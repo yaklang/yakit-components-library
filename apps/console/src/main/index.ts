@@ -5,7 +5,7 @@ const mode = process.env.MODE === 'dev'
 
 const preloadUrl = mode ? join(__dirname, '../preload/console.js') : join(__dirname, './preload.js')
 
-export const registerIpc = (mainWindow: BrowserWindow): void => {
+export const register = (mainWindow: BrowserWindow): void => {
   let childWindow: BrowserWindow | null = null
   // 监听主窗口发来的数据，并转发给子窗口
   ipcMain.on('forward-xterm-data', (_, data) => {

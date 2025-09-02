@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { registerIpc } from '../../src/main'
+import { register } from '../../src/main'
 
 function createWindow(): void {
   const win = new BrowserWindow({
@@ -19,7 +19,7 @@ function createWindow(): void {
   win.on('ready-to-show', () => {
     win.show()
   })
-  registerIpc(win)
+  register(win)
   ipcMain.handle('fetch-local-cache', async () => {
     return ''
   })
