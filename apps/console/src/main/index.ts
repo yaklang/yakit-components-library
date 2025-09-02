@@ -1,65 +1,88 @@
-import { BrowserWindow, ipcMain } from 'electron'
-import type { CreateWindowOption, CreateWindowRes, WindowItem } from '../types/interface'
+import { ipcMain, BrowserWindow } from 'electron'
+import { join } from 'path'
 
-const windows: WindowItem[] = []
+const mode = process.env.MODE === 'dev'
 
-export const registerIpc = (): void => {
-  ipcMain.handle('create-window', async (_, data: CreateWindowOption): Promise<CreateWindowRes> => {
-    const { url, id, windowOptions } = data
-    if (id) {
-      const win = windows.find((i) => i.id === id)
-      if (!win)
-        return {
-          id,
-          msg: '窗口id不存在'
-        }
-      win.window.focus()
-      return {
-        id,
-        msg: '窗口已聚焦'
-      }
-    }
-    if (url) {
-      const winId = Date.now()
-      const options = Object.assign(
-        {
-          width: 800,
-          height: 600,
-          webPreferences: {
-            preload: __dirname + '/preload.js'
-          }
-        },
-        windowOptions
-      )
-      const win = new BrowserWindow(options)
-      await win.loadURL(url)
-      windows.push({
-        id: winId,
-        window: win
-      })
-      return {
-        id: winId,
-        msg: '创建成功'
-      }
-    }
-    return {
-      id: -1,
-      msg: '参数错误'
+const preloadUrl = mode ? join(__dirname, '../preload/console.js') : join(__dirname, './preload.js')
+
+export const registerIpc = (mainWindow: BrowserWindow): void => {
+  let childWindow: BrowserWindow | null = null
+  // 监听主窗口发来的数据，并转发给子窗口
+  ipcMain.on('forward-xterm-data', (_, data) => {
+    if (childWindow && !childWindow.isDestroyed()) {
+      childWindow.webContents.send('xterm-data', data)
     }
   })
 
-  ipcMain.handle('close-window', async (_, id) => {
-    console.log('data:', id)
-    const win = windows.find((i) => i.id === id)
-    if (!win)
-      return {
-        id,
-        msg: '窗口id不存在'
-      }
-    await win?.window.close()
-    return {
-      id,
-      msg: '窗口id已关闭'
+  // 监听主窗口发送过来的主题色变量
+  ipcMain.on('forward-xterm-theme', (_, data) => {
+    if (childWindow && !childWindow.isDestroyed()) {
+      childWindow.webContents.send('xterm-theme', data)
     }
+  })
+
+  // 监听主窗口关闭子窗口
+  ipcMain.on('close-console-new-window', () => {
+    if (childWindow && !childWindow.isDestroyed()) {
+      childWindow.close()
+    }
+  })
+
+  // 监听主窗口触发子窗口获取焦点
+  ipcMain.on('onTop-console-new-window', () => {
+    if (childWindow && !childWindow.isDestroyed()) {
+      childWindow.focus()
+      childWindow.show()
+    }
+  })
+
+  // 监听子窗口的复制操作，转发给主窗口
+  ipcMain.on('console-terminal-window-copy', (_, copyData) => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('console-terminal-window-copy-data', copyData)
+    }
+  })
+
+  ipcMain.handle('open-console-new-window', async () => {
+    const windowHash = '123'
+    childWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      minWidth: 900,
+      minHeight: 500,
+      titleBarStyle: 'default',
+      webPreferences: {
+        preload: preloadUrl,
+        nodeIntegration: false,
+        contextIsolation: true,
+        sandbox: true
+      },
+      show: false
+    })
+
+    // 移除子窗口的菜单
+    childWindow.setMenu(null)
+
+    mode
+      ? childWindow.loadURL('http://localhost:3001')
+      : childWindow.loadFile(join(__dirname, '../renderer/index.html'))
+
+    // 在子窗口加载完成后，向其发送数据
+    childWindow.webContents.once('did-finish-load', () => {
+      childWindow?.show()
+      childWindow?.webContents.openDevTools()
+      // 通知父窗口：带上 hash
+      mainWindow.webContents.send('engineConsole-window-hash', { hash: windowHash })
+    })
+
+    childWindow.on('close', (e) => {
+      e.preventDefault()
+      childWindow?.destroy()
+      mainWindow.webContents.send('engineConsole-window-hash', { hash: '' })
+    })
+    childWindow.on('closed', () => {
+      childWindow = null
+      mainWindow.webContents.send('engineConsole-window-hash', { hash: '' })
+    })
   })
 }
