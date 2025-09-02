@@ -13,7 +13,7 @@
     "build:pack": " electron-vite build",
     "build": "concurrently \"pnpm build:main\" \"pnpm build:renderer\"",
     "build:renderer": "vite build --mode build",
-    "build:main": "ts-node-esm ./scripts/index.ts",
+    "build:main": "node ./scripts/index.js",
     "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
@@ -38,7 +38,6 @@
     "prettier": "^3.6.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },

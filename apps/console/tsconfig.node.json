@@ -7,7 +7,7 @@
     "src/**/*",
     "src/preload/**/*"
   ],
-  "exclude": ["scripts/index.ts"],
+  "exclude": ["scripts/index.js"],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],

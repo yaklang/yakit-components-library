@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
+  base: './',
   root: path.resolve(__dirname, 'src/renderer'), // React 子窗口源码目录
   plugins: [react()],
   server: {

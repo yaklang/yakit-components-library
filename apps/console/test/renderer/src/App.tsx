@@ -3,47 +3,51 @@ import { FC, useState } from 'react'
 const { ipcRenderer } = window.electronApi
 
 const light = {
-  foreground: '#5a5d64',
-  background: '#eef0f3',
-  cursor: '#5a5d64',
-  black: '#171717',
-  brightBlack: '#353639',
-  red: '#b93939',
-  brightRed: '#f15757',
-  green: '#379969',
-  brightGreen: '#54ca90',
-  yellow: '#c59d0a',
-  brightYellow: '#ffce1e',
-  blue: '#296bc5',
-  brightBlue: '#4493ff',
-  magenta: '#a83daa',
-  brightMagenta: '#dc5cdf',
-  cyan: '#22a5b6',
-  brightCyan: '#3cd8ed',
-  white: '#f8f9fa',
-  brightWhite: '#ffffff'
+  xtermThemeVars: {
+    foreground: '#5a5d64',
+    background: '#eef0f3',
+    cursor: '#5a5d64',
+    black: '#171717',
+    brightBlack: '#353639',
+    red: '#b93939',
+    brightRed: '#f15757',
+    green: '#379969',
+    brightGreen: '#54ca90',
+    yellow: '#c59d0a',
+    brightYellow: '#ffce1e',
+    blue: '#296bc5',
+    brightBlue: '#4493ff',
+    magenta: '#a83daa',
+    brightMagenta: '#dc5cdf',
+    cyan: '#22a5b6',
+    brightCyan: '#3cd8ed',
+    white: '#f8f9fa',
+    brightWhite: '#ffffff'
+  }
 }
 
 const dark = {
-  foreground: '#bac3d4',
-  background: '#37393c',
-  cursor: '#bac3d4',
-  black: '#171717',
-  brightBlack: '#f0f2f6',
-  red: '#f37373',
-  brightRed: '#d94040',
-  green: '#71d3a3',
-  brightGreen: '#3db379',
-  yellow: '#ffdd64',
-  brightYellow: '#e8bf2e',
-  blue: '#63a5ff',
-  brightBlue: '#2d7ce8',
-  magenta: '#e277e4',
-  brightMagenta: '#c545c7',
-  cyan: '#5cdff0',
-  brightCyan: '#25c1d6',
-  white: '#2a2b2d',
-  brightWhite: '#171717'
+  xtermThemeVars: {
+    foreground: '#bac3d4',
+    background: '#37393c',
+    cursor: '#bac3d4',
+    black: '#171717',
+    brightBlack: '#f0f2f6',
+    red: '#f37373',
+    brightRed: '#d94040',
+    green: '#71d3a3',
+    brightGreen: '#3db379',
+    yellow: '#ffdd64',
+    brightYellow: '#e8bf2e',
+    blue: '#63a5ff',
+    brightBlue: '#2d7ce8',
+    magenta: '#e277e4',
+    brightMagenta: '#c545c7',
+    cyan: '#5cdff0',
+    brightCyan: '#25c1d6',
+    white: '#2a2b2d',
+    brightWhite: '#171717'
+  }
 }
 const App: FC = () => {
   const [theme, setTheme] = useState(false)

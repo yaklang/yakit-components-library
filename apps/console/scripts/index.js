@@ -1,4 +1,3 @@
-// @ts-nocheck
 const { build } = require('vite')
 const path = require('path')
 
@@ -14,10 +13,7 @@ async function buildVite() {
           preload: path.resolve(__dirname, '../src/preload/index.ts')
         },
         formats: ['cjs'],
-        fileName: (_, name) => {
-          console.log('name:', name)
-          return `${name}.js`
-        }
+        fileName: (_, name) => `${name}.js`
       },
       rollupOptions: {
         external: ['electron', 'path', 'fs']
