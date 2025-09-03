@@ -1,6 +1,6 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
-  "include": ["src/renderer/src", "src/preload/index.d.ts", "test/renderer/src", "test/preload"],
+  "include": ["src/renderer/src", "src/preload/global.d.ts", "test/renderer/src", "test/preload"],
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
