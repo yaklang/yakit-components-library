@@ -13,7 +13,7 @@ out
 dist-ssr
 *.local
 *.turbo
-
+.eslintcache
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
