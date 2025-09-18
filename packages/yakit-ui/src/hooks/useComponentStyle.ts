@@ -1,20 +1,19 @@
 import type { CSSInterpolation } from '@ant-design/cssinjs';
-import { useStyleRegister, useToken, type GlobalToken } from 'antd/es/theme/internal';
+import { useStyleRegister, useToken } from 'antd/es/theme/internal';
 import { useMemo } from 'react';
 
 import '@yakit-libs/color/dist/index.css';
 import '../styles/reset.css';
+import yakitTheme from '../styles/theme';
+import type { GlobalToken } from '../types/token';
 
-const overrideToken = {
-  colorPrimary: 'var(--Colors-Use-Main-Primary)',
-};
 const useComponentStyle = <T extends GlobalToken = GlobalToken>(
   prefixCls: string,
   genStyle: (prefixCls: string, token: T) => CSSInterpolation,
 ) => {
   const [theme, token, hashId] = useToken();
 
-  const localToken = useMemo(() => ({ ...token, ...overrideToken }), [token]);
+  const localToken = useMemo(() => ({ ...token, ...yakitTheme }), [token]);
 
   const wrapSSR = useStyleRegister(
     {

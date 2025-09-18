@@ -8,7 +8,6 @@ export interface ButtonProps extends BaseProps {
    * @default default
    */
   type?:
-    | 'default'
     | 'primary'
     | 'secondary1'
     | 'secondary2'
@@ -28,10 +27,10 @@ export interface ButtonProps extends BaseProps {
    */
   size?: 'small' | 'medium' | 'large' | 'huge';
   /**
-   * 按钮性质
+   * 按钮形状
    * @default default
    */
-  shape?: 'default' | 'circle' | 'round';
+  shape?: 'default' | 'circle';
   /**
    * 按钮内容
    */

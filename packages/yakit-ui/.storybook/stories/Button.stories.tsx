@@ -14,7 +14,6 @@ const meta: Meta<typeof Button> = {
     type: {
       control: 'select',
       options: [
-        'default',
         'primary',
         'secondary1',
         'secondary2',
@@ -31,7 +30,7 @@ const meta: Meta<typeof Button> = {
     },
     shape: {
       control: 'select',
-      options: ['default', 'circle', 'round'],
+      options: ['default', 'circle'],
     },
     state: {
       control: 'select',
@@ -51,7 +50,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: 'Button',
-    type: 'default',
   },
 };
 
@@ -84,9 +82,6 @@ export const Shapes: Story = {
       </Button>
       <Button {...args} shape="circle">
         O
-      </Button>
-      <Button {...args} shape="round">
-        Round
       </Button>
     </div>
   ),

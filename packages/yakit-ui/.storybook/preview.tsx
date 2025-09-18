@@ -1,15 +1,13 @@
 import type { Preview } from '@storybook/react';
-import { ConfigProvider, theme } from 'antd';
-import type { ConfigProviderProps } from 'antd/es/config-provider';
+import { theme } from 'antd';
 import type { Locale } from 'antd/es/locale';
 import enUS from 'antd/locale/en_US';
 import zhCN from 'antd/locale/zh_CN';
-import type { ComponentType } from 'react';
 import { useEffect } from 'react';
 
-const antdLocales: Record<'zh' | 'en', Locale> = { zh: zhCN, en: enUS };
+import { ConfigProvider } from '../src/components';
 
-const CP = ConfigProvider as ComponentType<ConfigProviderProps>;
+const antdLocales: Record<'zh' | 'en', Locale> = { zh: zhCN, en: enUS };
 
 export const globalTypes = {
   locale: {
@@ -58,24 +56,16 @@ const preview: Preview = {
       const algorithm = currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm;
 
       return (
-        <CP
+        <ConfigProvider
           theme={{
             algorithm,
-            token: {
-              colorPrimary: '#5c6ac4',
-            },
-            components: {
-              Button: {
-                colorPrimary: '#5c6ac4',
-              },
-            },
           }}
           locale={antdLocales[locale]}
         >
           <div data-theme={currentTheme}>
             <Story />
           </div>
-        </CP>
+        </ConfigProvider>
       );
     },
   ],

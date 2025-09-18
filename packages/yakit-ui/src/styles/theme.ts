@@ -1,0 +1,69 @@
+const yakitTheme = Object.freeze({
+  /**
+   * 主题色
+   */
+  colorPrimary: 'var(--Colors-Use-Main-Primary)',
+  colorPrimaryActive: 'var(--Colors-Use-Main-Pressed)',
+  colorPrimaryBg: 'var(--Colors-Use-Main-Bg)',
+  colorPrimaryBgHover: 'var(--Colors-Use-Main-Bg-Hover)',
+  colorPrimaryBorder: 'var(--Colors-Use-Main-Border)',
+  colorPrimaryHover: 'var(--Colors-Use-Main-Hover)',
+  colorPrimaryText: 'var(--Colors-Use-Main-On-Primary)',
+  colorPrimaryTextActive: 'var(--Colors-Use-Main-On-Primary)',
+  colorPrimaryTextHover: 'var(--Colors-Use-Main-On-Primary)',
+
+  /**
+   * 错误色
+   */
+  colorError: 'var(--Colors-Use-Error-Primary)',
+  colorErrorActive: 'var(--Colors-Use-Error-Pressed)',
+  colorErrorBg: 'var(--Colors-Use-Error-Bg)',
+  colorErrorBgHover: 'var(--Colors-Use-Error-Bg-Hover)',
+  colorErrorBorder: 'var(--Colors-Use-Error-Border)',
+  colorErrorHover: 'var(--Colors-Use-Error-Hover)',
+  colorErrorText: 'var(--Colors-Use-Error-On-Primary)',
+  colorErrorTextActive: 'var(--Colors-Use-Error-On-Primary)',
+  colorErrorTextHover: 'var(--Colors-Use-Error-On-Primary)',
+
+  /**
+   * 成功色
+   */
+  colorSuccess: 'var(--Colors-Use-Success-Primary)',
+  colorSuccessActive: 'var(--Colors-Use-Success-Pressed)',
+  colorSuccessBg: 'var(--Colors-Use-Success-Bg)',
+  colorSuccessBgHover: 'var(--Colors-Use-Success-Bg-Hover)',
+  colorSuccessBorder: 'var(--Colors-Use-Success-Border)',
+  colorSuccessHover: 'var(--Colors-Use-Success-Hover)',
+  colorSuccessText: 'var(--Colors-Use-Success-On-Primary)',
+  colorSuccessTextActive: 'var(--Colors-Use-Success-On-Primary)',
+  colorSuccessTextHover: 'var(--Colors-Use-Success-On-Primary)',
+
+  /**
+   * 警告色
+   */
+  colorWarning: 'var(--Colors-Use-Warning-Primary)',
+  colorWarningActive: 'var(--Colors-Use-Warning-Pressed)',
+  colorWarningBg: 'var(--Colors-Use-Warning-Background)',
+  colorWarningBgHover: 'var(--Colors-Use-Warning-Background-Hover)',
+  colorWarningBorder: 'var(--Colors-Use-Warning-Border)',
+  colorWarningHover: 'var(--Colors-Use-Warning-Hover)',
+  colorWarningText: 'var(--Colors-Use-Warning-On-Primary)',
+  colorWarningTextActive: 'var(--Colors-Use-Warning-On-Primary)',
+  colorWarningTextHover: 'var(--Colors-Use-Warning-On-Primary)',
+
+  /**
+   * 本文颜色
+   */
+  colorTextTitle: 'var(--Colors-Use-Neutral-Text-1-Title)',
+  colorTextPrimary: 'var(--Colors-Use-Neutral-Text-2-Primary)',
+  colorTextSecondary: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
+  colorTextHelp: 'var(--Colors-Use-Neutral-Text-4-Help-text)',
+  colorTextBase: 'var(--Colors-Use-Basic-Background)',
+
+  /**
+   * 边框颜色
+   */
+  colorBorder: 'var(--Colors-Use-Neutral-Border)',
+});
+
+export default yakitTheme;

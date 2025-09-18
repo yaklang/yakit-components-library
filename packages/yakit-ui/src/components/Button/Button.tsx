@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import type { FC } from 'react';
 
 import useComponentStyle from '../../hooks/useComponentStyle';
+import { returnOrFalse } from '../../utils';
 
 import buttonStyle from './style';
 import type { ButtonProps } from './type';
@@ -9,8 +10,9 @@ import type { ButtonProps } from './type';
 const prefixCls = 'yakit-btn';
 
 export const Button: FC<ButtonProps> = ({
-  type = 'default',
-  size = 'md',
+  type = 'primary',
+  size = 'medium',
+  shape = 'default',
   disabled,
   children,
   className,
@@ -24,6 +26,7 @@ export const Button: FC<ButtonProps> = ({
     {
       [`${prefixCls}-${type}`]: type,
       [`${prefixCls}-${size}`]: size,
+      [`${prefixCls}-${shape}`]: returnOrFalse(shape),
     },
     className,
     rootClassName,
