@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
 
 import Button from '../../src/components/Button';
 
@@ -18,7 +17,6 @@ const meta = {
     backgroundColor: { control: 'color' },
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
-  args: { onClick: fn() },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -27,27 +25,14 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Primary: Story = {
   args: {
-    primary: true,
-    label: 'Button',
+    type: 'primary',
+    children: 'Button',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    label: 'Button',
+    children: 'Button',
   },
 };
 
-export const Large: Story = {
-  args: {
-    size: 'large',
-    label: 'Button',
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: 'small',
-    label: 'Button',
-  },
-};
