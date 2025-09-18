@@ -1,9 +1,12 @@
 import type { CSSInterpolation } from '@ant-design/cssinjs';
 
-const buttonStyle = (prefixCls: string): CSSInterpolation => {
+import type { GlobalToken } from '../../../types/common';
+
+const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation => {
+  console.log('token:', token);
   return {
     [`.${prefixCls}`]: {
-      backgroundColor: 'red',
+      cursor: 'pointer',
     },
   };
 };

@@ -1,0 +1,51 @@
+import type { ReactNode, MouseEvent } from 'react';
+
+import type { BaseProps } from '../../types/common';
+
+export interface ButtonProps extends BaseProps {
+  /**
+   * 按钮类型
+   * @default default
+   */
+  type?:
+    | 'default'
+    | 'primary'
+    | 'secondary1'
+    | 'secondary2'
+    | 'outline1'
+    | 'outline2'
+    | 'text1'
+    | 'text2'
+    | 'link';
+  /**
+   * 状态
+   * @default default
+   */
+  state?: 'default' | 'hover' | 'pressed' | 'animation' | 'disable';
+  /**
+   * 按钮尺寸
+   * @default md
+   */
+  size?: 'small' | 'medium' | 'large' | 'huge';
+  /**
+   * 按钮性质
+   * @default default
+   */
+  shape?: 'default' | 'circle' | 'round';
+  /**
+   * 按钮内容
+   */
+  children?: ReactNode;
+  /**
+   * 按钮样式
+   */
+  className?: string;
+  /**
+   * 按钮禁用
+   */
+  disabled?: boolean;
+  /**
+   * 点击按钮时触发
+   */
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+}
