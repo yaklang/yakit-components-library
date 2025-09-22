@@ -4,7 +4,7 @@ import Button from '../../src/components/Button';
 import type { ButtonProps } from '../../src/components/Button/type';
 
 const meta: Meta<typeof Button> = {
-  title: 'Example/Button',
+  title: 'YakitUi/通用/Button',
   component: Button,
   parameters: {
     layout: 'centered',
