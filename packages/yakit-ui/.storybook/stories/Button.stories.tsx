@@ -53,7 +53,6 @@ export const Default: Story = {
     type: 'primary',
     size: 'medium',
     shape: 'default',
-    state: 'default',
     animation: 'wave',
     disabled: false,
   },
