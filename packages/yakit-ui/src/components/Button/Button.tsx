@@ -14,8 +14,8 @@ export const Button: FC<ButtonProps> = ({
   type = 'primary',
   size = 'medium',
   shape = 'default',
+  state = 'default',
   animation = 'wave',
-  disabled,
   children,
   className,
   rootClassName,
@@ -30,7 +30,7 @@ export const Button: FC<ButtonProps> = ({
       [`${prefixCls}-${type}`]: type,
       [`${prefixCls}-${size}`]: size,
       [`${prefixCls}-${shape}`]: returnOrFalse(shape),
-      [`${prefixCls}-disabled`]: disabled,
+      [`${prefixCls}-${state}`]: state,
     },
     className,
     rootClassName,
@@ -38,7 +38,7 @@ export const Button: FC<ButtonProps> = ({
 
   return wrapSSR(
     <Wave animation={animation}>
-      <button disabled={disabled} onClick={onClick} className={classes}>
+      <button disabled={state === 'disable'} onClick={onClick} className={classes}>
         {children}
       </button>
     </Wave>,

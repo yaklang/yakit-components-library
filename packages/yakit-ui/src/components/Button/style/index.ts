@@ -25,7 +25,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       borderRadius: buttonToken.borderRadius,
       transition: 'all 0.3s ease',
 
-      [`&:not(:disabled):focus-visible`]: {
+      [`&:not(:disabled):focus-visible, &-animation`]: {
         outline: `2px solid ${token.colorPrimaryFocus}`,
         outlineOffset: '1px',
         transition: ' outlineOffset 0s, outline 0s',
@@ -67,11 +67,14 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         borderRadius: '50%',
       },
       /**
-       * 禁用
+       * 状态
        */
-      [`&-disabled`]: {
+      [`&-disable`]: {
         cursor: 'not-allowed',
         opacity: 0.5,
+      },
+      ['&-pressed']: {
+        backgroundColor: token.colorPrimaryActive,
       },
     },
   };

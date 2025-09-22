@@ -40,10 +40,6 @@ export interface ButtonProps extends BaseProps {
    */
   className?: string;
   /**
-   * 按钮禁用
-   */
-  disabled?: boolean;
-  /**
    * 按钮动画
    * @default wave
    */
