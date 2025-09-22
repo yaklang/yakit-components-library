@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { type FC } from 'react';
+import { useMemo, type FC } from 'react';
 
 import useComponentStyle from '../../hooks/useComponentStyle';
 import { returnOrFalse } from '../../utils';
@@ -40,10 +40,17 @@ export const Button: FC<ButtonProps> = ({
     rootClassName,
   );
 
+  const childrenDom = useMemo(() => {
+    if (typeof children === 'string') {
+      return <span>{children}</span>;
+    }
+    return children;
+  }, [children]);
+
   return wrapSSR(
     <Wave animation={animation}>
       <button disabled={disabled} onClick={onClick} className={classes} {...bind}>
-        {children}
+        {childrenDom}
       </button>
     </Wave>,
   );
