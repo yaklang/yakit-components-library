@@ -26,7 +26,7 @@ const WaveStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation => {
         height: '100%',
         borderRadius: 'inherit',
         boxShadow: `0 0 0 0 ${token.colorPrimary}`,
-        transition: 'box-shadow 0.4s ease-out, opacity 0.4s ease-out',
+        transition: 'box-shadow 0.6s ease-out, opacity 0.6s ease-out',
       },
     },
   };
