@@ -17,11 +17,6 @@ export interface ButtonProps extends BaseProps {
     | 'text2'
     | 'link';
   /**
-   * 状态
-   * @default default
-   */
-  state?: 'default' | 'hover' | 'pressed' | 'animation' | 'disable';
-  /**
    * 按钮尺寸
    * @default md
    */
@@ -39,6 +34,10 @@ export interface ButtonProps extends BaseProps {
    * 按钮样式
    */
   className?: string;
+  /**
+   * 按钮禁用
+   */
+  disabled?: boolean;
   /**
    * 按钮动画
    * @default wave

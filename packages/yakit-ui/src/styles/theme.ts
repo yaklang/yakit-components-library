@@ -5,7 +5,7 @@ const yakitTheme = Object.freeze({
    * 主题色
    */
   colorPrimary: 'var(--Colors-Use-Main-Primary)',
-  colorPrimaryActive: 'var(--Colors-Use-Main-Pressed)',
+  colorPrimaryPressed: 'var(--Colors-Use-Main-Pressed)',
   colorPrimaryBg: 'var(--Colors-Use-Main-Bg)',
   colorPrimaryBgHover: 'var(--Colors-Use-Main-Bg-Hover)',
   colorPrimaryFocus: 'var(--Colors-Use-Main-Focus)',
@@ -19,7 +19,7 @@ const yakitTheme = Object.freeze({
    * 错误色
    */
   colorError: 'var(--Colors-Use-Error-Primary)',
-  colorErrorActive: 'var(--Colors-Use-Error-Pressed)',
+  colorErrorPressed: 'var(--Colors-Use-Error-Pressed)',
   colorErrorBg: 'var(--Colors-Use-Error-Bg)',
   colorErrorBgHover: 'var(--Colors-Use-Error-Bg-Hover)',
   colorErrorFocus: 'var(--Colors-Use-Error-Focus)',
@@ -33,7 +33,7 @@ const yakitTheme = Object.freeze({
    * 成功色
    */
   colorSuccess: 'var(--Colors-Use-Success-Primary)',
-  colorSuccessActive: 'var(--Colors-Use-Success-Pressed)',
+  colorSuccessPressed: 'var(--Colors-Use-Success-Pressed)',
   colorSuccessBg: 'var(--Colors-Use-Success-Bg)',
   colorSuccessBgHover: 'var(--Colors-Use-Success-Bg-Hover)',
   colorSuccessFocus: 'var(--Colors-Use-Success-Focus)',
@@ -47,7 +47,7 @@ const yakitTheme = Object.freeze({
    * 警告色
    */
   colorWarning: 'var(--Colors-Use-Warning-Primary)',
-  colorWarningActive: 'var(--Colors-Use-Warning-Pressed)',
+  colorWarningPressed: 'var(--Colors-Use-Warning-Pressed)',
   colorWarningBg: 'var(--Colors-Use-Warning-Background)',
   colorWarningBgHover: 'var(--Colors-Use-Warning-Background-Hover)',
   colorWarningBorder: 'var(--Colors-Use-Warning-Border)',

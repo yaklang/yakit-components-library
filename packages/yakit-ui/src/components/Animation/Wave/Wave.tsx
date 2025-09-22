@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type MouseEvent,
   type ReactElement,
+  type KeyboardEvent,
 } from 'react';
 
 import useComponentStyle from '../../../hooks/useComponentStyle';
@@ -63,14 +64,17 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
       onClick: (e: MouseEvent<HTMLElement>) => {
         children.props.onClick?.(e);
       },
-      onMouseDown: () => {
+      onMouseUp: (e: MouseEvent<HTMLElement>) => {
+        children.props.onMouseUp?.(e);
         if (animation === 'wave') showWave();
       },
-      style: {
-        ...children.props.style,
-        position: 'relative',
-        overflow: 'visible',
+      onKeyUp: (e: KeyboardEvent<HTMLElement>) => {
+        children.props.onKeyUp?.(e);
+        if (animation === 'wave' && (e.key === 'Enter' || e.key === ' ')) {
+          showWave();
+        }
       },
+      style: children.props.style,
     }),
   );
 };

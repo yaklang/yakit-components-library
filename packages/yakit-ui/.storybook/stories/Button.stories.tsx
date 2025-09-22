@@ -24,10 +24,6 @@ const meta: Meta<typeof Button> = {
         'link',
       ],
     },
-    state: {
-      control: { type: 'select' },
-      options: ['default', 'hover', 'pressed', 'animation', 'disable'],
-    },
     size: {
       control: { type: 'select' },
       options: ['small', 'medium', 'large', 'huge'],
@@ -40,6 +36,7 @@ const meta: Meta<typeof Button> = {
       control: { type: 'select' },
       options: ['wave', false],
     },
+    disabled: { control: { type: 'boolean' } },
     onClick: { action: 'clicked' },
     children: { control: 'text' },
     className: { control: 'text' },
@@ -69,7 +66,7 @@ export const Sizes: Story = {
       <Button {...args} size="small">
         Small
       </Button>
-      <Button {...args} state="pressed" size="medium">
+      <Button {...args} size="medium">
         Medium
       </Button>
       <Button {...args} size="large">
@@ -125,6 +122,6 @@ export const Disabled: Story = {
   args: {
     type: 'primary',
     children: 'Disabled Button',
-    state: 'disable',
+    disabled: true,
   },
 };

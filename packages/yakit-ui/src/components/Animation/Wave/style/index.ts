@@ -6,7 +6,7 @@ const WaveStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation => {
   return {
     [`.${prefixCls}`]: {
       position: 'relative',
-      overflow: 'hidden',
+      overflow: 'visible',
 
       ['&-holder']: {
         position: 'absolute',

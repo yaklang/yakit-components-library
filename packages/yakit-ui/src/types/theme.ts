@@ -3,7 +3,7 @@ export interface YakitTheme {
    * 主题色
    */
   colorPrimary: string;
-  colorPrimaryActive: string;
+  colorPrimaryPressed: string;
   colorPrimaryBg: string;
   colorPrimaryBgHover: string;
   colorPrimaryBorder: string;
@@ -17,7 +17,7 @@ export interface YakitTheme {
    * 错误色
    */
   colorError: string;
-  colorErrorActive: string;
+  colorErrorPressed: string;
   colorErrorBg: string;
   colorErrorBgHover: string;
   colorErrorBorder: string;
@@ -31,7 +31,7 @@ export interface YakitTheme {
    * 成功色
    */
   colorSuccess: string;
-  colorSuccessActive: string;
+  colorSuccessPressed: string;
   colorSuccessBg: string;
   colorSuccessBgHover: string;
   colorSuccessBorder: string;
@@ -45,7 +45,7 @@ export interface YakitTheme {
    * 警告色
    */
   colorWarning: string;
-  colorWarningActive: string;
+  colorWarningPressed: string;
   colorWarningBg: string;
   colorWarningBgHover: string;
   colorWarningBorder: string;

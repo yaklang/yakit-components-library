@@ -20,12 +20,14 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
   return {
     [`.${prefixCls}`]: {
       position: 'relative',
-      overflow: 'hidden',
       cursor: 'pointer',
       borderRadius: buttonToken.borderRadius,
       transition: 'all 0.3s ease',
+      borderColor: 'transparent',
+      fontFamily: 'PingFang SC',
+      fontStyle: 'normal',
 
-      [`&:not(:disabled):focus-visible, &-animation`]: {
+      [`&:not(:disabled):focus-visible`]: {
         outline: `2px solid ${token.colorPrimaryFocus}`,
         outlineOffset: '1px',
         transition: ' outlineOffset 0s, outline 0s',
@@ -38,12 +40,25 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         color: token.colorPrimaryText,
         borderColor: 'transparent',
 
-        [`&:hover`]: {
+        ['&-pressed']: {
+          backgroundColor: token.colorPrimaryPressed,
+        },
+        '&:active:not(:disabled)': {
+          backgroundColor: token.colorPrimaryPressed,
+        },
+        [`&:hover:not(:disabled):not(&-pressed)`]: {
           backgroundColor: token.colorPrimaryHover,
           color: token.colorPrimaryText,
         },
       },
+      [`&-secondary1`]: {
+        backgroundColor: token.colorPrimaryBg,
+        color: token.colorPrimary,
 
+        [`&:hover:not(:disabled)`]: {
+          backgroundColor: token.colorPrimaryBgHover,
+        },
+      },
       /**
        * 按钮尺寸
        */
@@ -69,12 +84,9 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       /**
        * 状态
        */
-      [`&-disable`]: {
+      [`&-disabled`]: {
         cursor: 'not-allowed',
-        opacity: 0.5,
-      },
-      ['&-pressed']: {
-        backgroundColor: token.colorPrimaryActive,
+        backgroundColor: token.colorPrimaryBorder,
       },
     },
   };

@@ -5,6 +5,7 @@ import useComponentStyle from '../../hooks/useComponentStyle';
 import { returnOrFalse } from '../../utils';
 import Wave from '../Animation/Wave';
 
+import { usePressed } from './hooks/usePressed';
 import buttonStyle from './style';
 import type { ButtonProps } from './type';
 
@@ -14,14 +15,16 @@ export const Button: FC<ButtonProps> = ({
   type = 'primary',
   size = 'medium',
   shape = 'default',
-  state = 'default',
   animation = 'wave',
+  disabled,
   children,
   className,
   rootClassName,
   onClick,
 }) => {
   const { wrapSSR, hashId } = useComponentStyle(prefixCls, buttonStyle);
+
+  const { pressed, bind } = usePressed();
 
   const classes = classNames(
     prefixCls,
@@ -30,7 +33,8 @@ export const Button: FC<ButtonProps> = ({
       [`${prefixCls}-${type}`]: type,
       [`${prefixCls}-${size}`]: size,
       [`${prefixCls}-${shape}`]: returnOrFalse(shape),
-      [`${prefixCls}-${state}`]: state,
+      [`${prefixCls}-disabled`]: disabled,
+      [`${prefixCls}-${type}-pressed`]: pressed,
     },
     className,
     rootClassName,
@@ -38,7 +42,7 @@ export const Button: FC<ButtonProps> = ({
 
   return wrapSSR(
     <Wave animation={animation}>
-      <button disabled={state === 'disable'} onClick={onClick} className={classes}>
+      <button disabled={disabled} onClick={onClick} className={classes} {...bind}>
         {children}
       </button>
     </Wave>,
