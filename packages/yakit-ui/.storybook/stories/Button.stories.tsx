@@ -12,7 +12,7 @@ const meta: Meta<typeof Button> = {
   tags: ['autodocs'],
   argTypes: {
     type: {
-      control: 'select',
+      control: { type: 'select' },
       options: [
         'primary',
         'secondary1',
@@ -24,22 +24,26 @@ const meta: Meta<typeof Button> = {
         'link',
       ],
     },
+    state: {
+      control: { type: 'select' },
+      options: ['default', 'hover', 'pressed', 'animation', 'disable'],
+    },
     size: {
-      control: 'select',
+      control: { type: 'select' },
       options: ['small', 'medium', 'large', 'huge'],
     },
     shape: {
-      control: 'select',
+      control: { type: 'select' },
       options: ['default', 'circle'],
     },
-    state: {
-      control: 'select',
-      options: ['default', 'hover', 'pressed', 'animation', 'disable'],
+    animation: {
+      control: { type: 'select' },
+      options: ['wave', false],
     },
-    disabled: {
-      control: 'boolean',
-    },
+    disabled: { control: { type: 'boolean' } },
     onClick: { action: 'clicked' },
+    children: { control: 'text' },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof Button>;
 
@@ -50,10 +54,16 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: 'Button',
+    type: 'primary',
+    size: 'medium',
+    shape: 'default',
+    state: 'default',
+    animation: 'wave',
+    disabled: false,
   },
 };
 
-// 尺寸
+// 尺寸示例
 export const Sizes: Story = {
   render: (args: ButtonProps) => (
     <div style={{ display: 'flex', gap: '1rem' }}>
@@ -73,7 +83,7 @@ export const Sizes: Story = {
   ),
 };
 
-// 形状
+// 形状示例
 export const Shapes: Story = {
   render: (args: ButtonProps) => (
     <div style={{ display: 'flex', gap: '1rem' }}>
@@ -83,6 +93,30 @@ export const Shapes: Story = {
       <Button {...args} shape="circle">
         O
       </Button>
+    </div>
+  ),
+};
+
+// 类型示例
+export const Types: Story = {
+  render: (args: ButtonProps) => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      {(
+        [
+          'primary',
+          'secondary1',
+          'secondary2',
+          'outline1',
+          'outline2',
+          'text1',
+          'text2',
+          'link',
+        ] as ButtonProps['type'][]
+      ).map((t) => (
+        <Button {...args} type={t} key={t}>
+          {t}
+        </Button>
+      ))}
     </div>
   ),
 };

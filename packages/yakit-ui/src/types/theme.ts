@@ -7,6 +7,7 @@ export interface YakitTheme {
   colorPrimaryBg: string;
   colorPrimaryBgHover: string;
   colorPrimaryBorder: string;
+  colorPrimaryFocus: string;
   colorPrimaryHover: string;
   colorPrimaryText: string;
   colorPrimaryTextActive: string;
@@ -20,6 +21,7 @@ export interface YakitTheme {
   colorErrorBg: string;
   colorErrorBgHover: string;
   colorErrorBorder: string;
+  colorErrorFocus: string;
   colorErrorHover: string;
   colorErrorText: string;
   colorErrorTextActive: string;
@@ -33,6 +35,7 @@ export interface YakitTheme {
   colorSuccessBg: string;
   colorSuccessBgHover: string;
   colorSuccessBorder: string;
+  colorSuccessFocus: string;
   colorSuccessHover: string;
   colorSuccessText: string;
   colorSuccessTextActive: string;
@@ -46,6 +49,7 @@ export interface YakitTheme {
   colorWarningBg: string;
   colorWarningBgHover: string;
   colorWarningBorder: string;
+  colorWarningFocus: string;
   colorWarningHover: string;
   colorWarningText: string;
   colorWarningTextActive: string;

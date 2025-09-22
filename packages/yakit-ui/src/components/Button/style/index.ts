@@ -1,4 +1,5 @@
 import type { CSSInterpolation } from '@ant-design/cssinjs';
+
 import type { GlobalToken } from '../../../types/token';
 import type { YakitButtonToken } from '../../../types/token/YakitButton';
 
@@ -17,15 +18,6 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
   };
 
   return {
-    [`@keyframes ${prefixCls}-ripple-shadow`]: {
-      '0%': {
-        boxShadow: `0 0 0 0 ${token.colorPrimary}40`, // 初始透明阴影
-      },
-      '100%': {
-        boxShadow: `0 0 0 8px transparent`, // 阴影扩散到消失
-      },
-    },
-
     [`.${prefixCls}`]: {
       position: 'relative',
       overflow: 'hidden',
@@ -33,13 +25,11 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       borderRadius: buttonToken.borderRadius,
       transition: 'all 0.3s ease',
 
-      /**
-       * 点击波纹阴影
-       */
-      '&:active': {
-        animation: `${prefixCls}-ripple-shadow 0.4s ease-out`,
+      [`&:not(:disabled):focus-visible`]: {
+        outline: `2px solid ${token.colorPrimaryFocus}`,
+        outlineOffset: '1px',
+        transition: ' outlineOffset 0s, outline 0s',
       },
-
       /**
        * 按钮类型
        */
@@ -75,6 +65,13 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
        */
       [`&-circle`]: {
         borderRadius: '50%',
+      },
+      /**
+       * 禁用
+       */
+      [`&-disabled`]: {
+        cursor: 'not-allowed',
+        opacity: 0.5,
       },
     },
   };

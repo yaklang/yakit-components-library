@@ -44,6 +44,11 @@ export interface ButtonProps extends BaseProps {
    */
   disabled?: boolean;
   /**
+   * 按钮动画
+   * @default wave
+   */
+  animation?: 'wave' | false;
+  /**
    * 点击按钮时触发
    */
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;

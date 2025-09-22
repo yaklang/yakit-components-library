@@ -1,3 +1,5 @@
+import type { YakitTheme } from '../types/theme';
+
 const yakitTheme = Object.freeze({
   /**
    * 主题色
@@ -6,6 +8,7 @@ const yakitTheme = Object.freeze({
   colorPrimaryActive: 'var(--Colors-Use-Main-Pressed)',
   colorPrimaryBg: 'var(--Colors-Use-Main-Bg)',
   colorPrimaryBgHover: 'var(--Colors-Use-Main-Bg-Hover)',
+  colorPrimaryFocus: 'var(--Colors-Use-Main-Focus)',
   colorPrimaryBorder: 'var(--Colors-Use-Main-Border)',
   colorPrimaryHover: 'var(--Colors-Use-Main-Hover)',
   colorPrimaryText: 'var(--Colors-Use-Main-On-Primary)',
@@ -19,6 +22,7 @@ const yakitTheme = Object.freeze({
   colorErrorActive: 'var(--Colors-Use-Error-Pressed)',
   colorErrorBg: 'var(--Colors-Use-Error-Bg)',
   colorErrorBgHover: 'var(--Colors-Use-Error-Bg-Hover)',
+  colorErrorFocus: 'var(--Colors-Use-Error-Focus)',
   colorErrorBorder: 'var(--Colors-Use-Error-Border)',
   colorErrorHover: 'var(--Colors-Use-Error-Hover)',
   colorErrorText: 'var(--Colors-Use-Error-On-Primary)',
@@ -32,6 +36,7 @@ const yakitTheme = Object.freeze({
   colorSuccessActive: 'var(--Colors-Use-Success-Pressed)',
   colorSuccessBg: 'var(--Colors-Use-Success-Bg)',
   colorSuccessBgHover: 'var(--Colors-Use-Success-Bg-Hover)',
+  colorSuccessFocus: 'var(--Colors-Use-Success-Focus)',
   colorSuccessBorder: 'var(--Colors-Use-Success-Border)',
   colorSuccessHover: 'var(--Colors-Use-Success-Hover)',
   colorSuccessText: 'var(--Colors-Use-Success-On-Primary)',
@@ -46,6 +51,7 @@ const yakitTheme = Object.freeze({
   colorWarningBg: 'var(--Colors-Use-Warning-Background)',
   colorWarningBgHover: 'var(--Colors-Use-Warning-Background-Hover)',
   colorWarningBorder: 'var(--Colors-Use-Warning-Border)',
+  colorWarningFocus: 'var(--Colors-Use-Warning-Focus)',
   colorWarningHover: 'var(--Colors-Use-Warning-Hover)',
   colorWarningText: 'var(--Colors-Use-Warning-On-Primary)',
   colorWarningTextActive: 'var(--Colors-Use-Warning-On-Primary)',
@@ -64,6 +70,6 @@ const yakitTheme = Object.freeze({
    * 边框颜色
    */
   colorBorder: 'var(--Colors-Use-Neutral-Border)',
-});
+} as YakitTheme);
 
 export default yakitTheme;
