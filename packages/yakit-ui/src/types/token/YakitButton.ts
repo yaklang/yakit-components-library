@@ -5,4 +5,8 @@ export interface YakitButtonToken {
   paddingLG?: string;
   paddingXL?: string;
   borderRadius?: string;
+  fontSizeSM?: string;
+  fontSizeMD?: string;
+  fontSizeLG?: string;
+  fontSizeXL?: string;
 }

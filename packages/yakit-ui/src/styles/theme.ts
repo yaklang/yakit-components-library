@@ -67,6 +67,11 @@ const yakitTheme = Object.freeze({
   colorTextBase: 'var(--Colors-Use-Basic-Background)',
 
   /**
+   * 背景颜色
+   */
+  colorBasicBackground: 'var(--Colors-Use-Basic-Background)',
+
+  /**
    * 边框颜色
    */
   colorBorder: 'var(--Colors-Use-Neutral-Border)',

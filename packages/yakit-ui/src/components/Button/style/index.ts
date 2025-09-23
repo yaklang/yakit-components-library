@@ -9,6 +9,10 @@ const defaultButton: YakitButtonToken = {
   paddingLG: '4px 12px',
   paddingXL: '6px 12px',
   borderRadius: '4px',
+  fontSizeSM: '11px',
+  fontSizeMD: '12px',
+  fontSizeLG: '14px',
+  fontSizeXL: '14px',
 };
 
 const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation => {
@@ -26,6 +30,13 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       borderColor: 'transparent',
       fontFamily: 'PingFang SC',
       fontStyle: 'normal',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxSizing: 'border-box',
+
+      '--yakit-btn-disabled-color': token.colorBasicBackground,
+      '--yakit-btn-disabled-bg': token.colorPrimaryBg,
 
       [`&:not(:disabled):focus-visible`]: {
         outline: `2px solid ${token.colorPrimaryFocus}`,
@@ -40,23 +51,37 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         color: token.colorPrimaryText,
         borderColor: 'transparent',
 
+        // 设置变量
+        '--wave-color': token.colorPrimaryFocus,
+        '--yakit-btn-disabled-color': token.colorBasicBackground,
+        '--yakit-btn-disabled-bg': token.colorPrimaryBorder,
+
         ['&-pressed']: {
-          backgroundColor: token.colorPrimaryPressed,
-        },
-        '&:active:not(:disabled)': {
           backgroundColor: token.colorPrimaryPressed,
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
           backgroundColor: token.colorPrimaryHover,
-          color: token.colorPrimaryText,
+          color: token.colorPrimary,
         },
       },
+
       [`&-secondary1`]: {
         backgroundColor: token.colorPrimaryBg,
         color: token.colorPrimary,
+        borderColor: 'transparent',
 
-        [`&:hover:not(:disabled)`]: {
+        // 设置变量
+        '--wave-color': token.colorPrimaryFocus,
+        '--yakit-btn-disabled-color': token.colorPrimaryBorder,
+        '--yakit-btn-disabled-bg': token.colorPrimaryBg,
+
+        ['&-pressed']: {
           backgroundColor: token.colorPrimaryBgHover,
+          color: token.colorPrimaryPressed,
+        },
+        [`&:hover:not(:disabled):not(&-pressed)`]: {
+          backgroundColor: token.colorPrimaryBgHover,
+          color: token.colorPrimary,
         },
       },
       /**
@@ -64,15 +89,27 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
        */
       [`&-small`]: {
         padding: buttonToken.paddingSM,
+        fontSize: buttonToken.fontSizeSM,
+        letterSpacing: '0.5px',
+        lineHeight: '14px',
       },
       [`&-medium`]: {
         padding: buttonToken.paddingMD,
+        fontSize: buttonToken.fontSizeMD,
+        letterSpacing: '0.5px',
+        lineHeight: '16px',
       },
       [`&-large`]: {
         padding: buttonToken.paddingLG,
+        fontSize: buttonToken.fontSizeLG,
+        letterSpacing: '0.1px',
+        lineHeight: '20px',
       },
       [`&-huge`]: {
         padding: buttonToken.paddingXL,
+        fontSize: buttonToken.fontSizeXL,
+        letterSpacing: '0.1px',
+        lineHeight: '20px',
       },
 
       /**
@@ -86,7 +123,8 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
        */
       [`&-disabled`]: {
         cursor: 'not-allowed',
-        backgroundColor: token.colorPrimaryBorder,
+        backgroundColor: 'var(--yakit-btn-disabled-bg)',
+        color: 'var(--yakit-btn-disabled-color)',
       },
     },
   };

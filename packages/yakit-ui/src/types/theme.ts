@@ -65,6 +65,10 @@ export interface YakitTheme {
   colorTextBase: string;
 
   /**
+   * 背景颜色
+   */
+  colorBasicBackground: string;
+  /**
    * 边框颜色
    */
   colorBorder: string;

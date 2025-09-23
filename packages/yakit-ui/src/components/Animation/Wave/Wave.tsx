@@ -26,7 +26,7 @@ const prefixCls = 'yakit-wave';
 
 export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassName }) => {
   const nodeRef = useRef<HTMLElement | null>(null);
-  const { wrapSSR, hashId, token } = useComponentStyle(prefixCls, WaveStyle);
+  const { wrapSSR, hashId } = useComponentStyle(prefixCls, WaveStyle);
 
   const classes = classNames(prefixCls, hashId, className, rootClassName);
 
@@ -35,6 +35,15 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
     if (!node) return;
 
     const holder = document.createElement('div');
+    const rect = node.getBoundingClientRect();
+    const style = getComputedStyle(node);
+    const borderTop = parseFloat(style.borderTopWidth);
+    const borderWidth = parseFloat(style.borderLeftWidth);
+
+    holder.style.width = `${rect.width}px`;
+    holder.style.height = `${rect.height}px`;
+    holder.style.left = `-${borderTop}px`;
+    holder.style.top = `-${borderWidth}px`;
     holder.className = `${prefixCls}-holder ${hashId}`;
 
     const wave = document.createElement('div');
@@ -45,7 +54,7 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
 
     // 触发动画
     requestAnimationFrame(() => {
-      wave.style.boxShadow = `0 0 0 8px ${token.colorPrimary}`;
+      wave.style.boxShadow = '0 0 0 8px var(--wave-color)';
       wave.style.opacity = '0';
     });
 
@@ -53,7 +62,7 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
     wave.addEventListener('transitionend', () => {
       holder.remove();
     });
-  }, [hashId, token.colorPrimary]);
+  }, [hashId]);
 
   if (!isValidElement(children)) return children as ReactNode;
 
