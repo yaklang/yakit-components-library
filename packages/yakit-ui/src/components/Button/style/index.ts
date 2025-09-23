@@ -61,7 +61,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
           backgroundColor: token.colorPrimaryHover,
-          color: token.colorPrimary,
+          color: token.colorBasicBackground,
         },
       },
 
