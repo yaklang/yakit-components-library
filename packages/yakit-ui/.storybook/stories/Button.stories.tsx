@@ -21,7 +21,8 @@ const meta: Meta<typeof Button> = {
         'outline2',
         'text1',
         'text2',
-        'link',
+        'link1',
+        'link2',
       ],
     },
     size: {

@@ -15,7 +15,8 @@ export interface ButtonProps extends BaseProps {
     | 'outline2'
     | 'text1'
     | 'text2'
-    | 'link';
+    | 'link1'
+    | 'link2';
   /**
    * 按钮尺寸
    * @default md
