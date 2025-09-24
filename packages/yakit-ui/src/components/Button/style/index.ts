@@ -84,6 +84,26 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: token.colorPrimary,
         },
       },
+
+      ['&-secondary2']: {
+        backgroundColor: token.colorNeutralBgHover,
+        color: token.colorTextTitle,
+        borderColor: 'transparent',
+
+        // 设置变量
+        '--wave-color': token.colorPrimaryFocus,
+        '--yakit-btn-disabled-color': token.colorNeutralDisable,
+        '--yakit-btn-disabled-bg': token.colorNeutralBgHover,
+
+        ['&-pressed']: {
+          color: token.colorPrimaryPressed,
+          backgroundColor: token.colorPrimaryBgHover,
+        },
+        [`&:hover:not(:disabled):not(&-pressed)`]: {
+          backgroundColor: token.colorPrimaryBg,
+          color: token.colorPrimary,
+        },
+      },
       /**
        * 按钮尺寸
        */

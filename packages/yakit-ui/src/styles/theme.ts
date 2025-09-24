@@ -70,6 +70,8 @@ const yakitTheme = Object.freeze({
    * 背景颜色
    */
   colorBasicBackground: 'var(--Colors-Use-Basic-Background)',
+  colorNeutralBgHover: 'var(--Colors-Use-Neutral-Bg-Hover)',
+  colorNeutralDisable: 'var(--Colors-Use-Neutral-Disable)',
 
   /**
    * 边框颜色
