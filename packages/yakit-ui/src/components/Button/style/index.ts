@@ -27,7 +27,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       cursor: 'pointer',
       borderRadius: buttonToken.borderRadius,
       transition: 'all 0.3s ease',
-      borderColor: 'transparent',
+      border: '1px solid transparent',
       fontFamily: 'PingFang SC',
       fontStyle: 'normal',
       display: 'flex',
@@ -35,6 +35,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       justifyContent: 'center',
       boxSizing: 'border-box',
 
+      '--wave-color': token.colorPrimaryFocus,
       '--yakit-btn-disabled-color': token.colorBasicBackground,
       '--yakit-btn-disabled-bg': token.colorPrimaryBg,
 
@@ -102,6 +103,27 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         [`&:hover:not(:disabled):not(&-pressed)`]: {
           backgroundColor: token.colorPrimaryBg,
           color: token.colorPrimary,
+        },
+      },
+
+      ['&-outline1']: {
+        borderColor: token.colorPrimaryBorder,
+        color: token.colorPrimary,
+        backgroundColor: token.colorBasicBackground,
+
+        '--wave-color': token.colorPrimaryFocus,
+        '--yakit-btn-disabled-color': token.colorPrimaryBorder,
+        '--yakit-btn-disabled-bg': token.colorBasicBackground,
+
+        ['&-pressed']: {
+          backgroundColor: token.colorPrimaryBg,
+          color: token.colorPrimaryPressed,
+          borderColor: token.colorPrimaryPressed,
+        },
+        [`&:hover:not(:disabled):not(&-pressed)`]: {
+          backgroundColor: token.colorPrimaryBg,
+          color: token.colorPrimary,
+          borderColor: token.colorPrimary,
         },
       },
       /**
