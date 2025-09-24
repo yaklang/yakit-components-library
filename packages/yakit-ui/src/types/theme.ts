@@ -70,6 +70,7 @@ export interface YakitTheme {
   colorBasicBackground: string;
   colorNeutralBgHover: string;
   colorNeutralDisable: string;
+  colorNeutralBorder: string;
   /**
    * 边框颜色
    */
