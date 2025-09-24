@@ -147,6 +147,27 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           borderColor: token.colorPrimary,
         },
       },
+
+      ['&-text1']: {
+        borderColor: 'transparent',
+        color: token.colorPrimary,
+        backgroundColor: 'transparent',
+
+        '--wave-color': 'transparent',
+        '--yakit-btn-disabled-color': token.colorPrimaryBorder,
+        '--yakit-btn-disabled-bg': 'transparent',
+
+        ['&-pressed']: {
+          backgroundColor: token.colorPrimaryBgHover,
+          color: token.colorPrimaryPressed,
+          borderColor: 'transparent',
+        },
+        [`&:hover:not(:disabled):not(&-pressed)`]: {
+          backgroundColor: token.colorPrimaryBg,
+          color: token.colorPrimary,
+          borderColor: 'transparent',
+        },
+      },
       /**
        * 按钮尺寸
        */
