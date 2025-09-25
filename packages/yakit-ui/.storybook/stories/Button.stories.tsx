@@ -12,6 +12,8 @@ const meta: Meta<typeof Button> = {
   tags: ['autodocs'],
   argTypes: {
     type: {
+      description: '按钮类型（决定按钮的视觉样式）',
+      table: { defaultValue: { summary: 'primary' } },
       control: { type: 'select' },
       options: [
         'primary',
@@ -25,22 +27,47 @@ const meta: Meta<typeof Button> = {
         'link2',
       ],
     },
+    color: {
+      description: '按钮主题颜色',
+      table: { defaultValue: { summary: 'primary' } },
+      control: { type: 'select' },
+      options: ['primary', 'success', 'warning', 'error'],
+    },
     size: {
+      description: '按钮尺寸',
+      table: { defaultValue: { summary: 'medium' } },
       control: { type: 'select' },
       options: ['small', 'medium', 'large', 'huge'],
     },
     shape: {
+      description: '按钮形状',
+      table: { defaultValue: { summary: 'default' } },
       control: { type: 'select' },
       options: ['default', 'circle'],
     },
     animation: {
+      description: '点击时的波纹动画效果',
+      table: { defaultValue: { summary: 'wave' } },
       control: { type: 'select' },
       options: ['wave', false],
     },
-    disabled: { control: { type: 'boolean' } },
-    onClick: { action: 'clicked' },
-    children: { control: 'text' },
-    className: { control: 'text' },
+    disabled: {
+      description: '是否禁用按钮',
+      table: { defaultValue: { summary: 'false' } },
+      control: { type: 'boolean' },
+    },
+    children: {
+      description: '按钮内容',
+      control: 'text',
+    },
+    className: {
+      description: '自定义类名',
+      control: 'text',
+    },
+    onClick: {
+      description: '点击按钮时触发的回调',
+      action: 'clicked',
+    },
   },
 } satisfies Meta<typeof Button>;
 
@@ -55,6 +82,7 @@ export const Default: Story = {
     size: 'medium',
     shape: 'default',
     animation: 'wave',
+    color: 'primary',
     disabled: false,
   },
 };
@@ -106,7 +134,8 @@ export const Types: Story = {
           'outline2',
           'text1',
           'text2',
-          'link',
+          'link1',
+          'link2',
         ] as ButtonProps['type'][]
       ).map((t) => (
         <Button {...args} type={t} key={t}>

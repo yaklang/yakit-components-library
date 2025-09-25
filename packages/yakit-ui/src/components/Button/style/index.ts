@@ -2,6 +2,7 @@ import type { CSSInterpolation } from '@ant-design/cssinjs';
 
 import type { GlobalToken } from '../../../types/token';
 import type { YakitButtonToken } from '../../../types/token/YakitButton';
+import type { ButtonProps } from '../type';
 
 const defaultButton: YakitButtonToken = {
   paddingSM: '3px 6px',
@@ -15,11 +16,63 @@ const defaultButton: YakitButtonToken = {
   fontSizeXL: '14px',
 };
 
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
+const genColorVars = (color: NonNullable<ButtonProps['color']>, token: GlobalToken) => {
+  const cap = capitalize(color);
+  return {
+    [`&-color-${color}`]: {
+      '--yakit-btn-color-base': token[`color${cap}` as keyof GlobalToken],
+      '--yakit-btn-color-text': token[`color${cap}Text` as keyof GlobalToken],
+      '--yakit-btn-color-pressed': token[`color${cap}Pressed` as keyof GlobalToken],
+      '--yakit-btn-color-hover': token[`color${cap}Hover` as keyof GlobalToken],
+      '--yakit-btn-color-focus': token[`color${cap}Focus` as keyof GlobalToken],
+      '--yakit-btn-color-bg': token[`color${cap}Bg` as keyof GlobalToken],
+      '--yakit-btn-color-bg-hover': token[`color${cap}BgHover` as keyof GlobalToken],
+    },
+  };
+};
+
+// 尺寸
+const genSizeVars = (btnToken: YakitButtonToken) => ({
+  [`&-small`]: {
+    padding: btnToken.paddingSM,
+    fontSize: btnToken.fontSizeSM,
+    letterSpacing: '0.5px',
+    lineHeight: '14px',
+  },
+  [`&-medium`]: {
+    padding: btnToken.paddingMD,
+    fontSize: btnToken.fontSizeMD,
+    letterSpacing: '0.5px',
+    lineHeight: '16px',
+  },
+  [`&-large`]: {
+    padding: btnToken.paddingLG,
+    fontSize: btnToken.fontSizeLG,
+    letterSpacing: '0.1px',
+    lineHeight: '20px',
+  },
+  [`&-huge`]: {
+    padding: btnToken.paddingXL,
+    fontSize: btnToken.fontSizeXL,
+    letterSpacing: '0.1px',
+    lineHeight: '20px',
+  },
+});
+
 const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation => {
   const buttonToken = {
     ...defaultButton,
     ...token.YakitButton,
   };
+
+  const colorKeys: NonNullable<ButtonProps['color']>[] = ['primary', 'success', 'warning', 'error'];
+
+  const colorClasses = colorKeys.reduce(
+    (acc, color) => ({ ...acc, ...genColorVars(color, token) }),
+    {},
+  );
 
   return {
     [`.${prefixCls}`]: {
@@ -35,12 +88,21 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       justifyContent: 'center',
       boxSizing: 'border-box',
 
-      '--wave-color': token.colorPrimaryFocus,
+      // 颜色变量
+      '--yakit-btn-color-base': token.colorPrimary,
+      '--yakit-btn-color-text': token.colorPrimaryText,
+      '--yakit-btn-color-pressed': token.colorPrimaryPressed,
+      '--yakit-btn-color-hover': token.colorPrimaryHover,
+      '--yakit-btn-color-focus': token.colorPrimaryFocus,
+      '--yakit-btn-color-bg': token.colorPrimaryBg,
+      '--yakit-btn-color-bg-hover': token.colorPrimaryBgHover,
+
+      '--wave-color': 'var(--yakit-btn-color-focus)',
       '--yakit-btn-disabled-color': token.colorBasicBackground,
-      '--yakit-btn-disabled-bg': token.colorPrimaryBg,
+      '--yakit-btn-disabled-bg': 'var(--yakit-btn-color-bg)',
 
       [`&:not(:disabled):focus-visible`]: {
-        outline: `2px solid ${token.colorPrimaryFocus}`,
+        outline: `2px solid var(--yakit-btn-color-focus)`,
         outlineOffset: '1px',
         transition: ' outlineOffset 0s, outline 0s',
       },
@@ -48,41 +110,41 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
        * 按钮类型
        */
       [`&-primary`]: {
-        backgroundColor: token.colorPrimary,
-        color: token.colorPrimaryText,
+        backgroundColor: 'var(--yakit-btn-color-base)',
+        color: 'var(--yakit-btn-color-text)',
         borderColor: 'transparent',
 
         // 设置变量
-        '--wave-color': token.colorPrimaryFocus,
+        '--wave-color': 'var(--yakit-btn-color-focus)',
         '--yakit-btn-disabled-color': token.colorBasicBackground,
-        '--yakit-btn-disabled-bg': token.colorPrimaryBorder,
+        '--yakit-btn-disabled-bg': token.colorBorder,
 
         ['&-pressed']: {
-          backgroundColor: token.colorPrimaryPressed,
+          backgroundColor: 'var(--yakit-btn-color-pressed)',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
-          backgroundColor: token.colorPrimaryHover,
+          backgroundColor: 'var(--yakit-btn-color-hover)',
           color: token.colorBasicBackground,
         },
       },
 
       [`&-secondary1`]: {
-        backgroundColor: token.colorPrimaryBg,
-        color: token.colorPrimary,
+        backgroundColor: 'var(--yakit-btn-color-bg)',
+        color: 'var(--yakit-btn-color-base)',
         borderColor: 'transparent',
 
         // 设置变量
-        '--wave-color': token.colorPrimaryFocus,
-        '--yakit-btn-disabled-color': token.colorPrimaryBorder,
-        '--yakit-btn-disabled-bg': token.colorPrimaryBg,
+        '--wave-color': 'var(--yakit-btn-color-focus)',
+        '--yakit-btn-disabled-color': token.colorBorder,
+        '--yakit-btn-disabled-bg': 'var(--yakit-btn-color-bg)',
 
         ['&-pressed']: {
-          backgroundColor: token.colorPrimaryBgHover,
-          color: token.colorPrimaryPressed,
+          backgroundColor: 'var(--yakit-btn-color-bg-hover)',
+          color: 'var(--yakit-btn-color-pressed)',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
-          backgroundColor: token.colorPrimaryBgHover,
-          color: token.colorPrimary,
+          backgroundColor: 'var(--yakit-btn-color-bg-hover)',
+          color: 'var(--yakit-btn-color-base)',
         },
       },
 
@@ -92,38 +154,38 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         borderColor: 'transparent',
 
         // 设置变量
-        '--wave-color': token.colorPrimaryFocus,
+        '--wave-color': 'var(--yakit-btn-color-focus)',
         '--yakit-btn-disabled-color': token.colorNeutralDisable,
         '--yakit-btn-disabled-bg': token.colorNeutralBgHover,
 
         ['&-pressed']: {
-          color: token.colorPrimaryPressed,
-          backgroundColor: token.colorPrimaryBgHover,
+          color: 'var(--yakit-btn-color-pressed)',
+          backgroundColor: 'var(--yakit-btn-color-bg-hover)',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
-          backgroundColor: token.colorPrimaryBg,
-          color: token.colorPrimary,
+          backgroundColor: 'var(--yakit-btn-color-bg)',
+          color: 'var(--yakit-btn-color-base)',
         },
       },
 
       ['&-outline1']: {
-        borderColor: token.colorPrimaryBorder,
-        color: token.colorPrimary,
+        borderColor: token.colorBorder,
+        color: 'var(--yakit-btn-color-base)',
         backgroundColor: token.colorBasicBackground,
 
-        '--wave-color': token.colorPrimaryFocus,
-        '--yakit-btn-disabled-color': token.colorPrimaryBorder,
+        '--wave-color': 'var(--yakit-btn-color-focus)',
+        '--yakit-btn-disabled-color': token.colorBorder,
         '--yakit-btn-disabled-bg': token.colorBasicBackground,
 
         ['&-pressed']: {
-          backgroundColor: token.colorPrimaryBg,
-          color: token.colorPrimaryPressed,
-          borderColor: token.colorPrimaryPressed,
+          backgroundColor: 'var(--yakit-btn-color-bg)',
+          color: 'var(--yakit-btn-color-pressed)',
+          borderColor: 'var(--yakit-btn-color-pressed)',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
-          backgroundColor: token.colorPrimaryBg,
-          color: token.colorPrimary,
-          borderColor: token.colorPrimary,
+          backgroundColor: 'var(--yakit-btn-color-bg)',
+          color: 'var(--yakit-btn-color-base)',
+          borderColor: 'var(--yakit-btn-color-base)',
         },
       },
 
@@ -132,39 +194,39 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         color: token.colorText,
         backgroundColor: token.colorBasicBackground,
 
-        '--wave-color': token.colorPrimaryFocus,
+        '--wave-color': 'var(--yakit-btn-color-focus)',
         '--yakit-btn-disabled-color': token.colorNeutralDisable,
         '--yakit-btn-disabled-bg': token.colorNeutralBgHover,
 
         ['&-pressed']: {
           backgroundColor: token.colorBasicBackground,
-          color: token.colorPrimaryPressed,
-          borderColor: token.colorPrimaryPressed,
+          color: 'var(--yakit-btn-color-pressed)',
+          borderColor: 'var(--yakit-btn-color-pressed)',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
           backgroundColor: token.colorBasicBackground,
-          color: token.colorPrimary,
-          borderColor: token.colorPrimary,
+          color: 'var(--yakit-btn-color-base)',
+          borderColor: 'var(--yakit-btn-color-base)',
         },
       },
 
       ['&-text1']: {
         borderColor: 'transparent',
-        color: token.colorPrimary,
+        color: 'var(--yakit-btn-color-base)',
         backgroundColor: 'transparent',
 
         '--wave-color': 'transparent',
-        '--yakit-btn-disabled-color': token.colorPrimaryBorder,
+        '--yakit-btn-disabled-color': token.colorBorder,
         '--yakit-btn-disabled-bg': 'transparent',
 
         ['&-pressed']: {
-          backgroundColor: token.colorPrimaryBgHover,
-          color: token.colorPrimaryPressed,
+          backgroundColor: 'var(--yakit-btn-color-bg-hover)',
+          color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
-          backgroundColor: token.colorPrimaryBg,
-          color: token.colorPrimary,
+          backgroundColor: 'var(--yakit-btn-color-bg)',
+          color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
         },
       },
@@ -180,7 +242,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
 
         ['&-pressed']: {
           backgroundColor: token.colorNeutralBgHover,
-          color: token.colorPrimary,
+          color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
@@ -192,7 +254,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
 
       ['&-link1']: {
         borderColor: 'transparent',
-        color: token.colorPrimary,
+        color: 'var(--yakit-btn-color-base)',
         backgroundColor: 'transparent',
 
         '--wave-color': 'transparent',
@@ -201,12 +263,12 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
 
         ['&-pressed']: {
           backgroundColor: 'transparent',
-          color: token.colorPrimaryPressed,
+          color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
           backgroundColor: 'transparent',
-          color: token.colorPrimaryHover,
+          color: 'var(--yakit-btn-color-hover)',
           borderColor: 'transparent',
         },
       },
@@ -222,42 +284,19 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
 
         ['&-pressed']: {
           backgroundColor: 'transparent',
-          color: token.colorPrimaryPressed,
+          color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
         [`&:hover:not(:disabled):not(&-pressed)`]: {
           backgroundColor: 'transparent',
-          color: token.colorPrimary,
+          color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
         },
       },
       /**
        * 按钮尺寸
        */
-      [`&-small`]: {
-        padding: buttonToken.paddingSM,
-        fontSize: buttonToken.fontSizeSM,
-        letterSpacing: '0.5px',
-        lineHeight: '14px',
-      },
-      [`&-medium`]: {
-        padding: buttonToken.paddingMD,
-        fontSize: buttonToken.fontSizeMD,
-        letterSpacing: '0.5px',
-        lineHeight: '16px',
-      },
-      [`&-large`]: {
-        padding: buttonToken.paddingLG,
-        fontSize: buttonToken.fontSizeLG,
-        letterSpacing: '0.1px',
-        lineHeight: '20px',
-      },
-      [`&-huge`]: {
-        padding: buttonToken.paddingXL,
-        fontSize: buttonToken.fontSizeXL,
-        letterSpacing: '0.1px',
-        lineHeight: '20px',
-      },
+      ...genSizeVars(buttonToken),
 
       /**
        * 按钮形状
@@ -273,6 +312,10 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         backgroundColor: 'var(--yakit-btn-disabled-bg)',
         color: 'var(--yakit-btn-disabled-color)',
       },
+      /**
+       * 颜色
+       */
+      ...colorClasses,
     },
   };
 };

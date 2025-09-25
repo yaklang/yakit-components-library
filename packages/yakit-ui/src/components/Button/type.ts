@@ -17,6 +17,12 @@ export interface ButtonProps extends BaseProps {
     | 'text2'
     | 'link1'
     | 'link2';
+
+  /**
+   * 按钮颜色
+   * @default primary
+   */
+  color?: 'primary' | 'success' | 'warning' | 'error';
   /**
    * 按钮尺寸
    * @default md

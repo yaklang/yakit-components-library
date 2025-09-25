@@ -11,6 +11,7 @@ import useNewToken from './useToken';
 const useComponentStyle = <T extends GlobalToken = GlobalToken>(
   prefixCls: string,
   genStyle: (prefixCls: string, token: T) => CSSInterpolation,
+  extraStyle?: CSSInterpolation,
 ) => {
   const [theme, token, hashId] = useToken();
   const [_, localToken] = useNewToken();
@@ -21,7 +22,14 @@ const useComponentStyle = <T extends GlobalToken = GlobalToken>(
       path: [prefixCls],
       hashId,
     },
-    () => genStyle(prefixCls, localToken as T),
+    () => {
+      const baseStyle = genStyle(prefixCls, localToken as T);
+      if (extraStyle && typeof baseStyle === 'object' && !Array.isArray(baseStyle)) {
+        return { ...baseStyle, ...(extraStyle as object) };
+      }
+
+      return baseStyle;
+    },
   );
   return {
     wrapSSR,
