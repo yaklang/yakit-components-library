@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import ViteIcon from '../../public/vite.svg?react';
 import Button from '../../src/components/Button';
 import type { ButtonProps } from '../../src/components/Button/type';
 
@@ -55,6 +56,10 @@ const meta: Meta<typeof Button> = {
       description: '是否禁用按钮',
       table: { defaultValue: { summary: 'false' } },
       control: { type: 'boolean' },
+    },
+    icon: {
+      description: '按钮图标（ReactNode）',
+      control: false, // 图标一般不在控件里直接选，用示例展示
     },
     children: {
       description: '按钮内容',
@@ -116,6 +121,17 @@ export const Shapes: Story = {
       </Button>
       <Button {...args} shape="circle">
         O
+      </Button>
+    </div>
+  ),
+};
+
+// 图标示例
+export const WithIcon: Story = {
+  render: (args: ButtonProps) => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <Button {...args} icon={<ViteIcon />}>
+        搜索
       </Button>
     </div>
   ),

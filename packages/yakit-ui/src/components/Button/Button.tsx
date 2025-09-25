@@ -18,6 +18,7 @@ export const Button: FC<ButtonProps> = ({
   animation = 'wave',
   color = 'primary',
   htmlType = 'button',
+  icon,
   disabled,
   children,
   className,
@@ -53,7 +54,7 @@ export const Button: FC<ButtonProps> = ({
   return wrapSSR(
     <Wave animation={animation}>
       <button type={htmlType} disabled={disabled} onClick={onClick} className={classes} {...bind}>
-        {childrenDom}
+        {childrenDom} {icon}
       </button>
     </Wave>,
   );

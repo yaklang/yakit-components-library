@@ -56,6 +56,10 @@ export interface ButtonProps extends BaseProps {
    */
   htmlType?: 'button' | 'submit' | 'reset';
   /**
+   * 设置按钮的图标组件
+   */
+  icon?: ReactNode;
+  /**
    * 点击按钮时触发
    */
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
