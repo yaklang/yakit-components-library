@@ -17,7 +17,7 @@ export const Button: FC<ButtonProps> = ({
   shape = 'default',
   animation = 'wave',
   color = 'primary',
-  htmlType,
+  htmlType = 'button',
   disabled,
   children,
   className,

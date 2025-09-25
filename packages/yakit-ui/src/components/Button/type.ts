@@ -52,7 +52,7 @@ export interface ButtonProps extends BaseProps {
   animation?: 'wave' | false;
   /**
    * 设置 button 原生的 type 值
-   * @default primary
+   * @default button
    */
   htmlType?: 'button' | 'submit' | 'reset';
   /**
