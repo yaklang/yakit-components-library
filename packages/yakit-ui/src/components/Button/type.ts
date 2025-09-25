@@ -51,6 +51,11 @@ export interface ButtonProps extends BaseProps {
    */
   animation?: 'wave' | false;
   /**
+   * 设置 button 原生的 type 值
+   * @default primary
+   */
+  htmlType?: 'button' | 'submit' | 'reset';
+  /**
    * 点击按钮时触发
    */
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
