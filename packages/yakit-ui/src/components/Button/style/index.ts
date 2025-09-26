@@ -30,6 +30,7 @@ const genColorVars = (color: NonNullable<ButtonProps['color']>, token: GlobalTok
       '--yakit-btn-color-focus': token[`color${cap}Focus` as keyof GlobalToken],
       '--yakit-btn-color-bg': token[`color${cap}Bg` as keyof GlobalToken],
       '--yakit-btn-color-bg-hover': token[`color${cap}BgHover` as keyof GlobalToken],
+      '--yakit-btn-color-border': token[`color${cap}Border` as keyof GlobalToken],
     },
   };
 };
@@ -130,6 +131,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       '--yakit-btn-color-focus': token.colorPrimaryFocus,
       '--yakit-btn-color-bg': token.colorPrimaryBg,
       '--yakit-btn-color-bg-hover': token.colorPrimaryBgHover,
+      '--yakit-btn-color-border': token.colorPrimaryBorder,
 
       '--wave-color': 'var(--yakit-btn-color-focus)',
       '--yakit-btn-disabled-color': token.colorBasicBackground,
@@ -151,7 +153,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         // 设置变量
         '--wave-color': 'var(--yakit-btn-color-focus)',
         '--yakit-btn-disabled-color': token.colorBasicBackground,
-        '--yakit-btn-disabled-bg': token.colorBorder,
+        '--yakit-btn-disabled-bg': 'var(--yakit-btn-color-border)',
 
         ['&-pressed']: {
           backgroundColor: 'var(--yakit-btn-color-pressed)',
@@ -169,7 +171,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
 
         // 设置变量
         '--wave-color': 'var(--yakit-btn-color-focus)',
-        '--yakit-btn-disabled-color': token.colorBorder,
+        '--yakit-btn-disabled-color': 'var(--yakit-btn-color-border)',
         '--yakit-btn-disabled-bg': 'var(--yakit-btn-color-bg)',
 
         ['&-pressed']: {
@@ -203,12 +205,12 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       },
 
       ['&-outline1']: {
-        borderColor: token.colorBorder,
+        borderColor: 'var(--yakit-btn-color-border)',
         color: 'var(--yakit-btn-color-base)',
         backgroundColor: token.colorBasicBackground,
 
         '--wave-color': 'var(--yakit-btn-color-focus)',
-        '--yakit-btn-disabled-color': token.colorBorder,
+        '--yakit-btn-disabled-color': 'var(--yakit-btn-color-border)',
         '--yakit-btn-disabled-bg': token.colorBasicBackground,
 
         ['&-pressed']: {
@@ -250,7 +252,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         backgroundColor: 'transparent',
 
         '--wave-color': 'transparent',
-        '--yakit-btn-disabled-color': token.colorBorder,
+        '--yakit-btn-disabled-color': 'var(--yakit-btn-color-border)',
         '--yakit-btn-disabled-bg': 'transparent',
 
         ['&-pressed']: {
