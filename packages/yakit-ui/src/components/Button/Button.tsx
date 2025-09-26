@@ -18,6 +18,7 @@ export const Button: FC<ButtonProps> = ({
   animation = 'wave',
   color = 'primary',
   htmlType = 'button',
+  iconPosition = 'start',
   icon,
   disabled,
   children,
@@ -38,23 +39,34 @@ export const Button: FC<ButtonProps> = ({
       [`${prefixCls}-${shape}`]: returnOrFalse(shape),
       [`${prefixCls}-disabled`]: disabled,
       [`${prefixCls}-${type}-pressed`]: pressed,
+      [`${prefixCls}-icon-only`]: icon && !children,
       [`${prefixCls}-color-${color}`]: color,
+      [`${prefixCls}-icon-end`]: iconPosition === 'end',
     },
     className,
     rootClassName,
   );
 
   const childrenDom = useMemo(() => {
+    let content;
     if (typeof children === 'string') {
-      return <span>{children}</span>;
+      content = <span>{children}</span>;
+    } else {
+      content = children;
     }
-    return children;
-  }, [children]);
+
+    return (
+      <>
+        {icon && <span className={`${prefixCls}-icon`}>{icon}</span>}
+        {content}
+      </>
+    );
+  }, [children, icon]);
 
   return wrapSSR(
     <Wave animation={animation}>
       <button type={htmlType} disabled={disabled} onClick={onClick} className={classes} {...bind}>
-        {childrenDom} {icon}
+        {childrenDom}
       </button>
     </Wave>,
   );

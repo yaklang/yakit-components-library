@@ -9,4 +9,5 @@ export interface YakitButtonToken {
   fontSizeMD?: string;
   fontSizeLG?: string;
   fontSizeXL?: string;
+  iconGap?: string;
 }

@@ -14,6 +14,7 @@ const defaultButton: YakitButtonToken = {
   fontSizeMD: '12px',
   fontSizeLG: '14px',
   fontSizeXL: '14px',
+  iconGap: '4px',
 };
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -34,30 +35,62 @@ const genColorVars = (color: NonNullable<ButtonProps['color']>, token: GlobalTok
 };
 
 // 尺寸
-const genSizeVars = (btnToken: YakitButtonToken) => ({
+const genSizeVars = (btnToken: YakitButtonToken, prefixCls: string) => ({
   [`&-small`]: {
     padding: btnToken.paddingSM,
     fontSize: btnToken.fontSizeSM,
     letterSpacing: '0.5px',
     lineHeight: '14px',
+    height: '20px',
+    svg: {
+      width: '12px',
+      height: '12px',
+    },
+    [`&.${prefixCls}-icon-only`]: {
+      padding: '4px',
+    },
   },
   [`&-medium`]: {
     padding: btnToken.paddingMD,
     fontSize: btnToken.fontSizeMD,
     letterSpacing: '0.5px',
     lineHeight: '16px',
+    height: '24px',
+    svg: {
+      width: '16px',
+      height: '16px',
+    },
+    [`&.${prefixCls}-icon-only`]: {
+      padding: '4px',
+    },
   },
   [`&-large`]: {
     padding: btnToken.paddingLG,
     fontSize: btnToken.fontSizeLG,
     letterSpacing: '0.1px',
     lineHeight: '20px',
+    height: '28px',
+    svg: {
+      width: '20px',
+      height: '20px',
+    },
+    [`&.${prefixCls}-icon-only`]: {
+      padding: '4px',
+    },
   },
   [`&-huge`]: {
     padding: btnToken.paddingXL,
     fontSize: btnToken.fontSizeXL,
     letterSpacing: '0.1px',
     lineHeight: '20px',
+    height: '32px',
+    svg: {
+      width: '20px',
+      height: '20px',
+    },
+    [`&.${prefixCls}-icon-only`]: {
+      padding: '6px',
+    },
   },
 });
 
@@ -87,6 +120,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       alignItems: 'center',
       justifyContent: 'center',
       boxSizing: 'border-box',
+      gap: buttonToken.iconGap,
 
       // 颜色变量
       '--yakit-btn-color-base': token.colorPrimary,
@@ -296,7 +330,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       /**
        * 按钮尺寸
        */
-      ...genSizeVars(buttonToken),
+      ...genSizeVars(buttonToken, prefixCls),
 
       /**
        * 按钮形状
@@ -316,6 +350,25 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
        * 颜色
        */
       ...colorClasses,
+
+      /**
+       * 字体
+       */
+      [`& span`]: {
+        // 不换行
+        whiteSpace: 'nowrap',
+      },
+
+      /**
+       * 按钮图标位置
+       */
+      [`.${prefixCls}-icon`]: {
+        width: '100%',
+        height: '100%',
+      },
+      ['&-icon-end']: {
+        flexDirection: 'row-reverse',
+      },
     },
   };
 };

@@ -52,18 +52,28 @@ const meta: Meta<typeof Button> = {
       control: { type: 'select' },
       options: ['wave', false],
     },
-    disabled: {
-      description: '是否禁用按钮',
-      table: { defaultValue: { summary: 'false' } },
-      control: { type: 'boolean' },
-    },
     icon: {
       description: '按钮图标（ReactNode）',
-      control: false, // 图标一般不在控件里直接选，用示例展示
+      table: { defaultValue: { summary: 'null' } },
+      control: {
+        type: 'file',
+        accept: '.png',
+      },
+    },
+    iconPosition: {
+      description: '图标位置',
+      table: { defaultValue: { summary: 'start' } },
+      control: { type: 'select' },
+      options: ['start', 'end'],
     },
     children: {
       description: '按钮内容',
       control: 'text',
+    },
+    disabled: {
+      description: '是否禁用按钮',
+      table: { defaultValue: { summary: 'false' } },
+      control: { type: 'boolean' },
     },
     className: {
       description: '自定义类名',
@@ -130,8 +140,12 @@ export const Shapes: Story = {
 export const WithIcon: Story = {
   render: (args: ButtonProps) => (
     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <Button {...args} icon={<ViteIcon />} shape="circle" />
       <Button {...args} icon={<ViteIcon />}>
-        搜索
+        按钮
+      </Button>
+      <Button {...args} icon={<ViteIcon />} iconPosition="end">
+        按钮
       </Button>
     </div>
   ),

@@ -56,6 +56,11 @@ export interface ButtonProps extends BaseProps {
    */
   htmlType?: 'button' | 'submit' | 'reset';
   /**
+   * 设置按钮图标组件的位置
+   * @default start
+   */
+  iconPosition?: 'start' | 'end';
+  /**
    * 设置按钮的图标组件
    */
   icon?: ReactNode;
