@@ -69,6 +69,10 @@ export interface ButtonProps extends BaseProps {
    */
   icon?: ReactNode;
   /**
+   * 设置按钮载入状态
+   */
+  loading?: boolean;
+  /**
    * 点击按钮时触发
    */
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;

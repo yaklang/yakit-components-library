@@ -158,7 +158,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         ['&-pressed']: {
           backgroundColor: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-hover)',
           color: token.colorBasicBackground,
         },
@@ -178,7 +178,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           backgroundColor: 'var(--yakit-btn-color-bg-hover)',
           color: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-bg-hover)',
           color: 'var(--yakit-btn-color-base)',
         },
@@ -198,7 +198,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           backgroundColor: 'var(--yakit-btn-color-bg-hover)',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-bg)',
           color: 'var(--yakit-btn-color-base)',
         },
@@ -218,7 +218,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-bg)',
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'var(--yakit-btn-color-base)',
@@ -239,7 +239,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: token.colorBasicBackground,
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'var(--yakit-btn-color-base)',
@@ -260,7 +260,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-bg)',
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
@@ -281,7 +281,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: token.colorNeutralBgHover,
           color: token.colorTextTitle,
           borderColor: 'transparent',
@@ -302,7 +302,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: 'transparent',
           color: 'var(--yakit-btn-color-hover)',
           borderColor: 'transparent',
@@ -323,7 +323,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
           backgroundColor: 'transparent',
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
@@ -370,6 +370,14 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
       },
       ['&-icon-end']: {
         flexDirection: 'row-reverse',
+      },
+
+      /**
+       * 加载样式
+       */
+      [`&.${prefixCls}-loading`]: {
+        backgroundColor: 'var(--yakit-btn-disabled-bg)',
+        color: 'var(--yakit-btn-disabled-color)',
       },
     },
   };

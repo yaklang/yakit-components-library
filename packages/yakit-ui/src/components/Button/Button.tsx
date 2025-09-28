@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useMemo, type FC } from 'react';
 
 import useComponentStyle from '../../hooks/useComponentStyle';
+import { Loading } from '../../icons';
 import { returnOrFalse } from '../../utils';
 import Wave from '../Animation/Wave';
 
@@ -19,6 +20,7 @@ export const Button: FC<ButtonProps> = ({
   color = 'primary',
   htmlType = 'button',
   iconPosition = 'start',
+  loading,
   style,
   icon,
   disabled,
@@ -43,6 +45,7 @@ export const Button: FC<ButtonProps> = ({
       [`${prefixCls}-icon-only`]: icon && !children,
       [`${prefixCls}-color-${color}`]: color,
       [`${prefixCls}-icon-end`]: iconPosition === 'end',
+      [`${prefixCls}-loading`]: loading,
     },
     className,
     rootClassName,
@@ -55,14 +58,21 @@ export const Button: FC<ButtonProps> = ({
     } else {
       content = children;
     }
-
+    if (loading) {
+      return (
+        <>
+          <Loading spin />
+          {content}
+        </>
+      );
+    }
     return (
       <>
         {icon && <span className={`${prefixCls}-icon`}>{icon}</span>}
         {content}
       </>
     );
-  }, [children, icon]);
+  }, [children, icon, loading]);
 
   return wrapSSR(
     <Wave animation={animation}>
@@ -70,7 +80,10 @@ export const Button: FC<ButtonProps> = ({
         style={style}
         type={htmlType}
         disabled={disabled}
-        onClick={onClick}
+        onClick={(e) => {
+          if (disabled || loading) return;
+          onClick?.(e);
+        }}
         className={classes}
         {...bind}
       >

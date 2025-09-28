@@ -75,6 +75,11 @@ const meta: Meta<typeof Button> = {
       table: { defaultValue: { summary: 'false' } },
       control: { type: 'boolean' },
     },
+    loading: {
+      description: '是否开启加载',
+      table: { defaultValue: { summary: 'false' } },
+      control: { type: 'boolean' },
+    },
     className: {
       description: '自定义类名',
       control: 'text',
@@ -99,6 +104,8 @@ export const Default: Story = {
     animation: 'wave',
     color: 'primary',
     disabled: false,
+    loading: false,
+    iconPosition: 'start',
   },
 };
 
@@ -141,7 +148,7 @@ export const WithIcon: Story = {
   render: (args: ButtonProps) => (
     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       <Button {...args} icon={<ViteIcon />} shape="circle" />
-      <Button {...args} icon={<ViteIcon />}>
+      <Button {...args} icon={<ViteIcon />} loading>
         按钮
       </Button>
       <Button {...args} icon={<ViteIcon />} iconPosition="end">
