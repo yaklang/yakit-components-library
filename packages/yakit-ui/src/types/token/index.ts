@@ -7,10 +7,12 @@ import type {
 import type { YakitTheme } from '../theme';
 
 import type { YakitButtonToken } from './YakitButton';
+import type { YakitTagToken } from './YakitTag';
 
 // 扩展的组件 tokens
 export interface YakitThemeComponents {
   YakitButton?: Partial<YakitButtonToken>;
+  YakitTag?: Partial<YakitTagToken>;
 }
 
 // 扩展 antd 的 ThemeConfig

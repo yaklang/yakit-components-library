@@ -13,7 +13,7 @@ const meta: Meta<typeof Button> = {
   tags: ['autodocs'],
   argTypes: {
     type: {
-      description: '按钮类型（决定按钮的视觉样式）',
+      description: '按钮类型',
       table: { defaultValue: { summary: 'primary' } },
       control: { type: 'select' },
       options: [

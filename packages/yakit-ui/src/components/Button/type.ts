@@ -1,4 +1,4 @@
-import type { ReactNode, MouseEvent, CSSProperties } from 'react';
+import type { ReactNode, MouseEvent } from 'react';
 
 import type { BaseProps } from '../../types/common';
 
@@ -37,14 +37,6 @@ export interface ButtonProps extends BaseProps {
    * 按钮内容
    */
   children?: ReactNode;
-  /**
-   * 按钮根元素自定义类名
-   */
-  style?: CSSProperties;
-  /**
-   * 按钮样式
-   */
-  className?: string;
   /**
    * 按钮禁用
    */

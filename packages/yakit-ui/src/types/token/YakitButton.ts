@@ -1,5 +1,4 @@
 export interface YakitButtonToken {
-  /** 测试属性 */
   paddingSM?: string;
   paddingMD?: string;
   paddingLG?: string;

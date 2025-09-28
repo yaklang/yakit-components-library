@@ -58,13 +58,67 @@ const yakitTheme = Object.freeze({
   colorWarningTextHover: 'var(--Colors-Use-Warning-On-Primary)',
 
   /**
-   * 本文颜色
+   * 文本颜色
    */
   colorTextTitle: 'var(--Colors-Use-Neutral-Text-1-Title)',
   colorTextPrimary: 'var(--Colors-Use-Neutral-Text-2-Primary)',
   colorTextSecondary: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
   colorTextHelp: 'var(--Colors-Use-Neutral-Text-4-Help-text)',
   colorTextBase: 'var(--Colors-Use-Basic-Background)',
+
+  /**
+   * 颜色 Purple
+   */
+  colorPurple: 'var(--Colors-Use-Purple-Primary)',
+  colorPurpleBg: 'var(--Colors-Use-Purple-Bg)',
+  colorPurpleBgHover: 'var(--Colors-Use-Purple-Bg-Hover)',
+  colorPurpleBorder: 'var(--Colors-Use-Purple-Border)',
+  colorPurpleText: 'var(--Colors-Use-Purple-On-Primary)',
+
+  /**
+   * 颜色 Magenta
+   */
+  colorMagenta: 'var(--Colors-Use-Magenta-Primary)',
+  colorMagentaBg: 'var(--Colors-Use-Magenta-Bg)',
+  colorMagentaBgHover: 'var(--Colors-Use-Magenta-Bg-Hover)',
+  colorMagentaBorder: 'var(--Colors-Use-Magenta-Border)',
+  colorMagentaText: 'var(--Colors-Use-Magenta-On-Primary)',
+
+  /**
+   * 颜色 Blue
+   */
+  colorBlue: 'var(--Colors-Use-Blue-Primary)',
+  colorBlueBg: 'var(--Colors-Use-Blue-Bg)',
+  colorBlueBgHover: 'var(--Colors-Use-Blue-Bg-Hover)',
+  colorBlueBorder: 'var(--Colors-Use-Blue-Border)',
+  colorBlueText: 'var(--Colors-Use-Blue-On-Primary)',
+
+  /**
+   * 颜色 Lake Blue
+   */
+  colorLakeBlue: 'var(--Colors-Use-Lake-blue-Primary)',
+  colorLakeBlueBg: 'var(--Colors-Use-Lake-blue-Bg)',
+  colorLakeBlueBgHover: 'var(--Colors-Use-Lake-blue-Bg-Hover)',
+  colorLakeBlueBorder: 'var(--Colors-Use-Lake-blue-Border)',
+  colorLakeBlueText: 'var(--Colors-Use-Lake-blue-On-Primary)',
+
+  /**
+   * 颜色 Cyan
+   */
+  colorCyan: 'var(--Colors-Use-Cyan-Primary)',
+  colorCyanBg: 'var(--Colors-Use-Cyan-Bg)',
+  colorCyanBgHover: 'var(--Colors-Use-Cyan-Bg-Hover)',
+  colorCyanBorder: 'var(--Colors-Use-Cyan-Border)',
+  colorCyanText: 'var(--Colors-Use-Cyan-On-Primary)',
+
+  /**
+   * 颜色 Orange
+   */
+  colorOrange: 'var(--Colors-Use-Orange-Primary)',
+  colorOrangeBg: 'var(--Colors-Use-Orange-Bg)',
+  colorOrangeBgHover: 'var(--Colors-Use-Orange-Bg-Hover)',
+  colorOrangeBorder: 'var(--Colors-Use-Orange-Border)',
+  colorOrangeText: 'var(--Colors-Use-Orange-On-Primary)',
 
   /**
    * 背景颜色

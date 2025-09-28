@@ -56,13 +56,76 @@ export interface YakitTheme {
   colorWarningTextHover: string;
 
   /**
-   * 本文颜色
+   * 文本颜色
    */
   colorTextTitle: string;
   colorTextPrimary: string;
   colorTextSecondary: string;
   colorTextHelp: string;
   colorTextBase: string;
+
+  /**
+   * 颜色 Purple
+   */
+  colorPurple: string;
+  colorPurpleBg: string;
+  colorPurpleBgHover: string;
+  colorPurpleBorder: string;
+  colorPurpleText: string;
+
+  /**
+   * 颜色 Magenta
+   */
+  colorMagenta: string;
+  colorMagentaBg: string;
+  colorMagentaBgHover: string;
+  colorMagentaBorder: string;
+  colorMagentaText: string;
+
+  /**
+   * 颜色 Blue
+   */
+  colorBlue: string;
+  colorBlueBg: string;
+  colorBlueBgHover: string;
+  colorBlueBorder: string;
+  colorBlueText: string;
+
+  /**
+   * 颜色 Lake Blue
+   */
+  colorLakeBlue: string;
+  colorLakeBlueBg: string;
+  colorLakeBlueBgHover: string;
+  colorLakeBlueBorder: string;
+  colorLakeBlueText: string;
+
+  /**
+   * 颜色 Cyan
+   */
+  colorCyan: string;
+  colorCyanBg: string;
+  colorCyanBgHover: string;
+  colorCyanBorder: string;
+  colorCyanText: string;
+
+  /**
+   * 颜色 Orange
+   */
+  colorOrange: string;
+  colorOrangeBg: string;
+  colorOrangeBgHover: string;
+  colorOrangeBorder: string;
+  colorOrangeText: string;
+
+  /**
+   * 颜色 Yellow
+   */
+  colorYellow: string;
+  colorYellowBg: string;
+  colorYellowBgHover: string;
+  colorYellowBorder: string;
+  colorYellowText: string;
 
   /**
    * 背景颜色
