@@ -1,8 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ViteIcon from '../../public/vite.svg?react';
 import Button from '../../src/components/Button';
 import type { ButtonProps } from '../../src/components/Button/type';
+
+const PlusIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 16 16" fill="none">
+    <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+const storyLayout = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  flexWrap: 'wrap' as const,
+};
 
 const meta: Meta<typeof Button> = {
   title: 'YakitUi/通用/Button',
@@ -44,7 +56,12 @@ const meta: Meta<typeof Button> = {
       description: '按钮形状',
       table: { defaultValue: { summary: 'default' } },
       control: { type: 'select' },
-      options: ['default', 'circle'],
+      options: ['default', 'round', 'circle'],
+    },
+    error: {
+      description: '使用设计稿中的错误状态颜色（优先于 color）',
+      table: { defaultValue: { summary: 'false' } },
+      control: { type: 'boolean' },
     },
     animation: {
       description: '点击时的波纹动画效果',
@@ -54,11 +71,7 @@ const meta: Meta<typeof Button> = {
     },
     icon: {
       description: '按钮图标（ReactNode）',
-      table: { defaultValue: { summary: 'null' } },
-      control: {
-        type: 'file',
-        accept: '.png',
-      },
+      control: false,
     },
     iconPosition: {
       description: '图标位置',
@@ -112,7 +125,7 @@ export const Default: Story = {
 // 尺寸示例
 export const Sizes: Story = {
   render: (args: ButtonProps) => (
-    <div style={{ display: 'flex', gap: '1rem' }}>
+    <div style={storyLayout}>
       <Button {...args} size="small">
         Small
       </Button>
@@ -132,9 +145,12 @@ export const Sizes: Story = {
 // 形状示例
 export const Shapes: Story = {
   render: (args: ButtonProps) => (
-    <div style={{ display: 'flex', gap: '1rem' }}>
+    <div style={storyLayout}>
       <Button {...args} shape="default">
         Default
+      </Button>
+      <Button {...args} shape="round">
+        全圆角
       </Button>
       <Button {...args} shape="circle">
         O
@@ -146,13 +162,13 @@ export const Shapes: Story = {
 // 图标示例
 export const WithIcon: Story = {
   render: (args: ButtonProps) => (
-    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-      <Button {...args} icon={<ViteIcon />} shape="circle" />
-      <Button {...args} icon={<ViteIcon />} loading>
-        按钮
+    <div style={storyLayout}>
+      <Button {...args} icon={<PlusIcon />} aria-label="添加" />
+      <Button {...args} icon={<PlusIcon />}>
+        添加
       </Button>
-      <Button {...args} icon={<ViteIcon />} iconPosition="end">
-        按钮
+      <Button {...args} icon={<PlusIcon />} iconPosition="end">
+        添加
       </Button>
     </div>
   ),
@@ -161,7 +177,7 @@ export const WithIcon: Story = {
 // 类型示例
 export const Types: Story = {
   render: (args: ButtonProps) => (
-    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+    <div style={storyLayout}>
       {(
         [
           'primary',
@@ -181,6 +197,41 @@ export const Types: Story = {
       ))}
     </div>
   ),
+};
+
+// 颜色由 @yakit-libs/color 的语义色变量提供，并可随工具栏主题切换。
+export const Colors: Story = {
+  render: (args: ButtonProps) => (
+    <div style={storyLayout}>
+      {(['primary', 'success', 'warning', 'error'] as const).map((color) => (
+        <Button {...args} key={color} color={color}>
+          {color}
+        </Button>
+      ))}
+    </div>
+  ),
+};
+
+// 设计稿中的 Error=Yes 变体
+export const ErrorVariants: Story = {
+  render: (args: ButtonProps) => (
+    <div style={storyLayout}>
+      {(
+        ['primary', 'secondary1', 'secondary2', 'outline1', 'outline2', 'text1', 'link1'] as const
+      ).map((type) => (
+        <Button {...args} key={type} type={type} error>
+          {type}
+        </Button>
+      ))}
+    </div>
+  ),
+};
+
+export const Loading: Story = {
+  args: {
+    children: '加载中',
+    loading: true,
+  },
 };
 
 // 禁用状态

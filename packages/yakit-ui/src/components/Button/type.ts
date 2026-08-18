@@ -32,11 +32,22 @@ export interface ButtonProps extends BaseProps {
    * 按钮形状
    * @default default
    */
-  shape?: 'default' | 'circle';
+  shape?: 'default' | 'round' | 'circle';
+  /**
+   * 使用错误状态的颜色方案。
+   *
+   * 与设计稿中的「Error」变体对应；启用后会覆盖 color。
+   * @default false
+   */
+  error?: boolean;
   /**
    * 按钮内容
    */
   children?: ReactNode;
+  /**
+   * 纯图标按钮的无障碍名称。
+   */
+  'aria-label'?: string;
   /**
    * 按钮禁用
    */

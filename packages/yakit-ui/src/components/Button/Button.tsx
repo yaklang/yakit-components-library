@@ -18,9 +18,11 @@ export const Button: FC<ButtonProps> = ({
   shape = 'default',
   animation = 'wave',
   color = 'primary',
+  error = false,
   htmlType = 'button',
   iconPosition = 'start',
   loading,
+  'aria-label': ariaLabel,
   style,
   icon,
   disabled,
@@ -32,6 +34,7 @@ export const Button: FC<ButtonProps> = ({
   const { wrapSSR, hashId } = useComponentStyle(prefixCls, buttonStyle);
 
   const { pressed, bind } = usePressed();
+  const buttonColor = error ? 'error' : color;
 
   const classes = classNames(
     prefixCls,
@@ -43,7 +46,7 @@ export const Button: FC<ButtonProps> = ({
       [`${prefixCls}-disabled`]: disabled,
       [`${prefixCls}-${type}-pressed`]: pressed,
       [`${prefixCls}-icon-only`]: icon && !children,
-      [`${prefixCls}-color-${color}`]: color,
+      [`${prefixCls}-color-${buttonColor}`]: buttonColor,
       [`${prefixCls}-icon-end`]: iconPosition === 'end',
       [`${prefixCls}-loading`]: loading,
     },
@@ -79,7 +82,9 @@ export const Button: FC<ButtonProps> = ({
       <button
         style={style}
         type={htmlType}
-        disabled={disabled}
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        aria-label={ariaLabel}
         onClick={(e) => {
           if (disabled || loading) return;
           onClick?.(e);

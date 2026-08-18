@@ -158,7 +158,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
         ['&-pressed']: {
           backgroundColor: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-primary-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-hover)',
           color: token.colorBasicBackground,
         },
@@ -178,10 +178,11 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           backgroundColor: 'var(--yakit-btn-color-bg-hover)',
           color: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
-          backgroundColor: 'var(--yakit-btn-color-bg-hover)',
-          color: 'var(--yakit-btn-color-base)',
-        },
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-secondary1-pressed)`]:
+          {
+            backgroundColor: 'var(--yakit-btn-color-bg-hover)',
+            color: 'var(--yakit-btn-color-base)',
+          },
       },
 
       ['&-secondary2']: {
@@ -198,10 +199,11 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           backgroundColor: 'var(--yakit-btn-color-bg-hover)',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
-          backgroundColor: 'var(--yakit-btn-color-bg)',
-          color: 'var(--yakit-btn-color-base)',
-        },
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-secondary2-pressed)`]:
+          {
+            backgroundColor: 'var(--yakit-btn-color-bg)',
+            color: 'var(--yakit-btn-color-base)',
+          },
       },
 
       ['&-outline1']: {
@@ -218,7 +220,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-outline1-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-bg)',
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'var(--yakit-btn-color-base)',
@@ -239,7 +241,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'var(--yakit-btn-color-pressed)',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-outline2-pressed)`]: {
           backgroundColor: token.colorBasicBackground,
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'var(--yakit-btn-color-base)',
@@ -260,7 +262,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-text1-pressed)`]: {
           backgroundColor: 'var(--yakit-btn-color-bg)',
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
@@ -281,7 +283,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-text2-pressed)`]: {
           backgroundColor: token.colorNeutralBgHover,
           color: token.colorTextTitle,
           borderColor: 'transparent',
@@ -302,7 +304,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-link1-pressed)`]: {
           backgroundColor: 'transparent',
           color: 'var(--yakit-btn-color-hover)',
           borderColor: 'transparent',
@@ -323,7 +325,7 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
           color: 'var(--yakit-btn-color-pressed)',
           borderColor: 'transparent',
         },
-        [`&:hover:not(:disabled):not(:loading):not(&-pressed)`]: {
+        [`&:hover:not(:disabled):not(.${prefixCls}-loading):not(.${prefixCls}-link2-pressed)`]: {
           backgroundColor: 'transparent',
           color: 'var(--yakit-btn-color-base)',
           borderColor: 'transparent',
@@ -339,6 +341,10 @@ const buttonStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation =>
        */
       [`&-circle`]: {
         borderRadius: '50%',
+      },
+      [`&-round`]: {
+        borderRadius: '9999px',
+        gap: '2px',
       },
       /**
        * 状态
