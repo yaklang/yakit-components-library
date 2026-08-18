@@ -48,8 +48,8 @@ const yakitTheme = Object.freeze({
    */
   colorWarning: 'var(--Colors-Use-Warning-Primary)',
   colorWarningPressed: 'var(--Colors-Use-Warning-Pressed)',
-  colorWarningBg: 'var(--Colors-Use-Warning-Background)',
-  colorWarningBgHover: 'var(--Colors-Use-Warning-Background-Hover)',
+  colorWarningBg: 'var(--Colors-Use-Warning-Bg)',
+  colorWarningBgHover: 'var(--Colors-Use-Warning-Bg-Hover)',
   colorWarningBorder: 'var(--Colors-Use-Warning-Border)',
   colorWarningFocus: 'var(--Colors-Use-Warning-Focus)',
   colorWarningHover: 'var(--Colors-Use-Warning-Hover)',
