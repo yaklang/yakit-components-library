@@ -1,0 +1,53 @@
+# Context Snapshot: Yesterday Icon / Figma Audit
+
+- Task statement: 整理昨日生成的 icon 中是否存在乱码 icon，或与 Figma 中的 icon 不一致。
+- Desired outcome: 形成一份可验证的异常清单，区分“乱码/不可识别”和“与 Figma 不一致”，并保留足够证据供后续修复。
+- Stated solution: 审核昨日生成的 icon 并与 Figma 对照。
+- Probable intent hypothesis: 在合入或发布组件库前发现批量导入/命名/导出过程中产生的错误 icon。
+- Context type: Brownfield.
+- Date boundary: 当前日期为 2026-08-13（Asia/Shanghai）；“昨日”暂按 2026-08-12 00:00:00–23:59:59 +08:00 解释。
+- Known facts/evidence:
+  - `packages/yakit-ui/src/icons/outline/` 当前包含 361 个 SVG，均在昨日时间窗内落盘。
+  - `packages/yakit-ui/src/icons/solid/` 当前包含 275 个 SVG，均在昨日时间窗内落盘。
+  - `packages/yakit-ui/src/icons/` 在昨日时间窗内共有 642 个文件（包含 SVG 与索引/类型等相关文件）。
+  - `outline/index.tsx` 与 `solid/index.tsx` 将 Figma 节点 ID 风格的 SVG 文件映射为 React icon 名称；存在多个 `FigmaIcon...` 兜底名称，说明部分语义名称未被识别，但这本身尚不能证明图形乱码。
+  - `registry.ts` 将这些图标描述为 Figma-originated icons；Storybook 的 `Icon.stories.tsx` 提供集中预览入口。
+  - Git 在昨日时间窗内无提交；当前 icon 目录为未跟踪工作区内容，因此只能以文件时间和现有生成物界定“昨日批次”，不能依赖 commit diff。
+  - 仓库内未找到 Figma URL、`.fig` 文件、Figma 节点清单、导出 manifest 或像素/路径一致性校验脚本。
+- Constraints:
+  - 当前处于 `$deep-interview`，只澄清并生成执行规格，不直接修复 icon。
+  - 保留用户现有未提交/未跟踪工作区内容，不覆盖或回退。
+  - 若要判定“与 Figma 不一致”，需要可访问的权威 Figma 文件/page/frame/node 范围或等价导出基线。
+- Unknowns/open questions:
+  - 哪个 Figma 文件及其中哪个 page/frame/component set 是这批 636 个 SVG 的权威来源。
+  - “乱码 icon”是指视觉破损/空白/错位，还是名称乱码/兜底名称，或二者都算。
+  - 输出只需报告，还是后续还要修复并补自动校验。
+- Decision-boundary unknowns:
+  - 可否把明显的命名兜底、重复图形、空 SVG、viewBox/尺寸错误自动列为异常候选。
+  - 对微小 path/metadata 差异应采用结构一致、渲染像素一致还是人工视觉一致为准。
+- Likely codebase touchpoints:
+  - `packages/yakit-ui/src/icons/outline/`
+  - `packages/yakit-ui/src/icons/solid/`
+  - `packages/yakit-ui/src/icons/outline/index.tsx`
+  - `packages/yakit-ui/src/icons/solid/index.tsx`
+  - `packages/yakit-ui/src/icons/registry.ts`
+  - `packages/yakit-ui/.storybook/stories/Icon.stories.tsx`
+- Relevant repo docs/rules/context inspected:
+  - User-provided top-level `AGENTS.md` contract for this session.
+  - Root `README.md` (generic Turborepo guidance; no icon/Figma contract).
+  - `packages/yakit-ui/README.md` (empty/no usable icon contract at inspection time).
+  - Existing `.omx/context/` and `.omx/specs/` had no prior task-specific artifacts.
+- Terminology/doc-code conflicts:
+  - Code uses “Figma-originated icons” and separates `outline` (24×24, 2px stroke) from `solid` (20×20 filled). User term “乱码 icon” has no repository definition and requires a human meaning decision.
+- Prompt-safe initial-context summary status: not_needed.
+
+## Figma evidence (added after user supplied URL)
+
+- Figma URL: `https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Yakit-Design-System-V1.0?node-id=37148-15299&m=dev`
+- Parsed file key: `QWct5XE0Bg0bNDQ93eYgEw`; node: `37148:15299`; node name: `Basic Icons`.
+- Figma metadata labels the two sections as Outline (`2px stroke weight, 24x24 bounding box`) and Solid (`Solid fill, 20x20 bounding box`).
+- Figma screenshot shows the icon glyphs on a shared light frame background, not individual full-size `#E7E7F5` rectangles.
+- User decisions: whole `Basic Icons` set is in scope; “乱码” means visual blank/broken/misaligned glyph only, not naming fallback such as `FigmaIcon...`.
+- Local structural comparison: 636 SVGs total (361 outline, 275 solid); 0 empty SVGs. Numeric Figma-node-ID matching is broadly aligned, with `Icon/LandPlot` (Figma `46174:9893`) lacking a local SVG. Figma instances for `sun`, `moon`, `数据对比`, and `AI` are not separate export files and should not be counted as missing when their main symbol exports exist.
+- High-confidence visual anomaly heuristic: 188 local SVGs contain a visible full-canvas `<rect ... fill="#E7E7F5"/>` (75 outline, 113 solid), unlike the Figma per-icon appearance. This is a candidate list, not yet a per-icon pixel verdict.
+- Additional low-confidence scope discrepancy: four local numeric solid files (`4936-115787`, `4936-115788`, `4936-115789`, `4936-115790`) were not present in the returned metadata slice; because Figma metadata may be truncated and these files have valid glyph paths, do not call them mismatches without a complete node export.

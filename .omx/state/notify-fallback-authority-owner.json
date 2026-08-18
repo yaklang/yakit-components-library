@@ -1,0 +1,14 @@
+{
+  "owner": "hud",
+  "pid": 92550,
+  "cwd": "/Users/doubao/project/yakit-components-library",
+  "heartbeat_at": "2026-08-14T08:16:08.507Z",
+  "cooldown_ms": 5000,
+  "jitter_ms": 33,
+  "skip_count": 388,
+  "last_status": "skipped",
+  "last_reason": "rate_limited",
+  "last_spawn_at": "2026-08-14T08:16:04.505Z",
+  "last_skip_at": "2026-08-14T08:16:08.507Z",
+  "next_allowed_at": "2026-08-14T08:16:09.538Z"
+}

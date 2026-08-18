@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "active": false,
+  "skill": "ralph",
+  "keyword": "$ralph",
+  "phase": "planning",
+  "activated_at": "2026-08-13T07:13:43.598Z",
+  "updated_at": "2026-08-14T07:43:59.413Z",
+  "source": "keyword-detector",
+  "owner_codex_session_id": "019ff9f4-02a2-7751-9c7a-5d4750e7f974",
+  "input_lock": null,
+  "session_id": "019ff9f4-02a2-7751-9c7a-5d4750e7f974",
+  "active_skills": []
+}
