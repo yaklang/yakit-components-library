@@ -22,7 +22,7 @@ const useComponentStyle = <T extends GlobalToken = GlobalToken>(
 ): ComponentStyleResult => {
   const [theme, token, hashId] = useToken();
   const [_, localToken] = useNewToken();
-  const wrapSSR = useStyleRegister(
+  useStyleRegister(
     {
       theme,
       token,
@@ -39,7 +39,7 @@ const useComponentStyle = <T extends GlobalToken = GlobalToken>(
     },
   );
   return {
-    wrapSSR,
+    wrapSSR: (node) => node,
     hashId,
     token: localToken as GlobalToken,
   };

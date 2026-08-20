@@ -4,246 +4,226 @@ import type { GlobalToken } from '../../../types/token';
 
 const searchInputStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation => ({
   [`.${prefixCls}`]: {
-    alignItems: 'center',
-    backgroundColor: token.colorBasicBackground,
-    borderRadius: '4px',
+    alignItems: 'stretch',
     boxSizing: 'border-box',
-    color: token.colorTextTitle,
     display: 'inline-flex',
     fontFamily: 'PingFang SC',
-    fontStyle: 'normal',
-    gap: '4px',
     minWidth: 0,
-    overflow: 'hidden',
-    transition: 'box-shadow 0.2s ease',
-    width: '216px',
-    boxShadow: `inset 0 0 0 1px ${token.colorNeutralBorder}`,
-
-    [`&:hover:not(.${prefixCls}-disabled)`]: {
-      boxShadow: `inset 0 0 0 1px ${token.colorPrimary}`,
+    width: '100%',
+    [`.${prefixCls}-slot-control`]: {
+      display: 'flex',
+      flex: '1 1 0',
+      minWidth: 0,
+      padding: 0,
+      width: '100%',
     },
-
-    [`&:focus-within:not(.${prefixCls}-disabled)`]: {
-      boxShadow: `inset 0 0 0 1px ${token.colorPrimary}, 0 0 0 2px ${token.colorPrimaryFocus}`,
-    },
-
-    [`&.${prefixCls}-disabled`]: {
-      backgroundColor: token.colorNeutralBgHover,
-      boxShadow: `inset 0 0 0 1px ${token.colorNeutralBorder}`,
-      color: token.colorNeutralDisable,
-      cursor: 'not-allowed',
-    },
-
-    [`&-small`]: { height: '20px', padding: '2px 6px' },
-    [`&-medium`]: { height: '24px', padding: '4px 8px' },
-    [`&-large`]: { height: '28px', padding: '6px 8px' },
-    [`&-huge`]: { height: '32px', padding: '6px 12px' },
-
-    [`&-element`]: {
-      background: 'transparent',
-      border: 0,
+    [`.${prefixCls}-slot-field`]: {
+      background: token.colorBasicBackground,
+      border: `1px solid ${token.colorNeutralBorder}`,
+      borderRadius: '4px',
       boxSizing: 'border-box',
-      color: 'inherit',
+      color: token.colorTextTitle,
       flex: '1 1 0',
       fontFamily: 'inherit',
-      fontStyle: 'normal',
-      fontWeight: 400,
+      height: '100%',
       minWidth: 0,
-      outline: 0,
+      padding: '4px 8px',
+      '&::placeholder': { color: token.colorNeutralDisable, opacity: 1 },
+    },
+    [`.${prefixCls}-field-affix-wrapper`]: {
+      alignItems: 'center',
+      background: token.colorBasicBackground,
+      border: `1px solid ${token.colorNeutralBorder}`,
+      borderRadius: '4px',
+      boxShadow: 'none',
+      boxSizing: 'border-box',
+      color: token.colorTextTitle,
+      display: 'flex',
+      flex: '1 1 0',
+      fontFamily: 'inherit',
+      height: '100%',
+      minWidth: 0,
+      transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+    },
+    [`.${prefixCls}-field-affix-wrapper .${prefixCls}-slot-field`]: {
+      background: 'transparent',
+      border: 0,
+      borderRadius: 0,
+      height: '100%',
       padding: 0,
-
-      '&::placeholder': {
-        color: token.colorNeutralDisable,
-        opacity: 1,
-      },
-
-      '&:disabled': {
-        color: token.colorNeutralDisable,
-        cursor: 'not-allowed',
-      },
     },
-
-    [`&-small .${prefixCls}-element`]: {
-      fontSize: '11px',
-      letterSpacing: '0.5px',
-      lineHeight: '14px',
-    },
-
-    [`&-medium .${prefixCls}-element, &-large .${prefixCls}-element`]: {
-      fontSize: '12px',
-      letterSpacing: '0.5px',
-      lineHeight: '16px',
-    },
-
-    [`&-huge .${prefixCls}-element`]: {
-      fontSize: '14px',
-      letterSpacing: '0.1px',
-      lineHeight: '20px',
-    },
-
-    [`&-icon, &-suffix`]: {
+    [`.${prefixCls}-slot-prefix, .${prefixCls}-slot-suffix`]: {
       alignItems: 'center',
       display: 'inline-flex',
-      flex: 'none',
     },
-
-    [`&-icon img, &-suffix img`]: {
-      display: 'block',
-      height: '13px',
-      width: '13px',
-    },
-
-    [`&-small .${prefixCls}-icon, &-small .${prefixCls}-suffix`]: {
-      height: '12px',
-      width: '12px',
-    },
-
-    [`&-medium .${prefixCls}-icon, &-medium .${prefixCls}-suffix, &-large .${prefixCls}-icon, &-large .${prefixCls}-suffix`]:
-      {
-        height: '16px',
-        width: '16px',
-      },
-
-    [`&-huge .${prefixCls}-icon, &-huge .${prefixCls}-suffix`]: {
-      height: '20px',
-      width: '20px',
-    },
-
-    [`&-main-bg, &-dropdown`]: {
-      gap: 0,
-      overflow: 'visible',
-      padding: 0,
-      width: '216px',
+    [`.${prefixCls}-slot-button`]: {
+      alignItems: 'center',
+      background: 'transparent',
+      border: 0,
+      borderRadius: '0 4px 4px 0',
       boxShadow: 'none',
-
-      '&:hover:not(.${prefixCls}-disabled), &:focus-within:not(.${prefixCls}-disabled)': {
-        boxShadow: 'none',
-      },
-
-      [`.${prefixCls}-input-area`]: {
-        alignItems: 'center',
-        borderBottom: `1px solid ${token.colorNeutralBorder}`,
-        borderLeft: `1px solid ${token.colorNeutralBorder}`,
-        borderRadius: '4px 0 0 4px',
-        borderTop: `1px solid ${token.colorNeutralBorder}`,
-        display: 'flex',
-        flex: '1 1 0',
-        height: '100%',
-        minWidth: 0,
-        padding: '0 8px',
-      },
-
-      [`.${prefixCls}-action`]: {
-        alignItems: 'center',
-        backgroundColor: token.colorPrimary,
-        border: 0,
-        borderRadius: '0 4px 4px 0',
-        boxSizing: 'border-box',
-        cursor: 'pointer',
-        display: 'inline-flex',
-        flex: 'none',
-        height: '100%',
-        justifyContent: 'center',
-        outline: 0,
-        padding: '4px',
-        width: '24px',
-
-        img: { display: 'block', height: '13px', width: '13px' },
-
-        '&:disabled': {
-          backgroundColor: token.colorNeutralBgHover,
-          cursor: 'not-allowed',
-        },
-      },
+      boxSizing: 'border-box',
+      color: token.colorTextSecondary,
+      display: 'inline-flex',
+      flex: '0 0 auto',
+      height: '100%',
+      justifyContent: 'center',
+      minWidth: 0,
+      padding: '4px',
+      width: '100%',
+      img: { display: 'block' },
     },
-
-    [`&-main-bg.${prefixCls}-small .${prefixCls}-action, &-dropdown.${prefixCls}-small .${prefixCls}-action`]:
+    [`&.${prefixCls}-box`]: {
+      borderRadius: '4px',
+      [`&:hover:not(.${prefixCls}-disabled) .${prefixCls}-slot-field, &:hover:not(.${prefixCls}-disabled) .${prefixCls}-field-affix-wrapper`]:
+        {
+          borderColor: token.colorPrimary,
+        },
+      [`&:focus-within:not(.${prefixCls}-disabled) .${prefixCls}-slot-field, &:focus-within:not(.${prefixCls}-disabled) .${prefixCls}-field-affix-wrapper`]:
+        {
+          borderColor: token.colorPrimary,
+          boxShadow: `0 0 0 2px ${token.colorPrimaryFocus}`,
+        },
+      [`&:not(.${prefixCls}-has-action) .${prefixCls}-slot-button`]: { display: 'none' },
+    },
+    [`&.${prefixCls}-error .${prefixCls}-slot-field, &.${prefixCls}-error .${prefixCls}-field-affix-wrapper`]:
       {
-        padding: '2px',
-        width: '20px',
+        borderColor: token.colorErrorBorder,
       },
-
-    [`&-main-bg.${prefixCls}-large .${prefixCls}-action, &-dropdown.${prefixCls}-large .${prefixCls}-action`]:
+    [`&.${prefixCls}-error:focus-within .${prefixCls}-slot-field, &.${prefixCls}-error:focus-within .${prefixCls}-field-affix-wrapper`]:
       {
-        padding: '6px',
-        width: '28px',
+        borderColor: token.colorError,
+        boxShadow: `0 0 0 2px ${token.colorErrorFocus}`,
       },
-
-    [`&-main-bg.${prefixCls}-huge .${prefixCls}-action, &-dropdown.${prefixCls}-huge .${prefixCls}-action`]:
-      {
-        padding: '6px',
-        width: '32px',
-      },
-
-    [`&-main-bg:hover:not(.${prefixCls}-disabled) .${prefixCls}-input-area, &-dropdown:hover:not(.${prefixCls}-disabled) .${prefixCls}-input-area`]:
-      {
-        borderColor: token.colorPrimary,
-      },
-
-    [`&-main-bg:focus-within:not(.${prefixCls}-disabled) .${prefixCls}-input-area, &-dropdown:focus-within:not(.${prefixCls}-disabled) .${prefixCls}-input-area`]:
-      {
-        borderColor: token.colorPrimary,
-        boxShadow: `0 0 0 2px ${token.colorPrimaryFocus}`,
-      },
-
-    [`&-dropdown`]: {
-      width: '304px',
-
-      [`.${prefixCls}-dropdown-trigger`]: {
-        alignItems: 'center',
-        background: token.colorBasicBackground,
-        borderBottom: `1px solid ${token.colorNeutralBorder}`,
-        borderLeft: `1px solid ${token.colorNeutralBorder}`,
+    [`&.${prefixCls}-main-bg, &.${prefixCls}-dropdown`]: {
+      [`.${prefixCls}-slot-field, .${prefixCls}-field-affix-wrapper`]: {
         borderRadius: '4px 0 0 4px',
         borderRight: 0,
-        borderTop: `1px solid ${token.colorNeutralBorder}`,
-        color: token.colorTextTitle,
-        cursor: 'pointer',
-        display: 'inline-flex',
-        flex: 'none',
-        fontFamily: 'inherit',
-        fontSize: '12px',
-        fontWeight: 400,
-        gap: '4px',
-        height: '100%',
-        letterSpacing: '0.5px',
-        lineHeight: '16px',
-        outline: 0,
-        padding: '4px 8px',
-
-        img: { display: 'block', height: '12px', width: '12px' },
-
-        '&:disabled': { cursor: 'not-allowed' },
       },
-
-      [`.${prefixCls}-input-area`]: {
-        borderLeft: `1px solid ${token.colorNeutralBorder}`,
+      [`.${prefixCls}-slot-button`]: {
+        backgroundColor: token.colorPrimary,
+        color: token.colorBasicBackground,
+      },
+    },
+    [`&.${prefixCls}-dropdown`]: {
+      [`.${prefixCls}-selector-wrap, .${prefixCls}-selector`]: {
+        alignItems: 'center',
+        background: token.colorBasicBackground,
+        border: `1px solid ${token.colorNeutralBorder}`,
+        borderRight: 0,
+        borderRadius: '4px 0 0 4px',
+        boxSizing: 'border-box',
+        color: token.colorTextTitle,
+        font: 'inherit',
+        fontSize: '12px',
+        height: '100%',
+        maxWidth: '120px',
+        minWidth: '72px',
+        padding: '0 8px',
+      },
+      [`.${prefixCls}-selector-wrap`]: {
+        display: 'inline-flex',
+        flex: '0 0 auto',
+        gap: '4px',
+        '&:focus-within': {
+          borderColor: token.colorPrimary,
+          boxShadow: `0 0 0 2px ${token.colorPrimaryFocus}`,
+          position: 'relative',
+          zIndex: 1,
+        },
+      },
+      [`.${prefixCls}-selector`]: {
+        appearance: 'none',
+        background: 'transparent',
+        border: 0,
+        flex: '1 1 auto',
+        maxWidth: '100%',
+        minWidth: 0,
+        outline: 0,
+        padding: 0,
+      },
+      [`.${prefixCls}-selector-icon`]: {
+        display: 'block',
+        flex: '0 0 auto',
+        height: '4.5px',
+        width: '8px',
+      },
+      [`.${prefixCls}-selector-static`]: {
+        alignItems: 'center',
+        display: 'inline-flex',
+        gap: '4px',
+      },
+      [`.${prefixCls}-slot-field, .${prefixCls}-field-affix-wrapper`]: {
+        borderLeft: 0,
         borderRadius: 0,
       },
     },
-
-    [`&-icon-only`]: {
+    [`&.${prefixCls}-disabled .${prefixCls}-slot-field, &.${prefixCls}-disabled .${prefixCls}-field-affix-wrapper`]:
+      {
+        backgroundColor: token.colorNeutralBgHover,
+        borderColor: token.colorNeutralBorder,
+        color: token.colorNeutralDisable,
+        cursor: 'not-allowed',
+      },
+    [`&.${prefixCls}-small`]: { height: '20px', fontSize: '11px' },
+    [`&.${prefixCls}-medium`]: { height: '24px', fontSize: '12px' },
+    [`&.${prefixCls}-large`]: { height: '28px', fontSize: '12px' },
+    [`&.${prefixCls}-huge`]: { height: '32px', fontSize: '14px' },
+    [`&.${prefixCls}-small .${prefixCls}-slot-field, &.${prefixCls}-small .${prefixCls}-field-affix-wrapper`]:
+      {
+        fontSize: '11px',
+        lineHeight: '16px',
+        paddingInline: '6px',
+      },
+    [`&.${prefixCls}-medium .${prefixCls}-slot-field, &.${prefixCls}-medium .${prefixCls}-field-affix-wrapper, &.${prefixCls}-large .${prefixCls}-slot-field, &.${prefixCls}-large .${prefixCls}-field-affix-wrapper`]:
+      {
+        fontSize: '12px',
+        lineHeight: '16px',
+        paddingInline: '8px',
+      },
+    [`&.${prefixCls}-huge .${prefixCls}-slot-field, &.${prefixCls}-huge .${prefixCls}-field-affix-wrapper`]:
+      {
+        fontSize: '14px',
+        lineHeight: '20px',
+        paddingInline: '12px',
+      },
+    [`&.${prefixCls}-small .${prefixCls}-slot-button`]: { flexBasis: '20px', width: '20px' },
+    [`&.${prefixCls}-medium .${prefixCls}-slot-button`]: { flexBasis: '24px', width: '24px' },
+    [`&.${prefixCls}-large .${prefixCls}-slot-button`]: { flexBasis: '28px', width: '28px' },
+    [`&.${prefixCls}-huge .${prefixCls}-slot-button`]: { flexBasis: '32px', width: '32px' },
+    [`&.${prefixCls}-small .${prefixCls}-slot-prefix img, &.${prefixCls}-small .${prefixCls}-slot-suffix img, &.${prefixCls}-small .${prefixCls}-slot-button img`]:
+      { height: '12px', width: '12px' },
+    [`&.${prefixCls}-medium .${prefixCls}-slot-prefix img, &.${prefixCls}-medium .${prefixCls}-slot-suffix img, &.${prefixCls}-medium .${prefixCls}-slot-button img`]:
+      { height: '16px', width: '16px' },
+    [`&.${prefixCls}-large .${prefixCls}-slot-prefix img, &.${prefixCls}-large .${prefixCls}-slot-suffix img, &.${prefixCls}-large .${prefixCls}-slot-button img`]:
+      { height: '20px', width: '20px' },
+    [`&.${prefixCls}-huge .${prefixCls}-slot-prefix img, &.${prefixCls}-huge .${prefixCls}-slot-suffix img, &.${prefixCls}-huge .${prefixCls}-slot-button img`]:
+      { height: '24px', width: '24px' },
+    // In affix mode the wrapper owns Figma's horizontal padding. The native input
+    // must not add a second 8px inset after a leading icon.
+    [`&& .${prefixCls}-field-affix-wrapper .${prefixCls}-slot-field`]: { paddingInline: 0 },
+    [`&.${prefixCls}-icon-only`]: {
+      alignItems: 'center',
       background: 'transparent',
       border: 0,
-      boxShadow: 'none',
+      borderRadius: '4px',
       cursor: 'pointer',
       justifyContent: 'center',
       padding: '4px',
       width: '24px',
-
-      '&:hover:not(.${prefixCls}-disabled)': {
-        backgroundColor: token.colorNeutralBgHover,
-        boxShadow: 'none',
-      },
-
-      '&:focus-visible:not(.${prefixCls}-disabled)': {
-        boxShadow: `0 0 0 2px ${token.colorPrimaryFocus}`,
-      },
+      '&:hover:not(:disabled)': { backgroundColor: token.colorNeutralBgHover },
+      '&:focus-visible': { boxShadow: `0 0 0 2px ${token.colorPrimaryFocus}`, outline: 0 },
+      '&:disabled': { cursor: 'not-allowed' },
     },
-
-    [`&-icon-only.${prefixCls}-small`]: { padding: '2px', width: '20px' },
-    [`&-icon-only.${prefixCls}-large`]: { padding: '6px', width: '28px' },
-    [`&-icon-only.${prefixCls}-huge`]: { padding: '6px', width: '32px' },
+    [`&.${prefixCls}-icon-only.${prefixCls}-small`]: { padding: '2px', width: '20px' },
+    [`&.${prefixCls}-icon-only.${prefixCls}-large`]: { padding: '6px', width: '28px' },
+    [`&.${prefixCls}-icon-only.${prefixCls}-huge`]: { padding: '6px', width: '32px' },
+    [`.${prefixCls}-icon`]: {
+      alignItems: 'center',
+      display: 'inline-flex',
+      justifyContent: 'center',
+      img: { display: 'block', height: '13px', width: '13px' },
+    },
   },
 });
 

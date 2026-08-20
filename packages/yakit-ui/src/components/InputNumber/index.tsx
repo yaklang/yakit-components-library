@@ -1,5 +1,18 @@
+export { InputNumber } from './InputNumber';
 import { InputNumber } from './InputNumber';
-import type { InputNumberProps } from './type';
+import type {
+  InputNumberControls,
+  InputNumberProps,
+  InputNumberRef,
+  InputNumberSize,
+  InputNumberValue,
+} from './type';
 
-export type { InputNumberProps };
+export type {
+  InputNumberControls,
+  InputNumberProps,
+  InputNumberRef,
+  InputNumberSize,
+  InputNumberValue,
+};
 export default InputNumber;

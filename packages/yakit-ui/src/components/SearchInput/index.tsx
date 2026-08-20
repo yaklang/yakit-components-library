@@ -1,5 +1,11 @@
 import { SearchInput } from './SearchInput';
-import type { SearchInputProps } from './type';
 
-export type { SearchInputProps };
+export type {
+  SearchIconPosition,
+  SearchInputProps,
+  SearchInputSize,
+  SearchInputVariant,
+  SearchSelectorOption,
+  SearchSelectorProps,
+} from './type';
 export default SearchInput;

@@ -4,133 +4,152 @@ import type { GlobalToken } from '../../../types/token';
 
 const inputStyle = (prefixCls: string, token: GlobalToken): CSSInterpolation => ({
   [`.${prefixCls}`]: {
-    alignItems: 'center',
-    backgroundColor: token.colorBasicBackground,
+    borderColor: token.colorNeutralBorder,
     borderRadius: '4px',
+    boxShadow: 'none',
     boxSizing: 'border-box',
     color: token.colorTextTitle,
-    display: 'inline-flex',
     fontFamily: 'PingFang SC',
-    fontStyle: 'normal',
-    gap: 0,
-    height: '32px',
     minWidth: 0,
-    overflow: 'hidden',
-    padding: '6px 12px',
-    transition: 'box-shadow 0.2s ease',
-    width: '400px',
-    boxShadow: `inset 0 0 0 1px ${token.colorNeutralBorder}`,
+    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+    width: '100%',
 
-    [`&:hover:not(.${prefixCls}-disabled)`]: {
-      boxShadow: `inset 0 0 0 1px ${token.colorPrimary}`,
-    },
+    // Keep Figma tokens authoritative over Ant Design's outlined status selectors.
+    '&&': {
+      borderColor: token.colorNeutralBorder,
 
-    [`&:focus-within:not(.${prefixCls}-disabled)`]: {
-      boxShadow: `inset 0 0 0 1px ${token.colorPrimary}, 0 0 0 2px ${token.colorPrimaryFocus}`,
-    },
-
-    [`&.${prefixCls}-error`]: {
-      boxShadow: `inset 0 0 0 1px ${token.colorErrorBorder}`,
-
-      [`&:hover:not(.${prefixCls}-disabled)`]: {
-        boxShadow: `inset 0 0 0 1px ${token.colorError}`,
+      [`&:hover:not(.${prefixCls}-disabled):not(.${prefixCls}-error)`]: {
+        borderColor: token.colorPrimary,
       },
-
-      [`&:focus-within:not(.${prefixCls}-disabled)`]: {
-        boxShadow: `inset 0 0 0 1px ${token.colorError}, 0 0 0 2px ${token.colorErrorFocus}`,
+      [`&.${prefixCls}-focused:not(.${prefixCls}-disabled):not(.${prefixCls}-error), &:focus:not(.${prefixCls}-disabled):not(.${prefixCls}-error), &:focus-within:not(.${prefixCls}-disabled):not(.${prefixCls}-error)`]:
+        {
+          borderColor: `${token.colorPrimary} !important`,
+          boxShadow: `0 0 0 2px ${token.colorPrimaryFocus} !important`,
+        },
+      [`&.${prefixCls}-error`]: { borderColor: token.colorErrorBorder },
+      [`&.${prefixCls}-error:hover`]: { borderColor: token.colorError },
+      [`&.${prefixCls}-error:focus, &.${prefixCls}-error:focus-within`]: {
+        borderColor: token.colorError,
+        boxShadow: `0 0 0 2px ${token.colorErrorFocus}`,
       },
-    },
-
-    [`&.${prefixCls}-disabled`]: {
-      backgroundColor: token.colorNeutralBgHover,
-      boxShadow: `inset 0 0 0 1px ${token.colorNeutralBorder}`,
-      color: token.colorNeutralDisable,
-      cursor: 'not-allowed',
-    },
-
-    [`&-small`]: {
-      height: '24px',
-      padding: '4px 8px',
-
-      [`.${prefixCls}-element`]: {
-        fontSize: '12px',
-        letterSpacing: '0.5px',
-        lineHeight: '16px',
-      },
-
-      [`.${prefixCls}-prefix, .${prefixCls}-suffix`]: {
-        fontSize: '12px',
-        lineHeight: '12px',
-        svg: { height: '12px', width: '12px' },
-      },
-    },
-
-    [`&-medium`]: {
-      height: '28px',
-      padding: '6px 12px',
-
-      [`.${prefixCls}-element`]: {
-        fontSize: '12px',
-        letterSpacing: '0.5px',
-        lineHeight: '16px',
-      },
-
-      [`.${prefixCls}-prefix, .${prefixCls}-suffix`]: {
-        fontSize: '14px',
-        lineHeight: '14px',
-        svg: { height: '14px', width: '14px' },
-      },
-    },
-
-    [`&-large`]: {
-      height: '32px',
-      padding: '6px 12px',
-
-      [`.${prefixCls}-element`]: {
-        fontSize: '14px',
-        letterSpacing: '0.1px',
-        lineHeight: '20px',
-      },
-
-      [`.${prefixCls}-prefix, .${prefixCls}-suffix`]: {
-        fontSize: '16px',
-        lineHeight: '16px',
-        svg: { height: '16px', width: '16px' },
-      },
-    },
-
-    [`&-element`]: {
-      background: 'transparent',
-      border: 0,
-      color: 'inherit',
-      flex: 1,
-      fontFamily: 'inherit',
-      fontStyle: 'normal',
-      fontWeight: 400,
-      minWidth: 0,
-      outline: 0,
-      padding: 0,
-
-      '&::placeholder': {
-        color: token.colorNeutralDisable,
-        opacity: 1,
-      },
-
-      '&:disabled': {
+      [`&.${prefixCls}-disabled`]: {
+        backgroundColor: token.colorNeutralBgHover,
+        borderColor: token.colorNeutralBorder,
         color: token.colorNeutralDisable,
         cursor: 'not-allowed',
       },
     },
-
-    [`&.${prefixCls}-with-prefix, &.${prefixCls}-with-suffix`]: {
-      gap: '4px',
+    [`&.${prefixCls}-small`]: {
+      fontSize: '12px',
+      height: '24px',
+      lineHeight: '16px',
+      paddingBlock: '3px',
+      paddingInline: '8px',
     },
-
-    [`&-prefix, &-suffix`]: {
+    [`&.${prefixCls}-medium`]: {
+      fontSize: '12px',
+      height: '28px',
+      lineHeight: '16px',
+      paddingBlock: '5px',
+      paddingInline: '12px',
+    },
+    [`&.${prefixCls}-large`]: {
+      fontSize: '14px',
+      height: '32px',
+      lineHeight: '20px',
+      paddingBlock: '5px',
+      paddingInline: '12px',
+    },
+    [`.${prefixCls}-slot-input`]: {
+      color: 'inherit',
+      fontFamily: 'inherit',
+      '&::placeholder': { color: token.colorNeutralDisable, opacity: 1 },
+    },
+    [`.${prefixCls}-slot-root .${prefixCls}-slot-input`]: {
+      border: 0,
+      boxShadow: 'none',
+      height: '100%',
+      padding: 0,
+    },
+    [`.${prefixCls}-slot-prefix, .${prefixCls}-slot-suffix`]: {
       alignItems: 'center',
       color: token.colorTextSecondary,
       display: 'inline-flex',
-      flex: 'none',
+    },
+    [`&.${prefixCls}-slot-root:has(.${prefixCls}-select)`]: {
+      paddingInline: 0,
+      [`.${prefixCls}-slot-input`]: { paddingInline: '12px' },
+      [`.${prefixCls}-slot-prefix, .${prefixCls}-slot-suffix`]: {
+        alignSelf: 'stretch',
+        height: '100%',
+        marginInline: 0,
+      },
+    },
+    [`.${prefixCls}-select`]: {
+      alignItems: 'center',
+      alignSelf: 'stretch',
+      backgroundColor: '#F8F9FA',
+      border: 0,
+      boxShadow: 'none',
+      color: token.colorTextTitle,
+      cursor: 'pointer',
+      display: 'inline-flex',
+      font: 'inherit',
+      gap: '8px',
+      justifyContent: 'center',
+      lineHeight: '20px',
+      paddingInline: '12px',
+      whiteSpace: 'nowrap',
+      '&:disabled': {
+        color: token.colorNeutralDisable,
+        cursor: 'not-allowed',
+      },
+      '&:focus-visible': {
+        boxShadow: `inset 0 0 0 2px ${token.colorPrimaryFocus}`,
+        outline: `1px solid ${token.colorPrimary}`,
+        outlineOffset: '-1px',
+      },
+    },
+    [`.${prefixCls}-select-icon`]: {
+      display: 'block',
+      flex: '0 0 auto',
+      height: '4.5px',
+      width: '8px',
+    },
+    [`.${prefixCls}-slot-prefix .${prefixCls}-select`]: {
+      borderRadius: '3px 0 0 3px',
+      borderRight: `1px solid ${token.colorNeutralBorder}`,
+    },
+    [`.${prefixCls}-slot-suffix .${prefixCls}-select`]: {
+      borderLeft: `1px solid ${token.colorNeutralBorder}`,
+      borderRadius: '0 3px 3px 0',
+    },
+  },
+  [`.${prefixCls}-textarea`]: { height: 'auto', minHeight: '32px', resize: 'vertical' },
+  [`.${prefixCls}-textarea.${prefixCls}-small`]: { minHeight: '24px' },
+  [`.${prefixCls}-textarea.${prefixCls}-medium`]: { minHeight: '28px' },
+  [`.${prefixCls}.${prefixCls}-focused:not(.${prefixCls}-error)`]: {
+    borderColor: `${token.colorPrimary} !important`,
+    boxShadow: `0 0 0 2px ${token.colorPrimaryFocus} !important`,
+  },
+  [`.${prefixCls}-slot-textarea`]: {
+    fontFamily: 'inherit',
+    resize: 'vertical',
+    '&::placeholder': { color: token.colorNeutralDisable, opacity: 1 },
+  },
+  [`.${prefixCls}-otp`]: {
+    [`&.${prefixCls}-small .${prefixCls}-otp-slot-input`]: { height: '24px' },
+    [`&.${prefixCls}-medium .${prefixCls}-otp-slot-input`]: { height: '28px' },
+    [`&.${prefixCls}-large .${prefixCls}-otp-slot-input`]: { height: '32px' },
+    [`.${prefixCls}-otp-slot-input`]: {
+      borderColor: token.colorNeutralBorder,
+      borderRadius: '4px',
+      boxShadow: 'none',
+      '&:hover': { borderColor: token.colorPrimary },
+      '&:focus': {
+        borderColor: token.colorPrimary,
+        boxShadow: `0 0 0 2px ${token.colorPrimaryFocus}`,
+      },
     },
   },
 });

@@ -22,6 +22,8 @@
     "build:lib": "vite build --mode lib && tsc -p tsconfig.lib.json",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
+    "test": "vitest run --config vitest.config.ts",
+    "test:types": "tsc -p test/types/tsconfig.json --noEmit",
     "format": "prettier --write 'src/**/*.{ts,tsx,less,json,md}'",
     "format:check": "prettier --check 'src/**/*.{ts,tsx,less,json,md}'",
     "storybook": "storybook dev -p 6006",
@@ -30,12 +32,12 @@
   },
   "dependencies": {
     "@yakit-libs/color": "^1.0.2",
-    "antd": "^5.27.3",
+    "antd": "6.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@ant-design/cssinjs": "^1.24.0",
+    "@ant-design/cssinjs": "2.1.2",
     "@chromatic-com/storybook": "^3.2.7",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",

@@ -1,0 +1,59 @@
+{
+  "figmaFileKey": "QWct5XE0Bg0bNDQ93eYgEw",
+  "retrievedAt": "2026-08-19T09:45:40Z",
+  "comparator": {
+    "playwrightVersion": "1.55.0",
+    "deviceScaleFactor": 1,
+    "perChannelThreshold": 8,
+    "maxDiffPixelRatio": 0.005
+  },
+  "fixtures": [
+    {
+      "component": "Input",
+      "nodeId": "37277:17053",
+      "file": "input-node-37277-17053.png",
+      "sha256": "ad2ace068c511efe440c57e2c98420a1727fc9c8d12e7e31753fb382affc9eae",
+      "dimensions": {
+        "width": 4096,
+        "height": 1522
+      },
+      "sizes": {
+        "small": 24,
+        "medium": 28,
+        "large": 32
+      },
+      "tokens": {
+        "radius": 4,
+        "border": "#E6E8ED",
+        "hoverBorder": "#F28C45",
+        "focusRing": "#FCE5D6",
+        "disabledBackground": "#EEF0F3",
+        "errorBorder": "#F8ABAB"
+      }
+    },
+    {
+      "component": "Search",
+      "nodeId": "37285:27849",
+      "file": "search-node-37285-27849.png",
+      "sha256": "77dc789c9ff94a7e59504386aa1202a3c02e6bb0216a9e01a1ea2cf199a16c29",
+      "dimensions": {
+        "width": 2742,
+        "height": 1100
+      },
+      "sizes": {
+        "small": 20,
+        "medium": 24,
+        "large": 28,
+        "huge": 32
+      },
+      "specimenWidths": {
+        "box": 216,
+        "dropdown": 304
+      }
+    }
+  ],
+  "inputNumber": {
+    "designCoverage": "none",
+    "note": "The supplied Figma nodes do not define numeric controls; do not claim Figma parity for their spinner visuals."
+  }
+}
