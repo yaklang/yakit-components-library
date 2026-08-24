@@ -12,7 +12,14 @@ const executablePath = (
 export default defineConfig({
   plugins: [createSvgReactPlugin()],
   optimizeDeps: {
-    include: ['@emotion/react/jsx-dev-runtime'],
+    include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'react-dom/server',
+      'react/jsx-dev-runtime',
+      'react/jsx-runtime',
+    ],
   },
   test: {
     browser: {

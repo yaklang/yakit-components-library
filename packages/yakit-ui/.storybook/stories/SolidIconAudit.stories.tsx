@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { CSSProperties } from 'react';
 
-import { solidIconRegistry } from '../../src/icons';
+import { solidIconRegistry } from '../../src/icons/registry';
 import type { IconDefinition } from '../../src/icons/registry';
 import placement from '../../test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json';
 import prechange from '../../test/fixtures/icons/reference/solid-local-prechange-controls-v1.json';

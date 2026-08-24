@@ -4,7 +4,10 @@ import { appendFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-import { findSingleTarball } from "./verify-pack-directory.mjs";
+import {
+  findPackageTarball,
+  PUBLIC_PACKAGES,
+} from "./verify-pack-directory.mjs";
 import { validateVerificationManifest } from "./verification-manifest.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
@@ -15,7 +18,15 @@ const manifest = JSON.parse(
     "utf8",
   ),
 );
-const tarballPath = await findSingleTarball(verifiedDirectory);
+const tarballPaths = Object.fromEntries(
+  await Promise.all(
+    PUBLIC_PACKAGES.map(async (name) => [
+      name,
+      await findPackageTarball(verifiedDirectory, name),
+    ]),
+  ),
+);
+const tarballPath = tarballPaths["yakit-ui"];
 await validateVerificationManifest(manifest, {
   tarballPath,
   repository: process.env.GITHUB_REPOSITORY,
@@ -24,6 +35,9 @@ await validateVerificationManifest(manifest, {
   sourceRef: process.env.GITHUB_REF,
   packageName: "yakit-ui",
   packArtifactId: process.env.PACK_ARTIFACT_ID,
+  requiredSchemaVersion: 2,
+  expectedPackages: PUBLIC_PACKAGES,
+  tarballPaths,
 });
 
 const version = manifest.package.version;

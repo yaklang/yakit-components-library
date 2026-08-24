@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { outlineIconRegistry } from '../../src/icons';
+import { outlineIconRegistry } from '../../src/icons/registry';
 
 const defectNames = new Set([
   'ArchiveRestoreOutlined',

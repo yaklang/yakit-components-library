@@ -6,7 +6,7 @@ import process from "node:process";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const workspaceRoots = ["apps", "packages"];
-const expectedPublicPackage = "yakit-ui";
+const expectedPublicPackages = ["yakit-ui", "yakit-ui-icons"];
 const failures = [];
 const packages = [];
 
@@ -31,14 +31,17 @@ for (const workspaceRoot of workspaceRoots) {
       private: manifest.private === true,
     });
 
-    if (publishable && manifest.name !== expectedPublicPackage) {
+    if (publishable && !expectedPublicPackages.includes(manifest.name)) {
       failures.push(
-        `${relativePath}: only ${expectedPublicPackage} may be non-private`,
+        `${relativePath}: only ${expectedPublicPackages.join(" and ")} may be non-private`,
       );
     }
-    if (manifest.name === expectedPublicPackage && manifest.private === true) {
+    if (
+      expectedPublicPackages.includes(manifest.name) &&
+      manifest.private === true
+    ) {
       failures.push(
-        `${relativePath}: ${expectedPublicPackage} must remain publishable`,
+        `${relativePath}: ${manifest.name} must remain publishable`,
       );
     }
 
@@ -61,11 +64,11 @@ const publishableNames = packages
   .filter((item) => !item.private)
   .map((item) => item.name);
 if (
-  publishableNames.length !== 1 ||
-  publishableNames[0] !== expectedPublicPackage
+  JSON.stringify([...publishableNames].sort()) !==
+  JSON.stringify([...expectedPublicPackages].sort())
 ) {
   failures.push(
-    `publishable workspace set must be exactly [${expectedPublicPackage}], got ${JSON.stringify(publishableNames)}`,
+    `publishable workspace set must be exactly ${JSON.stringify(expectedPublicPackages)}, got ${JSON.stringify(publishableNames)}`,
   );
 }
 

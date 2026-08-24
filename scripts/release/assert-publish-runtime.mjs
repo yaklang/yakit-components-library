@@ -5,7 +5,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-import { findSingleTarball } from "./verify-pack-directory.mjs";
+import {
+  findPackageTarball,
+  PUBLIC_PACKAGES,
+} from "./verify-pack-directory.mjs";
 import { validateVerificationManifest } from "./verification-manifest.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
@@ -71,7 +74,15 @@ const verificationArtifactDigest = requiredEnvironment(
 const packArtifactId = requiredEnvironment("PACK_ARTIFACT_ID");
 const githubToken = requiredEnvironment("GITHUB_TOKEN");
 const verifiedDirectory = path.join(root, ".release/verified");
-const tarballPath = await findSingleTarball(verifiedDirectory);
+const tarballPaths = Object.fromEntries(
+  await Promise.all(
+    PUBLIC_PACKAGES.map(async (name) => [
+      name,
+      await findPackageTarball(verifiedDirectory, name),
+    ]),
+  ),
+);
+const tarballPath = tarballPaths["yakit-ui"];
 const manifest = JSON.parse(
   await readFile(
     path.join(verifiedDirectory, "verification-manifest.json"),
@@ -86,6 +97,9 @@ await validateVerificationManifest(manifest, {
   sourceRef: requiredEnvironment("GITHUB_REF"),
   packageName: "yakit-ui",
   packArtifactId,
+  requiredSchemaVersion: 2,
+  expectedPackages: PUBLIC_PACKAGES,
+  tarballPaths,
 });
 
 const [verificationArtifact, packArtifact] = await Promise.all([
@@ -110,7 +124,9 @@ console.log(
     {
       npmVersion,
       nodeVersion: process.version,
-      package: `${manifest.package.name}@${manifest.package.version}`,
+      packages: manifest.artifacts.map(
+        (item) => `${item.package}@${item.version}`,
+      ),
       packArtifactId,
       verificationArtifactId,
     },

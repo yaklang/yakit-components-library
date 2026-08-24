@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { outlineIconRegistry, solidIconRegistry } from '../../src/icons';
-import type { IconDefinition } from '../../src/icons/registry';
+import {
+  outlineIconRegistry,
+  solidIconRegistry,
+  type IconDefinition,
+} from '../../src/icons/registry';
 
 const IconSection = ({
   icons,

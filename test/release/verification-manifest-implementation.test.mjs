@@ -40,8 +40,38 @@ const makeFixture = async () => {
 
 test("manifest creator binds the canonical tarball hash and size", async () => {
   const { manifest, tarballPath } = await makeFixture();
+  assert.equal(manifest.schemaVersion, 2);
   assert.equal(manifest.tarball.sha256, await sha256File(tarballPath));
   assert.equal(manifest.tarball.packedBytes, 18);
+});
+
+test("validator accepts legacy schema v1 single-package recovery evidence", async () => {
+  const { manifest, tarballPath } = await makeFixture();
+  manifest.schemaVersion = 1;
+  delete manifest.artifacts;
+  await assert.doesNotReject(() =>
+    validateVerificationManifest(manifest, {
+      expectedPackages: ["yakit-ui"],
+      packageName: "yakit-ui",
+      tarballPath,
+      tarballPaths: { "yakit-ui": tarballPath },
+    }),
+  );
+});
+
+test("ordinary publication rejects legacy schema v1 evidence", async () => {
+  const { manifest, tarballPath } = await makeFixture();
+  manifest.schemaVersion = 1;
+  delete manifest.artifacts;
+  await assert.rejects(
+    () =>
+      validateVerificationManifest(manifest, {
+        expectedPackages: ["yakit-ui", "yakit-ui-icons"],
+        requiredSchemaVersion: 2,
+        tarballPath,
+      }),
+    /schemaVersion must equal 2 for this operation/,
+  );
 });
 
 test("manifest validator accepts matching trusted workflow identities", async () => {
@@ -119,5 +149,39 @@ test("manifest validator rejects a tarball size mismatch even when its hash is u
   await assert.rejects(
     () => validateVerificationManifest(manifest, { tarballPath }),
     /packedBytes/,
+  );
+});
+
+test("manifest validator binds every fixed-package tarball", async () => {
+  const { manifest, directory, options, tarballPath } = await makeFixture();
+  const iconsTarball = join(directory, "yakit-ui-icons-1.2.3.tgz");
+  writeFileSync(iconsTarball, "icons artifact");
+  manifest.artifacts.push({
+    package: "yakit-ui-icons",
+    version: "1.2.3",
+    filename: "yakit-ui-icons-1.2.3.tgz",
+    sha256: await sha256File(iconsTarball),
+    packedBytes: 14,
+    unpackedBytes: 100,
+    fileCount: 10,
+  });
+  await assert.doesNotReject(() =>
+    validateVerificationManifest(manifest, {
+      expectedPackages: ["yakit-ui", "yakit-ui-icons"],
+      tarballPath,
+      tarballPaths: { "yakit-ui": tarballPath, "yakit-ui-icons": iconsTarball },
+      packageName: options.packageName,
+    }),
+  );
+  writeFileSync(iconsTarball, "changed icons artifact");
+  await assert.rejects(
+    () =>
+      validateVerificationManifest(manifest, {
+        tarballPaths: {
+          "yakit-ui": tarballPath,
+          "yakit-ui-icons": iconsTarball,
+        },
+      }),
+    /yakit-ui-icons tarball SHA-256 mismatch/,
   );
 });

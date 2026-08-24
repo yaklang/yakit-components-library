@@ -12,8 +12,8 @@ import {
   PaintbrushFilled,
   PaperAirplaneFilled,
   PillFilled,
-  solidIconRegistry,
 } from '../../src/icons';
+import { solidIconRegistry } from '../../src/icons/registry';
 
 const roots: Root[] = [];
 const render = (node: React.ReactNode) => {

@@ -16,11 +16,11 @@ const manifests = ["apps", "packages"].flatMap((directory) => {
     .filter(existsSync);
 });
 
-test("yakit-ui is the only publishable workspace manifest", () => {
+test("only Yakit UI runtime packages are publishable workspace manifests", () => {
   const publishable = manifests
     .filter((file) => readJson(file).private !== true)
     .map((file) => readJson(file).name);
-  assert.deepEqual(publishable, ["yakit-ui"]);
+  assert.deepEqual(publishable.sort(), ["yakit-ui", "yakit-ui-icons"]);
 });
 
 test("the root lockfile is the only workspace pnpm lockfile", () => {
@@ -57,7 +57,7 @@ test("package allowlist publishes library, Storybook, and package documentation 
   );
 });
 
-test("repository and published package use the same MIT license", () => {
+test("repository and published packages use the same MIT license", () => {
   const rootManifest = readJson(join(root, "package.json"));
   const packageManifest = readJson(
     join(root, "packages/yakit-ui/package.json"),
@@ -67,10 +67,19 @@ test("repository and published package use the same MIT license", () => {
     join(root, "packages/yakit-ui/LICENSE"),
     "utf8",
   );
+  const iconsManifest = readJson(
+    join(root, "packages/yakit-ui-icons/package.json"),
+  );
+  const iconsLicense = readFileSync(
+    join(root, "packages/yakit-ui-icons/LICENSE"),
+    "utf8",
+  );
 
   assert.equal(rootManifest.license, "MIT");
   assert.equal(packageManifest.license, "MIT");
+  assert.equal(iconsManifest.license, "MIT");
   assert.equal(packageLicense, repositoryLicense);
+  assert.equal(iconsLicense, repositoryLicense);
   assert.match(repositoryLicense, /^MIT License\n/);
   assert.match(repositoryLicense, /Copyright \(c\) 2026 yaklang\.io Project/);
 });
@@ -94,6 +103,21 @@ test("package release state is valid before and after the initial Version Packag
 test("Changesets generates changelog entries for the Version Packages action", () => {
   const config = readJson(join(root, ".changeset/config.json"));
   assert.equal(config.changelog, "@changesets/cli/changelog");
+  assert.deepEqual(config.fixed, [["yakit-ui", "yakit-ui-icons"]]);
+});
+
+test("React-only icon package has a narrow public and peer contract", () => {
+  const manifest = readJson(join(root, "packages/yakit-ui-icons/package.json"));
+  assert.deepEqual(Object.keys(manifest.exports).sort(), [
+    ".",
+    "./outline",
+    "./registry",
+    "./solid",
+  ]);
+  assert.deepEqual(manifest.peerDependencies, { react: "^18.2.0" });
+  assert.equal(manifest.dependencies, undefined);
+  assert.equal(manifest.peerDependenciesMeta, undefined);
+  assert.deepEqual(manifest.files, ["dist", "README.md", "LICENSE"]);
 });
 
 test("package exports the ESM library, declarations, and CSS contract", () => {
@@ -114,13 +138,7 @@ test("package declares the offline Storybook launcher bin", () => {
 
 test("shared UI runtimes are peers while package-owned runtimes are dependencies", () => {
   const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
-  for (const name of [
-    "react",
-    "react-dom",
-    "antd",
-    "@ant-design/cssinjs",
-    "@emotion/react",
-  ]) {
+  for (const name of ["react", "react-dom", "antd", "@ant-design/cssinjs"]) {
     assert.ok(
       manifest.peerDependencies?.[name],
       `${name} must be a peer dependency`,
@@ -135,6 +153,8 @@ test("shared UI runtimes are peers while package-owned runtimes are dependencies
       `${name} must not be a direct runtime dependency`,
     );
   }
+  assert.equal(manifest.peerDependencies?.["@emotion/react"], undefined);
+  assert.equal(manifest.devDependencies?.["@emotion/react"], undefined);
   for (const name of ["@yakit-libs/color", "classnames"]) {
     assert.ok(
       manifest.dependencies?.[name],
@@ -144,13 +164,19 @@ test("shared UI runtimes are peers while package-owned runtimes are dependencies
   assert.equal(manifest.devDependencies?.["@emotion/styled"], undefined);
 });
 
-test("prepack verifies existing outputs without rebuilding them", () => {
-  const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
-  assert.ok(manifest.scripts?.prepack, "prepack script must be declared");
-  assert.doesNotMatch(
-    manifest.scripts.prepack,
-    /(?:build|storybook|vite|tsc)/i,
-  );
+test("public package prepack scripts verify outputs without rebuilding them", () => {
+  for (const name of ["yakit-ui", "yakit-ui-icons"]) {
+    const manifest = readJson(join(root, `packages/${name}/package.json`));
+    assert.ok(
+      manifest.scripts?.prepack,
+      `${name} prepack script must be declared`,
+    );
+    assert.doesNotMatch(
+      manifest.scripts.prepack,
+      /(?:build|storybook|vite|tsc)/i,
+      `${name} prepack must not rebuild verified artifacts`,
+    );
+  }
 });
 
 test("repository dry-run installs and verifies a disposable exact tarball", () => {
@@ -188,12 +214,19 @@ test("release-owned text files contain no credential-like values", () => {
     ".release",
     "scripts/release",
     "packages/yakit-ui/scripts/release",
+    "packages/yakit-ui-icons",
   ];
   const files = [];
   const visit = (path) => {
     if (!existsSync(path)) return;
     for (const entry of readdirSync(path, { withFileTypes: true })) {
       const child = join(path, entry.name);
+      if (
+        entry.isSymbolicLink() ||
+        entry.name === "dist" ||
+        entry.name === "node_modules"
+      )
+        continue;
       if (entry.isDirectory()) visit(child);
       else files.push(child);
     }

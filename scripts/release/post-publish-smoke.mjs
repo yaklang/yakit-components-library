@@ -2,7 +2,7 @@
 
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
-import { access, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -141,8 +141,10 @@ async function waitForStorybook(url, launcher, observation) {
 const packageName = requiredEnvironment("PACKAGE_NAME");
 const packageVersion = requiredEnvironment("PACKAGE_VERSION");
 const distTag = requiredEnvironment("DIST_TAG");
-if (packageName !== "yakit-ui")
-  throw new Error("post-publish verification is restricted to yakit-ui");
+if (!["yakit-ui", "yakit-ui-icons"].includes(packageName))
+  throw new Error(
+    "post-publish verification is restricted to Yakit UI packages",
+  );
 if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(packageVersion)) {
   throw new Error("invalid package version");
 }
@@ -157,6 +159,78 @@ if (
   registryManifest.version !== packageVersion
 ) {
   throw new Error("registry package identity mismatch");
+}
+if (packageName === "yakit-ui-icons") {
+  const iconsFixture = await mkdtemp(
+    path.join(tmpdir(), "yakit-ui-icons-registry-smoke-"),
+  );
+  try {
+    const emptyNpmConfig = path.join(iconsFixture, "empty.npmrc");
+    await writeFile(emptyNpmConfig, "");
+    await writeFile(
+      path.join(iconsFixture, "package.json"),
+      `${JSON.stringify({ name: "yakit-ui-icons-registry-smoke", private: true, type: "module" }, null, 2)}\n`,
+    );
+    await run(
+      "npm",
+      [
+        "install",
+        "--userconfig",
+        emptyNpmConfig,
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund",
+        "--save-exact",
+        `${packageName}@${packageVersion}`,
+        "react@18.3.1",
+        "vite@6.3.5",
+      ],
+      { cwd: iconsFixture, env: publicRegistryEnvironment() },
+    );
+    await writeFile(
+      path.join(iconsFixture, "index.html"),
+      '<!doctype html><html><body><script type="module" src="/consumer.mjs"></script></body></html>\n',
+    );
+    await writeFile(
+      path.join(iconsFixture, "consumer.mjs"),
+      'import { HomeOutlined } from "yakit-ui-icons";\nimport { HomeFilled } from "yakit-ui-icons/solid";\nwindow.iconCount = Number(Boolean(HomeOutlined)) + Number(Boolean(HomeFilled));\n',
+    );
+    await run(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
+      cwd: iconsFixture,
+      env: publicRegistryEnvironment(),
+    });
+    await access(path.join(iconsFixture, "dist/index.html"));
+    const installedManifest = JSON.parse(
+      await readFile(
+        path.join(iconsFixture, "node_modules/yakit-ui-icons/package.json"),
+        "utf8",
+      ),
+    );
+    if (
+      JSON.stringify(installedManifest.peerDependencies) !==
+        JSON.stringify({ react: "^18.2.0" }) ||
+      installedManifest.dependencies ||
+      installedManifest.peerDependenciesMeta
+    )
+      throw new Error(
+        "published icons package violates the React-only contract",
+      );
+    console.log(
+      JSON.stringify(
+        {
+          bundler: "passed",
+          distTag,
+          package: `${packageName}@${packageVersion}`,
+          reactOnly: "passed",
+        },
+        null,
+        2,
+      ),
+    );
+  } finally {
+    await rm(iconsFixture, { force: true, recursive: true });
+  }
+  process.exit(0);
 }
 const fixture = await mkdtemp(path.join(tmpdir(), "yakit-ui-registry-smoke-"));
 const emptyNpmConfig = path.join(fixture, "empty.npmrc");
@@ -180,7 +254,6 @@ await run(
     "react-dom@18.3.1",
     "antd@6.5.4",
     "@ant-design/cssinjs@2.1.2",
-    "@emotion/react@11.14.0",
     "typescript@5.9.2",
     "vite@6.3.5",
   ],

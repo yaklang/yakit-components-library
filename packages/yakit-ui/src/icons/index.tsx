@@ -1,7 +1,6 @@
-import Loading from './loading';
+import Loading from './loading/index.js';
 
 export { Loading };
-export * from './outline';
-export * from './solid';
-export { iconRegistry, outlineIconRegistry, solidIconRegistry } from './registry';
-export type { IconProps } from './types';
+export * from './outline/index.js';
+export * from './solid/index.js';
+export type { IconProps } from './types.js';

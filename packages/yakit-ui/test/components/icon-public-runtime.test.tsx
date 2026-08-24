@@ -5,8 +5,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import manifest from '../../scripts/figma-outline-icons-inventory.json';
 import * as PackageApi from '../../src';
-import { outlineIconRegistry } from '../../src/icons';
 import { outlineIconNameCatalog } from '../../src/icons/figmaNameCatalog';
+import { outlineIconRegistry } from '../../src/icons/registry';
 
 const roots: Root[] = [];
 const render = (node: React.ReactNode) => {

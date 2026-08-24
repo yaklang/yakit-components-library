@@ -1,9 +1,9 @@
 import type { ComponentType } from 'react';
 
-import { outlineIconNameCatalog, solidIconNameCatalog } from './figmaNameCatalog';
-import * as OutlineIcons from './outline';
-import * as SolidIcons from './solid';
-import type { IconProps } from './types';
+import { outlineIconNameCatalog, solidIconNameCatalog } from './figmaNameCatalog.js';
+import * as OutlineIcons from './outline/index.js';
+import * as SolidIcons from './solid/index.js';
+import type { IconProps } from './types.js';
 
 export type IconFamily = 'outline' | 'solid';
 export type IconSourceStatus =

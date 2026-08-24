@@ -12,6 +12,24 @@ export async function sha256File(filePath) {
   return hash.digest("hex");
 }
 
+export function artifactsForManifest(manifest) {
+  if (manifest?.schemaVersion === 2) return manifest.artifacts ?? [];
+  if (manifest?.schemaVersion === 1 && manifest?.package && manifest?.tarball) {
+    return [
+      {
+        package: manifest.package.name,
+        version: manifest.package.version,
+        filename: manifest.tarball.filename,
+        sha256: manifest.tarball.sha256,
+        packedBytes: manifest.tarball.packedBytes,
+        unpackedBytes: manifest.tarball.unpackedBytes,
+        fileCount: manifest.tarball.fileCount,
+      },
+    ];
+  }
+  return [];
+}
+
 export async function createVerificationManifest(options) {
   const tarballPath = path.resolve(options.tarballPath);
   const tarballStat = await stat(tarballPath);
@@ -31,8 +49,18 @@ export async function createVerificationManifest(options) {
     if (options[field] === undefined || options[field] === "")
       throw new Error(`Missing verification field: ${field}`);
   }
+  const primaryArtifact = {
+    package: options.packageName,
+    version: options.packageVersion,
+    filename: path.basename(tarballPath),
+    sha256: await sha256File(tarballPath),
+    packedBytes: tarballStat.size,
+    unpackedBytes: Number(options.unpackedBytes ?? 0),
+    fileCount: Number(options.fileCount ?? 0),
+  };
+  const artifacts = options.artifacts ?? [primaryArtifact];
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     repository: options.repository,
     workflowCommitSha: options.workflowCommitSha,
     runId: String(options.runId),
@@ -48,20 +76,28 @@ export async function createVerificationManifest(options) {
       digest: options.packArtifactDigest,
     },
     tarball: {
-      filename: path.basename(tarballPath),
-      sha256: await sha256File(tarballPath),
-      packedBytes: tarballStat.size,
-      unpackedBytes: Number(options.unpackedBytes ?? 0),
-      fileCount: Number(options.fileCount ?? 0),
+      filename: primaryArtifact.filename,
+      sha256: primaryArtifact.sha256,
+      packedBytes: primaryArtifact.packedBytes,
+      unpackedBytes: primaryArtifact.unpackedBytes,
+      fileCount: primaryArtifact.fileCount,
     },
+    artifacts,
     gates: options.gates ?? {},
   };
 }
 
 export async function validateVerificationManifest(manifest, options = {}) {
   const failures = [];
-  if (manifest?.schemaVersion !== 1)
-    failures.push("schemaVersion must equal 1");
+  if (![1, 2].includes(manifest?.schemaVersion))
+    failures.push("schemaVersion must equal 1 or 2");
+  if (
+    options.requiredSchemaVersion !== undefined &&
+    manifest?.schemaVersion !== options.requiredSchemaVersion
+  )
+    failures.push(
+      `schemaVersion must equal ${options.requiredSchemaVersion} for this operation`,
+    );
   for (const field of [
     "repository",
     "workflowCommitSha",
@@ -84,6 +120,62 @@ export async function validateVerificationManifest(manifest, options = {}) {
   }
   if (!/^[0-9a-f]{64}$/i.test(manifest?.tarball?.sha256 ?? ""))
     failures.push("tarball.sha256 must be 64 hex characters");
+
+  if (manifest?.schemaVersion === 1) {
+    if (manifest.artifacts !== undefined)
+      failures.push("schemaVersion 1 must use the legacy single tarball shape");
+    if (
+      options.expectedPackages &&
+      JSON.stringify([...options.expectedPackages].sort()) !==
+        JSON.stringify([manifest?.package?.name].sort())
+    )
+      failures.push(
+        "schemaVersion 1 evidence can describe only its primary package",
+      );
+  } else if (
+    !Array.isArray(manifest?.artifacts) ||
+    manifest.artifacts.length === 0
+  ) {
+    failures.push("schemaVersion 2 artifacts must be a non-empty array");
+  } else {
+    const names = new Set();
+    for (const artifact of manifest.artifacts) {
+      if (!artifact?.package || names.has(artifact.package))
+        failures.push("artifacts must contain unique package names");
+      names.add(artifact?.package);
+      if (!artifact?.version || !artifact?.filename)
+        failures.push(
+          `artifact ${artifact?.package ?? "<unknown>"} identity is incomplete`,
+        );
+      if (!/^[0-9a-f]{64}$/i.test(artifact?.sha256 ?? ""))
+        failures.push(
+          `artifact ${artifact?.package ?? "<unknown>"} SHA-256 is invalid`,
+        );
+      for (const field of ["packedBytes", "unpackedBytes", "fileCount"])
+        if (!Number.isSafeInteger(artifact?.[field]) || artifact[field] < 0)
+          failures.push(
+            `artifact ${artifact?.package ?? "<unknown>"} ${field} is invalid`,
+          );
+    }
+    const primary = manifest.artifacts.find(
+      (artifact) => artifact.package === manifest?.package?.name,
+    );
+    if (
+      !primary ||
+      primary.version !== manifest?.package?.version ||
+      primary.filename !== manifest?.tarball?.filename ||
+      primary.sha256 !== manifest?.tarball?.sha256
+    )
+      failures.push("primary tarball must match its artifacts entry");
+    if (options.expectedPackages) {
+      const actual = [...names].sort();
+      const expected = [...options.expectedPackages].sort();
+      if (JSON.stringify(actual) !== JSON.stringify(expected))
+        failures.push(
+          `artifact package set mismatch: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`,
+        );
+    }
+  }
 
   for (const field of ["packedBytes", "unpackedBytes", "fileCount"]) {
     const value = manifest?.tarball?.[field];
@@ -135,6 +227,22 @@ export async function validateVerificationManifest(manifest, options = {}) {
       failures.push("tarball packedBytes does not match verification manifest");
     if (path.basename(options.tarballPath) !== manifest?.tarball?.filename)
       failures.push("tarball filename does not match verification manifest");
+  }
+
+  if (options.tarballPaths) {
+    for (const artifact of artifactsForManifest(manifest)) {
+      const artifactPath = options.tarballPaths[artifact.package];
+      if (!artifactPath) {
+        failures.push(`missing tarball path for ${artifact.package}`);
+        continue;
+      }
+      if ((await sha256File(artifactPath)) !== artifact.sha256)
+        failures.push(`${artifact.package} tarball SHA-256 mismatch`);
+      if ((await stat(artifactPath)).size !== artifact.packedBytes)
+        failures.push(`${artifact.package} packedBytes mismatch`);
+      if (path.basename(artifactPath) !== artifact.filename)
+        failures.push(`${artifact.package} filename mismatch`);
+    }
   }
 
   if (failures.length)

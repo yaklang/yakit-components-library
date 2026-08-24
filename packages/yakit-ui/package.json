@@ -1,7 +1,7 @@
 {
   "name": "yakit-ui",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Yakit React component library with a version-matched offline Storybook.",
   "license": "MIT",
   "type": "module",
@@ -18,6 +18,22 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js"
+    },
+    "./icons/outline": {
+      "types": "./dist/icons/outline/index.d.ts",
+      "import": "./dist/icons/outline/index.js"
+    },
+    "./icons/solid": {
+      "types": "./dist/icons/solid/index.d.ts",
+      "import": "./dist/icons/solid/index.js"
+    },
+    "./icons/registry": {
+      "types": "./dist/icons/registry.d.ts",
+      "import": "./dist/icons/registry.js"
     },
     "./style.css": "./dist/index.css"
   },
@@ -61,6 +77,7 @@
     "test:audit-icons": "vitest run --config vitest.node.config.ts test/icons/audit-icons.test.ts test/icons/baseline-integrity.test.ts test/icons/solid-baseline-integrity.test.ts test/icons/icon-figma-names.test.ts test/icons/icon-registry-names.test.ts test/icons/icon-script-coverage.test.ts test/icons/icon-audit-determinism.test.ts",
     "test:icon-transform": "vitest run --config vitest.node.config.ts test/icons/icon-transform.test.ts test/icons/icon-ssr-fixture.test.ts test/icons/solid-fragment-normalization.test.ts test/icons/solid-icon-ssr-fixture.test.ts && vitest run --config vitest.config.ts test/components/icon-fragment-runtime.test.tsx test/components/icon-public-runtime.test.tsx test/components/solid-icon-fragment-runtime.test.tsx test/components/solid-icon-public-runtime.test.tsx",
     "test:icon-dist-consumer": "pnpm run build:lib && vitest run --config vitest.node.config.ts test/icons/dist-consumer.test.ts",
+    "test:icon-package-contract": "vitest run --config vitest.node.config.ts test/icons/light-entry-contract.test.ts test/icons/dedicated-package-contract.test.ts",
     "test:icon-visual": "vitest run --config vitest.node.config.ts test/icons/outline-pixel-metrics.test.ts test/icons/icon-paint-semantics.test.ts test/icons/solid-paint-semantics.test.ts && vitest run --config vitest.config.ts test/components/icon-visual.test.tsx test/components/solid-icon-visual.test.tsx",
     "test:icons:solid": "vitest run --config vitest.node.config.ts test/icons/solid-baseline-integrity.test.ts test/icons/solid-paint-semantics.test.ts test/icons/solid-fragment-normalization.test.ts test/icons/solid-icon-ssr-fixture.test.ts && vitest run --config vitest.config.ts test/components/solid-icon-public-runtime.test.tsx test/components/solid-icon-fragment-runtime.test.tsx test/components/solid-icon-visual.test.tsx && pnpm run test:types",
     "test:icons:audit-determinism": "vitest run --config vitest.node.config.ts test/icons/icon-audit-determinism.test.ts",
@@ -81,15 +98,13 @@
   },
   "peerDependencies": {
     "@ant-design/cssinjs": "^2.1.2",
-    "@emotion/react": "^11.14.0",
     "antd": "^6.5.4",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@ant-design/cssinjs": "2.1.2",
     "@chromatic-com/storybook": "^3.2.7",
-    "@emotion/react": "^11.14.0",
     "@eslint/js": "^9.25.0",
     "@storybook/addon-essentials": "8",
     "@storybook/addon-interactions": "8",

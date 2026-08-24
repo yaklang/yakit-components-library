@@ -5,8 +5,20 @@ Yakit 的 React 组件库。npm 包同时包含与组件版本一致的静态 St
 ## 安装
 
 ```bash
-pnpm add yakit-ui antd react react-dom @ant-design/cssinjs @emotion/react
+pnpm add yakit-ui antd react react-dom @ant-design/cssinjs
 ```
+
+仅使用图标时，推荐安装不带组件 peer dependencies 的独立包：
+
+```bash
+pnpm add yakit-ui-icons react
+```
+
+```tsx
+import { HomeOutlined } from 'yakit-ui-icons';
+```
+
+`yakit-ui/icons` 作为现有完整组件消费者的兼容入口保留；它仍属于 `yakit-ui` 包，安装时需要满足上面的完整组件 peer dependencies。
 
 ## 使用组件和样式
 

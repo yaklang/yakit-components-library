@@ -10,7 +10,10 @@ import {
   createVerificationManifest,
   validateVerificationManifest,
 } from "./verification-manifest.mjs";
-import { verifyPackDirectory } from "./verify-pack-directory.mjs";
+import {
+  PUBLIC_PACKAGES,
+  verifyPackDirectory,
+} from "./verify-pack-directory.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 
@@ -86,9 +89,21 @@ const runAttempt = requiredEnvironment("GITHUB_RUN_ATTEMPT");
 const sourceRef = requiredEnvironment("GITHUB_REF");
 const githubToken = requiredEnvironment("GITHUB_TOKEN");
 
-const pack = await verifyPackDirectory({ directory: packDirectory });
+const packDirectoryResult = await verifyPackDirectory({
+  directory: packDirectory,
+});
+const packByName = new Map(
+  packDirectoryResult.packages.map((item) => [item.package, item]),
+);
+const pack = packByName.get("yakit-ui");
+const iconsPack = packByName.get("yakit-ui-icons");
 const packageManifest = JSON.parse(
   execFileSync("tar", ["-xOzf", pack.tarball, "package/package.json"], {
+    encoding: "utf8",
+  }),
+);
+const iconsManifest = JSON.parse(
+  execFileSync("tar", ["-xOzf", iconsPack.tarball, "package/package.json"], {
     encoding: "utf8",
   }),
 );
@@ -102,6 +117,12 @@ if (
 ) {
   throw new Error("Changesets artifact contains an invalid package version");
 }
+if (iconsManifest.name !== "yakit-ui-icons" || iconsManifest.private === true)
+  throw new Error(
+    "Changesets artifact must contain the public yakit-ui-icons package",
+  );
+if (iconsManifest.version !== packageManifest.version)
+  throw new Error("fixed release packages must have the same version");
 
 const artifact = await readArtifactMetadata(
   repository,
@@ -128,6 +149,15 @@ const manifest = await createVerificationManifest({
   packArtifactDigest: artifact.digest,
   unpackedBytes: pack.unpackedBytes,
   fileCount: pack.fileCount,
+  artifacts: packDirectoryResult.packages.map((item) => ({
+    package: item.package,
+    version: item.version,
+    filename: path.basename(item.tarball),
+    sha256: item.sha256,
+    packedBytes: item.packedBytes,
+    unpackedBytes: item.unpackedBytes,
+    fileCount: item.fileCount,
+  })),
   gates: {
     build: "passed",
     consumer: "passed",
@@ -145,12 +175,22 @@ await validateVerificationManifest(manifest, {
   packageVersion: packageManifest.version,
   distTag,
   packArtifactId,
+  requiredSchemaVersion: 2,
+  expectedPackages: PUBLIC_PACKAGES,
+  tarballPaths: Object.fromEntries(
+    packDirectoryResult.packages.map((item) => [item.package, item.tarball]),
+  ),
 });
 
 const outputDirectory = path.join(root, ".release/verified");
 await mkdir(outputDirectory, { recursive: true });
-const outputTarball = path.join(outputDirectory, path.basename(pack.tarball));
-await copyFile(pack.tarball, outputTarball, constants.COPYFILE_EXCL);
+for (const item of packDirectoryResult.packages) {
+  await copyFile(
+    item.tarball,
+    path.join(outputDirectory, path.basename(item.tarball)),
+    constants.COPYFILE_EXCL,
+  );
+}
 await writeFile(
   path.join(outputDirectory, "verification-manifest.json"),
   `${JSON.stringify(manifest, null, 2)}\n`,
@@ -164,6 +204,9 @@ console.log(
       distTag,
       package: `${packageManifest.name}@${packageManifest.version}`,
       tarballSha256: manifest.tarball.sha256,
+      packages: manifest.artifacts.map(
+        (item) => `${item.package}@${item.version}`,
+      ),
     },
     null,
     2,

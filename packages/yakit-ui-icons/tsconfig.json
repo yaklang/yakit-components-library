@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "rootDir": "../yakit-ui/src/icons",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2020",
+    "verbatimModuleSyntax": true
+  },
+  "include": ["../yakit-ui/src/icons", "vite-env.d.ts"]
+}

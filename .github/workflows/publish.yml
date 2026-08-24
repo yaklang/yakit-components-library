@@ -1,4 +1,4 @@
-name: Publish yakit-ui
+name: Publish Yakit UI packages
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       recovery:
-        description: Run metadata-only recovery from an earlier verified release
+        description: Recover missing packages and metadata from verified evidence
         required: true
         type: boolean
         default: false
@@ -138,6 +138,10 @@ jobs:
         run: pnpm --filter yakit-ui run test:ci && pnpm --filter yakit-ui run audit:icons
       - name: Build package exactly once
         run: pnpm --filter yakit-ui run build:package
+      - name: Build React-only icon package exactly once
+        run: pnpm --filter yakit-ui-icons run build
+      - name: Verify lightweight and dedicated icon package contracts
+        run: pnpm --filter yakit-ui run test:icon-package-contract
       - name: Verify package and size policy
         run: pnpm --filter yakit-ui run verify:package && pnpm run release:policy:check
       - name: Pack publishable packages
@@ -281,7 +285,9 @@ jobs:
           node-version: 24.12.0
           package-manager-cache: false
       - name: Verify exact registry version
-        run: node scripts/release/post-publish-smoke.mjs
+        run: |
+          node scripts/release/post-publish-smoke.mjs
+          PACKAGE_NAME=yakit-ui-icons node scripts/release/post-publish-smoke.mjs
         env:
           PACKAGE_NAME: yakit-ui
           PACKAGE_VERSION: ${{ needs.verify-pack.outputs.package-version }}
@@ -327,6 +333,7 @@ jobs:
       package-version: ${{ steps.identity.outputs.package-version }}
       tag-name: ${{ steps.identity.outputs.tag-name }}
       commit-sha: ${{ steps.identity.outputs.commit-sha }}
+      has-missing: ${{ steps.identity.outputs.has-missing }}
     steps:
       - name: Check recovery inputs
         run: test -n '${{ inputs.source_run_id }}' && test -n '${{ inputs.verification_artifact_id }}'
@@ -345,15 +352,60 @@ jobs:
           path: .release/recovery
       - name: Validate retained evidence and registry identity
         id: identity
-        run: node scripts/release/verify-recovery-evidence.mjs .release/recovery
+        run: node scripts/release/recover-partial-publication.mjs .release/recovery
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
+
+  recovery-publish:
+    if: >-
+      needs.recovery-verify.outputs.has-missing == 'true' &&
+      vars.NPM_TRUSTED_PUBLISHING_ENABLED == 'true'
+    needs: recovery-verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: npm-release
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out repository scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          persist-credentials: false
+      - name: Set up Node.js for npm Trusted Publishing
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Download exact cross-run verification artifact
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.source_run_id }}
+          artifact-ids: ${{ inputs.verification_artifact_id }}
+          merge-multiple: true
+          path: .release/recovery
+      - name: Publish only missing exact verified tarballs
+        run: node scripts/release/recover-partial-publication.mjs .release/recovery --publish
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SOURCE_RUN_ID: ${{ inputs.source_run_id }}
           VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
 
   recovery-metadata:
-    if: github.event_name == 'workflow_dispatch' && inputs.recovery
-    needs: recovery-verify
+    if: >-
+      always() && github.event_name == 'workflow_dispatch' && inputs.recovery &&
+      needs.recovery-verify.result == 'success' &&
+      (needs.recovery-publish.result == 'success' ||
+      (needs.recovery-verify.outputs.has-missing == 'false' &&
+      needs.recovery-publish.result == 'skipped'))
+    needs:
+      - recovery-verify
+      - recovery-publish
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
