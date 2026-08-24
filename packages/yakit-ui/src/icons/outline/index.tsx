@@ -327,6 +327,7 @@ import EarOffOutlinedSvg from './45033-2063.svg?react';
 import EarOutlinedSvg from './45035-1892.svg?react';
 import MoveDiagonalOutlinedSvg from './45294-1902.svg?react';
 import NotebookOutlinedSvg from './45386-154724.svg?react';
+import LandPlotOutlinedSvg from './46174-9893.svg?react';
 import LogoOutlinedSvg from './45454-1952.svg?react';
 import CommandOutlinedSvg from './45460-1953.svg?react';
 import StopFigma455151942OutlinedSvg from './45515-1942.svg?react';
@@ -610,7 +611,7 @@ export const CubeTransparentOutlined = createIcon(
   'CubeTransparentOutlined',
 );
 export const ExternalLinkOutlined = createIcon(ExternalLinkOutlinedSvg, 'ExternalLinkOutlined');
-export const SunOutlined = createIcon(SunOutlinedSvg, 'SunOutlined');
+export const SunOutlined = createIcon(SunOutlinedSvg, 'SunOutlined', '#0A0A0A');
 export const MoonOutlined = createIcon(MoonOutlinedSvg, 'MoonOutlined');
 export const ClipboardCopyOutlined = createIcon(ClipboardCopyOutlinedSvg, 'ClipboardCopyOutlined');
 export const AnnotationOutlined = createIcon(AnnotationOutlinedSvg, 'AnnotationOutlined');
@@ -867,9 +868,14 @@ export const FigmaIcon450351908Outlined = createIcon(
 );
 export const PointerOutlined = createIcon(PointerOutlinedSvg, 'PointerOutlined');
 export const EarOffOutlined = createIcon(EarOffOutlinedSvg, 'EarOffOutlined');
-export const EarOutlined = createIcon(EarOutlinedSvg, 'EarOutlined');
+export const EarOutlined = createIcon(EarOutlinedSvg, 'EarOutlined', '#0A0A0A');
 export const MoveDiagonalOutlined = createIcon(MoveDiagonalOutlinedSvg, 'MoveDiagonalOutlined');
+/**
+ * @deprecated This legacy notebook glyph is absent from the current Outline Figma frame.
+ * Use LandPlotOutlined only for the distinct LandPlot glyph.
+ */
 export const NotebookOutlined = createIcon(NotebookOutlinedSvg, 'NotebookOutlined');
+export const LandPlotOutlined = createIcon(LandPlotOutlinedSvg, 'LandPlotOutlined');
 export const LogoOutlined = createIcon(LogoOutlinedSvg, 'LogoOutlined');
 export const CommandOutlined = createIcon(CommandOutlinedSvg, 'CommandOutlined');
 export const StopFigma455151942Outlined = createIcon(

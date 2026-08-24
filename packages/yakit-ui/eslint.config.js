@@ -12,6 +12,18 @@ import unusedImports from 'eslint-plugin-unused-imports';
 export default [
   { ignores: ['dist', 'node_modules'] },
   {
+    files: ['scripts/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: globals.node,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-console': 'off',
+    },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
@@ -81,6 +93,19 @@ export default [
     },
     settings: {
       react: { version: 'detect' },
+    },
+  },
+  {
+    files: [
+      'config/**/*.ts',
+      'test/icons/**/*.ts',
+      '.storybook/main.ts',
+      'vite.config.ts',
+      'vitest.config.ts',
+      'vitest.node.config.ts',
+    ],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 ];

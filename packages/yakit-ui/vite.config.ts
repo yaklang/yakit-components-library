@@ -1,20 +1,49 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import svgr from 'vite-plugin-svgr';
+
+import { createSvgReactPlugin } from './config/svgReactTransform';
+
+const packageRoot = path.dirname(fileURLToPath(import.meta.url));
+
+function nodeCompatibleExternalPath(id: string) {
+  if (!id.startsWith('antd/es/')) return id;
+  const relativePath = id.slice('antd/'.length);
+  const antdRoot = path.join(packageRoot, 'node_modules/antd');
+  if (existsSync(path.join(antdRoot, `${relativePath}.js`))) return `${id}.js`;
+  if (existsSync(path.join(antdRoot, relativePath, 'index.js'))) return `${id}/index.js`;
+  throw new Error(`Cannot resolve a Node-compatible Ant Design ESM path for ${id}`);
+}
 
 export default defineConfig(({ mode }) => {
-  const plugins = [react(), svgr()];
+  const plugins = [react(), createSvgReactPlugin()];
 
   if (mode === 'lib') {
     return {
       build: {
+        copyPublicDir: false,
         lib: {
           entry: './src/index.ts',
           fileName: 'index',
           formats: ['es'],
         },
         rollupOptions: {
-          external: ['react', 'react-dom', 'react/jsx-runtime'],
+          external: (id) =>
+            [
+              '@ant-design/cssinjs',
+              '@emotion/react',
+              '@yakit-libs/color',
+              'antd',
+              'classnames',
+              'react',
+              'react-dom',
+            ].some((dependency) => id === dependency || id.startsWith(`${dependency}/`)),
+          output: {
+            paths: nodeCompatibleExternalPath,
+          },
         },
       },
       plugins,

@@ -1,8 +1,8 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Basic Icons">
-<g id=" Outline/&#230;&#141;&#162;&#232;&#161;&#140;">
-<path id="Rectangle 180" d="M18.75 5.15881V11.6588C18.75 13.868 16.9591 15.6588 14.75 15.6588H5.75" stroke="#353639" stroke-width="2" stroke-linecap="round"/>
-<path id="Rectangle 181" d="M8.43213 12.4768L5.39157 15.5174C5.31346 15.5955 5.31346 15.7221 5.39157 15.8002L8.43213 18.8408" stroke="#353639" stroke-width="2" stroke-linecap="round"/>
+<g>
+<g>
+<path d="M18.75 5.15881V11.6588C18.75 13.868 16.9591 15.6588 14.75 15.6588H5.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<path d="M8.43213 12.4768L5.39157 15.5174C5.31346 15.5955 5.31346 15.7221 5.39157 15.8002L8.43213 18.8408" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
 </g>
 </g>
 </svg>

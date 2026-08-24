@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "outline-renderer-provenance-v1",
+  "metricsSchemaVersion": "outline-pixel-metrics-v1",
+  "metricsCanonicalPayloadSha256": "0f4bcd3fb5885badc9a149e154b0500f1b7e2b9ec5500bc2bde1ae05bd6e2618",
+  "browser": {
+    "product": "Google Chrome",
+    "version": "151.0.7922.173",
+    "executablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  },
+  "operatingSystem": {
+    "name": "macOS",
+    "version": "15.7.7",
+    "build": "24G720"
+  },
+  "deviceScaleFactor": 1,
+  "backgroundRgb": [248, 249, 250]
+}

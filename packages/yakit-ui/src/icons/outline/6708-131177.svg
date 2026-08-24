@@ -1,3 +1,7 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="11.8996" height="9.31371" viewBox="0 0 11.8996 9.31371" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Icon" d="M4.65689 1L1 4.65685L4.65685 8.31371M1 4.65685L10.8996 4.65681" stroke="#353639" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g>
+<rect x="2" y="3" width="20" height="15" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.1718 6.99988L9.00015 6.99985V12.1714M9.00015 6.99985L16.0002 13.9999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 21H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
 </svg>

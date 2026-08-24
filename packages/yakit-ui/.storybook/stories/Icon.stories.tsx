@@ -1,14 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import type { IconDefinition } from '../../src/icons/registry';
 import { outlineIconRegistry, solidIconRegistry } from '../../src/icons';
+import type { IconDefinition } from '../../src/icons/registry';
 
 const IconSection = ({
   icons,
+  size,
   subtitle,
   title,
 }: {
   icons: IconDefinition[];
+  size: number;
   subtitle: string;
   title: string;
 }) => (
@@ -25,9 +27,9 @@ const IconSection = ({
         gridTemplateColumns: 'repeat(auto-fill, minmax(255px, 1fr))',
       }}
     >
-      {icons.map(({ Component, name }) => (
+      {icons.map(({ Component, exportName, figmaName, name, sourceStatus }) => (
         <div
-          key={name}
+          key={exportName}
           style={{
             alignItems: 'center',
             border: '1px solid #e7e8eb',
@@ -38,7 +40,7 @@ const IconSection = ({
             padding: 12,
           }}
         >
-          <Component size={20} />
+          <Component size={size} />
           <div style={{ minWidth: 0 }}>
             <div
               style={{
@@ -50,12 +52,16 @@ const IconSection = ({
             >
               {name}
             </div>
+            <small style={{ color: '#8c8f95', display: 'block', fontSize: 10 }}>
+              {sourceStatus}
+              {figmaName === null ? ' · Figma name unavailable' : ''}
+            </small>
             <code
               style={{ color: '#8c8f95', fontSize: 11 }}
-            >{`import { ${name} } from 'yakit-ui';`}</code>
+            >{`import { ${exportName} } from 'yakit-ui';`}</code>
             <code
               style={{ color: '#8c8f95', display: 'block', fontSize: 11 }}
-            >{`<${name} />`}</code>
+            >{`<${exportName} />`}</code>
           </div>
         </div>
       ))}
@@ -67,11 +73,13 @@ const IconGallery = () => (
   <div style={{ display: 'grid', gap: 48 }}>
     <IconSection
       icons={outlineIconRegistry}
+      size={24}
       subtitle="2px stroke weight, 24×24 bounding box"
       title="Outline"
     />
     <IconSection
       icons={solidIconRegistry}
+      size={20}
       subtitle="Solid fill, 20×20 bounding box"
       title="Solid"
     />

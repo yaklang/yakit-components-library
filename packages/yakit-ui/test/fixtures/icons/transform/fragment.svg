@@ -1,0 +1,8 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path mask="url(#icon_999_1__mask_0)" d="M2 2H22V22H2Z" fill="currentColor" />
+  <defs>
+    <mask id="icon_999_1__mask_0">
+      <rect width="24" height="24" fill="white" />
+    </mask>
+  </defs>
+</svg>

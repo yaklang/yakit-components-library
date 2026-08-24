@@ -1,3 +1,5 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="20.6676" height="20.6676" viewBox="0 0 20.6676 20.6676" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Vector" d="M14.6001 14.6001L10.6001 18.6001L6.6001 14.6001H3.6001C2.49553 14.6001 1.6001 13.7047 1.6001 12.6001V4.6001C1.6001 3.85982 2.0023 3.21347 2.6001 2.86766M5.6001 6.6001H15.6001M5.6001 10.6001H9.6001M7.1001 2.6001H17.6001C18.7047 2.6001 19.6001 3.49553 19.6001 4.6001V12.6001C19.6001 13.0937 19.4213 13.5455 19.1249 13.8944M1 1L19.6676 19.6676" stroke="#353639" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g>
+<path d="M16 16L12 20L8 16H5C3.89543 16 3 15.1046 3 14V6C3 5.25972 3.4022 4.61337 4 4.26756M7 8H17M7 12H11M8.5 4H19C20.1046 4 21 4.89543 21 6V14C21 14.4936 20.8212 14.9454 20.5248 15.2943M2.3999 2.3999L21.0675 21.0675" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
 </svg>

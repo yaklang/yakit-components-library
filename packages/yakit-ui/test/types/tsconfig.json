@@ -4,5 +4,5 @@
     "noEmit": true,
     "tsBuildInfoFile": "../../node_modules/.tmp/tsconfig.input-types.tsbuildinfo"
   },
-  "include": ["../../src/vite-env.d.ts", "input-public.test.tsx"]
+  "include": ["../../src/vite-env.d.ts", "*.test.tsx"]
 }

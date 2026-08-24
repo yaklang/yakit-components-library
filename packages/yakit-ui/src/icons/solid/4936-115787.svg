@@ -1,14 +1,14 @@
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Basic Icons">
-<g id=" Solid/&#230;&#181;&#174;&#231;&#170;&#151;">
-<g id="Rectangle 78">
-<mask id="path-2-inside-1_1_85" fill="white">
+<g>
+<g>
+<g>
+<mask id="icon_4936_115787__mask_0" fill="white">
 <rect x="3" y="3" width="16" height="14" rx="1"/>
 </mask>
-<rect x="3" y="3" width="16" height="14" rx="1" stroke="#353639" stroke-width="4" mask="url(#path-2-inside-1_1_85)"/>
+<rect x="3" y="3" width="16" height="14" rx="1" stroke="currentColor" stroke-width="4" mask="url(#icon_4936_115787__mask_0)"/>
 </g>
-<rect id="Rectangle 79" x="2" y="2" width="12" height="9" rx="1" fill="#353639"/>
-<rect id="Rectangle 80" x="1" y="1" width="12" height="9" rx="1" fill="#353639"/>
+<rect x="2" y="2" width="12" height="9" rx="1" fill="currentColor"/>
+<rect x="1" y="1" width="12" height="9" rx="1" fill="currentColor"/>
 </g>
 </g>
 </svg>

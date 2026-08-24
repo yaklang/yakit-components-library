@@ -1,6 +1,7 @@
 {
   "name": "console",
   "version": "1.0.0",
+  "private": true,
   "main": "./out/main/index.js",
   "scripts": {
     "format": "prettier --write .",
@@ -39,12 +40,6 @@
     "react-dom": "^18.3.1",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "electron",
-      "esbuild"
-    ]
   },
   "dependencies": {
     "xterm": "5.3.0",

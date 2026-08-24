@@ -1,0 +1,377 @@
+name: Publish yakit-ui
+
+on:
+  push:
+    branches:
+      - main
+      - "pre/**"
+  workflow_dispatch:
+    inputs:
+      recovery:
+        description: Run metadata-only recovery from an earlier verified release
+        required: true
+        type: boolean
+        default: false
+      source_run_id:
+        description: Source workflow run ID for recovery
+        required: false
+        type: string
+      verification_artifact_id:
+        description: Exact verification artifact ID for recovery
+        required: false
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: publish-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 24.12.0
+  PNPM_VERSION: 10.34.5
+  CHANGESETS_ACTION_SHA: 8488615a623b1b9c987934bb89eae8af6a946ac1
+
+jobs:
+  select-mode:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.select.outputs.mode }}
+      publish-plan-artifact-id: ${{ steps.select.outputs.publish-plan-artifact-id }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0, reviewed 2026-08-21
+        with:
+          version: 10.34.5
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Validate branch and Changesets prerelease state
+        run: pnpm run release:preflight
+      - name: Select Changesets mode
+        id: select
+        uses: changesets/action/select-mode@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
+
+  version:
+    if: needs.select-mode.outputs.mode == 'version'
+    needs: select-mode
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0, reviewed 2026-08-21
+        with:
+          version: 10.34.5
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Create or update Version Packages pull request
+        uses: changesets/action/version@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
+        with:
+          github-token: ${{ github.token }}
+          script: pnpm version-packages
+          commit-message: Version Packages
+          pr-title: Version Packages
+          pr-base-branch: ${{ github.ref_name }}
+          push-with-git-cli: false
+
+  build-and-pack:
+    if: needs.select-mode.outputs.mode == 'publish'
+    needs: select-mode
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    outputs:
+      pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0, reviewed 2026-08-21
+        with:
+          version: 10.34.5
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Verify workspace and release state
+        run: pnpm run release:workspace-check && pnpm run release:preflight
+      - name: Run release policy tests
+        run: pnpm run release:test
+      - name: Lint and type-check
+        run: pnpm --filter yakit-ui run lint && pnpm --filter yakit-ui run test:types
+      - name: Install the pinned Playwright browser
+        run: pnpm --filter yakit-ui exec playwright install --with-deps chromium
+      - name: Run component and icon tests
+        run: pnpm --filter yakit-ui run test:ci && pnpm --filter yakit-ui run audit:icons
+      - name: Build package exactly once
+        run: pnpm --filter yakit-ui run build:package
+      - name: Verify package and size policy
+        run: pnpm --filter yakit-ui run verify:package && pnpm run release:policy:check
+      - name: Pack publishable packages
+        id: pack
+        uses: changesets/action/pack@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
+        with:
+          publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
+
+  verify-pack:
+    if: needs.select-mode.outputs.mode == 'publish'
+    needs:
+      - select-mode
+      - build-and-pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      package-version: ${{ steps.identity.outputs.package-version }}
+      dist-tag: ${{ steps.identity.outputs.dist-tag }}
+      tag-name: ${{ steps.identity.outputs.tag-name }}
+      commit-sha: ${{ github.sha }}
+      verification-artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      verification-artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Download exact Changesets pack artifact
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          artifact-ids: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
+          merge-multiple: true
+          path: .release/pack
+      - name: Install and smoke-test the exact tarball
+        run: node scripts/release/verify-tarball-consumer.mjs .release/pack
+      - name: Verify tarball contents and hash
+        id: pack
+        run: node scripts/release/prepare-verification-artifact.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PACK_DIRECTORY: .release/pack
+          PACK_ARTIFACT_ID: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
+      - name: Resolve package release identity
+        id: identity
+        run: node scripts/release/emit-release-identity.mjs
+        env:
+          PACK_ARTIFACT_ID: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
+      - name: Upload immutable verification evidence
+        id: upload
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0, reviewed 2026-08-21
+        with:
+          name: yakit-ui-verification-${{ github.run_id }}
+          path: .release/verified
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    # Keep this disabled for the one-time local 2FA bootstrap. Enable the
+    # repository variable only after npm Trusted Publishing is configured.
+    if: needs.select-mode.outputs.mode == 'publish' && vars.NPM_TRUSTED_PUBLISHING_ENABLED == 'true'
+    needs:
+      - select-mode
+      - build-and-pack
+      - verify-pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: npm-release
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+      published-packages: ${{ steps.publish.outputs.published-packages }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          persist-credentials: false
+      - name: Set up pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0, reviewed 2026-08-21
+        with:
+          version: 10.34.5
+      - name: Set up Node.js for npm Trusted Publishing
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Install release tooling without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Download exact verification evidence
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          artifact-ids: ${{ needs.verify-pack.outputs.verification-artifact-id }}
+          merge-multiple: true
+          path: .release/verified
+      - name: Assert Trusted Publishing runtime
+        run: node scripts/release/assert-publish-runtime.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PACK_ARTIFACT_ID: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
+          VERIFICATION_ARTIFACT_DIGEST: ${{ needs.verify-pack.outputs.verification-artifact-digest }}
+          VERIFICATION_ARTIFACT_ID: ${{ needs.verify-pack.outputs.verification-artifact-id }}
+      - name: Publish exact verified Changesets artifact
+        id: publish
+        uses: changesets/action/publish@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
+        with:
+          github-token: ${{ github.token }}
+          pack-dir-artifact-id: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
+          create-github-releases: false
+          push-git-tags: false
+
+  post-publish:
+    if: needs.publish.outputs.published == 'true'
+    needs:
+      - publish
+      - verify-pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Verify exact registry version
+        run: node scripts/release/post-publish-smoke.mjs
+        env:
+          PACKAGE_NAME: yakit-ui
+          PACKAGE_VERSION: ${{ needs.verify-pack.outputs.package-version }}
+          DIST_TAG: ${{ needs.verify-pack.outputs.dist-tag }}
+
+  metadata:
+    if: needs.publish.outputs.published == 'true'
+    needs:
+      - publish
+      - verify-pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Reconcile tag and GitHub release
+        run: node scripts/release/reconcile-github-metadata.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_REPOSITORY: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.verify-pack.outputs.tag-name }}
+          RELEASE_COMMIT: ${{ needs.verify-pack.outputs.commit-sha }}
+          PACKAGE_NAME: yakit-ui
+          PACKAGE_VERSION: ${{ needs.verify-pack.outputs.package-version }}
+
+  recovery-verify:
+    if: github.event_name == 'workflow_dispatch' && inputs.recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      package-version: ${{ steps.identity.outputs.package-version }}
+      tag-name: ${{ steps.identity.outputs.tag-name }}
+      commit-sha: ${{ steps.identity.outputs.commit-sha }}
+    steps:
+      - name: Check recovery inputs
+        run: test -n '${{ inputs.source_run_id }}' && test -n '${{ inputs.verification_artifact_id }}'
+      - name: Check out repository scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Download exact cross-run verification artifact
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.source_run_id }}
+          artifact-ids: ${{ inputs.verification_artifact_id }}
+          merge-multiple: true
+          path: .release/recovery
+      - name: Validate retained evidence and registry identity
+        id: identity
+        run: node scripts/release/verify-recovery-evidence.mjs .release/recovery
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
+
+  recovery-metadata:
+    if: github.event_name == 'workflow_dispatch' && inputs.recovery
+    needs: recovery-verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Reconcile tag and GitHub release only
+        run: node scripts/release/reconcile-github-metadata.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_REPOSITORY: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.recovery-verify.outputs.tag-name }}
+          RELEASE_COMMIT: ${{ needs.recovery-verify.outputs.commit-sha }}
+          PACKAGE_NAME: yakit-ui
+          PACKAGE_VERSION: ${{ needs.recovery-verify.outputs.package-version }}

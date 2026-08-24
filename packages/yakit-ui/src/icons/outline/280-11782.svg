@@ -1,3 +1,5 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="18.4738" height="16.0563" viewBox="0 0 18.4738 16.0563" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Polygon 1" d="M8.37941 1.4855C8.76781 0.838165 9.70599 0.838166 10.0944 1.4855L17.3282 13.5419C17.7281 14.2084 17.248 15.0563 16.4707 15.0563H2.00309C1.22579 15.0563 0.745681 14.2084 1.1456 13.5419L8.37941 1.4855Z" stroke="#353639" stroke-width="2"/>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g>
+<path d="M19.5708 11.1425C20.2182 11.5309 20.2182 12.4691 19.5708 12.8575L7.5145 20.0913C6.84797 20.4912 6 20.0111 6 19.2338L6 4.76619C6 3.98889 6.84797 3.50878 7.5145 3.9087L19.5708 11.1425Z" stroke="currentColor" stroke-width="2"/>
+</g>
 </svg>

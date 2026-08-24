@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "pre/**"
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0, reviewed 2026-08-21
+        with:
+          version: 10.34.5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify workspace publication boundary
+        run: pnpm run release:workspace-check
+
+      - name: Verify release configuration policies
+        run: pnpm run release:test
+
+      - name: Lint yakit-ui
+        run: pnpm --filter yakit-ui run lint
+
+      - name: Type-check public API
+        run: pnpm --filter yakit-ui run test:types
+
+      - name: Install the pinned Playwright browser
+        run: pnpm --filter yakit-ui exec playwright install --with-deps chromium
+
+      - name: Run component tests
+        run: pnpm --filter yakit-ui run test:ci
+
+      - name: Audit icons
+        run: pnpm --filter yakit-ui run audit:icons
+
+      - name: Build package and Storybook
+        run: pnpm --filter yakit-ui run build:package
+
+      - name: Verify package and installed consumer
+        run: pnpm --filter yakit-ui run verify:package
+
+      - name: Enforce package size policy
+        run: pnpm run release:policy:check
+
+      - name: Dry-run npm pack
+        run: pnpm --filter yakit-ui run pack:dry-run
