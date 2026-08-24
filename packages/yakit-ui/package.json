@@ -3,6 +3,12 @@
   "private": false,
   "version": "0.1.2",
   "description": "Yakit React component library with a version-matched offline Storybook.",
+  "keywords": [
+    "@yakit-libs/yakit-ui",
+    "@yakit-libs",
+    "react",
+    "component-library"
+  ],
   "license": "MIT",
   "type": "module",
   "files": [

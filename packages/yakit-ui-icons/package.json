@@ -3,6 +3,12 @@
   "private": false,
   "version": "0.1.2",
   "description": "React-only icon package for Yakit UI.",
+  "keywords": [
+    "@yakit-libs/yakit-ui-icons",
+    "@yakit-libs",
+    "react",
+    "icons"
+  ],
   "license": "MIT",
   "type": "module",
   "files": [
