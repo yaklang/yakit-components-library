@@ -111,6 +111,14 @@ test("Changesets generates changelog entries for the Version Packages action", (
   ]);
 });
 
+test("public packages remain discoverable in the Yakit libraries keyword search", () => {
+  for (const directory of ["yakit-ui", "yakit-ui-icons"]) {
+    const manifest = readJson(join(root, `packages/${directory}/package.json`));
+    assert.ok(manifest.keywords.includes("@yakit-libs"));
+    assert.ok(manifest.keywords.includes(manifest.name));
+  }
+});
+
 test("React-only icon package has a narrow public and peer contract", () => {
   const manifest = readJson(join(root, "packages/yakit-ui-icons/package.json"));
   assert.equal(manifest.name, "@yakit-libs/yakit-ui-icons");
