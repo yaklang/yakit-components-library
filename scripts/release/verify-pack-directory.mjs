@@ -6,17 +6,43 @@ import path from "node:path";
 import process from "node:process";
 import { sha256File } from "./verification-manifest.mjs";
 
-const REQUIRED_ENTRIES = [
-  "package/package.json",
-  "package/dist/index.js",
-  "package/dist/index.d.ts",
-  "package/dist/index.css",
-  "package/dist/bin/yakit-ui-storybook.mjs",
-  "package/storybook-static/index.html",
-  "package/LICENSE",
-];
-
+export const PUBLIC_PACKAGES = ["yakit-ui", "yakit-ui-icons"];
+export const ICON_PACKAGE_LIMITS = {
+  packedBytes: 250_000,
+  unpackedBytes: 1_500_000,
+  fileCount: 25,
+};
+const POLICIES = {
+  "yakit-ui": {
+    required: [
+      "package/package.json",
+      "package/dist/index.js",
+      "package/dist/index.d.ts",
+      "package/dist/index.css",
+      "package/dist/bin/yakit-ui-storybook.mjs",
+      "package/storybook-static/index.html",
+      "package/LICENSE",
+    ],
+    prefixes: ["package/dist/", "package/storybook-static/"],
+  },
+  "yakit-ui-icons": {
+    required: [
+      "package/package.json",
+      "package/dist/index.js",
+      "package/dist/index.d.ts",
+      "package/dist/outline/index.js",
+      "package/dist/outline/index.d.ts",
+      "package/dist/solid/index.js",
+      "package/dist/solid/index.d.ts",
+      "package/dist/registry.js",
+      "package/dist/registry.d.ts",
+      "package/LICENSE",
+    ],
+    prefixes: ["package/dist/"],
+  },
+};
 const EXACT_ALLOWED_ENTRIES = new Set([
+  "package/",
   "package/package.json",
   "package/README.md",
   "package/README",
@@ -24,7 +50,6 @@ const EXACT_ALLOWED_ENTRIES = new Set([
   "package/LICENSE.md",
   "package/LICENSE.txt",
 ]);
-
 const TEXT_EXTENSIONS = new Set([
   ".cjs",
   ".css",
@@ -45,79 +70,76 @@ const TEXT_EXTENSIONS = new Set([
   ".yml",
 ]);
 
-function isAllowedEntry(entry) {
-  if (entry.endsWith("/")) {
-    return (
-      entry === "package/" ||
-      entry === "package/dist/" ||
-      entry.startsWith("package/dist/") ||
-      entry === "package/storybook-static/" ||
-      entry.startsWith("package/storybook-static/")
-    );
+async function walk(directory) {
+  const files = [];
+  for (const entry of await readdir(path.resolve(directory), {
+    withFileTypes: true,
+  })) {
+    const absolute = path.join(path.resolve(directory), entry.name);
+    if (entry.isDirectory()) files.push(...(await walk(absolute)));
+    else if (entry.isFile() && absolute.endsWith(".tgz")) files.push(absolute);
   }
-  return (
-    EXACT_ALLOWED_ENTRIES.has(entry) ||
-    entry.startsWith("package/dist/") ||
-    entry.startsWith("package/storybook-static/")
+  return files.sort();
+}
+export const findTarballs = (directory) => walk(directory);
+const readManifest = (tarball) =>
+  JSON.parse(
+    execFileSync("tar", ["-xOzf", tarball, "package/package.json"], {
+      encoding: "utf8",
+    }),
   );
-}
 
-function isTextEntry(entry) {
-  if (entry.endsWith("/")) return false;
-  if (
-    entry === "package/package.json" ||
-    entry.startsWith("package/README") ||
-    entry.startsWith("package/LICENSE")
-  )
-    return true;
-  if (entry.endsWith(".d.ts")) return true;
-  return TEXT_EXTENSIONS.has(path.posix.extname(entry).toLowerCase());
+export async function findPackageTarball(directory, packageName) {
+  const matches = [];
+  for (const tarball of await findTarballs(directory))
+    if (readManifest(tarball).name === packageName) matches.push(tarball);
+  if (matches.length !== 1)
+    throw new Error(
+      `Expected exactly one ${packageName} tarball in ${directory}, found ${matches.length}`,
+    );
+  return matches[0];
 }
+const isAllowedEntry = (entry, policy) =>
+  EXACT_ALLOWED_ENTRIES.has(entry) ||
+  policy.prefixes.some((prefix) => entry.startsWith(prefix));
 
 function scanTextEntry(tarball, entry, failures) {
-  if (!isTextEntry(entry)) return;
+  if (entry.endsWith("/")) return;
+  const isText =
+    entry.endsWith(".d.ts") ||
+    TEXT_EXTENSIONS.has(path.posix.extname(entry).toLowerCase()) ||
+    entry.startsWith("package/README") ||
+    entry.startsWith("package/LICENSE") ||
+    entry === "package/package.json";
+  if (!isText) return;
   const contents = execFileSync("tar", ["-xOzf", tarball, entry], {
     encoding: "utf8",
     maxBuffer: 32 * 1024 * 1024,
   });
-  const credentialPatterns = [
-    /npm_[A-Za-z0-9]{20,}/,
-    /(?:_authToken|npmAuthToken)\s*[=:]\s*[^\s"']+/i,
-    /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
-    /(?:ghp|github_pat)_[A-Za-z0-9_]{20,}/,
-  ];
-  if (credentialPatterns.some((pattern) => pattern.test(contents))) {
+  if (
+    [
+      /npm_[A-Za-z0-9]{20,}/,
+      /(?:_authToken|npmAuthToken)\s*[=:]\s*[^\s"']+/i,
+      /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
+      /(?:ghp|github_pat)_[A-Za-z0-9_]{20,}/,
+    ].some((pattern) => pattern.test(contents))
+  )
     failures.push(`credential-like content in ${entry}`);
-  }
-  const absoluteDeveloperPath =
-    /(?:^|[\s"'=(])(?:\/Users\/[^/\s]+\/|\/home\/[^/\s]+\/|[A-Za-z]:\\Users\\[^\\\s]+\\)/m;
-  if (absoluteDeveloperPath.test(contents))
+  if (
+    /(?:^|[\s"'=(])(?:\/Users\/[^/\s]+\/|\/home\/[^/\s]+\/|[A-Za-z]:\\Users\\[^\\\s]+\\)/m.test(
+      contents,
+    )
+  )
     failures.push(`absolute developer path in ${entry}`);
 }
 
-async function walk(directory) {
-  const files = [];
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    const absolute = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...(await walk(absolute)));
-    else if (entry.isFile()) files.push(absolute);
-  }
-  return files;
-}
-
-export async function findSingleTarball(directory) {
-  const tarballs = (await walk(path.resolve(directory))).filter((file) =>
-    file.endsWith(".tgz"),
-  );
-  if (tarballs.length !== 1)
+export async function verifyPackageTarball(tarball) {
+  const manifest = readManifest(tarball);
+  const policy = POLICIES[manifest.name];
+  if (!policy || manifest.private === true)
     throw new Error(
-      `Expected exactly one tarball in ${directory}, found ${tarballs.length}`,
+      `unexpected publishable package ${manifest.name ?? "<missing>"}`,
     );
-  return tarballs[0];
-}
-
-export async function verifyPackDirectory(options) {
-  const tarball = await findSingleTarball(options.directory);
   const entries = execFileSync("tar", ["-tzf", tarball], { encoding: "utf8" })
     .split("\n")
     .map((entry) => entry.trim())
@@ -129,7 +151,7 @@ export async function verifyPackDirectory(options) {
     .map((entry) => entry.trim())
     .filter(Boolean);
   const failures = [];
-  for (const entry of REQUIRED_ENTRIES)
+  for (const entry of policy.required)
     if (!entries.includes(entry)) failures.push(`missing ${entry}`);
   for (const entry of entries) {
     const normalized = path.posix.normalize(`/${entry}`).slice(1);
@@ -141,28 +163,68 @@ export async function verifyPackDirectory(options) {
       )
     )
       failures.push(`forbidden tar entry ${entry}`);
-    if (!isAllowedEntry(entry)) failures.push(`unexpected tar entry ${entry}`);
-    if (isAllowedEntry(entry)) scanTextEntry(tarball, entry, failures);
+    if (!isAllowedEntry(entry, policy))
+      failures.push(`unexpected tar entry ${entry}`);
+    if (isAllowedEntry(entry, policy)) scanTextEntry(tarball, entry, failures);
   }
-  for (const entry of verboseEntries) {
-    const type = entry[0];
-    if (type !== "-" && type !== "d")
+  for (const entry of verboseEntries)
+    if (entry[0] !== "-" && entry[0] !== "d")
       failures.push("tarball must contain regular files and directories only");
-  }
-  if (failures.length)
-    throw new Error(`Pack directory failed:\n- ${failures.join("\n- ")}`);
+  const packedBytes = (await stat(tarball)).size;
   const unpacked = execFileSync("tar", ["-xOzf", tarball], {
     encoding: "buffer",
     maxBuffer: 256 * 1024 * 1024,
   });
+  const unpackedBytes = unpacked.length;
+  const fileCount = entries.filter((entry) => !entry.endsWith("/")).length;
+  if (manifest.name === "yakit-ui-icons") {
+    if (
+      JSON.stringify(manifest.peerDependencies) !==
+      JSON.stringify({ react: "^18.2.0" })
+    )
+      failures.push("yakit-ui-icons must peer only on react ^18.2.0");
+    if (manifest.dependencies || manifest.peerDependenciesMeta)
+      failures.push(
+        "yakit-ui-icons must not publish runtime dependencies or optional peers",
+      );
+    for (const [metric, limit] of Object.entries(ICON_PACKAGE_LIMITS))
+      if ({ packedBytes, unpackedBytes, fileCount }[metric] > limit)
+        failures.push(
+          `yakit-ui-icons ${metric} exceeds ${limit}: ${
+            { packedBytes, unpackedBytes, fileCount }[metric]
+          }`,
+        );
+  }
+  if (failures.length)
+    throw new Error(
+      `Pack directory failed for ${manifest.name}:\n- ${failures.join("\n- ")}`,
+    );
   return {
+    package: manifest.name,
+    version: manifest.version,
     tarball,
     sha256: await sha256File(tarball),
-    packedBytes: (await stat(tarball)).size,
-    unpackedBytes: unpacked.length,
-    fileCount: entries.filter((entry) => !entry.endsWith("/")).length,
+    packedBytes,
+    unpackedBytes,
+    fileCount,
     entries,
   };
+}
+
+export async function verifyPackDirectory({
+  directory,
+  expectedPackages = PUBLIC_PACKAGES,
+}) {
+  const packages = await Promise.all(
+    (await findTarballs(directory)).map(verifyPackageTarball),
+  );
+  const names = packages.map((item) => item.package).sort();
+  const expected = [...expectedPackages].sort();
+  if (JSON.stringify(names) !== JSON.stringify(expected))
+    throw new Error(
+      `Pack directory package set must be ${JSON.stringify(expected)}, got ${JSON.stringify(names)}`,
+    );
+  return { packages };
 }
 
 if (
@@ -173,6 +235,7 @@ if (
   const directory = process.argv[2];
   if (!directory)
     throw new Error("Usage: verify-pack-directory.mjs <directory>");
-  const result = await verifyPackDirectory({ directory });
-  console.log(JSON.stringify(result, null, 2));
+  console.log(
+    JSON.stringify(await verifyPackDirectory({ directory }), null, 2),
+  );
 }

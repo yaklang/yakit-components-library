@@ -4,8 +4,8 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import * as PackageApi from '../../src';
-import { solidIconRegistry } from '../../src/icons';
 import { solidIconNameCatalog } from '../../src/icons/figmaNameCatalog';
+import { solidIconRegistry } from '../../src/icons/registry';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 
 const roots: Root[] = [];

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { CSSProperties } from 'react';
 
-import { outlineIconRegistry } from '../../src/icons';
+import { outlineIconRegistry } from '../../src/icons/registry';
 import type { IconDefinition } from '../../src/icons/registry';
 
 const defectNames = new Set([

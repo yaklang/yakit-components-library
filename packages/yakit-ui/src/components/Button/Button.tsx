@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useMemo, type FC } from 'react';
 
 import useComponentStyle from '../../hooks/useComponentStyle';
-import { Loading } from '../../icons';
+import Loading from '../../icons/loading';
 import { returnOrFalse } from '../../utils';
 import Wave from '../Animation/Wave';
 

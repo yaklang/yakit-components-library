@@ -1,4 +1,4 @@
-import { createIcon } from '../createIcon';
+import { createIcon } from '../createIcon.js';
 
 import MailFilledSvg from './1-2539.svg?react';
 import LocationMarkerFilledSvg from './1-2541.svg?react';

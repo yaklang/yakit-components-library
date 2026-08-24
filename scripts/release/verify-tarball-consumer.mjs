@@ -8,7 +8,7 @@ import path from "node:path";
 import process from "node:process";
 import { promisify } from "node:util";
 
-import { findSingleTarball } from "./verify-pack-directory.mjs";
+import { findPackageTarball } from "./verify-pack-directory.mjs";
 
 const execute = promisify(execFile);
 
@@ -113,7 +113,8 @@ async function stopLauncher(launcher) {
 const packDirectory = process.argv[2];
 if (!packDirectory)
   throw new Error("Usage: verify-tarball-consumer.mjs <pack-directory>");
-const tarball = await findSingleTarball(packDirectory);
+const tarball = await findPackageTarball(packDirectory, "yakit-ui");
+const iconsTarball = await findPackageTarball(packDirectory, "yakit-ui-icons");
 const fixture = await mkdtemp(
   path.join(tmpdir(), "yakit-ui-tarball-consumer-"),
 );
@@ -136,11 +137,11 @@ try {
       "--package-lock=false",
       "--save-exact",
       tarball,
+      iconsTarball,
       "react@18.3.1",
       "react-dom@18.3.1",
       "antd@6.5.4",
       "@ant-design/cssinjs@2.1.2",
-      "@emotion/react@11.14.0",
       "typescript@5.9.2",
       "vite@6.3.5",
     ],
@@ -156,7 +157,7 @@ try {
   );
   await writeFile(
     path.join(fixture, "consumer.mjs"),
-    'import * as YakitUi from "yakit-ui";\nimport "yakit-ui/style.css";\nwindow.yakitUiExportCount = Object.keys(YakitUi).length;\n',
+    'import * as YakitUi from "yakit-ui";\nimport { HomeOutlined } from "yakit-ui-icons";\nimport "yakit-ui/style.css";\nwindow.yakitUiExportCount = Object.keys(YakitUi).length + Number(Boolean(HomeOutlined));\n',
   );
   await execute(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
     cwd: fixture,
@@ -166,7 +167,7 @@ try {
   await access(path.join(fixture, "dist/index.html"));
   await writeFile(
     path.join(fixture, "consumer.ts"),
-    'import * as YakitUi from "yakit-ui";\nvoid YakitUi;\n',
+    'import * as YakitUi from "yakit-ui";\nimport { HomeOutlined } from "yakit-ui-icons";\nimport { HomeFilled } from "yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeFilled];\n',
   );
   await writeFile(
     path.join(fixture, "tsconfig.json"),
@@ -202,6 +203,22 @@ try {
   );
   if (installedManifest.name !== "yakit-ui")
     throw new Error("installed tarball identity mismatch");
+  const installedIconsManifest = JSON.parse(
+    await readFile(
+      path.join(fixture, "node_modules/yakit-ui-icons/package.json"),
+      "utf8",
+    ),
+  );
+  if (
+    installedIconsManifest.name !== "yakit-ui-icons" ||
+    JSON.stringify(installedIconsManifest.peerDependencies) !==
+      JSON.stringify({ react: "^18.2.0" }) ||
+    installedIconsManifest.dependencies ||
+    installedIconsManifest.peerDependenciesMeta
+  )
+    throw new Error(
+      "installed icons tarball identity or React-only peer contract mismatch",
+    );
   const cssPath = path.join(installedPackage, "dist/index.css");
   await access(cssPath);
   if (!(await readFile(cssPath, "utf8")).trim())
@@ -249,6 +266,7 @@ try {
         css: "passed",
         bundler: "passed",
         package: `${installedManifest.name}@${installedManifest.version}`,
+        iconsPackage: `${installedIconsManifest.name}@${installedIconsManifest.version}`,
         storybook: "passed",
         typescript: "passed",
       },

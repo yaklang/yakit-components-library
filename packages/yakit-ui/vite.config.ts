@@ -26,15 +26,21 @@ export default defineConfig(({ mode }) => {
       build: {
         copyPublicDir: false,
         lib: {
-          entry: './src/index.ts',
-          fileName: 'index',
+          entry: {
+            index: './src/index.ts',
+            'icons/index': './src/icons/index.tsx',
+            'icons/outline/index': './src/icons/outline/index.tsx',
+            'icons/solid/index': './src/icons/solid/index.tsx',
+            'icons/registry': './src/icons/registry.ts',
+          },
+          cssFileName: 'index',
+          fileName: (_format, entryName) => `${entryName}.js`,
           formats: ['es'],
         },
         rollupOptions: {
           external: (id) =>
             [
               '@ant-design/cssinjs',
-              '@emotion/react',
               '@yakit-libs/color',
               'antd',
               'classnames',

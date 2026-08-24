@@ -10,6 +10,7 @@ import { promisify } from "node:util";
 const execute = promisify(execFile);
 const root = path.resolve(import.meta.dirname, "../..");
 const packageDirectory = path.join(root, "packages/yakit-ui");
+const iconsPackageDirectory = path.join(root, "packages/yakit-ui-icons");
 
 function credentialFreeEnvironment() {
   const environment = { ...process.env };
@@ -36,6 +37,15 @@ try {
     ["pack", "--ignore-scripts", "--json", "--pack-destination", packDirectory],
     {
       cwd: packageDirectory,
+      env: credentialFreeEnvironment(),
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  );
+  await execute(
+    "npm",
+    ["pack", "--ignore-scripts", "--json", "--pack-destination", packDirectory],
+    {
+      cwd: iconsPackageDirectory,
       env: credentialFreeEnvironment(),
       maxBuffer: 16 * 1024 * 1024,
     },

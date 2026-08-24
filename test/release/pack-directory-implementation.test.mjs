@@ -1,14 +1,12 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import {
-  findSingleTarball,
-  verifyPackDirectory,
-} from "../../scripts/release/verify-pack-directory.mjs";
+import { verifyPackDirectory } from "../../scripts/release/verify-pack-directory.mjs";
 
 const createTarball = (extraEntries = []) => {
   const directory = mkdtempSync(join(tmpdir(), "yakit-pack-"));
@@ -25,36 +23,85 @@ const createTarball = (extraEntries = []) => {
   ]) {
     const file = join(packageRoot, entry);
     mkdirSync(join(file, ".."), { recursive: true });
-    writeFileSync(file, entry);
+    writeFileSync(
+      file,
+      entry === "package.json"
+        ? JSON.stringify({ name: "yakit-ui", version: "1.2.3" })
+        : entry,
+    );
   }
   const tarball = join(directory, "yakit-ui-1.2.3.tgz");
   execFileSync("tar", ["-czf", tarball, "-C", directory, "package"]);
   return { directory, tarball };
 };
 
-test("single tarball finder rejects an empty pack directory", async () => {
-  const directory = mkdtempSync(join(tmpdir(), "yakit-pack-"));
-  await assert.rejects(() => findSingleTarball(directory), /found 0/);
-});
-
-test("single tarball finder rejects an ambiguous pack directory", async () => {
-  const directory = mkdtempSync(join(tmpdir(), "yakit-pack-"));
-  writeFileSync(join(directory, "one.tgz"), "one");
-  writeFileSync(join(directory, "two.tgz"), "two");
-  await assert.rejects(() => findSingleTarball(directory), /found 2/);
-});
+const createIconsTarball = (directory, { oversized = false } = {}) => {
+  const staging = join(directory, "icons-staging");
+  const packageRoot = join(staging, "package");
+  const entries = [
+    "LICENSE",
+    "dist/index.js",
+    "dist/index.d.ts",
+    "dist/outline/index.js",
+    "dist/outline/index.d.ts",
+    "dist/solid/index.js",
+    "dist/solid/index.d.ts",
+    "dist/registry.js",
+    "dist/registry.d.ts",
+  ];
+  for (const entry of entries) {
+    const file = join(packageRoot, entry);
+    mkdirSync(join(file, ".."), { recursive: true });
+    writeFileSync(file, entry);
+  }
+  if (oversized)
+    writeFileSync(join(packageRoot, "dist/payload.bin"), randomBytes(260_000));
+  writeFileSync(
+    join(packageRoot, "package.json"),
+    JSON.stringify({
+      name: "yakit-ui-icons",
+      version: "1.2.3",
+      peerDependencies: { react: "^18.2.0" },
+    }),
+  );
+  const tarball = join(directory, "yakit-ui-icons-1.2.3.tgz");
+  execFileSync("tar", ["-czf", tarball, "-C", staging, "package"]);
+  return tarball;
+};
 
 test("pack verifier accepts the canonical package surface", async () => {
   const { directory, tarball } = createTarball();
+  const result = await verifyPackDirectory({
+    directory,
+    expectedPackages: ["yakit-ui"],
+  });
+  assert.equal(result.packages[0].tarball, tarball);
+  assert.match(result.packages[0].sha256, /^[a-f0-9]{64}$/);
+});
+
+test("pack verifier accepts exactly both fixed public package tarballs", async () => {
+  const { directory } = createTarball();
+  createIconsTarball(directory);
   const result = await verifyPackDirectory({ directory });
-  assert.equal(result.tarball, tarball);
-  assert.match(result.sha256, /^[a-f0-9]{64}$/);
+  assert.deepEqual(result.packages.map((item) => item.package).sort(), [
+    "yakit-ui",
+    "yakit-ui-icons",
+  ]);
+});
+
+test("pack verifier enforces the independent icons package size budget", async () => {
+  const { directory } = createTarball();
+  createIconsTarball(directory, { oversized: true });
+  await assert.rejects(
+    () => verifyPackDirectory({ directory }),
+    /yakit-ui-icons packedBytes exceeds 250000/,
+  );
 });
 
 test("pack verifier rejects a credential-bearing path", async () => {
   const { directory } = createTarball([".npmrc"]);
   await assert.rejects(
-    () => verifyPackDirectory({ directory }),
+    () => verifyPackDirectory({ directory, expectedPackages: ["yakit-ui"] }),
     /forbidden tar entry package\/\.npmrc/,
   );
 });
@@ -62,7 +109,7 @@ test("pack verifier rejects a credential-bearing path", async () => {
 test("pack verifier rejects unexpected top-level package files", async () => {
   const { directory } = createTarball(["internal-notes.md"]);
   await assert.rejects(
-    () => verifyPackDirectory({ directory }),
+    () => verifyPackDirectory({ directory, expectedPackages: ["yakit-ui"] }),
     /unexpected tar entry package\/internal-notes\.md/,
   );
 });
@@ -78,7 +125,7 @@ test("pack verifier rejects credential-like content without disclosing the value
   const tarball = join(directory, "yakit-ui-1.2.3.tgz");
   execFileSync("tar", ["-czf", tarball, "-C", directory, "package"]);
   await assert.rejects(
-    () => verifyPackDirectory({ directory }),
+    () => verifyPackDirectory({ directory, expectedPackages: ["yakit-ui"] }),
     (error) =>
       /credential-like content/.test(error.message) &&
       !error.message.includes(secret),
@@ -95,7 +142,7 @@ test("pack verifier rejects absolute developer paths in generated files", async 
   const tarball = join(directory, "yakit-ui-1.2.3.tgz");
   execFileSync("tar", ["-czf", tarball, "-C", directory, "package"]);
   await assert.rejects(
-    () => verifyPackDirectory({ directory }),
+    () => verifyPackDirectory({ directory, expectedPackages: ["yakit-ui"] }),
     /absolute developer path/,
   );
 });

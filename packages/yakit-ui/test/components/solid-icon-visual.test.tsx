@@ -4,7 +4,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { solidIconRegistry } from '../../src/icons';
+import { solidIconRegistry } from '../../src/icons/registry';
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 import contract from '../fixtures/icons/reference/solid-render-contract-v1.json';

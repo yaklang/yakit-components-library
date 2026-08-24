@@ -77,25 +77,32 @@ test("publish workflow defaults to no workflow-level authority", () => {
   assertCredentialFree("publish.yml", source);
 });
 
-test("only publish job receives OIDC authority", () => {
+test("only protected publication jobs receive OIDC authority", () => {
   const jobs = extractWorkflowJobs(workflow("publish.yml"));
   const oidcJobs = [...jobs]
     .filter(([, source]) => /id-token:\s*write/.test(source))
     .map(([name]) => name);
-  assert.deepEqual(oidcJobs, ["publish"]);
+  assert.deepEqual(oidcJobs, ["publish", "recovery-publish"]);
 });
 
 test("publish authority is protected and cannot write repository contents", () => {
-  const job = extractWorkflowJobs(workflow("publish.yml")).get("publish") ?? "";
-  assert.match(job, /environment:\s*(?:name:\s*)?npm-release/);
-  assert.match(job, /contents:\s*read/);
-  assert.doesNotMatch(job, /contents:\s*write/);
-  assert.match(job, /--ignore-scripts/);
+  const jobs = extractWorkflowJobs(workflow("publish.yml"));
+  for (const name of ["publish", "recovery-publish"]) {
+    const job = jobs.get(name) ?? "";
+    assert.match(job, /environment:\s*(?:name:\s*)?npm-release/);
+    assert.match(job, /contents:\s*read/);
+    assert.doesNotMatch(job, /contents:\s*write/);
+  }
+  assert.match(jobs.get("publish") ?? "", /--ignore-scripts/);
 });
 
 test("OIDC publishing requires an explicit repository opt-in", () => {
-  const job = extractWorkflowJobs(workflow("publish.yml")).get("publish") ?? "";
-  assert.match(job, /vars\.NPM_TRUSTED_PUBLISHING_ENABLED\s*==\s*'true'/);
+  const jobs = extractWorkflowJobs(workflow("publish.yml"));
+  for (const name of ["publish", "recovery-publish"])
+    assert.match(
+      jobs.get(name) ?? "",
+      /vars\.NPM_TRUSTED_PUBLISHING_ENABLED\s*==\s*'true'/,
+    );
 });
 
 test("publish action disables GitHub tag and release creation", () => {
@@ -109,6 +116,58 @@ test("verification and publish consume the same Changesets pack artifact output"
   const reference = /needs\.build-and-pack\.outputs\.pack-dir-artifact-id/;
   assert.match(jobs.get("verify-pack") ?? "", reference);
   assert.match(jobs.get("publish") ?? "", reference);
+});
+
+test("CI and publish build and pack both fixed public packages", () => {
+  const ci = workflow("ci.yml");
+  const publishBuild =
+    extractWorkflowJobs(workflow("publish.yml")).get("build-and-pack") ?? "";
+  for (const source of [ci, publishBuild]) {
+    assert.match(source, /--filter yakit-ui run build:package/);
+    assert.match(source, /--filter yakit-ui-icons run build/);
+    assert.match(source, /--filter yakit-ui run test:icon-package-contract/);
+  }
+  assert.match(ci, /--filter yakit-ui-icons pack --dry-run/);
+});
+
+test("partial recovery publishes no rebuilt or already-published package", () => {
+  const job =
+    extractWorkflowJobs(workflow("publish.yml")).get("recovery-publish") ?? "";
+  assert.match(
+    job,
+    /recover-partial-publication\.mjs \.release\/recovery --publish/,
+  );
+  assert.match(
+    readFileSync(
+      join(root, "scripts/release/recover-partial-publication.mjs"),
+      "utf8",
+    ),
+    /"--ignore-scripts"/,
+  );
+  assert.doesNotMatch(
+    job,
+    /\bbuild\b|\bvite\b|\btsc\b|changesets\/action\/publish/,
+  );
+  assert.match(job, /id-token:\s*write/);
+  assert.match(job, /actions:\s*read/);
+});
+
+test("recovery metadata waits until no verified package is missing", () => {
+  const job =
+    extractWorkflowJobs(workflow("publish.yml")).get("recovery-metadata") ?? "";
+  assert.match(job, /recovery-publish\.result == 'success'/);
+  assert.match(job, /has-missing == 'false'/);
+  assert.doesNotMatch(
+    job,
+    /recovery-publish\.result == 'success'\s*\|\|\s*needs\.recovery-publish\.result == 'skipped'/,
+  );
+});
+
+test("post-publish smoke verifies both registry packages", () => {
+  const job =
+    extractWorkflowJobs(workflow("publish.yml")).get("post-publish") ?? "";
+  assert.match(job, /PACKAGE_NAME:\s*yakit-ui/);
+  assert.match(job, /PACKAGE_NAME=yakit-ui-icons/);
 });
 
 test("publish job cannot rebuild the verified package artifact", () => {

@@ -64,6 +64,12 @@ jobs:
       - name: Build package and Storybook
         run: pnpm --filter yakit-ui run build:package
 
+      - name: Build React-only icon package
+        run: pnpm --filter yakit-ui-icons run build
+
+      - name: Verify lightweight and dedicated icon package contracts
+        run: pnpm --filter yakit-ui run test:icon-package-contract
+
       - name: Verify package and installed consumer
         run: pnpm --filter yakit-ui run verify:package
 
@@ -71,4 +77,4 @@ jobs:
         run: pnpm run release:policy:check
 
       - name: Dry-run npm pack
-        run: pnpm --filter yakit-ui run pack:dry-run
+        run: pnpm --filter yakit-ui run pack:dry-run && pnpm --filter yakit-ui-icons pack --dry-run
