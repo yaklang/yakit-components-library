@@ -91,6 +91,11 @@ test("package release state is valid before and after the initial Version Packag
   }
 });
 
+test("Changesets generates changelog entries for the Version Packages action", () => {
+  const config = readJson(join(root, ".changeset/config.json"));
+  assert.equal(config.changelog, "@changesets/cli/changelog");
+});
+
 test("package exports the ESM library, declarations, and CSS contract", () => {
   const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
   assert.equal(manifest.exports["."].import, "./dist/index.js");
