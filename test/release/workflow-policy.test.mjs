@@ -93,7 +93,7 @@ test("publish authority is protected and cannot write repository contents", () =
   assert.match(job, /--ignore-scripts/);
 });
 
-test("OIDC publishing stays disabled until bootstrap setup is complete", () => {
+test("OIDC publishing requires an explicit repository opt-in", () => {
   const job = extractWorkflowJobs(workflow("publish.yml")).get("publish") ?? "";
   assert.match(job, /vars\.NPM_TRUSTED_PUBLISHING_ENABLED\s*==\s*'true'/);
 });
