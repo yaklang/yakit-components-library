@@ -1,0 +1,14 @@
+{
+  "session_id": "019ff92a-2806-7532-8656-3bd4af64b8d6",
+  "native_session_id": "019ff92a-2806-7532-8656-3bd4af64b8d6",
+  "started_at": "2026-08-14T07:41:07.061Z",
+  "cwd": "/Users/doubao/project/yakit-components-library",
+  "state_root": "/Users/doubao/project/yakit-components-library/.omx/state/sessions/019ff92a-2806-7532-8656-3bd4af64b8d6",
+  "pid": 29883,
+  "platform": "darwin",
+  "identity_schema_version": 2,
+  "process_identity": {
+    "platform": "darwin",
+    "birth": "1786690507.329659"
+  }
+}

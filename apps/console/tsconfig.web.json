@@ -1,7 +1,15 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
-  "include": ["test/renderer/**/*.ts", "test/preload/*.d.ts"],
+  "include": ["src/renderer/src", "src/preload/global.d.ts", "test/renderer/src", "test/preload"],
   "compilerOptions": {
-    "composite": true
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@renderer/*": ["src/renderer/src/*"]
+    }
   }
 }

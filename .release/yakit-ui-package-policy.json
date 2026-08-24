@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "package": "yakit-ui",
+  "sourceCommit": "32a942958e03b6c8cb00fbe9f5065a1afd730147",
+  "baseline": {
+    "packedBytes": 2588581,
+    "unpackedBytes": 8781264,
+    "fileCount": 170
+  },
+  "limits": {
+    "packedBytes": 2847439,
+    "unpackedBytes": 9659390,
+    "fileCount": 187
+  }
+}

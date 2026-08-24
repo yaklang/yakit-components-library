@@ -1,0 +1,18 @@
+{
+  "active": false,
+  "mode": "ralph",
+  "current_phase": "cancelled",
+  "started_at": "2026-08-13T07:13:43.598Z",
+  "updated_at": "2026-08-13T07:14:22.237Z",
+  "session_id": "019ff9f4-02a2-7751-9c7a-5d4750e7f974",
+  "owner_codex_session_id": "019ff9f4-02a2-7751-9c7a-5d4750e7f974",
+  "thread_id": "019ff9f1-d832-7a32-bcdf-34ae47490727",
+  "turn_id": "019ff9f8-ad99-7e30-bf93-283233ee4d3d",
+  "iteration": 1,
+  "max_iterations": 50,
+  "owner_omx_session_id": "019ff9f4-02a2-7751-9c7a-5d4750e7f974",
+  "last_turn_at": "2026-08-13T07:15:58.265Z",
+  "completed_at": "2026-08-14T07:43:34Z",
+  "run_outcome": "cancelled",
+  "lifecycle_outcome": "userinterlude"
+}

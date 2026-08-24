@@ -9,9 +9,17 @@ lerna-debug.log*
 
 node_modules
 dist
+out
 dist-ssr
 *.local
-
+*.turbo
+.eslintcache
+packages/yakit-ui/storybook-static/
+packages/yakit-ui/test-results/
+.release/*.candidate.json
+.release/pack/
+.release/recovery/
+.release/verified/
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

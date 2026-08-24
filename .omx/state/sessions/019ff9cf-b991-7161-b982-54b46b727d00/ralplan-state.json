@@ -1,0 +1,26 @@
+{
+  "active": false,
+  "current_phase": "waiting-for-host-receipt",
+  "completed_at": "2026-08-18T02:55:29.112Z",
+  "owner_omx_session_id": "019ff9cf-b991-7161-b982-54b46b727d00",
+  "stop_reason": "user_cancelled_stale_workflow",
+  "planning_artifacts": {
+    "prd": ".omx/plans/prd-storybook-figma-component-audit.md",
+    "test_spec": ".omx/plans/test-spec-storybook-figma-component-audit.md"
+  },
+  "ralplan_architect_review": {
+    "verdict": "APPROVE",
+    "completed": true
+  },
+  "ralplan_critic_review": {
+    "verdict": "APPROVE",
+    "completed": true
+  },
+  "ralplan_consensus_gate": {
+    "complete": false,
+    "blocked_reason": "documented_host_consensus_receipt_unavailable"
+  },
+  "execution_blocked": true,
+  "run_outcome": "finish",
+  "lifecycle_outcome": "finished"
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "solid-render-contract-v1",
+  "variant": "solid",
+  "expectedCounts": {
+    "targetSymbols": 251,
+    "supplementalSources": 4,
+    "publicExports": 255
+  },
+  "renderer": {
+    "browserProduct": "Google Chrome",
+    "browserVersion": "151.0.7922.173",
+    "browserExecutablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "browserExecutableSha256": "21b789908667614137c0db7dadebf1eff21e60c6bb30f349445aef47bbfdded8",
+    "playwrightVersion": "1.55.0",
+    "operatingSystem": {
+      "name": "macOS",
+      "version": "15.7.7",
+      "build": "24G720",
+      "architecture": "arm64"
+    }
+  },
+  "raster": {
+    "cropWidth": 20,
+    "cropHeight": 20,
+    "deviceScaleFactor": 1,
+    "background": "#F8F9FA",
+    "defaultColor": "#353639",
+    "inkMaskThreshold": 8
+  },
+  "metrics": {
+    "rounding": "half-up-six-decimals",
+    "bounds": "inclusive",
+    "centroid": "intensity-weighted-euclidean",
+    "maeMaximum": 0.5,
+    "iouMinimum": 0.995,
+    "boundsEdgeDeltaMaximum": 0,
+    "centroidDeltaMaximum": 0.05
+  }
+}
