@@ -1,5 +1,11 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.1.3
+
+### Patch Changes
+
+- 6eb88c1: Add the `@yakit-libs` npm keyword so both packages appear in the organization ecosystem search.
+
 ## 0.1.2
 
 ### Patch Changes
