@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui
 
+## 0.1.2
+
+### Patch Changes
+
+- c4138a7: Publish the component and React-only icon packages under the `@yakit-libs`
+  organization scope.
+
 ## 0.1.1
 
 ### Patch Changes
