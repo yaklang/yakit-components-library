@@ -81,7 +81,7 @@ describe('Published lightweight icon entries', () => {
       [
         '--input-type=module',
         '--eval',
-        "import('yakit-ui/icons/createIcon').catch((error) => process.stdout.write(error.code ?? ''))",
+        "import('@yakit-libs/yakit-ui/icons/createIcon').catch((error) => process.stdout.write(error.code ?? ''))",
       ],
       { cwd: packageRoot, encoding: 'utf8' },
     );

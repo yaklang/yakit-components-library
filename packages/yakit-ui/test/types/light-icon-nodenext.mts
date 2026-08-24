@@ -1,10 +1,10 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 
-import { HomeOutlined, type IconProps } from 'yakit-ui/icons';
-import { AcademicCapOutlined } from 'yakit-ui/icons/outline';
-import { HomeFilled } from 'yakit-ui/icons/solid';
-import { iconRegistry } from 'yakit-ui/icons/registry';
+import { HomeOutlined, type IconProps } from '@yakit-libs/yakit-ui/icons';
+import { AcademicCapOutlined } from '@yakit-libs/yakit-ui/icons/outline';
+import { HomeFilled } from '@yakit-libs/yakit-ui/icons/solid';
+import { iconRegistry } from '@yakit-libs/yakit-ui/icons/registry';
 
 const props: IconProps = { 'aria-label': 'home', size: 16 };
 

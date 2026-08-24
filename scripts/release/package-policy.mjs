@@ -25,7 +25,9 @@ function parsePackReport() {
     },
   );
   const jsonStart = stdout.lastIndexOf("\n[");
-  const report = JSON.parse(jsonStart === -1 ? stdout : stdout.slice(jsonStart + 1));
+  const report = JSON.parse(
+    jsonStart === -1 ? stdout : stdout.slice(jsonStart + 1),
+  );
   if (!Array.isArray(report) || report.length !== 1)
     throw new Error("Expected exactly one npm pack report");
   const item = report[0];
@@ -81,7 +83,7 @@ if (command === "init") {
   const baseline = parsePackReport();
   const policy = {
     schemaVersion: 1,
-    package: "yakit-ui",
+    package: "@yakit-libs/yakit-ui",
     sourceCommit: sourceSha,
     baseline: {
       packedBytes: baseline.packedBytes,
@@ -102,7 +104,7 @@ if (command === "init") {
   console.log(JSON.stringify(policy, null, 2));
 } else if (command === "check") {
   const policy = JSON.parse(await readFile(policyPath, "utf8"));
-  if (policy.schemaVersion !== 1 || policy.package !== "yakit-ui")
+  if (policy.schemaVersion !== 1 || policy.package !== "@yakit-libs/yakit-ui")
     throw new Error("Unsupported package policy schema");
   if (!/^[0-9a-f]{40}$/.test(policy.sourceCommit ?? ""))
     throw new Error(

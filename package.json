@@ -17,7 +17,7 @@
     "release:policy:check": "node scripts/release/package-policy.mjs check",
     "release:consumer:dry-run": "node scripts/release/tarball-consumer-dry-run.mjs",
     "release:test": "node --test test/release/*.test.mjs packages/yakit-ui/test/release/*.test.mjs",
-    "release:dry-run": "pnpm run release:workspace-check && pnpm run release:test && pnpm --filter yakit-ui run build:package && pnpm --filter yakit-ui-icons run build && pnpm --filter yakit-ui run verify:package && pnpm run release:policy:check && pnpm run release:consumer:dry-run && pnpm --filter yakit-ui run pack:dry-run && pnpm --filter yakit-ui-icons pack --dry-run"
+    "release:dry-run": "pnpm run release:workspace-check && pnpm run release:test && pnpm --filter @yakit-libs/yakit-ui run build:package && pnpm --filter @yakit-libs/yakit-ui-icons run build && pnpm --filter @yakit-libs/yakit-ui run verify:package && pnpm run release:policy:check && pnpm run release:consumer:dry-run && pnpm --filter @yakit-libs/yakit-ui run pack:dry-run && pnpm --filter @yakit-libs/yakit-ui-icons pack --dry-run"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.1",

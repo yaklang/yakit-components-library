@@ -141,7 +141,9 @@ async function waitForStorybook(url, launcher, observation) {
 const packageName = requiredEnvironment("PACKAGE_NAME");
 const packageVersion = requiredEnvironment("PACKAGE_VERSION");
 const distTag = requiredEnvironment("DIST_TAG");
-if (!["yakit-ui", "yakit-ui-icons"].includes(packageName))
+if (
+  !["@yakit-libs/yakit-ui", "@yakit-libs/yakit-ui-icons"].includes(packageName)
+)
   throw new Error(
     "post-publish verification is restricted to Yakit UI packages",
   );
@@ -160,7 +162,7 @@ if (
 ) {
   throw new Error("registry package identity mismatch");
 }
-if (packageName === "yakit-ui-icons") {
+if (packageName === "@yakit-libs/yakit-ui-icons") {
   const iconsFixture = await mkdtemp(
     path.join(tmpdir(), "yakit-ui-icons-registry-smoke-"),
   );
@@ -193,7 +195,7 @@ if (packageName === "yakit-ui-icons") {
     );
     await writeFile(
       path.join(iconsFixture, "consumer.mjs"),
-      'import { HomeOutlined } from "yakit-ui-icons";\nimport { HomeFilled } from "yakit-ui-icons/solid";\nwindow.iconCount = Number(Boolean(HomeOutlined)) + Number(Boolean(HomeFilled));\n',
+      'import { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeFilled } from "@yakit-libs/yakit-ui-icons/solid";\nwindow.iconCount = Number(Boolean(HomeOutlined)) + Number(Boolean(HomeFilled));\n',
     );
     await run(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
       cwd: iconsFixture,
@@ -202,7 +204,10 @@ if (packageName === "yakit-ui-icons") {
     await access(path.join(iconsFixture, "dist/index.html"));
     const installedManifest = JSON.parse(
       await readFile(
-        path.join(iconsFixture, "node_modules/yakit-ui-icons/package.json"),
+        path.join(
+          iconsFixture,
+          "node_modules/@yakit-libs/yakit-ui-icons/package.json",
+        ),
         "utf8",
       ),
     );

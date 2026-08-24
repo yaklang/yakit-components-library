@@ -34,9 +34,13 @@ for (const relativePath of requiredFiles) {
 
 const manifest = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'));
 const expected = {
+  name: '@yakit-libs/yakit-ui',
   bin: './dist/bin/yakit-ui-storybook.mjs',
   css: './dist/index.css',
 };
+if (manifest.name !== expected.name || manifest.private === true) {
+  failures.push(`package must be the public ${expected.name} package`);
+}
 
 if (manifest.bin?.['yakit-ui-storybook'] !== expected.bin) {
   failures.push(`bin.yakit-ui-storybook must be ${expected.bin}`);
@@ -46,6 +50,9 @@ if (manifest.exports?.['./style.css'] !== expected.css) {
 }
 if (manifest.publishConfig?.access !== 'public') {
   failures.push('publishConfig.access must be public');
+}
+if (manifest.publishConfig?.registry !== 'https://registry.npmjs.org/') {
+  failures.push('publishConfig.registry must be https://registry.npmjs.org/');
 }
 if (manifest.license !== 'MIT') {
   failures.push('license must be MIT');
@@ -59,7 +66,7 @@ for (const includedPath of ['dist', 'storybook-static', 'README.md', 'LICENSE'])
 if (failures.length > 0) {
   console.error('yakit-ui package outputs are not ready:');
   for (const failure of failures) console.error(`- ${failure}`);
-  console.error('Run "pnpm --filter yakit-ui build:package" before packing.');
+  console.error('Run "pnpm --filter @yakit-libs/yakit-ui build:package" before packing.');
   process.exitCode = 1;
 } else {
   console.log('yakit-ui package outputs verified.');

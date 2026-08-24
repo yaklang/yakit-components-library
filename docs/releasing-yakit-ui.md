@@ -1,27 +1,37 @@
 # Releasing Yakit UI packages
 
-The repository publishes the fixed-version pair `yakit-ui` and `yakit-ui-icons` with Changesets v2 actions and npm Trusted Publishing. The release path never stores an npm token in GitHub or repository files. A package's one-time bootstrap uses the owner's existing local npm login and an interactive 2FA challenge; no credential or OTP is copied into this repository, GitHub, logs, or chat.
+The repository publishes the fixed-version pair `@yakit-libs/yakit-ui` and
+`@yakit-libs/yakit-ui-icons` with Changesets v2 actions and npm Trusted
+Publishing. The release path never stores an npm token in GitHub or repository
+files. A package's one-time bootstrap uses an authorized organization member's
+existing local npm login and an interactive 2FA challenge; no credential or OTP
+is copied into this repository, GitHub, logs, or chat.
 
 ## One-time repository and npm setup
 
 The repository and published packages use the MIT License, matching the existing YakitLibs package ecosystem. The root and package copies are checked for exact equality by the release policy tests.
 
-npm requires each package to already exist before Trusted Publishing can be configured. The `yakit-ui@0.1.0` bootstrap was completed on 2026-08-24 by publishing the exact CI-verified tarball from the package owner's local npm session with interactive 2FA. Bootstrap `yakit-ui-icons` the same way from the dual-package verification artifact produced for its first fixed release; never rebuild or repack either tarball locally.
+npm package names cannot be renamed in place. The former unscoped
+`yakit-ui@0.1.0` therefore remains a separate registry identity; current releases
+use new packages under the `@yakit-libs` organization scope. npm requires each
+scoped package to exist before Trusted Publishing can be configured. Bootstrap
+both scoped packages from the dual-package verification artifact produced for
+their first fixed release; never rebuild or repack either tarball locally.
 
 Bootstrap sequence for the first Version Packages pull request:
 
-1. Run `npm view <package-name> name version --json` against `https://registry.npmjs.org` for every package that has not been bootstrapped. For a new unscoped package it must return `E404`; if it resolves, stop and resolve package ownership or choose an approved name before merging anything.
+1. Run `npm view <package-name> name version --json` against `https://registry.npmjs.org` for every package that has not been bootstrapped. For a new scoped package it must return `E404`; if it resolves, stop and resolve package ownership or choose an approved name before merging anything. Verify `npm whoami` is an accepted `@yakit-libs` organization member before publication.
 2. Protect the `main` branch and require the `CI` workflow.
 3. Leave the repository variable `NPM_TRUSTED_PUBLISHING_ENABLED` unset. This lets the workflow build and verify the first version while its OIDC publish job is skipped.
-4. Review the Version Packages diff. `yakit-ui` and `yakit-ui-icons` are a Changesets fixed group, so the release PR must advance both to the same version and consume the lightweight-icons Changeset.
+4. Review the Version Packages diff. `@yakit-libs/yakit-ui` and `@yakit-libs/yakit-ui-icons` are a Changesets fixed group, so the release PR must advance both to the same version and consume the relevant Changeset.
 5. The bot-created PR's `pull_request` checks initially require maintainer approval because it was opened with `GITHUB_TOKEN`. A maintainer with write access must click **Approve workflows to run**, then merge only after `CI / quality` passes. This keeps untrusted PR code out of a privileged trigger without adding a PAT or GitHub App credential.
 6. The resulting release run creates a `yakit-ui-verification-<run-id>` artifact containing both exact tarballs and a schema-v2 `verification-manifest.json` that binds their names, versions, hashes, sizes, and file counts.
 7. Download and inspect that artifact. Recompute both tarball SHA-256 values and compare them with `verification-manifest.json`; do not rebuild or repack either artifact.
-8. From a local terminal, verify the intended npm identity with `npm whoami`, then publish the downloaded tarball:
+8. From a local terminal, verify the intended npm identity with `npm whoami`, then publish the downloaded tarballs (scoped package tarball filenames are emitted by the verified artifact and must not be guessed or rebuilt):
 
    ```bash
-   npm publish ./yakit-ui-icons-<version>.tgz --access public --tag latest --ignore-scripts
-   npm publish ./yakit-ui-<version>.tgz --access public --tag latest --ignore-scripts
+   npm publish ./yakit-libs-yakit-ui-icons-<version>.tgz --access public --tag latest --ignore-scripts
+   npm publish ./yakit-libs-yakit-ui-<version>.tgz --access public --tag latest --ignore-scripts
    ```
 
    Do not put an OTP on the command line. Current npm clients prompt interactively after the registry requests 2FA, so the OTP is not stored in shell history or shared with an automation agent.
@@ -37,7 +47,7 @@ Bootstrap sequence for the first Version Packages pull request:
     The equivalent audited CLI command requires npm 11.15 or newer:
 
     ```bash
-    for package in yakit-ui yakit-ui-icons; do
+    for package in @yakit-libs/yakit-ui @yakit-libs/yakit-ui-icons; do
       npx --yes npm@11.19.0 trust github "$package" \
         --file publish.yml \
         --repository yaklang/yakit-components-library \
@@ -50,7 +60,7 @@ Bootstrap sequence for the first Version Packages pull request:
 12. If a verified package or GitHub metadata is still missing after bootstrap, use the documented recovery with the original run ID and verification artifact ID. It selects only absent package versions and publishes their retained tarballs without rebuilding; already-published matching versions are never republished.
 13. Do not add `NPM_TOKEN`, `NODE_AUTH_TOKEN`, an `.npmrc` credential, or a classic automation token to the repository or GitHub.
 
-Official references: [npm trust prerequisites](https://docs.npmjs.com/cli/v11/commands/npm-trust/), [Trusted Publishing](https://docs.npmjs.com/trusted-publishers/), and [unscoped public package publishing](https://docs.npmjs.com/creating-and-publishing-unscoped-public-packages/).
+Official references: [npm trust prerequisites](https://docs.npmjs.com/cli/v11/commands/npm-trust/), [Trusted Publishing](https://docs.npmjs.com/trusted-publishers/), and [scoped public package publishing](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
 
 ## Local repository dry-run
 
@@ -67,7 +77,7 @@ CI uses Playwright's dependency-pinned Chromium for portable component coverage.
 
 ```bash
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' \
-  pnpm --filter yakit-ui test
+  pnpm --filter @yakit-libs/yakit-ui test
 ```
 
 When the package surface intentionally changes, commit the release inputs first. From that clean source commit, create the size-policy candidate:

@@ -1,8 +1,12 @@
+import { HomeOutlined, type IconProps } from '@yakit-libs/yakit-ui/icons';
+import { AcademicCapOutlined } from '@yakit-libs/yakit-ui/icons/outline';
+import {
+  iconRegistry,
+  outlineIconRegistry,
+  solidIconRegistry,
+} from '@yakit-libs/yakit-ui/icons/registry';
+import { HomeFilled } from '@yakit-libs/yakit-ui/icons/solid';
 import type { ComponentType } from 'react';
-import { HomeOutlined, type IconProps } from 'yakit-ui/icons';
-import { AcademicCapOutlined } from 'yakit-ui/icons/outline';
-import { iconRegistry, outlineIconRegistry, solidIconRegistry } from 'yakit-ui/icons/registry';
-import { HomeFilled } from 'yakit-ui/icons/solid';
 
 const acceptsIcon = (_icon: ComponentType<IconProps>) => undefined;
 

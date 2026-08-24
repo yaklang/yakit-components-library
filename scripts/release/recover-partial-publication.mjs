@@ -53,6 +53,10 @@ export function assertRecoveryPlanAllowed(schemaVersion, plan) {
     );
 }
 
+export function primaryPackageNameForSchema(schemaVersion) {
+  return schemaVersion === 1 ? "yakit-ui" : "@yakit-libs/yakit-ui";
+}
+
 function parseSemver(version) {
   const match =
     /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/.exec(
@@ -216,8 +220,11 @@ if (invokedDirectly) {
     throw new Error(
       "verification evidence commit differs from its source workflow run",
     );
+  const primaryPackageName = primaryPackageNameForSchema(
+    manifest.schemaVersion,
+  );
   const expectedPackages =
-    manifest.schemaVersion === 1 ? ["yakit-ui"] : PUBLIC_PACKAGES;
+    manifest.schemaVersion === 1 ? [primaryPackageName] : PUBLIC_PACKAGES;
   const tarballPaths = Object.fromEntries(
     await Promise.all(
       expectedPackages.map(async (name) => [
@@ -228,10 +235,10 @@ if (invokedDirectly) {
   );
   await validateVerificationManifest(manifest, {
     expectedPackages,
-    packageName: "yakit-ui",
+    packageName: primaryPackageName,
     repository,
     runId: sourceRunId,
-    tarballPath: tarballPaths["yakit-ui"],
+    tarballPath: tarballPaths[primaryPackageName],
     tarballPaths,
   });
   const artifacts = artifactsForManifest(manifest);
@@ -312,8 +319,9 @@ if (invokedDirectly) {
   const outputs = {
     "commit-sha": manifest.workflowCommitSha,
     "has-missing": String(plan.missing.length > 0),
+    "package-name": primaryPackageName,
     "package-version": manifest.package.version,
-    "tag-name": `${manifest.package.name}@${manifest.package.version}`,
+    "tag-name": `${primaryPackageName}@${manifest.package.version}`,
   };
   await writeOutputs(outputs);
   console.log(JSON.stringify({ ...outputs, ...plan }, null, 2));

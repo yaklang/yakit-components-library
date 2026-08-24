@@ -95,8 +95,8 @@ const packDirectoryResult = await verifyPackDirectory({
 const packByName = new Map(
   packDirectoryResult.packages.map((item) => [item.package, item]),
 );
-const pack = packByName.get("yakit-ui");
-const iconsPack = packByName.get("yakit-ui-icons");
+const pack = packByName.get("@yakit-libs/yakit-ui");
+const iconsPack = packByName.get("@yakit-libs/yakit-ui-icons");
 const packageManifest = JSON.parse(
   execFileSync("tar", ["-xOzf", pack.tarball, "package/package.json"], {
     encoding: "utf8",
@@ -107,9 +107,12 @@ const iconsManifest = JSON.parse(
     encoding: "utf8",
   }),
 );
-if (packageManifest.name !== "yakit-ui" || packageManifest.private === true) {
+if (
+  packageManifest.name !== "@yakit-libs/yakit-ui" ||
+  packageManifest.private === true
+) {
   throw new Error(
-    "Changesets artifact must contain the public yakit-ui package",
+    "Changesets artifact must contain the public @yakit-libs/yakit-ui package",
   );
 }
 if (
@@ -117,9 +120,12 @@ if (
 ) {
   throw new Error("Changesets artifact contains an invalid package version");
 }
-if (iconsManifest.name !== "yakit-ui-icons" || iconsManifest.private === true)
+if (
+  iconsManifest.name !== "@yakit-libs/yakit-ui-icons" ||
+  iconsManifest.private === true
+)
   throw new Error(
-    "Changesets artifact must contain the public yakit-ui-icons package",
+    "Changesets artifact must contain the public @yakit-libs/yakit-ui-icons package",
   );
 if (iconsManifest.version !== packageManifest.version)
   throw new Error("fixed release packages must have the same version");
@@ -171,7 +177,7 @@ await validateVerificationManifest(manifest, {
   workflowCommitSha,
   runId,
   sourceRef,
-  packageName: "yakit-ui",
+  packageName: "@yakit-libs/yakit-ui",
   packageVersion: packageManifest.version,
   distTag,
   packArtifactId,

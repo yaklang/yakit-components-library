@@ -26,14 +26,14 @@ const tarballPaths = Object.fromEntries(
     ]),
   ),
 );
-const tarballPath = tarballPaths["yakit-ui"];
+const tarballPath = tarballPaths["@yakit-libs/yakit-ui"];
 await validateVerificationManifest(manifest, {
   tarballPath,
   repository: process.env.GITHUB_REPOSITORY,
   workflowCommitSha: process.env.GITHUB_SHA,
   runId: process.env.GITHUB_RUN_ID,
   sourceRef: process.env.GITHUB_REF,
-  packageName: "yakit-ui",
+  packageName: "@yakit-libs/yakit-ui",
   packArtifactId: process.env.PACK_ARTIFACT_ID,
   requiredSchemaVersion: 2,
   expectedPackages: PUBLIC_PACKAGES,

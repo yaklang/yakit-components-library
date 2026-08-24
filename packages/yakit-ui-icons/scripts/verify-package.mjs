@@ -57,12 +57,20 @@ for (const relativePath of requiredFiles) {
 const manifest = JSON.parse(
   await readFile(path.join(packageRoot, "package.json"), "utf8"),
 );
-if (manifest.name !== "yakit-ui-icons" || manifest.private === true) {
-  failures.push("package must be the public yakit-ui-icons package");
+if (
+  manifest.name !== "@yakit-libs/yakit-ui-icons" ||
+  manifest.private === true
+) {
+  failures.push(
+    "package must be the public @yakit-libs/yakit-ui-icons package",
+  );
 }
 if (manifest.license !== "MIT") failures.push("license must be MIT");
 if (manifest.publishConfig?.access !== "public") {
   failures.push("publishConfig.access must be public");
+}
+if (manifest.publishConfig?.registry !== "https://registry.npmjs.org/") {
+  failures.push("publishConfig.registry must be https://registry.npmjs.org/");
 }
 if (manifest.sideEffects !== false) failures.push("sideEffects must be false");
 if (JSON.stringify(manifest.exports) !== JSON.stringify(expectedExports)) {
@@ -123,7 +131,9 @@ try {
 if (failures.length > 0) {
   console.error("yakit-ui-icons package outputs are not ready:");
   for (const failure of failures) console.error(`- ${failure}`);
-  console.error('Run "pnpm --filter yakit-ui-icons build" before packing.');
+  console.error(
+    'Run "pnpm --filter @yakit-libs/yakit-ui-icons build" before packing.',
+  );
   process.exitCode = 1;
 } else {
   console.log("yakit-ui-icons package outputs verified.");

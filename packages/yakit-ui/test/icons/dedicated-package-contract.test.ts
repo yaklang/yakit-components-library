@@ -109,7 +109,7 @@ describe('Dedicated yakit-ui-icons package', () => {
       ...iconsManifest.peerDependencies,
     };
 
-    expect(iconsManifest.name).toBe('yakit-ui-icons');
+    expect(iconsManifest.name).toBe('@yakit-libs/yakit-ui-icons');
     expect(iconsManifest.private).toBe(false);
     expect(Object.keys(runtimeDependencies)).toEqual(['react']);
     expect(runtimeDependencies.react).toMatch(/18\.2\.0/);

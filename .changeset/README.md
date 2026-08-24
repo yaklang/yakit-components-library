@@ -1,6 +1,7 @@
 # Changesets
 
-Add a changeset for every release-worthy change to `yakit-ui`:
+Add a changeset for every release-worthy change to `@yakit-libs/yakit-ui` or
+`@yakit-libs/yakit-ui-icons`:
 
 ```sh
 pnpm changeset
