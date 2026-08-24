@@ -27,11 +27,23 @@ Bootstrap sequence for the first Version Packages pull request:
 
 9. Verify `npm view yakit-ui@0.1.0 version dist.tarball dist.integrity --json`, install the registry version in a clean directory, and run the component/CSS/Storybook smoke checks before changing any release setting.
 10. In the new npm package's settings, configure a GitHub Actions Trusted Publisher for:
-   - organization or user: `yaklang`
-   - repository: `yakit-components-library`
-   - workflow: `publish.yml`
-   - environment: `npm-release`
-11. Create the protected GitHub Environment `npm-release` with required reviewers. Only after both bindings exist, set the repository variable `NPM_TRUSTED_PUBLISHING_ENABLED=true` for later releases.
+    - organization or user: `yaklang`
+    - repository: `yakit-components-library`
+    - workflow: `publish.yml`
+    - environment: `npm-release`
+    - allowed action: `npm publish`
+
+    The equivalent audited CLI command requires npm 11.15 or newer:
+
+    ```bash
+    npx --yes npm@11.19.0 trust github yakit-ui \
+      --file publish.yml \
+      --repository yaklang/yakit-components-library \
+      --environment npm-release \
+      --allow-publish
+    ```
+
+11. Create the GitHub Environment `npm-release` and restrict deployments to `main` and `pre/*`. Add required reviewers when the repository plan supports them. At the initial bootstrap on 2026-08-24, the private-repository plan rejected that rule with HTTP 422, so the reviewed Version Packages PR merge became the human release approval and the Environment supplied branch scoping. Only after both the npm trust binding and GitHub Environment exist, set the repository variable `NPM_TRUSTED_PUBLISHING_ENABLED=true` for later releases.
 12. If GitHub metadata is wanted for the bootstrap version, use the documented metadata-only recovery with the original run ID and verification artifact ID.
 13. Do not add `NPM_TOKEN`, `NODE_AUTH_TOKEN`, an `.npmrc` credential, or a classic automation token to the repository or GitHub.
 
@@ -70,7 +82,7 @@ Review the candidate metrics and manifest diff before replacing `.release/yakit-
 3. A push to `main` runs `changesets/action/select-mode`.
 4. When versioning is needed, the workflow opens or updates the Version Packages pull request.
 5. After that pull request lands, the workflow builds once, creates the Changesets pack artifact, and independently verifies its tarball and identity.
-6. After bootstrap, `NPM_TRUSTED_PUBLISHING_ENABLED=true` lets the publish-only job pause at the protected `npm-release` Environment. Approval then requests npm OIDC and publishes that exact pack artifact. The job cannot rebuild or write GitHub tags/releases.
+6. After bootstrap, `NPM_TRUSTED_PUBLISHING_ENABLED=true` lets the publish-only job enter the branch-restricted `npm-release` Environment, request npm OIDC, and publish that exact pack artifact. When the GitHub plan supports Environment required reviewers, that job also pauses for approval; otherwise the reviewed Version Packages PR merge is the final human gate. The job cannot rebuild or write GitHub tags/releases.
 7. Registry smoke verification and GitHub tag/release reconciliation run as independent children of publish.
 
 ## Prerelease flow
