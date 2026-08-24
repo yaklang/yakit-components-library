@@ -207,6 +207,32 @@ test("component CI generates SSR fixtures before browser hydration tests", () =>
   );
 });
 
+test("pre-build types use source fixtures while built package contracts verify public subpaths", () => {
+  const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
+  const sourceTypes = readJson(
+    join(root, "packages/yakit-ui/test/types/tsconfig.json"),
+  );
+  const publicTypes = readJson(
+    join(root, "packages/yakit-ui/test/types/tsconfig.public.json"),
+  );
+
+  assert.doesNotMatch(manifest.scripts["test:types"], /build/i);
+  assert.deepEqual(sourceTypes.include, [
+    "../../src/vite-env.d.ts",
+    "icon-public.test.tsx",
+    "input-public.test.tsx",
+    "solid-icon-public.test.tsx",
+  ]);
+  assert.deepEqual(publicTypes.include, [
+    "../../src/vite-env.d.ts",
+    "light-icon-public.test.tsx",
+  ]);
+  assert.match(
+    manifest.scripts["test:icon-package-contract"],
+    /tsconfig\.public\.json/,
+  );
+});
+
 test("release-owned text files contain no credential-like values", () => {
   const roots = [
     ".changeset",
