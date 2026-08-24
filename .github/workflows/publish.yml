@@ -203,8 +203,10 @@ jobs:
           retention-days: 30
 
   publish:
-    # Keep this disabled for the one-time local 2FA bootstrap. Enable the
-    # repository variable only after npm Trusted Publishing is configured.
+    # Keep this disabled unless branch protection requires PRs and CI, the
+    # npm-release Environment has a required reviewer, and npm Trusted
+    # Publishing is configured. Otherwise publish the verified artifact
+    # locally with interactive 2FA.
     if: needs.select-mode.outputs.mode == 'publish' && vars.NPM_TRUSTED_PUBLISHING_ENABLED == 'true'
     needs:
       - select-mode
