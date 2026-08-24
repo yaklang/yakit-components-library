@@ -123,11 +123,14 @@ test("CI and publish build and pack both fixed public packages", () => {
   const publishBuild =
     extractWorkflowJobs(workflow("publish.yml")).get("build-and-pack") ?? "";
   for (const source of [ci, publishBuild]) {
-    assert.match(source, /--filter yakit-ui run build:package/);
-    assert.match(source, /--filter yakit-ui-icons run build/);
-    assert.match(source, /--filter yakit-ui run test:icon-package-contract/);
+    assert.match(source, /--filter @yakit-libs\/yakit-ui run build:package/);
+    assert.match(source, /--filter @yakit-libs\/yakit-ui-icons run build/);
+    assert.match(
+      source,
+      /--filter @yakit-libs\/yakit-ui run test:icon-package-contract/,
+    );
   }
-  assert.match(ci, /--filter yakit-ui-icons pack --dry-run/);
+  assert.match(ci, /--filter @yakit-libs\/yakit-ui-icons pack --dry-run/);
 });
 
 test("partial recovery publishes no rebuilt or already-published package", () => {
@@ -163,11 +166,42 @@ test("recovery metadata waits until no verified package is missing", () => {
   );
 });
 
+test("recovery metadata uses the package identity emitted by evidence validation", () => {
+  const source = workflow("publish.yml");
+  const metadata = extractWorkflowJobs(source).get("recovery-metadata") ?? "";
+  assert.match(
+    source,
+    /package-name:\s*\$\{\{\s*steps\.identity\.outputs\.package-name\s*\}\}/,
+  );
+  assert.match(
+    metadata,
+    /PACKAGE_NAME:\s*\$\{\{\s*needs\.recovery-verify\.outputs\.package-name\s*\}\}/,
+  );
+
+  const recovery = readFileSync(
+    join(root, "scripts/release/recover-partial-publication.mjs"),
+    "utf8",
+  );
+  assert.match(recovery, /"package-name":\s*primaryPackageName/);
+  assert.match(recovery, /"tag-name":\s*`\$\{primaryPackageName\}@/);
+
+  const reconciler = readFileSync(
+    join(root, "scripts/release/reconcile-github-metadata.mjs"),
+    "utf8",
+  );
+  assert.match(reconciler, /"yakit-ui"/);
+  assert.match(reconciler, /"@yakit-libs\/yakit-ui"/);
+  assert.match(reconciler, /tag !== `\$\{packageName\}@\$\{packageVersion\}`/);
+});
+
 test("post-publish smoke verifies both registry packages", () => {
   const job =
     extractWorkflowJobs(workflow("publish.yml")).get("post-publish") ?? "";
-  assert.match(job, /PACKAGE_NAME:\s*yakit-ui/);
-  assert.match(job, /PACKAGE_NAME=yakit-ui-icons/);
+  assert.match(job, /PACKAGE_NAME:\s*["']@yakit-libs\/yakit-ui["']/);
+  assert.match(
+    job,
+    /PACKAGE_NAME=(?:["'])?@yakit-libs\/yakit-ui-icons(?:["'])?/,
+  );
 });
 
 test("publish job cannot rebuild the verified package artifact", () => {

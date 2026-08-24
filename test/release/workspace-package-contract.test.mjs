@@ -20,7 +20,10 @@ test("only Yakit UI runtime packages are publishable workspace manifests", () =>
   const publishable = manifests
     .filter((file) => readJson(file).private !== true)
     .map((file) => readJson(file).name);
-  assert.deepEqual(publishable.sort(), ["yakit-ui", "yakit-ui-icons"]);
+  assert.deepEqual(publishable.sort(), [
+    "@yakit-libs/yakit-ui",
+    "@yakit-libs/yakit-ui-icons",
+  ]);
 });
 
 test("the root lockfile is the only workspace pnpm lockfile", () => {
@@ -92,7 +95,7 @@ test("package release state is valid before and after the initial Version Packag
     assert.equal(manifest.version, "0.0.0");
     assert.match(
       readFileSync(initialChangeset, "utf8"),
-      /^---\n"yakit-ui": minor\n---/,
+      /^---\n"@yakit-libs\/yakit-ui": minor\n---/,
     );
   } else {
     assert.match(manifest.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
@@ -103,11 +106,19 @@ test("package release state is valid before and after the initial Version Packag
 test("Changesets generates changelog entries for the Version Packages action", () => {
   const config = readJson(join(root, ".changeset/config.json"));
   assert.equal(config.changelog, "@changesets/cli/changelog");
-  assert.deepEqual(config.fixed, [["yakit-ui", "yakit-ui-icons"]]);
+  assert.deepEqual(config.fixed, [
+    ["@yakit-libs/yakit-ui", "@yakit-libs/yakit-ui-icons"],
+  ]);
 });
 
 test("React-only icon package has a narrow public and peer contract", () => {
   const manifest = readJson(join(root, "packages/yakit-ui-icons/package.json"));
+  assert.equal(manifest.name, "@yakit-libs/yakit-ui-icons");
+  assert.equal(manifest.private, false);
+  assert.deepEqual(manifest.publishConfig, {
+    access: "public",
+    registry: "https://registry.npmjs.org/",
+  });
   assert.deepEqual(Object.keys(manifest.exports).sort(), [
     ".",
     "./outline",
@@ -122,6 +133,12 @@ test("React-only icon package has a narrow public and peer contract", () => {
 
 test("package exports the ESM library, declarations, and CSS contract", () => {
   const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
+  assert.equal(manifest.name, "@yakit-libs/yakit-ui");
+  assert.equal(manifest.private, false);
+  assert.deepEqual(manifest.publishConfig, {
+    access: "public",
+    registry: "https://registry.npmjs.org/",
+  });
   assert.equal(manifest.exports["."].import, "./dist/index.js");
   assert.equal(manifest.exports["."].types, "./dist/index.d.ts");
   assert.equal(manifest.exports["./style.css"], "./dist/index.css");

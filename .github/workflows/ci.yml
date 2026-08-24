@@ -47,34 +47,34 @@ jobs:
         run: pnpm run release:test
 
       - name: Lint yakit-ui
-        run: pnpm --filter yakit-ui run lint
+        run: pnpm --filter @yakit-libs/yakit-ui run lint
 
       - name: Type-check public API
-        run: pnpm --filter yakit-ui run test:types
+        run: pnpm --filter @yakit-libs/yakit-ui run test:types
 
       - name: Install the pinned Playwright browser
-        run: pnpm --filter yakit-ui exec playwright install --with-deps chromium
+        run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
 
       - name: Run component tests
-        run: pnpm --filter yakit-ui run test:ci
+        run: pnpm --filter @yakit-libs/yakit-ui run test:ci
 
       - name: Audit icons
-        run: pnpm --filter yakit-ui run audit:icons
+        run: pnpm --filter @yakit-libs/yakit-ui run audit:icons
 
       - name: Build package and Storybook
-        run: pnpm --filter yakit-ui run build:package
+        run: pnpm --filter @yakit-libs/yakit-ui run build:package
 
       - name: Build React-only icon package
-        run: pnpm --filter yakit-ui-icons run build
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
 
       - name: Verify lightweight and dedicated icon package contracts
-        run: pnpm --filter yakit-ui run test:icon-package-contract
+        run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
 
       - name: Verify package and installed consumer
-        run: pnpm --filter yakit-ui run verify:package
+        run: pnpm --filter @yakit-libs/yakit-ui run verify:package
 
       - name: Enforce package size policy
         run: pnpm run release:policy:check
 
       - name: Dry-run npm pack
-        run: pnpm --filter yakit-ui run pack:dry-run && pnpm --filter yakit-ui-icons pack --dry-run
+        run: pnpm --filter @yakit-libs/yakit-ui run pack:dry-run && pnpm --filter @yakit-libs/yakit-ui-icons pack --dry-run

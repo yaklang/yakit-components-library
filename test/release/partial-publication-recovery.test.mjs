@@ -4,50 +4,62 @@ import test from "node:test";
 import {
   assertRecoveryPlanAllowed,
   classifyPublicationState,
+  primaryPackageNameForSchema,
 } from "../../scripts/release/recover-partial-publication.mjs";
 
 const artifacts = [
-  { package: "yakit-ui", version: "0.2.0" },
-  { package: "yakit-ui-icons", version: "0.2.0" },
+  { package: "@yakit-libs/yakit-ui", version: "0.2.0" },
+  { package: "@yakit-libs/yakit-ui-icons", version: "0.2.0" },
 ];
+
+test("recovery preserves the package identity encoded by each evidence schema", () => {
+  assert.equal(primaryPackageNameForSchema(1), "yakit-ui");
+  assert.equal(primaryPackageNameForSchema(2), "@yakit-libs/yakit-ui");
+});
 
 test("partial recovery selects only the missing exact verified package", () => {
   assert.deepEqual(
     classifyPublicationState(artifacts, {
-      "yakit-ui": {
+      "@yakit-libs/yakit-ui": {
         distTagVersion: "0.2.0",
         expectedShasum: "core-hash",
         shasum: "core-hash",
         versionExists: true,
       },
-      "yakit-ui-icons": {
+      "@yakit-libs/yakit-ui-icons": {
         distTagVersion: null,
         expectedShasum: "icons-hash",
         shasum: null,
         versionExists: false,
       },
     }),
-    { missing: ["yakit-ui-icons"], published: ["yakit-ui"] },
+    {
+      missing: ["@yakit-libs/yakit-ui-icons"],
+      published: ["@yakit-libs/yakit-ui"],
+    },
   );
 });
 
 test("partial recovery may advance a dist-tag to a missing verified version", () => {
   assert.deepEqual(
     classifyPublicationState(artifacts, {
-      "yakit-ui": {
+      "@yakit-libs/yakit-ui": {
         distTagVersion: "0.2.0",
         expectedShasum: "core-hash",
         shasum: "core-hash",
         versionExists: true,
       },
-      "yakit-ui-icons": {
+      "@yakit-libs/yakit-ui-icons": {
         distTagVersion: "0.1.0",
         expectedShasum: "icons-hash",
         shasum: null,
         versionExists: false,
       },
     }),
-    { missing: ["yakit-ui-icons"], published: ["yakit-ui"] },
+    {
+      missing: ["@yakit-libs/yakit-ui-icons"],
+      published: ["@yakit-libs/yakit-ui"],
+    },
   );
 });
 
@@ -55,13 +67,13 @@ test("partial recovery rejects moving a dist-tag back to a missing version", () 
   assert.throws(
     () =>
       classifyPublicationState(artifacts, {
-        "yakit-ui": {
+        "@yakit-libs/yakit-ui": {
           distTagVersion: "0.2.0",
           expectedShasum: "core-hash",
           shasum: "core-hash",
           versionExists: true,
         },
-        "yakit-ui-icons": {
+        "@yakit-libs/yakit-ui-icons": {
           distTagVersion: "0.3.0",
           expectedShasum: "icons-hash",
           shasum: null,
@@ -75,42 +87,45 @@ test("partial recovery rejects moving a dist-tag back to a missing version", () 
 test("partial recovery compares numeric prerelease identifiers numerically", () => {
   const prereleaseArtifacts = [
     artifacts[0],
-    { package: "yakit-ui-icons", version: "1.0.0-beta.10" },
+    { package: "@yakit-libs/yakit-ui-icons", version: "1.0.0-beta.10" },
   ];
   assert.deepEqual(
     classifyPublicationState(prereleaseArtifacts, {
-      "yakit-ui": {
+      "@yakit-libs/yakit-ui": {
         distTagVersion: "0.2.0",
         expectedShasum: "core-hash",
         shasum: "core-hash",
         versionExists: true,
       },
-      "yakit-ui-icons": {
+      "@yakit-libs/yakit-ui-icons": {
         distTagVersion: "1.0.0-beta.2",
         expectedShasum: "icons-hash",
         shasum: null,
         versionExists: false,
       },
     }),
-    { missing: ["yakit-ui-icons"], published: ["yakit-ui"] },
+    {
+      missing: ["@yakit-libs/yakit-ui-icons"],
+      published: ["@yakit-libs/yakit-ui"],
+    },
   );
 });
 
 test("partial recovery does not replace a stable tag with a prerelease", () => {
   const prereleaseArtifacts = [
     artifacts[0],
-    { package: "yakit-ui-icons", version: "1.0.0-rc.1" },
+    { package: "@yakit-libs/yakit-ui-icons", version: "1.0.0-rc.1" },
   ];
   assert.throws(
     () =>
       classifyPublicationState(prereleaseArtifacts, {
-        "yakit-ui": {
+        "@yakit-libs/yakit-ui": {
           distTagVersion: "0.2.0",
           expectedShasum: "core-hash",
           shasum: "core-hash",
           versionExists: true,
         },
-        "yakit-ui-icons": {
+        "@yakit-libs/yakit-ui-icons": {
           distTagVersion: "1.0.0",
           expectedShasum: "icons-hash",
           shasum: null,
@@ -144,20 +159,23 @@ test("legacy v1 evidence cannot publish a missing package", () => {
 test("partial recovery never republishes already verified packages", () => {
   assert.deepEqual(
     classifyPublicationState(artifacts, {
-      "yakit-ui": {
+      "@yakit-libs/yakit-ui": {
         distTagVersion: "0.2.0",
         expectedShasum: "core-hash",
         shasum: "core-hash",
         versionExists: true,
       },
-      "yakit-ui-icons": {
+      "@yakit-libs/yakit-ui-icons": {
         distTagVersion: "0.2.0",
         expectedShasum: "icons-hash",
         shasum: "icons-hash",
         versionExists: true,
       },
     }),
-    { missing: [], published: ["yakit-ui", "yakit-ui-icons"] },
+    {
+      missing: [],
+      published: ["@yakit-libs/yakit-ui", "@yakit-libs/yakit-ui-icons"],
+    },
   );
 });
 
@@ -165,13 +183,13 @@ test("partial recovery fails closed when an existing version has another tarball
   assert.throws(
     () =>
       classifyPublicationState(artifacts, {
-        "yakit-ui": {
+        "@yakit-libs/yakit-ui": {
           distTagVersion: "0.2.0",
           expectedShasum: "verified-core-hash",
           shasum: "different-core-hash",
           versionExists: true,
         },
-        "yakit-ui-icons": {
+        "@yakit-libs/yakit-ui-icons": {
           distTagVersion: null,
           expectedShasum: "icons-hash",
           shasum: null,
@@ -186,13 +204,13 @@ test("partial recovery fails closed when the verified dist-tag has moved", () =>
   assert.throws(
     () =>
       classifyPublicationState(artifacts, {
-        "yakit-ui": {
+        "@yakit-libs/yakit-ui": {
           distTagVersion: "0.1.0",
           expectedShasum: "core-hash",
           shasum: "core-hash",
           versionExists: true,
         },
-        "yakit-ui-icons": {
+        "@yakit-libs/yakit-ui-icons": {
           distTagVersion: null,
           expectedShasum: "icons-hash",
           shasum: null,

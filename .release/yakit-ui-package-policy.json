@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "package": "yakit-ui",
+  "package": "@yakit-libs/yakit-ui",
   "sourceCommit": "32a942958e03b6c8cb00fbe9f5065a1afd730147",
   "baseline": {
     "packedBytes": 2588581,

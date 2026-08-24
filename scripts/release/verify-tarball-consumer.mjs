@@ -113,8 +113,11 @@ async function stopLauncher(launcher) {
 const packDirectory = process.argv[2];
 if (!packDirectory)
   throw new Error("Usage: verify-tarball-consumer.mjs <pack-directory>");
-const tarball = await findPackageTarball(packDirectory, "yakit-ui");
-const iconsTarball = await findPackageTarball(packDirectory, "yakit-ui-icons");
+const tarball = await findPackageTarball(packDirectory, "@yakit-libs/yakit-ui");
+const iconsTarball = await findPackageTarball(
+  packDirectory,
+  "@yakit-libs/yakit-ui-icons",
+);
 const fixture = await mkdtemp(
   path.join(tmpdir(), "yakit-ui-tarball-consumer-"),
 );
@@ -157,7 +160,7 @@ try {
   );
   await writeFile(
     path.join(fixture, "consumer.mjs"),
-    'import * as YakitUi from "yakit-ui";\nimport { HomeOutlined } from "yakit-ui-icons";\nimport "yakit-ui/style.css";\nwindow.yakitUiExportCount = Object.keys(YakitUi).length + Number(Boolean(HomeOutlined));\n',
+    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport "@yakit-libs/yakit-ui/style.css";\nwindow.yakitUiExportCount = Object.keys(YakitUi).length + Number(Boolean(HomeOutlined));\n',
   );
   await execute(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
     cwd: fixture,
@@ -167,7 +170,7 @@ try {
   await access(path.join(fixture, "dist/index.html"));
   await writeFile(
     path.join(fixture, "consumer.ts"),
-    'import * as YakitUi from "yakit-ui";\nimport { HomeOutlined } from "yakit-ui-icons";\nimport { HomeFilled } from "yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeFilled];\n',
+    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeFilled } from "@yakit-libs/yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeFilled];\n',
   );
   await writeFile(
     path.join(fixture, "tsconfig.json"),
@@ -197,20 +200,26 @@ try {
     },
   );
 
-  const installedPackage = path.join(fixture, "node_modules/yakit-ui");
+  const installedPackage = path.join(
+    fixture,
+    "node_modules/@yakit-libs/yakit-ui",
+  );
   const installedManifest = JSON.parse(
     await readFile(path.join(installedPackage, "package.json"), "utf8"),
   );
-  if (installedManifest.name !== "yakit-ui")
+  if (installedManifest.name !== "@yakit-libs/yakit-ui")
     throw new Error("installed tarball identity mismatch");
   const installedIconsManifest = JSON.parse(
     await readFile(
-      path.join(fixture, "node_modules/yakit-ui-icons/package.json"),
+      path.join(
+        fixture,
+        "node_modules/@yakit-libs/yakit-ui-icons/package.json",
+      ),
       "utf8",
     ),
   );
   if (
-    installedIconsManifest.name !== "yakit-ui-icons" ||
+    installedIconsManifest.name !== "@yakit-libs/yakit-ui-icons" ||
     JSON.stringify(installedIconsManifest.peerDependencies) !==
       JSON.stringify({ react: "^18.2.0" }) ||
     installedIconsManifest.dependencies ||

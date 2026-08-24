@@ -6,7 +6,10 @@ import process from "node:process";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const workspaceRoots = ["apps", "packages"];
-const expectedPublicPackages = ["yakit-ui", "yakit-ui-icons"];
+const expectedPublicPackages = [
+  "@yakit-libs/yakit-ui",
+  "@yakit-libs/yakit-ui-icons",
+];
 const failures = [];
 const packages = [];
 

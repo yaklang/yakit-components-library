@@ -61,7 +61,7 @@ const IconSection = ({
             </small>
             <code
               style={{ color: '#8c8f95', fontSize: 11 }}
-            >{`import { ${exportName} } from 'yakit-ui';`}</code>
+            >{`import { ${exportName} } from '@yakit-libs/yakit-ui';`}</code>
             <code
               style={{ color: '#8c8f95', display: 'block', fontSize: 11 }}
             >{`<${exportName} />`}</code>

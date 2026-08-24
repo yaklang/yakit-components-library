@@ -82,7 +82,7 @@ const tarballPaths = Object.fromEntries(
     ]),
   ),
 );
-const tarballPath = tarballPaths["yakit-ui"];
+const tarballPath = tarballPaths["@yakit-libs/yakit-ui"];
 const manifest = JSON.parse(
   await readFile(
     path.join(verifiedDirectory, "verification-manifest.json"),
@@ -95,7 +95,7 @@ await validateVerificationManifest(manifest, {
   workflowCommitSha: requiredEnvironment("GITHUB_SHA"),
   runId: requiredEnvironment("GITHUB_RUN_ID"),
   sourceRef: requiredEnvironment("GITHUB_REF"),
-  packageName: "yakit-ui",
+  packageName: "@yakit-libs/yakit-ui",
   packArtifactId,
   requiredSchemaVersion: 2,
   expectedPackages: PUBLIC_PACKAGES,

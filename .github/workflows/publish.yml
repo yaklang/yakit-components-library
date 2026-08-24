@@ -131,19 +131,19 @@ jobs:
       - name: Run release policy tests
         run: pnpm run release:test
       - name: Lint and type-check
-        run: pnpm --filter yakit-ui run lint && pnpm --filter yakit-ui run test:types
+        run: pnpm --filter @yakit-libs/yakit-ui run lint && pnpm --filter @yakit-libs/yakit-ui run test:types
       - name: Install the pinned Playwright browser
-        run: pnpm --filter yakit-ui exec playwright install --with-deps chromium
+        run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
       - name: Run component and icon tests
-        run: pnpm --filter yakit-ui run test:ci && pnpm --filter yakit-ui run audit:icons
+        run: pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui run audit:icons
       - name: Build package exactly once
-        run: pnpm --filter yakit-ui run build:package
+        run: pnpm --filter @yakit-libs/yakit-ui run build:package
       - name: Build React-only icon package exactly once
-        run: pnpm --filter yakit-ui-icons run build
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
       - name: Verify lightweight and dedicated icon package contracts
-        run: pnpm --filter yakit-ui run test:icon-package-contract
+        run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
       - name: Verify package and size policy
-        run: pnpm --filter yakit-ui run verify:package && pnpm run release:policy:check
+        run: pnpm --filter @yakit-libs/yakit-ui run verify:package && pnpm run release:policy:check
       - name: Pack publishable packages
         id: pack
         uses: changesets/action/pack@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
@@ -287,9 +287,9 @@ jobs:
       - name: Verify exact registry version
         run: |
           node scripts/release/post-publish-smoke.mjs
-          PACKAGE_NAME=yakit-ui-icons node scripts/release/post-publish-smoke.mjs
+          PACKAGE_NAME=@yakit-libs/yakit-ui-icons node scripts/release/post-publish-smoke.mjs
         env:
-          PACKAGE_NAME: yakit-ui
+          PACKAGE_NAME: "@yakit-libs/yakit-ui"
           PACKAGE_VERSION: ${{ needs.verify-pack.outputs.package-version }}
           DIST_TAG: ${{ needs.verify-pack.outputs.dist-tag }}
 
@@ -319,7 +319,7 @@ jobs:
           RELEASE_REPOSITORY: ${{ github.repository }}
           RELEASE_TAG: ${{ needs.verify-pack.outputs.tag-name }}
           RELEASE_COMMIT: ${{ needs.verify-pack.outputs.commit-sha }}
-          PACKAGE_NAME: yakit-ui
+          PACKAGE_NAME: "@yakit-libs/yakit-ui"
           PACKAGE_VERSION: ${{ needs.verify-pack.outputs.package-version }}
 
   recovery-verify:
@@ -330,6 +330,7 @@ jobs:
       actions: read
       contents: read
     outputs:
+      package-name: ${{ steps.identity.outputs.package-name }}
       package-version: ${{ steps.identity.outputs.package-version }}
       tag-name: ${{ steps.identity.outputs.tag-name }}
       commit-sha: ${{ steps.identity.outputs.commit-sha }}
@@ -427,5 +428,5 @@ jobs:
           RELEASE_REPOSITORY: ${{ github.repository }}
           RELEASE_TAG: ${{ needs.recovery-verify.outputs.tag-name }}
           RELEASE_COMMIT: ${{ needs.recovery-verify.outputs.commit-sha }}
-          PACKAGE_NAME: yakit-ui
+          PACKAGE_NAME: ${{ needs.recovery-verify.outputs.package-name }}
           PACKAGE_VERSION: ${{ needs.recovery-verify.outputs.package-version }}

@@ -6,14 +6,17 @@ import path from "node:path";
 import process from "node:process";
 import { sha256File } from "./verification-manifest.mjs";
 
-export const PUBLIC_PACKAGES = ["yakit-ui", "yakit-ui-icons"];
+export const PUBLIC_PACKAGES = [
+  "@yakit-libs/yakit-ui",
+  "@yakit-libs/yakit-ui-icons",
+];
 export const ICON_PACKAGE_LIMITS = {
   packedBytes: 250_000,
   unpackedBytes: 1_500_000,
   fileCount: 25,
 };
 const POLICIES = {
-  "yakit-ui": {
+  "@yakit-libs/yakit-ui": {
     required: [
       "package/package.json",
       "package/dist/index.js",
@@ -25,7 +28,7 @@ const POLICIES = {
     ],
     prefixes: ["package/dist/", "package/storybook-static/"],
   },
-  "yakit-ui-icons": {
+  "@yakit-libs/yakit-ui-icons": {
     required: [
       "package/package.json",
       "package/dist/index.js",
@@ -177,20 +180,22 @@ export async function verifyPackageTarball(tarball) {
   });
   const unpackedBytes = unpacked.length;
   const fileCount = entries.filter((entry) => !entry.endsWith("/")).length;
-  if (manifest.name === "yakit-ui-icons") {
+  if (manifest.name === "@yakit-libs/yakit-ui-icons") {
     if (
       JSON.stringify(manifest.peerDependencies) !==
       JSON.stringify({ react: "^18.2.0" })
     )
-      failures.push("yakit-ui-icons must peer only on react ^18.2.0");
+      failures.push(
+        "@yakit-libs/yakit-ui-icons must peer only on react ^18.2.0",
+      );
     if (manifest.dependencies || manifest.peerDependenciesMeta)
       failures.push(
-        "yakit-ui-icons must not publish runtime dependencies or optional peers",
+        "@yakit-libs/yakit-ui-icons must not publish runtime dependencies or optional peers",
       );
     for (const [metric, limit] of Object.entries(ICON_PACKAGE_LIMITS))
       if ({ packedBytes, unpackedBytes, fileCount }[metric] > limit)
         failures.push(
-          `yakit-ui-icons ${metric} exceeds ${limit}: ${
+          `@yakit-libs/yakit-ui-icons ${metric} exceeds ${limit}: ${
             { packedBytes, unpackedBytes, fileCount }[metric]
           }`,
         );
