@@ -160,6 +160,22 @@ test("repository dry-run installs and verifies a disposable exact tarball", () =
   );
 });
 
+test("component CI generates SSR fixtures before browser hydration tests", () => {
+  const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
+  assert.match(
+    manifest.scripts?.["test:ssr-fixtures"] ?? "",
+    /test\/icons\/icon-ssr-fixture\.test\.ts/,
+  );
+  assert.match(
+    manifest.scripts?.["test:ssr-fixtures"] ?? "",
+    /test\/icons\/solid-icon-ssr-fixture\.test\.ts/,
+  );
+  assert.match(
+    manifest.scripts?.["test:ci"] ?? "",
+    /^pnpm run test:ssr-fixtures && vitest run /,
+  );
+});
+
 test("release-owned text files contain no credential-like values", () => {
   const roots = [
     ".changeset",
