@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   CommandOutlined,
-  FigmaIcon2281144183Filled,
+  FigmaIcon2281144183Solid,
   LogoOutlined,
   NotebookOutlined,
   SpeechToText2Outlined,
@@ -46,7 +46,7 @@ describe('Published icon dist consumer', () => {
       ({ exportName }) => exportName === 'SpeechToText2Outlined',
     );
     const drag = solidIconRegistry.find(
-      ({ exportName }) => exportName === 'FigmaIcon2281144183Filled',
+      ({ exportName }) => exportName === 'FigmaIcon2281144183Solid',
     );
 
     expect(speech).toMatchObject({
@@ -56,8 +56,8 @@ describe('Published icon dist consumer', () => {
       name: 'Outline/Speech-to-text2',
     });
     expect(drag).toMatchObject({
-      Component: FigmaIcon2281144183Filled,
-      exportName: 'FigmaIcon2281144183Filled',
+      Component: FigmaIcon2281144183Solid,
+      exportName: 'FigmaIcon2281144183Solid',
       figmaName: 'Solid/拖拽排序',
       name: 'Solid/拖拽排序',
     });

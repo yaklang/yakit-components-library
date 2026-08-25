@@ -39,6 +39,44 @@ const paths = {
   ),
   updater: resolve(packageRoot, 'scripts/update-icon-name-catalog.mjs'),
 };
+const notebookGroupMappings = [
+  { exportName: 'NotebookOutlined', figmaName: 'Outline/Notebook', sourceStatus: 'current' },
+  {
+    exportName: 'Notebook2Outlined',
+    figmaName: 'Outline/Notebook 2',
+    sourceStatus: 'current',
+  },
+  {
+    exportName: 'RotateCcwOutlined',
+    figmaName: 'Outline/RotateCcw',
+    sourceStatus: 'current',
+  },
+  { exportName: 'FeatherOutlined', figmaName: 'Outline/Feather', sourceStatus: 'current' },
+  {
+    exportName: 'HardDriveDownloadOutlined',
+    figmaName: 'Outline/HardDriveDownload',
+    sourceStatus: 'current',
+  },
+  {
+    exportName: 'RotateCcwSquareOutlined',
+    figmaName: 'Outline/RotateCcwSquare',
+    sourceStatus: 'current',
+  },
+  {
+    exportName: 'BookMarkedOutlined',
+    figmaName: 'Outline/BookMarked',
+    sourceStatus: 'current',
+  },
+  {
+    exportName: 'BookMarked2Outlined',
+    figmaName: 'Outline/BookMarked 2',
+    sourceStatus: 'current',
+  },
+  { exportName: 'TimerOutlined', figmaName: 'Outline/Timer', sourceStatus: 'current' },
+] as const;
+const notebookGroupExportNames = new Set<string>(
+  notebookGroupMappings.map(({ exportName }) => exportName),
+);
 
 const loadInputs = () => ({
   outlineIndexSource: readFileSync(paths.outlineIndex, 'utf8'),
@@ -70,13 +108,13 @@ const runNameAudit = (overrides: Record<string, string> = {}) =>
   });
 
 describe('Figma icon name catalog', () => {
-  it('preserves all 597 public export mappings in manifest source order', () => {
+  it('preserves all 605 public export mappings in manifest source order', () => {
     const expected = buildIconNameCatalog(loadInputs());
     expect(figmaIconNameCatalog).toEqual(expected);
-    expect(figmaIconNameCatalog).toHaveLength(597);
-    expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(342);
+    expect(figmaIconNameCatalog).toHaveLength(605);
+    expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(350);
     expect(figmaIconNameCatalog.filter(({ family }) => family === 'solid')).toHaveLength(255);
-    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(597);
+    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(605);
   });
 
   it('keeps authoritative full Figma names byte-for-byte except outer whitespace', () => {
@@ -88,15 +126,24 @@ describe('Figma icon name catalog', () => {
     ).toMatchObject({ figmaName: null, sourceStatus: 'unnamed-in-figma' });
     expect(
       figmaIconNameCatalog.find(({ exportName }) => exportName === 'NotebookOutlined'),
-    ).toMatchObject({ figmaName: null, sourceStatus: 'legacy-non-current-figma' });
+    ).toMatchObject({ figmaName: 'Outline/Notebook', sourceStatus: 'current' });
     expect(
-      figmaIconNameCatalog.find(({ exportName }) => exportName === 'FigmaIcon4936115787Filled'),
+      figmaIconNameCatalog
+        .filter(({ exportName }) => notebookGroupExportNames.has(exportName))
+        .map(({ exportName, figmaName, sourceStatus }) => ({
+          exportName,
+          figmaName,
+          sourceStatus,
+        })),
+    ).toEqual(notebookGroupMappings);
+    expect(
+      figmaIconNameCatalog.find(({ exportName }) => exportName === 'FigmaIcon4936115787Solid'),
     ).toMatchObject({ figmaName: 'Solid/浮窗', sourceStatus: 'supplement' });
     const names = figmaIconNameCatalog.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
     );
-    expect(names).toHaveLength(595);
-    expect(new Set(names)).toHaveLength(595);
+    expect(names).toHaveLength(604);
+    expect(new Set(names)).toHaveLength(604);
   });
 
   it.each([
@@ -104,7 +151,7 @@ describe('Figma icon name catalog', () => {
     [
       'unknown',
       (inputs: ReturnType<typeof loadInputs>) => {
-        inputs.solidManifest.symbols[0].exportName = 'UnknownFilled';
+        inputs.solidManifest.symbols[0].exportName = 'UnknownSolid';
       },
     ],
     [

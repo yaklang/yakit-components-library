@@ -3,23 +3,23 @@ import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import {
-  FigmaIcon4936115787Filled,
-  FigmaIcon4936115788Filled,
-  FigmaIcon4936115789Filled,
-  FigmaIcon4936115790Filled,
-  PaintbrushFilled,
-  PaperAirplaneFilled,
-  PillFilled,
+  FigmaIcon4936115787Solid,
+  FigmaIcon4936115788Solid,
+  FigmaIcon4936115789Solid,
+  FigmaIcon4936115790Solid,
+  PaintbrushSolid,
+  PaperAirplaneSolid,
+  PillSolid,
 } from '../../src/icons';
 
 const fragmentIcons = [
-  PaperAirplaneFilled,
-  PaintbrushFilled,
-  PillFilled,
-  FigmaIcon4936115787Filled,
-  FigmaIcon4936115790Filled,
-  FigmaIcon4936115789Filled,
-  FigmaIcon4936115788Filled,
+  PaperAirplaneSolid,
+  PaintbrushSolid,
+  PillSolid,
+  FigmaIcon4936115787Solid,
+  FigmaIcon4936115790Solid,
+  FigmaIcon4936115789Solid,
+  FigmaIcon4936115788Solid,
 ];
 const repeatedFragments = React.createElement(
   React.Fragment,

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import {
   canonicalizeSvg,
   collectPaintSemantics,
+  invalidStrokeWidths,
   paintSemanticsSha256,
   parseIconIndex,
   parseSvg,
@@ -157,22 +158,29 @@ async function main() {
     const file = `${nodeId.replace(':', '-')}.svg`;
     const localFile = `solid/${file}`;
     const localSource = await readFile(path.join(packageRoot, 'src/icons', localFile), 'utf8');
+    if (invalidStrokeWidths(localSource).length > 0)
+      throw new Error(`stroke-width policy mismatch: ${localFile}`);
     const figma = rawComponents.get(nodeId);
     if (!figma?.svg) throw new Error(`Figma raw SVG missing: ${nodeId}`);
     const normalizedOptions = {
       ignoreUnreferencedIds: true,
       normalizeForegroundPaint: true,
+      normalizeStrokeWidth: true,
     };
     const figmaNormalizedAstSha256 = sha256(canonicalizeSvg(figma.svg, normalizedOptions));
     const localNormalizedAstSha256 = sha256(canonicalizeSvg(localSource, normalizedOptions));
-    const geometryOptions = { geometryOnly: true, ignoreUnreferencedIds: true };
+    const geometryOptions = {
+      geometryOnly: true,
+      ignoreUnreferencedIds: true,
+      normalizeStrokeWidth: true,
+    };
     const figmaGeometrySha256 = sha256(canonicalizeSvg(figma.svg, geometryOptions));
     const localGeometrySha256 = sha256(canonicalizeSvg(localSource, geometryOptions));
     if (figmaNormalizedAstSha256 !== localNormalizedAstSha256)
       throw new Error(`normalized AST mismatch: ${localFile}`);
     if (figmaGeometrySha256 !== localGeometrySha256)
       throw new Error(`geometry mismatch: ${localFile}`);
-    const paintOptions = { normalizeFigmaPrimary: true };
+    const paintOptions = { normalizeFigmaPrimary: true, normalizeStrokeWidth: true };
     const paintRows = collectPaintSemantics(localSource, paintOptions);
     const figmaPaintSemanticsSha256 = paintSemanticsSha256(figma.svg, paintOptions);
     const localPaintSemanticsSha256 = paintSemanticsSha256(localSource, paintOptions);
@@ -225,6 +233,7 @@ async function main() {
     variant: policy.variant,
     fileKey: policy.fileKey,
     frameNodeId: policy.frameNodeId,
+    strokeWidthPolicy: policy.strokeWidthPolicy,
     policyDigestAlgorithmVersion: policy.policyDigestAlgorithmVersion,
     idHygieneAlgorithmVersion: policy.idHygieneAlgorithmVersion,
     paintSemanticsAlgorithmVersion: policy.paintSemanticsAlgorithmVersion,
@@ -251,7 +260,7 @@ async function main() {
     orphanSources: [],
     knownNamingDebt: [
       {
-        exportName: 'DownloadFigma12825Filled',
+        exportName: 'DownloadFigma12825Solid',
         disposition: 'public-name-preserved-shopping-cart-geometry',
       },
     ],

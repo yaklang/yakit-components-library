@@ -22,6 +22,7 @@ const focusNodeIds = [
   '4936:115789',
   '4936:115788',
 ] as const;
+const strokePolicyNodeIds = new Set(contract.localStrokeWidthPolicy.nodeIds);
 const colors = [contract.raster.defaultColor, '#123456'] as const;
 const rawByNodeId = new Map(
   [...raw.components, ...raw.supplementalComponents].map((record) => [record.nodeId, record.svg]),
@@ -30,7 +31,7 @@ const definitionByExportName = new Map(
   solidIconRegistry.map((definition) => [definition.exportName, definition]),
 );
 const exportByNodeId = new Map(
-  prechange.records.map((record) => [record.nodeId, record.exportName]),
+  prechange.records.map((record) => [record.nodeId, record.exportName.replace(/Filled$/, 'Solid')]),
 );
 
 interface Bounds {
@@ -189,6 +190,18 @@ describe('Solid Figma pixel parity', () => {
       boundsEdgeDeltaMaximum: 0,
       centroidDeltaMaximum: 0.05,
     });
+    expect(contract.localStrokeWidthPolicy).toEqual({
+      strategy: 'local-uniform-stroke-v1',
+      figmaStrokeWidth: 4,
+      localStrokeWidth: 1.5,
+      nodeIds: ['4936:115787', '4936:115788', '4936:115789', '4936:115790'],
+      metrics: {
+        maeMaximum: 20.25,
+        iouMinimum: 0.8,
+        boundsEdgeDeltaMaximum: 0,
+        centroidDeltaMaximum: 1.75,
+      },
+    });
   });
 
   it.each(focusNodeIds.flatMap((nodeId) => colors.map((color) => [nodeId, color] as const)))(
@@ -200,16 +213,17 @@ describe('Solid Figma pixel parity', () => {
         await rasterize(figmaSourceForColor(figmaSource!, color)),
         await rasterize(localSourceForColor(nodeId, color)),
       );
+      const gates = strokePolicyNodeIds.has(nodeId)
+        ? contract.localStrokeWidthPolicy.metrics
+        : contract.metrics;
 
-      expect(metric.mae, `${nodeId}:${color}:MAE`).toBeLessThanOrEqual(contract.metrics.maeMaximum);
-      expect(metric.iou, `${nodeId}:${color}:IoU`).toBeGreaterThanOrEqual(
-        contract.metrics.iouMinimum,
-      );
+      expect(metric.mae, `${nodeId}:${color}:MAE`).toBeLessThanOrEqual(gates.maeMaximum);
+      expect(metric.iou, `${nodeId}:${color}:IoU`).toBeGreaterThanOrEqual(gates.iouMinimum);
       expect(metric.boundsEdgeDelta, `${nodeId}:${color}:bounds`).toBeLessThanOrEqual(
-        contract.metrics.boundsEdgeDeltaMaximum,
+        gates.boundsEdgeDeltaMaximum,
       );
       expect(metric.centroidDelta, `${nodeId}:${color}:centroid`).toBeLessThanOrEqual(
-        contract.metrics.centroidDeltaMaximum,
+        gates.centroidDeltaMaximum,
       );
     },
   );

@@ -5,7 +5,7 @@
 <mask id="icon_4936_115787__mask_0" fill="white">
 <rect x="3" y="3" width="16" height="14" rx="1"/>
 </mask>
-<rect x="3" y="3" width="16" height="14" rx="1" stroke="currentColor" stroke-width="4" mask="url(#icon_4936_115787__mask_0)"/>
+<rect x="3" y="3" width="16" height="14" rx="1" stroke="currentColor" stroke-width="1.5" mask="url(#icon_4936_115787__mask_0)"/>
 </g>
 <rect x="2" y="2" width="12" height="9" rx="1" fill="currentColor"/>
 <rect x="1" y="1" width="12" height="9" rx="1" fill="currentColor"/>

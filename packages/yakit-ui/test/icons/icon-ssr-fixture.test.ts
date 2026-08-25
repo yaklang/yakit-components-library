@@ -5,7 +5,8 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { LogoOutlined, StarOffOutlined } from '../../src/icons';
+import { HomeOutlined, HomeSolid, LogoOutlined, StarOffOutlined } from '../../src/icons';
+import { DEFAULT_ICON_COLOR } from '../../src/icons/createIcon';
 
 const repeatedFragments = React.createElement(
   React.Fragment,
@@ -40,6 +41,26 @@ writeFileSync(
 );
 
 describe('Outline icon server rendering', () => {
+  it('serializes the shared color token without loading browser CSS', () => {
+    const markup = renderToString(
+      React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(HomeOutlined),
+        React.createElement(HomeSolid),
+        React.createElement(HomeOutlined, { color: '#123456' }),
+        React.createElement(HomeSolid, {
+          color: '#123456',
+          style: { color: '#654321' },
+        }),
+      ),
+    );
+
+    expect(markup.split(DEFAULT_ICON_COLOR)).toHaveLength(3);
+    expect(markup).toContain('color:#123456');
+    expect(markup).toContain('color:#654321');
+  });
+
   it.each([
     ['default identifiers', fixtures.default],
     ['matching custom identifierPrefix', fixtures.custom],

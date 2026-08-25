@@ -119,7 +119,7 @@ test("public packages remain discoverable in the Yakit libraries keyword search"
   }
 });
 
-test("React-only icon package has a narrow public and peer contract", () => {
+test("icon package has a narrow public, color, and React contract", () => {
   const manifest = readJson(join(root, "packages/yakit-ui-icons/package.json"));
   assert.equal(manifest.name, "@yakit-libs/yakit-ui-icons");
   assert.equal(manifest.private, false);
@@ -134,7 +134,9 @@ test("React-only icon package has a narrow public and peer contract", () => {
     "./solid",
   ]);
   assert.deepEqual(manifest.peerDependencies, { react: "^18.2.0" });
-  assert.equal(manifest.dependencies, undefined);
+  assert.deepEqual(manifest.dependencies, {
+    "@yakit-libs/color": "1.4.1",
+  });
   assert.equal(manifest.peerDependenciesMeta, undefined);
   assert.deepEqual(manifest.files, ["dist", "README.md", "LICENSE"]);
 });
@@ -186,7 +188,27 @@ test("shared UI runtimes are peers while package-owned runtimes are dependencies
       `${name} must be a direct dependency`,
     );
   }
+  assert.equal(manifest.dependencies?.["@yakit-libs/color"], "1.4.1");
   assert.equal(manifest.devDependencies?.["@emotion/styled"], undefined);
+});
+
+test("yakit-ui generates its published theme CSS with color 1.4.1", () => {
+  const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
+  const styleHook = readFileSync(
+    join(root, "packages/yakit-ui/src/hooks/useComponentStyle.ts"),
+    "utf8",
+  );
+
+  assert.equal(
+    manifest.scripts?.["generate:color-css"],
+    "yakit-color-css --theme Main --out src/styles/color.css",
+  );
+  assert.match(
+    manifest.scripts?.["build:lib"] ?? "",
+    /^pnpm run generate:color-css && /,
+  );
+  assert.match(styleHook, /import '\.\.\/styles\/color\.css';/);
+  assert.doesNotMatch(styleHook, /@yakit-libs\/color\/dist\/index\.css/);
 });
 
 test("public package prepack scripts verify outputs without rebuilding them", () => {
@@ -214,6 +236,29 @@ test("repository dry-run installs and verifies a disposable exact tarball", () =
     manifest.scripts?.["release:dry-run"] ?? "",
     /release:consumer:dry-run/,
   );
+});
+
+test("icon consumers install color directly and verify pnpm's strict layout", () => {
+  const readme = readFileSync(
+    join(root, "packages/yakit-ui-icons/README.md"),
+    "utf8",
+  );
+  const consumerVerifier = readFileSync(
+    join(root, "scripts/release/verify-tarball-consumer.mjs"),
+    "utf8",
+  );
+
+  assert.match(
+    readme,
+    /pnpm add @yakit-libs\/yakit-ui-icons @yakit-libs\/color@1\.4\.1 react/,
+  );
+  assert.match(readme, /@yakit-libs\/color\/preview/);
+  assert.doesNotMatch(readme, /@yakit-libs\/color\/dist\/index\.css/);
+  assert.match(consumerVerifier, /node-linker=isolated/);
+  assert.match(consumerVerifier, /@yakit-libs\/color@1\.4\.1/);
+  assert.match(consumerVerifier, /@yakit-libs\/color\/preview/);
+  assert.doesNotMatch(consumerVerifier, /@yakit-libs\/color\/dist\/index\.css/);
+  assert.match(consumerVerifier, /pnpmStrictLayout: "passed"/);
 });
 
 test("component CI generates SSR fixtures before browser hydration tests", () => {

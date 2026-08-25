@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
+  ICON_STROKE_WIDTH,
   ID_HYGIENE_ALGORITHM_VERSION,
   PAINT_COMPARISON_NORMALIZATION_VERSION,
   PAINT_SEMANTICS_ALGORITHM_VERSION,
@@ -177,6 +178,7 @@ export function canonicalizeSvg(
     ignoreUnreferencedIds = false,
     normalizeForegroundPaint = false,
     normalizeSemanticErase = false,
+    normalizeStrokeWidth = false,
     relativeCurrentColorValue,
     semanticEraseSourceId,
   } = {},
@@ -224,30 +226,28 @@ export function canonicalizeSvg(
   const normalizeValue = (name, value, insideDefinition) => {
     let normalized = value.trim().replace(/\s+/g, ' ');
     for (const [id, replacement] of idMap) normalized = normalized.replaceAll(id, replacement);
+    if (normalizeStrokeWidth && name === 'stroke-width') return ICON_STROKE_WIDTH;
     if (geometryOnly && (PAINT_ATTRIBUTES.has(name) || name === 'style') && normalized !== 'none')
       return '<paint>';
     if (normalizeForegroundPaint && !insideDefinition) {
       if (PAINT_ATTRIBUTES.has(name) && normalized !== 'none' && !normalized.startsWith('url('))
         return '<foreground>';
-      if (name === 'style') {
-        normalized = normalized
-          .split(';')
-          .map((declaration) => {
-            const separator = declaration.indexOf(':');
-            if (separator < 1) return declaration.trim();
-            const property = declaration.slice(0, separator).trim().toLowerCase();
-            const styleValue = declaration.slice(separator + 1).trim();
-            return `${property}:${
-              PAINT_ATTRIBUTES.has(property) &&
-              styleValue !== 'none' &&
-              !styleValue.startsWith('url(')
-                ? '<foreground>'
-                : styleValue
-            }`;
-          })
-          .join(';');
-      }
     }
+    if (name === 'style' && (normalizeForegroundPaint || normalizeStrokeWidth))
+      normalized = styleDeclarations(normalized)
+        .map(({ attribute, value: styleValue }) => {
+          if (normalizeStrokeWidth && attribute === 'stroke-width')
+            return `${attribute}:${ICON_STROKE_WIDTH}`;
+          if (
+            normalizeForegroundPaint &&
+            PAINT_ATTRIBUTES.has(attribute) &&
+            styleValue !== 'none' &&
+            !styleValue.startsWith('url(')
+          )
+            return `${attribute}:<foreground>`;
+          return `${attribute}:${styleValue}`;
+        })
+        .join(';');
     return normalized;
   };
   const serializeSemanticErase = (node) => {
@@ -316,7 +316,7 @@ export function canonicalizeSvg(
   return serialize(root);
 }
 
-function geometryAttributes(node) {
+function geometryAttributes(node, { normalizeStrokeWidth = false } = {}) {
   return [...node.attributes]
     .filter(
       ([name]) =>
@@ -328,11 +328,19 @@ function geometryAttributes(node) {
         name !== 'xlink:href' &&
         !['clip-path', 'mask', 'filter'].includes(name),
     )
-    .map(([name, value]) => [name, value.trim().replace(/\s+/g, ' ')])
+    .map(([name, value]) => [
+      name,
+      normalizeStrokeWidth && name === 'stroke-width'
+        ? ICON_STROKE_WIDTH
+        : value.trim().replace(/\s+/g, ' '),
+    ])
     .sort(([left], [right]) => left.localeCompare(right));
 }
 
-export function collectPaintSemantics(source, { normalizeFigmaPrimary = false } = {}) {
+export function collectPaintSemantics(
+  source,
+  { normalizeFigmaPrimary = false, normalizeStrokeWidth = false } = {},
+) {
   const root = typeof source === 'string' ? parseSvg(source) : source;
   const rows = [];
   let drawableOrdinal = 0;
@@ -354,7 +362,9 @@ export function collectPaintSemantics(source, { normalizeFigmaPrimary = false } 
       rows.push({
         drawableOrdinal: ordinal,
         tag: lowerName(node),
-        geometryAttributesSha256: sha256(canonicalJson(geometryAttributes(node))),
+        geometryAttributesSha256: sha256(
+          canonicalJson(geometryAttributes(node, { normalizeStrokeWidth })),
+        ),
         paintAttribute: attribute,
         role,
         value: normalizedValue,
@@ -416,7 +426,7 @@ function exceptionMatches(exceptions, relativePath, node, attribute, value) {
   );
 }
 
-function stylePaints(value) {
+function styleDeclarations(value) {
   return value
     .split(';')
     .map((declaration) => declaration.trim())
@@ -428,8 +438,25 @@ function stylePaints(value) {
         attribute: declaration.slice(0, separator).trim().toLowerCase(),
         value: declaration.slice(separator + 1).trim(),
       };
-    })
-    .filter(({ attribute }) => PAINT_ATTRIBUTES.has(attribute));
+    });
+}
+
+function stylePaints(value) {
+  return styleDeclarations(value).filter(({ attribute }) => PAINT_ATTRIBUTES.has(attribute));
+}
+
+export function invalidStrokeWidths(source) {
+  const root = typeof source === 'string' ? parseSvg(source) : source;
+  const violations = [];
+  visit(root, (node) => {
+    const attributeValue = node.attributes.get('stroke-width');
+    if (attributeValue !== undefined && attributeValue.trim() !== ICON_STROKE_WIDTH)
+      violations.push({ surface: 'attribute', tag: lowerName(node), value: attributeValue.trim() });
+    for (const { attribute, value } of styleDeclarations(node.attributes.get('style') ?? ''))
+      if (attribute === 'stroke-width' && value !== ICON_STROKE_WIDTH)
+        violations.push({ surface: 'style', tag: lowerName(node), value });
+  });
+  return violations;
 }
 
 function paintValues(node) {
@@ -449,6 +476,7 @@ function inspectSvg({ manifest, relativePath, source, variant }) {
   } catch {
     return ['XML_INVALID'];
   }
+  if (invalidStrokeWidths(root).length > 0) errors.push('STROKE_WIDTH_INVALID');
   const expectedSize = variant === 'outline' ? '24' : '20';
   const expectedViewBox = `0 0 ${expectedSize} ${expectedSize}`;
   if (
@@ -553,6 +581,7 @@ function inspectSvg({ manifest, relativePath, source, variant }) {
       ignoreUnreferencedIds: variant === 'solid',
       normalizeForegroundPaint: true,
       normalizeSemanticErase: true,
+      normalizeStrokeWidth: true,
       relativeCurrentColorValue,
       semanticEraseSourceId,
     }),
@@ -562,6 +591,7 @@ function inspectSvg({ manifest, relativePath, source, variant }) {
       geometryOnly: true,
       ignoreUnreferencedIds: variant === 'solid',
       normalizeSemanticErase: true,
+      normalizeStrokeWidth: true,
       relativeCurrentColorValue,
       semanticEraseSourceId,
     }),
@@ -578,7 +608,10 @@ function inspectSvg({ manifest, relativePath, source, variant }) {
     variant === 'solid' &&
     record?.localPaintSemanticsSha256 &&
     record.localPaintSemanticsSha256 !==
-      paintSemanticsSha256(source, { normalizeFigmaPrimary: true })
+      paintSemanticsSha256(source, {
+        normalizeFigmaPrimary: true,
+        normalizeStrokeWidth: true,
+      })
   )
     errors.push('PAINT_SEMANTICS_MISMATCH');
   if (record?.minimumDrawableCount && drawables.length < record.minimumDrawableCount)
@@ -616,6 +649,8 @@ function validateSolidManifest(manifest, files, policy) {
     manifest.paintComparisonNormalizationVersion === PAINT_COMPARISON_NORMALIZATION_VERSION;
   if (!algorithmsMatch || !paintComparisonVersionMatches)
     errors.push('ALGORITHM_VERSION_UNSUPPORTED');
+  if (canonicalJson(manifest.strokeWidthPolicy) !== canonicalJson(policy.strokeWidthPolicy))
+    errors.push('POLICY_CONTRACT_MISMATCH');
   if (
     manifest.complete !== true ||
     manifest.provenanceComplete !== true ||
@@ -723,6 +758,8 @@ function validateManifest(manifest, files, policy) {
   if (!manifest) return [];
   if (policy.variant === 'solid') return validateSolidManifest(manifest, files, policy);
   const errors = [];
+  if (canonicalJson(manifest.strokeWidthPolicy) !== canonicalJson(policy.strokeWidthPolicy))
+    errors.push('POLICY_CONTRACT_MISMATCH');
   if (manifest.complete !== true || manifest.provenanceComplete !== true)
     errors.push('MANIFEST_INCOMPLETE');
   for (const field of [
@@ -735,17 +772,17 @@ function validateManifest(manifest, files, policy) {
   const symbols = manifest.symbols ?? manifest.currentSymbols ?? [];
   const placements = manifest.placements ?? [];
   const expected = manifest.expectedCounts ?? {
-    currentSymbols: 341,
-    placements: 344,
-    publicExports: 342,
+    currentSymbols: 350,
+    placements: 353,
+    publicExports: 350,
   };
   if (
-    expected.currentSymbols !== 341 ||
-    expected.placements !== 344 ||
+    expected.currentSymbols !== 350 ||
+    expected.placements !== 353 ||
     expected.instances !== 3 ||
-    expected.publicExports !== 342 ||
-    symbols.length !== 341 ||
-    placements.length !== 344
+    expected.publicExports !== 350 ||
+    symbols.length !== 350 ||
+    placements.length !== 353
   )
     errors.push('MANIFEST_INCOMPLETE');
   if (manifest.fileKey === 'QWct5XE0Bg0bNDQ93eYgEw' && manifest.frameNodeId !== '46824:1930')
@@ -813,13 +850,7 @@ function validateManifest(manifest, files, policy) {
     !relativeCurrentColorExceptions[0].reason.trim()
   )
     errors.push('MANIFEST_INCOMPLETE');
-  const notebook = manifest.legacySources?.find((entry) => entry.exportName === 'NotebookOutlined');
-  if (
-    !notebook ||
-    notebook.provenanceStatus !== 'legacy/non-current-figma' ||
-    notebook.figmaRawSvgSha256 !== null
-  )
-    errors.push('LEGACY_STATUS_INVALID');
+  if ((manifest.legacySources ?? []).length !== 0) errors.push('LEGACY_STATUS_INVALID');
   return [...new Set(errors)];
 }
 
@@ -863,6 +894,7 @@ async function validateProvenanceEvidence({
         ignoreUnreferencedIds: policy.variant === 'solid',
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
+        normalizeStrokeWidth: true,
         relativeCurrentColorValue:
           sourceNodeId === '45035:1908' ? DATA_COMPARE_RELATIVE_CURRENT_COLOR : undefined,
         semanticEraseSourceId: sourceNodeId,
@@ -873,6 +905,7 @@ async function validateProvenanceEvidence({
         geometryOnly: true,
         ignoreUnreferencedIds: policy.variant === 'solid',
         normalizeSemanticErase: true,
+        normalizeStrokeWidth: true,
         relativeCurrentColorValue:
           sourceNodeId === '45035:1908' ? DATA_COMPARE_RELATIVE_CURRENT_COLOR : undefined,
         semanticEraseSourceId: sourceNodeId,
@@ -887,6 +920,7 @@ async function validateProvenanceEvidence({
       errors.push('GEOMETRY_DIGEST_MISMATCH');
     const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaSource, {
       normalizeFigmaPrimary: policy.variant === 'solid',
+      normalizeStrokeWidth: true,
     });
     if (
       policy.variant === 'solid' &&

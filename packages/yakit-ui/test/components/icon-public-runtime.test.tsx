@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import manifest from '../../scripts/figma-outline-icons-inventory.json';
 import * as PackageApi from '../../src';
+import { DEFAULT_ICON_COLOR } from '../../src/icons/createIcon';
 import { outlineIconNameCatalog } from '../../src/icons/figmaNameCatalog';
 import { outlineIconRegistry } from '../../src/icons/registry';
 
@@ -27,6 +28,17 @@ const renderRegistry = (props: Record<string, unknown> = {}) =>
   );
 const expectedDefaultColor = (name: string) =>
   name === 'EarOutlined' || name === 'SunOutlined' ? 'rgb(10, 10, 10)' : 'rgb(53, 54, 57)';
+const notebookGroupExports = [
+  'NotebookOutlined',
+  'Notebook2Outlined',
+  'RotateCcwOutlined',
+  'FeatherOutlined',
+  'HardDriveDownloadOutlined',
+  'RotateCcwSquareOutlined',
+  'BookMarkedOutlined',
+  'BookMarked2Outlined',
+  'TimerOutlined',
+] as const;
 
 afterEach(() => {
   roots.splice(0).forEach((root) => root.unmount());
@@ -34,14 +46,14 @@ afterEach(() => {
 });
 
 describe('Outline public component API', () => {
-  it('exposes exactly 341 current Figma names plus legacy Notebook from the package root', () => {
+  it('exposes exactly 350 current Figma icons from the package root', () => {
     const currentNames = manifest.symbols.map(({ exportName }) => exportName).sort();
     const registryNames = outlineIconRegistry.map(({ exportName }) => exportName).sort();
 
-    expect(currentNames).toHaveLength(341);
+    expect(currentNames).toHaveLength(350);
     expect(currentNames).toContain('LandPlotOutlined');
-    expect(currentNames).not.toContain('NotebookOutlined');
-    expect(registryNames).toEqual([...currentNames, 'NotebookOutlined'].sort());
+    expect(currentNames).toEqual(expect.arrayContaining([...notebookGroupExports]));
+    expect(registryNames).toEqual(currentNames);
     expect(
       outlineIconRegistry.every(
         ({ Component, exportName }) =>
@@ -84,9 +96,9 @@ describe('Outline public component API', () => {
       outlineIconRegistry.find(({ exportName }) => exportName === 'NotebookOutlined'),
     ).toMatchObject({
       exportName: 'NotebookOutlined',
-      figmaName: null,
-      name: 'NotebookOutlined',
-      sourceStatus: 'legacy-non-current-figma',
+      figmaName: 'Outline/Notebook',
+      name: 'Outline/Notebook',
+      sourceStatus: 'current',
     });
   });
 
@@ -94,9 +106,24 @@ describe('Outline public component API', () => {
     const container = renderRegistry();
     const svgs = [...container.querySelectorAll<SVGSVGElement>('svg')];
 
-    expect(svgs).toHaveLength(342);
+    expect(svgs).toHaveLength(350);
     for (const svg of svgs) {
       expect(getComputedStyle(svg).color).toBe(expectedDefaultColor(svg.dataset.iconName ?? ''));
+      if (!['EarOutlined', 'SunOutlined'].includes(svg.dataset.iconName ?? '')) {
+        expect(svg.style.color).toBe(DEFAULT_ICON_COLOR);
+      }
+    }
+  });
+
+  it('lets consumers override the shared Figma token on a local container', () => {
+    const container = renderRegistry();
+    container.style.setProperty('--Colors-Use-Neutral-Text-1-Title', '#2468ac');
+
+    for (const svg of container.querySelectorAll<SVGSVGElement>('svg')) {
+      const name = svg.dataset.iconName ?? '';
+      expect(getComputedStyle(svg).color).toBe(
+        name === 'EarOutlined' || name === 'SunOutlined' ? 'rgb(10, 10, 10)' : 'rgb(36, 104, 172)',
+      );
     }
   });
 

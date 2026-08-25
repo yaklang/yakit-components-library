@@ -184,6 +184,7 @@ if (packageName === "@yakit-libs/yakit-ui-icons") {
         "--no-fund",
         "--save-exact",
         `${packageName}@${packageVersion}`,
+        "@yakit-libs/color@1.4.1",
         "react@18.3.1",
         "vite@6.3.5",
       ],
@@ -195,7 +196,7 @@ if (packageName === "@yakit-libs/yakit-ui-icons") {
     );
     await writeFile(
       path.join(iconsFixture, "consumer.mjs"),
-      'import { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeFilled } from "@yakit-libs/yakit-ui-icons/solid";\nwindow.iconCount = Number(Boolean(HomeOutlined)) + Number(Boolean(HomeFilled));\n',
+      'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";\napplyThemeColors("light", getColors("light"));\nwindow.iconCount = Number(Boolean(HomeOutlined)) + Number(Boolean(HomeSolid));\n',
     );
     await run(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
       cwd: iconsFixture,
@@ -214,19 +215,33 @@ if (packageName === "@yakit-libs/yakit-ui-icons") {
     if (
       JSON.stringify(installedManifest.peerDependencies) !==
         JSON.stringify({ react: "^18.2.0" }) ||
-      installedManifest.dependencies ||
+      JSON.stringify(installedManifest.dependencies) !==
+        JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
       installedManifest.peerDependenciesMeta
     )
       throw new Error(
-        "published icons package violates the React-only contract",
+        "published icons package violates the color dependency or React peer contract",
       );
+    const installedColorManifest = JSON.parse(
+      await readFile(
+        path.join(iconsFixture, "node_modules/@yakit-libs/color/package.json"),
+        "utf8",
+      ),
+    );
+    if (
+      installedColorManifest.version !== "1.4.1" ||
+      !installedColorManifest.exports?.["./preview"] ||
+      !installedColorManifest.exports?.["./css"]
+    )
+      throw new Error("published @yakit-libs/color 1.4.1 exports are invalid");
     console.log(
       JSON.stringify(
         {
           bundler: "passed",
           distTag,
           package: `${packageName}@${packageVersion}`,
-          reactOnly: "passed",
+          colorDependency: "passed",
+          reactPeer: "passed",
         },
         null,
         2,

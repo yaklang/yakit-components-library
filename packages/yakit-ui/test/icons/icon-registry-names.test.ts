@@ -8,6 +8,8 @@ import {
   buildIconRegistry,
   iconRegistry,
   type IconNameCatalogEntry,
+  outlineIconRegistry,
+  solidIconRegistry,
 } from '../../src/icons/registry';
 import type { IconProps } from '../../src/icons/types';
 
@@ -25,6 +27,14 @@ const entry = (
 });
 
 describe('Figma icon registry name validation', () => {
+  it('uses family-specific public component suffixes', () => {
+    expect(outlineIconRegistry.every(({ exportName }) => exportName.endsWith('Outlined'))).toBe(
+      true,
+    );
+    expect(solidIconRegistry.every(({ exportName }) => exportName.endsWith('Solid'))).toBe(true);
+    expect(solidIconRegistry.some(({ exportName }) => exportName.endsWith('Filled'))).toBe(false);
+  });
+
   it('derives every available Figma name by trimming outer whitespace only', () => {
     const registryByExport = new Map(
       iconRegistry.map((definition) => [definition.exportName, definition]),
@@ -46,10 +56,10 @@ describe('Figma icon registry name validation', () => {
       iconRegistry
         .filter(({ figmaName }) => figmaName === null)
         .map(({ exportName }) => exportName),
-    ).toEqual(['CommandOutlined', 'NotebookOutlined']);
+    ).toEqual(['CommandOutlined']);
   });
 
-  it('keeps 595 non-null full Figma names unique while allowing exactly 94 leaf collisions', () => {
+  it('keeps 604 non-null full Figma names unique while allowing exactly 94 leaf collisions', () => {
     const fullNames = iconRegistry.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
     );
@@ -60,8 +70,8 @@ describe('Figma icon registry name validation', () => {
     }
     const collisions = [...leafOwners.values()].filter((owners) => owners.length > 1);
 
-    expect(fullNames).toHaveLength(595);
-    expect(new Set(fullNames)).toHaveLength(595);
+    expect(fullNames).toHaveLength(604);
+    expect(new Set(fullNames)).toHaveLength(604);
     expect(collisions).toHaveLength(94);
     expect(collisions.every((owners) => owners.length === 2)).toBe(true);
   });
@@ -79,9 +89,9 @@ describe('Figma icon registry name validation', () => {
     expect(() =>
       assertUniqueFigmaNames([
         entry('FirstOutlined', 'Shared/icon'),
-        entry('SecondFilled', 'Shared/icon', 'solid'),
+        entry('SecondSolid', 'Shared/icon', 'solid'),
       ]),
-    ).toThrow('Duplicate Figma icon name Shared/icon: FirstOutlined and SecondFilled');
+    ).toThrow('Duplicate Figma icon name Shared/icon: FirstOutlined and SecondSolid');
   });
 
   it('rejects a catalog export whose component is missing', () => {

@@ -2,7 +2,14 @@
 
 import { execFile, spawn } from "node:child_process";
 import { createServer } from "node:net";
-import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -141,6 +148,7 @@ try {
       "--save-exact",
       tarball,
       iconsTarball,
+      "@yakit-libs/color@1.4.1",
       "react@18.3.1",
       "react-dom@18.3.1",
       "antd@6.5.4",
@@ -160,7 +168,7 @@ try {
   );
   await writeFile(
     path.join(fixture, "consumer.mjs"),
-    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport "@yakit-libs/yakit-ui/style.css";\nwindow.yakitUiExportCount = Object.keys(YakitUi).length + Number(Boolean(HomeOutlined));\n',
+    'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport "@yakit-libs/yakit-ui/style.css";\napplyThemeColors("light", getColors("light"));\nwindow.yakitUiExportCount = Object.keys(YakitUi).length + Number(Boolean(HomeOutlined));\n',
   );
   await execute(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
     cwd: fixture,
@@ -170,7 +178,7 @@ try {
   await access(path.join(fixture, "dist/index.html"));
   await writeFile(
     path.join(fixture, "consumer.ts"),
-    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeFilled } from "@yakit-libs/yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeFilled];\n',
+    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeSolid];\n',
   );
   await writeFile(
     path.join(fixture, "tsconfig.json"),
@@ -222,12 +230,91 @@ try {
     installedIconsManifest.name !== "@yakit-libs/yakit-ui-icons" ||
     JSON.stringify(installedIconsManifest.peerDependencies) !==
       JSON.stringify({ react: "^18.2.0" }) ||
-    installedIconsManifest.dependencies ||
+    JSON.stringify(installedIconsManifest.dependencies) !==
+      JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
     installedIconsManifest.peerDependenciesMeta
   )
     throw new Error(
-      "installed icons tarball identity or React-only peer contract mismatch",
+      "installed icons tarball identity, color dependency, or React peer contract mismatch",
     );
+  const installedColorManifest = JSON.parse(
+    await readFile(
+      path.join(fixture, "node_modules/@yakit-libs/color/package.json"),
+      "utf8",
+    ),
+  );
+  if (
+    installedColorManifest.version !== "1.4.1" ||
+    !installedColorManifest.exports?.["./preview"] ||
+    !installedColorManifest.exports?.["./css"]
+  )
+    throw new Error("installed @yakit-libs/color 1.4.1 exports are invalid");
+  const { stdout: colorProbeOutput } = await execute(
+    process.execPath,
+    [
+      "-e",
+      'const color = require("@yakit-libs/color"); const light = color.generateColors("light"); const dark = color.generateColors("dark"); process.stdout.write(JSON.stringify({ lightBase: light["--yakit-colors-Neutral-100"], lightToken: light["--Colors-Use-Neutral-Text-1-Title"], darkBase: dark["--yakit-colors-Neutral-80"], darkToken: dark["--Colors-Use-Neutral-Text-1-Title"] }));',
+    ],
+    { cwd: fixture, env: publicRegistryEnvironment() },
+  );
+  const colorProbe = JSON.parse(colorProbeOutput);
+  if (
+    colorProbe.lightBase !== "#353639" ||
+    colorProbe.lightToken !== "var(--yakit-colors-Neutral-100)" ||
+    colorProbe.darkBase !== "#c8d0dd" ||
+    colorProbe.darkToken !== "var(--yakit-colors-Neutral-80)"
+  )
+    throw new Error("installed @yakit-libs/color 1.4.1 token contract is invalid");
+
+  const pnpmFixture = path.join(fixture, "pnpm-strict-icons");
+  await mkdir(pnpmFixture);
+  await writeFile(
+    path.join(pnpmFixture, ".npmrc"),
+    "node-linker=isolated\nhoist=false\n",
+  );
+  await writeFile(
+    path.join(pnpmFixture, "package.json"),
+    `${JSON.stringify({ name: "yakit-ui-icons-pnpm-consumer", private: true, type: "module" }, null, 2)}\n`,
+  );
+  await execute(
+    "pnpm",
+    [
+      "add",
+      "--ignore-scripts",
+      "--save-exact",
+      iconsTarball,
+      "@yakit-libs/color@1.4.1",
+      "react@18.3.1",
+      "vite@6.3.5",
+    ],
+    {
+      cwd: pnpmFixture,
+      env: publicRegistryEnvironment(),
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  );
+  await writeFile(
+    path.join(pnpmFixture, "index.html"),
+    '<!doctype html><html><body><script type="module" src="/consumer.mjs"></script></body></html>\n',
+  );
+  await writeFile(
+    path.join(pnpmFixture, "consumer.mjs"),
+    'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\napplyThemeColors("light", getColors("light"));\nwindow.iconLoaded = Boolean(HomeOutlined);\n',
+  );
+  await execute(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
+    cwd: pnpmFixture,
+    env: publicRegistryEnvironment(),
+    maxBuffer: 16 * 1024 * 1024,
+  });
+  await access(path.join(pnpmFixture, "dist/index.html"));
+  const pnpmManifest = JSON.parse(
+    await readFile(path.join(pnpmFixture, "package.json"), "utf8"),
+  );
+  if (pnpmManifest.dependencies?.["@yakit-libs/color"] !== "1.4.1") {
+    throw new Error(
+      "pnpm consumer must install @yakit-libs/color 1.4.1 directly",
+    );
+  }
   const cssPath = path.join(installedPackage, "dist/index.css");
   await access(cssPath);
   if (!(await readFile(cssPath, "utf8")).trim())
@@ -276,6 +363,7 @@ try {
         bundler: "passed",
         package: `${installedManifest.name}@${installedManifest.version}`,
         iconsPackage: `${installedIconsManifest.name}@${installedIconsManifest.version}`,
+        pnpmStrictLayout: "passed",
         storybook: "passed",
         typescript: "passed",
       },

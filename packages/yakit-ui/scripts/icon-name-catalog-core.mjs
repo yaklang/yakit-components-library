@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-const EXPECTED_COUNTS = Object.freeze({ outline: 342, solid: 255, total: 597 });
+const EXPECTED_COUNTS = Object.freeze({ outline: 350, solid: 255, total: 605 });
 const VALID_STATUSES = new Set([
   'current',
   'supplement',
@@ -94,7 +94,7 @@ function expectedRecords({
   const outlineLegacy = outlineManifest?.legacySources ?? [];
   const solidSymbols = solidManifest?.symbols ?? [];
   const solidSupplements = solidManifest?.supplementalSources ?? [];
-  if (outlineSymbols.length !== 341 || outlineLegacy.length !== 1)
+  if (outlineSymbols.length !== 350 || outlineLegacy.length !== 0)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'outline');
   if (solidSymbols.length !== 251 || solidSupplements.length !== 4)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'solid');
@@ -121,7 +121,7 @@ function expectedRecords({
     rawNodeKey: 'nodeId',
   });
   if (
-    outlineAuthoritative.length !== 341 ||
+    outlineAuthoritative.length !== 350 ||
     solidTargets.length !== 251 ||
     solidSupplementEvidence.length !== 4
   )
@@ -144,12 +144,6 @@ function expectedRecords({
     manifestNodeKey: 'nodeId',
     manifestRecords: solidSupplements,
   });
-  if (
-    outlineLegacy[0]?.exportName !== 'NotebookOutlined' ||
-    outlineLegacy[0]?.provenanceStatus !== 'legacy/non-current-figma'
-  )
-    fail('FIGMA_NAME_PROVENANCE_MISMATCH', 'outline-legacy');
-
   return [
     ...outlineSymbols.map((entry, index) => ({
       exportName: entry.exportName,

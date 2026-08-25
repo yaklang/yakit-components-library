@@ -49,6 +49,17 @@ const defectNames = new Set([
   'ThumbUpOutlined',
   'ThumbDownOutlined',
 ]);
+const notebookGroupNames = new Set([
+  'NotebookOutlined',
+  'Notebook2Outlined',
+  'RotateCcwOutlined',
+  'FeatherOutlined',
+  'HardDriveDownloadOutlined',
+  'RotateCcwSquareOutlined',
+  'BookMarkedOutlined',
+  'BookMarked2Outlined',
+  'TimerOutlined',
+]);
 const roots: Root[] = [];
 
 const render = (node: React.ReactNode) => {
@@ -58,6 +69,25 @@ const render = (node: React.ReactNode) => {
   roots.push(root);
   flushSync(() => root.render(node));
   return container;
+};
+const expectNonPlaceholder24pxSvgs = (svgs: SVGSVGElement[]) => {
+  for (const svg of svgs) {
+    const reachableDrawables = [
+      ...svg.querySelectorAll<SVGGraphicsElement>(
+        'path, circle, ellipse, line, polyline, polygon, use, rect',
+      ),
+    ].filter((element) => !element.closest('defs, clipPath, mask'));
+    const placeholder = reachableDrawables.find(
+      (element) =>
+        element.tagName.toLowerCase() === 'rect' &&
+        element.getAttribute('width') === '24' &&
+        element.getAttribute('height') === '24' &&
+        element.getAttribute('fill') === '#D9D9D9',
+    );
+    expect(svg.getAttribute('viewBox')).toBe('0 0 24 24');
+    expect(reachableDrawables.length).toBeGreaterThan(0);
+    expect(placeholder).toBeUndefined();
+  }
 };
 
 afterEach(() => {
@@ -79,30 +109,32 @@ describe('Outline remediation visual smoke', () => {
 
     expect(defects).toHaveLength(42);
     expect(svgs).toHaveLength(42);
-    for (const svg of svgs) {
-      const reachableDrawables = [
-        ...svg.querySelectorAll<SVGGraphicsElement>(
-          'path, circle, ellipse, line, polyline, polygon, use, rect',
-        ),
-      ].filter((element) => !element.closest('defs, clipPath, mask'));
-      const placeholder = reachableDrawables.find(
-        (element) =>
-          element.tagName.toLowerCase() === 'rect' &&
-          element.getAttribute('width') === '24' &&
-          element.getAttribute('height') === '24' &&
-          element.getAttribute('fill') === '#D9D9D9',
-      );
-      expect(svg.getAttribute('viewBox')).toBe('0 0 24 24');
-      expect(reachableDrawables.length).toBeGreaterThan(0);
-      expect(placeholder).toBeUndefined();
-    }
+    expectNonPlaceholder24pxSvgs(svgs);
+  });
+
+  it('renders the corrected Notebook and eight added icons as non-placeholder 24px SVGs', () => {
+    const notebookGroup = outlineIconRegistry.filter(({ exportName }) =>
+      notebookGroupNames.has(exportName),
+    );
+    const container = render(
+      <>
+        {notebookGroup.map(({ Component, exportName }) => (
+          <Component key={exportName} />
+        ))}
+      </>,
+    );
+    const svgs = [...container.querySelectorAll<SVGSVGElement>('svg')];
+
+    expect(notebookGroup).toHaveLength(9);
+    expect(svgs).toHaveLength(9);
+    expectNonPlaceholder24pxSvgs(svgs);
   });
 
   it('keeps the 298 frozen controls in the public registry', () => {
     const controls = outlineIconRegistry.filter(
       ({ exportName }) =>
         !defectNames.has(exportName) &&
-        exportName !== 'NotebookOutlined' &&
+        !notebookGroupNames.has(exportName) &&
         exportName !== 'LandPlotOutlined',
     );
 

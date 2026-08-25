@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { auditIcons, canonicalizeSvg } from '../../scripts/audit-icons.mjs';
+import { ICON_STROKE_WIDTH_POLICY } from '../../scripts/icon-audit-contracts.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const auditScript = resolve(packageRoot, 'scripts/audit-icons.mjs');
@@ -45,10 +46,15 @@ const completeManifest = (source = validOutline) => {
     canonicalizeSvg(source, {
       normalizeForegroundPaint: true,
       normalizeSemanticErase: true,
+      normalizeStrokeWidth: true,
     }),
   );
   const geometrySha256 = sha256(
-    canonicalizeSvg(source, { geometryOnly: true, normalizeSemanticErase: true }),
+    canonicalizeSvg(source, {
+      geometryOnly: true,
+      normalizeSemanticErase: true,
+      normalizeStrokeWidth: true,
+    }),
   );
   const symbol = (index: number) => ({
     exportedSourceNodeId: `${index + 1}:1`,
@@ -63,9 +69,9 @@ const completeManifest = (source = validOutline) => {
     localRawSvgSha256: sha256(source),
     normalizedAstSha256,
   });
-  const placements = Array.from({ length: 344 }, (_, index) => {
-    const instance = index >= 341;
-    const exportedSourceNodeId = `${(index % 341) + 1}:1`;
+  const placements = Array.from({ length: 353 }, (_, index) => {
+    const instance = index >= 350;
+    const exportedSourceNodeId = `${(index % 350) + 1}:1`;
     return {
       exportedSourceNodeId,
       mainComponentId: exportedSourceNodeId,
@@ -78,22 +84,17 @@ const completeManifest = (source = validOutline) => {
   });
   return {
     complete: true,
-    expectedCounts: { currentSymbols: 341, instances: 3, placements: 344, publicExports: 342 },
+    expectedCounts: { currentSymbols: 350, instances: 3, placements: 353, publicExports: 350 },
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     instanceVerification: placements.slice(-3),
-    legacySources: [
-      {
-        exportName: 'NotebookOutlined',
-        figmaRawSvgSha256: null,
-        provenanceStatus: 'legacy/non-current-figma',
-      },
-    ],
+    legacySources: [] as Array<Record<string, string | null>>,
     placements,
     paintExceptions: [] as Array<Record<string, string>>,
     provenanceComplete: true,
     sourceEvidence: {} as Record<string, string>,
-    symbols: Array.from({ length: 341 }, (_, index) => symbol(index)),
+    strokeWidthPolicy: { ...ICON_STROKE_WIDTH_POLICY },
+    symbols: Array.from({ length: 350 }, (_, index) => symbol(index)),
     variant: 'outline',
   };
 };
@@ -194,6 +195,10 @@ describe('Outline icon audit structural failures', () => {
     [
       'FOREGROUND_LITERAL',
       '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="#353639"/></svg>',
+    ],
+    [
+      'STROKE_WIDTH_INVALID',
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="currentColor" stroke-width="2"/></svg>',
     ],
     [
       'FRAGMENT_BASE_INVALID',
@@ -407,7 +412,11 @@ describe('Outline index and manifest failures', () => {
     [
       'LEGACY_STATUS_INVALID',
       (value: ManifestFixture) => {
-        value.legacySources[0].provenanceStatus = 'current';
+        value.legacySources.push({
+          exportName: 'LegacyOutlined',
+          figmaRawSvgSha256: null,
+          provenanceStatus: 'current',
+        });
       },
     ],
   ])('reports %s for fail-closed manifest evidence', async (token, mutate) => {
@@ -479,7 +488,7 @@ describe('Outline manifest updater provenance gate', () => {
       { cwd: packageRoot, encoding: 'utf8' },
     );
 
-  it('writes only a complete 341/342/344/3 independently matched manifest', () => {
+  it('writes only a complete 350/350/353/3 independently matched manifest', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
     try {
       const output = resolve(root, 'manifest.json');
@@ -487,13 +496,14 @@ describe('Outline manifest updater provenance gate', () => {
       expect(result).toMatchObject({ status: 0, stderr: '' });
       const value = JSON.parse(readFileSync(output, 'utf8'));
       expect(value).toMatchObject({ complete: true, provenanceComplete: true });
-      expect(value.symbols).toHaveLength(341);
-      expect(value.placements).toHaveLength(344);
+      expect(value.strokeWidthPolicy).toEqual(ICON_STROKE_WIDTH_POLICY);
+      expect(value.symbols).toHaveLength(350);
+      expect(value.placements).toHaveLength(353);
       expect(value.instanceVerification).toHaveLength(3);
       expect(
         new Set(value.symbols.map((symbol: Record<string, string>) => symbol.exportName)).size,
-      ).toBe(341);
-      expect(value.legacySources).toHaveLength(1);
+      ).toBe(350);
+      expect(value.legacySources).toEqual([]);
       expect(
         value.placements.every(
           (placement: Record<string, string>) =>
@@ -586,6 +596,19 @@ describe('Versioned semantic erase normalization', () => {
   ])('rejects %s instead of hiding topology differences', (_label, mask, reference) => {
     expect(canonicalizeSvg(local(mask, reference), options)).not.toBe(
       canonicalizeSvg(figma, options),
+    );
+  });
+});
+
+describe('Versioned local stroke-width normalization', () => {
+  it('compares immutable Figma widths against the local 1.5 policy only when requested', () => {
+    const figma =
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="black" stroke-width="2"/></svg>';
+    const local = figma.replace('stroke-width="2"', 'stroke-width="1.5"');
+
+    expect(canonicalizeSvg(local)).not.toBe(canonicalizeSvg(figma));
+    expect(canonicalizeSvg(local, { normalizeStrokeWidth: true })).toBe(
+      canonicalizeSvg(figma, { normalizeStrokeWidth: true }),
     );
   });
 });

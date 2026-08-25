@@ -3,7 +3,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { canonicalizeSvg, parseSvg } from './audit-icons.mjs';
+import { canonicalizeSvg, invalidStrokeWidths, parseSvg } from './audit-icons.mjs';
+import { getIconAuditPolicy } from './icon-audit-contracts.mjs';
 
 const sha256 = (source) => createHash('sha256').update(source).digest('hex');
 const DATA_COMPARE_RELATIVE_CURRENT_COLOR =
@@ -105,6 +106,7 @@ function semanticPaintExceptions(source, relativePath) {
 }
 
 async function main() {
+  const policy = getIconAuditPolicy('outline-v1');
   const args = parseArguments(process.argv.slice(2));
   const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
   const sourceInventoryPath = path.resolve(args.get('source-inventory'));
@@ -146,7 +148,7 @@ async function main() {
   if (
     figmaRawProvenance.fileKey !== 'QWct5XE0Bg0bNDQ93eYgEw' ||
     figmaRawProvenance.frameNodeId !== '46824:1930' ||
-    figmaRawProvenance.components?.length !== 341 ||
+    figmaRawProvenance.components?.length !== 350 ||
     figmaRawProvenance.instances?.length !== 3
   )
     throw new Error('Figma raw provenance identity/counts are invalid');
@@ -159,15 +161,15 @@ async function main() {
   if (
     placementProvenance.fileKey !== figmaRawProvenance.fileKey ||
     placementProvenance.frameNodeId !== figmaRawProvenance.frameNodeId ||
-    placementProvenance.currentSymbols?.length !== 341 ||
-    placementProvenance.placements?.length !== 344
+    placementProvenance.currentSymbols?.length !== 350 ||
+    placementProvenance.placements?.length !== 353
   )
     throw new Error('Figma placement provenance identity/counts are invalid');
   const placementSourceIds = new Set(
     placementProvenance.currentSymbols.map(({ exportedSourceNodeId }) => exportedSourceNodeId),
   );
   if (
-    placementSourceIds.size !== 341 ||
+    placementSourceIds.size !== 350 ||
     [...figmaComponents.keys()].some((nodeId) => !placementSourceIds.has(nodeId))
   )
     throw new Error('Figma placement/raw component sets differ');
@@ -175,8 +177,8 @@ async function main() {
   const prechangeByNode = new Map(
     prechange.exports.map((entry) => [entry.exportedSourceNodeId, entry]),
   );
-  if (sourceInventory.currentSymbols?.length !== 341 || sourceInventory.placements?.length !== 344)
-    throw new Error('source inventory must contain exactly 341 symbols and 344 placements');
+  if (sourceInventory.currentSymbols?.length !== 350 || sourceInventory.placements?.length !== 353)
+    throw new Error('source inventory must contain exactly 350 symbols and 353 placements');
   const instances = placementProvenance.placements.filter(
     ({ nodeType }) => nodeType === 'instance',
   );
@@ -218,6 +220,8 @@ async function main() {
   for (const symbol of placementProvenance.currentSymbols) {
     const file = `${symbol.exportedSourceNodeId.replace(':', '-')}.svg`;
     const localSource = await readFile(path.join(packageRoot, 'src/icons/outline', file), 'utf8');
+    if (invalidStrokeWidths(localSource).length > 0)
+      throw new Error(`stroke-width policy mismatch: ${file}`);
     const figmaRawSource = figmaComponents.get(symbol.exportedSourceNodeId)?.svg;
     if (!figmaRawSource) throw new Error(`Figma raw SVG missing: ${symbol.exportedSourceNodeId}`);
     const relativeCurrentColorValue =
@@ -228,6 +232,7 @@ async function main() {
       canonicalizeSvg(figmaRawSource, {
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
+        normalizeStrokeWidth: true,
         relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
@@ -236,6 +241,7 @@ async function main() {
       canonicalizeSvg(localSource, {
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
+        normalizeStrokeWidth: true,
         relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
@@ -244,6 +250,7 @@ async function main() {
       canonicalizeSvg(figmaRawSource, {
         geometryOnly: true,
         normalizeSemanticErase: true,
+        normalizeStrokeWidth: true,
         relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
@@ -252,6 +259,7 @@ async function main() {
       canonicalizeSvg(localSource, {
         geometryOnly: true,
         normalizeSemanticErase: true,
+        normalizeStrokeWidth: true,
         relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
@@ -282,27 +290,24 @@ async function main() {
     });
     paintExceptions.push(...semanticPaintExceptions(localSource, `outline/${file}`));
   }
-  const notebookSource = await readFile(
-    path.join(packageRoot, 'src/icons/outline/45386-154724.svg'),
-    'utf8',
-  );
   const missingExports = symbols.filter(({ exportName }) => !exportName).map(({ file }) => file);
   if (missingExports.length > 0)
     throw new Error(`missing public exports: ${missingExports.join(', ')}`);
-  if (exportsByFile.size !== 342)
-    throw new Error(`public export count must be 342, received ${exportsByFile.size}`);
+  if (exportsByFile.size !== 350)
+    throw new Error(`public export count must be 350, received ${exportsByFile.size}`);
   const manifest = {
     schemaVersion: 'figma-outline-icons-inventory-v1',
     complete: true,
     provenanceComplete: true,
     completenessScope:
-      'complete 344-placement, 341 Plugin API raw component SVG, and exact 3-instance override provenance',
+      'complete 353-placement, 350 Plugin API raw component SVG, and exact 3-instance override provenance',
     variant: 'outline',
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     frameName: 'outline',
-    frameSize: { height: 1731, width: 456 },
-    expectedCounts: { currentSymbols: 341, instances: 3, placements: 344, publicExports: 342 },
+    frameSize: { height: 1779, width: 457 },
+    expectedCounts: { currentSymbols: 350, instances: 3, placements: 353, publicExports: 350 },
+    strokeWidthPolicy: policy.strokeWidthPolicy,
     sourceEvidence: {
       ...sourceInventory.sourceEvidence,
       sourceInventorySha256: sha256(sourceInventoryText),
@@ -334,24 +339,7 @@ async function main() {
     })),
     symbols,
     instanceVerification: placements.filter(({ nodeType }) => nodeType === 'instance'),
-    legacySources: [
-      {
-        exportedSourceNodeId: '45386:154724',
-        file: '45386-154724.svg',
-        exportName: 'NotebookOutlined',
-        provenanceStatus: 'legacy/non-current-figma',
-        figmaRawSvgSha256: null,
-        localRawSvgSha256: sha256(notebookSource),
-        localNormalizedAstSha256: sha256(
-          canonicalizeSvg(notebookSource, { normalizeForegroundPaint: true }),
-        ),
-        normalizedAstSha256: sha256(
-          canonicalizeSvg(notebookSource, { normalizeForegroundPaint: true }),
-        ),
-        localGeometrySha256: sha256(canonicalizeSvg(notebookSource, { geometryOnly: true })),
-        geometrySha256: sha256(canonicalizeSvg(notebookSource, { geometryOnly: true })),
-      },
-    ],
+    legacySources: [],
     paintExceptions,
   };
   await writeFile(output, `${JSON.stringify(manifest, null, 2)}\n`, {

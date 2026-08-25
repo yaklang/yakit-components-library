@@ -59,6 +59,9 @@
     "verify:package": "node scripts/verify-package.mjs",
     "prepack": "pnpm run verify:package"
   },
+  "dependencies": {
+    "@yakit-libs/color": "1.4.1"
+  },
   "peerDependencies": {
     "react": "^18.2.0"
   },

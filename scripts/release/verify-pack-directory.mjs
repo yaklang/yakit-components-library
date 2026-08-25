@@ -188,9 +188,16 @@ export async function verifyPackageTarball(tarball) {
       failures.push(
         "@yakit-libs/yakit-ui-icons must peer only on react ^18.2.0",
       );
-    if (manifest.dependencies || manifest.peerDependenciesMeta)
+    if (
+      JSON.stringify(manifest.dependencies) !==
+      JSON.stringify({ "@yakit-libs/color": "1.4.1" })
+    )
       failures.push(
-        "@yakit-libs/yakit-ui-icons must not publish runtime dependencies or optional peers",
+        "@yakit-libs/yakit-ui-icons must depend only on @yakit-libs/color 1.4.1",
+      );
+    if (manifest.peerDependenciesMeta)
+      failures.push(
+        "@yakit-libs/yakit-ui-icons must not publish optional peers",
       );
     for (const [metric, limit] of Object.entries(ICON_PACKAGE_LIMITS))
       if ({ packedBytes, unpackedBytes, fileCount }[metric] > limit)

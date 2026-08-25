@@ -2,7 +2,7 @@ import type { CSSInterpolation } from '@ant-design/cssinjs';
 import { useStyleRegister, useToken } from 'antd/es/theme/internal';
 import type { ReactElement } from 'react';
 
-import '@yakit-libs/color/dist/index.css';
+import '../styles/color.css';
 import '../styles/reset.css';
 
 import type { GlobalToken } from '../types/token';

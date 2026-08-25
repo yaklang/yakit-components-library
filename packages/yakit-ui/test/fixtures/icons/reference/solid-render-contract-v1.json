@@ -8,9 +8,9 @@
   },
   "renderer": {
     "browserProduct": "Google Chrome",
-    "browserVersion": "151.0.7922.173",
+    "browserVersion": "151.0.7922.174",
     "browserExecutablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "browserExecutableSha256": "21b789908667614137c0db7dadebf1eff21e60c6bb30f349445aef47bbfdded8",
+    "browserExecutableSha256": "c62a6de1b6aecbcf91be770370abb7461e5a0718637962b6aa4b8d171f4de4f0",
     "playwrightVersion": "1.55.0",
     "operatingSystem": {
       "name": "macOS",
@@ -35,5 +35,22 @@
     "iouMinimum": 0.995,
     "boundsEdgeDeltaMaximum": 0,
     "centroidDeltaMaximum": 0.05
+  },
+  "localStrokeWidthPolicy": {
+    "strategy": "local-uniform-stroke-v1",
+    "figmaStrokeWidth": 4,
+    "localStrokeWidth": 1.5,
+    "nodeIds": [
+      "4936:115787",
+      "4936:115788",
+      "4936:115789",
+      "4936:115790"
+    ],
+    "metrics": {
+      "maeMaximum": 20.25,
+      "iouMinimum": 0.8,
+      "boundsEdgeDeltaMaximum": 0,
+      "centroidDeltaMaximum": 1.75
+    }
   }
 }

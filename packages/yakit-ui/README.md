@@ -32,6 +32,8 @@ export function Example() {
 }
 ```
 
+`style.css` 包含由 `@yakit-libs/color@1.4.1` 生成的 Main 主题 light/dark 变量；将根元素的 `data-theme` 设置为 `dark` 即可切换暗色变量。
+
 ## 浏览当前版本的 Storybook
 
 ```bash

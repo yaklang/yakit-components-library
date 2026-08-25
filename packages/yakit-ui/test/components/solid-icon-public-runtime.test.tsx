@@ -4,6 +4,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import * as PackageApi from '../../src';
+import { DEFAULT_ICON_COLOR } from '../../src/icons/createIcon';
 import { solidIconNameCatalog } from '../../src/icons/figmaNameCatalog';
 import { solidIconRegistry } from '../../src/icons/registry';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
@@ -52,14 +53,19 @@ const expectPrimaryPaint = (container: HTMLElement, expectedColor: string) => {
 afterEach(clearRenders);
 
 describe('Solid public component API', () => {
-  it('preserves all 255 frozen names through the registry and package root', () => {
-    const expectedNames = prechange.records.map(({ exportName }) => exportName).sort();
+  it('preserves all 255 frozen mappings under the Solid suffix', () => {
+    const expectedNames = prechange.records
+      .map(({ exportName }) => exportName.replace(/Filled$/, 'Solid'))
+      .sort();
     const registryNames = solidIconRegistry.map(({ exportName }) => exportName).sort();
 
     expect(expectedNames).toHaveLength(255);
     expect(registryNames).toEqual(expectedNames);
-    expect(registryNames).toContain('DownloadFigma12825Filled');
-    expect(registryNames).toContain('FigmaIcon2281144183Filled');
+    expect(registryNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
+    expect(registryNames.some((exportName) => exportName.endsWith('Filled'))).toBe(false);
+    expect(registryNames).toContain('DownloadFigma12825Solid');
+    expect(registryNames).toContain('FigmaIcon2281144183Solid');
+    expect('HomeFilled' in PackageApi).toBe(false);
     expect(
       solidIconRegistry.every(
         ({ Component, exportName }) =>
@@ -85,7 +91,18 @@ describe('Solid public component API', () => {
   });
 
   it('applies the default color to the actual primary glyph of every export', () => {
-    expectPrimaryPaint(renderRegistry(), 'rgb(53, 54, 57)');
+    const container = renderRegistry();
+    expectPrimaryPaint(container, 'rgb(53, 54, 57)');
+    for (const svg of container.querySelectorAll<SVGSVGElement>('svg')) {
+      expect(svg.style.color).toBe(DEFAULT_ICON_COLOR);
+    }
+  });
+
+  it('lets consumers override the shared Figma token on a local container', () => {
+    const container = renderRegistry();
+    container.style.setProperty('--Colors-Use-Neutral-Text-1-Title', '#2468ac');
+
+    expectPrimaryPaint(container, 'rgb(36, 104, 172)');
   });
 
   it('applies color, style precedence, and explicit inheritance to every primary glyph', () => {

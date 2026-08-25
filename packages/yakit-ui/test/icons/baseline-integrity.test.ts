@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
+import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
 import metrics from '../fixtures/icons/reference/outline-controls-298.json';
 import baseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
@@ -31,9 +32,11 @@ const canonicalizeSemanticEraseMask = (source: string, file?: string) => {
   const maskId = file ? semanticEraseMasks.get(file) : undefined;
   if (!maskId) return source;
   const reference = `mask="url(#${maskId})"`;
-  const erasePath =
+  const localErasePath =
+    '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const baselineErasePath =
     '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
-  const maskBlock = `<mask id="${maskId}" x="0" y="0" width="24" height="24" maskUnits="userSpaceOnUse" mask-type="luminance">\n<rect width="24" height="24" fill="white"/>\n${erasePath}\n</mask>`;
+  const maskBlock = `<mask id="${maskId}" x="0" y="0" width="24" height="24" maskUnits="userSpaceOnUse" mask-type="luminance">\n<rect width="24" height="24" fill="white"/>\n${localErasePath}\n</mask>`;
   if (source.split(reference).length - 1 !== 1 || source.split(maskBlock).length - 1 !== 1) {
     throw new Error(`Invalid semantic erase-mask contract: ${file}`);
   }
@@ -49,7 +52,7 @@ const canonicalizeSemanticEraseMask = (source: string, file?: string) => {
     canonical = canonical.replace(`<g ${reference}>\n`, '');
     canonical = canonical.replace(`</g>\n${slashStart}`, slashStart);
   }
-  canonical = canonical.replace(slashStart, `${erasePath}\n${slashStart}`);
+  canonical = canonical.replace(slashStart, `${baselineErasePath}\n${slashStart}`);
   canonical = canonical.replace(/<defs>\s*<\/defs>\s*/g, '');
   if (canonical.includes(reference) || canonical.includes(maskId)) {
     throw new Error(`Semantic erase-mask canonicalization incomplete: ${file}`);
@@ -97,7 +100,11 @@ const geometryProjection = (source: string, file?: string) => {
     const attributes: [string, string][] = [];
     for (const attribute of rawAttributes.matchAll(/([:\w-]+)=(['"])(.*?)\2/g)) {
       const [, name, , value] = attribute;
-      if (included.has(name)) attributes.push([name, value.trim().replace(/\s+/g, ' ')]);
+      if (included.has(name))
+        attributes.push([
+          name,
+          name === 'stroke-width' && value === '1.5' ? '2' : value.trim().replace(/\s+/g, ' '),
+        ]);
       if (
         (name === 'clip-path' || name === 'mask' || name === 'href' || name === 'xlink:href') &&
         value.includes('#')
@@ -134,11 +141,21 @@ describe('Outline pre-change baseline', () => {
     expect(changed.map(({ file }) => file)).toEqual([]);
   });
 
-  it('keeps the legacy Notebook geometry distinct and unchanged', () => {
+  it('replaces the legacy Notebook geometry with the current canonical Figma source', () => {
     const notebook = readFileSync(resolve(outlineRoot, baseline.legacyNotebook.file), 'utf8');
-    expect(sha256(geometryProjection(notebook))).toBe(
+    expect(sha256(geometryProjection(notebook))).not.toBe(
       baseline.legacyNotebook.geometryProjectionSha256,
     );
+    const currentNotebook = outlineManifest.symbols.find(
+      ({ exportedSourceNodeId }) => exportedSourceNodeId === '45386:154724',
+    );
+    expect(currentNotebook).toMatchObject({
+      exportName: 'NotebookOutlined',
+      file: '45386-154724.svg',
+      name: 'Outline/Notebook',
+    });
+    expect(currentNotebook?.localRawSvgSha256).toBe(sha256(notebook));
+    expect(currentNotebook?.localGeometrySha256).toBe(currentNotebook?.figmaGeometrySha256);
 
     const landPlot = baseline.exports.find(({ file }) => file === '46174-9893.svg');
     expect(landPlot).toBeUndefined();

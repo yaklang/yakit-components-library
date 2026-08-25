@@ -6,7 +6,7 @@
 <mask id="icon_4936_115790__mask_0" fill="white">
 <rect x="2" y="3" width="16" height="14" rx="1"/>
 </mask>
-<rect x="2" y="3" width="16" height="14" rx="1" stroke="currentColor" stroke-width="4" mask="url(#icon_4936_115790__mask_0)"/>
+<rect x="2" y="3" width="16" height="14" rx="1" stroke="currentColor" stroke-width="1.5" mask="url(#icon_4936_115790__mask_0)"/>
 </g>
 </g>
 </g>

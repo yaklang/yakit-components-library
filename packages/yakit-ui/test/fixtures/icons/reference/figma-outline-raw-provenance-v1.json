@@ -6,10 +6,10 @@
     "nodeId": "46824:1930",
     "nodeType": "GROUP",
     "name": "outline",
-    "width": 456,
-    "height": 1731,
-    "placementCount": 344,
-    "componentCount": 341,
+    "width": 457,
+    "height": 1779,
+    "placementCount": 353,
+    "componentCount": 350,
     "instanceCount": 3
   },
   "source": {
@@ -2230,6 +2230,60 @@
       "name": " Outline/Camera",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M19.5 19.5H4.5C4.10218 19.5 3.72064 19.342 3.43934 19.0607C3.15804 18.7794 3 18.3978 3 18V7.5C3 7.10218 3.15804 6.72064 3.43934 6.43934C3.72064 6.15804 4.10218 6 4.5 6H7.5L8.70313 4.1953C8.8886 3.9171 9.20083 3.75 9.53518 3.75H14.4648C14.7992 3.75 15.1114 3.9171 15.2969 4.1953L16.5 6H19.5C19.8978 6 20.2794 6.15804 20.5607 6.43934C20.842 6.72064 21 7.10218 21 7.5V18C21 18.3978 20.842 18.7794 20.5607 19.0607C20.2794 19.342 19.8978 19.5 19.5 19.5Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M12 15.75C13.864 15.75 15.375 14.239 15.375 12.375C15.375 10.511 13.864 9 12 9C10.136 9 8.625 10.511 8.625 12.375C8.625 14.239 10.136 15.75 12 15.75Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "45386:154724",
+      "name": "Outline/Notebook",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M3.50007 6H5.50007M3.50007 18H5.50007M16.5001 2.5V21.5M3.5 10H5.5M3.5 14H5.5M6.50007 2.5L18.5001 2.5C19.6046 2.5 20.5001 3.39543 20.5001 4.5V19.5C20.5001 20.6046 19.6046 21.5 18.5001 21.5H6.50007C5.3955 21.5 4.50007 20.6046 4.50007 19.5V4.5C4.50007 3.39543 5.3955 2.5 6.50007 2.5Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46707:8089",
+      "name": "Outline/Notebook 2",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M3.50007 6.0001H5.50007M3.50007 18.0001H5.50007M9 2.5V21.5M3.5 10.0001H5.5M3.5 14.0001H5.5M12 7.0001H17M12 10.0001H17M12 13.0001H15M6.50007 2.5001H18.5001C19.6046 2.5001 20.5001 3.39553 20.5001 4.5001V19.5001C20.5001 20.6047 19.6046 21.5001 18.5001 21.5001H6.50007C5.3955 21.5001 4.50007 20.6047 4.50007 19.5001V4.5001C4.50007 3.39553 5.3955 2.5001 6.50007 2.5001Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46783:88121",
+      "name": "Outline/RotateCcw",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M3 12C3 13.78 3.52784 15.5201 4.51677 17.0001C5.50571 18.4802 6.91131 19.6337 8.55585 20.3149C10.2004 20.9961 12.01 21.1743 13.7558 20.8271C15.5016 20.4798 17.1053 19.6226 18.364 18.364C19.6226 17.1053 20.4798 15.5016 20.8271 13.7558C21.1743 12.01 20.9961 10.2004 20.3149 8.55585C19.6337 6.91131 18.4802 5.50571 17.0001 4.51677C15.5201 3.52784 13.78 3 12 3C9.48395 3.00947 7.06897 3.99122 5.26 5.74L3 8M8 8H3V3\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46705:8074",
+      "name": "Outline/Feather",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M16 8L2 22M17.5 15H9M12.67 19C12.9331 19 13.1936 18.948 13.4366 18.8471C13.6796 18.7462 13.9003 18.5984 14.086 18.412L20.24 12.24C21.3658 11.1142 21.9983 9.58722 21.9983 7.99504C21.9983 6.40285 21.3658 4.87588 20.24 3.75004C19.1142 2.62419 17.5872 1.9917 15.995 1.9917C14.4028 1.9917 12.8758 2.62419 11.75 3.75004L5.586 9.91404C5.2109 10.289 5.00011 10.7976 5 11.328V18C5 18.2653 5.10536 18.5196 5.29289 18.7071C5.48043 18.8947 5.73478 19 6 19H12.67Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46767:87743",
+      "name": "Outline/HardDriveDownload",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M12 2V10M8 6L12 10L16 6M6 18H6.01M10 18H10.01M4 14H20C21.1046 14 22 14.8954 22 16V20C22 21.1046 21.1046 22 20 22H4C2.89543 22 2 21.1046 2 20V16C2 14.8954 2.89543 14 4 14Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46767:87745",
+      "name": "Outline/RotateCcwSquare",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M20 9V7C20 6.46957 19.7893 5.96086 19.4142 5.58579C19.0391 5.21071 18.5304 5 18 5H12M15 8L12 5L15 2M20 13V18C20 18.5304 19.7893 19.0391 19.4142 19.4142C19.0391 19.7893 18.5304 20 18 20H6C5.46957 20 4.96086 19.7893 4.58579 19.4142C4.21071 19.0391 4 18.5304 4 18V7C4 6.46957 4.21071 5.96086 4.58579 5.58579C4.96086 5.21071 5.46957 5 6 5H8\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46705:8072",
+      "name": "Outline/BookMarked",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5ZM4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20M10 2V10L13 7L16 10V2\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46707:8102",
+      "name": "Outline/BookMarked 2",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M13 2V10L14.5 7L16 10V2M7 2H5C4.44772 2 4 2.44772 4 3V21C4 21.5523 4.44772 22 5 22H7M7 2H18C19.1046 2 20 2.89543 20 4V20C20 21.1046 19.1046 22 18 22H7M7 2V22\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "46879:8170",
+      "name": "Outline/Timer",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M10 2H14M12 14L15 11M20 14C20 18.4183 16.4183 22 12 22C7.58172 22 4 18.4183 4 14C4 9.58172 7.58172 6 12 6C16.4183 6 20 9.58172 20 14Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     }
   ]
 }

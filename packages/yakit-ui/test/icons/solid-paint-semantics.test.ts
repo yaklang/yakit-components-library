@@ -11,10 +11,12 @@ import {
   paintSemanticsSha256,
 } from '../../scripts/audit-icons.mjs';
 import manifest from '../../scripts/figma-solid-icons-inventory.json';
+import { ICON_STROKE_WIDTH } from '../../scripts/icon-audit-contracts.mjs';
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const solidRoot = resolve(packageRoot, 'src/icons/solid');
+const outlineRoot = resolve(packageRoot, 'src/icons/outline');
 const files = readdirSync(solidRoot)
   .filter((file) => file.endsWith('.svg'))
   .sort();
@@ -57,6 +59,20 @@ const auditSourceMutation = async (file: string, mutate: (source: string) => str
 };
 
 describe('Solid paint semantics', () => {
+  it('uses the exact 1.5 stroke-width policy across Outline and Solid sources', () => {
+    const roots = [outlineRoot, solidRoot];
+    const values = roots.flatMap((root) =>
+      readdirSync(root)
+        .filter((file) => file.endsWith('.svg'))
+        .flatMap((file) => [
+          ...readFileSync(resolve(root, file), 'utf8').matchAll(/\bstroke-width=["']([^"']+)["']/g),
+        ]),
+    );
+
+    expect(values).toHaveLength(462);
+    expect([...new Set(values.map((match) => match[1]))]).toEqual([ICON_STROKE_WIDTH]);
+  });
+
   it('uses currentColor for every primary glyph and removes the legacy literal everywhere', () => {
     expect(files).toHaveLength(255);
     for (const file of files) {
@@ -131,12 +147,14 @@ describe('Solid paint semantics', () => {
     ]) {
       expect(source(file), file).toMatch(/<(?:clipPath|mask)\b/);
       expect(source(file), file).toMatch(/(?:fill|stroke)="currentColor"/);
+      if (file.startsWith('4936-'))
+        expect(source(file), file).toContain(`stroke-width="${ICON_STROKE_WIDTH}"`);
     }
   });
 
   it('freezes independently recomputed Figma and local paint semantics', () => {
     for (const record of [...manifest.symbols, ...manifest.supplementalSources]) {
-      const options = { normalizeFigmaPrimary: true };
+      const options = { normalizeFigmaPrimary: true, normalizeStrokeWidth: true };
       expect(record.figmaPaintSemanticsSha256, record.nodeId).toBe(
         paintSemanticsSha256(rawByNodeId.get(record.nodeId)!, options),
       );
@@ -163,6 +181,14 @@ describe('Solid paint semantics', () => {
     ],
   ])('rejects mutated %s with a stable paint token', async (_label, file, mutate) => {
     expect(await auditSourceMutation(file, mutate)).toContain('PAINT_SEMANTICS_MISMATCH');
+  });
+
+  it('rejects a stroke-width regression with a stable policy token', async () => {
+    expect(
+      await auditSourceMutation('16035-380989.svg', (svg) =>
+        svg.replace('stroke-width="1.5"', 'stroke-width="2"'),
+      ),
+    ).toContain('STROKE_WIDTH_INVALID');
   });
 
   it.each([

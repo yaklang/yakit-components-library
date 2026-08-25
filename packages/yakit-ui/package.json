@@ -69,7 +69,8 @@
     "dev": "vite",
     "start:dev": "storybook dev -p 6006",
     "build": "tsc -b && vite build",
-    "build:lib": "vite build --mode lib && tsc -p tsconfig.lib.json",
+    "generate:color-css": "yakit-color-css --theme Main --out src/styles/color.css",
+    "build:lib": "pnpm run generate:color-css && vite build --mode lib && tsc -p tsconfig.lib.json",
     "build:package": "node scripts/release/build-package.mjs",
     "verify:package": "node scripts/release/verify-package.mjs",
     "test:release": "node --test test/release/*.test.mjs",
@@ -81,7 +82,7 @@
     "lint": "eslint src config scripts .storybook test/icons test/components test/types vite.config.ts vitest.config.ts vitest.node.config.ts",
     "lint:fix": "eslint src config scripts .storybook test/icons test/components test/types vite.config.ts vitest.config.ts vitest.node.config.ts --fix",
     "test": "vitest run --config vitest.config.ts",
-    "test:audit-icons": "vitest run --config vitest.node.config.ts test/icons/audit-icons.test.ts test/icons/baseline-integrity.test.ts test/icons/solid-baseline-integrity.test.ts test/icons/icon-figma-names.test.ts test/icons/icon-registry-names.test.ts test/icons/icon-script-coverage.test.ts test/icons/icon-audit-determinism.test.ts",
+    "test:audit-icons": "vitest run --config vitest.node.config.ts test/icons/audit-icons.test.ts test/icons/baseline-integrity.test.ts test/icons/solid-baseline-integrity.test.ts test/icons/icon-figma-names.test.ts test/icons/icon-registry-names.test.ts test/icons/icon-storybook-contract.test.ts test/icons/icon-script-coverage.test.ts test/icons/icon-audit-determinism.test.ts",
     "test:icon-transform": "vitest run --config vitest.node.config.ts test/icons/icon-transform.test.ts test/icons/icon-ssr-fixture.test.ts test/icons/solid-fragment-normalization.test.ts test/icons/solid-icon-ssr-fixture.test.ts && vitest run --config vitest.config.ts test/components/icon-fragment-runtime.test.tsx test/components/icon-public-runtime.test.tsx test/components/solid-icon-fragment-runtime.test.tsx test/components/solid-icon-public-runtime.test.tsx",
     "test:icon-dist-consumer": "pnpm run build:lib && vitest run --config vitest.node.config.ts test/icons/dist-consumer.test.ts",
     "test:icon-package-contract": "tsc -p test/types/tsconfig.public.json --noEmit && vitest run --config vitest.node.config.ts test/icons/light-entry-contract.test.ts test/icons/dedicated-package-contract.test.ts",
@@ -100,7 +101,7 @@
     "update:icons:names": "node scripts/update-icon-name-catalog.mjs --replace-existing"
   },
   "dependencies": {
-    "@yakit-libs/color": "1.0.2",
+    "@yakit-libs/color": "1.4.1",
     "classnames": "^2.5.1"
   },
   "peerDependencies": {

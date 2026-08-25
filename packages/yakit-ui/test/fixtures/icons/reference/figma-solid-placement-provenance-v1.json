@@ -5546,7 +5546,7 @@
       "nodeType": "COMPONENT",
       "localFile": "4936-115787.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115787Filled"
+      "exportName": "FigmaIcon4936115787Solid"
     },
     {
       "nodeId": "4936:115790",
@@ -5554,7 +5554,7 @@
       "nodeType": "COMPONENT",
       "localFile": "4936-115790.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115790Filled"
+      "exportName": "FigmaIcon4936115790Solid"
     },
     {
       "nodeId": "4936:115789",
@@ -5562,7 +5562,7 @@
       "nodeType": "COMPONENT",
       "localFile": "4936-115789.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115789Filled"
+      "exportName": "FigmaIcon4936115789Solid"
     },
     {
       "nodeId": "4936:115788",
@@ -5570,7 +5570,7 @@
       "nodeType": "COMPONENT",
       "localFile": "4936-115788.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115788Filled"
+      "exportName": "FigmaIcon4936115788Solid"
     }
   ],
   "targetSymbols": [
