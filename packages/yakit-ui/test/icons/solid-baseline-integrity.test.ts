@@ -91,7 +91,7 @@ describe('Solid icon baseline integrity', () => {
     for (const orphan of prechange.staleOrphanFiles) expect(files).not.toContain(orphan);
   });
 
-  it('preserves all 255 public export mappings byte-for-byte', () => {
+  it('preserves all 255 public mappings while applying the Solid suffix migration', () => {
     const parsed = parseIconIndex(
       readFileSync(resolve(packageRoot, 'src/icons/solid/index.tsx'), 'utf8'),
     );
@@ -106,7 +106,7 @@ describe('Solid icon baseline integrity', () => {
     const frozen = prechange.records.map(({ nodeId, localFile, exportName, scopeRole }) => ({
       nodeId,
       localFile: `solid/${localFile}`,
-      exportName,
+      exportName: exportName.replace(/Filled$/, 'Solid'),
       scopeRole,
     }));
 
@@ -114,6 +114,8 @@ describe('Solid icon baseline integrity', () => {
     expect(parsed.duplicateImports.size).toBe(0);
     expect(parsed.missingImportTargets.size).toBe(0);
     expect(actual).toHaveLength(255);
+    expect(prechange.records.every(({ exportName }) => exportName.endsWith('Filled'))).toBe(true);
+    expect(actual.every(({ exportName }) => exportName.endsWith('Solid'))).toBe(true);
     expect(sortedPublicMapping(actual)).toEqual(sortedPublicMapping(frozen));
     expect(policyDigest(sortedPublicMapping(actual))).toBe(policy.publicMappingSha256);
   });

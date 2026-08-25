@@ -142,6 +142,16 @@ describe('Dedicated yakit-ui-icons package', () => {
     expect(dedicated).toEqual(core);
   });
 
+  it('publishes only Solid-suffixed components from the solid entry', async () => {
+    const solid = await import(exportTarget(iconsRoot, iconsManifest, './solid', 'import'));
+    const exportNames = Object.keys(solid);
+
+    expect(exportNames).toHaveLength(255);
+    expect(exportNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
+    expect(exportNames).toContain('HomeSolid');
+    expect(exportNames).not.toContain('HomeFilled');
+  });
+
   it.each(['.', './outline', './solid'])(
     '%s excludes component-only runtime dependencies',
     (subpath) => {
@@ -192,7 +202,7 @@ describe('Dedicated yakit-ui-icons package', () => {
     expect(Buffer.byteLength(code)).toBeLessThanOrEqual(15_000);
     expect(gzipSync(code).byteLength).toBeLessThanOrEqual(5_000);
     expect(code).not.toContain('AcademicCapOutlined');
-    expect(code).not.toContain('HomeFilled');
+    expect(code).not.toContain('HomeSolid');
     expect(code).not.toMatch(/(?:outlineIconRegistry|solidIconRegistry|iconRegistry)/);
     for (const dependency of forbiddenComponentDependencies) {
       expect(code, `single-icon bundle must not reference ${dependency}`).not.toContain(dependency);

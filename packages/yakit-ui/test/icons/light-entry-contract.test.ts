@@ -122,7 +122,7 @@ describe('Published lightweight icon entries', () => {
     const root = (await import(exportTarget('.', 'import'))) as Record<string, unknown>;
 
     expect(root.HomeOutlined).toBeTypeOf('function');
-    expect(root.HomeFilled).toBeTypeOf('function');
+    expect(root.HomeSolid).toBeTypeOf('function');
     expect(root.outlineIconRegistry).toBeInstanceOf(Array);
     expect(root.solidIconRegistry).toBeInstanceOf(Array);
     expect(root.Button).toBeTruthy();
@@ -138,7 +138,7 @@ describe('Published lightweight icon entries', () => {
         null,
         React.createElement(icons.HomeOutlined),
         React.createElement(outline.HomeOutlined),
-        React.createElement(solid.HomeFilled),
+        React.createElement(solid.HomeSolid),
       ),
     );
 
@@ -192,7 +192,7 @@ describe('Published lightweight icon entries', () => {
     expect(Buffer.byteLength(code)).toBeLessThanOrEqual(15_000);
     expect(gzipSync(code).byteLength).toBeLessThanOrEqual(5_000);
     expect(code).not.toContain('AcademicCapOutlined');
-    expect(code).not.toContain('HomeFilled');
+    expect(code).not.toContain('HomeSolid');
     expect(code).not.toMatch(/(?:outlineIconRegistry|solidIconRegistry|iconRegistry)/);
     for (const dependency of forbiddenRuntimeReferences) {
       expect(code, `single-icon bundle must not reference ${dependency}`).not.toContain(dependency);

@@ -170,7 +170,7 @@ try {
   await access(path.join(fixture, "dist/index.html"));
   await writeFile(
     path.join(fixture, "consumer.ts"),
-    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeFilled } from "@yakit-libs/yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeFilled];\n',
+    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeSolid];\n',
   );
   await writeFile(
     path.join(fixture, "tsconfig.json"),

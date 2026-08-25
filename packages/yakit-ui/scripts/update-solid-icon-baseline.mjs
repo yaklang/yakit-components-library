@@ -251,7 +251,7 @@ async function main() {
     orphanSources: [],
     knownNamingDebt: [
       {
-        exportName: 'DownloadFigma12825Filled',
+        exportName: 'DownloadFigma12825Solid',
         disposition: 'public-name-preserved-shopping-cart-geometry',
       },
     ],

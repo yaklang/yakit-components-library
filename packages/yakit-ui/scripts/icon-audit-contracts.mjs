@@ -23,25 +23,25 @@ const SOLID_SUPPLEMENTS = [
   {
     nodeId: '4936:115787',
     localFile: 'solid/4936-115787.svg',
-    exportName: 'FigmaIcon4936115787Filled',
+    exportName: 'FigmaIcon4936115787Solid',
     scopeRole: 'supplement',
   },
   {
     nodeId: '4936:115790',
     localFile: 'solid/4936-115790.svg',
-    exportName: 'FigmaIcon4936115790Filled',
+    exportName: 'FigmaIcon4936115790Solid',
     scopeRole: 'supplement',
   },
   {
     nodeId: '4936:115789',
     localFile: 'solid/4936-115789.svg',
-    exportName: 'FigmaIcon4936115789Filled',
+    exportName: 'FigmaIcon4936115789Solid',
     scopeRole: 'supplement',
   },
   {
     nodeId: '4936:115788',
     localFile: 'solid/4936-115788.svg',
-    exportName: 'FigmaIcon4936115788Filled',
+    exportName: 'FigmaIcon4936115788Solid',
     scopeRole: 'supplement',
   },
 ];
@@ -77,7 +77,7 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     }),
     targetMembershipSha256: '16b679e138399793f27a27b64c5e7573302416bcb81dd93fb91ed5796c2f415e',
     targetOrderSha256: '20beb1548e3309958bc085ed8cb699e141588c9c8c6a8fbe9c027925d37f1740',
-    publicMappingSha256: '7cef45ee2822f3416df38edd36106070ff3a1f7c0b13cc1aea63a1103ccb80a1',
+    publicMappingSha256: '1955dcdb5debc249410d92ced9ca8859ceb1d5e12c850697eae18c4eb40baa73',
     supplementalSources: Object.freeze(SOLID_SUPPLEMENTS.map((entry) => Object.freeze(entry))),
   }),
 });

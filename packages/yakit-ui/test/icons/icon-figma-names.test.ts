@@ -90,7 +90,7 @@ describe('Figma icon name catalog', () => {
       figmaIconNameCatalog.find(({ exportName }) => exportName === 'NotebookOutlined'),
     ).toMatchObject({ figmaName: null, sourceStatus: 'legacy-non-current-figma' });
     expect(
-      figmaIconNameCatalog.find(({ exportName }) => exportName === 'FigmaIcon4936115787Filled'),
+      figmaIconNameCatalog.find(({ exportName }) => exportName === 'FigmaIcon4936115787Solid'),
     ).toMatchObject({ figmaName: 'Solid/浮窗', sourceStatus: 'supplement' });
     const names = figmaIconNameCatalog.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
@@ -104,7 +104,7 @@ describe('Figma icon name catalog', () => {
     [
       'unknown',
       (inputs: ReturnType<typeof loadInputs>) => {
-        inputs.solidManifest.symbols[0].exportName = 'UnknownFilled';
+        inputs.solidManifest.symbols[0].exportName = 'UnknownSolid';
       },
     ],
     [

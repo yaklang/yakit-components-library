@@ -52,14 +52,19 @@ const expectPrimaryPaint = (container: HTMLElement, expectedColor: string) => {
 afterEach(clearRenders);
 
 describe('Solid public component API', () => {
-  it('preserves all 255 frozen names through the registry and package root', () => {
-    const expectedNames = prechange.records.map(({ exportName }) => exportName).sort();
+  it('preserves all 255 frozen mappings under the Solid suffix', () => {
+    const expectedNames = prechange.records
+      .map(({ exportName }) => exportName.replace(/Filled$/, 'Solid'))
+      .sort();
     const registryNames = solidIconRegistry.map(({ exportName }) => exportName).sort();
 
     expect(expectedNames).toHaveLength(255);
     expect(registryNames).toEqual(expectedNames);
-    expect(registryNames).toContain('DownloadFigma12825Filled');
-    expect(registryNames).toContain('FigmaIcon2281144183Filled');
+    expect(registryNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
+    expect(registryNames.some((exportName) => exportName.endsWith('Filled'))).toBe(false);
+    expect(registryNames).toContain('DownloadFigma12825Solid');
+    expect(registryNames).toContain('FigmaIcon2281144183Solid');
+    expect('HomeFilled' in PackageApi).toBe(false);
     expect(
       solidIconRegistry.every(
         ({ Component, exportName }) =>

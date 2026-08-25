@@ -11,12 +11,12 @@ pnpm add @yakit-libs/yakit-ui-icons react
 ## 使用
 
 ```tsx
-import { HomeFilled, HomeOutlined } from "@yakit-libs/yakit-ui-icons";
+import { HomeSolid, HomeOutlined } from "@yakit-libs/yakit-ui-icons";
 
 export const HomeEntry = () => (
   <button type="button">
     <HomeOutlined aria-hidden size={16} />
-    <HomeFilled aria-label="首页" size={16} />
+    <HomeSolid aria-label="首页" size={16} />
   </button>
 );
 ```
@@ -25,7 +25,7 @@ export const HomeEntry = () => (
 
 ```tsx
 import { HomeOutlined } from "@yakit-libs/yakit-ui-icons/outline";
-import { HomeFilled } from "@yakit-libs/yakit-ui-icons/solid";
+import { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";
 ```
 
 完整注册表是显式的重入口，仅在图标浏览器等需要枚举所有图标的场景使用：
