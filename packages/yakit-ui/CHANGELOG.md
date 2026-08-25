@@ -1,5 +1,19 @@
 # @yakit-libs/yakit-ui
 
+## 0.2.0
+
+### Minor Changes
+
+- a4e8bae: Correct `NotebookOutlined` to the current Figma source and add the `Notebook2Outlined`, `RotateCcwOutlined`, `FeatherOutlined`, `HardDriveDownloadOutlined`, `RotateCcwSquareOutlined`, `BookMarkedOutlined`, `BookMarked2Outlined`, and `TimerOutlined` exports.
+- e74cb65: Breaking: rename every solid icon component from the `Filled` suffix to the `Solid` suffix. Consumers should replace imports such as `HomeFilled` with `HomeSolid`.
+
+  The Storybook icon galleries are also consolidated under the single `Icon` group.
+
+### Patch Changes
+
+- a4e8bae: Use the `@yakit-libs/color@1.4.1` runtime neutral title token as the shared Outline and Solid icon default while preserving prop, style, inheritance, and scoped CSS-variable color overrides.
+- a4e8bae: Normalize every explicit Outline and Solid icon stroke width to `1.5` and enforce the policy in icon audits and visual regression gates.
+
 ## 0.1.3
 
 ### Patch Changes

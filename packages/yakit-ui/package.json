@@ -1,7 +1,7 @@
 {
   "name": "@yakit-libs/yakit-ui",
   "private": false,
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Yakit React component library with a version-matched offline Storybook.",
   "keywords": [
     "@yakit-libs/yakit-ui",
