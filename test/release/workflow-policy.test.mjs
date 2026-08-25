@@ -118,6 +118,20 @@ test("verification and publish consume the same Changesets pack artifact output"
   assert.match(jobs.get("publish") ?? "", reference);
 });
 
+test("tarball verification installs pnpm before running strict-layout consumers", () => {
+  const job = extractWorkflowJobs(workflow("publish.yml")).get("verify-pack") ?? "";
+  const setup =
+    "uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320";
+  const smoke =
+    "run: node scripts/release/verify-tarball-consumer.mjs .release/pack";
+  const setupIndex = job.indexOf(setup);
+  const smokeIndex = job.indexOf(smoke);
+  assert.ok(setupIndex >= 0, "verify-pack must install the reviewed pnpm action");
+  assert.match(job, /version:\s*10\.34\.5/);
+  assert.ok(smokeIndex >= 0, "verify-pack must run the strict-layout smoke test");
+  assert.ok(setupIndex < smokeIndex, "verify-pack must install pnpm before smoke tests");
+});
+
 test("CI and publish build and pack both fixed public packages", () => {
   const ci = workflow("ci.yml");
   const publishBuild =
