@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { auditIcons, canonicalizeSvg, parseIconIndex } from '../../scripts/audit-icons.mjs';
 import manifest from '../../scripts/figma-solid-icons-inventory.json';
 import {
+  ICON_STROKE_WIDTH,
   canonicalJson,
   getIconAuditPolicy,
   policyDigest,
@@ -25,6 +26,8 @@ const solidRoot = resolve(packageRoot, 'src/icons/solid');
 const policy = getIconAuditPolicy('solid-v1');
 const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
 const geometrySha256 = (source: string) => sha256(canonicalizeSvg(source, { geometryOnly: true }));
+const policyGeometrySha256 = (source: string) =>
+  sha256(canonicalizeSvg(source, { geometryOnly: true, normalizeStrokeWidth: true }));
 const files = readdirSync(solidRoot)
   .filter((file) => file.endsWith('.svg'))
   .sort();
@@ -120,16 +123,28 @@ describe('Solid icon baseline integrity', () => {
     expect(policyDigest(sortedPublicMapping(actual))).toBe(policy.publicMappingSha256);
   });
 
-  it('allows exactly one geometry change and binds it to the six-dot Figma component', () => {
+  it('allows only the reviewed geometry and local stroke-width policy changes', () => {
+    const strokePolicyIds = ['4936:115787', '4936:115788', '4936:115789', '4936:115790'];
     const changed = prechange.records
       .filter(({ geometrySha256: frozen, localFile }) => currentGeometry(localFile) !== frozen)
-      .map(({ nodeId }) => nodeId);
-    expect(changed).toEqual(['2281:144183']);
+      .map(({ nodeId }) => nodeId)
+      .sort();
+    expect(changed).toEqual(['2281:144183', ...strokePolicyIds].sort());
 
-    for (const row of prechange.records.filter(({ nodeId }) => nodeId !== '2281:144183')) {
+    for (const row of prechange.records.filter(
+      ({ nodeId }) => nodeId !== '2281:144183' && !strokePolicyIds.includes(nodeId),
+    )) {
       const figma = rawByNodeId.get(row.nodeId);
       expect(figma, row.nodeId).toBeDefined();
       expect(currentGeometry(row.localFile), row.localFile).toBe(geometrySha256(figma!.svg));
+    }
+
+    for (const nodeId of strokePolicyIds) {
+      const file = `${nodeId.replace(':', '-')}.svg`;
+      const figma = rawByNodeId.get(nodeId)!;
+      expect(figma.svg, nodeId).toContain('stroke-width="4"');
+      expect(currentSource(file), file).toContain(`stroke-width="${ICON_STROKE_WIDTH}"`);
+      expect(policyGeometrySha256(currentSource(file)), file).toBe(policyGeometrySha256(figma.svg));
     }
 
     const drag = currentSource('2281-144183.svg');
@@ -263,6 +278,18 @@ describe('Solid icon baseline integrity', () => {
       iouMinimum: 0.995,
       maeMaximum: 0.5,
       rounding: 'half-up-six-decimals',
+    });
+    expect(renderContract.localStrokeWidthPolicy).toEqual({
+      strategy: 'local-uniform-stroke-v1',
+      figmaStrokeWidth: 4,
+      localStrokeWidth: 1.5,
+      nodeIds: ['4936:115787', '4936:115788', '4936:115789', '4936:115790'],
+      metrics: {
+        maeMaximum: 20.25,
+        iouMinimum: 0.8,
+        boundsEdgeDeltaMaximum: 0,
+        centroidDeltaMaximum: 1.75,
+      },
     });
   });
 });

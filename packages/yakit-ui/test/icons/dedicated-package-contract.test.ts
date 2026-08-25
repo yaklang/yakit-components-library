@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
@@ -8,6 +9,7 @@ import { describe, expect, it } from 'vitest';
 
 const coreRoot = process.cwd();
 const iconsRoot = resolve(coreRoot, '../yakit-ui-icons');
+const requireFromIcons = createRequire(resolve(iconsRoot, 'package.json'));
 const forbiddenComponentDependencies = [
   'antd',
   '@ant-design/cssinjs',
@@ -111,9 +113,29 @@ describe('Dedicated yakit-ui-icons package', () => {
 
     expect(iconsManifest.name).toBe('@yakit-libs/yakit-ui-icons');
     expect(iconsManifest.private).toBe(false);
-    expect(Object.keys(runtimeDependencies)).toEqual(['react']);
+    expect(Object.keys(runtimeDependencies).sort()).toEqual(['@yakit-libs/color', 'react']);
+    expect(iconsManifest.dependencies).toEqual({ '@yakit-libs/color': '1.4.1' });
     expect(runtimeDependencies.react).toMatch(/18\.2\.0/);
     expect(iconsManifest.sideEffects).toBe(false);
+  });
+
+  it('uses the color 1.4.1 runtime token contract without a CSS side-effect entry', () => {
+    const colorEntry = requireFromIcons.resolve('@yakit-libs/color');
+    const colorManifest = JSON.parse(
+      readFileSync(resolve(dirname(colorEntry), '../package.json'), 'utf8'),
+    ) as { exports?: Record<string, unknown>; version?: string };
+    const color = requireFromIcons('@yakit-libs/color') as {
+      generateColors: (mode: 'dark' | 'light') => Record<string, string>;
+    };
+    const light = color.generateColors('light');
+    const dark = color.generateColors('dark');
+
+    expect(colorManifest.version).toBe('1.4.1');
+    expect(colorManifest.exports).not.toHaveProperty('./dist/index.css');
+    expect(light['--Colors-Use-Neutral-Text-1-Title']).toBe('var(--yakit-colors-Neutral-100)');
+    expect(light['--yakit-colors-Neutral-100']).toBe('#353639');
+    expect(dark['--Colors-Use-Neutral-Text-1-Title']).toBe('var(--yakit-colors-Neutral-80)');
+    expect(dark['--yakit-colors-Neutral-80']).toBe('#c8d0dd');
   });
 
   it.each(entryPairs)('publishes readable %s JavaScript and type targets', (iconsSubpath) => {
@@ -153,7 +175,7 @@ describe('Dedicated yakit-ui-icons package', () => {
   });
 
   it.each(['.', './outline', './solid'])(
-    '%s excludes component-only runtime dependencies',
+    '%s excludes component and CSS side-effect imports',
     (subpath) => {
       const graph = collectRelativeModuleGraph(
         exportTarget(iconsRoot, iconsManifest, subpath, 'import'),
@@ -164,6 +186,7 @@ describe('Dedicated yakit-ui-icons package', () => {
       for (const dependency of forbiddenComponentDependencies) {
         expect(source, `${subpath} must not reference ${dependency}`).not.toContain(dependency);
       }
+      expect(source).toContain('var(--Colors-Use-Neutral-Text-1-Title, #353639)');
     },
   );
 

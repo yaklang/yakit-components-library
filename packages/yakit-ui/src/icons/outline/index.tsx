@@ -342,6 +342,14 @@ import Goal2OutlinedSvg from './46287-1908.svg?react';
 import Grid2x2CheckOutlinedSvg from './46300-1925.svg?react';
 import Settings2OutlinedSvg from './46620-1904.svg?react';
 import TimelineOutlinedSvg from './46671-8055.svg?react';
+import BookMarkedOutlinedSvg from './46705-8072.svg?react';
+import FeatherOutlinedSvg from './46705-8074.svg?react';
+import Notebook2OutlinedSvg from './46707-8089.svg?react';
+import BookMarked2OutlinedSvg from './46707-8102.svg?react';
+import HardDriveDownloadOutlinedSvg from './46767-87743.svg?react';
+import RotateCcwSquareOutlinedSvg from './46767-87745.svg?react';
+import RotateCcwOutlinedSvg from './46783-88121.svg?react';
+import TimerOutlinedSvg from './46879-8170.svg?react';
 
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined');
 export const LocationMarkerOutlined = createIcon(
@@ -870,10 +878,6 @@ export const PointerOutlined = createIcon(PointerOutlinedSvg, 'PointerOutlined')
 export const EarOffOutlined = createIcon(EarOffOutlinedSvg, 'EarOffOutlined');
 export const EarOutlined = createIcon(EarOutlinedSvg, 'EarOutlined', '#0A0A0A');
 export const MoveDiagonalOutlined = createIcon(MoveDiagonalOutlinedSvg, 'MoveDiagonalOutlined');
-/**
- * @deprecated This legacy notebook glyph is absent from the current Outline Figma frame.
- * Use LandPlotOutlined only for the distinct LandPlot glyph.
- */
 export const NotebookOutlined = createIcon(NotebookOutlinedSvg, 'NotebookOutlined');
 export const LandPlotOutlined = createIcon(LandPlotOutlinedSvg, 'LandPlotOutlined');
 export const LogoOutlined = createIcon(LogoOutlinedSvg, 'LogoOutlined');
@@ -893,3 +897,17 @@ export const Goal2Outlined = createIcon(Goal2OutlinedSvg, 'Goal2Outlined');
 export const Grid2x2CheckOutlined = createIcon(Grid2x2CheckOutlinedSvg, 'Grid2x2CheckOutlined');
 export const Settings2Outlined = createIcon(Settings2OutlinedSvg, 'Settings2Outlined');
 export const TimelineOutlined = createIcon(TimelineOutlinedSvg, 'TimelineOutlined');
+export const Notebook2Outlined = createIcon(Notebook2OutlinedSvg, 'Notebook2Outlined');
+export const RotateCcwOutlined = createIcon(RotateCcwOutlinedSvg, 'RotateCcwOutlined');
+export const FeatherOutlined = createIcon(FeatherOutlinedSvg, 'FeatherOutlined');
+export const HardDriveDownloadOutlined = createIcon(
+  HardDriveDownloadOutlinedSvg,
+  'HardDriveDownloadOutlined',
+);
+export const RotateCcwSquareOutlined = createIcon(
+  RotateCcwSquareOutlinedSvg,
+  'RotateCcwSquareOutlined',
+);
+export const BookMarkedOutlined = createIcon(BookMarkedOutlinedSvg, 'BookMarkedOutlined');
+export const BookMarked2Outlined = createIcon(BookMarked2OutlinedSvg, 'BookMarked2Outlined');
+export const TimerOutlined = createIcon(TimerOutlinedSvg, 'TimerOutlined');

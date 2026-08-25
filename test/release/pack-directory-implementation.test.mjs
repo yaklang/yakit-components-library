@@ -61,6 +61,7 @@ const createIconsTarball = (directory, { oversized = false } = {}) => {
     JSON.stringify({
       name: "@yakit-libs/yakit-ui-icons",
       version: "1.2.3",
+      dependencies: { "@yakit-libs/color": "1.4.1" },
       peerDependencies: { react: "^18.2.0" },
     }),
   );

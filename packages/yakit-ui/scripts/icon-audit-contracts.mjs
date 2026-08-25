@@ -4,6 +4,11 @@ export const POLICY_DIGEST_ALGORITHM_VERSION = 'policy-digest-canonical-json-v1'
 export const ID_HYGIENE_ALGORITHM_VERSION = 'solid-id-hygiene-v1';
 export const PAINT_SEMANTICS_ALGORITHM_VERSION = 'geometry-role-locator-v1';
 export const PAINT_COMPARISON_NORMALIZATION_VERSION = 'figma-primary-currentcolor-v1';
+export const ICON_STROKE_WIDTH = '1.5';
+export const ICON_STROKE_WIDTH_POLICY = Object.freeze({
+  strategy: 'local-uniform-stroke-v1',
+  value: ICON_STROKE_WIDTH,
+});
 
 export function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
@@ -52,11 +57,12 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     variant: 'outline',
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
+    strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
     expectedCounts: Object.freeze({
-      currentSymbols: 341,
+      currentSymbols: 350,
       instances: 3,
-      placements: 344,
-      publicExports: 342,
+      placements: 353,
+      publicExports: 350,
     }),
   }),
   'solid-v1': Object.freeze({
@@ -68,6 +74,7 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     idHygieneAlgorithmVersion: ID_HYGIENE_ALGORITHM_VERSION,
     paintSemanticsAlgorithmVersion: PAINT_SEMANTICS_ALGORITHM_VERSION,
     paintComparisonNormalizationVersion: PAINT_COMPARISON_NORMALIZATION_VERSION,
+    strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
     prechangeBaselinePath: 'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json',
     expectedCounts: Object.freeze({
       targetSymbols: 251,

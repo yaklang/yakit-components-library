@@ -69,7 +69,8 @@
     "dev": "vite",
     "start:dev": "storybook dev -p 6006",
     "build": "tsc -b && vite build",
-    "build:lib": "vite build --mode lib && tsc -p tsconfig.lib.json",
+    "generate:color-css": "yakit-color-css --theme Main --out src/styles/color.css",
+    "build:lib": "pnpm run generate:color-css && vite build --mode lib && tsc -p tsconfig.lib.json",
     "build:package": "node scripts/release/build-package.mjs",
     "verify:package": "node scripts/release/verify-package.mjs",
     "test:release": "node --test test/release/*.test.mjs",
@@ -100,7 +101,7 @@
     "update:icons:names": "node scripts/update-icon-name-catalog.mjs --replace-existing"
   },
   "dependencies": {
-    "@yakit-libs/color": "1.0.2",
+    "@yakit-libs/color": "1.4.1",
     "classnames": "^2.5.1"
   },
   "peerDependencies": {

@@ -3,7 +3,7 @@
   "immutableAfterCandidateOutput": true,
   "provenance": {
     "baselineSha256": "362a76e87d66a2977aa8cee810a52136409594ac7015c556108a1ebb75586842",
-    "figmaReferenceSha256": "df13e7e4892b2ffe265b65d8f269ecf36afc5099401ed7fc277763e49290a88e",
+    "figmaReferenceSha256": "ca7ec2ba7d371690ec6ed4cd5a322f12557e2f46b1f4daba83a8e3fb7dbde583",
     "localPrechangeFrameSha256": "0a8ae69e3ff391aff2a7e69afab855a4009aae732fa9b61c82eb4cde8cdb0318",
     "renderer": {
       "browser": "Google Chrome",
@@ -3316,5 +3316,5 @@
       "centroidDelta": 0.063252
     }
   ],
-  "canonicalPayloadSha256": "0f4bcd3fb5885badc9a149e154b0500f1b7e2b9ec5500bc2bde1ae05bd6e2618"
+  "canonicalPayloadSha256": "6d9b057ff62eecc8df87a4205f2dbd2eedb2eb52542bc7ed86f820c91270c68e"
 }

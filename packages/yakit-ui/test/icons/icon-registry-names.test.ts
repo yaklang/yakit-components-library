@@ -56,10 +56,10 @@ describe('Figma icon registry name validation', () => {
       iconRegistry
         .filter(({ figmaName }) => figmaName === null)
         .map(({ exportName }) => exportName),
-    ).toEqual(['CommandOutlined', 'NotebookOutlined']);
+    ).toEqual(['CommandOutlined']);
   });
 
-  it('keeps 595 non-null full Figma names unique while allowing exactly 94 leaf collisions', () => {
+  it('keeps 604 non-null full Figma names unique while allowing exactly 94 leaf collisions', () => {
     const fullNames = iconRegistry.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
     );
@@ -70,8 +70,8 @@ describe('Figma icon registry name validation', () => {
     }
     const collisions = [...leafOwners.values()].filter((owners) => owners.length > 1);
 
-    expect(fullNames).toHaveLength(595);
-    expect(new Set(fullNames)).toHaveLength(595);
+    expect(fullNames).toHaveLength(604);
+    expect(new Set(fullNames)).toHaveLength(604);
     expect(collisions).toHaveLength(94);
     expect(collisions.every((owners) => owners.length === 2)).toBe(true);
   });

@@ -1,10 +1,10 @@
 {
   "schemaVersion": "outline-renderer-provenance-v1",
   "metricsSchemaVersion": "outline-pixel-metrics-v1",
-  "metricsCanonicalPayloadSha256": "0f4bcd3fb5885badc9a149e154b0500f1b7e2b9ec5500bc2bde1ae05bd6e2618",
+  "metricsCanonicalPayloadSha256": "6d9b057ff62eecc8df87a4205f2dbd2eedb2eb52542bc7ed86f820c91270c68e",
   "browser": {
     "product": "Google Chrome",
-    "version": "151.0.7922.173",
+    "version": "151.0.7922.174",
     "executablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
   },
   "operatingSystem": {

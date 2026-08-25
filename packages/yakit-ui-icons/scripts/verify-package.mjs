@@ -1,5 +1,6 @@
 import { constants } from "node:fs";
 import { access, lstat, readFile, realpath, readdir } from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -34,6 +35,7 @@ const requiredFiles = [
   "./LICENSE",
 ];
 const failures = [];
+const require = createRequire(import.meta.url);
 
 for (const relativePath of requiredFiles) {
   const absolutePath = path.join(packageRoot, relativePath);
@@ -89,8 +91,38 @@ if (
 ) {
   failures.push("react ^18.2.0 must be the only peer dependency");
 }
-if (manifest.dependencies || manifest.peerDependenciesMeta) {
-  failures.push("runtime dependencies and optional peers are forbidden");
+if (
+  JSON.stringify(manifest.dependencies) !==
+  JSON.stringify({ "@yakit-libs/color": "1.4.1" })
+) {
+  failures.push("@yakit-libs/color 1.4.1 must be the only runtime dependency");
+}
+if (manifest.peerDependenciesMeta) {
+  failures.push("optional peers are forbidden");
+}
+try {
+  const colorEntry = require.resolve("@yakit-libs/color");
+  const colorManifest = JSON.parse(
+    await readFile(path.resolve(path.dirname(colorEntry), "../package.json"), "utf8"),
+  );
+  const color = require("@yakit-libs/color");
+  const light = color.generateColors("light");
+  const dark = color.generateColors("dark");
+  if (
+    colorManifest.version !== "1.4.1" ||
+    !colorManifest.exports?.["./preview"] ||
+    !colorManifest.exports?.["./css"] ||
+    light["--Colors-Use-Neutral-Text-1-Title"] !==
+      "var(--yakit-colors-Neutral-100)" ||
+    light["--yakit-colors-Neutral-100"] !== "#353639" ||
+    dark["--Colors-Use-Neutral-Text-1-Title"] !==
+      "var(--yakit-colors-Neutral-80)" ||
+    dark["--yakit-colors-Neutral-80"] !== "#c8d0dd"
+  ) {
+    failures.push("@yakit-libs/color 1.4.1 token contract is invalid");
+  }
+} catch {
+  failures.push("@yakit-libs/color 1.4.1 runtime is missing or unreadable");
 }
 for (const includedPath of ["dist", "README.md", "LICENSE"]) {
   if (!manifest.files?.includes(includedPath)) {

@@ -4,6 +4,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import * as PackageApi from '../../src';
+import { DEFAULT_ICON_COLOR } from '../../src/icons/createIcon';
 import { solidIconNameCatalog } from '../../src/icons/figmaNameCatalog';
 import { solidIconRegistry } from '../../src/icons/registry';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
@@ -90,7 +91,18 @@ describe('Solid public component API', () => {
   });
 
   it('applies the default color to the actual primary glyph of every export', () => {
-    expectPrimaryPaint(renderRegistry(), 'rgb(53, 54, 57)');
+    const container = renderRegistry();
+    expectPrimaryPaint(container, 'rgb(53, 54, 57)');
+    for (const svg of container.querySelectorAll<SVGSVGElement>('svg')) {
+      expect(svg.style.color).toBe(DEFAULT_ICON_COLOR);
+    }
+  });
+
+  it('lets consumers override the shared Figma token on a local container', () => {
+    const container = renderRegistry();
+    container.style.setProperty('--Colors-Use-Neutral-Text-1-Title', '#2468ac');
+
+    expectPrimaryPaint(container, 'rgb(36, 104, 172)');
   });
 
   it('applies color, style precedence, and explicit inheritance to every primary glyph', () => {

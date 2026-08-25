@@ -4,6 +4,9 @@ import type { IconProps } from './types.js';
 
 type SvgIcon = ComponentType<IconProps>;
 
+/** Figma `Colors-Use/Neutral/Text 1-Title`, provided by @yakit-libs/color. */
+export const DEFAULT_ICON_COLOR = 'var(--Colors-Use-Neutral-Text-1-Title, #353639)';
+
 /**
  * Turns a Figma-exported SVG into an icon component with an Ant Design-like API.
  */
@@ -11,7 +14,7 @@ type SvgIcon = ComponentType<IconProps>;
 export function createIcon(
   svg: unknown,
   displayName: string,
-  defaultColor = '#353639',
+  defaultColor = DEFAULT_ICON_COLOR,
 ): ComponentType<IconProps> {
   // SVG modules are typed by vite-plugin-svgr. Keeping that type at this boundary
   // avoids exposing its React type-version details through the public icon API.

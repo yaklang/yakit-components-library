@@ -57,10 +57,26 @@ if (manifest.publishConfig?.registry !== 'https://registry.npmjs.org/') {
 if (manifest.license !== 'MIT') {
   failures.push('license must be MIT');
 }
+if (manifest.dependencies?.['@yakit-libs/color'] !== '1.4.1') {
+  failures.push('@yakit-libs/color must be pinned to 1.4.1');
+}
 for (const includedPath of ['dist', 'storybook-static', 'README.md', 'LICENSE']) {
   if (!manifest.files?.includes(includedPath)) {
     failures.push(`files must include ${includedPath}`);
   }
+}
+
+try {
+  const css = await readFile(path.join(packageRoot, expected.css), 'utf8');
+  if (
+    !css.includes('--Colors-Use-Neutral-Text-1-Title') ||
+    !css.includes(':root') ||
+    !/\[data-theme=(?:dark|"dark")\]/.test(css)
+  ) {
+    failures.push('dist/index.css must include the generated light and dark color 1.4.1 tokens');
+  }
+} catch {
+  failures.push('dist/index.css color token contract is unreadable');
 }
 
 if (failures.length > 0) {
