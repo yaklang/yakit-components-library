@@ -28,6 +28,8 @@ const renderRegistry = (props: Record<string, unknown> = {}) =>
   );
 const expectedDefaultColor = (name: string) =>
   name === 'EarOutlined' || name === 'SunOutlined' ? 'rgb(10, 10, 10)' : 'rgb(53, 54, 57)';
+const expectedDefaultToken = (name: string) =>
+  name === 'EarOutlined' || name === 'SunOutlined' ? '#0A0A0A' : DEFAULT_ICON_COLOR;
 const notebookGroupExports = [
   'NotebookOutlined',
   'Notebook2Outlined',
@@ -108,10 +110,13 @@ describe('Outline public component API', () => {
 
     expect(svgs).toHaveLength(350);
     for (const svg of svgs) {
-      expect(getComputedStyle(svg).color).toBe(expectedDefaultColor(svg.dataset.iconName ?? ''));
-      if (!['EarOutlined', 'SunOutlined'].includes(svg.dataset.iconName ?? '')) {
-        expect(svg.style.color).toBe(DEFAULT_ICON_COLOR);
-      }
+      const root = svg.parentElement as HTMLSpanElement;
+      const name = root.dataset.iconName ?? '';
+      expect(getComputedStyle(svg).color).toBe(expectedDefaultColor(name));
+      expect(svg.style.color).toBe('');
+      expect(root.style.getPropertyValue('--yakit-icon-default-color')).toBe(
+        expectedDefaultToken(name),
+      );
     }
   });
 
@@ -120,7 +125,7 @@ describe('Outline public component API', () => {
     container.style.setProperty('--Colors-Use-Neutral-Text-1-Title', '#2468ac');
 
     for (const svg of container.querySelectorAll<SVGSVGElement>('svg')) {
-      const name = svg.dataset.iconName ?? '';
+      const name = (svg.parentElement as HTMLSpanElement).dataset.iconName ?? '';
       expect(getComputedStyle(svg).color).toBe(
         name === 'EarOutlined' || name === 'SunOutlined' ? 'rgb(10, 10, 10)' : 'rgb(36, 104, 172)',
       );

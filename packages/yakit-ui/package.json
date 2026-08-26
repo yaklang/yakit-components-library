@@ -27,27 +27,38 @@
     },
     "./icons": {
       "types": "./dist/icons/index.d.ts",
+      "browser": "./dist/browser/icons/index.js",
       "import": "./dist/icons/index.js"
     },
     "./icons/outline": {
       "types": "./dist/icons/outline/index.d.ts",
+      "browser": "./dist/browser/icons/outline/index.js",
       "import": "./dist/icons/outline/index.js"
     },
     "./icons/solid": {
       "types": "./dist/icons/solid/index.d.ts",
+      "browser": "./dist/browser/icons/solid/index.js",
       "import": "./dist/icons/solid/index.js"
+    },
+    "./icons/colorful": {
+      "types": "./dist/icons/colorful/index.d.ts",
+      "browser": "./dist/browser/icons/colorful/index.js",
+      "import": "./dist/icons/colorful/index.js"
     },
     "./icons/registry": {
       "types": "./dist/icons/registry.d.ts",
+      "browser": "./dist/browser/icons/registry.js",
       "import": "./dist/icons/registry.js"
     },
+    "./icons/icon.css": "./dist/icon.css",
     "./style.css": "./dist/index.css"
   },
   "bin": {
     "yakit-ui-storybook": "./dist/bin/yakit-ui-storybook.mjs"
   },
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "dist/browser/**/*.js"
   ],
   "engines": {
     "node": "^22.14.0 || ^24.0.0"
@@ -82,8 +93,8 @@
     "lint": "eslint src config scripts .storybook test/icons test/components test/types vite.config.ts vitest.config.ts vitest.node.config.ts",
     "lint:fix": "eslint src config scripts .storybook test/icons test/components test/types vite.config.ts vitest.config.ts vitest.node.config.ts --fix",
     "test": "vitest run --config vitest.config.ts",
-    "test:audit-icons": "vitest run --config vitest.node.config.ts test/icons/audit-icons.test.ts test/icons/baseline-integrity.test.ts test/icons/solid-baseline-integrity.test.ts test/icons/icon-figma-names.test.ts test/icons/icon-registry-names.test.ts test/icons/icon-storybook-contract.test.ts test/icons/icon-script-coverage.test.ts test/icons/icon-audit-determinism.test.ts",
-    "test:icon-transform": "vitest run --config vitest.node.config.ts test/icons/icon-transform.test.ts test/icons/icon-ssr-fixture.test.ts test/icons/solid-fragment-normalization.test.ts test/icons/solid-icon-ssr-fixture.test.ts && vitest run --config vitest.config.ts test/components/icon-fragment-runtime.test.tsx test/components/icon-public-runtime.test.tsx test/components/solid-icon-fragment-runtime.test.tsx test/components/solid-icon-public-runtime.test.tsx",
+    "test:audit-icons": "vitest run --config vitest.node.config.ts test/icons/audit-icons.test.ts test/icons/baseline-integrity.test.ts test/icons/solid-baseline-integrity.test.ts test/icons/icon-figma-names.test.ts test/icons/icon-registry-names.test.ts test/icons/icon-storybook-contract.test.ts test/icons/icon-script-coverage.test.ts test/icons/icon-audit-determinism.test.ts test/icons/colorful-audit-determinism.test.ts test/icons/colorful-contracts.test.ts test/icons/colorful-entry-generator.test.ts test/icons/colorful-color-resolver.test.ts",
+    "test:icon-transform": "vitest run --config vitest.node.config.ts test/icons/icon-transform.test.ts test/icons/icon-ssr-fixture.test.ts test/icons/solid-fragment-normalization.test.ts test/icons/solid-icon-ssr-fixture.test.ts test/icons/colorful-fragment-normalization.test.ts && vitest run --config vitest.config.ts test/components/icon-fragment-runtime.test.tsx test/components/icon-public-runtime.test.tsx test/components/solid-icon-fragment-runtime.test.tsx test/components/solid-icon-public-runtime.test.tsx test/components/colorful-icon-fragment-runtime.test.tsx test/components/colorful-icon-public-runtime.test.tsx",
     "test:icon-dist-consumer": "pnpm run build:lib && vitest run --config vitest.node.config.ts test/icons/dist-consumer.test.ts",
     "test:icon-package-contract": "tsc -p test/types/tsconfig.public.json --noEmit && vitest run --config vitest.node.config.ts test/icons/light-entry-contract.test.ts test/icons/dedicated-package-contract.test.ts",
     "test:icon-visual": "vitest run --config vitest.node.config.ts test/icons/outline-pixel-metrics.test.ts test/icons/icon-paint-semantics.test.ts test/icons/solid-paint-semantics.test.ts && vitest run --config vitest.config.ts test/components/icon-visual.test.tsx test/components/solid-icon-visual.test.tsx",
@@ -96,9 +107,12 @@
     "build-storybook": "storybook build",
     "audit:icons:outline": "node scripts/audit-icons.mjs --check --policy outline-v1 --manifest scripts/figma-outline-icons-inventory.json --index src/icons/outline/index.tsx --name-catalog src/icons/figmaNameCatalog.ts --outline-name-manifest scripts/figma-outline-icons-inventory.json --outline-name-index src/icons/outline/index.tsx --outline-name-raw-provenance test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json --outline-name-placement-provenance test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json --solid-name-manifest scripts/figma-solid-icons-inventory.json --solid-name-index src/icons/solid/index.tsx --solid-name-raw-provenance test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json --solid-name-placement-provenance test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json",
     "audit:icons:solid": "node scripts/audit-icons.mjs --check --policy solid-v1 --manifest scripts/figma-solid-icons-inventory.json --index src/icons/solid/index.tsx --name-catalog src/icons/figmaNameCatalog.ts --outline-name-manifest scripts/figma-outline-icons-inventory.json --outline-name-index src/icons/outline/index.tsx --outline-name-raw-provenance test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json --outline-name-placement-provenance test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json --solid-name-manifest scripts/figma-solid-icons-inventory.json --solid-name-index src/icons/solid/index.tsx --solid-name-raw-provenance test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json --solid-name-placement-provenance test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json --figma-raw-provenance test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json --placement-provenance test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json",
-    "audit:icons": "pnpm run audit:icons:outline && pnpm run audit:icons:solid",
+    "audit:icons:colorful": "node scripts/colorful-audit.mjs && node scripts/colorful-entry-generator.mjs",
+    "audit:icons": "pnpm run audit:icons:outline && pnpm run audit:icons:solid && pnpm run audit:icons:colorful",
     "update:icons:solid": "node scripts/update-solid-icon-baseline.mjs",
-    "update:icons:names": "node scripts/update-icon-name-catalog.mjs --replace-existing"
+    "update:icons:names": "node scripts/update-icon-name-catalog.mjs --replace-existing",
+    "update:icons:colorful": "node scripts/colorful-inventory-merge.mjs --write --prune && node scripts/colorful-entry-generator.mjs --write",
+    "update:icons:colorful-entries": "node scripts/colorful-entry-generator.mjs --write"
   },
   "dependencies": {
     "@yakit-libs/color": "1.4.1",

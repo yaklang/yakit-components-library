@@ -22,22 +22,37 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "browser": "./dist/browser/index.js",
       "import": "./dist/index.js"
+    },
+    "./colorful": {
+      "types": "./dist/colorful/index.d.ts",
+      "browser": "./dist/browser/colorful/index.js",
+      "import": "./dist/colorful/index.js"
     },
     "./outline": {
       "types": "./dist/outline/index.d.ts",
+      "browser": "./dist/browser/outline/index.js",
       "import": "./dist/outline/index.js"
     },
     "./solid": {
       "types": "./dist/solid/index.d.ts",
+      "browser": "./dist/browser/solid/index.js",
       "import": "./dist/solid/index.js"
     },
     "./registry": {
       "types": "./dist/registry.d.ts",
+      "browser": "./dist/browser/registry.js",
       "import": "./dist/registry.js"
+    },
+    "./icon.css": {
+      "default": "./dist/icon.css"
     }
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css",
+    "dist/browser/**/*.js"
+  ],
   "engines": {
     "node": "^22.14.0 || ^24.0.0 || >=26.0.0"
   },

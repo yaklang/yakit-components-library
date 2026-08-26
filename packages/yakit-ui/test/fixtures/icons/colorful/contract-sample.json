@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "colorful-inventory-v1",
+  "policyId": "colorful-v1",
+  "groups": [
+    { "nodeId": "37150:33924", "name": "Primary menu" }
+  ],
+  "rows": [
+    {
+      "rowId": "37150:33924/37373:59879",
+      "groupNodeId": "37150:33924",
+      "componentNodeId": "37373:59879",
+      "figmaName": "Yakit",
+      "category": "primary-function-menu",
+      "rowDisposition": "canonical-new",
+      "publicExposure": "canonical",
+      "localFile": "colorful/37373-59879.svg",
+      "exportName": "YakitPrimaryMenuColorful",
+      "paintMode": "literal"
+    },
+    {
+      "rowId": "37150:33924/37373:59880",
+      "groupNodeId": "37150:33924",
+      "componentNodeId": "37373:59880",
+      "figmaName": "Yakit alias",
+      "category": "primary-function-menu",
+      "rowDisposition": "duplicate-colorful",
+      "publicExposure": "semantic-alias",
+      "canonicalComponentNodeId": "37373:59879",
+      "exportName": "YakitMenuColorful"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "fixtureVersion": 1,
+  "yakitSource": "app/renderer/src/main/src/assets/icon/outline.tsx at repository HEAD before migration",
+  "antPackage": "@ant-design/icons@4.8.0",
+  "antImplementation": "es/components/Icon.js",
+  "contract": {
+    "consumerPropsOwner": "span",
+    "defaultRole": "img",
+    "clickTabIndex": -1,
+    "rawSvgAcceptsProps": false,
+    "publicWrapperForwardsRef": false
+  },
+  "notes": "The fixture is self-contained so CI never reads the adjacent Yakit checkout. The P0 inner aria-hidden/focusable and forwarded span ref are deliberate improvements, not historical claims."
+}

@@ -1,0 +1,29 @@
+:where(.anticon.yakit-icon) {
+  display: inline-block;
+  color: var(
+    --yakit-icon-default-color,
+    var(--Colors-Use-Neutral-Text-1-Title, #353639)
+  );
+  font-style: normal;
+  line-height: 0;
+  text-align: center;
+  text-transform: none;
+  vertical-align: -0.125em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:where(.anticon.yakit-icon) > svg {
+  display: inline-block;
+}
+
+:where(.anticon.yakit-icon)[tabindex] {
+  cursor: pointer;
+}
+
+@keyframes yakitIconLoadingSpin_b1a35c158267 {
+  to {
+    transform: rotate(360deg);
+  }
+}

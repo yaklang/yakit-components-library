@@ -56,7 +56,9 @@ describe('Outline icon server rendering', () => {
       ),
     );
 
-    expect(markup.split(DEFAULT_ICON_COLOR)).toHaveLength(3);
+    expect(markup.split(DEFAULT_ICON_COLOR)).toHaveLength(5);
+    expect(markup.match(/--yakit-icon-default-color:/g)).toHaveLength(4);
+    expect(markup.match(/class="anticon yakit-icon"/g)).toHaveLength(4);
     expect(markup).toContain('color:#123456');
     expect(markup).toContain('color:#654321');
   });

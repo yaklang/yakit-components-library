@@ -11,8 +11,8 @@ export const PUBLIC_PACKAGES = [
   "@yakit-libs/yakit-ui-icons",
 ];
 export const ICON_PACKAGE_LIMITS = {
-  packedBytes: 250_000,
-  unpackedBytes: 1_500_000,
+  packedBytes: 600_000,
+  unpackedBytes: 3_000_000,
   fileCount: 25,
 };
 const POLICIES = {
@@ -33,6 +33,8 @@ const POLICIES = {
       "package/package.json",
       "package/dist/index.js",
       "package/dist/index.d.ts",
+      "package/dist/colorful/index.js",
+      "package/dist/colorful/index.d.ts",
       "package/dist/outline/index.js",
       "package/dist/outline/index.d.ts",
       "package/dist/solid/index.js",

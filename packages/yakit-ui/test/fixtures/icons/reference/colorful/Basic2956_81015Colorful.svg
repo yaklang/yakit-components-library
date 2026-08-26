@@ -1,0 +1,38 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" fill="#E7E7F5"/>
+<g id="Function Icons">
+<g clip-path="url(#clip0_1_85)">
+<path d="M-848 -1420C-848 -1433.25 -837.255 -1444 -824 -1444H464C477.255 -1444 488 -1433.25 488 -1420V2338C488 2351.25 477.255 2362 464 2362H-824C-837.255 2362 -848 2351.25 -848 2338V-1420Z" fill="#F8F9FA"/>
+<g id="Frame 308">
+<g id="Frame 308_2">
+<g id="Frame 468">
+<g id="Frame 468_2">
+<g id="Frame 468_3">
+<g id="Frame 4634">
+<g id="Basic/Outline/&#230;&#143;&#146;&#228;&#187;&#182;&#230;&#137;&#167;&#232;&#161;&#140;&#231;&#187;&#147;&#230;&#158;&#156;">
+<mask id="mask0_1_85" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect id="Rectangle 104" width="24" height="24" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_85)">
+<path id="Rectangle 785" d="M8 3H15C16.1046 3 17 3.89543 17 5V9.5M3 8V19C3 20.1046 3.89543 21 5 21H11.5" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 786" d="M8 6V3L3 8H6C7.10457 8 8 7.10457 8 6Z" stroke="#353639" stroke-width="1.5" stroke-linejoin="round"/>
+<path id="Vector 78" d="M6 11L14 11" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 79" d="M6 16L9 16" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Icon" d="M21.7877 13.7197C21.674 13.7256 21.5596 13.7285 21.4444 13.7285C19.737 13.7285 18.1794 13.0749 17 12C15.8205 13.0749 14.263 13.7285 12.5556 13.7285C12.4404 13.7285 12.326 13.7255 12.2123 13.7196C12.0737 14.2647 12 14.8364 12 15.4256C12 18.5887 14.1246 21.2464 17 22C19.8754 21.2464 22 18.5887 22 15.4256C22 14.8364 21.9263 14.2648 21.7877 13.7197Z" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Icon_2" d="M15.3335 17.1227L16.4446 18.2541L18.6668 15.9913" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_1_85">
+<path d="M-848 -1420C-848 -1433.25 -837.255 -1444 -824 -1444H464C477.255 -1444 488 -1433.25 488 -1420V2338C488 2351.25 477.255 2362 464 2362H-824C-837.255 2362 -848 2351.25 -848 2338V-1420Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>

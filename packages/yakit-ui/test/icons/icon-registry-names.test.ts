@@ -1,11 +1,13 @@
 import type { ComponentType } from 'react';
 import { describe, expect, it } from 'vitest';
 
+import colorfulManifest from '../../scripts/figma-colorful-icons-inventory.json';
 import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
 import solidManifest from '../../scripts/figma-solid-icons-inventory.json';
 import {
   assertUniqueFigmaNames,
   buildIconRegistry,
+  colorfulIconRegistry,
   iconRegistry,
   type IconNameCatalogEntry,
   outlineIconRegistry,
@@ -33,6 +35,9 @@ describe('Figma icon registry name validation', () => {
     );
     expect(solidIconRegistry.every(({ exportName }) => exportName.endsWith('Solid'))).toBe(true);
     expect(solidIconRegistry.some(({ exportName }) => exportName.endsWith('Filled'))).toBe(false);
+    expect(colorfulIconRegistry.every(({ exportName }) => exportName.endsWith('Colorful'))).toBe(
+      true,
+    );
   });
 
   it('derives every available Figma name by trimming outer whitespace only', () => {
@@ -60,7 +65,8 @@ describe('Figma icon registry name validation', () => {
   });
 
   it('keeps 604 non-null full Figma names unique while allowing exactly 94 leaf collisions', () => {
-    const fullNames = iconRegistry.flatMap(({ figmaName }) =>
+    const monochromeRegistry = [...outlineIconRegistry, ...solidIconRegistry];
+    const fullNames = monochromeRegistry.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
     );
     const leafOwners = new Map<string, string[]>();
@@ -74,6 +80,30 @@ describe('Figma icon registry name validation', () => {
     expect(new Set(fullNames)).toHaveLength(604);
     expect(collisions).toHaveLength(94);
     expect(collisions.every((owners) => owners.length === 2)).toBe(true);
+  });
+
+  it('maps all 296 colorful rows by unique export and source identity while preserving raw Figma names', () => {
+    const publicRows = colorfulManifest.rows.filter(({ publicExposure }) =>
+      ['canonical', 'semantic-alias'].includes(publicExposure),
+    );
+    const registryByExport = new Map(
+      colorfulIconRegistry.map((definition) => [definition.exportName, definition]),
+    );
+
+    expect(colorfulManifest.rows).toHaveLength(296);
+    expect(colorfulIconRegistry).toHaveLength(publicRows.length);
+    expect(new Set(colorfulIconRegistry.map(({ exportName }) => exportName))).toHaveLength(
+      colorfulIconRegistry.length,
+    );
+    expect(new Set(colorfulIconRegistry.map(({ sourceNodeId }) => sourceNodeId))).toHaveLength(
+      colorfulIconRegistry.length,
+    );
+    for (const row of publicRows) {
+      expect(registryByExport.get(row.exportName)?.figmaName, row.exportName).toBe(row.figmaName);
+    }
+    expect(
+      publicRows.filter(({ figmaName }) => figmaName === 'Basic/Solid/Web Fuzzer'),
+    ).toHaveLength(2);
   });
 
   it('rejects a duplicate full Figma name within one family', () => {
@@ -98,6 +128,19 @@ describe('Figma icon registry name validation', () => {
     expect(() =>
       buildIconRegistry({}, [entry('MissingOutlined', 'Outline/missing')], 'outline'),
     ).toThrow('Missing outline icon component for catalog export: MissingOutlined');
+  });
+
+  it('rejects duplicate source nodes even when export and Figma names differ', () => {
+    expect(() =>
+      buildIconRegistry(
+        { FirstOutlined: DummyIcon, SecondOutlined: DummyIcon },
+        [
+          entry('FirstOutlined', 'Outline/first'),
+          { ...entry('SecondOutlined', 'Outline/second'), sourceNodeId: 'FirstOutlined' },
+        ],
+        'outline',
+      ),
+    ).toThrow('Duplicate outline icon source node: FirstOutlined');
   });
 
   it('rejects a component export that is absent from the catalog', () => {

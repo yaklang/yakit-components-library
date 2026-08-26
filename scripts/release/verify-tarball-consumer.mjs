@@ -168,7 +168,7 @@ try {
   );
   await writeFile(
     path.join(fixture, "consumer.mjs"),
-    'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport "@yakit-libs/yakit-ui/style.css";\napplyThemeColors("light", getColors("light"));\nwindow.yakitUiExportCount = Object.keys(YakitUi).length + Number(Boolean(HomeOutlined));\n',
+    'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";\nimport "@yakit-libs/yakit-ui/style.css";\napplyThemeColors("light", getColors("light"));\nwindow.yakitUiExportCount = Object.keys(YakitUi).length + Object.keys(ColorfulIcons).length + Number(Boolean(HomeOutlined));\n',
   );
   await execute(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
     cwd: fixture,
@@ -178,7 +178,7 @@ try {
   await access(path.join(fixture, "dist/index.html"));
   await writeFile(
     path.join(fixture, "consumer.ts"),
-    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeSolid];\n',
+    'import * as YakitUi from "@yakit-libs/yakit-ui";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";\nimport { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";\nvoid [YakitUi, HomeOutlined, HomeSolid, ColorfulIcons];\n',
   );
   await writeFile(
     path.join(fixture, "tsconfig.json"),
@@ -299,7 +299,7 @@ try {
   );
   await writeFile(
     path.join(pnpmFixture, "consumer.mjs"),
-    'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\napplyThemeColors("light", getColors("light"));\nwindow.iconLoaded = Boolean(HomeOutlined);\n',
+    'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";\napplyThemeColors("light", getColors("light"));\nwindow.iconLoaded = Boolean(HomeOutlined) && Object.keys(ColorfulIcons).length > 0;\n',
   );
   await execute(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
     cwd: pnpmFixture,

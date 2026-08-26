@@ -35,16 +35,17 @@ const expectPrimaryPaint = (container: HTMLElement, expectedColor: string) => {
   const svgs = [...container.querySelectorAll<SVGSVGElement>('svg')];
   expect(svgs).toHaveLength(255);
   for (const svg of svgs) {
+    const iconName = (svg.parentElement as HTMLSpanElement).dataset.iconName;
     const primary = [
       ...svg.querySelectorAll<SVGElement>('[fill="currentColor"], [stroke="currentColor"]'),
     ];
-    expect(primary.length, svg.dataset.iconName).toBeGreaterThan(0);
+    expect(primary.length, iconName).toBeGreaterThan(0);
     for (const element of primary) {
       if (element.getAttribute('fill') === 'currentColor') {
-        expect(getComputedStyle(element).fill, svg.dataset.iconName).toBe(expectedColor);
+        expect(getComputedStyle(element).fill, iconName).toBe(expectedColor);
       }
       if (element.getAttribute('stroke') === 'currentColor') {
-        expect(getComputedStyle(element).stroke, svg.dataset.iconName).toBe(expectedColor);
+        expect(getComputedStyle(element).stroke, iconName).toBe(expectedColor);
       }
     }
   }
@@ -94,7 +95,9 @@ describe('Solid public component API', () => {
     const container = renderRegistry();
     expectPrimaryPaint(container, 'rgb(53, 54, 57)');
     for (const svg of container.querySelectorAll<SVGSVGElement>('svg')) {
-      expect(svg.style.color).toBe(DEFAULT_ICON_COLOR);
+      const root = svg.parentElement as HTMLSpanElement;
+      expect(svg.style.color).toBe('');
+      expect(root.style.getPropertyValue('--yakit-icon-default-color')).toBe(DEFAULT_ICON_COLOR);
     }
   });
 
@@ -128,9 +131,11 @@ describe('Solid public component API', () => {
   it('keeps size, accessibility, and intentional literal paints intact', () => {
     const container = renderRegistry({ 'aria-label': 'Solid icon', size: 32 });
     for (const svg of container.querySelectorAll<SVGSVGElement>('svg')) {
+      const root = svg.parentElement as HTMLSpanElement;
       expect(svg.getAttribute('width')).toBe('32');
       expect(svg.getAttribute('height')).toBe('32');
-      expect(svg.getAttribute('aria-hidden')).toBeNull();
+      expect(root.getAttribute('aria-label')).toBe('Solid icon');
+      expect(svg.getAttribute('aria-hidden')).toBe('true');
       expect(svg.getAttribute('focusable')).toBe('false');
     }
     expect(container.querySelector('[fill="#9CA3B1"]')).not.toBeNull();

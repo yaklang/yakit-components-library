@@ -1,0 +1,38 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" fill="#E7E7F5"/>
+<g id="Function Icons">
+<g clip-path="url(#clip0_1_85)">
+<path d="M-792 -1252C-792 -1265.25 -781.255 -1276 -768 -1276H520C533.255 -1276 544 -1265.25 544 -1252V2506C544 2519.25 533.255 2530 520 2530H-768C-781.255 2530 -792 2519.25 -792 2506V-1252Z" fill="#F8F9FA"/>
+<g id="Frame 308">
+<g id="Frame 308_2">
+<g id="Frame 468">
+<g id="Frame 468_2">
+<g id="Frame 468_3">
+<g id="Frame 4634">
+<g id="Basic/Outline/&#231;&#136;&#134;&#231;&#160;&#180;&#228;&#184;&#142;&#230;&#156;&#170;&#230;&#142;&#136;&#230;&#157;&#131;">
+<mask id="mask0_1_85" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect id="Rectangle 87" width="24" height="24" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_85)">
+<g id="Group 39">
+<circle id="Ellipse 143" cx="11.5" cy="13.5981" r="8" transform="rotate(30 11.5 13.5981)" stroke="#353639" stroke-width="1.5"/>
+<path id="Ellipse 146" d="M10.2541 8.75586C8.99872 9.0789 7.86907 9.88688 7.16972 11.0982C6.57554 12.1273 6.38881 13.2799 6.55947 14.3691" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Ellipse 145" d="M17 4.07183C17.8284 2.63695 19.6632 2.14533 21.0981 2.97375" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Rectangle 86" d="M12.5356 3.80383C13.0879 2.84724 14.3111 2.51949 15.2677 3.07178L18.7318 5.07178C19.6884 5.62406 20.0161 6.84724 19.4638 7.80383L18.9638 8.66985L12.0356 4.66985L12.5356 3.80383Z" stroke="#353639" stroke-width="1.5"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_1_85">
+<path d="M-792 -1252C-792 -1265.25 -781.255 -1276 -768 -1276H520C533.255 -1276 544 -1265.25 544 -1252V2506C544 2519.25 533.255 2530 520 2530H-768C-781.255 2530 -792 2519.25 -792 2506V-1252Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>

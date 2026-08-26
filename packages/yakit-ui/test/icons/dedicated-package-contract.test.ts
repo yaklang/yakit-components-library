@@ -22,6 +22,7 @@ const entryPairs = [
   ['.', './icons'],
   ['./outline', './icons/outline'],
   ['./solid', './icons/solid'],
+  ['./colorful', './icons/colorful'],
   ['./registry', './icons/registry'],
 ] as const;
 
@@ -116,7 +117,16 @@ describe('Dedicated yakit-ui-icons package', () => {
     expect(Object.keys(runtimeDependencies).sort()).toEqual(['@yakit-libs/color', 'react']);
     expect(iconsManifest.dependencies).toEqual({ '@yakit-libs/color': '1.4.1' });
     expect(runtimeDependencies.react).toMatch(/18\.2\.0/);
-    expect(iconsManifest.sideEffects).toBe(false);
+    expect(iconsManifest.sideEffects).toEqual(['**/*.css', 'dist/browser/**/*.js']);
+  });
+
+  it('does not publish an unproven bare-SVG raw surface', () => {
+    expect(Object.keys(iconsManifest.exports).some((subpath) => subpath.startsWith('./raw'))).toBe(
+      false,
+    );
+    expect(
+      Object.keys(coreManifest.exports).some((subpath) => subpath.startsWith('./icons/raw')),
+    ).toBe(false);
   });
 
   it('uses the color 1.4.1 runtime token contract without a CSS side-effect entry', () => {
@@ -174,7 +184,7 @@ describe('Dedicated yakit-ui-icons package', () => {
     expect(exportNames).not.toContain('HomeFilled');
   });
 
-  it.each(['.', './outline', './solid'])(
+  it.each(['.', './outline', './solid', './colorful'])(
     '%s excludes component and CSS side-effect imports',
     (subpath) => {
       const graph = collectRelativeModuleGraph(
@@ -196,6 +206,7 @@ describe('Dedicated yakit-ui-icons package', () => {
       configFile: false,
       logLevel: 'silent',
       build: {
+        lib: { entry, formats: ['es'] },
         minify: 'esbuild',
         write: false,
         rollupOptions: {
@@ -224,11 +235,54 @@ describe('Dedicated yakit-ui-icons package', () => {
 
     expect(Buffer.byteLength(code)).toBeLessThanOrEqual(15_000);
     expect(gzipSync(code).byteLength).toBeLessThanOrEqual(5_000);
+    expect(code).toContain('HomeOutlined');
     expect(code).not.toContain('AcademicCapOutlined');
     expect(code).not.toContain('HomeSolid');
     expect(code).not.toMatch(/(?:outlineIconRegistry|solidIconRegistry|iconRegistry)/);
     for (const dependency of forbiddenComponentDependencies) {
       expect(code, `single-icon bundle must not reference ${dependency}`).not.toContain(dependency);
     }
+  });
+
+  it('tree-shakes one fragment-bearing colorful icon from the dedicated subpath', async () => {
+    const entry = exportTarget(iconsRoot, iconsManifest, './colorful', 'import');
+    const result = await build({
+      configFile: false,
+      logLevel: 'silent',
+      build: {
+        lib: { entry, formats: ['es'] },
+        minify: 'esbuild',
+        write: false,
+        rollupOptions: {
+          external: (id) => id === 'react' || id.startsWith('react/'),
+          input: 'virtual:dedicated-colorful-icon-consumer',
+          plugins: [
+            {
+              name: 'dedicated-colorful-icon-consumer',
+              resolveId(id) {
+                return id === 'virtual:dedicated-colorful-icon-consumer' ? id : null;
+              },
+              load(id) {
+                if (id !== 'virtual:dedicated-colorful-icon-consumer') return null;
+                return `export { EdgeBrowserColorful } from ${JSON.stringify(entry)};`;
+              },
+            },
+          ],
+        },
+      },
+    });
+    const outputs = Array.isArray(result) ? result.flatMap(({ output }) => output) : result.output;
+    const code = outputs
+      .filter((output) => output.type === 'chunk')
+      .map((output) => output.code)
+      .join('\n');
+
+    expect(Buffer.byteLength(code)).toBeLessThanOrEqual(15_000);
+    expect(gzipSync(code).byteLength).toBeLessThanOrEqual(5_000);
+    expect(code).toContain('EdgeBrowserColorful');
+    expect(code).toContain('useId');
+    expect(code).not.toContain('ChromeBrowserColorful');
+    expect(code).not.toContain('MitmPrimaryMenuColorful');
+    expect(code).not.toMatch(/(?:colorfulIconRegistry|iconRegistry)/);
   });
 });

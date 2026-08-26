@@ -196,7 +196,7 @@ if (packageName === "@yakit-libs/yakit-ui-icons") {
     );
     await writeFile(
       path.join(iconsFixture, "consumer.mjs"),
-      'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";\napplyThemeColors("light", getColors("light"));\nwindow.iconCount = Number(Boolean(HomeOutlined)) + Number(Boolean(HomeSolid));\n',
+      'import { applyThemeColors, getColors } from "@yakit-libs/color/preview";\nimport { HomeOutlined } from "@yakit-libs/yakit-ui-icons";\nimport * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";\nimport { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";\napplyThemeColors("light", getColors("light"));\nwindow.iconCount = Number(Boolean(HomeOutlined)) + Number(Boolean(HomeSolid)) + Object.keys(ColorfulIcons).length;\n',
     );
     await run(process.execPath, ["node_modules/vite/bin/vite.js", "build"], {
       cwd: iconsFixture,

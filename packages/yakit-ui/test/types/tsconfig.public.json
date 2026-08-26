@@ -4,5 +4,9 @@
     "noEmit": true,
     "tsBuildInfoFile": "../../node_modules/.tmp/tsconfig.public-types.tsbuildinfo"
   },
-  "include": ["../../src/vite-env.d.ts", "light-icon-public.test.tsx"]
+  "include": [
+    "../../src/vite-env.d.ts",
+    "colorful-icon-public.test.tsx",
+    "light-icon-public.test.tsx"
+  ]
 }

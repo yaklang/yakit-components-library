@@ -1,5 +1,7 @@
 import { createIcon } from '../createIcon.js';
 
+export type { IconComponent, IconProps, IconRef, IconSvgProps } from '../types.js';
+
 import MailOutlinedSvg from './1-2087.svg?react';
 import LocationMarkerOutlinedSvg from './1-2089.svg?react';
 import ColorSwatchOutlinedSvg from './1-2091.svg?react';

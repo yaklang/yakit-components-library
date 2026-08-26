@@ -3,11 +3,20 @@ import { constants } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import { verifyIconCssGate } from '../../../yakit-ui-icons/scripts/verify-css-gate.mjs';
+
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const requiredFiles = [
   'dist/index.js',
   'dist/index.d.ts',
   'dist/index.css',
+  'dist/icon.css',
+  'dist/browser/icons/index.js',
+  'dist/browser/icons/outline/index.js',
+  'dist/browser/icons/solid/index.js',
+  'dist/browser/icons/colorful/index.js',
+  'dist/icons/colorful/index.js',
+  'dist/icons/colorful/index.d.ts',
   'dist/bin/yakit-ui-storybook.mjs',
   'storybook-static/index.html',
   'README.md',
@@ -48,6 +57,18 @@ if (manifest.bin?.['yakit-ui-storybook'] !== expected.bin) {
 if (manifest.exports?.['./style.css'] !== expected.css) {
   failures.push(`exports["./style.css"] must be ${expected.css}`);
 }
+if (manifest.exports?.['./icons/icon.css'] !== './dist/icon.css') {
+  failures.push('exports["./icons/icon.css"] must expose dist/icon.css');
+}
+if (JSON.stringify(manifest.sideEffects) !== JSON.stringify(['**/*.css', 'dist/browser/**/*.js'])) {
+  failures.push('sideEffects must contain only CSS and browser facade patterns');
+}
+if (
+  manifest.exports?.['./icons/colorful']?.import !== './dist/icons/colorful/index.js' ||
+  manifest.exports?.['./icons/colorful']?.types !== './dist/icons/colorful/index.d.ts'
+) {
+  failures.push('exports["./icons/colorful"] must expose JavaScript and declarations');
+}
 if (manifest.publishConfig?.access !== 'public') {
   failures.push('publishConfig.access must be public');
 }
@@ -60,6 +81,34 @@ if (manifest.license !== 'MIT') {
 if (manifest.dependencies?.['@yakit-libs/color'] !== '1.4.1') {
   failures.push('@yakit-libs/color must be pinned to 1.4.1');
 }
+failures.push(
+  ...(await verifyIconCssGate({
+    entries: [
+      {
+        exportName: 'MailOutlined',
+        specifier: '@yakit-libs/yakit-ui/icons',
+        subpath: './icons',
+      },
+      {
+        exportName: 'MailOutlined',
+        specifier: '@yakit-libs/yakit-ui/icons/outline',
+        subpath: './icons/outline',
+      },
+      {
+        exportName: 'MailSolid',
+        specifier: '@yakit-libs/yakit-ui/icons/solid',
+        subpath: './icons/solid',
+      },
+      {
+        exportName: 'MitmPrimaryMenuColorful',
+        specifier: '@yakit-libs/yakit-ui/icons/colorful',
+        subpath: './icons/colorful',
+      },
+    ],
+    packageName: '@yakit-libs/yakit-ui',
+    packageRoot,
+  })),
+);
 for (const includedPath of ['dist', 'storybook-static', 'README.md', 'LICENSE']) {
   if (!manifest.files?.includes(includedPath)) {
     failures.push(`files must include ${includedPath}`);

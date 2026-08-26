@@ -1,19 +1,21 @@
-import type { ComponentType } from 'react';
-
+import { colorfulIconNameCatalog } from './colorful/catalog.js';
+import * as ColorfulIcons from './colorful/index.js';
+import type { ColorfulIconCategory, ColorfulIconPaintMode } from './colorful/types.js';
 import { outlineIconNameCatalog, solidIconNameCatalog } from './figmaNameCatalog.js';
 import * as OutlineIcons from './outline/index.js';
 import * as SolidIcons from './solid/index.js';
-import type { IconProps } from './types.js';
+import type { IconComponent } from './types.js';
 
-export type IconFamily = 'outline' | 'solid';
+export type IconFamily = 'outline' | 'solid' | 'colorful';
+export type { ColorfulIconCategory, ColorfulIconPaintMode } from './colorful/types.js';
 export type IconSourceStatus =
   | 'current'
   | 'supplement'
   | 'unnamed-in-figma'
   | 'legacy-non-current-figma';
 
-export interface IconDefinition<TFamily extends IconFamily = IconFamily> {
-  Component: ComponentType<IconProps>;
+interface IconDefinitionBase<TFamily extends IconFamily> {
+  Component: IconComponent;
   exportName: string;
   family: TFamily;
   figmaName: string | null;
@@ -22,13 +24,27 @@ export interface IconDefinition<TFamily extends IconFamily = IconFamily> {
   sourceStatus: IconSourceStatus;
 }
 
-export interface IconNameCatalogEntry<TFamily extends IconFamily = IconFamily> {
+interface ColorfulIconMetadata {
+  category: ColorfulIconCategory;
+  paintMode: ColorfulIconPaintMode;
+}
+
+export type IconDefinition<TFamily extends IconFamily = IconFamily> = TFamily extends 'colorful'
+  ? IconDefinitionBase<'colorful'> & ColorfulIconMetadata
+  : IconDefinitionBase<TFamily>;
+
+interface IconNameCatalogEntryBase<TFamily extends IconFamily> {
   exportName: string;
   family: TFamily;
   figmaName: string | null;
   sourceNodeId: string;
   sourceStatus: IconSourceStatus;
 }
+
+export type IconNameCatalogEntry<TFamily extends IconFamily = IconFamily> =
+  TFamily extends 'colorful'
+    ? IconNameCatalogEntryBase<'colorful'> & ColorfulIconMetadata
+    : IconNameCatalogEntryBase<TFamily>;
 
 export const assertUniqueFigmaNames = (catalog: readonly IconNameCatalogEntry[]) => {
   const owners = new Map<string, string>();
@@ -45,12 +61,13 @@ export const assertUniqueFigmaNames = (catalog: readonly IconNameCatalogEntry[])
 };
 
 export const buildIconRegistry = <TFamily extends IconFamily>(
-  icons: Record<string, ComponentType<IconProps>>,
+  icons: Record<string, IconComponent>,
   catalog: readonly IconNameCatalogEntry[],
   family: TFamily,
 ): IconDefinition<TFamily>[] => {
   const components = new Map(Object.entries(icons));
   const catalogNames = new Set<string>();
+  const catalogSourceNodeIds = new Set<string>();
 
   const definitions = catalog.map((entry) => {
     if (entry.family !== family) {
@@ -62,6 +79,10 @@ export const buildIconRegistry = <TFamily extends IconFamily>(
       throw new Error(`Duplicate ${family} icon catalog export: ${entry.exportName}`);
     }
     catalogNames.add(entry.exportName);
+    if (catalogSourceNodeIds.has(entry.sourceNodeId)) {
+      throw new Error(`Duplicate ${family} icon source node: ${entry.sourceNodeId}`);
+    }
+    catalogSourceNodeIds.add(entry.sourceNodeId);
 
     const Component = components.get(entry.exportName);
     if (!Component) {
@@ -87,7 +108,8 @@ export const buildIconRegistry = <TFamily extends IconFamily>(
     throw new Error(`Uncatalogued ${family} icon exports: ${extraExports.join(', ')}`);
   }
 
-  return definitions;
+  // Runtime family validation above establishes the conditional generic branch.
+  return definitions as IconDefinition<TFamily>[];
 };
 
 assertUniqueFigmaNames([...outlineIconNameCatalog, ...solidIconNameCatalog]);
@@ -106,5 +128,16 @@ export const solidIconRegistry = buildIconRegistry<'solid'>(
   'solid',
 );
 
+/** Figma's multicolor, brand, status, avatar, and other literal-paint icon sets. */
+export const colorfulIconRegistry: IconDefinition<'colorful'>[] = buildIconRegistry<'colorful'>(
+  ColorfulIcons,
+  colorfulIconNameCatalog,
+  'colorful',
+);
+
 /** All Figma-originated icons that are currently included in this package. */
-export const iconRegistry = [...outlineIconRegistry, ...solidIconRegistry];
+export const iconRegistry: IconDefinition[] = [
+  ...outlineIconRegistry,
+  ...solidIconRegistry,
+  ...colorfulIconRegistry,
+];

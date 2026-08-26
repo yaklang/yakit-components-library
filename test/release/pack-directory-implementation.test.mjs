@@ -42,6 +42,8 @@ const createIconsTarball = (directory, { oversized = false } = {}) => {
     "LICENSE",
     "dist/index.js",
     "dist/index.d.ts",
+    "dist/colorful/index.js",
+    "dist/colorful/index.d.ts",
     "dist/outline/index.js",
     "dist/outline/index.d.ts",
     "dist/solid/index.js",
@@ -55,7 +57,7 @@ const createIconsTarball = (directory, { oversized = false } = {}) => {
     writeFileSync(file, entry);
   }
   if (oversized)
-    writeFileSync(join(packageRoot, "dist/payload.bin"), randomBytes(260_000));
+    writeFileSync(join(packageRoot, "dist/payload.bin"), randomBytes(610_000));
   writeFileSync(
     join(packageRoot, "package.json"),
     JSON.stringify({
@@ -95,7 +97,7 @@ test("pack verifier enforces the independent icons package size budget", async (
   createIconsTarball(directory, { oversized: true });
   await assert.rejects(
     () => verifyPackDirectory({ directory }),
-    /@yakit-libs\/yakit-ui-icons packedBytes exceeds 250000/,
+    /@yakit-libs\/yakit-ui-icons packedBytes exceeds 600000/,
   );
 });
 

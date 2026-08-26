@@ -1,0 +1,12 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-labelledby="icon_4633619924__semantic_0 icon_4633619924__semantic_1">
+  <title id="icon_4633619924__semantic_0">Fragment fixture</title>
+  <desc id="icon_4633619924__semantic_1">All supported local reference forms</desc>
+  <defs>
+    <linearGradient id="icon_4633619924__linearGradient_0"><stop stop-color="#FFFFFF" /></linearGradient>
+    <clipPath id="icon_4633619924__clip_0"><rect width="24" height="24" /></clipPath>
+    <path id="icon_4633619924__semantic_2" d="M0 0h24v24H0z" />
+  </defs>
+  <g clip-path="url(#icon_4633619924__clip_0)" style="fill: url('#icon_4633619924__linearGradient_0')">
+    <use href="#icon_4633619924__semantic_2" xlink:href="#icon_4633619924__semantic_2" />
+  </g>
+</svg>

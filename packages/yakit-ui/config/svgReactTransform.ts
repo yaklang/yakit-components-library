@@ -3,7 +3,7 @@ import svgr from 'vite-plugin-svgr';
 type SvgrPluginOptions = NonNullable<Parameters<typeof svgr>[0]>;
 type SvgrTemplate = NonNullable<NonNullable<SvgrPluginOptions['svgrOptions']>['template']>;
 
-const normalizedFragmentBase = /icon_[A-Za-z0-9_]+__[A-Za-z][A-Za-z0-9_]*_\d+/g;
+const normalizedFragmentBase = /icon_[A-Za-z0-9_]+__[A-Za-z][A-Za-z0-9_]*_\d+(?!\d|__)/g;
 
 interface AstNode {
   [key: string]: AstNode | AstNode[] | boolean | null | number | string | undefined;
@@ -13,7 +13,7 @@ interface AstNode {
 const stringLiteral = (value: string): AstNode => ({ type: 'StringLiteral', value });
 const identifier = (name: string): AstNode => ({ name, type: 'Identifier' });
 
-function dynamicFragmentValue(value: string): AstNode | undefined {
+function dynamicFragmentExpression(value: string): AstNode | undefined {
   const matches = [...value.matchAll(normalizedFragmentBase)];
   if (matches.length === 0) return undefined;
 
@@ -33,7 +33,7 @@ function dynamicFragmentValue(value: string): AstNode | undefined {
       (left, right) => ({ left, operator: '+', right, type: 'BinaryExpression' }),
       parts[0],
     );
-  return { expression, type: 'JSXExpressionContainer' };
+  return expression;
 }
 
 function appendInstanceSuffix(node: AstNode | AstNode[] | null | undefined): boolean {
@@ -50,20 +50,28 @@ function appendInstanceSuffix(node: AstNode | AstNode[] | null | undefined): boo
       !Array.isArray(value) &&
       value.type === 'StringLiteral'
     ) {
-      const replacement = dynamicFragmentValue(String(value.value));
-      if (replacement) {
-        node.value = replacement;
+      const expression = dynamicFragmentExpression(String(value.value));
+      if (expression) {
+        node.value = { expression, type: 'JSXExpressionContainer' };
         return true;
       }
     }
-    return false;
   }
 
   let changed = false;
-  for (const value of Object.values(node)) {
-    if (value && typeof value === 'object') {
-      changed = appendInstanceSuffix(value as AstNode | AstNode[]) || changed;
+  for (const [key, value] of Object.entries(node)) {
+    if (!value || typeof value !== 'object') continue;
+
+    if (!Array.isArray(value) && value.type === 'StringLiteral') {
+      const replacement = dynamicFragmentExpression(String(value.value));
+      if (replacement) {
+        node[key] = replacement;
+        changed = true;
+      }
+      continue;
     }
+
+    changed = appendInstanceSuffix(value as AstNode | AstNode[]) || changed;
   }
   return changed;
 }
