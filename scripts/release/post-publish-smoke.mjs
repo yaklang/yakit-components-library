@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
-import { spawn } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { createServer } from "node:net";
 import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { promisify } from "node:util";
+
+import { REMOVED_UI_RUNTIMES } from "./removed-ui-runtime-scan.mjs";
+
+const execute = promisify(execFile);
 
 function requiredEnvironment(name) {
   const value = process.env[name];
@@ -42,6 +47,30 @@ async function run(command, args, options = {}) {
         );
     });
   });
+}
+
+function findDependencies(tree, names, found = new Set()) {
+  for (const [name, dependency] of Object.entries(tree.dependencies ?? {})) {
+    if (names.includes(name)) found.add(name);
+    if (dependency && typeof dependency === "object") {
+      findDependencies(dependency, names, found);
+    }
+  }
+  return found;
+}
+
+async function assertRemovedUiRuntimesAreAbsent(directory) {
+  const { stdout } = await execute("npm", ["ls", "--all", "--json"], {
+    cwd: directory,
+    env: publicRegistryEnvironment(),
+    maxBuffer: 16 * 1024 * 1024,
+  });
+  const found = [...findDependencies(JSON.parse(stdout), REMOVED_UI_RUNTIMES)];
+  if (found.length > 0) {
+    throw new Error(
+      `consumer installation resolved removed UI runtimes: ${found.join(", ")}`,
+    );
+  }
 }
 
 const delay = (milliseconds) =>
@@ -272,13 +301,14 @@ await run(
     `${packageName}@${packageVersion}`,
     "react@18.3.1",
     "react-dom@18.3.1",
-    "antd@6.5.4",
-    "@ant-design/cssinjs@2.1.2",
+    "@types/react@18.3.24",
+    "@types/react-dom@18.3.7",
     "typescript@5.9.2",
     "vite@6.3.5",
   ],
   { cwd: fixture, env: publicRegistryEnvironment() },
 );
+await assertRemovedUiRuntimesAreAbsent(fixture);
 await writeFile(
   path.join(fixture, "index.html"),
   '<!doctype html><html><body><div id="app"></div><script type="module" src="/consumer.mjs"></script></body></html>\n',
@@ -305,7 +335,7 @@ await writeFile(
         module: "NodeNext",
         moduleResolution: "NodeNext",
         noEmit: true,
-        skipLibCheck: true,
+        skipLibCheck: false,
         strict: true,
         target: "ES2022",
       },
@@ -378,6 +408,7 @@ console.log(
       distTag,
       bundler: "passed",
       package: `${packageName}@${packageVersion}`,
+      removedUiRuntimes: "absent",
       storybook: "passed",
       typescript: "passed",
     },

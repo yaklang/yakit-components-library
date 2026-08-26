@@ -3,6 +3,11 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import test from "node:test";
 
+import {
+  findRemovedUiRuntimeReferences,
+  REMOVED_UI_RUNTIMES,
+  REMOVED_UI_RUNTIME_SCAN_POLICY,
+} from "../../scripts/release/removed-ui-runtime-scan.mjs";
 import { assertCredentialFree } from "./helpers/release-contracts.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
@@ -171,9 +176,9 @@ test("package declares the offline Storybook launcher bin", () => {
   );
 });
 
-test("shared UI runtimes are peers while package-owned runtimes are dependencies", () => {
+test("React runtimes are peers, removed UI runtimes are absent, and package-owned runtimes are dependencies", () => {
   const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
-  for (const name of ["react", "react-dom", "antd", "@ant-design/cssinjs"]) {
+  for (const name of ["react", "react-dom"]) {
     assert.ok(
       manifest.peerDependencies?.[name],
       `${name} must be a peer dependency`,
@@ -187,6 +192,20 @@ test("shared UI runtimes are peers while package-owned runtimes are dependencies
       undefined,
       `${name} must not be a direct runtime dependency`,
     );
+  }
+  for (const dependencyType of [
+    "dependencies",
+    "optionalDependencies",
+    "peerDependencies",
+    "devDependencies",
+  ]) {
+    for (const name of REMOVED_UI_RUNTIMES) {
+      assert.equal(
+        manifest[dependencyType]?.[name],
+        undefined,
+        `${name} must not be declared in ${dependencyType}`,
+      );
+    }
   }
   assert.equal(manifest.peerDependencies?.["@emotion/react"], undefined);
   assert.equal(manifest.devDependencies?.["@emotion/react"], undefined);
@@ -202,8 +221,12 @@ test("shared UI runtimes are peers while package-owned runtimes are dependencies
 
 test("yakit-ui generates its published theme CSS with color 1.4.1", () => {
   const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
-  const styleHook = readFileSync(
-    join(root, "packages/yakit-ui/src/hooks/useComponentStyle.ts"),
+  const publicEntry = readFileSync(
+    join(root, "packages/yakit-ui/src/index.ts"),
+    "utf8",
+  );
+  const baseStyles = readFileSync(
+    join(root, "packages/yakit-ui/src/styles/index.css"),
     "utf8",
   );
 
@@ -215,8 +238,9 @@ test("yakit-ui generates its published theme CSS with color 1.4.1", () => {
     manifest.scripts?.["build:lib"] ?? "",
     /^pnpm run generate:color-css && /,
   );
-  assert.match(styleHook, /import '\.\.\/styles\/color\.css';/);
-  assert.doesNotMatch(styleHook, /@yakit-libs\/color\/dist\/index\.css/);
+  assert.match(publicEntry, /import '\.\/styles\/index\.css';/);
+  assert.match(baseStyles, /@import '\.\/color\.css';/);
+  assert.doesNotMatch(baseStyles, /@yakit-libs\/color\/dist\/index\.css/);
 });
 
 test("public package prepack scripts verify outputs without rebuilding them", () => {
@@ -269,6 +293,102 @@ test("icon consumers install color directly and verify pnpm's strict layout", ()
   assert.match(consumerVerifier, /pnpmStrictLayout: "passed"/);
 });
 
+test("component consumers install only the package's current runtime contract", () => {
+  const readme = readFileSync(
+    join(root, "packages/yakit-ui/README.md"),
+    "utf8",
+  );
+  const consumerVerifiers = [
+    readFileSync(
+      join(root, "scripts/release/verify-tarball-consumer.mjs"),
+      "utf8",
+    ),
+    readFileSync(join(root, "scripts/release/post-publish-smoke.mjs"), "utf8"),
+  ];
+  const removedInstallArguments = ["ant" + "d@", "@ant-design/" + "cssinjs@"];
+
+  assert.match(readme, /pnpm add @yakit-libs\/yakit-ui react react-dom/);
+  for (const removed of removedInstallArguments) {
+    assert.equal(readme.includes(removed), false);
+    for (const verifier of consumerVerifiers) {
+      assert.equal(
+        verifier.includes(`"${removed}`),
+        false,
+        `${removed} must not be an npm install argument`,
+      );
+    }
+  }
+  for (const verifier of consumerVerifiers) {
+    assert.match(verifier, /skipLibCheck: false/);
+    assert.doesNotMatch(verifier, /skipLibCheck: true/);
+  }
+  assert.match(consumerVerifiers[0], /react-dom\/server/);
+  assert.match(consumerVerifiers[0], /ssr: "passed"/);
+});
+
+test("published-output scanner rejects removed runtime imports and resolutions", () => {
+  const firstRuntime = "ant" + "d";
+  const secondRuntime = "@ant-design/" + "cssinjs";
+
+  assert.deepEqual(
+    findRemovedUiRuntimeReferences(
+      `import value from "${firstRuntime}/es/input";`,
+    ),
+    [firstRuntime],
+  );
+  assert.deepEqual(
+    findRemovedUiRuntimeReferences(
+      `resolved /node_modules/${secondRuntime}/dist/index.js`,
+    ),
+    [secondRuntime],
+  );
+  assert.deepEqual(
+    findRemovedUiRuntimeReferences("const standard = true;"),
+    [],
+  );
+  assert.equal(REMOVED_UI_RUNTIME_SCAN_POLICY, "zero-token");
+  assert.deepEqual(
+    findRemovedUiRuntimeReferences(`migration note mentions ${firstRuntime}`),
+    [firstRuntime],
+    "the published-output policy intentionally rejects removed runtime tokens in plain text",
+  );
+  assert.deepEqual(
+    findRemovedUiRuntimeReferences("const commandPalette = true;"),
+    [],
+    "runtime names embedded inside unrelated words are not tokens",
+  );
+  for (const punctuation of [".", ",", ")", "]", ":"]) {
+    assert.deepEqual(
+      findRemovedUiRuntimeReferences(`(${firstRuntime}${punctuation}`),
+      [firstRuntime],
+      `the zero-token policy recognizes runtime names next to ${punctuation}`,
+    );
+  }
+});
+
+test("package verification hard-gates every final zero-dependency surface", () => {
+  const verifier = readFileSync(
+    join(root, "packages/yakit-ui/scripts/release/verify-package.mjs"),
+    "utf8",
+  );
+  for (const surface of [
+    "'.storybook'",
+    "'config'",
+    "'dist'",
+    "'src'",
+    "'storybook-static'",
+    "'pnpm-lock.yaml'",
+    "'vite.config.ts'",
+    "'vitest.config.ts'",
+    "'vitest.node.config.ts'",
+  ]) {
+    assert.ok(
+      verifier.includes(surface),
+      `package verifier must scan ${surface}`,
+    );
+  }
+});
+
 test("component CI generates SSR fixtures before browser hydration tests", () => {
   const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
   assert.match(
@@ -278,6 +398,10 @@ test("component CI generates SSR fixtures before browser hydration tests", () =>
   assert.match(
     manifest.scripts?.["test:ssr-fixtures"] ?? "",
     /test\/icons\/solid-icon-ssr-fixture\.test\.ts/,
+  );
+  assert.match(
+    manifest.scripts?.["test:ssr-fixtures"] ?? "",
+    /test\/ssr\/native-components-ssr\.test\.tsx/,
   );
   assert.match(
     manifest.scripts?.["test:ci"] ?? "",
@@ -293,8 +417,13 @@ test("pre-build types use source fixtures while built package contracts verify p
   const publicTypes = readJson(
     join(root, "packages/yakit-ui/test/types/tsconfig.public.json"),
   );
+  const libraryTypes = readJson(
+    join(root, "packages/yakit-ui/tsconfig.lib.json"),
+  );
 
   assert.doesNotMatch(manifest.scripts["test:types"], /build/i);
+  assert.match(manifest.scripts["build:lib"], /fix-declaration-imports\.mjs/);
+  assert.equal(libraryTypes.compilerOptions.declarationMap, false);
   assert.deepEqual(sourceTypes.include, [
     "../../src/vite-env.d.ts",
     "colorful-icon-public.test.tsx",

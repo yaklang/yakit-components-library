@@ -1,20 +1,22 @@
 import classNames from 'classnames';
 import { useMemo, type FC } from 'react';
 
-import useComponentStyle from '../../hooks/useComponentStyle';
+import useYakitConfig from '../../hooks/useYakitConfig';
 import Loading from '../../icons/loading';
+import { getYakitTokenVariables } from '../../styles/tokenVariables';
+import type { YakitCSSProperties } from '../../styles/tokenVariables';
 import { returnOrFalse } from '../../utils';
 import Wave from '../Animation/Wave';
 
 import { usePressed } from './hooks/usePressed';
-import buttonStyle from './style';
+import './style/index.css';
 import type { ButtonProps } from './type';
 
 const prefixCls = 'yakit-btn';
 
 export const Button: FC<ButtonProps> = ({
   type = 'primary',
-  size = 'medium',
+  size: sizeProp,
   shape = 'default',
   animation = 'wave',
   color = 'primary',
@@ -25,20 +27,22 @@ export const Button: FC<ButtonProps> = ({
   'aria-label': ariaLabel,
   style,
   icon,
-  disabled,
+  disabled: disabledProp,
   children,
   className,
   rootClassName,
   onClick,
 }) => {
-  const { wrapSSR, hashId } = useComponentStyle(prefixCls, buttonStyle);
+  const config = useYakitConfig();
+  const size = sizeProp ?? config.componentSize ?? 'medium';
+  const disabled = disabledProp ?? config.componentDisabled;
+  const buttonToken = config.token.YakitButton;
 
   const { pressed, bind } = usePressed();
   const buttonColor = error ? 'error' : color;
 
   const classes = classNames(
     prefixCls,
-    hashId,
     {
       [`${prefixCls}-${type}`]: type,
       [`${prefixCls}-${size}`]: size,
@@ -77,11 +81,28 @@ export const Button: FC<ButtonProps> = ({
     );
   }, [children, icon, loading]);
 
-  return wrapSSR(
+  return (
     <Wave animation={animation}>
       <button
-        style={style}
+        data-theme={config.mode}
+        style={
+          {
+            ...getYakitTokenVariables(config.token),
+            '--yakit-btn-border-radius': buttonToken?.borderRadius,
+            '--yakit-btn-font-size-lg': buttonToken?.fontSizeLG,
+            '--yakit-btn-font-size-md': buttonToken?.fontSizeMD,
+            '--yakit-btn-font-size-sm': buttonToken?.fontSizeSM,
+            '--yakit-btn-font-size-xl': buttonToken?.fontSizeXL,
+            '--yakit-btn-icon-gap': buttonToken?.iconGap,
+            '--yakit-btn-padding-lg': buttonToken?.paddingLG,
+            '--yakit-btn-padding-md': buttonToken?.paddingMD,
+            '--yakit-btn-padding-sm': buttonToken?.paddingSM,
+            '--yakit-btn-padding-xl': buttonToken?.paddingXL,
+            ...style,
+          } as YakitCSSProperties
+        }
         type={htmlType}
+        dir={config.direction}
         disabled={disabled || loading}
         aria-busy={loading || undefined}
         aria-label={ariaLabel}
@@ -94,6 +115,6 @@ export const Button: FC<ButtonProps> = ({
       >
         {childrenDom}
       </button>
-    </Wave>,
+    </Wave>
   );
 };

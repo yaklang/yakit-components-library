@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -34,15 +34,6 @@ function iconBrowserFacades() {
   };
 }
 
-function nodeCompatibleExternalPath(id: string) {
-  if (!id.startsWith('antd/es/')) return id;
-  const relativePath = id.slice('antd/'.length);
-  const antdRoot = path.join(packageRoot, 'node_modules/antd');
-  if (existsSync(path.join(antdRoot, `${relativePath}.js`))) return `${id}.js`;
-  if (existsSync(path.join(antdRoot, relativePath, 'index.js'))) return `${id}/index.js`;
-  throw new Error(`Cannot resolve a Node-compatible Ant Design ESM path for ${id}`);
-}
-
 export default defineConfig(({ mode }) => {
   const plugins = [react(), createSvgReactPlugin()];
 
@@ -65,17 +56,9 @@ export default defineConfig(({ mode }) => {
         },
         rollupOptions: {
           external: (id) =>
-            [
-              '@ant-design/cssinjs',
-              '@yakit-libs/color',
-              'antd',
-              'classnames',
-              'react',
-              'react-dom',
-            ].some((dependency) => id === dependency || id.startsWith(`${dependency}/`)),
-          output: {
-            paths: nodeCompatibleExternalPath,
-          },
+            ['@yakit-libs/color', 'classnames', 'react', 'react-dom'].some(
+              (dependency) => id === dependency || id.startsWith(`${dependency}/`),
+            ),
         },
       },
       plugins: [...plugins, iconBrowserFacades()],

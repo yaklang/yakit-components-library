@@ -1,11 +1,18 @@
-import { access, lstat, readFile, realpath } from 'node:fs/promises';
+import { access, lstat, readFile, readdir, realpath } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import {
+  findRemovedUiRuntimeReferences,
+  REMOVED_UI_RUNTIMES,
+  scanRemovedUiRuntimesInTrees,
+} from '../../../../scripts/release/removed-ui-runtime-scan.mjs';
+import { findNodeNextIncompatibleSpecifiers } from './fix-declaration-imports.mjs';
 import { verifyIconCssGate } from '../../../yakit-ui-icons/scripts/verify-css-gate.mjs';
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const repositoryRoot = path.resolve(packageRoot, '../..');
 const requiredFiles = [
   'dist/index.js',
   'dist/index.d.ts',
@@ -81,6 +88,37 @@ if (manifest.license !== 'MIT') {
 if (manifest.dependencies?.['@yakit-libs/color'] !== '1.4.1') {
   failures.push('@yakit-libs/color must be pinned to 1.4.1');
 }
+for (const dependencyType of [
+  'dependencies',
+  'optionalDependencies',
+  'peerDependencies',
+  'devDependencies',
+]) {
+  for (const name of REMOVED_UI_RUNTIMES) {
+    if (manifest[dependencyType]?.[name]) {
+      failures.push(`${name} must not be declared in ${dependencyType}`);
+    }
+  }
+}
+for (const includedPath of ['dist', 'storybook-static', 'README.md', 'LICENSE']) {
+  if (!manifest.files?.includes(includedPath)) {
+    failures.push(`files must include ${includedPath}`);
+  }
+}
+
+try {
+  const css = await readFile(path.join(packageRoot, expected.css), 'utf8');
+  if (
+    !css.includes('--Colors-Use-Neutral-Text-1-Title') ||
+    !css.includes(':root') ||
+    !/\[data-theme=(?:dark|"dark")\]/.test(css)
+  ) {
+    failures.push('dist/index.css must include the generated light and dark color 1.4.1 tokens');
+  }
+} catch {
+  failures.push('dist/index.css color token contract is unreadable');
+}
+
 failures.push(
   ...(await verifyIconCssGate({
     entries: [
@@ -109,23 +147,65 @@ failures.push(
     packageRoot,
   })),
 );
-for (const includedPath of ['dist', 'storybook-static', 'README.md', 'LICENSE']) {
-  if (!manifest.files?.includes(includedPath)) {
-    failures.push(`files must include ${includedPath}`);
+
+try {
+  const findings = await scanRemovedUiRuntimesInTrees([
+    path.join(packageRoot, '.storybook'),
+    path.join(packageRoot, 'config'),
+    path.join(packageRoot, 'dist'),
+    path.join(packageRoot, 'src'),
+    path.join(packageRoot, 'storybook-static'),
+  ]);
+  for (const finding of findings) {
+    failures.push(
+      `${path.relative(packageRoot, finding.file)} resolves removed UI runtimes: ${finding.runtimes.join(', ')}`,
+    );
+  }
+} catch {
+  failures.push('source, config, dist, and Storybook removed-runtime scan could not be completed');
+}
+
+for (const sourceFile of [
+  path.join(packageRoot, 'package.json'),
+  path.join(packageRoot, 'vite.config.ts'),
+  path.join(packageRoot, 'vitest.config.ts'),
+  path.join(packageRoot, 'vitest.node.config.ts'),
+  path.join(repositoryRoot, 'package.json'),
+  path.join(repositoryRoot, 'pnpm-lock.yaml'),
+]) {
+  try {
+    const runtimes = findRemovedUiRuntimeReferences(await readFile(sourceFile, 'utf8'));
+    if (runtimes.length > 0) {
+      failures.push(
+        `${path.relative(repositoryRoot, sourceFile)} contains removed UI runtime tokens: ${runtimes.join(', ')}`,
+      );
+    }
+  } catch {
+    failures.push(`${path.relative(repositoryRoot, sourceFile)} removed-runtime scan failed`);
   }
 }
 
 try {
-  const css = await readFile(path.join(packageRoot, expected.css), 'utf8');
-  if (
-    !css.includes('--Colors-Use-Neutral-Text-1-Title') ||
-    !css.includes(':root') ||
-    !/\[data-theme=(?:dark|"dark")\]/.test(css)
-  ) {
-    failures.push('dist/index.css must include the generated light and dark color 1.4.1 tokens');
+  const declarationFiles = [];
+  const collectDeclarations = async (directory) => {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      const absolute = path.join(directory, entry.name);
+      if (entry.isDirectory()) await collectDeclarations(absolute);
+      else if (entry.isFile() && entry.name.endsWith('.d.ts')) declarationFiles.push(absolute);
+    }
+  };
+  await collectDeclarations(path.join(packageRoot, 'dist'));
+  for (const declaration of declarationFiles) {
+    const source = await readFile(declaration, 'utf8');
+    const incompatible = findNodeNextIncompatibleSpecifiers(declaration, source);
+    if (incompatible.length > 0) {
+      failures.push(
+        `${path.relative(packageRoot, declaration)} contains NodeNext-incompatible relative specifiers: ${incompatible.join(', ')}`,
+      );
+    }
   }
 } catch {
-  failures.push('dist/index.css color token contract is unreadable');
+  failures.push('dist declaration NodeNext scan could not be completed');
 }
 
 if (failures.length > 0) {

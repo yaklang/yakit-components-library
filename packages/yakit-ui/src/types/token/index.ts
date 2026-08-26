@@ -1,8 +1,4 @@
-import type {
-  GlobalToken as AntdGlobalToken,
-  ThemeConfig,
-  ConfigProviderProps as AntdConfigProviderProps,
-} from 'antd';
+import type { ReactNode } from 'react';
 
 import type { YakitTheme } from '../theme';
 
@@ -15,15 +11,40 @@ export interface YakitThemeComponents {
   YakitTag?: Partial<YakitTagToken>;
 }
 
-// 扩展 antd 的 ThemeConfig
-export type CustomThemeConfig = Omit<ThemeConfig, 'components'> & {
-  components?: NonNullable<ThemeConfig['components']> & YakitThemeComponents;
-};
+export type YakitThemeMode = 'light' | 'dark';
 
-// 扩展 antd 的全局 token
-export type GlobalToken = AntdGlobalToken & YakitTheme & YakitThemeComponents;
+export interface CustomThemeConfig {
+  components?: YakitThemeComponents;
+  mode?: YakitThemeMode;
+  token?: Partial<YakitTheme>;
+}
 
-// ConfigProvider Props
-export interface YakitConfigProviderProps extends Omit<AntdConfigProviderProps, 'theme'> {
+export type GlobalToken = YakitTheme & YakitThemeComponents;
+
+export interface YakitLocale {
+  locale: string;
+  Input?: {
+    clear?: string;
+    showPassword?: string;
+    hidePassword?: string;
+  };
+  InputNumber?: {
+    decrement?: string;
+    increment?: string;
+  };
+  Search?: {
+    search?: string;
+    scope?: string;
+  };
+}
+
+export type YakitComponentSize = 'small' | 'medium' | 'large' | 'huge';
+
+export interface YakitConfigProviderProps {
+  children?: ReactNode;
+  componentDisabled?: boolean;
+  componentSize?: YakitComponentSize;
+  direction?: 'ltr' | 'rtl';
+  locale?: YakitLocale;
   theme?: CustomThemeConfig;
 }

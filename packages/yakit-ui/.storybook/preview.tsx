@@ -1,13 +1,24 @@
 import type { Preview } from '@storybook/react';
-import { theme } from 'antd';
-import type { Locale } from 'antd/es/locale';
-import enUS from 'antd/locale/en_US';
-import zhCN from 'antd/locale/zh_CN';
 import { useEffect } from 'react';
 
 import { ConfigProvider } from '../src/components';
+import type { YakitLocale } from '../src/components';
+import '../src/styles/index.css';
 
-const antdLocales: Record<'zh' | 'en', Locale> = { zh: zhCN, en: enUS };
+const locales: Record<'zh' | 'en', YakitLocale> = {
+  zh: {
+    locale: 'zh-CN',
+    Input: { clear: '清除', hidePassword: '隐藏密码', showPassword: '显示密码' },
+    InputNumber: { decrement: '减少', increment: '增加' },
+    Search: { scope: '搜索范围', search: '搜索' },
+  },
+  en: {
+    locale: 'en-US',
+    Input: { clear: 'Clear', hidePassword: 'Hide password', showPassword: 'Show password' },
+    InputNumber: { decrement: 'Decrease', increment: 'Increase' },
+    Search: { scope: 'Search scope', search: 'Search' },
+  },
+};
 
 export const globalTypes = {
   locale: {
@@ -52,16 +63,8 @@ const preview: Preview = {
       // 显式指定 locale 类型
       const locale = context.globals.locale as 'zh' | 'en';
 
-      // 根据主题选择算法
-      const algorithm = currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm;
-
       return (
-        <ConfigProvider
-          theme={{
-            algorithm,
-          }}
-          locale={antdLocales[locale]}
-        >
+        <ConfigProvider theme={{ mode: currentTheme }} locale={locales[locale]}>
           <div data-theme={currentTheme}>
             <Story />
           </div>

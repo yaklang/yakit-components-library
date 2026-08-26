@@ -1,8 +1,8 @@
-import type { InputRef } from 'antd';
 import { forwardRef } from 'react';
 import type React from 'react';
 
 import { Search, SearchTrigger } from '../Input/Search';
+import type { InputRef } from '../Input/type';
 
 import type { SearchInputProps } from './type';
 

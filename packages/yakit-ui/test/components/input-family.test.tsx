@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import ConfigProvider from '../../src/components/ConfigProvider';
 import Input from '../../src/components/Input';
 import InputNumber from '../../src/components/InputNumber';
 
@@ -115,6 +116,36 @@ describe('Input public composition', () => {
 
     expect(onSelectorChange).toHaveBeenCalledTimes(1);
     expect(onSearch).not.toHaveBeenCalled();
+  });
+
+  it('inherits native provider size, disabled, direction, locale, and token values', () => {
+    const container = render(
+      <ConfigProvider
+        componentDisabled
+        componentSize="small"
+        direction="rtl"
+        locale={{
+          locale: 'zh-CN',
+          Input: { clear: '清空内容' },
+          Search: { scope: '搜索类型', search: '立即搜索' },
+        }}
+        theme={{ token: { colorPrimary: '#123456' } }}
+      >
+        <Input allowClear defaultValue="value" />
+        <Input.Search selector={{ options: [{ label: 'A', value: 'a' }] }} variant="dropdown" />
+      </ConfigProvider>,
+    );
+    const input = container.querySelector<HTMLInputElement>('input');
+    const inputRoot = input?.closest<HTMLElement>('.yakit-input');
+    const search = container.querySelector<HTMLElement>('.yakit-search-input');
+
+    expect(input?.disabled).toBe(true);
+    expect(inputRoot?.dir).toBe('rtl');
+    expect(inputRoot?.classList.contains('yakit-input-small')).toBe(true);
+    expect(inputRoot?.style.getPropertyValue('--yakit-color-primary')).toBe('#123456');
+    expect(search?.classList.contains('yakit-search-input-small')).toBe(true);
+    expect(search?.querySelector('select')?.getAttribute('aria-label')).toBe('搜索类型');
+    expect(search?.querySelector('button')?.getAttribute('aria-label')).toBe('立即搜索');
   });
 
   it('searches the current value with the Ant Design input source on Enter', () => {
