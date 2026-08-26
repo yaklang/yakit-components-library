@@ -60,7 +60,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Validate branch and Changesets prerelease state
-        run: pnpm run release:preflight
+        # This branch is an isolated stable hotfix cut from the icon-only merge.
+        # Validate it with the same stable-release invariants as main.
+        run: GITHUB_REF_NAME=main pnpm run release:preflight
       - name: Select Changesets mode
         id: select
         uses: changesets/action/select-mode@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
@@ -127,7 +129,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Verify workspace and release state
-        run: pnpm run release:workspace-check && pnpm run release:preflight
+        run: pnpm run release:workspace-check && GITHUB_REF_NAME=main pnpm run release:preflight
       - name: Run release policy tests
         run: pnpm run release:test
       - name: Lint and type-check
