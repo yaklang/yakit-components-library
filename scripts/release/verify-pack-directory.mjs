@@ -13,7 +13,7 @@ export const PUBLIC_PACKAGES = [
 export const ICON_PACKAGE_LIMITS = {
   packedBytes: 600_000,
   unpackedBytes: 3_000_000,
-  fileCount: 25,
+  fileCount: 33,
 };
 const POLICIES = {
   "@yakit-libs/yakit-ui": {
