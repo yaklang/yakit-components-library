@@ -36,4 +36,10 @@ export type {
 } from './InputNumber';
 
 export { default as ConfigProvider } from './ConfigProvider';
-export type { YakitConfigProviderProps } from './ConfigProvider';
+export type {
+  CustomThemeConfig,
+  GlobalToken,
+  YakitConfigProviderProps,
+  YakitLocale,
+  YakitThemeMode,
+} from './ConfigProvider';

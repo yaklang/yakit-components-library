@@ -1,0 +1,186 @@
+.yakit-input-number {
+  align-items: center;
+  background-color: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background));
+  border: 1px solid var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border));
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title));
+  display: inline-flex;
+  font-family: Roboto, 'PingFang SC', sans-serif;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  width: 96px;
+}
+
+.yakit-input-number:hover:not(.yakit-input-number-disabled):not(.yakit-input-number-error) {
+  border-color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary));
+}
+
+.yakit-input-number:focus-within:not(.yakit-input-number-disabled) {
+  border-color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary));
+  box-shadow: 0 0 0 2px var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus));
+}
+
+.yakit-input-number.yakit-input-number-error {
+  border-color: var(--yakit-color-error-border, var(--Colors-Use-Error-Border));
+}
+.yakit-input-number.yakit-input-number-error:focus-within {
+  border-color: var(--yakit-color-error, var(--Colors-Use-Error-Primary));
+  box-shadow: 0 0 0 2px var(--yakit-color-error-focus, var(--Colors-Use-Error-Focus));
+}
+
+.yakit-input-number.yakit-input-number-disabled {
+  background-color: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover));
+  color: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable));
+  cursor: not-allowed;
+}
+
+.yakit-input-number-small {
+  height: 24px;
+  width: 80px;
+}
+.yakit-input-number-medium {
+  height: 28px;
+  width: 88px;
+}
+.yakit-input-number-large {
+  height: 32px;
+  width: 88px;
+}
+.yakit-input-number-huge {
+  height: 40px;
+  width: 96px;
+}
+
+.yakit-input-number-slot-input {
+  appearance: textfield;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-sizing: border-box;
+  color: inherit;
+  flex: 1 1 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  height: 100%;
+  letter-spacing: 0.1px;
+  line-height: 20px;
+  min-width: 0;
+  outline: 0;
+  padding: 2px 12px;
+  text-align: left;
+}
+
+.yakit-input-number-slot-input:disabled {
+  color: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable));
+  cursor: not-allowed;
+}
+.yakit-input-number-small .yakit-input-number-slot-input,
+.yakit-input-number-medium .yakit-input-number-slot-input {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+}
+
+.yakit-input-number-slot-prefix,
+.yakit-input-number-slot-suffix {
+  align-items: center;
+  color: var(--yakit-color-text-secondary, var(--Colors-Use-Neutral-Text-3-Secondary));
+  display: inline-flex;
+  flex: none;
+}
+.yakit-input-number-slot-prefix {
+  padding-left: 12px;
+}
+.yakit-input-number-slot-suffix {
+  padding-right: 12px;
+}
+
+.yakit-input-number-slot-actions {
+  align-self: stretch;
+  border-left: 1px solid var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border));
+  display: none;
+  flex: none;
+  flex-direction: column;
+  width: 28px;
+}
+.yakit-input-number-medium .yakit-input-number-slot-actions {
+  width: 24px;
+}
+.yakit-input-number-small .yakit-input-number-slot-actions {
+  width: 20px;
+}
+.yakit-input-number-controls-vertical:hover .yakit-input-number-slot-actions,
+.yakit-input-number-controls-vertical:focus-within .yakit-input-number-slot-actions {
+  display: flex;
+}
+
+.yakit-input-number-slot-action,
+.yakit-input-number-action {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--yakit-color-text-secondary, var(--Colors-Use-Neutral-Text-3-Secondary));
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+}
+.yakit-input-number-slot-action img,
+.yakit-input-number-action img {
+  display: block;
+  height: 12px;
+  object-fit: contain;
+  width: 12px;
+}
+.yakit-input-number-slot-action:disabled,
+.yakit-input-number-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.yakit-input-number-small .yakit-input-number-slot-action img {
+  height: 8px;
+  width: 8px;
+}
+.yakit-input-number-medium .yakit-input-number-slot-action img {
+  height: 10px;
+  width: 10px;
+}
+
+.yakit-input-number-mode-spinner {
+  width: 112px;
+}
+.yakit-input-number-mode-spinner .yakit-input-number-slot-input {
+  text-align: center;
+}
+.yakit-input-number-mode-spinner > .yakit-input-number-action {
+  align-self: stretch;
+  background-color: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover));
+  flex: 0 0 24px;
+}
+.yakit-input-number-mode-spinner > .yakit-input-number-action:first-child {
+  border-right: 1px solid var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border));
+  order: 0;
+}
+.yakit-input-number-mode-spinner > .yakit-input-number-action:last-child {
+  border-left: 1px solid var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border));
+  order: 2;
+}
+.yakit-input-number-mode-spinner.yakit-input-number-small > .yakit-input-number-action {
+  flex-basis: 20px;
+}
+.yakit-input-number-mode-spinner.yakit-input-number-huge {
+  width: 120px;
+}
+.yakit-input-number-mode-spinner.yakit-input-number-disabled > .yakit-input-number-action {
+  background-color: transparent;
+}

@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { findRemovedUiRuntimeReferences } from "./removed-ui-runtime-scan.mjs";
 import { sha256File } from "./verification-manifest.mjs";
 
 export const PUBLIC_PACKAGES = [
@@ -136,6 +137,11 @@ function scanTextEntry(tarball, entry, failures) {
     )
   )
     failures.push(`absolute developer path in ${entry}`);
+  const removedUiRuntimes = findRemovedUiRuntimeReferences(contents);
+  if (removedUiRuntimes.length > 0)
+    failures.push(
+      `removed UI runtime reference in ${entry}: ${removedUiRuntimes.join(", ")}`,
+    );
 }
 
 export async function verifyPackageTarball(tarball) {

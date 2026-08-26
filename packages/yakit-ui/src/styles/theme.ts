@@ -65,6 +65,7 @@ const yakitTheme = Object.freeze({
   colorTextSecondary: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
   colorTextHelp: 'var(--Colors-Use-Neutral-Text-4-Help-text)',
   colorTextBase: 'var(--Colors-Use-Basic-Background)',
+  colorText: 'var(--Colors-Use-Neutral-Text-1-Title)',
 
   /**
    * 颜色 Purple
@@ -119,6 +120,15 @@ const yakitTheme = Object.freeze({
   colorOrangeBgHover: 'var(--Colors-Use-Orange-Bg-Hover)',
   colorOrangeBorder: 'var(--Colors-Use-Orange-Border)',
   colorOrangeText: 'var(--Colors-Use-Orange-On-Primary)',
+
+  /**
+   * 颜色 Yellow
+   */
+  colorYellow: 'var(--Colors-Use-Yellow-Primary)',
+  colorYellowBg: 'var(--Colors-Use-Yellow-Bg)',
+  colorYellowBgHover: 'var(--Colors-Use-Yellow-Bg-Hover)',
+  colorYellowBorder: 'var(--Colors-Use-Yellow-Border)',
+  colorYellowText: 'var(--Colors-Use-Yellow-On-Primary)',
 
   /**
    * 背景颜色

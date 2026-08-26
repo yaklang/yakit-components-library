@@ -1,13 +1,8 @@
-import type { CSSInterpolation } from '@ant-design/cssinjs';
-import { useStyleRegister, useToken } from 'antd/es/theme/internal';
 import type { ReactElement } from 'react';
-
-import '../styles/color.css';
-import '../styles/reset.css';
 
 import type { GlobalToken } from '../types/token';
 
-import useNewToken from './useToken';
+import useYakitToken from './useYakitToken';
 
 interface ComponentStyleResult {
   hashId: string;
@@ -16,32 +11,15 @@ interface ComponentStyleResult {
 }
 
 const useComponentStyle = <T extends GlobalToken = GlobalToken>(
-  prefixCls: string,
-  genStyle: (prefixCls: string, token: T) => CSSInterpolation,
-  extraStyle?: CSSInterpolation,
+  _prefixCls: string,
+  _genStyle: (prefixCls: string, token: T) => unknown,
+  _extraStyle?: unknown,
 ): ComponentStyleResult => {
-  const [theme, token, hashId] = useToken();
-  const [_, localToken] = useNewToken();
-  useStyleRegister(
-    {
-      theme,
-      token,
-      path: [prefixCls],
-      hashId,
-    },
-    () => {
-      const baseStyle = genStyle(prefixCls, localToken as T);
-      if (extraStyle && typeof baseStyle === 'object' && !Array.isArray(baseStyle)) {
-        return { ...baseStyle, ...(extraStyle as object) };
-      }
-
-      return baseStyle;
-    },
-  );
+  const token = useYakitToken();
   return {
     wrapSSR: (node) => node,
-    hashId,
-    token: localToken as GlobalToken,
+    hashId: '',
+    token,
   };
 };
 

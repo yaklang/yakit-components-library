@@ -1,10 +1,12 @@
 import classNames from 'classnames';
 import type { FC, ReactNode, MouseEvent } from 'react';
 
-import useComponentStyle from '../../hooks/useComponentStyle';
+import useYakitConfig from '../../hooks/useYakitConfig';
+import { getYakitTokenVariables } from '../../styles/tokenVariables';
+import type { YakitCSSProperties } from '../../styles/tokenVariables';
 import type { BaseProps } from '../../types/common';
 
-import tagStyle from './style';
+import './style/index.css';
 
 export interface TagProps extends BaseProps {
   children?: ReactNode;
@@ -40,17 +42,34 @@ export const Tag: FC<TagProps> = ({
   className,
   style,
 }) => {
-  const { wrapSSR, hashId } = useComponentStyle(prefixCls, tagStyle);
+  const config = useYakitConfig();
+  const tagToken = config.token.YakitTag;
 
-  const classes = classNames(prefixCls, hashId, className, rootClassName, {
+  const classes = classNames(prefixCls, className, rootClassName, {
     [`${prefixCls}-bordered`]: !bordered,
     [`${prefixCls}-${size}`]: size,
     [`${prefixCls}-${color}`]: color,
   });
 
-  return wrapSSR(
-    <span className={classes} style={style}>
+  return (
+    <span
+      className={classes}
+      data-theme={config.mode}
+      dir={config.direction}
+      style={
+        {
+          ...getYakitTokenVariables(config.token),
+          '--yakit-tag-border-radius-lg': tagToken?.borderRadiusLG,
+          '--yakit-tag-border-radius-md': tagToken?.borderRadiusMD,
+          '--yakit-tag-border-radius-sm': tagToken?.borderRadiusSM,
+          '--yakit-tag-padding-lg': tagToken?.paddingLG,
+          '--yakit-tag-padding-md': tagToken?.paddingMD,
+          '--yakit-tag-padding-sm': tagToken?.paddingSM,
+          ...style,
+        } as YakitCSSProperties
+      }
+    >
       {children}
-    </span>,
+    </span>
   );
 };

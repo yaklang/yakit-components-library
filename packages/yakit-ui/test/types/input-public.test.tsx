@@ -39,7 +39,24 @@ export const inputNumberProps: InputNumberProps<string> = {
 };
 
 export const configProviderProps: YakitConfigProviderProps = {
-  theme: { token: { colorPrimary: '#F28C45' } },
+  locale: {
+    locale: 'zh-CN',
+    Input: { clear: '清除内容' },
+    Search: { search: '执行搜索' },
+  },
+  theme: { mode: 'dark', token: { colorPrimary: '#F28C45' } },
+};
+
+export const invalidConfigProviderAlgorithm: YakitConfigProviderProps = {
+  theme: {
+    // @ts-expect-error Ant Design theme algorithms are not part of the Yakit provider contract.
+    algorithm: 'darkAlgorithm',
+  },
+};
+
+export const invalidConfigProviderPrefix: YakitConfigProviderProps = {
+  // @ts-expect-error Yakit public class names are fixed and prefixCls is not supported.
+  prefixCls: 'custom',
 };
 
 export const editableSearchAliasProps: SearchInputProps = searchProps;
@@ -83,6 +100,16 @@ export const missingInputNumberMember = Input.Number;
 
 // @ts-expect-error Input.Group is intentionally not exposed.
 export const missingInputGroupMember = Input.Group;
+
+// @ts-expect-error custom string masks are not part of the owned native OTP contract.
+export const invalidOtpStringMask = <Input.OTP mask="*" />;
+
+export const invalidSearchActionArray = (
+  <Input.Search
+    // @ts-expect-error Search accepts one action element rather than an array of nested controls.
+    enterButton={[<button key="first">First</button>]}
+  />
+);
 
 // @ts-expect-error addonBefore is intentionally absent from standalone Yakit InputNumber.
 export const invalidInputNumberAddonBefore = <InputNumber addonBefore="prefix" />;

@@ -1,0 +1,80 @@
+.yakit-btn {
+  --yakit-btn-color-base: var(--yakit-color-primary);
+  --yakit-btn-color-text: var(--yakit-color-primary-text);
+  --yakit-btn-color-pressed: var(--yakit-color-primary-pressed);
+  --yakit-btn-color-hover: var(--yakit-color-primary-hover);
+  --yakit-btn-color-focus: var(--yakit-color-primary-focus);
+  --yakit-btn-color-bg: var(--yakit-color-primary-bg);
+  --yakit-btn-color-bg-hover: var(--yakit-color-primary-bg-hover);
+  --yakit-btn-color-border: var(--yakit-color-primary-border);
+  --yakit-btn-disabled-color: var(--yakit-color-basic-background);
+  --yakit-btn-disabled-bg: var(--yakit-btn-color-bg);
+  --wave-color: var(--yakit-btn-color-focus);
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--yakit-btn-border-radius, 4px);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  font-family: 'PingFang SC', sans-serif;
+  font-style: normal;
+  gap: var(--yakit-btn-icon-gap, 4px);
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.yakit-btn:not(:disabled):focus-visible {
+  outline: 2px solid var(--yakit-btn-color-focus);
+  outline-offset: 1px;
+}
+
+.yakit-btn-primary {
+  --yakit-btn-disabled-bg: var(--yakit-btn-color-border);
+  background: var(--yakit-btn-color-base);
+  color: var(--yakit-btn-color-text);
+}
+.yakit-btn-primary-pressed { background: var(--yakit-btn-color-pressed); }
+.yakit-btn-primary:hover:not(:disabled):not(.yakit-btn-loading):not(.yakit-btn-primary-pressed) {
+  background: var(--yakit-btn-color-hover);
+  color: var(--yakit-color-basic-background);
+}
+
+.yakit-btn-secondary1 { background: var(--yakit-btn-color-bg); color: var(--yakit-btn-color-base); }
+.yakit-btn-secondary1-pressed,
+.yakit-btn-secondary1:hover:not(:disabled):not(.yakit-btn-loading) {
+  background: var(--yakit-btn-color-bg-hover);
+  color: var(--yakit-btn-color-pressed);
+}
+.yakit-btn-secondary2 { background: var(--yakit-color-neutral-bg-hover); color: var(--yakit-color-text-title); }
+.yakit-btn-outline1 { background: var(--yakit-color-basic-background); border-color: var(--yakit-btn-color-border); color: var(--yakit-btn-color-base); }
+.yakit-btn-outline2 { background: var(--yakit-color-basic-background); border-color: var(--yakit-color-neutral-border); color: var(--yakit-color-text); }
+.yakit-btn-text1,
+.yakit-btn-text2,
+.yakit-btn-link1,
+.yakit-btn-link2 { background: transparent; border-color: transparent; }
+.yakit-btn-text1,
+.yakit-btn-link1 { color: var(--yakit-btn-color-base); }
+.yakit-btn-text2 { color: var(--yakit-color-text-title); }
+.yakit-btn-link2 { color: var(--yakit-color-text-secondary); }
+
+.yakit-btn-small { font-size: var(--yakit-btn-font-size-sm, 11px); height: 20px; line-height: 14px; padding: var(--yakit-btn-padding-sm, 3px 6px); }
+.yakit-btn-medium { font-size: var(--yakit-btn-font-size-md, 12px); height: 24px; line-height: 16px; padding: var(--yakit-btn-padding-md, 4px 8px); }
+.yakit-btn-large { font-size: var(--yakit-btn-font-size-lg, 14px); height: 28px; line-height: 20px; padding: var(--yakit-btn-padding-lg, 4px 12px); }
+.yakit-btn-huge { font-size: var(--yakit-btn-font-size-xl, 14px); height: 32px; line-height: 20px; padding: var(--yakit-btn-padding-xl, 6px 12px); }
+.yakit-btn-small svg { height: 12px; width: 12px; }
+.yakit-btn-medium svg { height: 16px; width: 16px; }
+.yakit-btn-large svg,
+.yakit-btn-huge svg { height: 20px; width: 20px; }
+.yakit-btn-icon-only { padding: 4px; }
+.yakit-btn-huge.yakit-btn-icon-only { padding: 6px; }
+.yakit-btn-circle { border-radius: 50%; }
+.yakit-btn-round { border-radius: 9999px; gap: 2px; }
+.yakit-btn-disabled,
+.yakit-btn-loading { background: var(--yakit-btn-disabled-bg); color: var(--yakit-btn-disabled-color); cursor: not-allowed; }
+.yakit-btn-color-success { --yakit-btn-color-base: var(--yakit-color-success); --yakit-btn-color-text: var(--yakit-color-success-text); --yakit-btn-color-pressed: var(--yakit-color-success-pressed); --yakit-btn-color-hover: var(--yakit-color-success-hover); --yakit-btn-color-focus: var(--yakit-color-success-focus); --yakit-btn-color-bg: var(--yakit-color-success-bg); --yakit-btn-color-bg-hover: var(--yakit-color-success-bg-hover); --yakit-btn-color-border: var(--yakit-color-success-border); }
+.yakit-btn-color-warning { --yakit-btn-color-base: var(--yakit-color-warning); --yakit-btn-color-text: var(--yakit-color-warning-text); --yakit-btn-color-pressed: var(--yakit-color-warning-pressed); --yakit-btn-color-hover: var(--yakit-color-warning-hover); --yakit-btn-color-focus: var(--yakit-color-warning-focus); --yakit-btn-color-bg: var(--yakit-color-warning-bg); --yakit-btn-color-bg-hover: var(--yakit-color-warning-bg-hover); --yakit-btn-color-border: var(--yakit-color-warning-border); }
+.yakit-btn-color-error { --yakit-btn-color-base: var(--yakit-color-error); --yakit-btn-color-text: var(--yakit-color-error-text); --yakit-btn-color-pressed: var(--yakit-color-error-pressed); --yakit-btn-color-hover: var(--yakit-color-error-hover); --yakit-btn-color-focus: var(--yakit-color-error-focus); --yakit-btn-color-bg: var(--yakit-color-error-bg); --yakit-btn-color-bg-hover: var(--yakit-color-error-bg-hover); --yakit-btn-color-border: var(--yakit-color-error-border); }
+.yakit-btn > span { white-space: nowrap; }
+.yakit-btn-icon { height: 100%; width: 100%; }
+.yakit-btn-icon-end { flex-direction: row-reverse; }

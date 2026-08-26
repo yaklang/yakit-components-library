@@ -1,0 +1,295 @@
+.yakit-input {
+  --yakit-input-bg: var(--yakit-color-basic-background, #fff);
+  --yakit-input-border: var(--yakit-color-neutral-border, #e6e8ed);
+  --yakit-input-disabled: var(--yakit-color-neutral-disable, #c0c6d1);
+  --yakit-input-disabled-bg: var(--yakit-color-neutral-bg-hover, #eef0f3);
+  --yakit-input-error: var(--yakit-color-error, #f15757);
+  --yakit-input-error-border: var(--yakit-color-error-border, #f8abab);
+  --yakit-input-error-ring: var(--yakit-color-error-focus, #fcdada);
+  --yakit-input-primary: var(--yakit-color-primary, #f28c45);
+  --yakit-input-primary-ring: var(--yakit-color-primary-focus, #fce5d6);
+  --yakit-input-text: var(--yakit-color-text-title, #353639);
+  align-items: center;
+  background: var(--yakit-input-bg);
+  border: 1px solid var(--yakit-input-border);
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--yakit-input-text);
+  display: inline-flex;
+  font-family: 'PingFang SC', sans-serif;
+  min-width: 0;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  width: 100%;
+}
+
+input.yakit-input {
+  display: block;
+}
+
+.yakit-input:hover:not(.yakit-input-disabled):not(.yakit-input-error),
+.yakit-input-focused:not(.yakit-input-disabled):not(.yakit-input-error),
+.yakit-input:focus:not(.yakit-input-disabled):not(.yakit-input-error),
+.yakit-input:focus-within:not(.yakit-input-disabled):not(.yakit-input-error) {
+  border-color: var(--yakit-input-primary);
+}
+
+.yakit-input-focused:not(.yakit-input-disabled):not(.yakit-input-error),
+.yakit-input:focus:not(.yakit-input-disabled):not(.yakit-input-error),
+.yakit-input:focus-within:not(.yakit-input-disabled):not(.yakit-input-error) {
+  box-shadow: 0 0 0 2px var(--yakit-input-primary-ring);
+}
+
+.yakit-input-error {
+  border-color: var(--yakit-input-error-border);
+}
+
+.yakit-input-error:hover,
+.yakit-input-error:focus,
+.yakit-input-error:focus-within {
+  border-color: var(--yakit-input-error);
+}
+
+.yakit-input-error:focus,
+.yakit-input-error:focus-within {
+  box-shadow: 0 0 0 2px var(--yakit-input-error-ring);
+}
+
+.yakit-input-disabled,
+.yakit-input:disabled {
+  background-color: var(--yakit-input-disabled-bg);
+  border-color: var(--yakit-input-border);
+  color: var(--yakit-input-disabled);
+  cursor: not-allowed;
+}
+
+.yakit-input-small {
+  font-size: 12px;
+  height: 24px;
+  line-height: 16px;
+  padding: 3px 8px;
+}
+
+.yakit-input-medium {
+  font-size: 12px;
+  height: 28px;
+  line-height: 16px;
+  padding: 5px 12px;
+}
+
+.yakit-input-large {
+  font-size: 14px;
+  height: 32px;
+  line-height: 20px;
+  padding: 5px 12px;
+}
+
+.yakit-input-slot-input,
+.yakit-input-slot-textarea {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: inherit;
+  flex: 1 1 auto;
+  font: inherit;
+  height: 100%;
+  min-width: 0;
+  outline: none;
+  padding: 0;
+}
+
+.yakit-input::placeholder,
+.yakit-input-slot-input::placeholder,
+.yakit-input-slot-textarea::placeholder {
+  color: var(--yakit-input-disabled);
+  opacity: 1;
+}
+
+.yakit-input-slot-prefix,
+.yakit-input-slot-suffix {
+  align-items: center;
+  color: var(--yakit-color-text-secondary, #868c97);
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.yakit-input-control-clear-icon,
+.yakit-input-password-toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--yakit-color-text-secondary, #868c97);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font: inherit;
+  justify-content: center;
+  padding: 0 2px;
+}
+
+.yakit-input-control-show-count-suffix {
+  color: var(--yakit-color-text-help, #9ca3b1);
+  flex: 0 0 auto;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.yakit-input-borderless {
+  border-color: transparent;
+}
+
+.yakit-input-filled {
+  background: var(--yakit-color-neutral-bg, #f8f9fa);
+  border-color: transparent;
+}
+
+.yakit-input-underlined {
+  border-color: transparent transparent var(--yakit-input-border);
+  border-radius: 0;
+}
+
+.yakit-input-textarea {
+  height: auto;
+  min-height: 32px;
+  resize: vertical;
+}
+
+.yakit-input-textarea.yakit-input-small {
+  min-height: 24px;
+}
+
+.yakit-input-textarea.yakit-input-medium {
+  min-height: 28px;
+}
+
+textarea.yakit-input-textarea,
+.yakit-input-slot-textarea {
+  resize: vertical;
+}
+
+.yakit-input-textarea-wrapper {
+  align-items: flex-start;
+  position: relative;
+}
+
+.yakit-input-textarea-wrapper .yakit-input-control-show-count-suffix {
+  align-self: flex-end;
+}
+
+.yakit-input-slot-root:has(.yakit-input-select) {
+  padding-inline: 0;
+}
+
+.yakit-input-slot-root:has(.yakit-input-select) .yakit-input-slot-input {
+  padding-inline: 12px;
+}
+
+.yakit-input-slot-root:has(.yakit-input-select) .yakit-input-slot-prefix,
+.yakit-input-slot-root:has(.yakit-input-select) .yakit-input-slot-suffix {
+  align-self: stretch;
+  height: 100%;
+}
+
+.yakit-input-select {
+  align-items: center;
+  align-self: stretch;
+  background: var(--yakit-color-neutral-bg, #f8f9fa);
+  border: 0;
+  color: var(--yakit-input-text);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  gap: 8px;
+  justify-content: center;
+  padding-inline: 12px;
+  white-space: nowrap;
+}
+
+.yakit-input-select:disabled {
+  color: var(--yakit-input-disabled);
+  cursor: not-allowed;
+}
+
+.yakit-input-select:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--yakit-input-primary-ring);
+  outline: 1px solid var(--yakit-input-primary);
+  outline-offset: -1px;
+}
+
+.yakit-input-select-icon {
+  display: block;
+  height: 4.5px;
+  width: 8px;
+}
+
+.yakit-input-slot-prefix .yakit-input-select {
+  border-radius: 3px 0 0 3px;
+  border-right: 1px solid var(--yakit-input-border);
+}
+
+.yakit-input-slot-suffix .yakit-input-select {
+  border-left: 1px solid var(--yakit-input-border);
+  border-radius: 0 3px 3px 0;
+}
+
+.yakit-input-otp {
+  background: transparent;
+  border: 0;
+  display: inline-flex;
+  gap: 8px;
+  height: auto;
+  padding: 0;
+  width: auto;
+}
+
+.yakit-input-otp-slot-input {
+  background: var(--yakit-input-bg);
+  border: 1px solid var(--yakit-input-border);
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--yakit-input-text);
+  font: inherit;
+  outline: none;
+  text-align: center;
+  width: 32px;
+}
+
+.yakit-input-small .yakit-input-otp-slot-input {
+  height: 24px;
+  width: 24px;
+}
+
+.yakit-input-medium .yakit-input-otp-slot-input {
+  height: 28px;
+  width: 28px;
+}
+
+.yakit-input-large .yakit-input-otp-slot-input {
+  height: 32px;
+}
+
+.yakit-input-otp-slot-input:hover {
+  border-color: var(--yakit-input-primary);
+}
+
+.yakit-input-otp-slot-input:focus {
+  border-color: var(--yakit-input-primary);
+  box-shadow: 0 0 0 2px var(--yakit-input-primary-ring);
+}
+
+.yakit-input-error .yakit-input-otp-slot-input {
+  border-color: var(--yakit-input-error-border);
+}
+
+.yakit-input-disabled .yakit-input-otp-slot-input {
+  background: var(--yakit-input-disabled-bg);
+  color: var(--yakit-input-disabled);
+}
+
+.yakit-input-otp-slot-separator {
+  align-items: center;
+  display: inline-flex;
+}

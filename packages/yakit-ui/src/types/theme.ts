@@ -63,6 +63,7 @@ export interface YakitTheme {
   colorTextSecondary: string;
   colorTextHelp: string;
   colorTextBase: string;
+  colorText: string;
 
   /**
    * 颜色 Purple

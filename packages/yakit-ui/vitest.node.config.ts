@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [createSvgReactPlugin()],
   test: {
     environment: 'node',
-    include: ['test/icons/**/*.test.ts'],
+    include: ['test/icons/**/*.test.ts', 'test/ssr/**/*.test.tsx'],
   },
 });

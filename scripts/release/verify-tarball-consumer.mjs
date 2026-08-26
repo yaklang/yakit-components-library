@@ -16,8 +16,33 @@ import process from "node:process";
 import { promisify } from "node:util";
 
 import { findPackageTarball } from "./verify-pack-directory.mjs";
+import { REMOVED_UI_RUNTIMES } from "./removed-ui-runtime-scan.mjs";
 
 const execute = promisify(execFile);
+
+function findDependencies(tree, names, found = new Set()) {
+  for (const [name, dependency] of Object.entries(tree.dependencies ?? {})) {
+    if (names.includes(name)) found.add(name);
+    if (dependency && typeof dependency === "object") {
+      findDependencies(dependency, names, found);
+    }
+  }
+  return found;
+}
+
+async function assertRemovedUiRuntimesAreAbsent(directory) {
+  const { stdout } = await execute("npm", ["ls", "--all", "--json"], {
+    cwd: directory,
+    env: publicRegistryEnvironment(),
+    maxBuffer: 16 * 1024 * 1024,
+  });
+  const found = [...findDependencies(JSON.parse(stdout), REMOVED_UI_RUNTIMES)];
+  if (found.length > 0) {
+    throw new Error(
+      `consumer installation resolved removed UI runtimes: ${found.join(", ")}`,
+    );
+  }
+}
 
 function publicRegistryEnvironment() {
   const environment = { ...process.env };
@@ -151,8 +176,8 @@ try {
       "@yakit-libs/color@1.4.1",
       "react@18.3.1",
       "react-dom@18.3.1",
-      "antd@6.5.4",
-      "@ant-design/cssinjs@2.1.2",
+      "@types/react@18.3.24",
+      "@types/react-dom@18.3.7",
       "typescript@5.9.2",
       "vite@6.3.5",
     ],
@@ -162,6 +187,7 @@ try {
       maxBuffer: 16 * 1024 * 1024,
     },
   );
+  await assertRemovedUiRuntimesAreAbsent(fixture);
   await writeFile(
     path.join(fixture, "index.html"),
     '<!doctype html><html><body><div id="app"></div><script type="module" src="/consumer.mjs"></script></body></html>\n',
@@ -189,7 +215,7 @@ try {
           module: "NodeNext",
           moduleResolution: "NodeNext",
           noEmit: true,
-          skipLibCheck: true,
+          skipLibCheck: false,
           strict: true,
           target: "ES2022",
         },
@@ -207,6 +233,31 @@ try {
       env: publicRegistryEnvironment(),
     },
   );
+  await writeFile(
+    path.join(fixture, "ssr-consumer.mjs"),
+    [
+      'import { createElement } from "react";',
+      'import { renderToString } from "react-dom/server";',
+      'import { Button, ConfigProvider, Input, InputNumber } from "@yakit-libs/yakit-ui";',
+      'const tree = createElement(ConfigProvider, { componentSize: "large", theme: { mode: "dark" } }, createElement("main", null, createElement(Button, null, "Submit"), createElement(Input, { defaultValue: "value" }), createElement(Input.Search, { defaultValue: "query" }), createElement(InputNumber, { defaultValue: 7 })));',
+      "const markup = renderToString(tree);",
+      'if (!markup.includes("yakit-btn") || !markup.includes("yakit-input") || !markup.includes("yakit-input-number") || markup.includes("ant-")) throw new Error("installed package SSR markup is invalid");',
+      "process.stdout.write(markup);",
+      "",
+    ].join("\n"),
+  );
+  const { stdout: ssrMarkup } = await execute(
+    process.execPath,
+    ["ssr-consumer.mjs"],
+    {
+      cwd: fixture,
+      env: publicRegistryEnvironment(),
+      maxBuffer: 4 * 1024 * 1024,
+    },
+  );
+  if (!ssrMarkup.includes("yakit-search-input")) {
+    throw new Error("installed package SSR smoke did not render Input.Search");
+  }
 
   const installedPackage = path.join(
     fixture,
@@ -264,7 +315,9 @@ try {
     colorProbe.darkBase !== "#c8d0dd" ||
     colorProbe.darkToken !== "var(--yakit-colors-Neutral-80)"
   )
-    throw new Error("installed @yakit-libs/color 1.4.1 token contract is invalid");
+    throw new Error(
+      "installed @yakit-libs/color 1.4.1 token contract is invalid",
+    );
 
   const pnpmFixture = path.join(fixture, "pnpm-strict-icons");
   await mkdir(pnpmFixture);
@@ -363,7 +416,9 @@ try {
         bundler: "passed",
         package: `${installedManifest.name}@${installedManifest.version}`,
         iconsPackage: `${installedIconsManifest.name}@${installedIconsManifest.version}`,
+        removedUiRuntimes: "absent",
         pnpmStrictLayout: "passed",
+        ssr: "passed",
         storybook: "passed",
         typescript: "passed",
       },
