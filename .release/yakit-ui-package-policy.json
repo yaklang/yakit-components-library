@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "package": "@yakit-libs/yakit-ui",
-  "sourceCommit": "32a942958e03b6c8cb00fbe9f5065a1afd730147",
+  "sourceCommit": "cc577a0629e11b2892935c6b787858cde5a8ecd7",
   "baseline": {
-    "packedBytes": 2588581,
-    "unpackedBytes": 8781264,
-    "fileCount": 170
+    "packedBytes": 3364349,
+    "unpackedBytes": 11593482,
+    "fileCount": 192
   },
   "limits": {
-    "packedBytes": 2847439,
-    "unpackedBytes": 9659390,
-    "fileCount": 187
+    "packedBytes": 3700783,
+    "unpackedBytes": 12752830,
+    "fileCount": 211
   }
 }
