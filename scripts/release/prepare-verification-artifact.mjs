@@ -49,7 +49,12 @@ async function readArtifactMetadata(repository, artifactId, token) {
 }
 
 async function resolveDistTag(version, sourceRef) {
-  if (sourceRef === "refs/heads/main") {
+  // The icon-only 0.2.1 hotfix is intentionally cut from its pre/* trigger
+  // branch while remaining a stable latest-tag release.
+  if (
+    sourceRef === "refs/heads/main" ||
+    sourceRef === "refs/heads/pre/icon-release-0.2.1"
+  ) {
     if (version.includes("-"))
       throw new Error("main may only release a stable package version");
     return "latest";
