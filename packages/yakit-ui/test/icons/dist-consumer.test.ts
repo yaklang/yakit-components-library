@@ -80,6 +80,6 @@ describe('Published icon dist consumer', () => {
     ]) {
       expect(declaration, field).toContain(field);
     }
-    expect(declaration).toContain("export type IconFamily = 'outline' | 'solid'");
+    expect(declaration).toContain("export type IconFamily = 'outline' | 'solid' | 'colorful';");
   });
 });

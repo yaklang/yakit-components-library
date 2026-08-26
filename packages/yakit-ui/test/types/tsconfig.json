@@ -6,6 +6,8 @@
   },
   "include": [
     "../../src/vite-env.d.ts",
+    "colorful-icon-public.test.tsx",
+    "icon-ant-compat-public.test.tsx",
     "icon-public.test.tsx",
     "input-public.test.tsx",
     "solid-icon-public.test.tsx"

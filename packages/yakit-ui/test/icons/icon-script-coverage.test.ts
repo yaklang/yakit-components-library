@@ -29,8 +29,11 @@ describe('icon package script coverage', () => {
     expect(scripts['audit:icons:solid']).toContain('figma-solid-icons-inventory.json');
     expect(scripts['audit:icons:solid']).toContain('figma-solid-raw-provenance-v1.json');
     expect(scripts['audit:icons:solid']).toContain('figma-solid-placement-provenance-v1.json');
+    expect(scripts['audit:icons:colorful']).toBe(
+      'node scripts/colorful-audit.mjs && node scripts/colorful-entry-generator.mjs',
+    );
     expect(scripts['audit:icons']).toBe(
-      'pnpm run audit:icons:outline && pnpm run audit:icons:solid',
+      'pnpm run audit:icons:outline && pnpm run audit:icons:solid && pnpm run audit:icons:colorful',
     );
   });
 

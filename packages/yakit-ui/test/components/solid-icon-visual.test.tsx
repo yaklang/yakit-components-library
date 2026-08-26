@@ -104,7 +104,9 @@ const localSourceForColor = (nodeId: string, color: string) => {
   const container = render(<definition.Component color={color} size={20} />);
   const svg = container.querySelector('svg');
   if (!svg) throw new Error(`Missing rendered SVG for ${nodeId}`);
-  return new XMLSerializer().serializeToString(svg);
+  const standaloneSvg = svg.cloneNode(true) as SVGSVGElement;
+  standaloneSvg.style.color = getComputedStyle(svg).color;
+  return new XMLSerializer().serializeToString(standaloneSvg);
 };
 
 const inkMetric = (pixels: Uint8ClampedArray): InkMetric => {

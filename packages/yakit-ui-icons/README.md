@@ -1,6 +1,6 @@
 # @yakit-libs/yakit-ui-icons
 
-Yakit UI 的 React 图标包。它不依赖 Ant Design、`@ant-design/cssinjs`、Emotion 或 ReactDOM，颜色 token 由运行时依赖 `@yakit-libs/color` 提供。
+Yakit UI 的 React 图标包。它不依赖组件库或 CSS-in-JS 运行时，颜色 token 由运行时依赖 `@yakit-libs/color` 提供。
 
 ## 安装
 
@@ -32,6 +32,20 @@ export const HomeEntry = () => (
 );
 ```
 
+所有默认图标都会渲染为与 Yakit 原 Ant Design 4.8 自定义图标兼容的结构：
+
+```html
+<span role="img" class="anticon yakit-icon consumer-class">
+  <svg aria-hidden="true" focusable="false">...</svg>
+</span>
+```
+
+`className`、`style`、事件、ARIA 属性和 `ref<HTMLSpanElement>` 属于外层 `span`；`size` 设置内层 SVG 的宽高。确需修改 SVG 表现属性时使用 `svgProps`，该入口不会接受内层事件、ARIA、焦点、ref 或内容注入。`color="currentColor"` 不产生内联颜色，可继续继承现有 Yakit/Ant 样式。
+
+浏览器条件入口会自动关联静态 `icon.css`，根入口和 `/outline`、`/solid`、`/colorful` 多次导入时由打包器合并为一份样式；Node SSR 使用无 CSS 的通用入口，不会访问 DOM 或尝试加载 CSS 模块。无法识别 package `browser` condition 的自定义构建环境可显式导入 `@yakit-libs/yakit-ui-icons/icon.css`。
+
+多色、品牌、头像和状态类图标同样从根入口导出。它们会保留 Figma 定义的固定色、渐变与局部主题色；注册表中的 `paintMode` 可用于区分 `literal`、`mixed` 和 `currentColor` 行为。
+
 Outline 与 Solid 的主色默认使用 `var(--Colors-Use-Neutral-Text-1-Title, #353639)`。消费者仍可以通过 `color`、`style.color`、`color="inherit"` 或局部覆盖 CSS 变量改变颜色：
 
 ```tsx
@@ -51,6 +65,7 @@ Outline 与 Solid 的主色默认使用 `var(--Colors-Use-Neutral-Text-1-Title, 
 ```tsx
 import { HomeOutlined } from "@yakit-libs/yakit-ui-icons/outline";
 import { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";
+import * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";
 ```
 
 完整注册表是显式的重入口，仅在图标浏览器等需要枚举所有图标的场景使用：
@@ -58,3 +73,5 @@ import { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";
 ```tsx
 import { iconRegistry } from "@yakit-libs/yakit-ui-icons/registry";
 ```
+
+带渐变、遮罩或裁剪的图标通过 React `useId()` 隔离 SVG fragment ID。一个页面存在多个独立 React root 时，每个 root 必须使用不同的 `identifierPrefix`；同一组 SSR 与 hydration 必须使用完全相同的 prefix。跨 root 重用 prefix 可能产生 DOM ID 冲突，`useId()` 本身不提供该跨 root 保证。

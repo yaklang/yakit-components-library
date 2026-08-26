@@ -22,6 +22,7 @@ export default defineConfig({
     ],
   },
   test: {
+    setupFiles: ['./test/setup.ts'],
     browser: {
       enabled: true,
       headless: true,

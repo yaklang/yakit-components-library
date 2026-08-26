@@ -4,6 +4,8 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { verifyIconCssGate } from "./verify-css-gate.mjs";
+
 const packageRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -11,26 +13,37 @@ const packageRoot = path.resolve(
 const expectedExports = {
   ".": {
     types: "./dist/index.d.ts",
+    browser: "./dist/browser/index.js",
     import: "./dist/index.js",
+  },
+  "./colorful": {
+    types: "./dist/colorful/index.d.ts",
+    browser: "./dist/browser/colorful/index.js",
+    import: "./dist/colorful/index.js",
   },
   "./outline": {
     types: "./dist/outline/index.d.ts",
+    browser: "./dist/browser/outline/index.js",
     import: "./dist/outline/index.js",
   },
   "./solid": {
     types: "./dist/solid/index.d.ts",
+    browser: "./dist/browser/solid/index.js",
     import: "./dist/solid/index.js",
   },
   "./registry": {
     types: "./dist/registry.d.ts",
+    browser: "./dist/browser/registry.js",
     import: "./dist/registry.js",
+  },
+  "./icon.css": {
+    default: "./dist/icon.css",
   },
 };
 const requiredFiles = [
-  ...Object.values(expectedExports).flatMap(({ import: js, types }) => [
-    js,
-    types,
-  ]),
+  ...Object.values(expectedExports).flatMap((contract) =>
+    Object.values(contract),
+  ),
   "./README.md",
   "./LICENSE",
 ];
@@ -74,7 +87,14 @@ if (manifest.publishConfig?.access !== "public") {
 if (manifest.publishConfig?.registry !== "https://registry.npmjs.org/") {
   failures.push("publishConfig.registry must be https://registry.npmjs.org/");
 }
-if (manifest.sideEffects !== false) failures.push("sideEffects must be false");
+if (
+  JSON.stringify(manifest.sideEffects) !==
+  JSON.stringify(["**/*.css", "dist/browser/**/*.js"])
+) {
+  failures.push(
+    "sideEffects must contain only CSS and browser facade patterns",
+  );
+}
 if (JSON.stringify(manifest.exports) !== JSON.stringify(expectedExports)) {
   failures.push("exports must match the supported icon entry contract");
 }
@@ -103,7 +123,10 @@ if (manifest.peerDependenciesMeta) {
 try {
   const colorEntry = require.resolve("@yakit-libs/color");
   const colorManifest = JSON.parse(
-    await readFile(path.resolve(path.dirname(colorEntry), "../package.json"), "utf8"),
+    await readFile(
+      path.resolve(path.dirname(colorEntry), "../package.json"),
+      "utf8",
+    ),
   );
   const color = require("@yakit-libs/color");
   const light = color.generateColors("light");
@@ -124,6 +147,35 @@ try {
 } catch {
   failures.push("@yakit-libs/color 1.4.1 runtime is missing or unreadable");
 }
+
+failures.push(
+  ...(await verifyIconCssGate({
+    entries: [
+      {
+        exportName: "MailOutlined",
+        specifier: "@yakit-libs/yakit-ui-icons",
+        subpath: ".",
+      },
+      {
+        exportName: "MailOutlined",
+        specifier: "@yakit-libs/yakit-ui-icons/outline",
+        subpath: "./outline",
+      },
+      {
+        exportName: "MailSolid",
+        specifier: "@yakit-libs/yakit-ui-icons/solid",
+        subpath: "./solid",
+      },
+      {
+        exportName: "MitmPrimaryMenuColorful",
+        specifier: "@yakit-libs/yakit-ui-icons/colorful",
+        subpath: "./colorful",
+      },
+    ],
+    packageName: "@yakit-libs/yakit-ui-icons",
+    packageRoot,
+  })),
+);
 for (const includedPath of ["dist", "README.md", "LICENSE"]) {
   if (!manifest.files?.includes(includedPath)) {
     failures.push(`files must include ${includedPath}`);

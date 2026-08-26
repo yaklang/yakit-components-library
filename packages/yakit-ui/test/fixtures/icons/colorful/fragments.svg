@@ -1,0 +1,12 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title0 desc0">
+  <title id="title0">Fragment fixture</title>
+  <desc id="desc0">All supported local reference forms</desc>
+  <defs>
+    <linearGradient id="paint0"><stop stop-color="#FFFFFF" /></linearGradient>
+    <clipPath id="clip0"><rect width="24" height="24" /></clipPath>
+    <path id="shape0" d="M0 0h24v24H0z" />
+  </defs>
+  <g clip-path="url(#clip0)" style="fill: url('#paint0')">
+    <use href="#shape0" xlink:href="#shape0" />
+  </g>
+</svg>

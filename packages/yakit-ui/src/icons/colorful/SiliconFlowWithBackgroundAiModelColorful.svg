@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg x="0" y="0" width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none">
+<g clip-path="url(#icon_3880867896__clip_0)">
+<path d="M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z" fill="#6F29F4"/>
+<path d="M26.9564 10.2614H16.5207C15.9438 10.2614 15.4771 10.7281 15.4771 11.305V14.4357C15.4771 15.0126 15.0104 15.4793 14.4336 15.4793H5.04357C4.46669 15.4793 4 15.946 4 16.5229V20.6972C4 21.274 4.46669 21.7407 5.04357 21.7407H15.4793C16.0562 21.7407 16.5229 21.274 16.5229 20.6972V17.5664C16.5229 16.9896 16.9896 16.5229 17.5664 16.5229H26.9586C27.5355 16.5229 28.0022 16.0562 28.0022 15.4793V11.305C28.0022 10.7281 27.5355 10.2614 26.9586 10.2614H26.9564Z" fill="var(--Colors-Use-Basic-White, #FFFFFF)"/>
+</g>
+<defs>
+<clipPath id="icon_3880867896__clip_0">
+<rect width="32" height="32" fill="var(--Colors-Use-Basic-White, #FFFFFF)"/>
+</clipPath>
+</defs>
+</svg>
+</svg>
+

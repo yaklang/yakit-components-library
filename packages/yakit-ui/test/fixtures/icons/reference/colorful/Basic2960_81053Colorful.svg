@@ -1,0 +1,36 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" fill="#E7E7F5"/>
+<g id="Function Icons">
+<g clip-path="url(#clip0_1_85)">
+<path d="M-792 -1420C-792 -1433.25 -781.255 -1444 -768 -1444H520C533.255 -1444 544 -1433.25 544 -1420V2338C544 2351.25 533.255 2362 520 2362H-768C-781.255 2362 -792 2351.25 -792 2338V-1420Z" fill="#F8F9FA"/>
+<g id="Frame 308">
+<g id="Frame 308_2">
+<g id="Frame 468">
+<g id="Frame 468_2">
+<g id="Frame 468_3">
+<g id="Frame 4634">
+<g id="Basic/Outline/&#230;&#188;&#143;&#230;&#180;&#158;&#228;&#184;&#142;&#233;&#163;&#142;&#233;&#153;&#169;">
+<mask id="mask0_1_85" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect id="Rectangle 104" width="24" height="24" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_85)">
+<path id="Rectangle 105" d="M17.5 6H19C20.1046 6 21 6.89543 21 8V16C21 17.1046 20.1046 18 19 18H5C3.89543 18 3 17.1046 3 16V8C3 6.89543 3.89543 6 5 6H6.5" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 106" d="M1 18H23V19C23 20.1046 22.1046 21 21 21H3C1.89543 21 1 20.1046 1 19V18Z" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Icon" d="M11.0303 3.5625C11.4613 2.8125 12.5387 2.8125 12.9697 3.5625L16.8483 10.3125C17.2793 11.0625 16.7406 12 15.8787 12H8.12134C7.25942 12 6.72072 11.0625 7.15168 10.3125L11.0303 3.5625Z" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Icon_2" d="M12 6.375V7.5M12 9.75H12.0056M8.12134 12H15.8787C16.7406 12 17.2793 11.0625 16.8483 10.3125L12.9697 3.5625C12.5387 2.8125 11.4613 2.8125 11.0303 3.5625L7.15168 10.3125C6.72072 11.0625 7.25942 12 8.12134 12Z" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_1_85">
+<path d="M-792 -1420C-792 -1433.25 -781.255 -1444 -768 -1444H520C533.255 -1444 544 -1433.25 544 -1420V2338C544 2351.25 533.255 2362 520 2362H-768C-781.255 2362 -792 2351.25 -792 2338V-1420Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>

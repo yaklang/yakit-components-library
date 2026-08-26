@@ -15,7 +15,7 @@ const packageJson = JSON.parse(readFileSync(resolve(packageRoot, 'package.json')
   exports: Record<string, string | { import?: string; types?: string }>;
 };
 
-const lightSubpaths = ['./icons', './icons/outline', './icons/solid'] as const;
+const lightSubpaths = ['./icons', './icons/outline', './icons/solid', './icons/colorful'] as const;
 const forbiddenRuntimeReferences = [
   'antd',
   '@ant-design/cssinjs',
@@ -64,6 +64,13 @@ function collectRelativeModuleGraph(entry: string) {
   }
 
   return [...visited];
+}
+
+function isReactElementType(value: unknown): value is React.ElementType {
+  return (
+    typeof value === 'function' ||
+    (typeof value === 'object' && value !== null && '$$typeof' in value)
+  );
 }
 
 describe('Published lightweight icon entries', () => {
@@ -121,8 +128,8 @@ describe('Published lightweight icon entries', () => {
   it('keeps root icon, registry, and component exports compatible', async () => {
     const root = (await import(exportTarget('.', 'import'))) as Record<string, unknown>;
 
-    expect(root.HomeOutlined).toBeTypeOf('function');
-    expect(root.HomeSolid).toBeTypeOf('function');
+    expect(isReactElementType(root.HomeOutlined)).toBe(true);
+    expect(isReactElementType(root.HomeSolid)).toBe(true);
     expect(root.outlineIconRegistry).toBeInstanceOf(Array);
     expect(root.solidIconRegistry).toBeInstanceOf(Array);
     expect(root.Button).toBeTruthy();
@@ -132,6 +139,10 @@ describe('Published lightweight icon entries', () => {
     const icons = await import(exportTarget('./icons', 'import'));
     const outline = await import(exportTarget('./icons/outline', 'import'));
     const solid = await import(exportTarget('./icons/solid', 'import'));
+    const colorful = await import(exportTarget('./icons/colorful', 'import'));
+    const ColorfulIcon = Object.values(colorful).find(isReactElementType);
+
+    expect(isReactElementType(ColorfulIcon)).toBe(true);
     const markup = renderToString(
       React.createElement(
         React.Fragment,
@@ -139,10 +150,11 @@ describe('Published lightweight icon entries', () => {
         React.createElement(icons.HomeOutlined),
         React.createElement(outline.HomeOutlined),
         React.createElement(solid.HomeSolid),
+        ColorfulIcon ? React.createElement(ColorfulIcon) : null,
       ),
     );
 
-    expect(markup.match(/<svg/g)).toHaveLength(3);
+    expect(markup.match(/<svg/g)).toHaveLength(4);
   });
 
   it('resolves lightweight icon types in NodeNext mode', () => {
@@ -197,5 +209,47 @@ describe('Published lightweight icon entries', () => {
     for (const dependency of forbiddenRuntimeReferences) {
       expect(code, `single-icon bundle must not reference ${dependency}`).not.toContain(dependency);
     }
+  });
+
+  it('tree-shakes one fragment-bearing colorful icon without pulling sibling artwork', async () => {
+    const entry = exportTarget('./icons/colorful', 'import');
+    const result = await build({
+      configFile: false,
+      logLevel: 'silent',
+      build: {
+        minify: 'esbuild',
+        write: false,
+        lib: { entry, formats: ['es'] },
+        rollupOptions: {
+          external: (id) => id === 'react' || id.startsWith('react/'),
+          input: 'virtual:single-colorful-icon-consumer',
+          plugins: [
+            {
+              name: 'single-colorful-icon-consumer',
+              resolveId(id) {
+                return id === 'virtual:single-colorful-icon-consumer' ? id : null;
+              },
+              load(id) {
+                if (id !== 'virtual:single-colorful-icon-consumer') return null;
+                return `export { EdgeBrowserColorful } from ${JSON.stringify(entry)};`;
+              },
+            },
+          ],
+        },
+      },
+    });
+    const outputs = Array.isArray(result) ? result.flatMap(({ output }) => output) : result.output;
+    const code = outputs
+      .filter((output) => output.type === 'chunk')
+      .map((output) => output.code)
+      .join('\n');
+
+    expect(Buffer.byteLength(code)).toBeLessThanOrEqual(15_000);
+    expect(gzipSync(code).byteLength).toBeLessThanOrEqual(5_000);
+    expect(code).toContain('EdgeBrowserColorful');
+    expect(code).toContain('useId');
+    expect(code).not.toContain('ChromeBrowserColorful');
+    expect(code).not.toContain('MitmPrimaryMenuColorful');
+    expect(code).not.toMatch(/(?:colorfulIconRegistry|iconRegistry)/);
   });
 });

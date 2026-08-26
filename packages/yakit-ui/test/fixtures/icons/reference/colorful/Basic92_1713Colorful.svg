@@ -1,0 +1,38 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" fill="#E7E7F5"/>
+<g id="Function Icons">
+<g clip-path="url(#clip0_1_85)">
+<path d="M-848 -1364C-848 -1377.25 -837.255 -1388 -824 -1388H464C477.255 -1388 488 -1377.25 488 -1364V2394C488 2407.25 477.255 2418 464 2418H-824C-837.255 2418 -848 2407.25 -848 2394V-1364Z" fill="#F8F9FA"/>
+<g id="Frame 308">
+<g id="Frame 308_2">
+<g id="Frame 468">
+<g id="Frame 468_2">
+<g id="Frame 468_3">
+<g id="Frame 4634">
+<g id="Basic/Outline/ICMP-SizeLog">
+<mask id="mask0_1_85" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect id="Rectangle 145" width="24" height="24" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_85)">
+<path id="Vector 52" d="M7 21L10.5858 17.4142C11.3668 16.6332 12.6332 16.6332 13.4142 17.4142L17 21" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Rectangle 144" d="M4 3H20V14C20 15.1046 19.1046 16 18 16H6C4.89543 16 4 15.1046 4 14V3Z" stroke="#31343F" stroke-width="1.5"/>
+<path id="Vector 53" d="M2 3H22" stroke="#31343F" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Vector 54" d="M8 13L8 10" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Vector 55" d="M12 13V8" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Vector 56" d="M16 13L16 6" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_1_85">
+<path d="M-848 -1364C-848 -1377.25 -837.255 -1388 -824 -1388H464C477.255 -1388 488 -1377.25 488 -1364V2394C488 2407.25 477.255 2418 464 2418H-824C-837.255 2418 -848 2407.25 -848 2394V-1364Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>

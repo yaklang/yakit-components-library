@@ -129,6 +129,8 @@ test("icon package has a narrow public, color, and React contract", () => {
   });
   assert.deepEqual(Object.keys(manifest.exports).sort(), [
     ".",
+    "./colorful",
+    "./icon.css",
     "./outline",
     "./registry",
     "./solid",
@@ -151,8 +153,14 @@ test("package exports the ESM library, declarations, and CSS contract", () => {
   });
   assert.equal(manifest.exports["."].import, "./dist/index.js");
   assert.equal(manifest.exports["."].types, "./dist/index.d.ts");
+  assert.deepEqual(manifest.exports["./icons/colorful"], {
+    types: "./dist/icons/colorful/index.d.ts",
+    browser: "./dist/browser/icons/colorful/index.js",
+    import: "./dist/icons/colorful/index.js",
+  });
+  assert.equal(manifest.exports["./icons/icon.css"], "./dist/icon.css");
   assert.equal(manifest.exports["./style.css"], "./dist/index.css");
-  assert.deepEqual(manifest.sideEffects, ["**/*.css"]);
+  assert.deepEqual(manifest.sideEffects, ["**/*.css", "dist/browser/**/*.js"]);
 });
 
 test("package declares the offline Storybook launcher bin", () => {
@@ -289,12 +297,15 @@ test("pre-build types use source fixtures while built package contracts verify p
   assert.doesNotMatch(manifest.scripts["test:types"], /build/i);
   assert.deepEqual(sourceTypes.include, [
     "../../src/vite-env.d.ts",
+    "colorful-icon-public.test.tsx",
+    "icon-ant-compat-public.test.tsx",
     "icon-public.test.tsx",
     "input-public.test.tsx",
     "solid-icon-public.test.tsx",
   ]);
   assert.deepEqual(publicTypes.include, [
     "../../src/vite-env.d.ts",
+    "colorful-icon-public.test.tsx",
     "light-icon-public.test.tsx",
   ]);
   assert.match(

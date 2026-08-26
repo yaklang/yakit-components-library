@@ -1,0 +1,37 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" fill="#E7E7F5"/>
+<g id="Function Icons">
+<g clip-path="url(#clip0_1_85)">
+<path d="M-1128 -1420C-1128 -1433.25 -1117.25 -1444 -1104 -1444H184C197.255 -1444 208 -1433.25 208 -1420V2338C208 2351.25 197.255 2362 184 2362H-1104C-1117.25 2362 -1128 2351.25 -1128 2338V-1420Z" fill="#F8F9FA"/>
+<g id="Frame 308">
+<g id="Frame 308_2">
+<g id="Frame 468">
+<g id="Frame 468_2">
+<g id="Frame 468_3">
+<g id="Frame 4634">
+<g id="Basic/Outline/&#230;&#143;&#146;&#228;&#187;&#182;&#228;&#187;&#147;&#229;&#186;&#147;">
+<mask id="mask0_1_85" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect id="Rectangle 104" width="24" height="24" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_85)">
+<path id="Polygon 8" d="M23 9L12 1L1 9" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 777" d="M4 13V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V11" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 778" d="M4 16H9V21H6C4.89543 21 4 20.1046 4 19V16Z" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 780" d="M9 16H12C13.1046 16 14 16.8954 14 18V21H9V16Z" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 779" d="M4 13C4 11.8954 4.89543 11 6 11H7C8.10457 11 9 11.8954 9 13V16H4V13Z" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_1_85">
+<path d="M-1128 -1420C-1128 -1433.25 -1117.25 -1444 -1104 -1444H184C197.255 -1444 208 -1433.25 208 -1420V2338C208 2351.25 197.255 2362 184 2362H-1104C-1117.25 2362 -1128 2351.25 -1128 2338V-1420Z" fill="white"/>
+</clipPath>
+</defs>
+</svg>

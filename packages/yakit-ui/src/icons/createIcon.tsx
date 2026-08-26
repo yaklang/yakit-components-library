@@ -1,8 +1,9 @@
-import type { ComponentType } from 'react';
+import { forwardRef, type ComponentType, type SVGProps } from 'react';
 
-import type { IconProps } from './types.js';
+import { IconBase } from './IconBase.js';
+import type { IconComponent, IconProps } from './types.js';
 
-type SvgIcon = ComponentType<IconProps>;
+type SvgIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
 /** Figma `Colors-Use/Neutral/Text 1-Title`, provided by @yakit-libs/color. */
 export const DEFAULT_ICON_COLOR = 'var(--Colors-Use-Neutral-Text-1-Title, #353639)';
@@ -15,23 +16,13 @@ export function createIcon(
   svg: unknown,
   displayName: string,
   defaultColor = DEFAULT_ICON_COLOR,
-): ComponentType<IconProps> {
+): IconComponent {
   // SVG modules are typed by vite-plugin-svgr. Keeping that type at this boundary
   // avoids exposing its React type-version details through the public icon API.
   const Svg = svg as SvgIcon;
-  const Icon = ({ size, color, style, ...props }: IconProps) => {
-    const sizeProps = size === undefined ? undefined : { height: size, width: size };
-
-    return (
-      <Svg
-        aria-hidden={props['aria-label'] || props['aria-labelledby'] ? undefined : true}
-        focusable="false"
-        {...sizeProps}
-        {...props}
-        style={{ color: color ?? defaultColor, ...style }}
-      />
-    );
-  };
+  const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => (
+    <IconBase {...props} ref={ref} Svg={Svg} defaultColor={defaultColor} />
+  ));
 
   Icon.displayName = displayName;
   return Icon;

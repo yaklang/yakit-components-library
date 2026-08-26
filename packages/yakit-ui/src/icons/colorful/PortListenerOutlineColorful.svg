@@ -1,0 +1,15 @@
+<svg width="24" height="24" preserveAspectRatio="xMidYMid meet" overflow="visible" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g >
+<mask id="icon_881820__mask_0" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect  width="24" height="24" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#icon_881820__mask_0)">
+<path  d="M22 16V13C22 7.47715 17.5228 3 12 3C6.47715 3 2 7.47715 2 13V16" stroke="#353639" stroke-width="1.5"/>
+<path  d="M2 14H4C5.10457 14 6 14.8954 6 16V18C6 19.1046 5.10457 20 4 20C2.89543 20 2 19.1046 2 18V14Z" stroke="#353639" stroke-width="1.5"/>
+<path  d="M18 16C18 14.8954 18.8954 14 20 14H22V18C22 19.1046 21.1046 20 20 20C18.8954 20 18 19.1046 18 18V16Z" stroke="#353639" stroke-width="1.5"/>
+<path  d="M9 16V19" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+<path  d="M12 16V19" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+<path  d="M15 16V19" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+</g>
+</svg>

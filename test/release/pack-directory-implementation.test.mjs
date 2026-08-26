@@ -6,7 +6,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { verifyPackDirectory } from "../../scripts/release/verify-pack-directory.mjs";
+import {
+  ICON_PACKAGE_LIMITS,
+  verifyPackDirectory,
+} from "../../scripts/release/verify-pack-directory.mjs";
 
 const createTarball = (extraEntries = []) => {
   const directory = mkdtempSync(join(tmpdir(), "yakit-pack-"));
@@ -35,13 +38,18 @@ const createTarball = (extraEntries = []) => {
   return { directory, tarball };
 };
 
-const createIconsTarball = (directory, { oversized = false } = {}) => {
+const createIconsTarball = (
+  directory,
+  { excessFiles = false, oversized = false } = {},
+) => {
   const staging = join(directory, "icons-staging");
   const packageRoot = join(staging, "package");
   const entries = [
     "LICENSE",
     "dist/index.js",
     "dist/index.d.ts",
+    "dist/colorful/index.js",
+    "dist/colorful/index.d.ts",
     "dist/outline/index.js",
     "dist/outline/index.d.ts",
     "dist/solid/index.js",
@@ -55,7 +63,12 @@ const createIconsTarball = (directory, { oversized = false } = {}) => {
     writeFileSync(file, entry);
   }
   if (oversized)
-    writeFileSync(join(packageRoot, "dist/payload.bin"), randomBytes(260_000));
+    writeFileSync(join(packageRoot, "dist/payload.bin"), randomBytes(610_000));
+  if (excessFiles) {
+    for (let index = 0; index < 22; index += 1) {
+      writeFileSync(join(packageRoot, `dist/extra-${index}.js`), "export {};\n");
+    }
+  }
   writeFileSync(
     join(packageRoot, "package.json"),
     JSON.stringify({
@@ -95,7 +108,18 @@ test("pack verifier enforces the independent icons package size budget", async (
   createIconsTarball(directory, { oversized: true });
   await assert.rejects(
     () => verifyPackDirectory({ directory }),
-    /@yakit-libs\/yakit-ui-icons packedBytes exceeds 250000/,
+    /@yakit-libs\/yakit-ui-icons packedBytes exceeds 600000/,
+  );
+});
+
+test("pack verifier enforces the independent icons package file budget", async () => {
+  const { directory } = createTarball();
+  createIconsTarball(directory, { excessFiles: true });
+  await assert.rejects(
+    () => verifyPackDirectory({ directory }),
+    new RegExp(
+      `@yakit-libs/yakit-ui-icons fileCount exceeds ${ICON_PACKAGE_LIMITS.fileCount}`,
+    ),
   );
 });
 

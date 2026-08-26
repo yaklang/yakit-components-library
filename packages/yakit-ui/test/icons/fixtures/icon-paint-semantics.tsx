@@ -2,6 +2,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
+import '../../../../yakit-ui-icons/icon.css';
 import {
   EarOutlined,
   FigmaIcon450351908Outlined,
