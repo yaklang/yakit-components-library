@@ -8,6 +8,10 @@ import {
   dispositionForExactRef,
   validateCutoverPolicy,
 } from "./release-cutover-policy.mjs";
+import {
+  readPrivateProvenanceIncidentPolicy,
+  validatePrivateProvenanceResolution,
+} from "./private-provenance-recovery.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "../..");
 const SHA1 = /^[0-9a-f]{40}$/i;
@@ -52,7 +56,14 @@ function fail(reason) {
   return { status: "BLOCK", reason };
 }
 
-export function evaluateReleaseCutover({ policy, producer, evidence, now }) {
+export function evaluateReleaseCutover({
+  policy,
+  producer,
+  evidence,
+  incidentPolicy,
+  incidentResolution,
+  now,
+}) {
   try {
     validateCutoverPolicy(policy);
   } catch (error) {
@@ -73,8 +84,26 @@ export function evaluateReleaseCutover({ policy, producer, evidence, now }) {
     [...runs, ...artifacts].some((item) => !DISPOSITIONS.has(item.disposition))
   )
     return fail("inventory item has no closed disposition");
+  let allowedInconclusiveIds = new Set();
+  if (incidentResolution) {
+    try {
+      validatePrivateProvenanceResolution({
+        cutoverEvidence: evidence,
+        now,
+        policy: incidentPolicy,
+        resolution: incidentResolution,
+      });
+      allowedInconclusiveIds = new Set(
+        incidentResolution.allowedInconclusiveIds.map(String),
+      );
+    } catch (error) {
+      return fail(error.message);
+    }
+  }
   const inconclusive = [...runs, ...artifacts].find(
-    (item) => item.disposition === "inconclusive",
+    (item) =>
+      item.disposition === "inconclusive" &&
+      !allowedInconclusiveIds.has(String(item.id)),
   );
   if (inconclusive)
     return fail(`inventory evidence is inconclusive: ${inconclusive.id}`);
@@ -191,17 +220,29 @@ async function main() {
     throw new Error(
       "RELEASE_CUTOVER_EVIDENCE and RELEASE_PRODUCER_IDENTITY are required",
     );
-  const [policy, evidence, producer] = await Promise.all([
-    readFile(
-      path.join(ROOT, "scripts/release/release-cutover-policy.json"),
-      "utf8",
-    ).then(JSON.parse),
-    readFile(path.resolve(evidencePath), "utf8").then(JSON.parse),
-    readFile(path.resolve(producerPath), "utf8").then(JSON.parse),
-  ]);
+  const incidentResolutionPath = process.env.RELEASE_INCIDENT_RESOLUTION;
+  const [policy, evidence, producer, incidentPolicy, incidentResolution] =
+    await Promise.all([
+      readFile(
+        path.join(ROOT, "scripts/release/release-cutover-policy.json"),
+        "utf8",
+      ).then(JSON.parse),
+      readFile(path.resolve(evidencePath), "utf8").then(JSON.parse),
+      readFile(path.resolve(producerPath), "utf8").then(JSON.parse),
+      incidentResolutionPath
+        ? readPrivateProvenanceIncidentPolicy()
+        : Promise.resolve(undefined),
+      incidentResolutionPath
+        ? readFile(path.resolve(incidentResolutionPath), "utf8").then(
+            JSON.parse,
+          )
+        : Promise.resolve(undefined),
+    ]);
   const result = evaluateReleaseCutover({
     policy,
     evidence,
+    incidentPolicy,
+    incidentResolution,
     producer,
     now: process.env.RELEASE_CUTOVER_NOW ?? new Date().toISOString(),
   });

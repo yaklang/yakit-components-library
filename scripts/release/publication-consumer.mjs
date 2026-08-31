@@ -11,6 +11,10 @@ import {
   payloadHash,
   readRevisionedJson,
 } from "./durable-release-state.mjs";
+import {
+  BOUND_PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+  PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+} from "./private-provenance-recovery.mjs";
 
 export const PUBLICATION_OUTBOX_SCHEMA = "yakit-ui-publication-outbox/v1";
 export const PUBLICATION_STATE_SCHEMA = "yakit-ui-publication-state/v1";
@@ -267,14 +271,102 @@ function authorizeRetry({
     selected.state.durableIntentArtifact?.digest !== intent.artifact.digest
   )
     throw new Error("authorized retry dual evidence identity mismatch");
-  const retryablePackages = selected.state.releases
+  const receiptRetryablePackages = selected.state.releases
     .filter((release) => release.recoveryStatus === "not-applied")
     .map((release) => release.name);
+  const rejectionEvidence = request.definitiveNoApplyEvidence;
+  let remediatedPackages = [];
+  if (rejectionEvidence) {
+    const { evidenceHash, ...boundPayload } = rejectionEvidence;
+    const resolution = boundPayload.resolution;
+    const { evidenceHash: resolutionHash, ...resolutionPayload } =
+      resolution ?? {};
+    const expectedReleaseIdentities = manifest.releases.map(
+      (release) => release.identity,
+    );
+    const expectedResolvedOutcomes = Object.fromEntries(
+      expectedReleaseIdentities.map((identity, index) => [
+        identity,
+        index === 0 ? "NOT_APPLIED" : "NOT_ATTEMPTED",
+      ]),
+    );
+    if (
+      boundPayload.schemaId !== BOUND_PRIVATE_PROVENANCE_REJECTION_SCHEMA ||
+      boundPayload.schemaVersion !== 1 ||
+      !/^[0-9a-f]{64}$/i.test(boundPayload.resolutionSha256 ?? "") ||
+      !boundPayload.resolutionArtifact?.id ||
+      !/^sha256:[0-9a-f]{64}$/i.test(
+        boundPayload.resolutionArtifact?.digest ?? "",
+      ) ||
+      !boundPayload.resolutionArtifact?.workflowRunId ||
+      evidenceHash !== payloadHash(boundPayload) ||
+      resolutionPayload.schemaId !== PRIVATE_PROVENANCE_REJECTION_SCHEMA ||
+      resolutionPayload.schemaVersion !== 1 ||
+      resolutionPayload.repository?.name !== manifest.repository ||
+      resolutionPayload.repository?.visibility !== "private" ||
+      String(resolutionPayload.sourceRunId) !== String(manifest.runId) ||
+      resolutionPayload.workflowCommitSha !== manifest.workflowCommitSha ||
+      resolutionPayload.npmErrorCode !== "E422" ||
+      resolutionPayload.failureReason !==
+        "PRIVATE_SOURCE_REPOSITORY_PROVENANCE_UNSUPPORTED" ||
+      resolutionPayload.failureReleaseIdentity !==
+        expectedReleaseIdentities[0] ||
+      JSON.stringify(resolutionPayload.releaseIdentities) !==
+        JSON.stringify(expectedReleaseIdentities) ||
+      JSON.stringify(resolutionPayload.resolvedOutcomes) !==
+        JSON.stringify(expectedResolvedOutcomes) ||
+      !/^[0-9a-f]{64}$/i.test(resolutionPayload.logSha256 ?? "") ||
+      resolutionHash !== payloadHash(resolutionPayload) ||
+      resolutionPayload.sourceArtifactEvidence?.intent?.id !==
+        intent.artifact.id ||
+      resolutionPayload.sourceArtifactEvidence?.intent?.digest !==
+        intent.artifact.digest ||
+      resolutionPayload.sourceArtifactEvidence?.receipt?.id !==
+        selected.artifact.id ||
+      resolutionPayload.sourceArtifactEvidence?.receipt?.digest !==
+        selected.artifact.digest ||
+      !Number.isFinite(Date.parse(resolutionPayload.rejectionObservedAt ?? ""))
+    )
+      throw new Error("private provenance rejection evidence is invalid");
+    for (const [index, release] of manifest.releases.entries()) {
+      const lifecycle = selected.state.releases.find(
+        (item) => item.name === release.name,
+      );
+      const receipt =
+        selected.inbox.records?.[`publish:${release.name}@${release.version}`];
+      if (index === 0) {
+        if (
+          lifecycle?.recoveryStatus !== "ambiguous" ||
+          receipt?.status !== INBOX_STATES.AMBIGUOUS ||
+          receipt?.observation !== "NOT_APPLIED" ||
+          !receipt?.error?.includes("--provenance")
+        )
+          throw new Error(
+            "private provenance rejection receipt state is invalid",
+          );
+      } else if (
+        lifecycle?.recoveryStatus !== "processing" ||
+        receipt?.status !== INBOX_STATES.PROCESSING
+      )
+        throw new Error(
+          "private provenance unattempted package state is invalid",
+        );
+    }
+    if (receiptRetryablePackages.length > 0)
+      throw new Error(
+        "private provenance remediation cannot mix with ordinary retry receipts",
+      );
+    remediatedPackages = manifest.releases.map((release) => release.name);
+  }
+  const retryablePackages =
+    remediatedPackages.length > 0
+      ? remediatedPackages
+      : receiptRetryablePackages;
   if (retryablePackages.length === 0)
     throw new Error(
       "authorized retry requires a definitive producer-authenticated no-success receipt; AMBIGUOUS is never retry authority",
     );
-  for (const packageName of retryablePackages) {
+  for (const packageName of receiptRetryablePackages) {
     const release = manifest.releases.find((item) => item.name === packageName);
     const key = `publish:${packageName}@${release.version}`;
     const receipt = selected.inbox.records?.[key];
@@ -310,6 +402,7 @@ function authorizeRetry({
       inboxSha256: selected.inboxSha256,
       lifecycleSha256: selected.lifecycleSha256,
     },
+    definitiveNoApplyEvidence: rejectionEvidence ?? null,
     registryAbsenceEvidence: [],
   };
 }
@@ -318,6 +411,7 @@ function validateRegistryAbsenceObservation({
   evidence,
   release,
   receipt,
+  retryDecision,
   now,
   propagationWindowMs,
   observationMaxAgeMs,
@@ -339,14 +433,21 @@ function validateRegistryAbsenceObservation({
       `${release.identity} registry absence evidence identity or hash is invalid`,
     );
   const observedAt = Date.parse(payload.observedAt);
+  const definitiveReceiptTime = [...receipt.state.history]
+    .reverse()
+    .find(
+      (event) =>
+        event.packageName === release.name &&
+        event.event === "PUBLISH_DEFINITIVELY_NOT_APPLIED",
+    )?.recordedAt;
+  const remediatedRejectionTime =
+    retryDecision?.definitiveNoApplyEvidence?.resolution?.releaseIdentities.includes(
+      release.identity,
+    )
+      ? retryDecision.definitiveNoApplyEvidence.resolution.rejectionObservedAt
+      : undefined;
   const noSuccessAt = Date.parse(
-    [...receipt.state.history]
-      .reverse()
-      .find(
-        (event) =>
-          event.packageName === release.name &&
-          event.event === "PUBLISH_DEFINITIVELY_NOT_APPLIED",
-      )?.recordedAt ?? "",
+    definitiveReceiptTime ?? remediatedRejectionTime ?? "",
   );
   if (!Number.isFinite(observedAt) || !Number.isFinite(noSuccessAt))
     throw new Error(
@@ -526,6 +627,7 @@ export async function preparePublicationAttempt({
           evidence: observed,
           release,
           receipt: selected,
+          retryDecision,
           now: currentTime(),
           propagationWindowMs,
           observationMaxAgeMs,
@@ -596,7 +698,18 @@ export async function preparePublicationAttempt({
       const authorizedIdentity = retryDecision?.releaseIdentities.includes(
         release.identity,
       );
-      if (!authorizedIdentity || previous?.recoveryStatus !== "not-applied")
+      const remediatedIdentity =
+        retryDecision?.definitiveNoApplyEvidence?.resolution?.releaseIdentities.includes(
+          release.identity,
+        );
+      if (
+        !authorizedIdentity ||
+        (previous?.recoveryStatus !== "not-applied" &&
+          !(
+            remediatedIdentity &&
+            ["ambiguous", "processing"].includes(previous?.recoveryStatus)
+          ))
+      )
         throw new Error(
           `${release.identity} requires an explicit producer-authenticated retry decision`,
         );

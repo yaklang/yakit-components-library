@@ -19,6 +19,7 @@ import {
   sha256File,
   validateVerificationManifest,
 } from "./verification-manifest.mjs";
+import { bindPrivateProvenanceResolutionArtifact } from "./private-provenance-recovery.mjs";
 
 async function writeOutputs(outputs) {
   if (!process.env.GITHUB_OUTPUT) return;
@@ -86,6 +87,24 @@ function durationEnvironment(name, fallback) {
   return value;
 }
 
+const privateProvenanceResolutionPath =
+  process.env.PRIVATE_PROVENANCE_RESOLUTION_PATH;
+let definitiveNoApplyEvidence;
+if (privateProvenanceResolutionPath) {
+  if (process.env.AUTHORIZE_PUBLICATION_RETRY !== "true")
+    throw new Error(
+      "private provenance recovery requires explicit retry authorization",
+    );
+  definitiveNoApplyEvidence = await bindPrivateProvenanceResolutionArtifact({
+    artifactDigest: process.env.PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_DIGEST,
+    artifactId: process.env.PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_ID,
+    currentRunId: process.env.GITHUB_RUN_ID,
+    repository: process.env.GITHUB_REPOSITORY,
+    resolutionPath: privateProvenanceResolutionPath,
+    token: process.env.GITHUB_TOKEN,
+  });
+}
+
 const result = await preparePublicationAttempt({
   manifest,
   outbox,
@@ -95,6 +114,7 @@ const result = await preparePublicationAttempt({
   priorArtifactInventory,
   retryAuthorizationRequest: {
     authorized: process.env.AUTHORIZE_PUBLICATION_RETRY === "true",
+    definitiveNoApplyEvidence,
     intentArtifactId: process.env.RETRY_INTENT_ARTIFACT_ID,
     receiptArtifactId: process.env.RETRY_RECEIPT_ARTIFACT_ID,
   },
