@@ -1,8 +1,8 @@
 # @yakit-libs/yakit-ui-icons
 
-## 0.3.0
+## 0.2.1
 
-### Minor Changes
+### Patch Changes
 
 - cc577a0: Add the Figma-audited colorful icon catalog, grouped Storybook documentation, public colorful icon subpath exports, and Ant Design-compatible icon wrapper behavior for both packages.
 
