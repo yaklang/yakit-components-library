@@ -474,6 +474,7 @@ function expectedResolutionTarget(probe, condition) {
 function validateGraph(graph, artifact, distribution) {
   const failures = [];
   const contract = graph?.installContract;
+  const storeSeed = contract?.storeSeed;
   const candidatePackages = graph?.candidate?.packages;
   const controlPackages = graph?.control?.packages;
   if (
@@ -485,6 +486,13 @@ function validateGraph(graph, artifact, distribution) {
     contract?.configSha256 !== sha256Json(contract?.config ?? null) ||
     contract?.commonManifestSha256 !==
       sha256Json(contract?.commonManifest ?? null) ||
+    storeSeed?.configSha256 !== sha256Json(storeSeed?.config ?? null) ||
+    storeSeed?.configFileSha256 !==
+      sha256Text(storeSeed?.configContents ?? "") ||
+    storeSeed?.flagsSha256 !== sha256Json(storeSeed?.flags ?? null) ||
+    storeSeed?.manifestSha256 !== sha256Json(storeSeed?.manifest ?? null) ||
+    storeSeed?.installExitCode !== 0 ||
+    !/^[a-f0-9]{64}$/.test(storeSeed?.lockfileSha256 ?? "") ||
     graph?.candidate?.projectManifestSha256 !==
       sha256Json(graph?.candidate?.projectManifest ?? null) ||
     graph?.control?.projectManifestSha256 !==
@@ -525,6 +533,14 @@ function validateGraph(graph, artifact, distribution) {
     failures.push(
       "isolated install flags/config are not the required offline contract",
     );
+  if (
+    canonicalJson(storeSeed?.config) !==
+      canonicalJson({ ...contract?.config, offline: false }) ||
+    canonicalJson(storeSeed?.flags) !== canonicalJson(contract?.flags) ||
+    canonicalJson(storeSeed?.manifest) !==
+      canonicalJson(contract?.commonManifest)
+  )
+    failures.push("isolated install store seed contract is invalid");
 
   const commonManifest = contract?.commonManifest ?? {};
   const expectedControl = commonManifest;
