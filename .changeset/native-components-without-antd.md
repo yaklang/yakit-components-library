@@ -1,5 +1,5 @@
 ---
-"@yakit-libs/yakit-ui": major
+"@yakit-libs/yakit-ui": patch
 ---
 
 Replace the existing component implementations and styling runtime with Yakit-owned React context, native DOM controls, static CSS, and CSS custom properties. Consumers no longer need `antd` or `@ant-design/cssinjs`.
