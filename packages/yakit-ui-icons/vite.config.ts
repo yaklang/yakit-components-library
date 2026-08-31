@@ -5,7 +5,10 @@ import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-import { createSvgReactPlugin } from "../yakit-ui/config/svgReactTransform";
+import {
+  createIconPureAnnotationPlugin,
+  createSvgReactPlugin,
+} from "../yakit-ui/config/svgReactTransform";
 
 const packageRoot = path.dirname(fileURLToPath(import.meta.url));
 const iconSourceRoot = path.resolve(packageRoot, "../yakit-ui/src/icons");
@@ -15,6 +18,7 @@ function iconBrowserFacades() {
   const facades = {
     "browser/index.js": ["../icon.css", "../index.js"],
     "browser/colorful/index.js": ["../../icon.css", "../../colorful/index.js"],
+    "browser/oldicon/index.js": ["../../icon.css", "../../oldicon/index.js"],
     "browser/outline/index.js": ["../../icon.css", "../../outline/index.js"],
     "browser/registry.js": ["../icon.css", "../registry.js"],
     "browser/solid/index.js": ["../../icon.css", "../../solid/index.js"],
@@ -44,6 +48,7 @@ export default defineConfig({
       entry: {
         "colorful/index": path.join(iconSourceRoot, "colorful/index.tsx"),
         index: path.join(iconSourceRoot, "index.tsx"),
+        "oldicon/index": path.join(iconSourceRoot, "oldicon/index.tsx"),
         "outline/index": path.join(iconSourceRoot, "outline/index.tsx"),
         registry: path.join(iconSourceRoot, "registry.ts"),
         "solid/index": path.join(iconSourceRoot, "solid/index.tsx"),
@@ -59,5 +64,10 @@ export default defineConfig({
         id.startsWith("react/"),
     },
   },
-  plugins: [react(), createSvgReactPlugin(), iconBrowserFacades()],
+  plugins: [
+    createIconPureAnnotationPlugin(),
+    react(),
+    createSvgReactPlugin(),
+    iconBrowserFacades(),
+  ],
 });

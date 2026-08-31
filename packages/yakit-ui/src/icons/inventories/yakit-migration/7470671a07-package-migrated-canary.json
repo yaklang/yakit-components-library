@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "batchId": "yakit-7470671a07-package-migrated-canary",
+  "sourceYakitCommit": "7470671a07",
+  "packageSourceCommit": "cbd1467",
+  "entries": [
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "outline",
+      "exportName": "QuestionMarkCircleOutlined",
+      "sourceNodeId": "1:2095",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    },
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "outline",
+      "exportName": "SearchOutlined",
+      "sourceNodeId": "1:2291",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    },
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "outline",
+      "exportName": "XOutlined",
+      "sourceNodeId": "1:2257",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    },
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "outline",
+      "exportName": "DocumentDuplicateOutlined",
+      "sourceNodeId": "1:2123",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    },
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "solid",
+      "exportName": "CheckCircleSolid",
+      "sourceNodeId": "1:2583",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    },
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "solid",
+      "exportName": "CheckSolid",
+      "sourceNodeId": "1:2733",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    },
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "colorful",
+      "exportName": "WeChatSocialColorful",
+      "sourceNodeId": "44554:2144",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    },
+    {
+      "disposition": "package-migrated",
+      "status": "registry-verified",
+      "family": "colorful",
+      "exportName": "SystemOutputWithBackgroundAiModelColorful",
+      "sourceNodeId": "45594:5407",
+      "sourceStatus": "current",
+      "reason": "Package export metadata matches the icon registry; visual approval is not asserted by this canary."
+    }
+  ]
+}

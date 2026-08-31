@@ -35,6 +35,11 @@
       "browser": "./dist/browser/outline/index.js",
       "import": "./dist/outline/index.js"
     },
+    "./oldicon": {
+      "types": "./dist/oldicon/index.d.ts",
+      "browser": "./dist/browser/oldicon/index.js",
+      "import": "./dist/oldicon/index.js"
+    },
     "./solid": {
       "types": "./dist/solid/index.d.ts",
       "browser": "./dist/browser/solid/index.js",
@@ -71,6 +76,7 @@
   },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.json",
+    "measure:size": "node scripts/size-observability.mjs",
     "verify:package": "node scripts/verify-package.mjs",
     "prepack": "pnpm run verify:package"
   },
@@ -83,6 +89,7 @@
   "devDependencies": {
     "@types/react": "^18.3.24",
     "@vitejs/plugin-react": "^4.4.1",
+    "esbuild": "0.25.9",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-svgr": "^4.5.0"
