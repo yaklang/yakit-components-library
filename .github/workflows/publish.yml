@@ -245,6 +245,8 @@ jobs:
         with:
           node-version: 24.12.0
           package-manager-cache: false
+      - name: Install verification tooling without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Download exact Changesets pack artifact
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
         with:
