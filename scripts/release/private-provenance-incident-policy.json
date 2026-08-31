@@ -1,0 +1,84 @@
+{
+  "schemaId": "yakit-ui-private-provenance-incident-policy/v1",
+  "schemaVersion": 1,
+  "incidentId": "private-provenance-33387081894",
+  "notAfter": "2026-09-14T11:38:10.000Z",
+  "repository": {
+    "id": "1045339722",
+    "name": "yaklang/yakit-components-library",
+    "visibility": "private"
+  },
+  "source": {
+    "runId": "33387081894",
+    "runAttempt": 1,
+    "publishJobId": "99474567221",
+    "headSha": "fb3441d0616f69cb88cb9b1e6a740ad79adbcb4a",
+    "sourceRef": "refs/heads/main"
+  },
+  "artifacts": {
+    "verification": {
+      "id": "9756272088",
+      "digest": "sha256:14f02febd45b9d9c9d14dcf6629cec812098e33871421480dbc80f6393e7d030"
+    },
+    "intent": {
+      "id": "9756273100",
+      "digest": "sha256:4666c3647e206fec4a999a8142ce355154f1016940aeee780352fce5c7a140cf"
+    },
+    "receipt": {
+      "id": "9756304220",
+      "digest": "sha256:b88f5d59ba6d5e5477af189c8f1efbf1f9d7f3be1b6e4b93ec5fd09a93e9fd0f"
+    }
+  },
+  "outboxSha256": "cfc21fe9ed511fcb3b46eeb398bf6e0e493d469901022e87805b946d31ab8f33",
+  "releaseSet": [
+    {
+      "name": "@yakit-libs/yakit-ui",
+      "version": "0.2.2",
+      "expectedLatest": "0.2.1",
+      "identity": "@yakit-libs/yakit-ui@0.2.2",
+      "tarballFilename": "yakit-libs-yakit-ui-0.2.2.tgz",
+      "tarballSha256": "679cf66efbe78cb0521e70aef7fa10286ab49e4a99159613ef0b9bafb8b8ff9e",
+      "integrity": "sha512-cQTghdlgvajUSWYLsz2n1GpNzsDNqCya/C69FDZ7hDHfE5wexTqqyz2C6rwL45nPfBeDWRBYg2ZZHzfzkmEhCg==",
+      "priorStatus": "AMBIGUOUS",
+      "resolvedOutcome": "NOT_APPLIED"
+    },
+    {
+      "name": "@yakit-libs/yakit-ui-icons",
+      "version": "0.2.2",
+      "expectedLatest": "0.2.1",
+      "identity": "@yakit-libs/yakit-ui-icons@0.2.2",
+      "tarballFilename": "yakit-libs-yakit-ui-icons-0.2.2.tgz",
+      "tarballSha256": "ebf009184dcf2238c353c2b744ee60478f03b223f7c25465ad38cd3b9d11cfed",
+      "integrity": "sha512-QPJvwBMX85YpwEFwPUwy6r9U7KaWQOSlzfRmyjvA8Z0ioE8YR6yvNNXp5l/cwJxJeyp/xlOzXHpwNnBA4TfdJQ==",
+      "priorStatus": "PROCESSING",
+      "resolvedOutcome": "NOT_ATTEMPTED"
+    }
+  ],
+  "sourceConsumer": {
+    "path": "scripts/release/publication-consumer.mjs",
+    "blobSha": "a7e7ddd1686af4f400c250dffce00f4bbf22a4c8",
+    "sha256": "2bed0c0ee461de9f908957deda7f2056bc6c1c84dd4482be1aabacbf1a1acee8"
+  },
+  "requiredJobSteps": [
+    {
+      "name": "Consume immutable publication outbox and publish exact tarballs",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Upload append-only publication receipt",
+      "conclusion": "success"
+    }
+  ],
+  "requiredLogTokens": [
+    "npm publish /home/runner/work/yakit-components-library/yakit-components-library/.release/verified/yakit-libs-yakit-ui-0.2.2.tgz --access public --provenance --ignore-scripts --tag latest",
+    "npm error code E422",
+    "PUT https://registry.npmjs.org/@yakit-libs%2fyakit-ui",
+    "Unsupported GitHub Actions source repository visibility: \"private\""
+  ],
+  "forbiddenLogTokens": [
+    "npm publish /home/runner/work/yakit-components-library/yakit-components-library/.release/verified/yakit-libs-yakit-ui-icons-0.2.2.tgz",
+    "+ @yakit-libs/yakit-ui@0.2.2",
+    "+ @yakit-libs/yakit-ui-icons@0.2.2"
+  ],
+  "allowedInconclusiveIds": ["33387081894", "9756304220"]
+}

@@ -24,7 +24,7 @@ import { validateVerificationManifest } from "./verification-manifest.mjs";
 const API_VERSION = "2022-11-28";
 const ROOT = path.resolve(import.meta.dirname, "../..");
 const RELEVANT_ARTIFACT =
-  /^yakit-ui-(?:release-impact|verification|publish-intent|publish-receipt|recovery-intent|recovery-receipt)-/;
+  /^yakit-ui-(?:release-impact|verification|publish-intent|publish-receipt|recovery-intent|recovery-receipt|incident-resolution)-/;
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
 
 function requiredEnvironment(name) {
@@ -198,6 +198,7 @@ function artifactKind(name) {
     "publish-receipt",
     "recovery-intent",
     "recovery-receipt",
+    "incident-resolution",
   ])
     if (name.startsWith(`yakit-ui-${kind}-`)) return kind;
   return "unknown";
@@ -531,6 +532,20 @@ export async function validateStrictArtifact({
     await validateVerificationArtifact({ artifact, directory, jsonDocuments });
     return { semanticOutcome: "recoverable" };
   }
+  if (artifact.kind === "incident-resolution") {
+    exactJsonNames(jsonDocuments, ["incident-resolution.json"]);
+    exactArchiveEntries(artifact, ["incident-resolution.json"]);
+    const resolution = jsonDocuments["incident-resolution.json"].value;
+    const { evidenceHash, ...payload } = resolution ?? {};
+    if (
+      resolution?.schemaId !== "yakit-ui-private-provenance-rejection/v1" ||
+      resolution?.schemaVersion !== 1 ||
+      !resolution?.incidentId ||
+      evidenceHash !== payloadHash(payload)
+    )
+      throw new Error("incident resolution artifact is invalid");
+    return { semanticOutcome: "closed-terminal" };
+  }
   if (
     [
       "publish-intent",
@@ -686,7 +701,7 @@ export function classifyArtifactEvidence(artifact) {
       disposition: "inconclusive",
       reason: "artifact lifecycle outcome is ambiguous",
     };
-  if (kind === "release-impact") {
+  if (["release-impact", "incident-resolution"].includes(kind)) {
     return { ...artifact, disposition: semanticOutcome };
   }
   if (["publish-receipt", "recovery-receipt"].includes(kind))

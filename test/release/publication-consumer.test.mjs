@@ -6,6 +6,10 @@ import test from "node:test";
 
 import { payloadHash } from "../../scripts/release/durable-release-state.mjs";
 import {
+  BOUND_PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+  PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+} from "../../scripts/release/private-provenance-recovery.mjs";
+import {
   createRegistryAbsenceObservation,
   createPublicationOutbox,
   dispatchPreparedPublication,
@@ -348,6 +352,150 @@ test("connection-lost AMBIGUOUS receipt can never authorize replay", async () =>
         now: now + 60_000,
       }),
     /inbox identity conflict/,
+  );
+});
+
+test("exact private provenance incident evidence resolves ambiguous and unattempted packages once", async () => {
+  const coupledManifest = structuredClone(manifest);
+  coupledManifest.releases.push({
+    name: "@yakit-libs/yakit-ui-icons",
+    version: "2.0.0",
+    identity: "@yakit-libs/yakit-ui-icons@2.0.0",
+    distTag: "latest",
+    tarball: {
+      filename: "yakit-libs-yakit-ui-icons-2.0.0.tgz",
+      sha256: "c".repeat(64),
+      integrity: `sha512-${Buffer.from("icons fixture").toString("base64")}`,
+      packedBytes: 45,
+    },
+  });
+  const outbox = createPublicationOutbox(coupledManifest);
+  const outboxSha256 = "3".repeat(64);
+  const priorRoot = await directory("yakit-private-provenance-root-");
+  const intentName = "yakit-ui-publish-intent-42-1";
+  const receiptName = "yakit-ui-publish-receipt-42-1";
+  const intent = await artifactDirectory(priorRoot, intentName);
+  const receipt = await artifactDirectory(priorRoot, receiptName);
+  await preparePublicationAttempt({
+    manifest: coupledManifest,
+    outbox,
+    outboxSha256,
+    stateDirectory: intent,
+    priorArtifactInventory: inventory(),
+    attemptId: "42:1",
+    observe: async () => "NOT_APPLIED",
+    now,
+  });
+  await assert.rejects(
+    () =>
+      dispatchPreparedPublication({
+        manifest: coupledManifest,
+        outbox,
+        outboxSha256,
+        intentDirectory: intent,
+        receiptDirectory: receipt,
+        intentArtifactIdentity: {
+          id: "101",
+          digest: `sha256:${"a".repeat(64)}`,
+        },
+        observe: async () => "NOT_APPLIED",
+        publish: async () => {
+          throw new Error(
+            "npm publish exact.tgz --provenance failed with E422",
+          );
+        },
+        now: now + 1,
+      }),
+    /publication outcome is ambiguous/,
+  );
+  const priorInventory = inventory([
+    artifact("101", intentName, "a"),
+    artifact("102", receiptName, "b"),
+  ]);
+  const resolutionPayload = {
+    schemaId: PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+    schemaVersion: 1,
+    repository: {
+      name: coupledManifest.repository,
+      visibility: "private",
+    },
+    sourceRunId: coupledManifest.runId,
+    workflowCommitSha: coupledManifest.workflowCommitSha,
+    rejectionObservedAt: new Date(now + 1).toISOString(),
+    npmErrorCode: "E422",
+    failureReason: "PRIVATE_SOURCE_REPOSITORY_PROVENANCE_UNSUPPORTED",
+    failureReleaseIdentity: coupledManifest.releases[0].identity,
+    releaseIdentities: coupledManifest.releases.map(
+      (release) => release.identity,
+    ),
+    resolvedOutcomes: Object.fromEntries(
+      coupledManifest.releases.map((release, index) => [
+        release.identity,
+        index === 0 ? "NOT_APPLIED" : "NOT_ATTEMPTED",
+      ]),
+    ),
+    logSha256: "d".repeat(64),
+    sourceArtifactEvidence: {
+      intent: {
+        id: "101",
+        digest: `sha256:${"a".repeat(64)}`,
+      },
+      receipt: {
+        id: "102",
+        digest: `sha256:${"b".repeat(64)}`,
+      },
+    },
+  };
+  const resolution = {
+    ...resolutionPayload,
+    evidenceHash: payloadHash(resolutionPayload),
+  };
+  const boundPayload = {
+    schemaId: BOUND_PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+    schemaVersion: 1,
+    resolution,
+    resolutionSha256: "e".repeat(64),
+    resolutionArtifact: {
+      id: "900",
+      digest: `sha256:${"f".repeat(64)}`,
+      workflowRunId: "99",
+    },
+  };
+  const definitiveNoApplyEvidence = {
+    ...boundPayload,
+    evidenceHash: payloadHash(boundPayload),
+  };
+  const retry = await directory("yakit-private-provenance-retry-");
+  const retryAt = now + 60_000;
+  const prepared = await preparePublicationAttempt({
+    manifest: coupledManifest,
+    outbox,
+    outboxSha256,
+    stateDirectory: retry,
+    priorStateRoot: priorRoot,
+    priorArtifactInventory: priorInventory,
+    retryAuthorizationRequest: {
+      authorized: true,
+      definitiveNoApplyEvidence,
+      intentArtifactId: "101",
+      receiptArtifactId: "102",
+    },
+    attemptId: "99:1",
+    observe: async (release) =>
+      createRegistryAbsenceObservation(release, retryAt),
+    now: retryAt,
+  });
+  assert.deepEqual(
+    prepared.pending,
+    coupledManifest.releases.map((release) => release.name),
+  );
+  const lifecycle = JSON.parse(
+    await readFile(path.join(retry, "lifecycle-snapshot.json"), "utf8"),
+  );
+  assert.equal(
+    lifecycle.authorizedRetryDecision.definitiveNoApplyEvidence
+      .resolutionArtifact.id,
+    "900",
   );
 });
 

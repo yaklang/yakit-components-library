@@ -13,6 +13,11 @@ import {
   classifyPublicationState,
   registryRecord,
 } from "./recover-partial-publication.mjs";
+import {
+  createPrivateProvenanceAuthorizedPublish,
+  readPrivateProvenanceIncidentPolicy,
+  validatePrivateProvenancePublishAuthorization,
+} from "./private-provenance-recovery.mjs";
 import { findPackageTarball } from "./verify-pack-directory.mjs";
 import {
   artifactsForManifest,
@@ -147,6 +152,53 @@ if (
     "durable publication intent belongs to a different workflow run",
   );
 
+const intentLifecycle = JSON.parse(
+  await readFile(path.join(intentDirectory, "lifecycle-snapshot.json"), "utf8"),
+);
+const boundIncidentEvidence =
+  intentLifecycle.authorizedRetryDecision?.definitiveNoApplyEvidence;
+const incidentResolutionPath = process.env.PRIVATE_PROVENANCE_RESOLUTION_PATH;
+let privateProvenanceAuthorization;
+if (Boolean(boundIncidentEvidence) !== Boolean(incidentResolutionPath))
+  throw new Error("incident resolution download does not match durable intent");
+if (incidentResolutionPath) {
+  const resolutionArtifactId = requiredEnvironment(
+    "PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_ID",
+  );
+  const resolutionArtifactDigest = normalizedArtifactDigest(
+    requiredEnvironment("PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_DIGEST"),
+  );
+  const resolutionArtifact = await artifactMetadata(
+    requiredEnvironment("GITHUB_REPOSITORY"),
+    resolutionArtifactId,
+    requiredEnvironment("GITHUB_TOKEN"),
+  );
+  const resolution = JSON.parse(await readFile(incidentResolutionPath, "utf8"));
+  if (
+    String(resolutionArtifact.id) !== String(resolutionArtifactId) ||
+    resolutionArtifact.expired ||
+    resolutionArtifact.digest !== resolutionArtifactDigest ||
+    String(resolutionArtifact.workflow_run?.id) !==
+      String(process.env.GITHUB_RUN_ID) ||
+    boundIncidentEvidence.resolutionArtifact?.id !==
+      String(resolutionArtifactId) ||
+    boundIncidentEvidence.resolutionArtifact?.digest !==
+      resolutionArtifactDigest ||
+    boundIncidentEvidence.resolutionSha256 !==
+      (await sha256File(incidentResolutionPath)) ||
+    JSON.stringify(boundIncidentEvidence.resolution) !==
+      JSON.stringify(resolution)
+  )
+    throw new Error("incident resolution artifact differs from durable intent");
+  const policy = await readPrivateProvenanceIncidentPolicy();
+  validatePrivateProvenancePublishAuthorization({
+    now: new Date().toISOString(),
+    policy,
+    resolution,
+  });
+  privateProvenanceAuthorization = { policy, resolution };
+}
+
 async function observe(release) {
   const artifact = artifacts.find((item) => item.package === release.name);
   const record = await registryRecord(
@@ -195,6 +247,13 @@ async function publish(release) {
   }
 }
 
+const authorizedPublish = privateProvenanceAuthorization
+  ? createPrivateProvenanceAuthorizedPublish({
+      ...privateProvenanceAuthorization,
+      publish,
+    })
+  : publish;
+
 const result = await dispatchPreparedPublication({
   manifest,
   outbox,
@@ -207,7 +266,7 @@ const result = await dispatchPreparedPublication({
   },
   observe,
   observeAfterPublish,
-  publish,
+  publish: authorizedPublish,
 });
 await writeOutputs({
   published: "true",

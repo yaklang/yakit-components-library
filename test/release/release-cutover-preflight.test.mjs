@@ -18,6 +18,10 @@ import {
   evaluateReleaseCutover,
 } from "../../scripts/release/release-cutover-preflight.mjs";
 import { validateCutoverPolicy } from "../../scripts/release/release-cutover-policy.mjs";
+import {
+  PRIVATE_PROVENANCE_INCIDENT_POLICY_SCHEMA,
+  PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+} from "../../scripts/release/private-provenance-recovery.mjs";
 
 const HEAD = "1".repeat(40);
 const CUTOVER = "2".repeat(40);
@@ -230,6 +234,148 @@ test("repo-wide incomplete or inconclusive inventory blocks", () => {
       now: "2026-09-01T00:00:00.000Z",
     }).reason,
     /inconclusive/,
+  );
+});
+
+test("an exact incident resolution permits only its two reviewed inconclusive identities", () => {
+  const candidate = evidence();
+  candidate.inventory.runs.push({
+    id: "source-run",
+    sourceRef: "refs/heads/main",
+    headSha: HEAD,
+    workflowPath: ".github/workflows/publish.yml",
+    disposition: "inconclusive",
+  });
+  candidate.inventory.artifacts.push({
+    id: "source-receipt",
+    workflowRunId: "source-run",
+    sourceRef: "refs/heads/main",
+    headSha: HEAD,
+    digest: DIGEST,
+    archiveSha256: DIGEST.slice("sha256:".length),
+    entries: ["consumer-inbox.json", "lifecycle-snapshot.json"],
+    strictValidation: { status: "passed" },
+    disposition: "inconclusive",
+  });
+  const incidentPolicy = {
+    schemaId: PRIVATE_PROVENANCE_INCIDENT_POLICY_SCHEMA,
+    schemaVersion: 1,
+    incidentId: "incident",
+    notAfter: "2026-09-14T00:00:00.000Z",
+    repository: { id: "1", name: "owner/repo", visibility: "private" },
+    source: {
+      runId: "source-run",
+      runAttempt: 1,
+      publishJobId: "job",
+      headSha: HEAD,
+      sourceRef: "refs/heads/main",
+    },
+    artifacts: {
+      verification: { id: "verification", digest: DIGEST },
+      intent: { id: "intent", digest: DIGEST },
+      receipt: { id: "source-receipt", digest: DIGEST },
+    },
+    outboxSha256: HASH,
+    releaseSet: [UI, ICONS].map((name, index) => ({
+      name,
+      version: "0.2.2",
+      expectedLatest: "0.2.1",
+      identity: `${name}@0.2.2`,
+      tarballFilename: `package-${index}.tgz`,
+      tarballSha256: HASH,
+      integrity: `sha512-${Buffer.from(String(index)).toString("base64")}`,
+      priorStatus: index === 0 ? "AMBIGUOUS" : "PROCESSING",
+      resolvedOutcome: index === 0 ? "NOT_APPLIED" : "NOT_ATTEMPTED",
+    })),
+    sourceConsumer: {
+      path: "scripts/release/publication-consumer.mjs",
+      blobSha: BLOB,
+      sha256: HASH,
+    },
+    requiredJobSteps: [],
+    requiredLogTokens: [],
+    forbiddenLogTokens: [],
+    allowedInconclusiveIds: ["source-run", "source-receipt"],
+  };
+  const observedAt = "2026-09-01T00:00:30.000Z";
+  const registryPass = incidentPolicy.releaseSet.map((release) => ({
+    identity: release.identity,
+    observedAt,
+    registryUrl: `https://registry.npmjs.org/${encodeURIComponent(release.name)}`,
+    httpStatus: 200,
+    versionExists: false,
+    latest: release.expectedLatest,
+    result: "NOT_APPLIED",
+  }));
+  const resolutionPayload = {
+    schemaId: PRIVATE_PROVENANCE_REJECTION_SCHEMA,
+    schemaVersion: 1,
+    incidentId: incidentPolicy.incidentId,
+    policySha256: payloadHash(incidentPolicy),
+    repository: incidentPolicy.repository,
+    sourceRunId: incidentPolicy.source.runId,
+    publishJobId: incidentPolicy.source.publishJobId,
+    workflowCommitSha: incidentPolicy.source.headSha,
+    npmErrorCode: "E422",
+    failureReason: "PRIVATE_SOURCE_REPOSITORY_PROVENANCE_UNSUPPORTED",
+    failureReleaseIdentity: incidentPolicy.releaseSet[0].identity,
+    releaseIdentities: incidentPolicy.releaseSet.map(
+      (release) => release.identity,
+    ),
+    allowedInconclusiveIds: incidentPolicy.allowedInconclusiveIds,
+    resolvedOutcomes: Object.fromEntries(
+      incidentPolicy.releaseSet.map((release) => [
+        release.identity,
+        release.resolvedOutcome,
+      ]),
+    ),
+    sourceArtifactEvidence: {
+      intent: incidentPolicy.artifacts.intent,
+      receipt: incidentPolicy.artifacts.receipt,
+      verification: incidentPolicy.artifacts.verification,
+    },
+    sourceConsumerSha256: incidentPolicy.sourceConsumer.sha256,
+    logSha256: HASH,
+    propagationWindowMs: 30_000,
+    observationMaxAgeMs: 300_000,
+    registryObservations: [
+      registryPass.map((item) => ({
+        ...item,
+        observedAt: "2026-09-01T00:00:00.000Z",
+      })),
+      registryPass,
+    ],
+    cutoverInventoryHash: payloadHash(candidate.inventory),
+  };
+  const incidentResolution = {
+    ...resolutionPayload,
+    evidenceHash: payloadHash(resolutionPayload),
+  };
+  assert.equal(
+    evaluateReleaseCutover({
+      policy,
+      producer: producer(),
+      evidence: candidate,
+      incidentPolicy,
+      incidentResolution,
+      now: observedAt,
+    }).status,
+    "PASS",
+  );
+  candidate.inventory.artifacts.push({
+    id: "unexpected",
+    disposition: "inconclusive",
+  });
+  assert.match(
+    evaluateReleaseCutover({
+      policy,
+      producer: producer(),
+      evidence: candidate,
+      incidentPolicy,
+      incidentResolution,
+      now: observedAt,
+    }).reason,
+    /inconclusive inventory mismatch|inconclusive/,
   );
 });
 

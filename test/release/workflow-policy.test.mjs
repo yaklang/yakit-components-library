@@ -303,6 +303,39 @@ test("durable PROCESSING intent is uploaded before either OIDC publisher can run
   );
 });
 
+test("private repository provenance recovery is evidence-bound and explicitly authorized", () => {
+  const source = workflow("publish.yml");
+  const jobs = extractWorkflowJobs(source);
+  const recoveryVerifier = jobs.get("recovery-verify") ?? "";
+  const recoveryPublisher = jobs.get("recovery-publish") ?? "";
+  assert.match(source, /incident_id:/);
+  assert.doesNotMatch(source, /private_provenance_rejection_job_id:/);
+  assert.match(
+    recoveryVerifier,
+    /Resolve the exact checked-in private provenance incident[\s\S]*private-provenance-recovery\.mjs/,
+  );
+  assert.match(
+    recoveryVerifier,
+    /Re-enforce cutover with the exact incident resolution[\s\S]*RELEASE_INCIDENT_RESOLUTION/,
+  );
+  assert.match(recoveryVerifier, /Upload append-only incident resolution/);
+  assert.match(recoveryVerifier, /AUTHORIZE_PUBLICATION_RETRY/);
+  assert.match(recoveryVerifier, /RETRY_INTENT_ARTIFACT_ID/);
+  assert.match(recoveryVerifier, /RETRY_RECEIPT_ARTIFACT_ID/);
+  assert.match(recoveryVerifier, /GITHUB_TOKEN/);
+  const preparation = readFileSync(
+    join(root, "scripts/release/prepare-publication-attempt.mjs"),
+    "utf8",
+  );
+  assert.match(preparation, /bindPrivateProvenanceResolutionArtifact/);
+  assert.match(preparation, /definitiveNoApplyEvidence/);
+  assert.match(
+    recoveryPublisher,
+    /Download exact append-only incident resolution/,
+  );
+  assert.match(recoveryPublisher, /PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_ID/);
+});
+
 test("verification evidence contains a manifest-bound immutable publication outbox", () => {
   const preparation = readFileSync(
     join(root, "scripts/release/prepare-verification-artifact.mjs"),

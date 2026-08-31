@@ -33,6 +33,10 @@ on:
         description: Exact prior definitive no-success receipt artifact ID for authorized retry
         required: false
         type: string
+      incident_id:
+        description: Checked-in one-time incident policy ID for an exact recovery exception
+        required: false
+        type: string
 
 permissions: {}
 
@@ -470,9 +474,25 @@ jobs:
       release-matrix: ${{ steps.identity.outputs.release-matrix }}
       recovery-intent-artifact-id: ${{ steps.upload-intent.outputs.artifact-id }}
       recovery-intent-artifact-digest: ${{ steps.upload-intent.outputs.artifact-digest }}
+      incident-resolution-artifact-id: ${{ steps.upload-incident-resolution.outputs.artifact-id }}
+      incident-resolution-artifact-digest: ${{ steps.upload-incident-resolution.outputs.artifact-digest }}
     steps:
       - name: Check recovery inputs
-        run: test -n '${{ inputs.source_run_id }}' && test -n '${{ inputs.verification_artifact_id }}'
+        run: |
+          test -n "$RECOVERY_SOURCE_RUN_ID"
+          test -n "$RECOVERY_VERIFICATION_ARTIFACT_ID"
+          if test -n "$INCIDENT_ID"; then
+            test "$AUTHORIZE_PUBLICATION_RETRY" = "true"
+            test -n "$RETRY_INTENT_ARTIFACT_ID"
+            test -n "$RETRY_RECEIPT_ARTIFACT_ID"
+          fi
+        env:
+          AUTHORIZE_PUBLICATION_RETRY: ${{ inputs.authorize_retry }}
+          INCIDENT_ID: ${{ inputs.incident_id }}
+          RECOVERY_SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          RECOVERY_VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
+          RETRY_INTENT_ARTIFACT_ID: ${{ inputs.retry_intent_artifact_id }}
+          RETRY_RECEIPT_ARTIFACT_ID: ${{ inputs.retry_receipt_artifact_id }}
       - name: Check out repository scripts
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
         with:
@@ -487,10 +507,38 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
       - name: Enforce the v3 recovery cutover
+        if: inputs.incident_id == ''
         run: node scripts/release/release-cutover-preflight.mjs
         env:
           RELEASE_CUTOVER_EVIDENCE: .release/cutover-evidence.json
+          RELEASE_INCIDENT_RESOLUTION: ${{ inputs.incident_id != '' && '.release/incident-resolution/incident-resolution.json' || '' }}
           RELEASE_PRODUCER_IDENTITY: .release/cutover-producer.json
+      - name: Resolve the exact checked-in private provenance incident
+        if: inputs.incident_id != ''
+        run: >-
+          node scripts/release/private-provenance-recovery.mjs
+          "$INCIDENT_ID" .release/cutover-evidence.json
+          .release/incident-resolution/incident-resolution.json
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.token }}
+          INCIDENT_ID: ${{ inputs.incident_id }}
+      - name: Re-enforce cutover with the exact incident resolution
+        if: inputs.incident_id != ''
+        run: node scripts/release/release-cutover-preflight.mjs
+        env:
+          RELEASE_CUTOVER_EVIDENCE: .release/cutover-evidence.json
+          RELEASE_INCIDENT_RESOLUTION: .release/incident-resolution/incident-resolution.json
+          RELEASE_PRODUCER_IDENTITY: .release/cutover-producer.json
+      - name: Upload append-only incident resolution
+        if: inputs.incident_id != ''
+        id: upload-incident-resolution
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0, reviewed 2026-08-21
+        with:
+          name: yakit-ui-incident-resolution-${{ inputs.incident_id }}-${{ github.run_id }}
+          path: .release/incident-resolution/incident-resolution.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Download exact cross-run verification artifact
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
         with:
@@ -530,8 +578,15 @@ jobs:
           .release/prior-recovery-state
         env:
           AUTHORIZE_PUBLICATION_RETRY: ${{ inputs.authorize_retry }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_DIGEST: ${{ steps.upload-incident-resolution.outputs.artifact-digest }}
+          PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_ID: ${{ steps.upload-incident-resolution.outputs.artifact-id }}
+          PRIVATE_PROVENANCE_RESOLUTION_PATH: ${{ inputs.incident_id != '' && '.release/incident-resolution/incident-resolution.json' || '' }}
           RETRY_INTENT_ARTIFACT_ID: ${{ inputs.retry_intent_artifact_id }}
           RETRY_RECEIPT_ARTIFACT_ID: ${{ inputs.retry_receipt_artifact_id }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
       - name: Upload durable pre-side-effect recovery intent
         if: steps.identity.outputs.has-missing == 'true'
         id: upload-intent
@@ -579,6 +634,13 @@ jobs:
           artifact-ids: ${{ needs.recovery-verify.outputs.recovery-intent-artifact-id }}
           merge-multiple: true
           path: .release/recovery-intent
+      - name: Download exact append-only incident resolution
+        if: needs.recovery-verify.outputs.incident-resolution-artifact-id != ''
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          artifact-ids: ${{ needs.recovery-verify.outputs.incident-resolution-artifact-id }}
+          merge-multiple: true
+          path: .release/incident-resolution
       - name: Publish only missing exact verified tarballs
         id: consume
         run: >-
@@ -589,6 +651,9 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PUBLICATION_INTENT_ARTIFACT_ID: ${{ needs.recovery-verify.outputs.recovery-intent-artifact-id }}
           PUBLICATION_INTENT_ARTIFACT_DIGEST: ${{ needs.recovery-verify.outputs.recovery-intent-artifact-digest }}
+          PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_DIGEST: ${{ needs.recovery-verify.outputs.incident-resolution-artifact-digest }}
+          PRIVATE_PROVENANCE_RESOLUTION_ARTIFACT_ID: ${{ needs.recovery-verify.outputs.incident-resolution-artifact-id }}
+          PRIVATE_PROVENANCE_RESOLUTION_PATH: ${{ needs.recovery-verify.outputs.incident-resolution-artifact-id != '' && '.release/incident-resolution/incident-resolution.json' || '' }}
           SOURCE_RUN_ID: ${{ inputs.source_run_id }}
           VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
       - name: Upload append-only recovery receipt
