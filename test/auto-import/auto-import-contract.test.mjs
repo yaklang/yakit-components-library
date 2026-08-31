@@ -57,12 +57,13 @@ function scenarioContract(scenario, installSet) {
   const preferredSpecifier = scenario.subpath
     ? `${isUiOnly ? "@yakit-libs/yakit-ui/icons" : rootSpecifier}/${scenario.subpath}`
     : rootSpecifier;
-  const acceptedSpecifierSet =
-    scenario.subpath && scenario.subpath !== "registry"
-      ? scenario.subpath === "oldicon"
+  let acceptedSpecifierSet = [preferredSpecifier];
+  if (scenario.subpath && scenario.subpath !== "registry") {
+    acceptedSpecifierSet =
+      scenario.subpath === "oldicon"
         ? [preferredSpecifier]
-        : [preferredSpecifier, rootSpecifier]
-      : [preferredSpecifier];
+        : [preferredSpecifier, rootSpecifier];
+  }
   if (isUiOnly && scenario.subpath === "registry") {
     // yakit-ui's root still re-exports the registry, so it is a valid compatibility fallback.
     acceptedSpecifierSet.push(rootSpecifier);

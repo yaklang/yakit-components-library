@@ -55,6 +55,13 @@ const validReport = () => {
           condition === "browser"
             ? { gzipBytes: 5, minifiedBytes: 10, unminifiedBytes: 12 }
             : { gzipBytes: 0, minifiedBytes: 0, unminifiedBytes: 0 };
+        let basename = `${probe.subpath.slice(2)}/index.js`;
+        if (probe.subpath === ".") basename = "index.js";
+        else if (probe.kind === "registry")
+          basename = `${probe.subpath.slice(2)}.js`;
+        const expectedTarget = `dist/${
+          condition === "browser" ? "browser/" : ""
+        }${basename}`;
         return {
           buildOptions: comparePairedBuildOptions(
             normalizedBuildOptions(tool, condition, false),
@@ -78,20 +85,8 @@ const validReport = () => {
           kind: probe.kind,
           probe: probe.id,
           resolution: {
-            actual: `dist/${condition === "browser" ? "browser/" : ""}${
-              probe.subpath === "."
-                ? "index.js"
-                : probe.kind === "registry"
-                  ? `${probe.subpath.slice(2)}.js`
-                  : `${probe.subpath.slice(2)}/index.js`
-            }`,
-            expected: `dist/${condition === "browser" ? "browser/" : ""}${
-              probe.subpath === "."
-                ? "index.js"
-                : probe.kind === "registry"
-                  ? `${probe.subpath.slice(2)}.js`
-                  : `${probe.subpath.slice(2)}/index.js`
-            }`,
+            actual: expectedTarget,
+            expected: expectedTarget,
             matchedExpectedCondition: true,
           },
           resolvedInputs: ["dist/index.js"],

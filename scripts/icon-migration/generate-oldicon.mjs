@@ -349,6 +349,9 @@ async function collect() {
     if (!direct && !audit?.rawSvg)
       fail("AUDIT_ROW_MISSING", `${row.file}::${row.name}`);
     const rawSvg = direct?.rawSvg ?? audit.rawSvg;
+    let sourceKind = "main-audit";
+    if (direct) sourceKind = "direct-source";
+    else if (isLink) sourceKind = "link-audit";
     return {
       classification: row.classification,
       dimensions: dimensionsFromSvg(rawSvg),
@@ -356,11 +359,7 @@ async function collect() {
       sourceSvgSha256: sha256(rawSvg),
       rawSvg,
       sourceFile: row.file,
-      sourceKind: direct
-        ? "direct-source"
-        : isLink
-          ? "link-audit"
-          : "main-audit",
+      sourceKind,
       sourceName: row.name,
     };
   });

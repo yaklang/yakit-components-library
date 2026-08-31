@@ -231,12 +231,9 @@ if (invokedDirectly) {
     manifest.schemaVersion === 3
       ? manifest.releaseSet?.[0]
       : primaryPackageNameForSchema(manifest.schemaVersion);
-  const expectedPackages =
-    manifest.schemaVersion === 1
-      ? [primaryPackageName]
-      : manifest.schemaVersion === 2
-        ? PUBLIC_PACKAGES
-        : manifest.releaseSet;
+  let expectedPackages = manifest.releaseSet;
+  if (manifest.schemaVersion === 1) expectedPackages = [primaryPackageName];
+  else if (manifest.schemaVersion === 2) expectedPackages = PUBLIC_PACKAGES;
   const tarballPaths = Object.fromEntries(
     await Promise.all(
       expectedPackages.map(async (name) => [

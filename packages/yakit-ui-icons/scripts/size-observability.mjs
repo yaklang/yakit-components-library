@@ -222,20 +222,20 @@ export function createIdentityRecord({
 
 export function failureSignalsFromLightweight(lightweight) {
   return normalizeFailureSignals(
-    lightweight.breaches.map((breach) => ({
-      condition: breach.condition,
-      engine: breach.tool,
-      expected: breach.cap,
-      failureKind:
-        breach.metric === "minifiedBytes"
-          ? "JS_MINIFIED_BUDGET"
-          : breach.metric === "gzipBytes"
-            ? "JS_GZIP_BUDGET"
-            : "UNRELATED_SENTINEL",
-      observed: breach.actual,
-      rowId: breach.probe,
-      source: "paired-graph",
-    })),
+    lightweight.breaches.map((breach) => {
+      let failureKind = "UNRELATED_SENTINEL";
+      if (breach.metric === "minifiedBytes") failureKind = "JS_MINIFIED_BUDGET";
+      else if (breach.metric === "gzipBytes") failureKind = "JS_GZIP_BUDGET";
+      return {
+        condition: breach.condition,
+        engine: breach.tool,
+        expected: breach.cap,
+        failureKind,
+        observed: breach.actual,
+        rowId: breach.probe,
+        source: "paired-graph",
+      };
+    }),
   );
 }
 
@@ -268,12 +268,9 @@ export function classifyDistribution(metrics, caps = ICON_DISTRIBUTION_CAPS) {
   const nearCapDimensions = Object.entries(utilization)
     .filter(([, ratio]) => ratio >= 0.95)
     .map(([metric]) => metric);
-  const classification =
-    breaches.length > 0
-      ? "EXCEEDS_CAP"
-      : nearCapDimensions.length > 0
-        ? "NEAR_CAP"
-        : "WITHIN_CAP";
+  let classification = "WITHIN_CAP";
+  if (breaches.length > 0) classification = "EXCEEDS_CAP";
+  else if (nearCapDimensions.length > 0) classification = "NEAR_CAP";
   return {
     breaches,
     classification,
@@ -398,13 +395,17 @@ export function classifyRuntime({ evidenceErrors = [], signals = [] }) {
     confirmed.add("ENTRY_CONTRACT_DEFECT");
   }
   const confirmedDefectCategories = [...confirmed].sort();
-  const classification =
-    confirmedDefectCategories.length > 1
-      ? "MULTIPLE_RUNTIME_DEFECTS"
-      : (confirmedDefectCategories[0] ??
-        (failureSignals.length > 0
-          ? "BUNDLER_SPECIFIC_VARIANCE"
-          : "HEALTHY_ANALYZER_AMBIGUITY"));
+  let classification = confirmedDefectCategories[0];
+  if (confirmedDefectCategories.length > 1)
+    classification = "MULTIPLE_RUNTIME_DEFECTS";
+  else if (!classification && failureSignals.length > 0)
+    classification = "BUNDLER_SPECIFIC_VARIANCE";
+  else if (!classification) classification = "HEALTHY_ANALYZER_AMBIGUITY";
+  let reasons = ["UNCORROBORATED_FAILURE_SIGNALS"];
+  if (classification === "HEALTHY_ANALYZER_AMBIGUITY")
+    reasons = ["NO_NORMALIZED_FAILURE_SIGNALS"];
+  else if (confirmedDefectCategories.length > 0)
+    reasons = confirmedDefectCategories;
   return {
     browserSignalIds: failureSignals
       .filter(
@@ -417,12 +418,7 @@ export function classifyRuntime({ evidenceErrors = [], signals = [] }) {
       browserRows: SIZE_PROBES.length * 2,
       generalRows: SIZE_PROBES.length * 2,
     },
-    reasons:
-      classification === "HEALTHY_ANALYZER_AMBIGUITY"
-        ? ["NO_NORMALIZED_FAILURE_SIGNALS"]
-        : confirmedDefectCategories.length > 0
-          ? confirmedDefectCategories
-          : ["UNCORROBORATED_FAILURE_SIGNALS"],
+    reasons,
     treeSignalIds: failureSignals
       .filter(
         ({ condition, id }) => condition === "general" && corroborated.has(id),
@@ -763,11 +759,9 @@ function bytesByExtension(outputs) {
     js: { gzipBytes: 0, outputBytes: 0 },
   };
   for (const output of outputs) {
-    const extension = output.path.endsWith(".css")
-      ? "css"
-      : /\.m?js$/.test(output.path)
-        ? "js"
-        : null;
+    let extension = null;
+    if (output.path.endsWith(".css")) extension = "css";
+    else if (/\.m?js$/.test(output.path)) extension = "js";
     if (!extension) continue;
     const contents = Buffer.isBuffer(output.contents)
       ? output.contents
@@ -827,12 +821,9 @@ export function comparePairedBuildOptions(unminified, minified) {
 
 function expectedResolutionTarget(probe, condition) {
   if (!probe) return null;
-  const basename =
-    probe.subpath === "."
-      ? "index.js"
-      : probe.kind === "registry"
-        ? `${probe.subpath.slice(2)}.js`
-        : `${probe.subpath.slice(2)}/index.js`;
+  let basename = `${probe.subpath.slice(2)}/index.js`;
+  if (probe.subpath === ".") basename = "index.js";
+  else if (probe.kind === "registry") basename = `${probe.subpath.slice(2)}.js`;
   return `dist/${condition === "browser" ? "browser/" : ""}${basename}`;
 }
 
