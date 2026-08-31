@@ -120,6 +120,12 @@ test("publish and recovery fail closed on cutover and exact impact evidence", ()
   assert.match(build, /release-impact\.mjs/);
   assert.match(build, /--from-release-tags --build-isolated/);
   assert.match(build, /publish-plan\.json/);
+  assert.match(selector, /publish-plan-job-output\.mjs export/);
+  assert.match(selector, /publish-plan-base64/);
+  assert.match(selector, /publish-plan-sha256/);
+  assert.match(build, /publish-plan-job-output\.mjs restore/);
+  assert.doesNotMatch(build, /Download exact Changesets publish plan/);
+  assert.doesNotMatch(build, /publish-plan-artifact-id:/);
   assert.match(build, /Upload immutable release impact evidence/);
   assert.match(verifier, /needs\.build-and-pack\.outputs\.impact-artifact-id/);
   assert.match(verifier, /RELEASE_IMPACT_OUTPUT:/);

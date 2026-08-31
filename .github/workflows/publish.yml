@@ -58,6 +58,8 @@ jobs:
     outputs:
       mode: ${{ steps.select.outputs.mode }}
       publish-plan-artifact-id: ${{ steps.select.outputs.publish-plan-artifact-id }}
+      publish-plan-base64: ${{ steps.publish-plan.outputs.publish-plan-base64 }}
+      publish-plan-sha256: ${{ steps.publish-plan.outputs.publish-plan-sha256 }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
@@ -93,6 +95,10 @@ jobs:
       - name: Select Changesets mode
         id: select
         uses: changesets/action/select-mode@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
+      - name: Export exact Changesets publish plan
+        if: steps.select.outputs.mode == 'publish'
+        id: publish-plan
+        run: node scripts/release/publish-plan-job-output.mjs export "${RUNNER_TEMP}"
 
   version:
     if: needs.select-mode.outputs.mode == 'version'
@@ -157,12 +163,13 @@ jobs:
           package-manager-cache: false
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Download exact Changesets publish plan
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
-        with:
-          artifact-ids: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
-          merge-multiple: true
-          path: .release/publish-plan
+      - name: Restore exact Changesets publish plan
+        run: >-
+          node scripts/release/publish-plan-job-output.mjs restore
+          .release/publish-plan/publish-plan.json
+        env:
+          PUBLISH_PLAN_BASE64: ${{ needs.select-mode.outputs.publish-plan-base64 }}
+          PUBLISH_PLAN_SHA256: ${{ needs.select-mode.outputs.publish-plan-sha256 }}
       - name: Verify workspace and release state
         run: pnpm run release:workspace-check && pnpm run release:preflight
       - name: Run release policy tests
@@ -202,8 +209,6 @@ jobs:
       - name: Pack publishable packages
         id: pack
         uses: changesets/action/pack@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
-        with:
-          publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
 
   verify-pack:
     if: needs.select-mode.outputs.mode == 'publish'
