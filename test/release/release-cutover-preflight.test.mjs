@@ -26,6 +26,13 @@ const HASH = "4".repeat(64);
 const DIGEST = `sha256:${"5".repeat(64)}`;
 const UI = "@yakit-libs/yakit-ui";
 const ICONS = "@yakit-libs/yakit-ui-icons";
+const collectorSource = readFileSync(
+  new URL(
+    "../../scripts/release/collect-release-cutover-evidence.mjs",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 function impactDocument(releaseSet = [UI]) {
   return {
@@ -776,7 +783,7 @@ test("old artifacts remain relevant by cutover ancestry or exact legacy allowlis
   );
 });
 
-test("collector follows Link pagination and source uses repo-wide artifact inventory", async () => {
+test("collector follows Link pagination and uses repo-wide artifact inventory", async () => {
   const originalFetch = globalThis.fetch;
   const requested = [];
   globalThis.fetch = async (url) => {
@@ -802,18 +809,16 @@ test("collector follows Link pagination and source uses repo-wide artifact inven
   } finally {
     globalThis.fetch = originalFetch;
   }
-  const source = readFileSync(
-    new URL(
-      "../../scripts/release/collect-release-cutover-evidence.mjs",
-      import.meta.url,
-    ),
-    "utf8",
-  );
-  assert.match(source, /\/actions\/artifacts\?per_page=100/);
+  assert.match(collectorSource, /\/actions\/artifacts\?per_page=100/);
   assert.doesNotMatch(
-    source,
+    collectorSource,
     /actions\/runs\/\$\{encodeURIComponent\(run\.id\)\}\/artifacts/,
   );
+});
+
+test("collector uses the canonical GitHub media type for artifact downloads", () => {
+  assert.match(collectorSource, /accept:\s*"application\/vnd\.github\+json"/);
+  assert.doesNotMatch(collectorSource, /application\/octet-stream/);
 });
 
 test("legacy page collector remains fail-closed for adapter callers", () => {
