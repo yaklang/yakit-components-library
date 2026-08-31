@@ -21,6 +21,12 @@ applyThemeColors(theme, getColors(theme));
 
 ## 使用
 
+`@yakit-libs/yakit-ui-icons` 是 Yakit 图标的规范导入包。即使项目同时安装了
+`@yakit-libs/yakit-ui`，新增代码也应优先使用本包，而不是兼容入口
+`@yakit-libs/yakit-ui/icons*`。
+
+本包与 `@yakit-libs/yakit-ui` 独立遵循 SemVer，版本号不要求相同；任一包单独发布不会强制另一个包升版。
+
 ```tsx
 import { HomeSolid, HomeOutlined } from "@yakit-libs/yakit-ui-icons";
 
@@ -68,10 +74,54 @@ import { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";
 import * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";
 ```
 
+### 遗留图标兼容入口
+
+仍在 Yakit 中使用、但无法用现有正式图标安全替换的旧 SVG 通过独立的 `oldicon`
+兼容入口提供：
+
+```tsx
+import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon";
+```
+
+`oldicon` 保留旧实现的几何、paint、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
+它不是第四个正式图标家族，不会进入根入口或 `iconRegistry`；新功能应优先选择
+`/outline`、`/solid` 或 `/colorful`。同名但图形不同的旧实现会使用来源限定的导出名，
+迁移时应按生成清单中的源文件映射选择，不能仅凭名称互换。
+
 完整注册表是显式的重入口，仅在图标浏览器等需要枚举所有图标的场景使用：
 
 ```tsx
 import { iconRegistry } from "@yakit-libs/yakit-ui-icons/registry";
 ```
+
+### 编辑器自动导入
+
+TypeScript/VS Code 可能为同一个图标发现多个公开候选；候选顺序由编辑器决定，npm 包不能从包元数据层面
+强制排序。应选择 `@yakit-libs/yakit-ui-icons` 或上文列出的公开子路径，并拒绝包含 `/dist/`、`/src/`
+的深层导入。
+
+如果自动导入没有扫描 `package.json` 依赖，可以在 VS Code 工作区设置中显式开启：
+
+```json
+{
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}
+```
+
+这些是消费者编辑器偏好，不会随 npm 包安装自动生效。仓库使用真实 tsserver 协议覆盖 TypeScript
+5.8.3/5.9.2、TS/TSX、`Bundler`/`NodeNext` 以及单包/双包安装组合；可运行：
+
+```bash
+pnpm run test:auto-import
+```
+
+#### English note
+
+Use `@yakit-libs/yakit-ui-icons` as the canonical package for new icon imports. The
+`@yakit-libs/yakit-ui/icons*` paths are compatibility-only. Both packages follow SemVer
+independently, so their versions do not need to match. Auto-import ordering is editor-controlled;
+the package exposes public module specifiers but does not install or enforce editor-private
+configuration.
 
 带渐变、遮罩或裁剪的图标通过 React `useId()` 隔离 SVG fragment ID。一个页面存在多个独立 React root 时，每个 root 必须使用不同的 `identifierPrefix`；同一组 SSR 与 hydration 必须使用完全相同的 prefix。跨 root 重用 prefix 可能产生 DOM ID 冲突，`useId()` 本身不提供该跨 root 保证。

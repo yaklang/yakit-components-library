@@ -18,8 +18,39 @@ pnpm add @yakit-libs/yakit-ui-icons react
 import { HomeOutlined } from '@yakit-libs/yakit-ui-icons';
 ```
 
-`@yakit-libs/yakit-ui/icons` 作为完整组件消费者的兼容入口保留；它仍属于
-`@yakit-libs/yakit-ui` 包，安装时需要满足上面的 React peer dependencies。
+`@yakit-libs/yakit-ui-icons` 是图标的规范导入包。`@yakit-libs/yakit-ui/icons`、
+`@yakit-libs/yakit-ui/icons/outline`、`@yakit-libs/yakit-ui/icons/solid`、
+`@yakit-libs/yakit-ui/icons/colorful` 和 `@yakit-libs/yakit-ui/icons/registry` 仅作为完整组件消费者的
+兼容入口保留；它们仍属于 `@yakit-libs/yakit-ui` 包，安装时需要满足上面的 React peer dependencies。
+新增代码请直接从独立图标包导入。
+
+两个 npm 包独立遵循 SemVer，版本号不要求相同，也不会仅因其中一个包发布就强制另一个包升版。
+兼容入口随 `@yakit-libs/yakit-ui` 自身版本发布，不代表独立图标包的版本。
+
+### 编辑器自动导入
+
+同时安装两个包时，TypeScript 可能发现多个公开入口。包元数据能够声明可用入口，但不能强制 VS Code
+把某个候选排在首位；请将 `@yakit-libs/yakit-ui-icons` 视为规范结果，不要接受包含 `/dist/` 或 `/src/`
+的深层路径。按家族和注册表手写导入时分别使用 `@yakit-libs/yakit-ui-icons/outline`、
+`@yakit-libs/yakit-ui-icons/solid`、`@yakit-libs/yakit-ui-icons/colorful` 和
+`@yakit-libs/yakit-ui-icons/registry`。
+
+如果 VS Code 未扫描 `package.json` 中的依赖，可以在工作区设置中显式开启扫描；这是消费者编辑器设置，
+组件包无法替消费者强制开启：
+
+```json
+{
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}
+```
+
+#### English note
+
+Use `@yakit-libs/yakit-ui-icons` as the canonical source for new icon imports. The
+`@yakit-libs/yakit-ui/icons*` paths are compatibility entries. The two npm packages follow SemVer
+independently and do not need matching versions. VS Code preferences are consumer settings; this
+package cannot enforce candidate ordering or install editor-private configuration.
 
 图标默认渲染为 `span.anticon.yakit-icon > svg`。`className`、`style`、事件、ARIA 属性和 `ref<HTMLSpanElement>` 作用于外层 `span`，`size` 与受限的 `svgProps` 作用于内层 SVG；浏览器入口自动关联静态兼容样式，Node SSR 入口保持无 CSS。无法识别 package `browser` condition 的自定义构建环境可显式导入 `@yakit-libs/yakit-ui/icons/icon.css`。
 
