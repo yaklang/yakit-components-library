@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.2.2
+
+### Patch Changes
+
+- e1d43f4: Add the isolated `oldicon` compatibility entry for legacy Yakit SVG implementations that cannot be replaced safely by the curated icon families.
+- e1d43f4: Publish the icon package independently, document and verify its stable public auto-import paths, preserve single-icon tree shaking across Vite and esbuild consumers, and add exact-tarball size evidence.
+
 ## 0.2.1
 
 ### Patch Changes
