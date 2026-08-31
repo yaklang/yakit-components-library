@@ -8,6 +8,7 @@ import test from "node:test";
 
 import {
   ICON_PACKAGE_LIMITS,
+  OLDICON_ENTRY_LIMITS,
   verifyPackDirectory,
 } from "../../scripts/release/verify-pack-directory.mjs";
 
@@ -40,7 +41,13 @@ const createTarball = (extraEntries = []) => {
 
 const createIconsTarball = (
   directory,
-  { excessFiles = false, oversized = false } = {},
+  {
+    excessFiles = false,
+    omitOldicon = false,
+    oversized = false,
+    oversizedOldicon = false,
+    version = "1.2.3",
+  } = {},
 ) => {
   const staging = join(directory, "icons-staging");
   const packageRoot = join(staging, "package");
@@ -52,33 +59,47 @@ const createIconsTarball = (
     "dist/colorful/index.d.ts",
     "dist/outline/index.js",
     "dist/outline/index.d.ts",
+    "dist/oldicon/index.js",
+    "dist/oldicon/index.d.ts",
     "dist/solid/index.js",
     "dist/solid/index.d.ts",
     "dist/registry.js",
     "dist/registry.d.ts",
-  ];
+  ].filter((entry) => !omitOldicon || !entry.startsWith("dist/oldicon/"));
   for (const entry of entries) {
     const file = join(packageRoot, entry);
     mkdirSync(join(file, ".."), { recursive: true });
     writeFileSync(file, entry);
   }
+  if (oversizedOldicon) {
+    writeFileSync(
+      join(packageRoot, "dist/oldicon/index.js"),
+      randomBytes(OLDICON_ENTRY_LIMITS.runtimeBytes + 1),
+    );
+  }
   if (oversized)
-    writeFileSync(join(packageRoot, "dist/payload.bin"), randomBytes(610_000));
+    writeFileSync(
+      join(packageRoot, "dist/payload.bin"),
+      randomBytes(ICON_PACKAGE_LIMITS.packedBytes + 1),
+    );
   if (excessFiles) {
     for (let index = 0; index < 22; index += 1) {
-      writeFileSync(join(packageRoot, `dist/extra-${index}.js`), "export {};\n");
+      writeFileSync(
+        join(packageRoot, `dist/extra-${index}.js`),
+        "export {};\n",
+      );
     }
   }
   writeFileSync(
     join(packageRoot, "package.json"),
     JSON.stringify({
       name: "@yakit-libs/yakit-ui-icons",
-      version: "1.2.3",
+      version,
       dependencies: { "@yakit-libs/color": "1.4.1" },
       peerDependencies: { react: "^18.2.0" },
     }),
   );
-  const tarball = join(directory, "yakit-libs-yakit-ui-icons-1.2.3.tgz");
+  const tarball = join(directory, `yakit-libs-yakit-ui-icons-${version}.tgz`);
   execFileSync("tar", ["-czf", tarball, "-C", staging, "package"]);
   return tarball;
 };
@@ -93,9 +114,9 @@ test("pack verifier accepts the canonical package surface", async () => {
   assert.match(result.packages[0].sha256, /^[a-f0-9]{64}$/);
 });
 
-test("pack verifier accepts exactly both fixed public package tarballs", async () => {
+test("pack verifier accepts a deterministic two-package releaseSet with different versions", async () => {
   const { directory } = createTarball();
-  createIconsTarball(directory);
+  createIconsTarball(directory, { version: "2.0.0" });
   const result = await verifyPackDirectory({ directory });
   assert.deepEqual(result.packages.map((item) => item.package).sort(), [
     "@yakit-libs/yakit-ui",
@@ -103,12 +124,52 @@ test("pack verifier accepts exactly both fixed public package tarballs", async (
   ]);
 });
 
+test("pack verifier accepts an icons-only releaseSet", async () => {
+  const directory = mkdtempSync(join(tmpdir(), "yakit-icons-only-"));
+  createIconsTarball(directory);
+  const result = await verifyPackDirectory({ directory });
+  assert.deepEqual(
+    result.packages.map((item) => item.package),
+    ["@yakit-libs/yakit-ui-icons"],
+  );
+});
+
+test("pack verifier rejects an empty releaseSet", async () => {
+  const directory = mkdtempSync(join(tmpdir(), "yakit-empty-release-"));
+  await assert.rejects(
+    () => verifyPackDirectory({ directory }),
+    /releaseSet must be a non-empty array/,
+  );
+});
+
 test("pack verifier enforces the independent icons package size budget", async () => {
   const { directory } = createTarball();
   createIconsTarball(directory, { oversized: true });
   await assert.rejects(
     () => verifyPackDirectory({ directory }),
-    /@yakit-libs\/yakit-ui-icons packedBytes exceeds 600000/,
+    new RegExp(
+      `@yakit-libs/yakit-ui-icons packedBytes exceeds ${ICON_PACKAGE_LIMITS.packedBytes}`,
+    ),
+  );
+});
+
+test("pack verifier enforces the oldicon compatibility entry budget", async () => {
+  const { directory } = createTarball();
+  createIconsTarball(directory, { oversizedOldicon: true });
+  await assert.rejects(
+    () => verifyPackDirectory({ directory }),
+    new RegExp(
+      `package/dist/oldicon/index.js exceeds ${OLDICON_ENTRY_LIMITS.runtimeBytes}`,
+    ),
+  );
+});
+
+test("pack verifier requires the oldicon runtime and declaration entries", async () => {
+  const { directory } = createTarball();
+  createIconsTarball(directory, { omitOldicon: true });
+  await assert.rejects(
+    () => verifyPackDirectory({ directory }),
+    /missing package\/dist\/oldicon\/index\.js/,
   );
 });
 

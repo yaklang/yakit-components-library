@@ -2,9 +2,91 @@
 
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { readFile, stat, writeFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+
+import { validateSizeReport } from "../../packages/yakit-ui-icons/scripts/size-observability-validator.mjs";
+
+export const RELEASE_MANIFEST_SCHEMA_ID = "yakit-ui-release-manifest/v3";
+const PUBLIC_PACKAGES = ["@yakit-libs/yakit-ui", "@yakit-libs/yakit-ui-icons"];
+const sortPublicPackages = (packages) =>
+  [...packages].sort(
+    (left, right) =>
+      PUBLIC_PACKAGES.indexOf(left) - PUBLIC_PACKAGES.indexOf(right),
+  );
+const validateReleaseSet = (releaseSet) => {
+  checkedSet("releaseSet", releaseSet, { allowEmpty: false });
+  const sorted = sortPublicPackages(releaseSet);
+  if (JSON.stringify(sorted) !== JSON.stringify(releaseSet))
+    throw new Error(
+      `releaseSet must use deterministic order ${JSON.stringify(sorted)}`,
+    );
+  return releaseSet;
+};
+const VALID_PUBLISH_STATES = new Set([
+  "pending",
+  "verified",
+  "publishing",
+  "published",
+  "failed",
+]);
+const REQUIRED_FINAL_GATES = ["build", "consumer"];
+export function requiredReleaseGates(entry) {
+  return entry?.name === "@yakit-libs/yakit-ui-icons"
+    ? [...REQUIRED_FINAL_GATES, "size"]
+    : [...REQUIRED_FINAL_GATES];
+}
+
+export function isManifestFinalized(manifest) {
+  return (
+    Array.isArray(manifest?.releases) &&
+    manifest.releases.length > 0 &&
+    manifest.releases.every((entry) =>
+      requiredReleaseGates(entry).every(
+        (gate) => entry.gates?.[gate] === "passed",
+      ),
+    )
+  );
+}
+const PUBLISH_TRANSITIONS = new Map([
+  ["pending", new Set(["verified"])],
+  ["verified", new Set(["publishing"])],
+  ["publishing", new Set(["published", "failed"])],
+  ["failed", new Set(["publishing"])],
+  ["published", new Set()],
+]);
+
+export function transitionPublishState(
+  entry,
+  nextStatus,
+  { registryMatch = false } = {},
+) {
+  if (
+    !VALID_PUBLISH_STATES.has(entry?.publish?.status) ||
+    !VALID_PUBLISH_STATES.has(nextStatus)
+  )
+    throw new Error("invalid publish state transition");
+  if (entry.publish.status === "published" && nextStatus === "published")
+    return entry;
+  if (registryMatch && nextStatus === "published")
+    return { ...entry, publish: { ...entry.publish, status: "published" } };
+  if (!PUBLISH_TRANSITIONS.get(entry.publish.status).has(nextStatus))
+    throw new Error(
+      `publish transition ${entry.publish.status} -> ${nextStatus} is not allowed`,
+    );
+  return {
+    ...entry,
+    publish: {
+      ...entry.publish,
+      status: nextStatus,
+      attempt:
+        nextStatus === "publishing"
+          ? (entry.publish.attempt ?? 0) + 1
+          : entry.publish.attempt,
+    },
+  };
+}
 
 export async function sha256File(filePath) {
   const hash = createHash("sha256");
@@ -12,239 +94,448 @@ export async function sha256File(filePath) {
   return hash.digest("hex");
 }
 
-export function artifactsForManifest(manifest) {
-  if (manifest?.schemaVersion === 2) return manifest.artifacts ?? [];
-  if (manifest?.schemaVersion === 1 && manifest?.package && manifest?.tarball) {
+async function sriFile(filePath) {
+  const hash = createHash("sha512");
+  for await (const chunk of createReadStream(filePath)) hash.update(chunk);
+  return `sha512-${hash.digest("base64")}`;
+}
+
+export function releasesForManifest(manifest) {
+  if (
+    manifest?.schemaId === RELEASE_MANIFEST_SCHEMA_ID &&
+    manifest?.schemaVersion === 3
+  )
+    return manifest.releases ?? [];
+  if (manifest?.schemaVersion === 2)
+    return (manifest.artifacts ?? []).map((item) => ({
+      name: item.package,
+      version: item.version,
+      distTag: manifest.package?.distTag,
+      tarball: {
+        filename: item.filename,
+        sha256: item.sha256,
+        packedBytes: item.packedBytes,
+        unpackedBytes: item.unpackedBytes,
+        fileCount: item.fileCount,
+      },
+    }));
+  if (manifest?.schemaVersion === 1 && manifest?.package && manifest?.tarball)
     return [
       {
-        package: manifest.package.name,
+        name: manifest.package.name,
         version: manifest.package.version,
-        filename: manifest.tarball.filename,
-        sha256: manifest.tarball.sha256,
-        packedBytes: manifest.tarball.packedBytes,
-        unpackedBytes: manifest.tarball.unpackedBytes,
-        fileCount: manifest.tarball.fileCount,
+        distTag: manifest.package.distTag,
+        tarball: manifest.tarball,
       },
     ];
-  }
   return [];
 }
 
-export async function createVerificationManifest(options) {
-  const tarballPath = path.resolve(options.tarballPath);
-  const tarballStat = await stat(tarballPath);
-  const required = [
-    "repository",
-    "workflowCommitSha",
-    "runId",
-    "runAttempt",
-    "sourceRef",
-    "packageName",
-    "packageVersion",
-    "distTag",
-    "packArtifactId",
-    "packArtifactDigest",
-  ];
-  for (const field of required) {
-    if (options[field] === undefined || options[field] === "")
-      throw new Error(`Missing verification field: ${field}`);
-  }
-  const primaryArtifact = {
-    package: options.packageName,
-    version: options.packageVersion,
-    filename: path.basename(tarballPath),
-    sha256: await sha256File(tarballPath),
-    packedBytes: tarballStat.size,
-    unpackedBytes: Number(options.unpackedBytes ?? 0),
-    fileCount: Number(options.fileCount ?? 0),
-  };
-  const artifacts = options.artifacts ?? [primaryArtifact];
-  return {
-    schemaVersion: 2,
-    repository: options.repository,
-    workflowCommitSha: options.workflowCommitSha,
-    runId: String(options.runId),
-    runAttempt: String(options.runAttempt),
-    sourceRef: options.sourceRef,
-    package: {
-      name: options.packageName,
-      version: options.packageVersion,
-      distTag: options.distTag,
-    },
-    packArtifact: {
-      id: String(options.packArtifactId),
-      digest: options.packArtifactDigest,
-    },
-    tarball: {
-      filename: primaryArtifact.filename,
-      sha256: primaryArtifact.sha256,
-      packedBytes: primaryArtifact.packedBytes,
-      unpackedBytes: primaryArtifact.unpackedBytes,
-      fileCount: primaryArtifact.fileCount,
-    },
-    artifacts,
-    gates: options.gates ?? {},
-  };
+export const artifactsForManifest = (manifest) =>
+  releasesForManifest(manifest).map((entry) => ({
+    package: entry.name,
+    version: entry.version,
+    distTag: entry.distTag,
+    filename: entry.tarball.filename,
+    sha256: entry.tarball.sha256,
+    integrity: entry.tarball.integrity,
+    packedBytes: entry.tarball.packedBytes,
+    unpackedBytes: entry.tarball.unpackedBytes,
+    fileCount: entry.tarball.fileCount,
+  }));
+
+function checkedSet(name, value, { allowEmpty = true } = {}) {
+  if (!Array.isArray(value) || (!allowEmpty && value.length === 0))
+    throw new Error(
+      `${name} must be ${allowEmpty ? "an" : "a non-empty"} array`,
+    );
+  if (new Set(value).size !== value.length)
+    throw new Error(`${name} must not contain duplicate packages`);
+  for (const packageName of value)
+    if (!PUBLIC_PACKAGES.includes(packageName))
+      throw new Error(`${name} contains unsupported package ${packageName}`);
+  return sortPublicPackages(value);
 }
 
-export async function validateVerificationManifest(manifest, options = {}) {
-  const failures = [];
-  if (![1, 2].includes(manifest?.schemaVersion))
-    failures.push("schemaVersion must equal 1 or 2");
+function validateImpactProbes(value) {
+  if (!Array.isArray(value)) throw new Error("impactProbeSet must be an array");
+  for (const probe of value) {
+    if (!PUBLIC_PACKAGES.includes(probe?.package))
+      throw new Error("impactProbeSet contains an unsupported package");
+    if (probe.nonPublishable !== true || probe.kind !== "impact-probe")
+      throw new Error(
+        "impactProbeSet entries must be non-publishable shadow artifacts",
+      );
+    if (!probe.baseRevision || !probe.headRevision || !probe.sourceHash)
+      throw new Error("impactProbeSet identity is incomplete");
+  }
+  return value;
+}
+
+function validateCompatibilityBaselines(value, releaseSet) {
+  if (!Array.isArray(value))
+    throw new Error("compatibilityBaselineSet must be an array");
+  const expected =
+    releaseSet.length === 1
+      ? PUBLIC_PACKAGES.filter((name) => !releaseSet.includes(name))
+      : [];
   if (
-    options.requiredSchemaVersion !== undefined &&
-    manifest?.schemaVersion !== options.requiredSchemaVersion
+    JSON.stringify(value.map((item) => item.package)) !==
+    JSON.stringify(expected)
   )
-    failures.push(
-      `schemaVersion must equal ${options.requiredSchemaVersion} for this operation`,
+    throw new Error(
+      `compatibilityBaselineSet must contain exact counterpart identities ${JSON.stringify(expected)}`,
     );
+  for (const item of value) {
+    if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(item.version ?? ""))
+      throw new Error("compatibility baseline version is invalid");
+    if (
+      !/^https:\/\//.test(item.resolved ?? "") ||
+      !/^sha(?:256|384|512)-[A-Za-z0-9+/=]+$/.test(item.integrity ?? "") ||
+      !/^[0-9a-f]{64}$/i.test(item.sha256 ?? "") ||
+      !/^baseline-[A-Za-z0-9._-]+\.tgz$/.test(item.filename ?? "") ||
+      !Number.isSafeInteger(item.packedBytes) ||
+      item.packedBytes <= 0 ||
+      !item.cacheKey ||
+      !item.distTag
+    )
+      throw new Error(
+        `compatibility baseline ${item.package} identity is incomplete`,
+      );
+  }
+  return value;
+}
+
+export async function createVerificationManifest(options) {
   for (const field of [
     "repository",
     "workflowCommitSha",
     "runId",
     "runAttempt",
     "sourceRef",
-  ]) {
-    if (!manifest?.[field]) failures.push(`${field} is required`);
+    "packArtifactId",
+    "packArtifactDigest",
+  ])
+    if (options[field] === undefined || options[field] === "")
+      throw new Error(`Missing verification field: ${field}`);
+  const artifacts = options.artifacts ?? [];
+  const releaseSet = validateReleaseSet(
+    sortPublicPackages(
+      options.releaseSet ?? artifacts.map((item) => item.package),
+    ),
+  );
+  const byName = new Map(artifacts.map((item) => [item.package, item]));
+  const releases = [];
+  for (const name of releaseSet) {
+    const item = byName.get(name);
+    if (!item) throw new Error(`Missing release artifact for ${name}`);
+    const tarballPath = path.resolve(item.tarballPath ?? item.tarball);
+    const packedBytes = (await stat(tarballPath)).size;
+    const sha256 = await sha256File(tarballPath);
+    releases.push({
+      name,
+      version: item.version,
+      distTag: item.distTag ?? options.distTag,
+      identity: `${name}@${item.version}`,
+      tarball: {
+        filename: path.basename(tarballPath),
+        sha256,
+        integrity: item.integrity ?? (await sriFile(tarballPath)),
+        packedBytes,
+        unpackedBytes: Number(item.unpackedBytes ?? 0),
+        fileCount: Number(item.fileCount ?? 0),
+      },
+      gates: item.gates ?? options.gates ?? {},
+      publish: { status: "verified", attempt: 0 },
+      metadata: { status: "pending", tag: `${name}@${item.version}` },
+      recovery: { status: "pending", revision: 0 },
+    });
   }
-  for (const field of ["name", "version", "distTag"]) {
-    if (!manifest?.package?.[field])
-      failures.push(`package.${field} is required`);
-  }
-  if (!/^[0-9a-f]{40}$/i.test(manifest?.workflowCommitSha ?? "")) {
-    failures.push("workflowCommitSha must be a 40-character Git commit SHA");
-  }
-  if (!manifest?.packArtifact?.id) failures.push("packArtifact.id is required");
-  if (!/^sha256:[0-9a-f]{64}$/i.test(manifest?.packArtifact?.digest ?? "")) {
-    failures.push("packArtifact.digest must use sha256:<64 hex>");
-  }
-  if (!/^[0-9a-f]{64}$/i.test(manifest?.tarball?.sha256 ?? ""))
-    failures.push("tarball.sha256 must be 64 hex characters");
+  return {
+    schemaId: RELEASE_MANIFEST_SCHEMA_ID,
+    schemaVersion: 3,
+    repository: options.repository,
+    workflowCommitSha: options.workflowCommitSha,
+    runId: String(options.runId),
+    runAttempt: String(options.runAttempt),
+    sourceRef: options.sourceRef,
+    releaseSet,
+    impactProbeSet: validateImpactProbes(options.impactProbeSet ?? []),
+    compatibilityBaselineSet: validateCompatibilityBaselines(
+      options.compatibilityBaselineSet ?? [],
+      releaseSet,
+    ),
+    packArtifact: {
+      id: String(options.packArtifactId),
+      digest: options.packArtifactDigest,
+    },
+    releases,
+    finalized: isManifestFinalized({ releases }),
+  };
+}
 
-  if (manifest?.schemaVersion === 1) {
-    if (manifest.artifacts !== undefined)
-      failures.push("schemaVersion 1 must use the legacy single tarball shape");
-    if (
-      options.expectedPackages &&
-      JSON.stringify([...options.expectedPackages].sort()) !==
-        JSON.stringify([manifest?.package?.name].sort())
-    )
+function validateLegacyManifest(manifest, options, failures) {
+  if (![1, 2].includes(manifest?.schemaVersion)) {
+    failures.push("legacy schemaVersion must equal 1 or 2");
+    return;
+  }
+  if (options.allowLegacy !== true)
+    failures.push("legacy v1/v2 evidence is recovery-only");
+  if (manifest.schemaVersion === 1 && options.legacyOperation !== "metadata")
+    failures.push("legacy schema-v1 evidence supports metadata recovery only");
+  if (manifest.schemaVersion === 2 && options.legacyOperation === "publish")
+    failures.push("legacy schema-v2 evidence cannot initiate publication");
+  if (manifest.schemaVersion === 2) {
+    const artifacts = manifest.artifacts ?? [];
+    const names = artifacts.map((item) => item.package);
+    if (JSON.stringify(names) !== JSON.stringify(PUBLIC_PACKAGES))
       failures.push(
-        "schemaVersion 1 evidence can describe only its primary package",
+        "legacy schema-v2 evidence must retain the original ordered pair",
       );
-  } else if (
-    !Array.isArray(manifest?.artifacts) ||
-    manifest.artifacts.length === 0
-  ) {
-    failures.push("schemaVersion 2 artifacts must be a non-empty array");
-  } else {
-    const names = new Set();
-    for (const artifact of manifest.artifacts) {
-      if (!artifact?.package || names.has(artifact.package))
-        failures.push("artifacts must contain unique package names");
-      names.add(artifact?.package);
-      if (!artifact?.version || !artifact?.filename)
+    if (new Set(artifacts.map((item) => item.version)).size > 1)
+      failures.push(
+        "legacy schema-v2 evidence must retain its original same-version identity",
+      );
+    if (manifest.package?.name !== "@yakit-libs/yakit-ui")
+      failures.push("legacy schema-v2 primary package identity is invalid");
+  }
+}
+
+export async function validateVerificationManifest(manifest, options = {}) {
+  const failures = [];
+  const isV3 =
+    manifest?.schemaId === RELEASE_MANIFEST_SCHEMA_ID &&
+    manifest?.schemaVersion === 3;
+  if (!isV3) {
+    validateLegacyManifest(manifest, options, failures);
+    if (failures.length)
+      throw new Error(
+        `Verification manifest failed:\n- ${failures.join("\n- ")}`,
+      );
+    return manifest;
+  }
+  if (manifest.finalized !== true && options.allowDraft !== true)
+    failures.push("manifest must be finalized before publish or recovery");
+  for (const field of [
+    "repository",
+    "workflowCommitSha",
+    "runId",
+    "runAttempt",
+    "sourceRef",
+  ])
+    if (!manifest[field]) failures.push(`${field} is required`);
+  if (!/^[0-9a-f]{40}$/i.test(manifest.workflowCommitSha ?? ""))
+    failures.push("workflowCommitSha must be a 40-character Git commit SHA");
+  if (!manifest.packArtifact?.id) failures.push("packArtifact.id is required");
+  if (!/^sha256:[0-9a-f]{64}$/i.test(manifest.packArtifact?.digest ?? ""))
+    failures.push("packArtifact.digest must use sha256:<64 hex>");
+  if (manifest.publicationOutbox !== undefined) {
+    if (
+      manifest.publicationOutbox?.filename !== "transactional-outbox.json" ||
+      !/^[0-9a-f]{64}$/i.test(manifest.publicationOutbox?.sha256 ?? "")
+    )
+      failures.push("publicationOutbox identity is invalid");
+  } else if (options.requirePublicationOutbox === true) {
+    failures.push("publicationOutbox is required for publication");
+  }
+  let releaseSet = [];
+  try {
+    releaseSet = validateReleaseSet(manifest.releaseSet);
+  } catch (error) {
+    failures.push(error.message);
+  }
+  try {
+    validateImpactProbes(manifest.impactProbeSet);
+    if (
+      JSON.stringify(
+        sortPublicPackages(
+          manifest.impactProbeSet.map((probe) => probe.package),
+        ),
+      ) !== JSON.stringify(releaseSet)
+    )
+      failures.push("impactProbeSet must exactly match releaseSet");
+  } catch (error) {
+    failures.push(error.message);
+  }
+  try {
+    validateCompatibilityBaselines(
+      manifest.compatibilityBaselineSet,
+      releaseSet,
+    );
+  } catch (error) {
+    failures.push(error.message);
+  }
+  if (!Array.isArray(manifest.releases) || manifest.releases.length === 0)
+    failures.push("releases must be a non-empty array");
+  else {
+    const names = [];
+    for (const entry of manifest.releases) {
+      names.push(entry?.name);
+      if (!PUBLIC_PACKAGES.includes(entry?.name))
+        failures.push(`unsupported release package ${entry?.name}`);
+      if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(entry?.version ?? ""))
         failures.push(
-          `artifact ${artifact?.package ?? "<unknown>"} identity is incomplete`,
+          `release ${entry?.name ?? "<unknown>"} version is invalid`,
         );
-      if (!/^[0-9a-f]{64}$/i.test(artifact?.sha256 ?? ""))
+      if (entry?.identity !== `${entry?.name}@${entry?.version}`)
         failures.push(
-          `artifact ${artifact?.package ?? "<unknown>"} SHA-256 is invalid`,
+          `release ${entry?.name ?? "<unknown>"} identity mismatch`,
+        );
+      if (!entry?.distTag)
+        failures.push(
+          `release ${entry?.name ?? "<unknown>"} distTag is required`,
+        );
+      if (!/^[0-9a-f]{64}$/i.test(entry?.tarball?.sha256 ?? ""))
+        failures.push(
+          `release ${entry?.name ?? "<unknown>"} tarball SHA-256 is invalid`,
+        );
+      if (
+        !/^sha(?:256|384|512)-[A-Za-z0-9+/=]+$/.test(
+          entry?.tarball?.integrity ?? "",
+        )
+      )
+        failures.push(
+          `release ${entry?.name ?? "<unknown>"} tarball integrity is invalid`,
         );
       for (const field of ["packedBytes", "unpackedBytes", "fileCount"])
-        if (!Number.isSafeInteger(artifact?.[field]) || artifact[field] < 0)
+        if (
+          !Number.isSafeInteger(entry?.tarball?.[field]) ||
+          entry.tarball[field] < 0
+        )
           failures.push(
-            `artifact ${artifact?.package ?? "<unknown>"} ${field} is invalid`,
+            `release ${entry?.name ?? "<unknown>"} ${field} is invalid`,
           );
-    }
-    const primary = manifest.artifacts.find(
-      (artifact) => artifact.package === manifest?.package?.name,
-    );
-    if (
-      !primary ||
-      primary.version !== manifest?.package?.version ||
-      primary.filename !== manifest?.tarball?.filename ||
-      primary.sha256 !== manifest?.tarball?.sha256
-    )
-      failures.push("primary tarball must match its artifacts entry");
-    if (options.expectedPackages) {
-      const actual = [...names].sort();
-      const expected = [...options.expectedPackages].sort();
-      if (JSON.stringify(actual) !== JSON.stringify(expected))
+      if (!entry?.gates || Object.keys(entry.gates).length === 0)
         failures.push(
-          `artifact package set mismatch: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`,
+          `release ${entry?.name ?? "<unknown>"} gates are required`,
+        );
+      else
+        for (const [gate, result] of Object.entries(entry.gates))
+          if (result !== "passed")
+            failures.push(
+              `release ${entry.name} gates.${gate} must equal passed`,
+            );
+      if (
+        entry.name === "@yakit-libs/yakit-ui-icons" &&
+        entry.gates?.size === "passed"
+      ) {
+        const size = entry.evidence?.size;
+        if (
+          size?.status !== "PASS" ||
+          size?.artifactSha256 !== entry.tarball.sha256 ||
+          !/^[0-9a-f]{64}$/i.test(size?.reportSha256 ?? "") ||
+          !/^yakit-ui-icons-size-report-[A-Za-z0-9._-]+\.json$/.test(
+            size?.filename ?? "",
+          )
+        )
+          failures.push(`release ${entry.name} size evidence is invalid`);
+      }
+      if (manifest.finalized === true)
+        for (const gate of requiredReleaseGates(entry))
+          if (entry.gates?.[gate] !== "passed")
+            failures.push(
+              `release ${entry.name} required gate ${gate} is missing`,
+            );
+      if (!VALID_PUBLISH_STATES.has(entry?.publish?.status))
+        failures.push(
+          `release ${entry?.name ?? "<unknown>"} publish status is invalid`,
+        );
+      if (!entry?.metadata?.status || !entry?.recovery?.status)
+        failures.push(
+          `release ${entry?.name ?? "<unknown>"} lifecycle state is incomplete`,
         );
     }
+    if (new Set(names).size !== names.length)
+      failures.push("releases must contain unique package names");
+    if (JSON.stringify(names) !== JSON.stringify(releaseSet))
+      failures.push(
+        "releaseSet must equal releases in deterministic package order",
+      );
   }
-
-  for (const field of ["packedBytes", "unpackedBytes", "fileCount"]) {
-    const value = manifest?.tarball?.[field];
-    if (!Number.isSafeInteger(value) || value < 0)
-      failures.push(`tarball.${field} must be a non-negative safe integer`);
-  }
-
-  const gates = manifest?.gates;
-  if (
-    !gates ||
-    typeof gates !== "object" ||
-    Array.isArray(gates) ||
-    Object.keys(gates).length === 0
-  ) {
-    failures.push("gates must be a non-empty object");
-  } else {
-    for (const [gate, result] of Object.entries(gates)) {
-      if (result !== "passed") failures.push(`gates.${gate} must equal passed`);
-    }
-  }
-
-  const expectedFields = {
-    repository: manifest?.repository,
-    workflowCommitSha: manifest?.workflowCommitSha,
-    runId: manifest?.runId,
-    sourceRef: manifest?.sourceRef,
-    packageName: manifest?.package?.name,
-    packageVersion: manifest?.package?.version,
-    distTag: manifest?.package?.distTag,
-    packArtifactId: manifest?.packArtifact?.id,
-  };
-  for (const [name, actual] of Object.entries(expectedFields)) {
-    if (
-      options[name] !== undefined &&
-      String(options[name]) !== String(actual)
-    ) {
+  for (const [name, actual] of Object.entries({
+    repository: manifest.repository,
+    workflowCommitSha: manifest.workflowCommitSha,
+    runId: manifest.runId,
+    sourceRef: manifest.sourceRef,
+    packArtifactId: manifest.packArtifact?.id,
+  }))
+    if (options[name] !== undefined && String(options[name]) !== String(actual))
       failures.push(
         `${name} mismatch: expected ${options[name]}, got ${actual}`,
       );
-    }
-  }
-
-  if (options.tarballPath) {
-    const actualHash = await sha256File(options.tarballPath);
-    const actualSize = (await stat(options.tarballPath)).size;
-    if (actualHash !== manifest?.tarball?.sha256)
-      failures.push("tarball SHA-256 does not match verification manifest");
-    if (actualSize !== manifest?.tarball?.packedBytes)
-      failures.push("tarball packedBytes does not match verification manifest");
-    if (path.basename(options.tarballPath) !== manifest?.tarball?.filename)
-      failures.push("tarball filename does not match verification manifest");
-  }
-
+  if (
+    options.expectedPackages &&
+    JSON.stringify(options.expectedPackages) !== JSON.stringify(releaseSet)
+  )
+    failures.push(
+      `releaseSet mismatch: expected ${JSON.stringify(options.expectedPackages)}, got ${JSON.stringify(releaseSet)}`,
+    );
   if (options.tarballPaths) {
-    for (const artifact of artifactsForManifest(manifest)) {
-      const artifactPath = options.tarballPaths[artifact.package];
+    for (const entry of manifest.releases ?? []) {
+      const artifactPath = options.tarballPaths[entry.name];
       if (!artifactPath) {
-        failures.push(`missing tarball path for ${artifact.package}`);
+        failures.push(`missing tarball path for ${entry.name}`);
         continue;
       }
-      if ((await sha256File(artifactPath)) !== artifact.sha256)
-        failures.push(`${artifact.package} tarball SHA-256 mismatch`);
-      if ((await stat(artifactPath)).size !== artifact.packedBytes)
-        failures.push(`${artifact.package} packedBytes mismatch`);
-      if (path.basename(artifactPath) !== artifact.filename)
-        failures.push(`${artifact.package} filename mismatch`);
+      if ((await sha256File(artifactPath)) !== entry.tarball.sha256)
+        failures.push(`${entry.name} tarball SHA-256 mismatch`);
+      if ((await sriFile(artifactPath)) !== entry.tarball.integrity)
+        failures.push(`${entry.name} tarball integrity mismatch`);
+      if ((await stat(artifactPath)).size !== entry.tarball.packedBytes)
+        failures.push(`${entry.name} packedBytes mismatch`);
+      if (path.basename(artifactPath) !== entry.tarball.filename)
+        failures.push(`${entry.name} filename mismatch`);
     }
   }
-
+  if (options.evidenceDirectory) {
+    if (manifest.publicationOutbox) {
+      const outboxPath = path.join(
+        options.evidenceDirectory,
+        manifest.publicationOutbox.filename,
+      );
+      try {
+        if (
+          (await sha256File(outboxPath)) !== manifest.publicationOutbox.sha256
+        )
+          failures.push("publication outbox SHA-256 mismatch");
+      } catch (error) {
+        failures.push(`publication outbox is unavailable: ${error.message}`);
+      }
+    }
+    for (const entry of manifest.releases ?? []) {
+      const size = entry.evidence?.size;
+      if (!size) continue;
+      const reportPath = path.join(options.evidenceDirectory, size.filename);
+      try {
+        if ((await sha256File(reportPath)) !== size.reportSha256)
+          failures.push(`${entry.name} size report SHA-256 mismatch`);
+        const report = JSON.parse(await readFile(reportPath, "utf8"));
+        const strictSizeFailures = validateSizeReport(report, {
+          fileCount: entry.tarball.fileCount,
+          filename: entry.tarball.filename,
+          integrity: entry.tarball.integrity,
+          package: entry.name,
+          packedBytes: entry.tarball.packedBytes,
+          sha256: entry.tarball.sha256,
+          unpackedBytes: entry.tarball.unpackedBytes,
+          version: entry.version,
+        });
+        if (
+          report.status !== size.status ||
+          report.schemaVersion !== size.schemaVersion
+        )
+          failures.push(`${entry.name} size report identity mismatch`);
+        if (strictSizeFailures.length > 0)
+          failures.push(
+            `${entry.name} size report strict validation failed: ${strictSizeFailures.join("; ")}`,
+          );
+      } catch (error) {
+        failures.push(
+          `${entry.name} size report is unavailable: ${error.message}`,
+        );
+      }
+    }
+  }
   if (failures.length)
     throw new Error(
       `Verification manifest failed:\n- ${failures.join("\n- ")}`,
@@ -252,68 +543,16 @@ export async function validateVerificationManifest(manifest, options = {}) {
   return manifest;
 }
 
-function flags(argv) {
-  const result = {};
-  for (let index = 0; index < argv.length; index += 1) {
-    const key = argv[index];
-    if (!key.startsWith("--")) continue;
-    result[key.slice(2)] = argv[index + 1];
-    index += 1;
-  }
-  return result;
-}
-
 if (
   process.argv[1] &&
   path.resolve(process.argv[1]) ===
     path.resolve(new URL(import.meta.url).pathname)
 ) {
-  const command = process.argv[2];
-  const args = flags(process.argv.slice(3));
-  if (command === "create") {
-    const manifest = await createVerificationManifest({
-      tarballPath: args.tarball,
-      repository: args.repository,
-      workflowCommitSha: args.commit,
-      runId: args["run-id"],
-      runAttempt: args["run-attempt"],
-      sourceRef: args.ref,
-      packageName: args.package,
-      packageVersion: args.version,
-      distTag: args["dist-tag"],
-      packArtifactId: args["artifact-id"],
-      packArtifactDigest: args["artifact-digest"],
-      unpackedBytes: args["unpacked-bytes"],
-      fileCount: args["file-count"],
-      gates: {
-        package: "passed",
-        consumer: "passed",
-        storybook: "passed",
-        policy: "passed",
-      },
-    });
-    if (!args.output) throw new Error("create requires --output");
-    await writeFile(args.output, `${JSON.stringify(manifest, null, 2)}\n`, {
-      flag: "wx",
-    });
-    console.log(JSON.stringify(manifest, null, 2));
-  } else if (command === "verify") {
-    if (!args.manifest || !args.tarball)
-      throw new Error("verify requires --manifest and --tarball");
-    const manifest = JSON.parse(await readFile(args.manifest, "utf8"));
-    await validateVerificationManifest(manifest, {
-      tarballPath: args.tarball,
-      repository: args.repository,
-      workflowCommitSha: args.commit,
-      runId: args["run-id"],
-      sourceRef: args.ref,
-      packageName: args.package,
-      packageVersion: args.version,
-      distTag: args["dist-tag"],
-      packArtifactId: args["artifact-id"],
-    });
-    console.log("Verification manifest is valid");
-  } else {
-    throw new Error("Usage: verification-manifest.mjs <create|verify> [flags]");
-  }
+  const [command, manifestPath] = process.argv.slice(2);
+  if (command !== "verify" || !manifestPath)
+    throw new Error("Usage: verification-manifest.mjs verify <manifest>");
+  await validateVerificationManifest(
+    JSON.parse(await readFile(manifestPath, "utf8")),
+  );
+  console.log("Verification manifest is valid");
 }

@@ -1,0 +1,26 @@
+{
+  "schemaId": "yakit-ui-icons-size-sentinels/v1",
+  "version": 2,
+  "selected": {
+    "root-outline": "MailOutlined",
+    "outline": "MailOutlined",
+    "solid": "MailSolid",
+    "colorful": "MitmPrimaryMenuColorful",
+    "oldicon": "PopoverArrowIcon",
+    "registry": "iconRegistry"
+  },
+  "unrelated": {
+    "root-outline": ["MailSolid", "MitmPrimaryMenuColorful", "iconRegistry"],
+    "outline": ["LocationOutlined", "MailSolid", "iconRegistry"],
+    "solid": ["BookSolid", "MailOutlined", "iconRegistry"],
+    "colorful": ["OfficialAvatarColorful", "MailOutlined", "iconRegistry"],
+    "oldicon": [
+      "MailOutlined",
+      "MailSolid",
+      "MitmPrimaryMenuColorful",
+      "iconRegistry"
+    ],
+    "registry": []
+  },
+  "registryFull": ["MailOutlined", "MailSolid", "MitmPrimaryMenuColorful"]
+}

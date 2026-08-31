@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { appendFile, readFile } from "node:fs/promises";
@@ -21,6 +20,10 @@ export function classifyPublicationState(artifacts, registryRecords) {
   const published = [];
   for (const artifact of artifacts) {
     const record = registryRecords[artifact.package];
+    if (!record || record.unknown === true)
+      throw new Error(
+        `${artifact.package} registry state is ambiguous; reconciliation required`,
+      );
     if (!record?.versionExists) {
       if (
         record?.distTagVersion != null &&
@@ -37,6 +40,13 @@ export function classifyPublicationState(artifacts, registryRecords) {
         `${artifact.package}@${artifact.version} exists with a different tarball`,
       );
     }
+    if (
+      record.expectedIntegrity &&
+      record.integrity !== record.expectedIntegrity
+    )
+      throw new Error(
+        `${artifact.package}@${artifact.version} exists with different registry integrity`,
+      );
     if (record.distTagVersion !== artifact.version)
       throw new Error(
         `${artifact.package} dist-tag does not match the verified version`,
@@ -47,9 +57,9 @@ export function classifyPublicationState(artifacts, registryRecords) {
 }
 
 export function assertRecoveryPlanAllowed(schemaVersion, plan) {
-  if (schemaVersion === 1 && plan.missing.length > 0)
+  if (schemaVersion < 3 && plan.missing.length > 0)
     throw new Error(
-      "legacy schema-v1 evidence supports metadata recovery only",
+      `legacy schema-v${schemaVersion} evidence cannot initiate publication`,
     );
 }
 
@@ -103,16 +113,6 @@ function requiredEnvironment(name) {
   return value;
 }
 
-function atLeast(actual, minimum) {
-  const parts = actual.replace(/^v/, "").split(".").map(Number);
-  const expected = minimum.split(".").map(Number);
-  for (let index = 0; index < expected.length; index += 1) {
-    if ((parts[index] ?? 0) > expected[index]) return true;
-    if ((parts[index] ?? 0) < expected[index]) return false;
-  }
-  return true;
-}
-
 async function sha1File(file) {
   const hash = createHash("sha1");
   for await (const chunk of createReadStream(file)) hash.update(chunk);
@@ -137,7 +137,7 @@ async function artifactMetadata(repository, artifactId, token) {
   return response.json();
 }
 
-async function registryRecord(artifact, tarballPath, distTag) {
+export async function registryRecord(artifact, tarballPath, distTag) {
   const response = await fetch(
     `https://registry.npmjs.org/${encodeURIComponent(artifact.package)}`,
     { headers: { accept: "application/json" } },
@@ -145,7 +145,9 @@ async function registryRecord(artifact, tarballPath, distTag) {
   if (response.status === 404)
     return {
       expectedShasum: await sha1File(tarballPath),
+      expectedIntegrity: artifact.integrity ?? null,
       distTagVersion: null,
+      integrity: null,
       shasum: null,
       versionExists: false,
     };
@@ -157,7 +159,9 @@ async function registryRecord(artifact, tarballPath, distTag) {
   const version = metadata.versions?.[artifact.version];
   return {
     expectedShasum: await sha1File(tarballPath),
+    expectedIntegrity: artifact.integrity ?? null,
     distTagVersion: metadata["dist-tags"]?.[distTag] ?? null,
+    integrity: version?.dist?.integrity ?? null,
     shasum: version?.dist?.shasum?.toLowerCase() ?? null,
     versionExists: Boolean(version),
   };
@@ -182,9 +186,12 @@ if (invokedDirectly) {
   const evidenceDirectory = path.resolve(process.argv[2] ?? "");
   if (!process.argv[2])
     throw new Error(
-      "Usage: recover-partial-publication.mjs <evidence-directory> [--publish]",
+      "Usage: recover-partial-publication.mjs <evidence-directory>",
     );
-  const publish = process.argv.includes("--publish");
+  if (process.argv.includes("--publish"))
+    throw new Error(
+      "recovery publication must consume the immutable verification outbox through publish-verification-artifact.mjs",
+    );
   const repository = requiredEnvironment("GITHUB_REPOSITORY");
   const sourceRunId = requiredEnvironment("SOURCE_RUN_ID");
   const artifactId = requiredEnvironment("VERIFICATION_ARTIFACT_ID");
@@ -220,11 +227,13 @@ if (invokedDirectly) {
     throw new Error(
       "verification evidence commit differs from its source workflow run",
     );
-  const primaryPackageName = primaryPackageNameForSchema(
-    manifest.schemaVersion,
-  );
-  const expectedPackages =
-    manifest.schemaVersion === 1 ? [primaryPackageName] : PUBLIC_PACKAGES;
+  const primaryPackageName =
+    manifest.schemaVersion === 3
+      ? manifest.releaseSet?.[0]
+      : primaryPackageNameForSchema(manifest.schemaVersion);
+  let expectedPackages = manifest.releaseSet;
+  if (manifest.schemaVersion === 1) expectedPackages = [primaryPackageName];
+  else if (manifest.schemaVersion === 2) expectedPackages = PUBLIC_PACKAGES;
   const tarballPaths = Object.fromEntries(
     await Promise.all(
       expectedPackages.map(async (name) => [
@@ -234,11 +243,14 @@ if (invokedDirectly) {
     ),
   );
   await validateVerificationManifest(manifest, {
+    allowLegacy: manifest.schemaVersion < 3,
+    legacyOperation: manifest.schemaVersion === 1 ? "metadata" : "recovery",
+    evidenceDirectory,
     expectedPackages,
     packageName: primaryPackageName,
     repository,
+    requirePublicationOutbox: manifest.schemaVersion === 3,
     runId: sourceRunId,
-    tarballPath: tarballPaths[primaryPackageName],
     tarballPaths,
   });
   const artifacts = artifactsForManifest(manifest);
@@ -249,7 +261,7 @@ if (invokedDirectly) {
         await registryRecord(
           artifact,
           tarballPaths[artifact.package],
-          manifest.package.distTag,
+          artifact.distTag ?? manifest.package?.distTag,
         ),
       ]),
     ),
@@ -257,71 +269,19 @@ if (invokedDirectly) {
   let plan = classifyPublicationState(artifacts, registryRecords);
   assertRecoveryPlanAllowed(manifest.schemaVersion, plan);
 
-  if (publish && plan.missing.length > 0) {
-    if (process.env.GITHUB_ACTIONS !== "true")
-      throw new Error(
-        "partial publication recovery is restricted to GitHub Actions",
-      );
-    if (
-      !requiredEnvironment("GITHUB_WORKFLOW_REF").includes(
-        "/.github/workflows/publish.yml@",
-      )
-    )
-      throw new Error(
-        "partial publication recovery is restricted to the publish workflow",
-      );
-    requiredEnvironment("ACTIONS_ID_TOKEN_REQUEST_URL");
-    requiredEnvironment("ACTIONS_ID_TOKEN_REQUEST_TOKEN");
-    if (!atLeast(process.version, "22.14.0"))
-      throw new Error(
-        "npm Trusted Publishing requires Node.js 22.14.0 or newer",
-      );
-    const npmVersion = execFileSync("npm", ["--version"], {
-      encoding: "utf8",
-    }).trim();
-    if (!atLeast(npmVersion, "11.5.1"))
-      throw new Error("npm Trusted Publishing requires npm 11.5.1 or newer");
-    for (const packageName of plan.missing) {
-      execFileSync(
-        "npm",
-        [
-          "publish",
-          tarballPaths[packageName],
-          "--access",
-          "public",
-          "--provenance",
-          "--ignore-scripts",
-          "--tag",
-          manifest.package.distTag,
-        ],
-        { stdio: "inherit" },
-      );
-    }
-    const refreshedRecords = Object.fromEntries(
-      await Promise.all(
-        artifacts.map(async (artifact) => [
-          artifact.package,
-          await registryRecord(
-            artifact,
-            tarballPaths[artifact.package],
-            manifest.package.distTag,
-          ),
-        ]),
-      ),
-    );
-    plan = classifyPublicationState(artifacts, refreshedRecords);
-    if (plan.missing.length > 0)
-      throw new Error(
-        `packages remain unpublished: ${plan.missing.join(", ")}`,
-      );
-  }
-
   const outputs = {
     "commit-sha": manifest.workflowCommitSha,
     "has-missing": String(plan.missing.length > 0),
     "package-name": primaryPackageName,
-    "package-version": manifest.package.version,
-    "tag-name": `${primaryPackageName}@${manifest.package.version}`,
+    "package-version": artifacts[0].version,
+    "tag-name": `${primaryPackageName}@${artifacts[0].version}`,
+    "release-matrix": JSON.stringify({
+      include: artifacts.map((artifact) => ({
+        package: artifact.package,
+        version: artifact.version,
+        distTag: artifact.distTag ?? manifest.package?.distTag,
+      })),
+    }),
   };
   await writeOutputs(outputs);
   console.log(JSON.stringify({ ...outputs, ...plan }, null, 2));

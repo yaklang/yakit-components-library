@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { constants } from "node:fs";
 import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -8,14 +9,15 @@ import process from "node:process";
 
 import {
   createVerificationManifest,
+  sha256File,
   validateVerificationManifest,
 } from "./verification-manifest.mjs";
-import {
-  PUBLIC_PACKAGES,
-  verifyPackDirectory,
-} from "./verify-pack-directory.mjs";
+import { createPublicationOutbox } from "./publication-consumer.mjs";
+import { impactProbesForRelease } from "./release-impact.mjs";
+import { verifyPackDirectory } from "./verify-pack-directory.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
+const PUBLIC_PACKAGES = ["@yakit-libs/yakit-ui", "@yakit-libs/yakit-ui-icons"];
 
 function requiredEnvironment(name) {
   const value = process.env[name];
@@ -80,6 +82,52 @@ async function resolveDistTag(version, sourceRef) {
   return branchTag;
 }
 
+async function resolveCompatibilityBaseline(packageName, distTag) {
+  const response = await fetch(
+    `https://registry.npmjs.org/${encodeURIComponent(packageName)}`,
+    { headers: { accept: "application/json" } },
+  );
+  if (!response.ok)
+    throw new Error(
+      `counterpart baseline lookup for ${packageName} failed with HTTP ${response.status}`,
+    );
+  const metadata = await response.json();
+  const version = metadata["dist-tags"]?.[distTag];
+  if (!version)
+    throw new Error(
+      `counterpart baseline ${packageName} has no ${distTag} dist-tag; no implicit fallback is allowed`,
+    );
+  const published = metadata.versions?.[version];
+  const resolved = published?.dist?.tarball;
+  const integrity = published?.dist?.integrity;
+  if (!resolved || !integrity)
+    throw new Error(
+      `counterpart baseline ${packageName}@${version} has incomplete registry identity`,
+    );
+  const tarball = await fetch(resolved);
+  if (!tarball.ok)
+    throw new Error(
+      `counterpart baseline download failed with HTTP ${tarball.status}`,
+    );
+  const bytes = Buffer.from(await tarball.arrayBuffer());
+  const sha256 = createHash("sha256").update(bytes).digest("hex");
+  const filename = `baseline-${packageName.split("/").at(-1)}-${version}.tgz`;
+  return {
+    bytes,
+    identity: {
+      package: packageName,
+      version,
+      distTag,
+      resolved,
+      integrity,
+      sha256,
+      filename,
+      packedBytes: bytes.length,
+      cacheKey: `${packageName}@${version}:${sha256}`,
+    },
+  };
+}
+
 const packDirectory = path.resolve(requiredEnvironment("PACK_DIRECTORY"));
 const packArtifactId = requiredEnvironment("PACK_ARTIFACT_ID");
 const repository = requiredEnvironment("GITHUB_REPOSITORY");
@@ -92,43 +140,29 @@ const githubToken = requiredEnvironment("GITHUB_TOKEN");
 const packDirectoryResult = await verifyPackDirectory({
   directory: packDirectory,
 });
-const packByName = new Map(
-  packDirectoryResult.packages.map((item) => [item.package, item]),
+const packageManifests = new Map(
+  packDirectoryResult.packages.map((item) => [
+    item.package,
+    JSON.parse(
+      execFileSync("tar", ["-xOzf", item.tarball, "package/package.json"], {
+        encoding: "utf8",
+      }),
+    ),
+  ]),
 );
-const pack = packByName.get("@yakit-libs/yakit-ui");
-const iconsPack = packByName.get("@yakit-libs/yakit-ui-icons");
-const packageManifest = JSON.parse(
-  execFileSync("tar", ["-xOzf", pack.tarball, "package/package.json"], {
-    encoding: "utf8",
-  }),
-);
-const iconsManifest = JSON.parse(
-  execFileSync("tar", ["-xOzf", iconsPack.tarball, "package/package.json"], {
-    encoding: "utf8",
-  }),
-);
-if (
-  packageManifest.name !== "@yakit-libs/yakit-ui" ||
-  packageManifest.private === true
-) {
-  throw new Error(
-    "Changesets artifact must contain the public @yakit-libs/yakit-ui package",
-  );
+for (const item of packDirectoryResult.packages) {
+  const packageManifest = packageManifests.get(item.package);
+  if (packageManifest.name !== item.package || packageManifest.private === true)
+    throw new Error(
+      `Changesets artifact contains an invalid public package ${item.package}`,
+    );
+  if (
+    !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(packageManifest.version ?? "")
+  )
+    throw new Error(
+      `Changesets artifact contains an invalid version for ${item.package}`,
+    );
 }
-if (
-  !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(packageManifest.version ?? "")
-) {
-  throw new Error("Changesets artifact contains an invalid package version");
-}
-if (
-  iconsManifest.name !== "@yakit-libs/yakit-ui-icons" ||
-  iconsManifest.private === true
-)
-  throw new Error(
-    "Changesets artifact must contain the public @yakit-libs/yakit-ui-icons package",
-  );
-if (iconsManifest.version !== packageManifest.version)
-  throw new Error("fixed release packages must have the same version");
 
 const artifact = await readArtifactMetadata(
   repository,
@@ -140,54 +174,62 @@ if (artifact.workflow_run?.id && String(artifact.workflow_run.id) !== runId) {
     "Changesets pack artifact belongs to a different workflow run",
   );
 }
-const distTag = await resolveDistTag(packageManifest.version, sourceRef);
+const distTags = Object.fromEntries(
+  await Promise.all(
+    packDirectoryResult.packages.map(async (item) => [
+      item.package,
+      await resolveDistTag(
+        packageManifests.get(item.package).version,
+        sourceRef,
+      ),
+    ]),
+  ),
+);
+const releaseSet = packDirectoryResult.packages.map((item) => item.package);
+const impactOutputPath = path.resolve(
+  requiredEnvironment("RELEASE_IMPACT_OUTPUT"),
+);
+const impactProbeSet = impactProbesForRelease(
+  JSON.parse(await readFile(impactOutputPath, "utf8")),
+  releaseSet,
+);
+const compatibilityBaselineDownloads =
+  releaseSet.length === 1
+    ? [
+        await resolveCompatibilityBaseline(
+          PUBLIC_PACKAGES.find((name) => !releaseSet.includes(name)),
+          distTags[releaseSet[0]],
+        ),
+      ]
+    : [];
+const compatibilityBaselineSet = compatibilityBaselineDownloads.map(
+  (item) => item.identity,
+);
 const manifest = await createVerificationManifest({
-  tarballPath: pack.tarball,
   repository,
   workflowCommitSha,
   runId,
   runAttempt,
   sourceRef,
-  packageName: packageManifest.name,
-  packageVersion: packageManifest.version,
-  distTag,
   packArtifactId,
   packArtifactDigest: artifact.digest,
-  unpackedBytes: pack.unpackedBytes,
-  fileCount: pack.fileCount,
+  releaseSet,
+  impactProbeSet,
+  compatibilityBaselineSet,
   artifacts: packDirectoryResult.packages.map((item) => ({
     package: item.package,
     version: item.version,
-    filename: path.basename(item.tarball),
-    sha256: item.sha256,
-    packedBytes: item.packedBytes,
+    tarballPath: item.tarball,
+    distTag: distTags[item.package],
     unpackedBytes: item.unpackedBytes,
     fileCount: item.fileCount,
   })),
   gates: {
     build: "passed",
-    consumer: "passed",
     packagePolicy: "passed",
     storybook: "passed",
   },
 });
-await validateVerificationManifest(manifest, {
-  tarballPath: pack.tarball,
-  repository,
-  workflowCommitSha,
-  runId,
-  sourceRef,
-  packageName: "@yakit-libs/yakit-ui",
-  packageVersion: packageManifest.version,
-  distTag,
-  packArtifactId,
-  requiredSchemaVersion: 2,
-  expectedPackages: PUBLIC_PACKAGES,
-  tarballPaths: Object.fromEntries(
-    packDirectoryResult.packages.map((item) => [item.package, item.tarball]),
-  ),
-});
-
 const outputDirectory = path.join(root, ".release/verified");
 await mkdir(outputDirectory, { recursive: true });
 for (const item of packDirectoryResult.packages) {
@@ -197,6 +239,39 @@ for (const item of packDirectoryResult.packages) {
     constants.COPYFILE_EXCL,
   );
 }
+for (const baseline of compatibilityBaselineDownloads) {
+  await writeFile(
+    path.join(outputDirectory, baseline.identity.filename),
+    baseline.bytes,
+    { flag: "wx" },
+  );
+}
+const outboxPath = path.join(outputDirectory, "transactional-outbox.json");
+await writeFile(
+  outboxPath,
+  `${JSON.stringify(createPublicationOutbox(manifest), null, 2)}\n`,
+  { flag: "wx" },
+);
+manifest.publicationOutbox = {
+  filename: path.basename(outboxPath),
+  sha256: await sha256File(outboxPath),
+};
+await validateVerificationManifest(manifest, {
+  allowDraft: true,
+  evidenceDirectory: outputDirectory,
+  repository,
+  workflowCommitSha,
+  runId,
+  sourceRef,
+  packArtifactId,
+  expectedPackages: manifest.releaseSet,
+  tarballPaths: Object.fromEntries(
+    packDirectoryResult.packages.map((item) => [
+      item.package,
+      path.join(outputDirectory, path.basename(item.tarball)),
+    ]),
+  ),
+});
 await writeFile(
   path.join(outputDirectory, "verification-manifest.json"),
   `${JSON.stringify(manifest, null, 2)}\n`,
@@ -207,12 +282,8 @@ console.log(
   JSON.stringify(
     {
       artifactId: packArtifactId,
-      distTag,
-      package: `${packageManifest.name}@${packageManifest.version}`,
-      tarballSha256: manifest.tarball.sha256,
-      packages: manifest.artifacts.map(
-        (item) => `${item.package}@${item.version}`,
-      ),
+      releaseSet: manifest.releaseSet,
+      packages: manifest.releases.map((item) => item.identity),
     },
     null,
     2,

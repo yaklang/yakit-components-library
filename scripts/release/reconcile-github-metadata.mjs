@@ -14,7 +14,11 @@ const commit = requiredEnvironment("RELEASE_COMMIT");
 const packageName = requiredEnvironment("PACKAGE_NAME");
 const packageVersion = requiredEnvironment("PACKAGE_VERSION");
 const token = requiredEnvironment("GITHUB_TOKEN");
-const supportedPackageNames = new Set(["yakit-ui", "@yakit-libs/yakit-ui"]);
+const supportedPackageNames = new Set([
+  "yakit-ui",
+  "@yakit-libs/yakit-ui",
+  "@yakit-libs/yakit-ui-icons",
+]);
 
 if (!/^[0-9a-f]{40}$/i.test(commit))
   throw new Error("RELEASE_COMMIT must be a full Git commit SHA");

@@ -1,8 +1,15 @@
 # @yakit-libs/yakit-ui-icons
 
-## 0.3.0
+## 0.2.2
 
-### Minor Changes
+### Patch Changes
+
+- e1d43f4: Add the isolated `oldicon` compatibility entry for legacy Yakit SVG implementations that cannot be replaced safely by the curated icon families.
+- e1d43f4: Publish the icon package independently, document and verify its stable public auto-import paths, preserve single-icon tree shaking across Vite and esbuild consumers, and add exact-tarball size evidence.
+
+## 0.2.1
+
+### Patch Changes
 
 - cc577a0: Add the Figma-audited colorful icon catalog, grouped Storybook documentation, public colorful icon subpath exports, and Ant Design-compatible icon wrapper behavior for both packages.
 

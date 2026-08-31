@@ -1,0 +1,40 @@
+{
+  "schemaId": "yakit-ui-release-cutover-policy/v2",
+  "inventoryWindowStartsAt": "2026-08-17T00:00:00.000Z",
+  "legacyRecoveryEol": "2026-12-31T23:59:59.999Z",
+  "refDispositions": [
+    {
+      "ref": "refs/heads/main",
+      "disposition": "migrated",
+      "headBinding": "live-producer",
+      "cutoverRevision": "cbd1467c9fe3716508272dc101224dd697ad9fd1",
+      "approval": {
+        "approved": true,
+        "approvedBy": "release-engineering",
+        "approvedAt": "2026-08-31T00:00:00.000Z",
+        "auditArtifact": {
+          "path": ".github/workflows/publish.yml",
+          "blobSha": "8cec1fb15965cc6f2024a1b0b8834e85cc80c15c",
+          "sha256": "150717dced35083fb3cfde6fabff786530d02d34e92b2043dfad333a08086c9d"
+        }
+      }
+    },
+    {
+      "ref": "refs/heads/pre/icon-release-0.2.1",
+      "disposition": "frozen",
+      "expectedHeadSha": "d6756e7f7a2bf3e5ef81294fb099b2d737a8eda7",
+      "cutoverRevision": "d6756e7f7a2bf3e5ef81294fb099b2d737a8eda7",
+      "approval": {
+        "approved": true,
+        "approvedBy": "release-engineering",
+        "approvedAt": "2026-08-31T00:00:00.000Z",
+        "auditArtifact": {
+          "path": ".github/workflows/publish.yml",
+          "blobSha": "6ac8b6a70da19f89c1a39cc3646714503a4e6cc0",
+          "sha256": "52a7fc493367de768370be1ddff81dbca8bffb3a22eb18fba07c7062b00e71ef"
+        }
+      }
+    }
+  ],
+  "legacyExactAllowlist": []
+}

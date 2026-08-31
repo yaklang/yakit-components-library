@@ -15,6 +15,7 @@ const artifacts = [
 test("recovery preserves the package identity encoded by each evidence schema", () => {
   assert.equal(primaryPackageNameForSchema(1), "yakit-ui");
   assert.equal(primaryPackageNameForSchema(2), "@yakit-libs/yakit-ui");
+  assert.equal(primaryPackageNameForSchema(3), "@yakit-libs/yakit-ui");
 });
 
 test("partial recovery selects only the missing exact verified package", () => {
@@ -152,7 +153,18 @@ test("legacy v1 evidence cannot publish a missing package", () => {
         missing: ["yakit-ui"],
         published: [],
       }),
-    /schema-v1 evidence supports metadata recovery only/,
+    /schema-v1 evidence cannot initiate publication/,
+  );
+});
+
+test("legacy v2 evidence cannot initiate a new publication", () => {
+  assert.throws(
+    () =>
+      assertRecoveryPlanAllowed(2, {
+        missing: ["@yakit-libs/yakit-ui-icons"],
+        published: ["@yakit-libs/yakit-ui"],
+      }),
+    /schema-v2 evidence cannot initiate publication/,
   );
 });
 
@@ -200,6 +212,23 @@ test("partial recovery fails closed when an existing version has another tarball
   );
 });
 
+test("registry reconciliation binds npm SRI as well as the legacy shasum", () => {
+  assert.throws(
+    () =>
+      classifyPublicationState([artifacts[0]], {
+        "@yakit-libs/yakit-ui": {
+          distTagVersion: "0.2.0",
+          expectedIntegrity: "sha512-expected",
+          integrity: "sha512-other",
+          expectedShasum: "core-hash",
+          shasum: "core-hash",
+          versionExists: true,
+        },
+      }),
+    /different registry integrity/,
+  );
+});
+
 test("partial recovery fails closed when the verified dist-tag has moved", () => {
   assert.throws(
     () =>
@@ -218,5 +247,42 @@ test("partial recovery fails closed when the verified dist-tag has moved", () =>
         },
       }),
     /dist-tag does not match the verified version/,
+  );
+});
+
+test("partial recovery handles independent package versions in deterministic order", () => {
+  const independent = [
+    { package: "@yakit-libs/yakit-ui", version: "1.2.3" },
+    { package: "@yakit-libs/yakit-ui-icons", version: "2.0.0" },
+  ];
+  assert.deepEqual(
+    classifyPublicationState(independent, {
+      "@yakit-libs/yakit-ui": {
+        versionExists: true,
+        expectedShasum: "ui",
+        shasum: "ui",
+        distTagVersion: "1.2.3",
+      },
+      "@yakit-libs/yakit-ui-icons": {
+        versionExists: false,
+        expectedShasum: "icons",
+        shasum: null,
+        distTagVersion: "1.9.0",
+      },
+    }),
+    {
+      missing: ["@yakit-libs/yakit-ui-icons"],
+      published: ["@yakit-libs/yakit-ui"],
+    },
+  );
+});
+
+test("partial recovery fails closed on ambiguous registry state", () => {
+  assert.throws(
+    () =>
+      classifyPublicationState([artifacts[0]], {
+        "@yakit-libs/yakit-ui": { unknown: true },
+      }),
+    /ambiguous; reconciliation required/,
   );
 });

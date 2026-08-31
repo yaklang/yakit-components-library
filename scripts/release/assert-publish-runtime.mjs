@@ -5,10 +5,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-import {
-  findPackageTarball,
-  PUBLIC_PACKAGES,
-} from "./verify-pack-directory.mjs";
+import { findPackageTarball } from "./verify-pack-directory.mjs";
 import { validateVerificationManifest } from "./verification-manifest.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
@@ -71,34 +68,39 @@ const verificationArtifactId = requiredEnvironment("VERIFICATION_ARTIFACT_ID");
 const verificationArtifactDigest = requiredEnvironment(
   "VERIFICATION_ARTIFACT_DIGEST",
 );
+if (!/^(?:sha256:)?[0-9a-f]{64}$/i.test(verificationArtifactDigest))
+  throw new Error("verification artifact digest is invalid");
+const normalizedVerificationArtifactDigest = /^sha256:/i.test(
+  verificationArtifactDigest,
+)
+  ? verificationArtifactDigest.toLowerCase()
+  : `sha256:${verificationArtifactDigest.toLowerCase()}`;
 const packArtifactId = requiredEnvironment("PACK_ARTIFACT_ID");
 const githubToken = requiredEnvironment("GITHUB_TOKEN");
 const verifiedDirectory = path.join(root, ".release/verified");
-const tarballPaths = Object.fromEntries(
-  await Promise.all(
-    PUBLIC_PACKAGES.map(async (name) => [
-      name,
-      await findPackageTarball(verifiedDirectory, name),
-    ]),
-  ),
-);
-const tarballPath = tarballPaths["@yakit-libs/yakit-ui"];
 const manifest = JSON.parse(
   await readFile(
     path.join(verifiedDirectory, "verification-manifest.json"),
     "utf8",
   ),
 );
+const tarballPaths = Object.fromEntries(
+  await Promise.all(
+    manifest.releaseSet.map(async (name) => [
+      name,
+      await findPackageTarball(verifiedDirectory, name),
+    ]),
+  ),
+);
 await validateVerificationManifest(manifest, {
-  tarballPath,
+  evidenceDirectory: verifiedDirectory,
   repository,
   workflowCommitSha: requiredEnvironment("GITHUB_SHA"),
   runId: requiredEnvironment("GITHUB_RUN_ID"),
   sourceRef: requiredEnvironment("GITHUB_REF"),
-  packageName: "@yakit-libs/yakit-ui",
   packArtifactId,
-  requiredSchemaVersion: 2,
-  expectedPackages: PUBLIC_PACKAGES,
+  expectedPackages: manifest.releaseSet,
+  requirePublicationOutbox: true,
   tarballPaths,
 });
 
@@ -108,7 +110,7 @@ const [verificationArtifact, packArtifact] = await Promise.all([
 ]);
 if (verificationArtifact.expired || packArtifact.expired)
   throw new Error("release artifact has expired");
-if (verificationArtifact.digest !== verificationArtifactDigest) {
+if (verificationArtifact.digest !== normalizedVerificationArtifactDigest) {
   throw new Error("verification artifact digest mismatch");
 }
 if (packArtifact.digest !== manifest.packArtifact.digest)
@@ -124,9 +126,7 @@ console.log(
     {
       npmVersion,
       nodeVersion: process.version,
-      packages: manifest.artifacts.map(
-        (item) => `${item.package}@${item.version}`,
-      ),
+      packages: manifest.releases.map((item) => item.identity),
       packArtifactId,
       verificationArtifactId,
     },
