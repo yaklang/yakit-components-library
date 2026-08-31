@@ -2,7 +2,7 @@ import { constants } from "node:fs";
 import { access, lstat, readFile, realpath, readdir } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { verifyIconCssGate } from "./verify-css-gate.mjs";
 
@@ -25,6 +25,11 @@ const expectedExports = {
     types: "./dist/outline/index.d.ts",
     browser: "./dist/browser/outline/index.js",
     import: "./dist/outline/index.js",
+  },
+  "./oldicon": {
+    types: "./dist/oldicon/index.d.ts",
+    browser: "./dist/browser/oldicon/index.js",
+    import: "./dist/oldicon/index.js",
   },
   "./solid": {
     types: "./dist/solid/index.d.ts",
@@ -49,6 +54,32 @@ const requiredFiles = [
 ];
 const failures = [];
 const require = createRequire(import.meta.url);
+
+try {
+  const [oldiconRuntime, registryRuntime, rootRuntime] = await Promise.all([
+    import(pathToFileURL(path.join(packageRoot, "dist/oldicon/index.js"))),
+    import(pathToFileURL(path.join(packageRoot, "dist/registry.js"))),
+    import(pathToFileURL(path.join(packageRoot, "dist/index.js"))),
+  ]);
+  if (
+    Object.keys(oldiconRuntime).length !== 380 ||
+    typeof oldiconRuntime.PopoverArrowIcon !== "object"
+  ) {
+    failures.push("oldicon runtime must expose all 380 compatibility exports");
+  }
+  if (
+    "PopoverArrowIcon" in rootRuntime ||
+    registryRuntime.iconRegistry?.some(
+      ({ exportName }) => exportName === "PopoverArrowIcon",
+    )
+  ) {
+    failures.push(
+      "oldicon exports must stay isolated from the root and registry",
+    );
+  }
+} catch {
+  failures.push("oldicon runtime isolation contract is unreadable");
+}
 
 for (const relativePath of requiredFiles) {
   const absolutePath = path.join(packageRoot, relativePath);
@@ -162,6 +193,11 @@ failures.push(
         subpath: "./outline",
       },
       {
+        exportName: "PopoverArrowIcon",
+        specifier: "@yakit-libs/yakit-ui-icons/oldicon",
+        subpath: "./oldicon",
+      },
+      {
         exportName: "MailSolid",
         specifier: "@yakit-libs/yakit-ui-icons/solid",
         subpath: "./solid",
@@ -196,9 +232,16 @@ async function distFiles(directory) {
 const allowedExternal = new Set(["react", "react/jsx-runtime"]);
 const specifierPattern =
   /(?:\bfrom\s*|\bimport\s*\(|\bimport\s*)['"]([^'"]+)['"]/g;
+const pureCreateIconCallPattern =
+  /=\s*\/\* @__PURE__ \*\/\s*[A-Za-z_$][A-Za-z0-9_$]*\(/g;
+let pureCreateIconCalls = 0;
 try {
   for (const file of await distFiles(path.join(packageRoot, "dist"))) {
     const source = await readFile(file, "utf8");
+    if (file.endsWith(".js")) {
+      pureCreateIconCalls +=
+        source.match(pureCreateIconCallPattern)?.length ?? 0;
+    }
     for (const match of source.matchAll(specifierPattern)) {
       const specifier = match[1];
       if (!specifier.startsWith(".") && !allowedExternal.has(specifier)) {
@@ -207,6 +250,11 @@ try {
         );
       }
     }
+  }
+  if (pureCreateIconCalls < 100) {
+    failures.push(
+      `dist must preserve createIcon pure annotations, found ${pureCreateIconCalls}`,
+    );
   }
 } catch {
   failures.push("dist is missing or unreadable");
