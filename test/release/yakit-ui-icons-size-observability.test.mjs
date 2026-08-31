@@ -625,5 +625,9 @@ test("CLI persists INCONCLUSIVE evidence and exits non-zero when the exact tarba
   assert.equal(result.status, 1);
   const report = JSON.parse(readFileSync(output, "utf8"));
   assert.equal(report.status, "INCONCLUSIVE");
-  assert.match(report.error, /(?:ENOENT|Failed to open)/);
+  assert.match(report.error, /missing\.tgz/);
+  assert.match(
+    report.error,
+    /(?:ENOENT|Failed to open|Cannot open|No such file or directory)/,
+  );
 });
