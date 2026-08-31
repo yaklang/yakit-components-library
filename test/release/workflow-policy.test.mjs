@@ -192,6 +192,9 @@ test("tarball verification installs pnpm before running strict-layout consumers"
   const smokeIndex = job.indexOf(smoke);
   const sealIndex = job.indexOf("record-verification-gate.mjs");
   const sizeIndex = job.indexOf("verify-icons-size-gate.mjs");
+  const installIndex = job.indexOf(
+    "run: pnpm install --frozen-lockfile --ignore-scripts",
+  );
   assert.ok(
     setupIndex >= 0,
     "verify-pack must install the reviewed pnpm action",
@@ -204,6 +207,10 @@ test("tarball verification installs pnpm before running strict-layout consumers"
   assert.ok(
     setupIndex < smokeIndex,
     "verify-pack must install pnpm before smoke tests",
+  );
+  assert.ok(
+    installIndex > setupIndex && installIndex < sizeIndex,
+    "verify-pack must install size verification tooling before the exact icons size gate",
   );
   assert.ok(
     smokeIndex < sealIndex,
