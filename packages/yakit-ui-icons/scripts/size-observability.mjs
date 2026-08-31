@@ -31,6 +31,7 @@ import {
   classifyRuntime as classifyRuntimeV2,
   failureSignalsFromReport as failureSignalsFromReportV2,
   normalizeValidationErrors as normalizeValidationErrorsV2,
+  sha256Text,
   validateSizeReport as validateSizeReportV2,
 } from "./size-observability-validator.mjs";
 
@@ -1291,16 +1292,26 @@ async function workspaceDependencyVersion(dependency) {
 
 async function runIsolatedInstall(projectRoot, flags) {
   try {
-    const { stderr } = await execFileAsync("pnpm", flags, {
+    const { stderr, stdout } = await execFileAsync("pnpm", flags, {
       cwd: projectRoot,
       env: { ...process.env, CI: "true" },
       maxBuffer: 4 * 1024 * 1024,
     });
-    return { exitCode: 0, stderr: stderr.trim() };
+    return {
+      exitCode: 0,
+      diagnosticOutput: [stdout, stderr]
+        .map((value) => value.trim())
+        .filter(Boolean)
+        .join("\n"),
+      stderr: stderr.trim(),
+    };
   } catch (error) {
+    const stdout = String(error?.stdout ?? "").trim();
+    const stderr = String(error?.stderr ?? error?.message ?? error).trim();
     return {
       exitCode: Number.isSafeInteger(error?.code) ? error.code : 1,
-      stderr: String(error?.stderr ?? error?.message ?? error).trim(),
+      diagnosticOutput: [stdout, stderr].filter(Boolean).join("\n"),
+      stderr,
     };
   }
 }
@@ -1406,10 +1417,12 @@ async function prepareIsolatedProjects(tarball, artifactSha256) {
   const artifactsRoot = path.join(installRoot, "artifacts");
   const candidateRoot = path.join(installRoot, "candidate");
   const controlRoot = path.join(installRoot, "control");
+  const seedRoot = path.join(installRoot, "seed");
   await Promise.all([
     mkdir(artifactsRoot, { recursive: true }),
     mkdir(candidateRoot, { recursive: true }),
     mkdir(controlRoot, { recursive: true }),
+    mkdir(seedRoot, { recursive: true }),
   ]);
   const artifactFilename = path.basename(tarball);
   const isolatedArtifact = path.join(artifactsRoot, artifactFilename);
@@ -1446,35 +1459,68 @@ async function prepareIsolatedProjects(tarball, artifactSha256) {
     sharedWorkspaceLockfile: false,
     strictPeerDependencies: true,
   };
-  const configContents = [
-    "auto-install-peers=false",
-    "ignore-scripts=true",
-    "offline=true",
-    "shared-workspace-lockfile=false",
-    "strict-peer-dependencies=true",
-    "",
-  ].join("\n");
+  const configContentsFor = (values) =>
+    [
+      `auto-install-peers=${values.autoInstallPeers}`,
+      `ignore-scripts=${values.ignoreScripts}`,
+      `offline=${values.offline}`,
+      `shared-workspace-lockfile=${values.sharedWorkspaceLockfile}`,
+      `strict-peer-dependencies=${values.strictPeerDependencies}`,
+      "",
+    ].join("\n");
+  const configContents = configContentsFor(config);
+  const seedConfig = { ...config, offline: false };
+  const seedConfigContents = configContentsFor(seedConfig);
   const flags = ["install", "--frozen-lockfile=false", "--reporter=silent"];
-  const writeProject = async (projectRoot, manifest) => {
+  const commonManifestSha256 = sha256Json(commonManifest);
+  const configSha256 = sha256Json(config);
+  const flagsSha256 = sha256Json(flags);
+  const seedConfigSha256 = sha256Json(seedConfig);
+  const writeProject = async (
+    projectRoot,
+    manifest,
+    projectConfigContents = configContents,
+  ) => {
     await Promise.all([
       writeFile(
         path.join(projectRoot, "package.json"),
         `${JSON.stringify(manifest, null, 2)}\n`,
       ),
-      writeFile(path.join(projectRoot, ".npmrc"), configContents),
+      writeFile(path.join(projectRoot, ".npmrc"), projectConfigContents),
     ]);
   };
   await Promise.all([
     writeProject(candidateRoot, candidateManifest),
     writeProject(controlRoot, controlManifest),
+    writeProject(seedRoot, commonManifest, seedConfigContents),
   ]);
+  const seedInstall = await runIsolatedInstall(seedRoot, flags);
+  if (seedInstall.exitCode !== 0) {
+    throw new Error(
+      `isolated pnpm store seed failed (exit=${seedInstall.exitCode}; output=${seedInstall.diagnosticOutput})`,
+    );
+  }
+  const storeSeed = {
+    config: seedConfig,
+    configContents: seedConfigContents,
+    configFileSha256: sha256Text(seedConfigContents),
+    configSha256: seedConfigSha256,
+    flags,
+    flagsSha256,
+    installExitCode: seedInstall.exitCode,
+    installOutput: seedInstall.diagnosticOutput,
+    lockfileSha256: await sha256(path.join(seedRoot, "pnpm-lock.yaml")),
+    manifest: commonManifest,
+    manifestSha256: commonManifestSha256,
+  };
+  await rm(seedRoot, { force: true, recursive: true });
   const [candidateInstall, controlInstall] = await Promise.all([
     runIsolatedInstall(candidateRoot, flags),
     runIsolatedInstall(controlRoot, flags),
   ]);
   if (candidateInstall.exitCode !== 0 || controlInstall.exitCode !== 0) {
     throw new Error(
-      `isolated pnpm install failed (candidate=${candidateInstall.exitCode}: ${candidateInstall.stderr}; control=${controlInstall.exitCode}: ${controlInstall.stderr})`,
+      `isolated pnpm install failed (candidate exit=${candidateInstall.exitCode}, output=${candidateInstall.diagnosticOutput}; control exit=${controlInstall.exitCode}, output=${controlInstall.diagnosticOutput})`,
     );
   }
   const [candidateInventory, controlInventory] = await Promise.all([
@@ -1507,14 +1553,12 @@ async function prepareIsolatedProjects(tarball, artifactSha256) {
       "isolated package inventory has missing or duplicate runtime packages",
     );
   }
-  const configSha256 = sha256Json(config);
-  const flagsSha256 = sha256Json(flags);
   const installContract = {
     commonManifest,
-    commonManifestSha256: sha256Json(commonManifest),
+    commonManifestSha256,
     config,
     configContents,
-    configFileSha256: createHash("sha256").update(configContents).digest("hex"),
+    configFileSha256: sha256Text(configContents),
     configSha256,
     flags,
     manifestDifference: {
@@ -1524,6 +1568,7 @@ async function prepareIsolatedProjects(tarball, artifactSha256) {
     },
     packageManager: { name: "pnpm", version: packageManagerVersion },
     schemaId: "yakit-ui-icons-isolated-install/v1",
+    storeSeed,
   };
   const projectEvidence = async (root, manifest, install, inventory) => ({
     ...inventory,

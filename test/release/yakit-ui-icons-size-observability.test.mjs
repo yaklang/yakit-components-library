@@ -143,6 +143,13 @@ const validReport = () => {
   const configContents =
     "auto-install-peers=false\nignore-scripts=true\noffline=true\nshared-workspace-lockfile=false\nstrict-peer-dependencies=true\n";
   const flags = ["install", "--frozen-lockfile=false", "--reporter=silent"];
+  const commonManifestSha256 = sha256Json(commonManifest);
+  const flagsSha256 = sha256Json(flags);
+  const seedConfig = { ...config, offline: false };
+  const seedConfigContents = configContents.replace(
+    "offline=true",
+    "offline=false",
+  );
   const sharedPackages = [
     {
       bytes: 40,
@@ -232,7 +239,7 @@ const validReport = () => {
       delta: { packageCount: 1, totalBytes: distribution.unpackedBytes },
       installContract: {
         commonManifest,
-        commonManifestSha256: sha256Json(commonManifest),
+        commonManifestSha256,
         config,
         configContents,
         configFileSha256: sha256Text(configContents),
@@ -245,6 +252,19 @@ const validReport = () => {
         },
         packageManager: { name: "pnpm", version: "10.34.5" },
         schemaId: "yakit-ui-icons-isolated-install/v1",
+        storeSeed: {
+          config: seedConfig,
+          configContents: seedConfigContents,
+          configFileSha256: sha256Text(seedConfigContents),
+          configSha256: sha256Json(seedConfig),
+          flags,
+          flagsSha256,
+          installExitCode: 0,
+          installOutput: "",
+          lockfileSha256: "d".repeat(64),
+          manifest: commonManifest,
+          manifestSha256: commonManifestSha256,
+        },
       },
       react: {
         instances: 1,
@@ -482,6 +502,13 @@ test("validator rejects broken identity, sentinel, build-pair, and installed-gra
   assert.match(errors, /paired build options/);
   assert.match(errors, /isolated package-manager install contract/);
   assert.match(errors, /non-normative/);
+});
+
+test("validator requires an exact online seed for the offline install store", () => {
+  const report = validReport();
+  report.installedGraph.installContract.storeSeed.config.offline = true;
+  const errors = validateSizeReport(report).join("\n");
+  assert.match(errors, /store seed contract/);
 });
 
 test("validator recomputes classifications and exact esbuild ownership", () => {
