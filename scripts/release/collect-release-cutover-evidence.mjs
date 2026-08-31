@@ -42,14 +42,10 @@ function nextLink(headers) {
   return null;
 }
 
-async function githubResponse(
-  url,
-  token,
-  accept = "application/vnd.github+json",
-) {
+async function githubResponse(url, token) {
   const response = await fetch(url, {
     headers: {
-      accept,
+      accept: "application/vnd.github+json",
       authorization: `Bearer ${token}`,
       "x-github-api-version": API_VERSION,
     },
@@ -562,11 +558,7 @@ async function inspectArtifactArchive({ artifact, token }) {
   const archivePath = path.join(temporaryDirectory, "artifact.zip");
   const extractedDirectory = path.join(temporaryDirectory, "extracted");
   try {
-    const response = await githubResponse(
-      artifact.archive_download_url,
-      token,
-      "application/octet-stream",
-    );
+    const response = await githubResponse(artifact.archive_download_url, token);
     const bytes = Buffer.from(await response.arrayBuffer());
     const archiveSha256 = sha256(bytes);
     const expectedDigest = /^sha256:([0-9a-f]{64})$/i.exec(
