@@ -252,16 +252,19 @@ test("CI validates both build surfaces while the publish artifact selects a non-
 test("partial recovery publishes no rebuilt or already-published package", () => {
   const job =
     extractWorkflowJobs(workflow("publish.yml")).get("recovery-publish") ?? "";
+  const publisher = readFileSync(
+    join(root, "scripts/release/publish-verification-artifact.mjs"),
+    "utf8",
+  );
   assert.match(
     job,
     /publish-verification-artifact\.mjs[\s\S]*\.release\/recovery[\s\S]*\.release\/recovery-intent/,
   );
-  assert.match(
-    readFileSync(
-      join(root, "scripts/release/publish-verification-artifact.mjs"),
-      "utf8",
-    ),
-    /"--ignore-scripts"/,
+  assert.match(publisher, /"--ignore-scripts"/);
+  assert.doesNotMatch(
+    publisher,
+    /"--provenance"/,
+    "Trusted Publishing must decide provenance automatically so private repositories remain publishable",
   );
   assert.doesNotMatch(
     job,
