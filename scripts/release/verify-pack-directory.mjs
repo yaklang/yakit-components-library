@@ -11,10 +11,48 @@ export const PUBLIC_PACKAGES = [
   "@yakit-libs/yakit-ui",
   "@yakit-libs/yakit-ui-icons",
 ];
-export const ICON_PACKAGE_LIMITS = {
+const PUBLIC_PACKAGE_SET = new Set(PUBLIC_PACKAGES);
+export const sortPublicPackages = (packages) =>
+  [...packages].sort(
+    (left, right) =>
+      PUBLIC_PACKAGES.indexOf(left) - PUBLIC_PACKAGES.indexOf(right),
+  );
+
+export function validateReleaseSet(releaseSet) {
+  if (!Array.isArray(releaseSet) || releaseSet.length === 0)
+    throw new Error("releaseSet must be a non-empty array");
+  if (new Set(releaseSet).size !== releaseSet.length)
+    throw new Error("releaseSet must not contain duplicate packages");
+  for (const packageName of releaseSet)
+    if (!PUBLIC_PACKAGE_SET.has(packageName))
+      throw new Error(`releaseSet contains unsupported package ${packageName}`);
+  const sorted = sortPublicPackages(releaseSet);
+  if (JSON.stringify(sorted) !== JSON.stringify(releaseSet))
+    throw new Error(
+      `releaseSet must use deterministic order ${JSON.stringify(sorted)}`,
+    );
+  return releaseSet;
+}
+export const CURATED_ICON_PACKAGE_LIMITS = {
   packedBytes: 600_000,
   unpackedBytes: 3_000_000,
   fileCount: 33,
+};
+export const OLDICON_COMPATIBILITY_ALLOWANCE = {
+  packedBytes: 1_200_000,
+  unpackedBytes: 4_000_000,
+  fileCount: 0,
+};
+export const ICON_PACKAGE_LIMITS = Object.fromEntries(
+  Object.keys(CURATED_ICON_PACKAGE_LIMITS).map((metric) => [
+    metric,
+    CURATED_ICON_PACKAGE_LIMITS[metric] +
+      OLDICON_COMPATIBILITY_ALLOWANCE[metric],
+  ]),
+);
+export const OLDICON_ENTRY_LIMITS = {
+  runtimeBytes: 4_200_000,
+  typesBytes: 40_000,
 };
 const POLICIES = {
   "@yakit-libs/yakit-ui": {
@@ -38,6 +76,8 @@ const POLICIES = {
       "package/dist/colorful/index.d.ts",
       "package/dist/outline/index.js",
       "package/dist/outline/index.d.ts",
+      "package/dist/oldicon/index.js",
+      "package/dist/oldicon/index.d.ts",
       "package/dist/solid/index.js",
       "package/dist/solid/index.d.ts",
       "package/dist/registry.js",
@@ -207,6 +247,17 @@ export async function verifyPackageTarball(tarball) {
       failures.push(
         "@yakit-libs/yakit-ui-icons must not publish optional peers",
       );
+    for (const [entry, limit] of [
+      ["package/dist/oldicon/index.js", OLDICON_ENTRY_LIMITS.runtimeBytes],
+      ["package/dist/oldicon/index.d.ts", OLDICON_ENTRY_LIMITS.typesBytes],
+    ]) {
+      if (!entries.includes(entry)) continue;
+      const bytes = execFileSync("tar", ["-xOzf", tarball, entry], {
+        encoding: "buffer",
+        maxBuffer: 16 * 1024 * 1024,
+      }).length;
+      if (bytes > limit) failures.push(`${entry} exceeds ${limit}: ${bytes}`);
+    }
     for (const [metric, limit] of Object.entries(ICON_PACKAGE_LIMITS))
       if ({ packedBytes, unpackedBytes, fileCount }[metric] > limit)
         failures.push(
@@ -231,15 +282,19 @@ export async function verifyPackageTarball(tarball) {
   };
 }
 
-export async function verifyPackDirectory({
-  directory,
-  expectedPackages = PUBLIC_PACKAGES,
-}) {
+export async function verifyPackDirectory({ directory, expectedPackages }) {
   const packages = await Promise.all(
     (await findTarballs(directory)).map(verifyPackageTarball),
   );
-  const names = packages.map((item) => item.package).sort();
-  const expected = [...expectedPackages].sort();
+  packages.sort(
+    (left, right) =>
+      PUBLIC_PACKAGES.indexOf(left.package) -
+      PUBLIC_PACKAGES.indexOf(right.package),
+  );
+  const names = packages.map((item) => item.package);
+  const expected = expectedPackages
+    ? validateReleaseSet(expectedPackages)
+    : validateReleaseSet(names);
   if (JSON.stringify(names) !== JSON.stringify(expected))
     throw new Error(
       `Pack directory package set must be ${JSON.stringify(expected)}, got ${JSON.stringify(names)}`,

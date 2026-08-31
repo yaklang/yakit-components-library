@@ -20,17 +20,32 @@ on:
         description: Exact verification artifact ID for recovery
         required: false
         type: string
+      authorize_retry:
+        description: Authorize retry only from a definitive NOT_ATTEMPTED/NOT_APPLIED receipt
+        required: false
+        type: boolean
+        default: false
+      retry_intent_artifact_id:
+        description: Exact prior durable intent artifact ID for authorized retry
+        required: false
+        type: string
+      retry_receipt_artifact_id:
+        description: Exact prior definitive no-success receipt artifact ID for authorized retry
+        required: false
+        type: string
 
 permissions: {}
 
 concurrency:
-  group: publish-${{ github.workflow }}-${{ github.ref }}
+  group: yakit-ui-npm-release
   cancel-in-progress: false
 
 env:
   NODE_VERSION: 24.12.0
   PNPM_VERSION: 10.34.5
   CHANGESETS_ACTION_SHA: 8488615a623b1b9c987934bb89eae8af6a946ac1
+  PUBLICATION_REGISTRY_PROPAGATION_WINDOW_MS: 30000
+  PUBLICATION_REGISTRY_OBSERVATION_MAX_AGE_MS: 300000
 
 jobs:
   select-mode:
@@ -38,6 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
+      actions: read
       contents: read
     outputs:
       mode: ${{ steps.select.outputs.mode }}
@@ -61,6 +77,19 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Validate branch and Changesets prerelease state
         run: pnpm run release:preflight
+      - name: Collect complete cutover evidence
+        run: >-
+          node scripts/release/collect-release-cutover-evidence.mjs
+          .release/cutover-evidence.json .release/cutover-producer.json
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+      - name: Enforce the v3 release cutover
+        run: node scripts/release/release-cutover-preflight.mjs
+        env:
+          RELEASE_CUTOVER_EVIDENCE: .release/cutover-evidence.json
+          RELEASE_PRODUCER_IDENTITY: .release/cutover-producer.json
       - name: Select Changesets mode
         id: select
         uses: changesets/action/select-mode@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
@@ -104,11 +133,13 @@ jobs:
     if: needs.select-mode.outputs.mode == 'publish'
     needs: select-mode
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     permissions:
+      actions: read
       contents: read
     outputs:
       pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
+      impact-artifact-id: ${{ steps.upload-impact.outputs.artifact-id }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
@@ -126,10 +157,32 @@ jobs:
           package-manager-cache: false
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Download exact Changesets publish plan
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          artifact-ids: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
+          merge-multiple: true
+          path: .release/publish-plan
       - name: Verify workspace and release state
         run: pnpm run release:workspace-check && pnpm run release:preflight
       - name: Run release policy tests
         run: pnpm run release:test
+      - name: Prove the exact independent package impact
+        run: >-
+          node scripts/release/release-impact.mjs
+          --publish-plan .release/publish-plan/publish-plan.json
+          --source-ref "${GITHUB_REF}"
+          --head "${GITHUB_SHA}"
+          --from-release-tags --build-isolated
+          --output .release/release-impact.json
+      - name: Upload immutable release impact evidence
+        id: upload-impact
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0, reviewed 2026-08-21
+        with:
+          name: yakit-ui-release-impact-${{ github.run_id }}
+          path: .release/release-impact.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Lint and type-check
         run: pnpm --filter @yakit-libs/yakit-ui run lint && pnpm --filter @yakit-libs/yakit-ui run test:types
       - name: Install the pinned Playwright browser
@@ -140,6 +193,8 @@ jobs:
         run: pnpm --filter @yakit-libs/yakit-ui run build:package
       - name: Build React-only icon package exactly once
         run: pnpm --filter @yakit-libs/yakit-ui-icons run build
+      - name: Verify icon auto-import contracts
+        run: pnpm run test:auto-import
       - name: Verify lightweight and dedicated icon package contracts
         run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
       - name: Verify package and size policy
@@ -165,8 +220,12 @@ jobs:
       dist-tag: ${{ steps.identity.outputs.dist-tag }}
       tag-name: ${{ steps.identity.outputs.tag-name }}
       commit-sha: ${{ github.sha }}
+      release-set: ${{ steps.identity.outputs.release-set }}
+      release-matrix: ${{ steps.identity.outputs.release-matrix }}
       verification-artifact-id: ${{ steps.upload.outputs.artifact-id }}
       verification-artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
+      publication-intent-artifact-id: ${{ steps.upload-intent.outputs.artifact-id }}
+      publication-intent-artifact-digest: ${{ steps.upload-intent.outputs.artifact-digest }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
@@ -187,8 +246,12 @@ jobs:
           artifact-ids: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
           merge-multiple: true
           path: .release/pack
-      - name: Install and smoke-test the exact tarball
-        run: node scripts/release/verify-tarball-consumer.mjs .release/pack
+      - name: Download exact release impact evidence
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          artifact-ids: ${{ needs.build-and-pack.outputs.impact-artifact-id }}
+          merge-multiple: true
+          path: .release/impact
       - name: Verify tarball contents and hash
         id: pack
         run: node scripts/release/prepare-verification-artifact.mjs
@@ -196,6 +259,13 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PACK_DIRECTORY: .release/pack
           PACK_ARTIFACT_ID: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
+          RELEASE_IMPACT_OUTPUT: .release/impact/release-impact.json
+      - name: Measure and bind the exact icons tarball when released
+        run: node scripts/release/verify-icons-size-gate.mjs .release/verified
+      - name: Install candidate with the frozen exact counterpart baseline
+        run: node scripts/release/verify-tarball-consumer.mjs .release/verified
+      - name: Seal exact consumer verification in the final manifest
+        run: node scripts/release/record-verification-gate.mjs .release/verified/verification-manifest.json consumer
       - name: Resolve package release identity
         id: identity
         run: node scripts/release/emit-release-identity.mjs
@@ -207,6 +277,35 @@ jobs:
         with:
           name: yakit-ui-verification-${{ github.run_id }}
           path: .release/verified
+          if-no-files-found: error
+          retention-days: 30
+      - name: Inventory every prior publication intent and receipt
+        id: inventory
+        run: >-
+          node scripts/release/inventory-publication-artifacts.mjs
+          .release/verified .release/prior-publication-inventory.json
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Download exact inventoried publication state artifacts
+        if: steps.inventory.outputs.has-artifacts == 'true'
+        run: >-
+          node scripts/release/download-publication-artifacts.mjs
+          .release/prior-publication-inventory.json
+          .release/prior-publish-state
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Reconcile registry and prepare durable publication intent
+        run: >-
+          node scripts/release/prepare-publication-attempt.mjs
+          .release/verified .release/publish-intent
+          .release/prior-publication-inventory.json
+          .release/prior-publish-state
+      - name: Upload durable pre-side-effect publication intent
+        id: upload-intent
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0, reviewed 2026-08-21
+        with:
+          name: yakit-ui-publish-intent-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .release/publish-intent
           if-no-files-found: error
           retention-days: 30
 
@@ -228,8 +327,8 @@ jobs:
       contents: read
       id-token: write
     outputs:
-      published: ${{ steps.publish.outputs.published }}
-      published-packages: ${{ steps.publish.outputs.published-packages }}
+      published: ${{ steps.consume.outputs.published }}
+      published-packages: ${{ steps.consume.outputs.published-packages }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
@@ -253,6 +352,12 @@ jobs:
           artifact-ids: ${{ needs.verify-pack.outputs.verification-artifact-id }}
           merge-multiple: true
           path: .release/verified
+      - name: Download durable pre-side-effect publication intent
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          artifact-ids: ${{ needs.verify-pack.outputs.publication-intent-artifact-id }}
+          merge-multiple: true
+          path: .release/publish-intent
       - name: Assert Trusted Publishing runtime
         run: node scripts/release/assert-publish-runtime.mjs
         env:
@@ -260,14 +365,24 @@ jobs:
           PACK_ARTIFACT_ID: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
           VERIFICATION_ARTIFACT_DIGEST: ${{ needs.verify-pack.outputs.verification-artifact-digest }}
           VERIFICATION_ARTIFACT_ID: ${{ needs.verify-pack.outputs.verification-artifact-id }}
-      - name: Publish exact verified Changesets artifact
-        id: publish
-        uses: changesets/action/publish@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21
+      - name: Consume immutable publication outbox and publish exact tarballs
+        id: consume
+        run: >-
+          node scripts/release/publish-verification-artifact.mjs
+          .release/verified .release/publish-intent
+          .release/publish-receipt
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PUBLICATION_INTENT_ARTIFACT_ID: ${{ needs.verify-pack.outputs.publication-intent-artifact-id }}
+          PUBLICATION_INTENT_ARTIFACT_DIGEST: ${{ needs.verify-pack.outputs.publication-intent-artifact-digest }}
+      - name: Upload append-only publication receipt
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0, reviewed 2026-08-21
         with:
-          github-token: ${{ github.token }}
-          pack-dir-artifact-id: ${{ needs.build-and-pack.outputs.pack-dir-artifact-id }}
-          create-github-releases: false
-          push-git-tags: false
+          name: yakit-ui-publish-receipt-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .release/publish-receipt
+          if-no-files-found: error
+          retention-days: 30
 
   post-publish:
     if: needs.publish.outputs.published == 'true'
@@ -278,6 +393,10 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.verify-pack.outputs.release-matrix) }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
@@ -289,13 +408,11 @@ jobs:
           node-version: 24.12.0
           package-manager-cache: false
       - name: Verify exact registry version
-        run: |
-          node scripts/release/post-publish-smoke.mjs
-          PACKAGE_NAME=@yakit-libs/yakit-ui-icons node scripts/release/post-publish-smoke.mjs
+        run: node scripts/release/post-publish-smoke.mjs
         env:
-          PACKAGE_NAME: "@yakit-libs/yakit-ui"
-          PACKAGE_VERSION: ${{ needs.verify-pack.outputs.package-version }}
-          DIST_TAG: ${{ needs.verify-pack.outputs.dist-tag }}
+          PACKAGE_NAME: ${{ matrix.package }}
+          PACKAGE_VERSION: ${{ matrix.version }}
+          DIST_TAG: ${{ matrix.distTag }}
 
   metadata:
     if: needs.publish.outputs.published == 'true'
@@ -306,6 +423,10 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.verify-pack.outputs.release-matrix) }}
     steps:
       - name: Check out repository scripts
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
@@ -321,10 +442,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RELEASE_REPOSITORY: ${{ github.repository }}
-          RELEASE_TAG: ${{ needs.verify-pack.outputs.tag-name }}
+          RELEASE_TAG: ${{ matrix.tag }}
           RELEASE_COMMIT: ${{ needs.verify-pack.outputs.commit-sha }}
-          PACKAGE_NAME: "@yakit-libs/yakit-ui"
-          PACKAGE_VERSION: ${{ needs.verify-pack.outputs.package-version }}
+          PACKAGE_NAME: ${{ matrix.package }}
+          PACKAGE_VERSION: ${{ matrix.version }}
 
   recovery-verify:
     if: github.event_name == 'workflow_dispatch' && inputs.recovery
@@ -339,6 +460,9 @@ jobs:
       tag-name: ${{ steps.identity.outputs.tag-name }}
       commit-sha: ${{ steps.identity.outputs.commit-sha }}
       has-missing: ${{ steps.identity.outputs.has-missing }}
+      release-matrix: ${{ steps.identity.outputs.release-matrix }}
+      recovery-intent-artifact-id: ${{ steps.upload-intent.outputs.artifact-id }}
+      recovery-intent-artifact-digest: ${{ steps.upload-intent.outputs.artifact-digest }}
     steps:
       - name: Check recovery inputs
         run: test -n '${{ inputs.source_run_id }}' && test -n '${{ inputs.verification_artifact_id }}'
@@ -347,6 +471,19 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Collect complete cutover evidence
+        run: >-
+          node scripts/release/collect-release-cutover-evidence.mjs
+          .release/cutover-evidence.json .release/cutover-producer.json
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+      - name: Enforce the v3 recovery cutover
+        run: node scripts/release/release-cutover-preflight.mjs
+        env:
+          RELEASE_CUTOVER_EVIDENCE: .release/cutover-evidence.json
+          RELEASE_PRODUCER_IDENTITY: .release/cutover-producer.json
       - name: Download exact cross-run verification artifact
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
         with:
@@ -355,6 +492,21 @@ jobs:
           artifact-ids: ${{ inputs.verification_artifact_id }}
           merge-multiple: true
           path: .release/recovery
+      - name: Inventory every source and recovery publication state artifact
+        id: inventory
+        run: >-
+          node scripts/release/inventory-publication-artifacts.mjs
+          .release/recovery .release/prior-recovery-inventory.json
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Download exact inventoried source and recovery state artifacts
+        if: steps.inventory.outputs.has-artifacts == 'true'
+        run: >-
+          node scripts/release/download-publication-artifacts.mjs
+          .release/prior-recovery-inventory.json
+          .release/prior-recovery-state
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Validate retained evidence and registry identity
         id: identity
         run: node scripts/release/recover-partial-publication.mjs .release/recovery
@@ -362,6 +514,26 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           SOURCE_RUN_ID: ${{ inputs.source_run_id }}
           VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
+      - name: Prepare durable recovery publication intent
+        if: steps.identity.outputs.has-missing == 'true'
+        run: >-
+          node scripts/release/prepare-publication-attempt.mjs
+          .release/recovery .release/recovery-intent
+          .release/prior-recovery-inventory.json
+          .release/prior-recovery-state
+        env:
+          AUTHORIZE_PUBLICATION_RETRY: ${{ inputs.authorize_retry }}
+          RETRY_INTENT_ARTIFACT_ID: ${{ inputs.retry_intent_artifact_id }}
+          RETRY_RECEIPT_ARTIFACT_ID: ${{ inputs.retry_receipt_artifact_id }}
+      - name: Upload durable pre-side-effect recovery intent
+        if: steps.identity.outputs.has-missing == 'true'
+        id: upload-intent
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0, reviewed 2026-08-21
+        with:
+          name: yakit-ui-recovery-intent-${{ inputs.source_run_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .release/recovery-intent
+          if-no-files-found: error
+          retention-days: 30
 
   recovery-publish:
     if: >-
@@ -394,12 +566,32 @@ jobs:
           artifact-ids: ${{ inputs.verification_artifact_id }}
           merge-multiple: true
           path: .release/recovery
+      - name: Download durable pre-side-effect recovery intent
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0, reviewed 2026-08-21
+        with:
+          artifact-ids: ${{ needs.recovery-verify.outputs.recovery-intent-artifact-id }}
+          merge-multiple: true
+          path: .release/recovery-intent
       - name: Publish only missing exact verified tarballs
-        run: node scripts/release/recover-partial-publication.mjs .release/recovery --publish
+        id: consume
+        run: >-
+          node scripts/release/publish-verification-artifact.mjs
+          .release/recovery .release/recovery-intent
+          .release/recovery-receipt
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          PUBLICATION_INTENT_ARTIFACT_ID: ${{ needs.recovery-verify.outputs.recovery-intent-artifact-id }}
+          PUBLICATION_INTENT_ARTIFACT_DIGEST: ${{ needs.recovery-verify.outputs.recovery-intent-artifact-digest }}
           SOURCE_RUN_ID: ${{ inputs.source_run_id }}
           VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
+      - name: Upload append-only recovery receipt
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0, reviewed 2026-08-21
+        with:
+          name: yakit-ui-recovery-receipt-${{ inputs.source_run_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .release/recovery-receipt
+          if-no-files-found: error
+          retention-days: 30
 
   recovery-metadata:
     if: >-
@@ -415,6 +607,10 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.recovery-verify.outputs.release-matrix) }}
     steps:
       - name: Check out repository scripts
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
@@ -430,7 +626,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RELEASE_REPOSITORY: ${{ github.repository }}
-          RELEASE_TAG: ${{ needs.recovery-verify.outputs.tag-name }}
+          RELEASE_TAG: ${{ matrix.package }}@${{ matrix.version }}
           RELEASE_COMMIT: ${{ needs.recovery-verify.outputs.commit-sha }}
-          PACKAGE_NAME: ${{ needs.recovery-verify.outputs.package-name }}
-          PACKAGE_VERSION: ${{ needs.recovery-verify.outputs.package-version }}
+          PACKAGE_NAME: ${{ matrix.package }}
+          PACKAGE_VERSION: ${{ matrix.version }}

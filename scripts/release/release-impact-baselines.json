@@ -1,0 +1,12 @@
+{
+  "schemaId": "yakit-ui-release-impact-baselines/v1",
+  "initialTagFallbacks": {
+    "@yakit-libs/yakit-ui-icons": {
+      "revision": "@yakit-libs/yakit-ui@0.2.1",
+      "expectedVersion": "0.2.1",
+      "expectedCommit": "d226b6310bb476d7ccd2dd8048914588b1a81b8c",
+      "expectedSnapshotHash": "d53a39d10a6fe7b2994582eccaf899cdff58eb57576d150b80cf00ec2329741b"
+    }
+  },
+  "prereleaseFallback": "latest-stable-package-tag"
+}

@@ -111,9 +111,8 @@ test("package release state is valid before and after the initial Version Packag
 test("Changesets generates changelog entries for the Version Packages action", () => {
   const config = readJson(join(root, ".changeset/config.json"));
   assert.equal(config.changelog, "@changesets/cli/changelog");
-  assert.deepEqual(config.fixed, [
-    ["@yakit-libs/yakit-ui", "@yakit-libs/yakit-ui-icons"],
-  ]);
+  assert.deepEqual(config.fixed, []);
+  assert.deepEqual(config.linked, []);
 });
 
 test("public packages remain discoverable in the Yakit libraries keyword search", () => {
@@ -136,6 +135,7 @@ test("icon package has a narrow public, color, and React contract", () => {
     ".",
     "./colorful",
     "./icon.css",
+    "./oldicon",
     "./outline",
     "./registry",
     "./solid",

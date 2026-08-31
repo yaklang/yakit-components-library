@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execFile, spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import { createServer } from "node:net";
 import {
   access,
@@ -145,11 +146,50 @@ async function stopLauncher(launcher) {
 const packDirectory = process.argv[2];
 if (!packDirectory)
   throw new Error("Usage: verify-tarball-consumer.mjs <pack-directory>");
-const tarball = await findPackageTarball(packDirectory, "@yakit-libs/yakit-ui");
-const iconsTarball = await findPackageTarball(
-  packDirectory,
-  "@yakit-libs/yakit-ui-icons",
-);
+let releaseManifest;
+try {
+  releaseManifest = JSON.parse(
+    await readFile(
+      path.join(packDirectory, "verification-manifest.json"),
+      "utf8",
+    ),
+  );
+} catch (error) {
+  if (error?.code !== "ENOENT") throw error;
+}
+async function candidateOrBaseline(packageName) {
+  if (!releaseManifest) return findPackageTarball(packDirectory, packageName);
+  if (releaseManifest?.releaseSet?.includes(packageName))
+    return findPackageTarball(packDirectory, packageName);
+  const baseline = releaseManifest?.compatibilityBaselineSet?.find(
+    (item) => item.package === packageName,
+  );
+  if (
+    !baseline?.filename ||
+    !baseline?.integrity ||
+    !baseline?.sha256 ||
+    !baseline?.packedBytes
+  )
+    throw new Error(
+      `exact compatibility baseline is missing for ${packageName}`,
+    );
+  const baselinePath = path.join(packDirectory, baseline.filename);
+  const bytes = await readFile(baselinePath);
+  const sha256 = createHash("sha256").update(bytes).digest("hex");
+  const separator = baseline.integrity.indexOf("-");
+  const algorithm = baseline.integrity.slice(0, separator);
+  const expectedIntegrity = baseline.integrity.slice(separator + 1);
+  const actualIntegrity = createHash(algorithm).update(bytes).digest("base64");
+  if (
+    sha256 !== baseline.sha256 ||
+    actualIntegrity !== expectedIntegrity ||
+    bytes.length !== baseline.packedBytes
+  )
+    throw new Error(`exact compatibility baseline mismatch for ${packageName}`);
+  return baselinePath;
+}
+const tarball = await candidateOrBaseline("@yakit-libs/yakit-ui");
+const iconsTarball = await candidateOrBaseline("@yakit-libs/yakit-ui-icons");
 const fixture = await mkdtemp(
   path.join(tmpdir(), "yakit-ui-tarball-consumer-"),
 );

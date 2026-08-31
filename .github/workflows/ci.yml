@@ -67,6 +67,9 @@ jobs:
       - name: Build React-only icon package
         run: pnpm --filter @yakit-libs/yakit-ui-icons run build
 
+      - name: Verify icon auto-import contracts
+        run: pnpm run test:auto-import
+
       - name: Verify lightweight and dedicated icon package contracts
         run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
 

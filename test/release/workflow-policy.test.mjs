@@ -27,6 +27,27 @@ test("CI workflow has no publish credential or OIDC authority", () => {
   );
 });
 
+test("CI and publish verification gate the icon auto-import contract", () => {
+  const command = "run: pnpm run test:auto-import";
+  const builds = [
+    "run: pnpm --filter @yakit-libs/yakit-ui run build:package",
+    "run: pnpm --filter @yakit-libs/yakit-ui-icons run build",
+  ];
+  const sources = [
+    workflow("ci.yml"),
+    extractWorkflowJobs(workflow("publish.yml")).get("build-and-pack") ?? "",
+  ];
+  for (const source of sources) {
+    const autoImportIndex = source.indexOf(command);
+    assert.ok(autoImportIndex >= 0, "auto-import contract must run");
+    for (const build of builds)
+      assert.ok(
+        source.indexOf(build) >= 0 && source.indexOf(build) < autoImportIndex,
+        `${build} must complete before the auto-import contract`,
+      );
+  }
+});
+
 test("all third-party workflow actions are pinned to full commit SHAs", () => {
   for (const name of ["ci.yml", "publish.yml"]) {
     const references = thirdPartyActionReferences(workflow(name));
@@ -53,7 +74,6 @@ test("release actions use the reviewed upstream commit SHAs", () => {
     ],
     ["changesets/action/version", "8488615a623b1b9c987934bb89eae8af6a946ac1"],
     ["changesets/action/pack", "8488615a623b1b9c987934bb89eae8af6a946ac1"],
-    ["changesets/action/publish", "8488615a623b1b9c987934bb89eae8af6a946ac1"],
   ]);
   const references = ["ci.yml", "publish.yml"].flatMap((name) =>
     thirdPartyActionReferences(workflow(name)),
@@ -75,6 +95,40 @@ test("publish workflow defaults to no workflow-level authority", () => {
   assert.match(source, /^permissions:\s*\{\}\s*$/m);
   assert.doesNotMatch(source, /actions:\s*write/);
   assertCredentialFree("publish.yml", source);
+});
+
+test("normal, prerelease, and recovery publication share one global lock", () => {
+  const source = workflow("publish.yml");
+  assert.match(
+    source,
+    /concurrency:\s*\n\s*group:\s*yakit-ui-npm-release\s*\n\s*cancel-in-progress:\s*false/,
+  );
+  assert.doesNotMatch(source, /group:[^\n]*(?:github\.ref|github\.workflow)/);
+});
+
+test("publish and recovery fail closed on cutover and exact impact evidence", () => {
+  const source = workflow("publish.yml");
+  const jobs = extractWorkflowJobs(source);
+  const selector = jobs.get("select-mode") ?? "";
+  const build = jobs.get("build-and-pack") ?? "";
+  const verifier = jobs.get("verify-pack") ?? "";
+  const recovery = jobs.get("recovery-verify") ?? "";
+  for (const job of [selector, recovery]) {
+    assert.match(job, /collect-release-cutover-evidence\.mjs/);
+    assert.match(job, /release-cutover-preflight\.mjs/);
+  }
+  assert.match(build, /release-impact\.mjs/);
+  assert.match(build, /--from-release-tags --build-isolated/);
+  assert.match(build, /publish-plan\.json/);
+  assert.match(build, /Upload immutable release impact evidence/);
+  assert.match(verifier, /needs\.build-and-pack\.outputs\.impact-artifact-id/);
+  assert.match(verifier, /RELEASE_IMPACT_OUTPUT:/);
+  const preparation = readFileSync(
+    join(root, "scripts/release/prepare-verification-artifact.mjs"),
+    "utf8",
+  );
+  assert.match(preparation, /impactProbesForRelease/);
+  assert.match(preparation, /impactProbeSet/);
 });
 
 test("only protected publication jobs receive OIDC authority", () => {
@@ -105,10 +159,13 @@ test("OIDC publishing requires an explicit repository opt-in", () => {
     );
 });
 
-test("publish action disables GitHub tag and release creation", () => {
+test("normal publish consumes exact verified tarballs without Changesets publish", () => {
   const job = extractWorkflowJobs(workflow("publish.yml")).get("publish") ?? "";
-  assert.match(job, /create-github-releases:\s*(?:false|['"]false['"])/);
-  assert.match(job, /push-git-tags:\s*(?:false|['"]false['"])/);
+  assert.doesNotMatch(job, /changesets\/action\/publish/);
+  assert.match(job, /publish-verification-artifact\.mjs/);
+  assert.match(job, /\.release\/verified/);
+  assert.match(job, /\.release\/publish-intent/);
+  assert.doesNotMatch(job, /create-github-releases|push-git-tags/);
 });
 
 test("verification and publish consume the same Changesets pack artifact output", () => {
@@ -119,20 +176,50 @@ test("verification and publish consume the same Changesets pack artifact output"
 });
 
 test("tarball verification installs pnpm before running strict-layout consumers", () => {
-  const job = extractWorkflowJobs(workflow("publish.yml")).get("verify-pack") ?? "";
+  const job =
+    extractWorkflowJobs(workflow("publish.yml")).get("verify-pack") ?? "";
   const setup =
     "uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320";
   const smoke =
-    "run: node scripts/release/verify-tarball-consumer.mjs .release/pack";
+    "run: node scripts/release/verify-tarball-consumer.mjs .release/verified";
   const setupIndex = job.indexOf(setup);
   const smokeIndex = job.indexOf(smoke);
-  assert.ok(setupIndex >= 0, "verify-pack must install the reviewed pnpm action");
+  const sealIndex = job.indexOf("record-verification-gate.mjs");
+  const sizeIndex = job.indexOf("verify-icons-size-gate.mjs");
+  assert.ok(
+    setupIndex >= 0,
+    "verify-pack must install the reviewed pnpm action",
+  );
   assert.match(job, /version:\s*10\.34\.5/);
-  assert.ok(smokeIndex >= 0, "verify-pack must run the strict-layout smoke test");
-  assert.ok(setupIndex < smokeIndex, "verify-pack must install pnpm before smoke tests");
+  assert.ok(
+    smokeIndex >= 0,
+    "verify-pack must run the strict-layout smoke test",
+  );
+  assert.ok(
+    setupIndex < smokeIndex,
+    "verify-pack must install pnpm before smoke tests",
+  );
+  assert.ok(
+    smokeIndex < sealIndex,
+    "the consumer gate must be sealed only after the exact consumer passes",
+  );
+  assert.ok(
+    sizeIndex >= 0 && sizeIndex < smokeIndex,
+    "the exact icons size report must be bound before consumer verification",
+  );
+  const sizeGate = readFileSync(
+    join(root, "scripts/release/verify-icons-size-gate.mjs"),
+    "utf8",
+  );
+  assert.match(sizeGate, /if \(!icons\)/);
+  assert.match(sizeGate, /sizeGate:\s*"skipped"/);
+  assert.match(
+    sizeGate,
+    /entry\.name === "@yakit-libs\/yakit-ui-icons"|@yakit-libs\/yakit-ui-icons/,
+  );
 });
 
-test("CI and publish build and pack both fixed public packages", () => {
+test("CI validates both build surfaces while the publish artifact selects a non-empty releaseSet", () => {
   const ci = workflow("ci.yml");
   const publishBuild =
     extractWorkflowJobs(workflow("publish.yml")).get("build-and-pack") ?? "";
@@ -145,6 +232,8 @@ test("CI and publish build and pack both fixed public packages", () => {
     );
   }
   assert.match(ci, /--filter @yakit-libs\/yakit-ui-icons pack --dry-run/);
+  assert.match(publishBuild, /changesets\/action\/pack/);
+  assert.match(workflow("publish.yml"), /release-matrix/);
 });
 
 test("partial recovery publishes no rebuilt or already-published package", () => {
@@ -152,11 +241,11 @@ test("partial recovery publishes no rebuilt or already-published package", () =>
     extractWorkflowJobs(workflow("publish.yml")).get("recovery-publish") ?? "";
   assert.match(
     job,
-    /recover-partial-publication\.mjs \.release\/recovery --publish/,
+    /publish-verification-artifact\.mjs[\s\S]*\.release\/recovery[\s\S]*\.release\/recovery-intent/,
   );
   assert.match(
     readFileSync(
-      join(root, "scripts/release/recover-partial-publication.mjs"),
+      join(root, "scripts/release/publish-verification-artifact.mjs"),
       "utf8",
     ),
     /"--ignore-scripts"/,
@@ -167,6 +256,63 @@ test("partial recovery publishes no rebuilt or already-published package", () =>
   );
   assert.match(job, /id-token:\s*write/);
   assert.match(job, /actions:\s*read/);
+});
+
+test("durable PROCESSING intent is uploaded before either OIDC publisher can run", () => {
+  const jobs = extractWorkflowJobs(workflow("publish.yml"));
+  const verifier = jobs.get("verify-pack") ?? "";
+  const publisher = jobs.get("publish") ?? "";
+  const recoveryVerifier = jobs.get("recovery-verify") ?? "";
+  const recoveryPublisher = jobs.get("recovery-publish") ?? "";
+  assert.ok(
+    verifier.indexOf("prepare-publication-attempt.mjs") <
+      verifier.indexOf("Upload durable pre-side-effect publication intent"),
+  );
+  assert.match(verifier, /publication-intent-artifact-id/);
+  assert.match(publisher, /publication-intent-artifact-id/);
+  assert.match(publisher, /PUBLICATION_INTENT_ARTIFACT_DIGEST/);
+  assert.match(
+    publisher,
+    /Upload append-only publication receipt[\s\S]*if: always\(\)/,
+  );
+  assert.match(recoveryVerifier, /prepare-publication-attempt\.mjs/);
+  assert.match(
+    recoveryVerifier,
+    /Upload durable pre-side-effect recovery intent/,
+  );
+  assert.match(recoveryPublisher, /PUBLICATION_INTENT_ARTIFACT_DIGEST/);
+  assert.match(
+    recoveryPublisher,
+    /Upload append-only recovery receipt[\s\S]*if: always\(\)/,
+  );
+});
+
+test("verification evidence contains a manifest-bound immutable publication outbox", () => {
+  const preparation = readFileSync(
+    join(root, "scripts/release/prepare-verification-artifact.mjs"),
+    "utf8",
+  );
+  const consumer = readFileSync(
+    join(root, "scripts/release/publication-consumer.mjs"),
+    "utf8",
+  );
+  assert.match(preparation, /transactional-outbox\.json/);
+  assert.match(preparation, /manifest\.publicationOutbox/);
+  assert.match(consumer, /PUBLISH_INTENT_DURABLY_RECORDED/);
+  assert.match(consumer, /DURABLE_INTENT_ARTIFACT_VALIDATED/);
+  assert.match(
+    consumer,
+    /is UNKNOWN because its durable success receipt is missing; replay is forbidden/,
+  );
+  assert.match(consumer, /authorized retry dual evidence identity mismatch/);
+  assert.match(consumer, /AMBIGUOUS is never retry authority/);
+  assert.match(consumer, /registryAbsenceEvidence/);
+  assert.match(consumer, /evidenceHash !== payloadHash\(payload\)/);
+  const publisher = readFileSync(
+    join(root, "scripts/release/publish-verification-artifact.mjs"),
+    "utf8",
+  );
+  assert.match(publisher, /error\.publicationOutcome = "NOT_ATTEMPTED"/);
 });
 
 test("recovery metadata waits until no verified package is missing", () => {
@@ -185,12 +331,13 @@ test("recovery metadata uses the package identity emitted by evidence validation
   const metadata = extractWorkflowJobs(source).get("recovery-metadata") ?? "";
   assert.match(
     source,
-    /package-name:\s*\$\{\{\s*steps\.identity\.outputs\.package-name\s*\}\}/,
+    /release-matrix:\s*\$\{\{\s*steps\.identity\.outputs\.release-matrix\s*\}\}/,
   );
   assert.match(
     metadata,
-    /PACKAGE_NAME:\s*\$\{\{\s*needs\.recovery-verify\.outputs\.package-name\s*\}\}/,
+    /matrix:\s*\$\{\{ fromJSON\(needs\.recovery-verify\.outputs\.release-matrix\) \}\}/,
   );
+  assert.match(metadata, /PACKAGE_NAME:\s*\$\{\{ matrix\.package \}\}/);
 
   const recovery = readFileSync(
     join(root, "scripts/release/recover-partial-publication.mjs"),
@@ -205,17 +352,19 @@ test("recovery metadata uses the package identity emitted by evidence validation
   );
   assert.match(reconciler, /"yakit-ui"/);
   assert.match(reconciler, /"@yakit-libs\/yakit-ui"/);
+  assert.match(reconciler, /"@yakit-libs\/yakit-ui-icons"/);
   assert.match(reconciler, /tag !== `\$\{packageName\}@\$\{packageVersion\}`/);
 });
 
-test("post-publish smoke verifies both registry packages", () => {
+test("post-publish smoke verifies exactly the release matrix packages", () => {
   const job =
     extractWorkflowJobs(workflow("publish.yml")).get("post-publish") ?? "";
-  assert.match(job, /PACKAGE_NAME:\s*["']@yakit-libs\/yakit-ui["']/);
   assert.match(
     job,
-    /PACKAGE_NAME=(?:["'])?@yakit-libs\/yakit-ui-icons(?:["'])?/,
+    /matrix:\s*\$\{\{ fromJSON\(needs\.verify-pack\.outputs\.release-matrix\) \}\}/,
   );
+  assert.match(job, /PACKAGE_NAME:\s*\$\{\{ matrix\.package \}\}/);
+  assert.match(job, /PACKAGE_VERSION:\s*\$\{\{ matrix\.version \}\}/);
 });
 
 test("publish job cannot rebuild the verified package artifact", () => {

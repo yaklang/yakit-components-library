@@ -4,10 +4,7 @@ import { appendFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-import {
-  findPackageTarball,
-  PUBLIC_PACKAGES,
-} from "./verify-pack-directory.mjs";
+import { findPackageTarball } from "./verify-pack-directory.mjs";
 import { validateVerificationManifest } from "./verification-manifest.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
@@ -20,36 +17,38 @@ const manifest = JSON.parse(
 );
 const tarballPaths = Object.fromEntries(
   await Promise.all(
-    PUBLIC_PACKAGES.map(async (name) => [
+    manifest.releaseSet.map(async (name) => [
       name,
       await findPackageTarball(verifiedDirectory, name),
     ]),
   ),
 );
-const tarballPath = tarballPaths["@yakit-libs/yakit-ui"];
 await validateVerificationManifest(manifest, {
-  tarballPath,
+  evidenceDirectory: verifiedDirectory,
   repository: process.env.GITHUB_REPOSITORY,
   workflowCommitSha: process.env.GITHUB_SHA,
   runId: process.env.GITHUB_RUN_ID,
   sourceRef: process.env.GITHUB_REF,
-  packageName: "@yakit-libs/yakit-ui",
   packArtifactId: process.env.PACK_ARTIFACT_ID,
-  requiredSchemaVersion: 2,
-  expectedPackages: PUBLIC_PACKAGES,
+  expectedPackages: manifest.releaseSet,
   tarballPaths,
 });
 
-const version = manifest.package.version;
-if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) {
-  throw new Error("verification manifest contains an invalid package version");
-}
-const tagName = `${manifest.package.name}@${version}`;
+const primary = manifest.releases[0];
 const outputs = {
   "commit-sha": manifest.workflowCommitSha,
-  "dist-tag": manifest.package.distTag,
-  "package-version": version,
-  "tag-name": tagName,
+  "release-set": JSON.stringify(manifest.releaseSet),
+  "release-matrix": JSON.stringify({
+    include: manifest.releases.map((entry) => ({
+      package: entry.name,
+      version: entry.version,
+      distTag: entry.distTag,
+      tag: entry.metadata.tag,
+    })),
+  }),
+  "package-version": primary.version,
+  "dist-tag": primary.distTag,
+  "tag-name": primary.metadata.tag,
 };
 if (process.env.GITHUB_OUTPUT) {
   await appendFile(
