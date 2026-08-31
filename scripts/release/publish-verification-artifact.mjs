@@ -182,7 +182,6 @@ async function publish(release) {
         tarballPaths[release.name],
         "--access",
         "public",
-        "--provenance",
         "--ignore-scripts",
         "--tag",
         release.distTag,
