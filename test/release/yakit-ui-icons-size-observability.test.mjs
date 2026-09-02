@@ -9,6 +9,9 @@ import {
   CURATED_DISTRIBUTION_CAPS,
   ICON_DISTRIBUTION_CAPS,
   LIGHTWEIGHT_BUDGET,
+  MONOLITHIC_OLDICON_ARTIFACT_IDENTITY,
+  MONOLITHIC_OLDICON_DISTRIBUTION_CAPS,
+  MONOLITHIC_OLDICON_SENTINEL_SET,
   OLDICON_COMPATIBILITY_ALLOWANCE,
   SIZE_PROBES,
   SIZE_REPORT_SCHEMA_ID,
@@ -22,6 +25,7 @@ import {
   failureSignalsFromReport,
   normalizedBuildOptions,
   sha256Json,
+  sizeReportCompatibilityProfile,
   sha256Text,
   validateSizeReport,
 } from "../../packages/yakit-ui-icons/scripts/size-observability-validator.mjs";
@@ -40,13 +44,68 @@ test("oldicon receives an explicit additive distribution allowance", () => {
   });
 });
 
-const validReport = () => {
+test("the monolithic oldicon report keeps its exact stricter profile", () => {
+  const report = {
+    ...structuredClone(MONOLITHIC_OLDICON_ARTIFACT_IDENTITY),
+    sentinelSet: {
+      record: MONOLITHIC_OLDICON_SENTINEL_SET,
+      sha256: sha256Json(MONOLITHIC_OLDICON_SENTINEL_SET),
+    },
+  };
+  const profile = sizeReportCompatibilityProfile(report);
+  assert.deepEqual(
+    profile?.distributionCaps,
+    MONOLITHIC_OLDICON_DISTRIBUTION_CAPS,
+  );
+  assert.equal(
+    sha256Json(MONOLITHIC_OLDICON_SENTINEL_SET),
+    "a17fa770460063f6b5baee10867d7fec3777c60de6d5ffc1f30e7945dcc19451",
+  );
+  assert.deepEqual(
+    classifyDistribution(
+      {
+        fileCount: 33,
+        packedBytes: 1_766_286,
+        unpackedBytes: 6_808_447,
+      },
+      profile.distributionCaps,
+    ).headroom,
+    { fileCount: 0, packedBytes: 33_714, unpackedBytes: 191_553 },
+  );
+
+  const altered = structuredClone(report);
+  altered.sentinelSet.record.unrelated.oldicon.push("UnexpectedIcon");
+  altered.sentinelSet.sha256 = sha256Json(altered.sentinelSet.record);
+  assert.equal(sizeReportCompatibilityProfile(altered), null);
+
+  for (const mutate of [
+    (candidate) => (candidate.artifact.version = "0.2.3"),
+    (candidate) => (candidate.artifact.sha256 = "b".repeat(64)),
+    (candidate) => (candidate.distribution.packedBytes += 1),
+  ]) {
+    const candidate = structuredClone(report);
+    mutate(candidate);
+    assert.equal(sizeReportCompatibilityProfile(candidate), null);
+  }
+});
+
+const validReport = ({
+  artifact: artifactOverrides = {},
+  distributionCaps = ICON_DISTRIBUTION_CAPS,
+  distributionMetrics = {
+    fileCount: 10,
+    packedBytes: 100,
+    unpackedBytes: 200,
+  },
+  sentinelSet = SIZE_SENTINEL_SET,
+} = {}) => {
   const artifact = {
     filename: "yakit-icons.tgz",
     integrity: `sha512-${"A".repeat(88)}`,
     package: "@yakit-libs/yakit-ui-icons",
     sha256: "a".repeat(64),
     version: "1.2.3",
+    ...artifactOverrides,
   };
   const measurements = ["vite", "esbuild"].flatMap((tool) =>
     ["browser", "general"].flatMap((condition) =>
@@ -110,14 +169,8 @@ const validReport = () => {
     ),
   );
   const distribution = {
-    ...classifyDistribution({
-      fileCount: 10,
-      packedBytes: 100,
-      unpackedBytes: 200,
-    }),
-    fileCount: 10,
-    packedBytes: 100,
-    unpackedBytes: 200,
+    ...classifyDistribution(distributionMetrics, distributionCaps),
+    ...distributionMetrics,
   };
   const commonManifest = {
     name: "yakit-ui-icons-size-install-fixture",
@@ -283,8 +336,8 @@ const validReport = () => {
     schemaId: SIZE_REPORT_SCHEMA_ID,
     schemaVersion: 2,
     sentinelSet: {
-      record: SIZE_SENTINEL_SET,
-      sha256: sha256Json(SIZE_SENTINEL_SET),
+      record: sentinelSet,
+      sha256: sha256Json(sentinelSet),
     },
     status: null,
     toolOwnership: {
@@ -308,6 +361,35 @@ const validReport = () => {
   );
   return report;
 };
+
+test("the exact monolithic report remains strictly verifiable", () => {
+  const report = validReport({
+    artifact: MONOLITHIC_OLDICON_ARTIFACT_IDENTITY.artifact,
+    distributionCaps: MONOLITHIC_OLDICON_DISTRIBUTION_CAPS,
+    distributionMetrics: MONOLITHIC_OLDICON_ARTIFACT_IDENTITY.distribution,
+    sentinelSet: MONOLITHIC_OLDICON_SENTINEL_SET,
+  });
+  const expectedArtifact = {
+    ...report.artifact,
+    fileCount: report.distribution.fileCount,
+    packedBytes: report.distribution.packedBytes,
+    unpackedBytes: report.distribution.unpackedBytes,
+  };
+  assert.deepEqual(validateSizeReport(report, expectedArtifact), []);
+
+  for (const mutate of [
+    (candidate) => (candidate.artifact.version = "0.2.3"),
+    (candidate) => (candidate.artifact.sha256 = "b".repeat(64)),
+    (candidate) => (candidate.distribution.fileCount = 34),
+  ]) {
+    const candidate = structuredClone(report);
+    mutate(candidate);
+    assert.match(
+      validateSizeReport(candidate, expectedArtifact).join("\n"),
+      /sentinel version\/hash relation is invalid/,
+    );
+  }
+});
 
 test("distribution classifier reports utilization, headroom, and cap bands", () => {
   const atCap = classifyDistribution({ ...ICON_DISTRIBUTION_CAPS });

@@ -733,6 +733,75 @@ export function classifyArtifactEvidence(artifact) {
   };
 }
 
+function lifecycleReleaseIdentities(state) {
+  return (state?.releases ?? []).map(
+    (release) => `${release.name}@${release.version}`,
+  );
+}
+
+function recoveryClosesArtifact(sourceArtifact, recoveryReceipt) {
+  if (
+    recoveryReceipt.kind !== "recovery-receipt" ||
+    !recoveryReceipt.id ||
+    !recoveryReceipt.workflowRunId ||
+    !/^sha256:[0-9a-f]{64}$/i.test(recoveryReceipt.digest ?? "") ||
+    recoveryReceipt.disposition !== "closed-terminal" ||
+    recoveryReceipt.strictValidation?.status !== "passed" ||
+    recoveryReceipt.strictValidation?.semanticOutcome !== "closed-terminal"
+  )
+    return false;
+  const recoveryState =
+    recoveryReceipt.jsonDocuments?.["lifecycle-snapshot.json"]?.value;
+  if (
+    String(recoveryState?.sourceRunId) !==
+      String(sourceArtifact.workflowRunId) ||
+    !/^[0-9a-f]{64}$/i.test(recoveryState?.outboxSha256 ?? "")
+  )
+    return false;
+  const recoveryReleaseIdentities = lifecycleReleaseIdentities(recoveryState);
+  if (recoveryReleaseIdentities.length === 0) return false;
+
+  if (
+    !["publish-intent", "publish-receipt"].includes(sourceArtifact.kind) ||
+    !["recoverable", "inconclusive"].includes(sourceArtifact.disposition) ||
+    sourceArtifact.strictValidation?.status !== "passed"
+  )
+    return false;
+  const sourceState =
+    sourceArtifact.jsonDocuments?.["lifecycle-snapshot.json"]?.value;
+  return (
+    String(sourceState?.sourceRunId) === String(sourceArtifact.workflowRunId) &&
+    sourceState?.outboxSha256 === recoveryState.outboxSha256 &&
+    JSON.stringify(lifecycleReleaseIdentities(sourceState)) ===
+      JSON.stringify(recoveryReleaseIdentities)
+  );
+}
+
+export function reconcileRecoveredArtifacts(artifacts) {
+  const recoveryReceipts = artifacts.filter(
+    (artifact) => artifact.kind === "recovery-receipt",
+  );
+  return artifacts.map((artifact) => {
+    const recoveryReceipt = recoveryReceipts.find((receipt) =>
+      recoveryClosesArtifact(artifact, receipt),
+    );
+    if (artifact.disposition === "closed-terminal" || !recoveryReceipt)
+      return artifact;
+    return {
+      ...artifact,
+      historicalDisposition: artifact.disposition,
+      historicalReason: artifact.reason,
+      disposition: "closed-terminal",
+      reason: undefined,
+      recoveredBy: {
+        artifactId: String(recoveryReceipt.id),
+        digest: recoveryReceipt.digest,
+        workflowRunId: String(recoveryReceipt.workflowRunId),
+      },
+    };
+  });
+}
+
 export function classifyRunEvidence(run, artifacts, currentRunId) {
   const owned = artifacts.filter(
     (artifact) => String(artifact.workflowRunId) === String(run.id),
@@ -880,7 +949,7 @@ export async function collectCutoverEvidence({ repository, runId, token }) {
     });
   }
 
-  const artifacts = [];
+  const classifiedArtifacts = [];
   for (const artifact of relevantArtifacts) {
     const run = runById.get(String(artifact.workflow_run.id));
     const kind = artifactKind(artifact.name);
@@ -905,8 +974,9 @@ export async function collectCutoverEvidence({ repository, runId, token }) {
       ...inspected,
     };
     evidence.registry = await registryDisposition(evidence.jsonDocuments);
-    artifacts.push(classifyArtifactEvidence(evidence));
+    classifiedArtifacts.push(classifyArtifactEvidence(evidence));
   }
+  const artifacts = reconcileRecoveredArtifacts(classifiedArtifacts);
 
   const refOptions = {
     token,

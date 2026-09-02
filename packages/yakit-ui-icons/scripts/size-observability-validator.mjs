@@ -32,6 +32,32 @@ export const SIZE_SENTINEL_SET = Object.freeze({
   },
   registryFull: ["MailOutlined", "MailSolid", "MitmPrimaryMenuColorful"],
 });
+export const MONOLITHIC_OLDICON_SENTINEL_SET = Object.freeze({
+  schemaId: "yakit-ui-icons-size-sentinels/v1",
+  version: 2,
+  selected: {
+    "root-outline": "MailOutlined",
+    outline: "MailOutlined",
+    solid: "MailSolid",
+    colorful: "MitmPrimaryMenuColorful",
+    oldicon: "PopoverArrowIcon",
+    registry: "iconRegistry",
+  },
+  unrelated: {
+    "root-outline": ["MailSolid", "MitmPrimaryMenuColorful", "iconRegistry"],
+    outline: ["LocationOutlined", "MailSolid", "iconRegistry"],
+    solid: ["BookSolid", "MailOutlined", "iconRegistry"],
+    colorful: ["OfficialAvatarColorful", "MailOutlined", "iconRegistry"],
+    oldicon: [
+      "MailOutlined",
+      "MailSolid",
+      "MitmPrimaryMenuColorful",
+      "iconRegistry",
+    ],
+    registry: [],
+  },
+  registryFull: ["MailOutlined", "MailSolid", "MitmPrimaryMenuColorful"],
+});
 export const CURATED_DISTRIBUTION_CAPS = Object.freeze({
   packedBytes: 600_000,
   unpackedBytes: 3_000_000,
@@ -51,6 +77,26 @@ export const ICON_DISTRIBUTION_CAPS = Object.freeze(
     ]),
   ),
 );
+export const MONOLITHIC_OLDICON_DISTRIBUTION_CAPS = Object.freeze({
+  packedBytes: 1_800_000,
+  unpackedBytes: 7_000_000,
+  fileCount: 33,
+});
+export const MONOLITHIC_OLDICON_ARTIFACT_IDENTITY = Object.freeze({
+  artifact: {
+    package: packageName,
+    filename: "yakit-libs-yakit-ui-icons-0.2.2.tgz",
+    integrity:
+      "sha512-QPJvwBMX85YpwEFwPUwy6r9U7KaWQOSlzfRmyjvA8Z0ioE8YR6yvNNXp5l/cwJxJeyp/xlOzXHpwNnBA4TfdJQ==",
+    sha256: "ebf009184dcf2238c353c2b744ee60478f03b223f7c25465ad38cd3b9d11cfed",
+    version: "0.2.2",
+  },
+  distribution: {
+    packedBytes: 1_766_286,
+    unpackedBytes: 6_808_447,
+    fileCount: 33,
+  },
+});
 export const LIGHTWEIGHT_BUDGET = Object.freeze({
   gzipBytes: 5_000,
   minifiedBytes: 15_000,
@@ -123,6 +169,34 @@ export function sha256Json(value) {
 
 export function sha256Text(value) {
   return createHash("sha256").update(value).digest("hex");
+}
+
+export function sizeReportCompatibilityProfile(report) {
+  for (const profile of [
+    {
+      distributionCaps: ICON_DISTRIBUTION_CAPS,
+      sentinelSet: SIZE_SENTINEL_SET,
+    },
+    {
+      artifactIdentity: MONOLITHIC_OLDICON_ARTIFACT_IDENTITY,
+      distributionCaps: MONOLITHIC_OLDICON_DISTRIBUTION_CAPS,
+      sentinelSet: MONOLITHIC_OLDICON_SENTINEL_SET,
+    },
+  ])
+    if (
+      canonicalJson(report?.sentinelSet?.record) ===
+        canonicalJson(profile.sentinelSet) &&
+      report?.sentinelSet?.sha256 === sha256Json(profile.sentinelSet) &&
+      (!profile.artifactIdentity ||
+        (Object.entries(profile.artifactIdentity.artifact).every(
+          ([key, value]) => report?.artifact?.[key] === value,
+        ) &&
+          Object.entries(profile.artifactIdentity.distribution).every(
+            ([key, value]) => report?.distribution?.[key] === value,
+          )))
+    )
+      return profile;
+  return null;
 }
 
 export function createIdentityRecord({
@@ -682,6 +756,7 @@ function validateGraph(graph, artifact, distribution) {
 
 export function validateSizeReport(report, expectedArtifact) {
   const errors = [];
+  const compatibilityProfile = sizeReportCompatibilityProfile(report);
   if (report?.schemaId !== SIZE_REPORT_SCHEMA_ID)
     errors.push("unsupported schemaId");
   if (report?.schemaVersion !== SIZE_REPORT_SCHEMA_VERSION)
@@ -720,11 +795,7 @@ export function validateSizeReport(report, expectedArtifact) {
   });
   if (canonicalJson(report?.identityRecord) !== canonicalJson(expectedIdentity))
     errors.push("immutable identity SHA relation is invalid");
-  if (
-    canonicalJson(report?.sentinelSet?.record) !==
-      canonicalJson(SIZE_SENTINEL_SET) ||
-    report?.sentinelSet?.sha256 !== sha256Json(SIZE_SENTINEL_SET)
-  )
+  if (!compatibilityProfile)
     errors.push("sentinel version/hash relation is invalid");
   if (
     !Array.isArray(report?.externalObservations) ||
@@ -743,7 +814,10 @@ export function validateSizeReport(report, expectedArtifact) {
   )
     errors.push("direct exact esbuild ownership or tool versions are invalid");
 
-  const expectedDistribution = classifyDistribution(report?.distribution);
+  const expectedDistribution = classifyDistribution(
+    report?.distribution,
+    compatibilityProfile?.distributionCaps,
+  );
   const actualDistribution = Object.fromEntries(
     Object.keys(expectedDistribution).map((key) => [
       key,
