@@ -31,7 +31,7 @@
     {
       "name": "aiTree",
       "path": "app/renderer/src/main/src/pages/ai-agent/aiTree/icon.tsx",
-      "sha256": "4e8e7204240c8fd6dfaa182ac6af735e6376f9cf69a11f9049cb63aa506b1f1e"
+      "sha256": "a89cf0e7c528182a477e571d00030059ef11a6703469a657eedd7be9d90aa736"
     },
     {
       "name": "pluginLog",

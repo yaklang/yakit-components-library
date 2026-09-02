@@ -123,7 +123,8 @@ export const svgReactPluginOptions: SvgrPluginOptions = {
 /** The only SVG-to-React compilation contract used by Vite, Vitest, and Storybook. */
 export const createSvgReactPlugin = () => svgr(svgReactPluginOptions);
 
-const iconFamilyIndex = /[/\\]icons[/\\](?:colorful|oldicon|outline|solid)[/\\]index\.tsx$/;
+const iconFactoryModule =
+  /[/\\]icons[/\\](?:(?:colorful|outline|solid)[/\\]index|oldicon[/\\]icons[/\\][A-Za-z_$][A-Za-z0-9_$]*)\.tsx$/;
 const unannotatedCreateIconCall = /(?<!@__PURE__ \*\/)\bcreateIcon\s*\(/g;
 
 /** Preserve per-export tree shaking when Rollup compiles icon family barrels. */
@@ -131,7 +132,7 @@ export const createIconPureAnnotationPlugin = () => ({
   enforce: 'pre' as const,
   name: 'yakit-icon-pure-annotations',
   transform(code: string, id: string) {
-    if (!iconFamilyIndex.test(id) || !code.includes('createIcon(')) return null;
+    if (!iconFactoryModule.test(id) || !code.includes('createIcon(')) return null;
     return {
       code: code.replace(unannotatedCreateIconCall, '/* @__PURE__ */ createIcon('),
       map: null,
