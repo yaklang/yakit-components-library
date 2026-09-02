@@ -430,6 +430,7 @@ test("pre-build types use source fixtures while built package contracts verify p
   assert.doesNotMatch(manifest.scripts["test:types"], /build/i);
   assert.match(manifest.scripts["build:lib"], /fix-declaration-imports\.mjs/);
   assert.equal(libraryTypes.compilerOptions.declarationMap, false);
+  assert.deepEqual(libraryTypes.exclude, ["src/icons/oldicon"]);
   assert.deepEqual(sourceTypes.include, [
     "../../src/vite-env.d.ts",
     "colorful-icon-public.test.tsx",
