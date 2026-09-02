@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { createElement, Fragment, type ComponentType } from 'react';
@@ -162,6 +162,24 @@ describe('oldicon package entry and server rendering', () => {
     expect(Object.keys(OldIcons).sort()).toEqual(
       inventory.exports.map(({ exportName }) => exportName).sort(),
     );
+  });
+
+  it('generates one public source module per oldicon export', () => {
+    const iconFiles = readdirSync(resolve(oldiconRoot, 'icons')).sort();
+    const exportNames = inventory.exports.map(({ exportName }) => exportName).sort();
+
+    expect(iconFiles).toEqual(exportNames.map((exportName) => `${exportName}.tsx`));
+    expect(exportNames).not.toContain('TaskWaitIcon');
+    const barrel = readFileSync(resolve(oldiconRoot, 'index.tsx'), 'utf8');
+    expect(barrel).not.toContain('?react');
+    expect(barrel).not.toContain('createIcon(');
+    for (const { assetFile, exportName } of inventory.exports) {
+      expect(barrel).toContain(`export { ${exportName} } from './icons/${exportName}.js';`);
+      const source = readFileSync(resolve(oldiconRoot, 'icons', `${exportName}.tsx`), 'utf8');
+      expect(source).toContain(`from '../${assetFile}?react';`);
+      expect(source).toContain(`export const ${exportName} = createIcon(`);
+      expect(source.match(/\.svg\?react/g)).toHaveLength(1);
+    }
   });
 
   it('SSR renders every oldicon export as an accessible icon wrapper', () => {

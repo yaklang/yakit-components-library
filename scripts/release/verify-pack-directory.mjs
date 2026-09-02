@@ -39,9 +39,9 @@ export const CURATED_ICON_PACKAGE_LIMITS = {
   fileCount: 33,
 };
 export const OLDICON_COMPATIBILITY_ALLOWANCE = {
-  packedBytes: 1_200_000,
-  unpackedBytes: 4_000_000,
-  fileCount: 0,
+  packedBytes: 1_400_000,
+  unpackedBytes: 4_700_000,
+  fileCount: 1_167,
 };
 export const ICON_PACKAGE_LIMITS = Object.fromEntries(
   Object.keys(CURATED_ICON_PACKAGE_LIMITS).map((metric) => [
@@ -51,9 +51,10 @@ export const ICON_PACKAGE_LIMITS = Object.fromEntries(
   ]),
 );
 export const OLDICON_ENTRY_LIMITS = {
-  runtimeBytes: 4_200_000,
+  runtimeBytes: 100_000,
   typesBytes: 40_000,
 };
+export const OLDICON_EXPORT_COUNT = 380;
 const POLICIES = {
   "@yakit-libs/yakit-ui": {
     required: [
@@ -78,6 +79,9 @@ const POLICIES = {
       "package/dist/outline/index.d.ts",
       "package/dist/oldicon/index.js",
       "package/dist/oldicon/index.d.ts",
+      "package/dist/oldicon/icons/PopoverArrowIcon.js",
+      "package/dist/oldicon/icons/PopoverArrowIcon.d.ts",
+      "package/dist/browser/oldicon/icons/PopoverArrowIcon.js",
       "package/dist/solid/index.js",
       "package/dist/solid/index.d.ts",
       "package/dist/registry.js",
@@ -229,6 +233,50 @@ export async function verifyPackageTarball(tarball) {
   const unpackedBytes = unpacked.length;
   const fileCount = entries.filter((entry) => !entry.endsWith("/")).length;
   if (manifest.name === "@yakit-libs/yakit-ui-icons") {
+    const oldiconExport = manifest.exports?.["./oldicon/*"];
+    if (
+      JSON.stringify(oldiconExport) !==
+      JSON.stringify({
+        types: "./dist/oldicon/icons/*.d.ts",
+        browser: "./dist/browser/oldicon/icons/*.js",
+        import: "./dist/oldicon/icons/*.js",
+      })
+    ) {
+      failures.push(
+        "@yakit-libs/yakit-ui-icons must publish the typed oldicon per-icon export pattern",
+      );
+    }
+    const oldiconFileNames = (prefix, suffix) =>
+      entries
+        .filter((entry) => entry.startsWith(prefix) && entry.endsWith(suffix))
+        .map((entry) => entry.slice(prefix.length, -suffix.length))
+        .sort();
+    const oldiconRuntimeNames = oldiconFileNames(
+      "package/dist/oldicon/icons/",
+      ".js",
+    );
+    const oldiconTypeNames = oldiconFileNames(
+      "package/dist/oldicon/icons/",
+      ".d.ts",
+    );
+    const oldiconBrowserNames = oldiconFileNames(
+      "package/dist/browser/oldicon/icons/",
+      ".js",
+    );
+    if (
+      oldiconRuntimeNames.length !== OLDICON_EXPORT_COUNT ||
+      JSON.stringify(oldiconRuntimeNames) !==
+        JSON.stringify(oldiconTypeNames) ||
+      JSON.stringify(oldiconRuntimeNames) !==
+        JSON.stringify(oldiconBrowserNames)
+    ) {
+      failures.push(
+        `oldicon per-icon runtime, declaration, and browser file sets must match all ${OLDICON_EXPORT_COUNT} exports`,
+      );
+    }
+    if (oldiconRuntimeNames.includes("TaskWaitIcon")) {
+      failures.push("TaskWaitIcon must not be published as an SVG oldicon");
+    }
     if (
       JSON.stringify(manifest.peerDependencies) !==
       JSON.stringify({ react: "^18.2.0" })

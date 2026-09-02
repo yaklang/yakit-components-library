@@ -136,6 +136,7 @@ test("icon package has a narrow public, color, and React contract", () => {
     "./colorful",
     "./icon.css",
     "./oldicon",
+    "./oldicon/*",
     "./outline",
     "./registry",
     "./solid",
@@ -143,6 +144,11 @@ test("icon package has a narrow public, color, and React contract", () => {
   assert.deepEqual(manifest.peerDependencies, { react: "^18.2.0" });
   assert.deepEqual(manifest.dependencies, {
     "@yakit-libs/color": "1.4.1",
+  });
+  assert.deepEqual(manifest.exports["./oldicon/*"], {
+    types: "./dist/oldicon/icons/*.d.ts",
+    browser: "./dist/browser/oldicon/icons/*.js",
+    import: "./dist/oldicon/icons/*.js",
   });
   assert.equal(manifest.peerDependenciesMeta, undefined);
   assert.deepEqual(manifest.files, ["dist", "README.md", "LICENSE"]);

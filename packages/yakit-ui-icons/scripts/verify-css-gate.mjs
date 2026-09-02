@@ -5,6 +5,7 @@ import {
   mkdtemp,
   cp,
   readFile,
+  realpath,
   readdir,
   rm,
   symlink,
@@ -163,16 +164,146 @@ async function runBrowserBundle({ entries, packageName, packageRoot }) {
     if (jsFiles.length === 0) {
       throw new Error("browser fixture emitted no JavaScript entry");
     }
-    const js = (
-      await Promise.all(jsFiles.map((file) => readFile(file)))
-    ).reduce((total, source) => total + source.byteLength, 0);
-    const gzip = await gzipSize(
-      Buffer.concat(await Promise.all(jsFiles.map((file) => readFile(file)))),
+    const jsSources = await Promise.all(jsFiles.map((file) => readFile(file)));
+    const js = jsSources.reduce(
+      (total, source) => total + source.byteLength,
+      0,
     );
+    const gzip = await gzipSize(Buffer.concat(jsSources));
     return { gzip, raw: js };
   } finally {
     await rm(fixtureRoot, { force: true, recursive: true });
   }
+}
+
+async function runBrowserSplitBundle({
+  initial,
+  lazy,
+  packageName,
+  packageRoot,
+}) {
+  const fixtureRoot = await realpath(
+    await mkdtemp(path.join(os.tmpdir(), "yakit-icon-split-")),
+  );
+  try {
+    await installPackedView({ fixtureRoot, packageName, packageRoot });
+    await writeFile(
+      path.join(fixtureRoot, "index.html"),
+      '<div id="app"></div><script type="module" src="/entry.js"></script>\n',
+    );
+    await writeFile(
+      path.join(fixtureRoot, "entry.js"),
+      [
+        `import { ${initial.exportName} } from ${JSON.stringify(initial.specifier)};`,
+        `window.__yakitInitialIcon = ${initial.exportName};`,
+        'window.__loadYakitLazyIcon = () => import("./lazy.js");',
+      ].join("\n"),
+    );
+    await writeFile(
+      path.join(fixtureRoot, "lazy.js"),
+      [
+        `import { ${lazy.exportName} } from ${JSON.stringify(lazy.specifier)};`,
+        `window.__yakitLazyIcon = ${lazy.exportName};`,
+      ].join("\n"),
+    );
+
+    const buildResult = await build({
+      build: {
+        emptyOutDir: true,
+        minify: true,
+        outDir: path.join(fixtureRoot, "dist"),
+        rollupOptions: {
+          external: (id) => id === "react" || id.startsWith("react/"),
+        },
+        write: false,
+      },
+      configFile: false,
+      logLevel: "silent",
+      resolve: { conditions: ["browser", "module", "import"] },
+      root: fixtureRoot,
+    });
+    const outputs = (
+      Array.isArray(buildResult) ? buildResult : [buildResult]
+    ).flatMap((result) => result.output);
+    const chunks = outputs.filter((output) => output.type === "chunk");
+    const chunkByFile = new Map(chunks.map((chunk) => [chunk.fileName, chunk]));
+    const entryChunk = chunks.find((chunk) => chunk.isEntry);
+    if (!entryChunk) throw new Error("split fixture emitted no entry chunk");
+
+    const staticClosure = new Set();
+    const visitStatic = (chunk) => {
+      if (!chunk || staticClosure.has(chunk.fileName)) return;
+      staticClosure.add(chunk.fileName);
+      for (const imported of chunk.imports)
+        visitStatic(chunkByFile.get(imported));
+    };
+    visitStatic(entryChunk);
+    const moduleSuffix = (entry) =>
+      `/dist/oldicon/icons/${entry.exportName}.js`;
+    const chunksContaining = (entry) =>
+      chunks.filter((chunk) =>
+        Object.keys(chunk.modules).some((id) =>
+          id.replaceAll("\\", "/").endsWith(moduleSuffix(entry)),
+        ),
+      );
+    const initialChunks = chunksContaining(initial);
+    const lazyChunks = chunksContaining(lazy);
+    if (
+      initialChunks.length !== 1 ||
+      initialChunks.every((chunk) => !staticClosure.has(chunk.fileName))
+    ) {
+      throw new Error(
+        "initial oldicon is missing from the static entry closure",
+      );
+    }
+    if (
+      lazyChunks.length !== 1 ||
+      lazyChunks.some((chunk) => staticClosure.has(chunk.fileName))
+    ) {
+      throw new Error("lazy oldicon leaked into the static entry closure");
+    }
+
+    const html = outputs.find(
+      (output) => output.type === "asset" && output.fileName === "index.html",
+    );
+    if (!html || typeof html.source !== "string") {
+      throw new Error("split fixture emitted no index.html asset");
+    }
+    const htmlSource = html.source;
+    if (lazyChunks.some((chunk) => htmlSource.includes(chunk.fileName))) {
+      throw new Error(
+        "lazy oldicon leaked into index.html modulepreload output",
+      );
+    }
+    return {
+      initialStaticChunks: initialChunks.map((chunk) => chunk.fileName),
+      lazyChunks: lazyChunks.map((chunk) => chunk.fileName),
+    };
+  } finally {
+    await rm(fixtureRoot, { force: true, recursive: true });
+  }
+}
+
+function resolveExportContract(exportMap, subpath) {
+  if (exportMap[subpath]) return exportMap[subpath];
+  for (const [pattern, contract] of Object.entries(exportMap)) {
+    const wildcard = pattern.indexOf("*");
+    if (wildcard < 0) continue;
+    const prefix = pattern.slice(0, wildcard);
+    const suffix = pattern.slice(wildcard + 1);
+    if (!subpath.startsWith(prefix) || !subpath.endsWith(suffix)) continue;
+    const replacement = subpath.slice(
+      prefix.length,
+      subpath.length - suffix.length,
+    );
+    return Object.fromEntries(
+      Object.entries(contract).map(([condition, target]) => [
+        condition,
+        target.replace("*", replacement),
+      ]),
+    );
+  }
+  return undefined;
 }
 
 export async function verifyIconCssGate({ entries, packageName, packageRoot }) {
@@ -202,7 +333,7 @@ export async function verifyIconCssGate({ entries, packageName, packageRoot }) {
   }
 
   for (const { exportName: _exportName, specifier, subpath } of entries) {
-    const contract = manifest.exports?.[subpath];
+    const contract = resolveExportContract(manifest.exports ?? {}, subpath);
     if (!contract?.browser || !contract?.import || !contract?.types) {
       failures.push(
         `${subpath} must expose types, browser, and import conditions`,
@@ -240,13 +371,18 @@ export async function verifyIconCssGate({ entries, packageName, packageRoot }) {
 
   if (failures.length === 0) {
     try {
-      await runNodeSsr({ packageName, packageRoot, ...entries[0] });
+      await Promise.all(
+        entries.map((entry) =>
+          runNodeSsr({ packageName, packageRoot, ...entry }),
+        ),
+      );
     } catch (error) {
       failures.push(error instanceof Error ? error.message : String(error));
     }
   }
 
   let bundleEvidence;
+  let splitEvidence;
   if (failures.length === 0) {
     try {
       await runBrowserBundle({ entries, packageName, packageRoot });
@@ -264,6 +400,17 @@ export async function verifyIconCssGate({ entries, packageName, packageRoot }) {
         );
       }
       bundleEvidence = singleIcon;
+      const aggregateOldicons = entries.filter(
+        ({ subpath }) => subpath === "./oldicon",
+      );
+      if (aggregateOldicons.length >= 2) {
+        splitEvidence = await runBrowserSplitBundle({
+          initial: aggregateOldicons[0],
+          lazy: aggregateOldicons[1],
+          packageName,
+          packageRoot,
+        });
+      }
     } catch (error) {
       failures.push(error instanceof Error ? error.message : String(error));
     }
@@ -274,6 +421,13 @@ export async function verifyIconCssGate({ entries, packageName, packageRoot }) {
       `${packageName} CSS gate verified: one CSS asset, Node SSR CSS-free, ` +
         `single-icon JS ${bundleEvidence.raw} raw / ${bundleEvidence.gzip} gzip.`,
     );
+    if (splitEvidence) {
+      console.log(
+        `${packageName} oldicon split gate verified: ` +
+          `${splitEvidence.initialStaticChunks.length} initial / ` +
+          `${splitEvidence.lazyChunks.length} lazy chunk(s).`,
+      );
+    }
   }
 
   return failures;

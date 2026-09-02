@@ -14,4 +14,5 @@ test("icons package build enables the shared createIcon pure annotation transfor
   assert.match(config, /createIconPureAnnotationPlugin\(\)/);
   assert.match(transform, /\/\* @__PURE__ \*\/ createIcon\(/);
   assert.match(transform, /icons\[\/\\\\\]/);
+  assert.match(transform, /oldicon\[\/\\\\\]icons/);
 });

@@ -46,6 +46,14 @@ const importScenarios = [
     subpath: "oldicon",
     symbolName: "PopoverArrowIcon",
   },
+  {
+    // tsserver does not enumerate wildcard exports, so the aggregate public
+    // path remains the valid auto-import fallback for a per-icon symbol.
+    id: "oldicon-with-per-icon-export",
+    installSets: ["both", "icons-only"],
+    subpath: "oldicon/PopoverArrowIcon",
+    symbolName: "PopoverArrowIcon",
+  },
   { id: "registry", subpath: "registry", symbolName: "iconRegistry" },
 ];
 
@@ -59,10 +67,15 @@ function scenarioContract(scenario, installSet) {
     : rootSpecifier;
   let acceptedSpecifierSet = [preferredSpecifier];
   if (scenario.subpath && scenario.subpath !== "registry") {
-    acceptedSpecifierSet =
-      scenario.subpath === "oldicon"
-        ? [preferredSpecifier]
-        : [preferredSpecifier, rootSpecifier];
+    if (scenario.subpath.startsWith("oldicon")) {
+      const aggregateSpecifier = `${rootSpecifier}/oldicon`;
+      acceptedSpecifierSet =
+        scenario.subpath === "oldicon"
+          ? [preferredSpecifier]
+          : [preferredSpecifier, aggregateSpecifier];
+    } else {
+      acceptedSpecifierSet = [preferredSpecifier, rootSpecifier];
+    }
   }
   if (isUiOnly && scenario.subpath === "registry") {
     // yakit-ui's root still re-exports the registry, so it is a valid compatibility fallback.
