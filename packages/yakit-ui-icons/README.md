@@ -83,6 +83,18 @@ import * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";
 import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon";
 ```
 
+`/oldicon` 仍是兼容现有 Yakit 消费代码的 named-export 入口，但内部已经按图标拆成独立
+ESM factory；静态导入一个图标时，打包器无需保留其他 oldicon。需要显式固定到单图标
+公开路径（例如懒加载模块或手写依赖边界）时，也可以使用同名的 named export：
+
+```tsx
+import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon/PopoverArrowIcon";
+```
+
+单图标路径不提供 default export，也不允许通过 `/dist`、`/src` 或 SVG hash 深层导入。
+浏览器条件入口会与其他图标入口一样关联 `icon.css`；Node/SSR 的 import 条件保持 CSS-free。
+`TaskWaitIcon` 是产品侧 DOM 动画而不是 SVG，不属于此兼容图标集合。
+
 `oldicon` 保留旧实现的几何、paint、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
 它不是第四个正式图标家族，不会进入根入口或 `iconRegistry`；新功能应优先选择
 `/outline`、`/solid` 或 `/colorful`。同名但图形不同的旧实现会使用来源限定的导出名，
@@ -97,8 +109,8 @@ import { iconRegistry } from "@yakit-libs/yakit-ui-icons/registry";
 ### 编辑器自动导入
 
 TypeScript/VS Code 可能为同一个图标发现多个公开候选；候选顺序由编辑器决定，npm 包不能从包元数据层面
-强制排序。应选择 `@yakit-libs/yakit-ui-icons` 或上文列出的公开子路径，并拒绝包含 `/dist/`、`/src/`
-的深层导入。
+强制排序。应选择 `@yakit-libs/yakit-ui-icons`、上文列出的家族入口或
+`@yakit-libs/yakit-ui-icons/oldicon/<IconName>`，并拒绝包含 `/dist/`、`/src/` 的深层导入。
 
 如果自动导入没有扫描 `package.json` 依赖，可以在 VS Code 工作区设置中显式开启：
 
