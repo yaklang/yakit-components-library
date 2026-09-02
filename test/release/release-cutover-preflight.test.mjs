@@ -8,6 +8,7 @@ import {
   collectGithubPages,
   collectStableCountedInventory,
   isArtifactRevisionRelevant,
+  reconcileRecoveredArtifacts,
   validateStrictArtifact,
   validateStableRefSnapshots,
   verificationArchiveEntries,
@@ -598,6 +599,226 @@ test("receipt semantics distinguish success, definitive no-apply, and ambiguous"
       })
     ).semanticOutcome,
     "closed-terminal",
+  );
+});
+
+test("a closed recovery receipt closes its matching source run", async () => {
+  const sourceArtifact = {
+    id: "source-receipt",
+    kind: "publish-receipt",
+    name: "yakit-ui-publish-receipt-30-1",
+    workflowRunId: "30",
+    entries: ["consumer-inbox.json", "lifecycle-snapshot.json"],
+  };
+  const sourceDocuments = receiptDocuments("ambiguous");
+  const sourceValidation = await validateStrictArtifact({
+    artifact: sourceArtifact,
+    jsonDocuments: sourceDocuments,
+  });
+  const sourceReceipt = classifyArtifactEvidence({
+    ...sourceArtifact,
+    jsonDocuments: sourceDocuments,
+    strictValidation: { status: "passed", ...sourceValidation },
+  });
+
+  const recoveryArtifact = {
+    id: "recovery-receipt",
+    kind: "recovery-receipt",
+    name: "yakit-ui-recovery-receipt-30-99-1",
+    digest: DIGEST,
+    workflowRunId: "99",
+    entries: ["consumer-inbox.json", "lifecycle-snapshot.json"],
+  };
+  const recoveryDocuments = receiptDocuments("success");
+  recoveryDocuments["lifecycle-snapshot.json"].value.attemptId = "99:1";
+  const recoveryValidation = await validateStrictArtifact({
+    artifact: recoveryArtifact,
+    jsonDocuments: recoveryDocuments,
+  });
+  const recoveryReceipt = classifyArtifactEvidence({
+    ...recoveryArtifact,
+    jsonDocuments: recoveryDocuments,
+    strictValidation: { status: "passed", ...recoveryValidation },
+  });
+  const sourceVerification = classifyArtifactEvidence({
+    id: "source-verification",
+    kind: "verification",
+    workflowRunId: "30",
+    registry: [{ identity: `${UI}@1.0.0`, status: "exact" }],
+    strictValidation: { status: "passed" },
+    jsonDocuments: {
+      "verification-manifest.json": {
+        value: {
+          schemaId: "yakit-ui-release-manifest/v3",
+          runId: "30",
+          releases: [{ identity: `${UI}@1.0.0` }],
+          publicationOutbox: { sha256: "a".repeat(64) },
+        },
+      },
+    },
+  });
+  const recoveredArtifacts = reconcileRecoveredArtifacts([
+    sourceReceipt,
+    sourceVerification,
+    recoveryReceipt,
+  ]);
+
+  assert.equal(
+    classifyRunEvidence(
+      { id: "30", status: "completed" },
+      recoveredArtifacts,
+      "100",
+    ).disposition,
+    "closed-terminal",
+  );
+  assert.equal(recoveredArtifacts[0].disposition, "closed-terminal");
+  assert.equal(recoveredArtifacts[0].historicalDisposition, "inconclusive");
+  assert.equal(recoveredArtifacts[1].disposition, "closed-terminal");
+
+  const candidate = evidence();
+  candidate.inventory.runs[0] = classifyRunEvidence(
+    { ...candidate.inventory.runs[0], status: "completed" },
+    recoveredArtifacts,
+    "100",
+  );
+  candidate.inventory.runs.push({
+    ...candidate.inventory.runs[0],
+    id: "99",
+    disposition: "closed-terminal",
+  });
+  candidate.inventory.artifacts.push(
+    ...recoveredArtifacts.map((artifact) => ({
+      ...artifact,
+      sourceRef: "refs/heads/main",
+      headSha: HEAD,
+      digest: DIGEST,
+      archiveSha256: DIGEST.slice("sha256:".length),
+      entries: artifact.entries ?? [
+        "transactional-outbox.json",
+        "verification-manifest.json",
+      ],
+    })),
+  );
+  const recoveredCutover = evaluateReleaseCutover({
+    policy,
+    producer: producer(),
+    evidence: candidate,
+    now: "2026-09-01T00:00:00.000Z",
+  });
+  assert.equal(recoveredCutover.status, "PASS", recoveredCutover.reason);
+
+  const mismatchCases = [
+    [
+      "source run",
+      (receipt) => {
+        receipt.jsonDocuments["lifecycle-snapshot.json"].value.sourceRunId =
+          "31";
+      },
+    ],
+    [
+      "outbox",
+      (receipt) => {
+        receipt.jsonDocuments["lifecycle-snapshot.json"].value.outboxSha256 =
+          "c".repeat(64);
+      },
+    ],
+    [
+      "release identities",
+      (receipt) => {
+        receipt.jsonDocuments[
+          "lifecycle-snapshot.json"
+        ].value.releases[0].version = "2.0.0";
+      },
+    ],
+    [
+      "receipt disposition",
+      (receipt) => {
+        receipt.disposition = "recoverable";
+      },
+    ],
+    [
+      "receipt digest",
+      (receipt) => {
+        receipt.digest = "invalid";
+      },
+    ],
+  ];
+  let mismatchedArtifacts;
+  for (const [label, mutate] of mismatchCases) {
+    const mismatchedReceipt = structuredClone(recoveryReceipt);
+    mutate(mismatchedReceipt);
+    const artifacts = reconcileRecoveredArtifacts([
+      sourceReceipt,
+      sourceVerification,
+      mismatchedReceipt,
+    ]);
+    assert.equal(artifacts[0].disposition, "inconclusive", label);
+    assert.equal(artifacts[1].disposition, "closed-terminal", label);
+    if (label === "outbox") mismatchedArtifacts = artifacts;
+  }
+
+  assert.equal(
+    classifyRunEvidence(
+      { id: "30", status: "completed" },
+      mismatchedArtifacts,
+      "100",
+    ).disposition,
+    "inconclusive",
+  );
+
+  const registryConflict = reconcileRecoveredArtifacts([
+    sourceReceipt,
+    classifyArtifactEvidence({
+      ...sourceVerification,
+      registry: [{ identity: `${UI}@1.0.0`, status: "conflict" }],
+      strictValidation: { status: "passed" },
+    }),
+    recoveryReceipt,
+  ]);
+  assert.equal(registryConflict[1].disposition, "inconclusive");
+
+  const strictFailure = reconcileRecoveredArtifacts([
+    {
+      ...sourceReceipt,
+      strictValidation: { status: "failed", reason: "invalid archive" },
+    },
+    sourceVerification,
+    recoveryReceipt,
+  ]);
+  assert.equal(strictFailure[0].disposition, "inconclusive");
+
+  const blocked = evidence();
+  blocked.inventory.runs[0] = classifyRunEvidence(
+    { ...blocked.inventory.runs[0], status: "completed" },
+    mismatchedArtifacts,
+    "100",
+  );
+  blocked.inventory.runs.push({
+    ...blocked.inventory.runs[0],
+    id: "99",
+    disposition: "closed-terminal",
+  });
+  blocked.inventory.artifacts.push(
+    ...mismatchedArtifacts.map((artifact) => ({
+      ...artifact,
+      sourceRef: "refs/heads/main",
+      headSha: HEAD,
+      digest: DIGEST,
+      archiveSha256: DIGEST.slice("sha256:".length),
+      entries: artifact.entries ?? [
+        "transactional-outbox.json",
+        "verification-manifest.json",
+      ],
+    })),
+  );
+  assert.equal(
+    evaluateReleaseCutover({
+      policy,
+      producer: producer(),
+      evidence: blocked,
+      now: "2026-09-01T00:00:00.000Z",
+    }).status,
+    "BLOCK",
   );
 });
 
