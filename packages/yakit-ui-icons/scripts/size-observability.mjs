@@ -54,9 +54,9 @@ export const CURATED_DISTRIBUTION_CAPS = Object.freeze({
   fileCount: 33,
 });
 export const OLDICON_COMPATIBILITY_ALLOWANCE = Object.freeze({
-  packedBytes: 1_200_000,
-  unpackedBytes: 4_000_000,
-  fileCount: 0,
+  packedBytes: 1_400_000,
+  unpackedBytes: 4_700_000,
+  fileCount: 1_167,
 });
 export const ICON_DISTRIBUTION_CAPS = Object.freeze(
   Object.fromEntries(

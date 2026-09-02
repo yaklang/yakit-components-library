@@ -15,6 +15,7 @@
     "solid": ["BookSolid", "MailOutlined", "iconRegistry"],
     "colorful": ["OfficialAvatarColorful", "MailOutlined", "iconRegistry"],
     "oldicon": [
+      "TaskSuccessIcon",
       "MailOutlined",
       "MailSolid",
       "MitmPrimaryMenuColorful",

@@ -31,6 +31,11 @@ const expectedExports = {
     browser: "./dist/browser/oldicon/index.js",
     import: "./dist/oldicon/index.js",
   },
+  "./oldicon/*": {
+    types: "./dist/oldicon/icons/*.d.ts",
+    browser: "./dist/browser/oldicon/icons/*.js",
+    import: "./dist/oldicon/icons/*.js",
+  },
   "./solid": {
     types: "./dist/solid/index.d.ts",
     browser: "./dist/browser/solid/index.js",
@@ -46,18 +51,21 @@ const expectedExports = {
   },
 };
 const requiredFiles = [
-  ...Object.values(expectedExports).flatMap((contract) =>
-    Object.values(contract),
-  ),
+  ...Object.entries(expectedExports)
+    .filter(([subpath]) => !subpath.includes("*"))
+    .flatMap(([, contract]) => Object.values(contract)),
   "./README.md",
   "./LICENSE",
 ];
 const failures = [];
 const require = createRequire(import.meta.url);
 
+let oldiconRuntime;
 try {
-  const [oldiconRuntime, registryRuntime, rootRuntime] = await Promise.all([
-    import(pathToFileURL(path.join(packageRoot, "dist/oldicon/index.js"))),
+  oldiconRuntime = await import(
+    pathToFileURL(path.join(packageRoot, "dist/oldicon/index.js"))
+  );
+  const [registryRuntime, rootRuntime] = await Promise.all([
     import(pathToFileURL(path.join(packageRoot, "dist/registry.js"))),
     import(pathToFileURL(path.join(packageRoot, "dist/index.js"))),
   ]);
@@ -129,6 +137,65 @@ if (
 if (JSON.stringify(manifest.exports) !== JSON.stringify(expectedExports)) {
   failures.push("exports must match the supported icon entry contract");
 }
+
+const oldiconNames = Object.keys(oldiconRuntime ?? {}).sort();
+const oldiconContract = expectedExports["./oldicon/*"];
+const oldiconOutputs = [
+  ["runtime", oldiconContract.import],
+  ["browser", oldiconContract.browser],
+  ["declaration", oldiconContract.types],
+];
+for (const [label, pattern] of oldiconOutputs) {
+  const directory = path.join(packageRoot, path.dirname(pattern));
+  try {
+    const extension = pattern.endsWith(".d.ts") ? ".d.ts" : ".js";
+    const actualNames = (await readdir(directory))
+      .filter((fileName) => fileName.endsWith(extension))
+      .map((fileName) => fileName.slice(0, -extension.length))
+      .sort();
+    if (JSON.stringify(actualNames) !== JSON.stringify(oldiconNames)) {
+      failures.push(
+        `oldicon ${label} file set must match all ${oldiconNames.length} exports`,
+      );
+    }
+  } catch {
+    failures.push(`oldicon ${label} output directory is missing or unreadable`);
+  }
+}
+if (oldiconNames.includes("TaskWaitIcon")) {
+  failures.push("TaskWaitIcon must remain a product-side non-SVG animation");
+}
+await Promise.all(
+  oldiconNames.map(async (exportName) => {
+    const runtimePath = path.join(
+      packageRoot,
+      oldiconContract.import.replace("*", exportName),
+    );
+    try {
+      const runtimeSource = await readFile(runtimePath, "utf8");
+      const directRuntime = await import(pathToFileURL(runtimePath));
+      if (
+        Object.keys(directRuntime).length !== 1 ||
+        directRuntime[exportName] !== oldiconRuntime?.[exportName]
+      ) {
+        failures.push(
+          `oldicon/${exportName} must expose only the matching aggregate component`,
+        );
+      }
+      if (
+        runtimeSource.includes("oldicon/index") ||
+        runtimeSource.includes("oldicon/icons/") ||
+        /\.css["']/.test(runtimeSource)
+      ) {
+        failures.push(
+          `oldicon/${exportName} runtime must not retain the aggregate barrel, sibling icons, or CSS`,
+        );
+      }
+    } catch {
+      failures.push(`oldicon/${exportName} runtime is missing or unreadable`);
+    }
+  }),
+);
 if (
   manifest.main !== expectedExports["."].import ||
   manifest.module !== expectedExports["."].import ||
@@ -196,6 +263,21 @@ failures.push(
         exportName: "PopoverArrowIcon",
         specifier: "@yakit-libs/yakit-ui-icons/oldicon",
         subpath: "./oldicon",
+      },
+      {
+        exportName: "TaskSuccessIcon",
+        specifier: "@yakit-libs/yakit-ui-icons/oldicon",
+        subpath: "./oldicon",
+      },
+      {
+        exportName: "PopoverArrowIcon",
+        specifier: "@yakit-libs/yakit-ui-icons/oldicon/PopoverArrowIcon",
+        subpath: "./oldicon/PopoverArrowIcon",
+      },
+      {
+        exportName: "TaskSuccessIcon",
+        specifier: "@yakit-libs/yakit-ui-icons/oldicon/TaskSuccessIcon",
+        subpath: "./oldicon/TaskSuccessIcon",
       },
       {
         exportName: "MailSolid",

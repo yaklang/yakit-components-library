@@ -9,6 +9,7 @@ import test from "node:test";
 import {
   ICON_PACKAGE_LIMITS,
   OLDICON_ENTRY_LIMITS,
+  OLDICON_EXPORT_COUNT,
   verifyPackDirectory,
 } from "../../scripts/release/verify-pack-directory.mjs";
 
@@ -71,6 +72,26 @@ const createIconsTarball = (
     mkdirSync(join(file, ".."), { recursive: true });
     writeFileSync(file, entry);
   }
+  const oldiconNames = [
+    "PopoverArrowIcon",
+    ...Array.from(
+      { length: OLDICON_EXPORT_COUNT - 1 },
+      (_, index) => `TestOldIcon${String(index).padStart(3, "0")}`,
+    ),
+  ].sort();
+  if (!omitOldicon) {
+    for (const exportName of oldiconNames) {
+      for (const entry of [
+        `dist/oldicon/icons/${exportName}.js`,
+        `dist/oldicon/icons/${exportName}.d.ts`,
+        `dist/browser/oldicon/icons/${exportName}.js`,
+      ]) {
+        const file = join(packageRoot, entry);
+        mkdirSync(join(file, ".."), { recursive: true });
+        writeFileSync(file, `export const ${exportName} = {};\n`);
+      }
+    }
+  }
   if (oversizedOldicon) {
     writeFileSync(
       join(packageRoot, "dist/oldicon/index.js"),
@@ -83,7 +104,10 @@ const createIconsTarball = (
       randomBytes(ICON_PACKAGE_LIMITS.packedBytes + 1),
     );
   if (excessFiles) {
-    for (let index = 0; index < 22; index += 1) {
+    const currentFileCount = entries.length + oldiconNames.length * 3 + 1;
+    const excessFileCount =
+      ICON_PACKAGE_LIMITS.fileCount - currentFileCount + 1;
+    for (let index = 0; index < excessFileCount; index += 1) {
       writeFileSync(
         join(packageRoot, `dist/extra-${index}.js`),
         "export {};\n",
@@ -97,6 +121,13 @@ const createIconsTarball = (
       version,
       dependencies: { "@yakit-libs/color": "1.4.1" },
       peerDependencies: { react: "^18.2.0" },
+      exports: {
+        "./oldicon/*": {
+          types: "./dist/oldicon/icons/*.d.ts",
+          browser: "./dist/browser/oldicon/icons/*.js",
+          import: "./dist/oldicon/icons/*.js",
+        },
+      },
     }),
   );
   const tarball = join(directory, `yakit-libs-yakit-ui-icons-${version}.tgz`);
