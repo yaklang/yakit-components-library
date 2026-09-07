@@ -149,7 +149,6 @@ const InternalInputNumber = <T extends InputNumberValue = InputNumberValue>(
   const composingRef = useRef(false);
   const repeatDelayRef = useRef<number>();
   const repeatIntervalRef = useRef<number>();
-  const mouseStepRef = useRef(false);
   const [innerValue, setInnerValue] = useState<T | null>(defaultValue);
   const [editing, setEditing] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -347,10 +346,6 @@ const InternalInputNumber = <T extends InputNumberValue = InputNumberValue>(
   const startControlStep = (event: MouseEvent<HTMLButtonElement>, direction: StepDirection) => {
     event.preventDefault();
     inputRef.current?.focus();
-    mouseStepRef.current = true;
-    window.setTimeout(() => {
-      mouseStepRef.current = false;
-    }, 0);
     changeByStep(direction, 1, 'handler');
     if (disabled || readOnly) return;
     repeatDelayRef.current = window.setTimeout(() => {
@@ -389,8 +384,8 @@ const InternalInputNumber = <T extends InputNumberValue = InputNumberValue>(
         resolvedClassNames.action,
       )}
       disabled={actionDisabled}
-      onClick={() => {
-        if (!mouseStepRef.current) changeByStep(direction, 1, 'handler');
+      onClick={(event) => {
+        if (event.detail === 0) changeByStep(direction, 1, 'handler');
       }}
       onMouseDown={(event) => startControlStep(event, direction)}
       onMouseLeave={stopRepeat}

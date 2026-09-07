@@ -52,12 +52,12 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
     const rect = node.getBoundingClientRect();
     const style = getComputedStyle(node);
     const borderTop = parseFloat(style.borderTopWidth) || 0;
-    const borderWidth = parseFloat(style.borderLeftWidth) || 0;
+    const borderLeft = parseFloat(style.borderLeftWidth) || 0;
 
     holder.style.width = `${rect.width}px`;
     holder.style.height = `${rect.height}px`;
-    holder.style.left = `-${borderTop}px`;
-    holder.style.top = `-${borderWidth}px`;
+    holder.style.left = `-${borderLeft}px`;
+    holder.style.top = `-${borderTop}px`;
     holder.className = `${prefixCls}-holder`;
 
     const wave = document.createElement('div');
