@@ -119,3 +119,27 @@ If publication or GitHub metadata only partially succeeds, first re-run only the
 - Stable, prerelease, and recovery runs share the global `yakit-ui-npm-release` concurrency group. The lock prevents overlapping workflow producers; retained v3 evidence plus registry/GitHub observations remain the recovery authority, and uncertainty stops the workflow for reconciliation.
 
 For a bad live version, fix forward with a patch. Deprecating a version or moving an npm dist-tag is an explicit operator action and is intentionally outside this workflow; rehearse the exact command against a non-production fixture before changing the registry.
+
+## Explicitly deferred shared-source impact
+
+A package may remain at its published version while another package releases
+shared-source changes only through a checked-in
+`scripts/release/release-deferral-policy.json`. The default impact rule remains
+an exact match between observed and declared releases. A deferral policy records
+the exact released and deferred versions, the deferred baseline commit, reviewed
+source/lock/toolchain/config hashes, rationale and pending-release document.
+Source drift, a changed deferred version, an unobserved release or a different
+release identity blocks the exception.
+
+Impact output retains every observed probe. The v3 verification manifest keeps
+`impactProbeSet` equal to `releaseSet` and additionally seals `deferredImpact`
+(policy, canonical SHA-256 and non-publishable deferred probes). Manifest
+validation binds that evidence to the workflow commit, released versions and
+exact registry compatibility baseline. Deferred probes never become tarballs,
+outbox entries, publication attempts or recovery releases. Existing v3 manifests
+without deferral evidence retain their original validation rules.
+
+Move deferred Changesets to `docs/pending-releases` with their bump levels and
+text intact. Restore them before that package's later release. This releases
+only the selected package through the existing verified-tarball and protected
+Trusted Publishing flow; it does not authorize publishing local candidate packs.

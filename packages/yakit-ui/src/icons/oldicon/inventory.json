@@ -4,12 +4,13 @@
     "deduplicationKey": "canonicalArtworkSha256",
     "fragmentIds": "stable-content-qualified",
     "nameCollision": "lexicographic-primary-with-source-qualified-secondary",
-    "orphanReferences": "remove-without-guess-pairing"
+    "orphanReferences": "remove-without-guess-pairing",
+    "strokeWidth": { "strategy": "local-uniform-stroke-v1", "value": "1" }
   },
   "hashSemantics": {
     "artworkSha256": "alias of assetSha256",
-    "assetSha256": "SHA-256 of exact emitted SVG file bytes",
-    "canonicalArtworkSha256": "SHA-256 after orphan cleanup and canonical fragment normalization",
+    "assetSha256": "SHA-256 of exact emitted stroke-width-normalized SVG file bytes",
+    "canonicalArtworkSha256": "SHA-256 after orphan cleanup and canonical fragment normalization, before emitted stroke-width normalization",
     "sourceSvgSha256": "SHA-256 of exact audit or direct-source SVG evidence"
   },
   "sources": [
@@ -151,9 +152,9 @@
       "sourceKind": "link-audit",
       "sourceName": "CheckCircleOutlineIcon",
       "canonicalArtworkSha256": "a9064a02d961ca3187aba147af933aefecb489bd35253072d43495086e9c2e62",
-      "artworkSha256": "06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c",
-      "assetSha256": "06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c",
-      "assetFile": "assets/06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c.svg",
+      "artworkSha256": "854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340",
+      "assetSha256": "854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340",
+      "assetFile": "assets/854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340.svg",
       "repairs": [],
       "exportName": "CheckCircleOutlineIcon"
     },
@@ -241,9 +242,9 @@
       "sourceKind": "link-audit",
       "sourceName": "CloseCircleIcon",
       "canonicalArtworkSha256": "8f8b1e287b28aa131cf7d217108a5f63f1cfdf2fdf844ffee50bb5fd6a24c0af",
-      "artworkSha256": "2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191",
-      "assetSha256": "2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191",
-      "assetFile": "assets/2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191.svg",
+      "artworkSha256": "7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd",
+      "assetSha256": "7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd",
+      "assetFile": "assets/7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd.svg",
       "repairs": [],
       "exportName": "CloseCircleIcon"
     },
@@ -256,9 +257,9 @@
       "sourceKind": "link-audit",
       "sourceName": "ExclamationOutlineIcon",
       "canonicalArtworkSha256": "3ac82baf5a02e4772d17ec6750bdc6ad8f2935b05cbc106ae4fc76ce39e1d39c",
-      "artworkSha256": "9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9",
-      "assetSha256": "9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9",
-      "assetFile": "assets/9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9.svg",
+      "artworkSha256": "d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f",
+      "assetSha256": "d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f",
+      "assetFile": "assets/d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f.svg",
       "repairs": [],
       "exportName": "ExclamationOutlineIcon"
     },
@@ -271,9 +272,9 @@
       "sourceKind": "link-audit",
       "sourceName": "GooglePhotosLogoSvgIcon",
       "canonicalArtworkSha256": "8d452c62883e0587c1a5e5fb59b587f0071d5356cc4e007d44eac51559304979",
-      "artworkSha256": "4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f",
-      "assetSha256": "4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f",
-      "assetFile": "assets/4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f.svg",
+      "artworkSha256": "d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf",
+      "assetSha256": "d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf",
+      "assetFile": "assets/d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf.svg",
       "repairs": [],
       "exportName": "GooglePhotosLogoSvgIcon"
     },
@@ -316,9 +317,9 @@
       "sourceKind": "link-audit",
       "sourceName": "WinUIOpCloseSvgIcon",
       "canonicalArtworkSha256": "ec2dbe244ecb253dfc4ab2d0837e00ad7efbd41c65014c9390b51c0f35c0f812",
-      "artworkSha256": "c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac",
-      "assetSha256": "c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac",
-      "assetFile": "assets/c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac.svg",
+      "artworkSha256": "70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c",
+      "assetSha256": "70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c",
+      "assetFile": "assets/70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c.svg",
       "repairs": [],
       "exportName": "WinUIOpCloseSvgIcon"
     },
@@ -734,9 +735,9 @@
       "sourceKind": "main-audit",
       "sourceName": "HomeIcon",
       "canonicalArtworkSha256": "958abdaa7fb6a093c51ca7bfb03d2fd705d9db88d08ada4f869d414605aced3b",
-      "artworkSha256": "210004e15dee0b31892585398068d8a6abb6dd78fe813b394cf9e1a44db003df",
-      "assetSha256": "210004e15dee0b31892585398068d8a6abb6dd78fe813b394cf9e1a44db003df",
-      "assetFile": "assets/210004e15dee0b31892585398068d8a6abb6dd78fe813b394cf9e1a44db003df.svg",
+      "artworkSha256": "c06b8302b19e23808747cfe35465027a69a959e4605ec7e2e5aac74ee36dea99",
+      "assetSha256": "c06b8302b19e23808747cfe35465027a69a959e4605ec7e2e5aac74ee36dea99",
+      "assetFile": "assets/c06b8302b19e23808747cfe35465027a69a959e4605ec7e2e5aac74ee36dea99.svg",
       "repairs": [],
       "exportName": "HomeIcon"
     },
@@ -749,9 +750,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlinCompileIcon",
       "canonicalArtworkSha256": "f137a10712875a1f2daa0bdfc037a3d42b9ee9cfcd8a26e500e584c2a4ea90d7",
-      "artworkSha256": "322af27f9dd83bd081345dd2f85de524edb2f927bebde50d96da46c7f52bf7fa",
-      "assetSha256": "322af27f9dd83bd081345dd2f85de524edb2f927bebde50d96da46c7f52bf7fa",
-      "assetFile": "assets/322af27f9dd83bd081345dd2f85de524edb2f927bebde50d96da46c7f52bf7fa.svg",
+      "artworkSha256": "22859c8d1925c054a393eb61b60489acb4f2b3527f2b81d33156a1adc9da96d0",
+      "assetSha256": "22859c8d1925c054a393eb61b60489acb4f2b3527f2b81d33156a1adc9da96d0",
+      "assetFile": "assets/22859c8d1925c054a393eb61b60489acb4f2b3527f2b81d33156a1adc9da96d0.svg",
       "repairs": [],
       "exportName": "OutlinCompileIcon"
     },
@@ -764,9 +765,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlineBugIcon",
       "canonicalArtworkSha256": "deed85feb974c709629f69e18b3d0ae0e91083a9152afada766704560b4d393c",
-      "artworkSha256": "f538c7026f45de4911dee9e61937cb95645e267b6f96bc011843eca0bb30145b",
-      "assetSha256": "f538c7026f45de4911dee9e61937cb95645e267b6f96bc011843eca0bb30145b",
-      "assetFile": "assets/f538c7026f45de4911dee9e61937cb95645e267b6f96bc011843eca0bb30145b.svg",
+      "artworkSha256": "86207fac21ae6b5c8a97891fd4131a0f5347e4e0a6f06fdfa80c773642f03d3c",
+      "assetSha256": "86207fac21ae6b5c8a97891fd4131a0f5347e4e0a6f06fdfa80c773642f03d3c",
+      "assetFile": "assets/86207fac21ae6b5c8a97891fd4131a0f5347e4e0a6f06fdfa80c773642f03d3c.svg",
       "repairs": [],
       "exportName": "OutlineBugIcon"
     },
@@ -779,9 +780,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlineConfiguredIcon",
       "canonicalArtworkSha256": "cd90d9a1f6ea1ca5577a217280dab382ca6933fddb15f8f08f5e87920c189c46",
-      "artworkSha256": "2b5a8eab645873e457db18481b46fdd20de03099a708513c81aca2286f869f99",
-      "assetSha256": "2b5a8eab645873e457db18481b46fdd20de03099a708513c81aca2286f869f99",
-      "assetFile": "assets/2b5a8eab645873e457db18481b46fdd20de03099a708513c81aca2286f869f99.svg",
+      "artworkSha256": "4018ec48a7ca7a70d35d33f1ac54b2bbf8c000d128e55bb66bf49c3b3ec4c866",
+      "assetSha256": "4018ec48a7ca7a70d35d33f1ac54b2bbf8c000d128e55bb66bf49c3b3ec4c866",
+      "assetFile": "assets/4018ec48a7ca7a70d35d33f1ac54b2bbf8c000d128e55bb66bf49c3b3ec4c866.svg",
       "repairs": [],
       "exportName": "OutlineConfiguredIcon"
     },
@@ -824,9 +825,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlineNotebookIcon",
       "canonicalArtworkSha256": "24c6bd35e61841e1f140ef970188355ca871e8ac74ff4eba310af1721f532f15",
-      "artworkSha256": "22cfeff1e87510f5f96796edd736896ce832f4817cf4da852dd4bbe6cc25bf5a",
-      "assetSha256": "22cfeff1e87510f5f96796edd736896ce832f4817cf4da852dd4bbe6cc25bf5a",
-      "assetFile": "assets/22cfeff1e87510f5f96796edd736896ce832f4817cf4da852dd4bbe6cc25bf5a.svg",
+      "artworkSha256": "c70c482f6480f74d118aa3f021386d148e7889a7c5e4d2ced5e3f521cfb11107",
+      "assetSha256": "c70c482f6480f74d118aa3f021386d148e7889a7c5e4d2ced5e3f521cfb11107",
+      "assetFile": "assets/c70c482f6480f74d118aa3f021386d148e7889a7c5e4d2ced5e3f521cfb11107.svg",
       "repairs": [],
       "exportName": "OutlineNotebookIcon"
     },
@@ -884,9 +885,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlineReloadScanIcon",
       "canonicalArtworkSha256": "eb4ba5b50cf6128f63abc13a81e4153ba29177901c911313c4f5068be5b26175",
-      "artworkSha256": "57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012",
-      "assetSha256": "57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012",
-      "assetFile": "assets/57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012.svg",
+      "artworkSha256": "3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68",
+      "assetSha256": "3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68",
+      "assetFile": "assets/3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68.svg",
       "repairs": [],
       "exportName": "OutlineReloadScanIcon"
     },
@@ -899,9 +900,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlineScanRuleEditIcon",
       "canonicalArtworkSha256": "eb4ba5b50cf6128f63abc13a81e4153ba29177901c911313c4f5068be5b26175",
-      "artworkSha256": "57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012",
-      "assetSha256": "57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012",
-      "assetFile": "assets/57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012.svg",
+      "artworkSha256": "3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68",
+      "assetSha256": "3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68",
+      "assetFile": "assets/3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68.svg",
       "repairs": [],
       "exportName": "OutlineScanRuleEditIcon"
     },
@@ -929,9 +930,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlineTimeIcon",
       "canonicalArtworkSha256": "9db477a48e38012adfc53ce2b3f26318df9e89980862c386efd571dea228df5f",
-      "artworkSha256": "b95117f140e921db16836bbaf12b9f8289d4e125fdb675aa46066a52b761fa6e",
-      "assetSha256": "b95117f140e921db16836bbaf12b9f8289d4e125fdb675aa46066a52b761fa6e",
-      "assetFile": "assets/b95117f140e921db16836bbaf12b9f8289d4e125fdb675aa46066a52b761fa6e.svg",
+      "artworkSha256": "4cbb000b9469f4e3a4a871b3b09b1654b21985ec677f0493be90d3ec7962f358",
+      "assetSha256": "4cbb000b9469f4e3a4a871b3b09b1654b21985ec677f0493be90d3ec7962f358",
+      "assetFile": "assets/4cbb000b9469f4e3a4a871b3b09b1654b21985ec677f0493be90d3ec7962f358.svg",
       "repairs": [],
       "exportName": "OutlineTimeIcon"
     },
@@ -959,9 +960,9 @@
       "sourceKind": "main-audit",
       "sourceName": "OutlineUnConfiguredIcon",
       "canonicalArtworkSha256": "a4fe104f18200145bcc5640f273b751ab2013197ae5ba43f62ce649efdabbde6",
-      "artworkSha256": "1ada2df8af1489337737f321dc598f5b78ee403a778089fb1b637e19eb516cbf",
-      "assetSha256": "1ada2df8af1489337737f321dc598f5b78ee403a778089fb1b637e19eb516cbf",
-      "assetFile": "assets/1ada2df8af1489337737f321dc598f5b78ee403a778089fb1b637e19eb516cbf.svg",
+      "artworkSha256": "af7ee9a0081db0ebd425a366f33388ffa31d5a16ca83c1678190457a2bebfd4e",
+      "assetSha256": "af7ee9a0081db0ebd425a366f33388ffa31d5a16ca83c1678190457a2bebfd4e",
+      "assetFile": "assets/af7ee9a0081db0ebd425a366f33388ffa31d5a16ca83c1678190457a2bebfd4e.svg",
       "repairs": [],
       "exportName": "OutlineUnConfiguredIcon"
     },
@@ -989,9 +990,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SolidFloatwinIcon",
       "canonicalArtworkSha256": "f1627d2f618c628562e233cc374f769b214f51cd2fbd3fa884ccfd2f875839f6",
-      "artworkSha256": "90e380413dc126e0562b8a80452dcdc08d277360b9193f4e72bfe617db6c83d9",
-      "assetSha256": "90e380413dc126e0562b8a80452dcdc08d277360b9193f4e72bfe617db6c83d9",
-      "assetFile": "assets/90e380413dc126e0562b8a80452dcdc08d277360b9193f4e72bfe617db6c83d9.svg",
+      "artworkSha256": "897d00bf9268bda1baf56e7573a2f7d9d7a86291e30072f34e719f53c5f44d54",
+      "assetSha256": "897d00bf9268bda1baf56e7573a2f7d9d7a86291e30072f34e719f53c5f44d54",
+      "assetFile": "assets/897d00bf9268bda1baf56e7573a2f7d9d7a86291e30072f34e719f53c5f44d54.svg",
       "repairs": [],
       "exportName": "SolidFloatwinIcon"
     },
@@ -1034,9 +1035,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SolidTodownIcon",
       "canonicalArtworkSha256": "940346120080707d38f4e5dfd5127f58d344ed2313bd9a026b40e3d6a33a6ea8",
-      "artworkSha256": "d10acf0f725120bc1953c011c358071825419b686a2476e2e9373286bfc464df",
-      "assetSha256": "d10acf0f725120bc1953c011c358071825419b686a2476e2e9373286bfc464df",
-      "assetFile": "assets/d10acf0f725120bc1953c011c358071825419b686a2476e2e9373286bfc464df.svg",
+      "artworkSha256": "a2fd23318624139aacb1de3af4f7cb0f068c3e8bd085da673e3ae0b751de4016",
+      "assetSha256": "a2fd23318624139aacb1de3af4f7cb0f068c3e8bd085da673e3ae0b751de4016",
+      "assetFile": "assets/a2fd23318624139aacb1de3af4f7cb0f068c3e8bd085da673e3ae0b751de4016.svg",
       "repairs": [],
       "exportName": "SolidTodownIcon"
     },
@@ -1049,9 +1050,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SolidToleftIcon",
       "canonicalArtworkSha256": "8af0f6c23de33989fc10a18eda60d77904084bcbab3eb01a86fad4a82901bd3e",
-      "artworkSha256": "54ed786d481486ea6758fb8f3d22a9305b5f7c6179d35a3b1103e350dd1c1f4e",
-      "assetSha256": "54ed786d481486ea6758fb8f3d22a9305b5f7c6179d35a3b1103e350dd1c1f4e",
-      "assetFile": "assets/54ed786d481486ea6758fb8f3d22a9305b5f7c6179d35a3b1103e350dd1c1f4e.svg",
+      "artworkSha256": "1834ff652ffd9a883ea667fc9b845e939b08691e682a5488b9d7b62d44e90ea3",
+      "assetSha256": "1834ff652ffd9a883ea667fc9b845e939b08691e682a5488b9d7b62d44e90ea3",
+      "assetFile": "assets/1834ff652ffd9a883ea667fc9b845e939b08691e682a5488b9d7b62d44e90ea3.svg",
       "repairs": [],
       "exportName": "SolidToleftIcon"
     },
@@ -1064,9 +1065,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SolidTorightIcon",
       "canonicalArtworkSha256": "e072633621cbeb7f49eaece23e73cc3390c8a10a24aa352ff4284ec1e546089f",
-      "artworkSha256": "75937d272da31d0bbd839a0645cad31a309b28cff660b1d929e4a0e344c82a1b",
-      "assetSha256": "75937d272da31d0bbd839a0645cad31a309b28cff660b1d929e4a0e344c82a1b",
-      "assetFile": "assets/75937d272da31d0bbd839a0645cad31a309b28cff660b1d929e4a0e344c82a1b.svg",
+      "artworkSha256": "c9f6ca140212861e17c5e5c67ab0b94583dfa3a511629f99fb34e717eea05770",
+      "assetSha256": "c9f6ca140212861e17c5e5c67ab0b94583dfa3a511629f99fb34e717eea05770",
+      "assetFile": "assets/c9f6ca140212861e17c5e5c67ab0b94583dfa3a511629f99fb34e717eea05770.svg",
       "repairs": [],
       "exportName": "SolidTorightIcon"
     },
@@ -1083,9 +1084,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ColorsAIIcon",
       "canonicalArtworkSha256": "97311ca1154393b26075c9fc69cee96550856aa8930b66668bcd65bbf2419fb5",
-      "artworkSha256": "fa8e0acf74b0965e61e5fe154730bdc4dd103583f0d6f7c1430b961138876cc9",
-      "assetSha256": "fa8e0acf74b0965e61e5fe154730bdc4dd103583f0d6f7c1430b961138876cc9",
-      "assetFile": "assets/fa8e0acf74b0965e61e5fe154730bdc4dd103583f0d6f7c1430b961138876cc9.svg",
+      "artworkSha256": "bc4867e4a7ee36d07e0b376406df1e555ed8ab6a587aa761f23b2b166c704ff2",
+      "assetSha256": "bc4867e4a7ee36d07e0b376406df1e555ed8ab6a587aa761f23b2b166c704ff2",
+      "assetFile": "assets/bc4867e4a7ee36d07e0b376406df1e555ed8ab6a587aa761f23b2b166c704ff2.svg",
       "repairs": [],
       "exportName": "ColorsAIIcon"
     },
@@ -1330,9 +1331,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SolidCollectionPluginIcon",
       "canonicalArtworkSha256": "9c22309788d175d6d64e355dd940a721111577358d473bcfadc48a096131ffd9",
-      "artworkSha256": "6eeaeb1f328b8af37cc7e109f3053549b11ca5fda01f522d97558e3af1bc05be",
-      "assetSha256": "6eeaeb1f328b8af37cc7e109f3053549b11ca5fda01f522d97558e3af1bc05be",
-      "assetFile": "assets/6eeaeb1f328b8af37cc7e109f3053549b11ca5fda01f522d97558e3af1bc05be.svg",
+      "artworkSha256": "6d3da649f86aeb07f68297ff82a0274ba2d6e3971dffd03e2986c7dd1c3774c9",
+      "assetSha256": "6d3da649f86aeb07f68297ff82a0274ba2d6e3971dffd03e2986c7dd1c3774c9",
+      "assetFile": "assets/6d3da649f86aeb07f68297ff82a0274ba2d6e3971dffd03e2986c7dd1c3774c9.svg",
       "repairs": [],
       "exportName": "SolidCollectionPluginIcon"
     },
@@ -1345,9 +1346,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SolidDocumentSearchPluginIcon",
       "canonicalArtworkSha256": "f1b8dd1352f9bfdbc5bcfe07a81e1f42c80bb0558ad78bd239876da1ed9b5ed9",
-      "artworkSha256": "22d6f36d9404500e2eacf55f192396e12331d448ddb2a30d29447b2c9620b591",
-      "assetSha256": "22d6f36d9404500e2eacf55f192396e12331d448ddb2a30d29447b2c9620b591",
-      "assetFile": "assets/22d6f36d9404500e2eacf55f192396e12331d448ddb2a30d29447b2c9620b591.svg",
+      "artworkSha256": "819ce9dc4716d3d45a0b63ecb20d07c7ab3afa7f7847ab3cec91cbe69766592a",
+      "assetSha256": "819ce9dc4716d3d45a0b63ecb20d07c7ab3afa7f7847ab3cec91cbe69766592a",
+      "assetFile": "assets/819ce9dc4716d3d45a0b63ecb20d07c7ab3afa7f7847ab3cec91cbe69766592a.svg",
       "repairs": [],
       "exportName": "SolidDocumentSearchPluginIcon"
     },
@@ -1492,9 +1493,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SolidSparklesPluginIcon",
       "canonicalArtworkSha256": "e3da375bf220befaeb406a7686fe0e9e749a69884334942b2e48325fc685e0c8",
-      "artworkSha256": "324ce2df3d9491720f43f61ee161d7ac9278d573e3bd765678c3dddd01fc8061",
-      "assetSha256": "324ce2df3d9491720f43f61ee161d7ac9278d573e3bd765678c3dddd01fc8061",
-      "assetFile": "assets/324ce2df3d9491720f43f61ee161d7ac9278d573e3bd765678c3dddd01fc8061.svg",
+      "artworkSha256": "78effcbb757242bf93c8e955987326758bae706b583717558bda21777c43f23c",
+      "assetSha256": "78effcbb757242bf93c8e955987326758bae706b583717558bda21777c43f23c",
+      "assetFile": "assets/78effcbb757242bf93c8e955987326758bae706b583717558bda21777c43f23c.svg",
       "repairs": [],
       "exportName": "SolidSparklesPluginIcon"
     },
@@ -1572,9 +1573,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ControlMyselfIcon",
       "canonicalArtworkSha256": "38eab15f76350059ad4490a27b6dde3ce554bf03c8f91eaad77e8061b1fe06af",
-      "artworkSha256": "76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca",
-      "assetSha256": "76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca",
-      "assetFile": "assets/76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca.svg",
+      "artworkSha256": "4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022",
+      "assetSha256": "4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022",
+      "assetFile": "assets/4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022.svg",
       "repairs": [],
       "exportName": "ControlMyselfIcon"
     },
@@ -1607,9 +1608,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ImportIcon",
       "canonicalArtworkSha256": "79c33b7c0c39351665a2d9d83a7fdf720be36b37c2fd2a7d4f64f08087278474",
-      "artworkSha256": "d9f20358189dc13793a9a788a822792ced1c69a797d0f482aa6c1cfc58639314",
-      "assetSha256": "d9f20358189dc13793a9a788a822792ced1c69a797d0f482aa6c1cfc58639314",
-      "assetFile": "assets/d9f20358189dc13793a9a788a822792ced1c69a797d0f482aa6c1cfc58639314.svg",
+      "artworkSha256": "554b2eed096d9eb4213350f2d978de40fa09bec89c6dab724373f51ffa22b262",
+      "assetSha256": "554b2eed096d9eb4213350f2d978de40fa09bec89c6dab724373f51ffa22b262",
+      "assetFile": "assets/554b2eed096d9eb4213350f2d978de40fa09bec89c6dab724373f51ffa22b262.svg",
       "repairs": [],
       "exportName": "ImportIcon"
     },
@@ -1693,9 +1694,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ControlMyselfIcon",
       "canonicalArtworkSha256": "38eab15f76350059ad4490a27b6dde3ce554bf03c8f91eaad77e8061b1fe06af",
-      "artworkSha256": "76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca",
-      "assetSha256": "76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca",
-      "assetFile": "assets/76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca.svg",
+      "artworkSha256": "4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022",
+      "assetSha256": "4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022",
+      "assetFile": "assets/4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022.svg",
       "repairs": [],
       "exportName": "ControlMyselfIcon"
     },
@@ -1794,9 +1795,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ArrowDownIcon",
       "canonicalArtworkSha256": "a641a690ca446ad3739ae286bdf760a7a96fea8a06046e6ca4964b1507c7ece5",
-      "artworkSha256": "3337104d399e0d1f7bcd0661689fe3c9d0da6e64a1d5e49d1c991cd346f1ec78",
-      "assetSha256": "3337104d399e0d1f7bcd0661689fe3c9d0da6e64a1d5e49d1c991cd346f1ec78",
-      "assetFile": "assets/3337104d399e0d1f7bcd0661689fe3c9d0da6e64a1d5e49d1c991cd346f1ec78.svg",
+      "artworkSha256": "a9b458a337fb6e757362657b068b85abb46fe3bb6e9e8aa265a29f7cdad11699",
+      "assetSha256": "a9b458a337fb6e757362657b068b85abb46fe3bb6e9e8aa265a29f7cdad11699",
+      "assetFile": "assets/a9b458a337fb6e757362657b068b85abb46fe3bb6e9e8aa265a29f7cdad11699.svg",
       "repairs": [],
       "exportName": "ArrowDownIcon"
     },
@@ -1839,9 +1840,9 @@
       "sourceKind": "main-audit",
       "sourceName": "CheckCircleOutlineIcon",
       "canonicalArtworkSha256": "a9064a02d961ca3187aba147af933aefecb489bd35253072d43495086e9c2e62",
-      "artworkSha256": "06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c",
-      "assetSha256": "06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c",
-      "assetFile": "assets/06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c.svg",
+      "artworkSha256": "854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340",
+      "assetSha256": "854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340",
+      "assetFile": "assets/854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340.svg",
       "repairs": [],
       "exportName": "CheckCircleOutlineIcon"
     },
@@ -1929,9 +1930,9 @@
       "sourceKind": "main-audit",
       "sourceName": "CloseCircleIcon",
       "canonicalArtworkSha256": "8f8b1e287b28aa131cf7d217108a5f63f1cfdf2fdf844ffee50bb5fd6a24c0af",
-      "artworkSha256": "2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191",
-      "assetSha256": "2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191",
-      "assetFile": "assets/2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191.svg",
+      "artworkSha256": "7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd",
+      "assetSha256": "7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd",
+      "assetFile": "assets/7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd.svg",
       "repairs": [],
       "exportName": "CloseCircleIcon"
     },
@@ -1944,9 +1945,9 @@
       "sourceKind": "main-audit",
       "sourceName": "DesktopComputerSvgIcon",
       "canonicalArtworkSha256": "bdee54524143cd32f7a04e82fefcf4f0bc29d32fdab9f04b186463122a482d2b",
-      "artworkSha256": "35c2b63fdd5820dee26bbf8ad02c43762c44449c1929003c9ea76c59baba240f",
-      "assetSha256": "35c2b63fdd5820dee26bbf8ad02c43762c44449c1929003c9ea76c59baba240f",
-      "assetFile": "assets/35c2b63fdd5820dee26bbf8ad02c43762c44449c1929003c9ea76c59baba240f.svg",
+      "artworkSha256": "6852cbc59001b4d0f9aa39f8cea3b60237628d6b11359c2cd82934f1b9c00a97",
+      "assetSha256": "6852cbc59001b4d0f9aa39f8cea3b60237628d6b11359c2cd82934f1b9c00a97",
+      "assetFile": "assets/6852cbc59001b4d0f9aa39f8cea3b60237628d6b11359c2cd82934f1b9c00a97.svg",
       "repairs": [],
       "exportName": "DesktopComputerSvgIcon"
     },
@@ -1974,9 +1975,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ExclamationIcon",
       "canonicalArtworkSha256": "ae046b1e88a5300d22835f60a4003b1a56753cd463c1a29e4f16fc634bc3d390",
-      "artworkSha256": "74feebc2fecf465f8698c55e5976ce13a4274a18b9e239103d6a261c4236de4c",
-      "assetSha256": "74feebc2fecf465f8698c55e5976ce13a4274a18b9e239103d6a261c4236de4c",
-      "assetFile": "assets/74feebc2fecf465f8698c55e5976ce13a4274a18b9e239103d6a261c4236de4c.svg",
+      "artworkSha256": "9fc8b025288776d55a799cae96fc2ee78f2542690c7bd24685e127d2e76b9897",
+      "assetSha256": "9fc8b025288776d55a799cae96fc2ee78f2542690c7bd24685e127d2e76b9897",
+      "assetFile": "assets/9fc8b025288776d55a799cae96fc2ee78f2542690c7bd24685e127d2e76b9897.svg",
       "repairs": [],
       "exportName": "ExclamationIcon"
     },
@@ -1989,9 +1990,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ExclamationOutlineIcon",
       "canonicalArtworkSha256": "3ac82baf5a02e4772d17ec6750bdc6ad8f2935b05cbc106ae4fc76ce39e1d39c",
-      "artworkSha256": "9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9",
-      "assetSha256": "9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9",
-      "assetFile": "assets/9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9.svg",
+      "artworkSha256": "d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f",
+      "assetSha256": "d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f",
+      "assetFile": "assets/d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f.svg",
       "repairs": [],
       "exportName": "ExclamationOutlineIcon"
     },
@@ -2079,9 +2080,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ImportSvgIcon",
       "canonicalArtworkSha256": "69a3e123c3c0bcf854edd4aa533dd16653e7ed7f531a4e42c421f22e0eb59168",
-      "artworkSha256": "46f298832f17a38a22686336b2d918f8c08e1abb289555711e642a18e81ba82b",
-      "assetSha256": "46f298832f17a38a22686336b2d918f8c08e1abb289555711e642a18e81ba82b",
-      "assetFile": "assets/46f298832f17a38a22686336b2d918f8c08e1abb289555711e642a18e81ba82b.svg",
+      "artworkSha256": "0d43e4db1ce69f6dad61309fb2acd2e165b5910044126287b90fc0ac7dd843b2",
+      "assetSha256": "0d43e4db1ce69f6dad61309fb2acd2e165b5910044126287b90fc0ac7dd843b2",
+      "assetFile": "assets/0d43e4db1ce69f6dad61309fb2acd2e165b5910044126287b90fc0ac7dd843b2.svg",
       "repairs": [],
       "exportName": "ImportSvgIcon"
     },
@@ -2124,9 +2125,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PlusSmIcon",
       "canonicalArtworkSha256": "e524252524c6a961e487a7ba046017ec07a094d7288a5bf5a81fed4017e032c4",
-      "artworkSha256": "d614a71ca5138fef95db3b1ba9b87c5fc74513dd9af311480bb107a00e75cafd",
-      "assetSha256": "d614a71ca5138fef95db3b1ba9b87c5fc74513dd9af311480bb107a00e75cafd",
-      "assetFile": "assets/d614a71ca5138fef95db3b1ba9b87c5fc74513dd9af311480bb107a00e75cafd.svg",
+      "artworkSha256": "423abe87521be57b3d8c3198a4ca6768b23afad4995f8f13c55df75afaa945e0",
+      "assetSha256": "423abe87521be57b3d8c3198a4ca6768b23afad4995f8f13c55df75afaa945e0",
+      "assetFile": "assets/423abe87521be57b3d8c3198a4ca6768b23afad4995f8f13c55df75afaa945e0.svg",
       "repairs": [],
       "exportName": "PlusSmIcon"
     },
@@ -2139,9 +2140,9 @@
       "sourceKind": "main-audit",
       "sourceName": "QuitIcon",
       "canonicalArtworkSha256": "e9171f7fbb36e50f98fb682b41da208d31f181b21da57ece2df8fb80dfbac880",
-      "artworkSha256": "82176b9dbe8d7680fff0abc456618501f54bd0c08f20f822554293d15da30f51",
-      "assetSha256": "82176b9dbe8d7680fff0abc456618501f54bd0c08f20f822554293d15da30f51",
-      "assetFile": "assets/82176b9dbe8d7680fff0abc456618501f54bd0c08f20f822554293d15da30f51.svg",
+      "artworkSha256": "c5acda17be0e12a12d923820d53b94d5d0ff552b6b4c8bb7ecbae6b93f31be59",
+      "assetSha256": "c5acda17be0e12a12d923820d53b94d5d0ff552b6b4c8bb7ecbae6b93f31be59",
+      "assetFile": "assets/c5acda17be0e12a12d923820d53b94d5d0ff552b6b4c8bb7ecbae6b93f31be59.svg",
       "repairs": [],
       "exportName": "QuitIcon"
     },
@@ -2154,9 +2155,9 @@
       "sourceKind": "main-audit",
       "sourceName": "RefreshIcon",
       "canonicalArtworkSha256": "1aee1238dd436d0728b952542f1e3af6dd1d04719ded5b150f13d73670b1e171",
-      "artworkSha256": "38fce3941a6ac2514bc772efe38fb9ae58336a7603753d1426029ac2533ca4ea",
-      "assetSha256": "38fce3941a6ac2514bc772efe38fb9ae58336a7603753d1426029ac2533ca4ea",
-      "assetFile": "assets/38fce3941a6ac2514bc772efe38fb9ae58336a7603753d1426029ac2533ca4ea.svg",
+      "artworkSha256": "e683f9cb37a1469315cceb9239a624f9cc00d56a2069c460ed3765bed4f4bd46",
+      "assetSha256": "e683f9cb37a1469315cceb9239a624f9cc00d56a2069c460ed3765bed4f4bd46",
+      "assetFile": "assets/e683f9cb37a1469315cceb9239a624f9cc00d56a2069c460ed3765bed4f4bd46.svg",
       "repairs": [],
       "exportName": "RefreshIcon"
     },
@@ -2184,9 +2185,9 @@
       "sourceKind": "main-audit",
       "sourceName": "ShieldCheckIcon",
       "canonicalArtworkSha256": "87f5b7725a8190a1dfcd720f1f29edd4855ff492d74598ab9928c1be53393442",
-      "artworkSha256": "ca4d2f0bc5bbd19c8956bf9c41ebcca36937084f4b78c41024c796cf6319511e",
-      "assetSha256": "ca4d2f0bc5bbd19c8956bf9c41ebcca36937084f4b78c41024c796cf6319511e",
-      "assetFile": "assets/ca4d2f0bc5bbd19c8956bf9c41ebcca36937084f4b78c41024c796cf6319511e.svg",
+      "artworkSha256": "b3d9c77144890357b5fbefe78384d9ecea22f7c9c7820699a37c5fbba276ca4f",
+      "assetSha256": "b3d9c77144890357b5fbefe78384d9ecea22f7c9c7820699a37c5fbba276ca4f",
+      "assetFile": "assets/b3d9c77144890357b5fbefe78384d9ecea22f7c9c7820699a37c5fbba276ca4f.svg",
       "repairs": [],
       "exportName": "ShieldCheckIcon"
     },
@@ -2319,9 +2320,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PayFailedIcon",
       "canonicalArtworkSha256": "ac6bbfe575a209de13629f8d8cb6da573784ef0a6634acff05c76ca67fc33b69",
-      "artworkSha256": "cc1d4a2f7eff6fddf9daaea1f2e4269bd5c063df197a3d63d95f44aafa0d6764",
-      "assetSha256": "cc1d4a2f7eff6fddf9daaea1f2e4269bd5c063df197a3d63d95f44aafa0d6764",
-      "assetFile": "assets/cc1d4a2f7eff6fddf9daaea1f2e4269bd5c063df197a3d63d95f44aafa0d6764.svg",
+      "artworkSha256": "8debd3f8e9575eeb87124c8d517537306c9dfc6efaae98aa34b9b29f8461c4ec",
+      "assetSha256": "8debd3f8e9575eeb87124c8d517537306c9dfc6efaae98aa34b9b29f8461c4ec",
+      "assetFile": "assets/8debd3f8e9575eeb87124c8d517537306c9dfc6efaae98aa34b9b29f8461c4ec.svg",
       "repairs": [],
       "exportName": "PayFailedIcon"
     },
@@ -2334,9 +2335,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PaySuccessIcon",
       "canonicalArtworkSha256": "0fc687194fa02f4cbc61e316a623f0e5e24db9713d30c78ad57bcfce507eb3e4",
-      "artworkSha256": "f6bc0d02c7dc9df94b52cf10c15c2139974692bc98a5423cf58beb65067d780a",
-      "assetSha256": "f6bc0d02c7dc9df94b52cf10c15c2139974692bc98a5423cf58beb65067d780a",
-      "assetFile": "assets/f6bc0d02c7dc9df94b52cf10c15c2139974692bc98a5423cf58beb65067d780a.svg",
+      "artworkSha256": "ce72482dcd75b3f3b4303c59c1c953251a2cf47f5caf2efa55b2e31f36ac0e6a",
+      "assetSha256": "ce72482dcd75b3f3b4303c59c1c953251a2cf47f5caf2efa55b2e31f36ac0e6a",
+      "assetFile": "assets/ce72482dcd75b3f3b4303c59c1c953251a2cf47f5caf2efa55b2e31f36ac0e6a.svg",
       "repairs": [],
       "exportName": "PaySuccessIcon"
     },
@@ -2463,9 +2464,9 @@
       "sourceKind": "main-audit",
       "sourceName": "RocketIcon",
       "canonicalArtworkSha256": "b72fa9e1480ccb3aea9e52064ea9ac3f766aee8ca5e8506ea265f039dabc8f24",
-      "artworkSha256": "bbbe0b92fa97cf67cf2bc7f8be53c885d81e40f349af5237ad6f0bbcefa0472f",
-      "assetSha256": "bbbe0b92fa97cf67cf2bc7f8be53c885d81e40f349af5237ad6f0bbcefa0472f",
-      "assetFile": "assets/bbbe0b92fa97cf67cf2bc7f8be53c885d81e40f349af5237ad6f0bbcefa0472f.svg",
+      "artworkSha256": "c46bcbe285a763fe5da087e133a5eac2e28e12d6e7f67979bd9db9207039ab1a",
+      "assetSha256": "c46bcbe285a763fe5da087e133a5eac2e28e12d6e7f67979bd9db9207039ab1a",
+      "assetFile": "assets/c46bcbe285a763fe5da087e133a5eac2e28e12d6e7f67979bd9db9207039ab1a.svg",
       "repairs": [],
       "exportName": "RocketIcon"
     },
@@ -2523,9 +2524,9 @@
       "sourceKind": "main-audit",
       "sourceName": "GooglePhotosLogoSvgIcon",
       "canonicalArtworkSha256": "8d452c62883e0587c1a5e5fb59b587f0071d5356cc4e007d44eac51559304979",
-      "artworkSha256": "4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f",
-      "assetSha256": "4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f",
-      "assetFile": "assets/4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f.svg",
+      "artworkSha256": "d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf",
+      "assetSha256": "d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf",
+      "assetFile": "assets/d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf.svg",
       "repairs": [],
       "exportName": "GooglePhotosLogoSvgIcon"
     },
@@ -2598,9 +2599,9 @@
       "sourceKind": "main-audit",
       "sourceName": "RiskStateSvgIcon",
       "canonicalArtworkSha256": "4650f1e02bc337b4f73abbb15be739207535ed719d5f03e1731d2e3491b14779",
-      "artworkSha256": "b07f48e8448b76ddaf08cc776e82e91139eb61d0daea65f402ac0e0a3ef83a48",
-      "assetSha256": "b07f48e8448b76ddaf08cc776e82e91139eb61d0daea65f402ac0e0a3ef83a48",
-      "assetFile": "assets/b07f48e8448b76ddaf08cc776e82e91139eb61d0daea65f402ac0e0a3ef83a48.svg",
+      "artworkSha256": "0519c8dde31ed447838571796eb47aa280c98cac8f2527ca7395f89414c20169",
+      "assetSha256": "0519c8dde31ed447838571796eb47aa280c98cac8f2527ca7395f89414c20169",
+      "assetFile": "assets/0519c8dde31ed447838571796eb47aa280c98cac8f2527ca7395f89414c20169.svg",
       "repairs": [],
       "exportName": "RiskStateSvgIcon"
     },
@@ -2613,9 +2614,9 @@
       "sourceKind": "main-audit",
       "sourceName": "UISettingSvgIcon",
       "canonicalArtworkSha256": "9c6fa059c10489b9ea67c8804fc5669993ab5dc103ec216609a559ebe68359ea",
-      "artworkSha256": "96e963d1d2703b11f47097bf6a8e190ae168c66b117ffe45da9a557e157ad2b4",
-      "assetSha256": "96e963d1d2703b11f47097bf6a8e190ae168c66b117ffe45da9a557e157ad2b4",
-      "assetFile": "assets/96e963d1d2703b11f47097bf6a8e190ae168c66b117ffe45da9a557e157ad2b4.svg",
+      "artworkSha256": "0b8f09d8e984dac59015caff6ea76fcd561d05bdd6a2dfc2aee0e079a50bf52e",
+      "assetSha256": "0b8f09d8e984dac59015caff6ea76fcd561d05bdd6a2dfc2aee0e079a50bf52e",
+      "assetFile": "assets/0b8f09d8e984dac59015caff6ea76fcd561d05bdd6a2dfc2aee0e079a50bf52e.svg",
       "repairs": [],
       "exportName": "UISettingSvgIcon"
     },
@@ -2628,9 +2629,9 @@
       "sourceKind": "main-audit",
       "sourceName": "VersionUpdateSvgIcon",
       "canonicalArtworkSha256": "1e218f49b5ada51fa72c7b1bd1df34ee99c90f01e096f2e3431e31000de2f498",
-      "artworkSha256": "de050ebefa0c036e56556f18a6101e31ef82cf9d9e7658e9fc1dfe51f8759338",
-      "assetSha256": "de050ebefa0c036e56556f18a6101e31ef82cf9d9e7658e9fc1dfe51f8759338",
-      "assetFile": "assets/de050ebefa0c036e56556f18a6101e31ef82cf9d9e7658e9fc1dfe51f8759338.svg",
+      "artworkSha256": "dc78c10923bf9c9dec68f7b8016514fe03db766ce75683fcdef304e451f5b7d2",
+      "assetSha256": "dc78c10923bf9c9dec68f7b8016514fe03db766ce75683fcdef304e451f5b7d2",
+      "assetFile": "assets/dc78c10923bf9c9dec68f7b8016514fe03db766ce75683fcdef304e451f5b7d2.svg",
       "repairs": [],
       "exportName": "VersionUpdateSvgIcon"
     },
@@ -2643,9 +2644,9 @@
       "sourceKind": "main-audit",
       "sourceName": "WinUIOpCloseSvgIcon",
       "canonicalArtworkSha256": "ec2dbe244ecb253dfc4ab2d0837e00ad7efbd41c65014c9390b51c0f35c0f812",
-      "artworkSha256": "c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac",
-      "assetSha256": "c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac",
-      "assetFile": "assets/c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac.svg",
+      "artworkSha256": "70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c",
+      "assetSha256": "70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c",
+      "assetFile": "assets/70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c.svg",
       "repairs": [],
       "exportName": "WinUIOpCloseSvgIcon"
     },
@@ -2658,9 +2659,9 @@
       "sourceKind": "main-audit",
       "sourceName": "WinUIOpMaxSvgIcon",
       "canonicalArtworkSha256": "8c3644a1af47179e523f1679ef9fc36563072c01256e4a9d310660037a3d8325",
-      "artworkSha256": "5da0d328fe52b6c0ad49125cc948a491f806ecd228a955fcb55fb01fd26d1ee6",
-      "assetSha256": "5da0d328fe52b6c0ad49125cc948a491f806ecd228a955fcb55fb01fd26d1ee6",
-      "assetFile": "assets/5da0d328fe52b6c0ad49125cc948a491f806ecd228a955fcb55fb01fd26d1ee6.svg",
+      "artworkSha256": "edf645eea58f3dcbf80122a3290e8738766177b38ffe4ab6df9a0d022ce15718",
+      "assetSha256": "edf645eea58f3dcbf80122a3290e8738766177b38ffe4ab6df9a0d022ce15718",
+      "assetFile": "assets/edf645eea58f3dcbf80122a3290e8738766177b38ffe4ab6df9a0d022ce15718.svg",
       "repairs": [],
       "exportName": "WinUIOpMaxSvgIcon"
     },
@@ -2673,9 +2674,9 @@
       "sourceKind": "main-audit",
       "sourceName": "WinUIOpRestoreSvgIcon",
       "canonicalArtworkSha256": "7a77e3cc35fcecba34d3461cfc9694fb1cc7cbcdafb460fefae14cfac4f18c6e",
-      "artworkSha256": "ff436f72201b223d4e20686ffcb6c653ab9debebf3422f1be146881c15cac6f3",
-      "assetSha256": "ff436f72201b223d4e20686ffcb6c653ab9debebf3422f1be146881c15cac6f3",
-      "assetFile": "assets/ff436f72201b223d4e20686ffcb6c653ab9debebf3422f1be146881c15cac6f3.svg",
+      "artworkSha256": "65407e10c6cd689aa0733de7c195b1defefc256c7ff05c14d7a6c37cb58476f1",
+      "assetSha256": "65407e10c6cd689aa0733de7c195b1defefc256c7ff05c14d7a6c37cb58476f1",
+      "assetFile": "assets/65407e10c6cd689aa0733de7c195b1defefc256c7ff05c14d7a6c37cb58476f1.svg",
       "repairs": [],
       "exportName": "WinUIOpRestoreSvgIcon"
     },
@@ -2745,9 +2746,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconBold",
       "canonicalArtworkSha256": "37fb60454e542d015fd3dee2ba4db224c69fa8321b2bab847af76b68e5899e1e",
-      "artworkSha256": "3c87208af64c38054fbf81f9355ae985c989d2b6f7234077a533eca42ba818c8",
-      "assetSha256": "3c87208af64c38054fbf81f9355ae985c989d2b6f7234077a533eca42ba818c8",
-      "assetFile": "assets/3c87208af64c38054fbf81f9355ae985c989d2b6f7234077a533eca42ba818c8.svg",
+      "artworkSha256": "b43bf40a28f60ff16e60eb0f24d8cd10073904edc1a3c315b0332ef896f63a91",
+      "assetSha256": "b43bf40a28f60ff16e60eb0f24d8cd10073904edc1a3c315b0332ef896f63a91",
+      "assetFile": "assets/b43bf40a28f60ff16e60eb0f24d8cd10073904edc1a3c315b0332ef896f63a91.svg",
       "repairs": [],
       "exportName": "IconBold"
     },
@@ -2760,9 +2761,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconCheckSquare",
       "canonicalArtworkSha256": "ef664217a88a2f9fb18c66fe1d2b7249b14627e18f74b575e218780b85017c2d",
-      "artworkSha256": "d9c09dcd51234fdab95c9a103fcefe48db741071f636ddd757b0470b1d40d9f3",
-      "assetSha256": "d9c09dcd51234fdab95c9a103fcefe48db741071f636ddd757b0470b1d40d9f3",
-      "assetFile": "assets/d9c09dcd51234fdab95c9a103fcefe48db741071f636ddd757b0470b1d40d9f3.svg",
+      "artworkSha256": "2369f70cabf49bf44677e34fc722ce0b2f4e0d57b2c877d48ec5ec900688650f",
+      "assetSha256": "2369f70cabf49bf44677e34fc722ce0b2f4e0d57b2c877d48ec5ec900688650f",
+      "assetFile": "assets/2369f70cabf49bf44677e34fc722ce0b2f4e0d57b2c877d48ec5ec900688650f.svg",
       "repairs": [],
       "exportName": "IconCheckSquare"
     },
@@ -2775,9 +2776,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconCode2",
       "canonicalArtworkSha256": "315145e010aca3a6778aa26465f370f1d05bc76c062806b1bf33dead23d46408",
-      "artworkSha256": "5a1c9c11572628d6ba6833090048fa6b6d845b69bb0afddca0b0e86dc1630647",
-      "assetSha256": "5a1c9c11572628d6ba6833090048fa6b6d845b69bb0afddca0b0e86dc1630647",
-      "assetFile": "assets/5a1c9c11572628d6ba6833090048fa6b6d845b69bb0afddca0b0e86dc1630647.svg",
+      "artworkSha256": "2e2374096828fe95b2839f21561215a7d028edec9424fdddb64f54a98b0ea875",
+      "assetSha256": "2e2374096828fe95b2839f21561215a7d028edec9424fdddb64f54a98b0ea875",
+      "assetFile": "assets/2e2374096828fe95b2839f21561215a7d028edec9424fdddb64f54a98b0ea875.svg",
       "repairs": [],
       "exportName": "IconCode2"
     },
@@ -2790,9 +2791,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconCurlyBraces",
       "canonicalArtworkSha256": "3ee854904ae449c775df5c8dad1ecfa302f0b1c6ca9f75a304715185f759c3da",
-      "artworkSha256": "4bd9a4c5643664e8c585af12278dc5ec9fdb91e60b3d63d1f5d79a75c61a47df",
-      "assetSha256": "4bd9a4c5643664e8c585af12278dc5ec9fdb91e60b3d63d1f5d79a75c61a47df",
-      "assetFile": "assets/4bd9a4c5643664e8c585af12278dc5ec9fdb91e60b3d63d1f5d79a75c61a47df.svg",
+      "artworkSha256": "f7edd3039675d2a5b525b6ddef134641b7c8ca67ba61e29066e939d6ff8ab578",
+      "assetSha256": "f7edd3039675d2a5b525b6ddef134641b7c8ca67ba61e29066e939d6ff8ab578",
+      "assetFile": "assets/f7edd3039675d2a5b525b6ddef134641b7c8ca67ba61e29066e939d6ff8ab578.svg",
       "repairs": [],
       "exportName": "IconCurlyBraces"
     },
@@ -2805,9 +2806,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconFlipVertical",
       "canonicalArtworkSha256": "b6996b61fd98665f85c5e02bafe0a4e6c667314756745176fe0660af2da3c58e",
-      "artworkSha256": "dc87dd8a8b42f225f3742f411e12f1f213f847000bde416ac337b763a2245c4b",
-      "assetSha256": "dc87dd8a8b42f225f3742f411e12f1f213f847000bde416ac337b763a2245c4b",
-      "assetFile": "assets/dc87dd8a8b42f225f3742f411e12f1f213f847000bde416ac337b763a2245c4b.svg",
+      "artworkSha256": "414df2d2842d7bbce04b12cd2c039d047b47e61912d89ef50df83638258f2019",
+      "assetSha256": "414df2d2842d7bbce04b12cd2c039d047b47e61912d89ef50df83638258f2019",
+      "assetFile": "assets/414df2d2842d7bbce04b12cd2c039d047b47e61912d89ef50df83638258f2019.svg",
       "repairs": [],
       "exportName": "IconFlipVertical"
     },
@@ -2820,9 +2821,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconHeading1",
       "canonicalArtworkSha256": "57d425d2508719189f392a7ba3b25e73072533b2933572da33d95fd3348cf464",
-      "artworkSha256": "34410d8c9a8f9160be81c898cc8fe1aec328644bcab55287acabda87d113400e",
-      "assetSha256": "34410d8c9a8f9160be81c898cc8fe1aec328644bcab55287acabda87d113400e",
-      "assetFile": "assets/34410d8c9a8f9160be81c898cc8fe1aec328644bcab55287acabda87d113400e.svg",
+      "artworkSha256": "9df8465369013f01a25633b1c1de0e239446645d35de5aba6c199798dc63b5e8",
+      "assetSha256": "9df8465369013f01a25633b1c1de0e239446645d35de5aba6c199798dc63b5e8",
+      "assetFile": "assets/9df8465369013f01a25633b1c1de0e239446645d35de5aba6c199798dc63b5e8.svg",
       "repairs": [],
       "exportName": "IconHeading1"
     },
@@ -2835,9 +2836,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconHeading2",
       "canonicalArtworkSha256": "4b753a75541039f4c367b3bec15cbfecbcba96e919b903f09b78d760aed86ce6",
-      "artworkSha256": "3ba20756d4d581b980f10ffc6f28b87257b98756acc8850d5487df57ed73c3d2",
-      "assetSha256": "3ba20756d4d581b980f10ffc6f28b87257b98756acc8850d5487df57ed73c3d2",
-      "assetFile": "assets/3ba20756d4d581b980f10ffc6f28b87257b98756acc8850d5487df57ed73c3d2.svg",
+      "artworkSha256": "711b8857ef92a6206c1401297066afef7a0497a62e517d0a75af1819fa56796c",
+      "assetSha256": "711b8857ef92a6206c1401297066afef7a0497a62e517d0a75af1819fa56796c",
+      "assetFile": "assets/711b8857ef92a6206c1401297066afef7a0497a62e517d0a75af1819fa56796c.svg",
       "repairs": [],
       "exportName": "IconHeading2"
     },
@@ -2850,9 +2851,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconHeading3",
       "canonicalArtworkSha256": "396cbb200c84bb4b592cf4ee96982581cfc43b194ef7a6ec8b7d463dd73c7e8e",
-      "artworkSha256": "6e836cbc61f1cf233511d12bcd977088cd06b4012f1b01b74770662bbe641703",
-      "assetSha256": "6e836cbc61f1cf233511d12bcd977088cd06b4012f1b01b74770662bbe641703",
-      "assetFile": "assets/6e836cbc61f1cf233511d12bcd977088cd06b4012f1b01b74770662bbe641703.svg",
+      "artworkSha256": "dff2b2994f367de5ae99d6423e9903858a06567626c98035fd0e88475c2c4292",
+      "assetSha256": "dff2b2994f367de5ae99d6423e9903858a06567626c98035fd0e88475c2c4292",
+      "assetFile": "assets/dff2b2994f367de5ae99d6423e9903858a06567626c98035fd0e88475c2c4292.svg",
       "repairs": [],
       "exportName": "IconHeading3"
     },
@@ -2865,9 +2866,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconItalic",
       "canonicalArtworkSha256": "4ee3693ab36c1a06e40eebf06f32c3c2a90e0a2d15ce6603963395b2b0735fa9",
-      "artworkSha256": "25f680ab73897fe240e23a65c20399f53d93403ade8a12e3bbe659515e219488",
-      "assetSha256": "25f680ab73897fe240e23a65c20399f53d93403ade8a12e3bbe659515e219488",
-      "assetFile": "assets/25f680ab73897fe240e23a65c20399f53d93403ade8a12e3bbe659515e219488.svg",
+      "artworkSha256": "45e7831ec8e9fcedb96ea509916290bf4cad61a750c2a4b9df5315fc69f6c3b4",
+      "assetSha256": "45e7831ec8e9fcedb96ea509916290bf4cad61a750c2a4b9df5315fc69f6c3b4",
+      "assetFile": "assets/45e7831ec8e9fcedb96ea509916290bf4cad61a750c2a4b9df5315fc69f6c3b4.svg",
       "repairs": [],
       "exportName": "IconItalic"
     },
@@ -2925,9 +2926,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconQuote",
       "canonicalArtworkSha256": "a0b510cab56aa62e638776479286ec325adab14510480810b1ea3c918e097209",
-      "artworkSha256": "b8eb459830c388496d23b20f0231e633c2bed2ba2004590f484bf2dcf5163977",
-      "assetSha256": "b8eb459830c388496d23b20f0231e633c2bed2ba2004590f484bf2dcf5163977",
-      "assetFile": "assets/b8eb459830c388496d23b20f0231e633c2bed2ba2004590f484bf2dcf5163977.svg",
+      "artworkSha256": "dc7a8f5f103bd50d2bd6bdd35a6a99a361f543762cc6195408d280f918ab9140",
+      "assetSha256": "dc7a8f5f103bd50d2bd6bdd35a6a99a361f543762cc6195408d280f918ab9140",
+      "assetFile": "assets/dc7a8f5f103bd50d2bd6bdd35a6a99a361f543762cc6195408d280f918ab9140.svg",
       "repairs": [],
       "exportName": "IconQuote"
     },
@@ -2940,9 +2941,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconStrikethrough",
       "canonicalArtworkSha256": "5d55c143be71d0b7d4cdbefab34c709d03a6e9cc81f324cec179253ba384ed58",
-      "artworkSha256": "16f00d445b7f1c82369a759e09133c64b677acc7eec1ec7c2611ba6825ecb2a6",
-      "assetSha256": "16f00d445b7f1c82369a759e09133c64b677acc7eec1ec7c2611ba6825ecb2a6",
-      "assetFile": "assets/16f00d445b7f1c82369a759e09133c64b677acc7eec1ec7c2611ba6825ecb2a6.svg",
+      "artworkSha256": "2a1ce3b7b251131c9c0729060ace711bff109666b60692ef45565d07b2327ba1",
+      "assetSha256": "2a1ce3b7b251131c9c0729060ace711bff109666b60692ef45565d07b2327ba1",
+      "assetFile": "assets/2a1ce3b7b251131c9c0729060ace711bff109666b60692ef45565d07b2327ba1.svg",
       "repairs": [],
       "exportName": "IconStrikethrough"
     },
@@ -2955,9 +2956,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconType",
       "canonicalArtworkSha256": "f071184d58ecf920335d9653f49390611d443229958636843816015e98924ea8",
-      "artworkSha256": "d86ece995b84c51fe81ae5e9c36e562c6d6cb6d4b9db82dc63e6a8bbf51a9de7",
-      "assetSha256": "d86ece995b84c51fe81ae5e9c36e562c6d6cb6d4b9db82dc63e6a8bbf51a9de7",
-      "assetFile": "assets/d86ece995b84c51fe81ae5e9c36e562c6d6cb6d4b9db82dc63e6a8bbf51a9de7.svg",
+      "artworkSha256": "e04b2d54620455c89e36901a2672ccee7049c70bea1d8cc5c88aff287c9d82bd",
+      "assetSha256": "e04b2d54620455c89e36901a2672ccee7049c70bea1d8cc5c88aff287c9d82bd",
+      "assetFile": "assets/e04b2d54620455c89e36901a2672ccee7049c70bea1d8cc5c88aff287c9d82bd.svg",
       "repairs": [],
       "exportName": "IconType"
     },
@@ -2970,9 +2971,9 @@
       "sourceKind": "main-audit",
       "sourceName": "IconUnderline",
       "canonicalArtworkSha256": "0861ea001164719039329e0e3aee60e2618c873eae02964b433040337d88ed66",
-      "artworkSha256": "439fa3b621980e8d557114c633bccec120c239b40db864343e9fdc1b0d0eabf9",
-      "assetSha256": "439fa3b621980e8d557114c633bccec120c239b40db864343e9fdc1b0d0eabf9",
-      "assetFile": "assets/439fa3b621980e8d557114c633bccec120c239b40db864343e9fdc1b0d0eabf9.svg",
+      "artworkSha256": "0a628e79c2fa967204506cea42208af0cb4b98fe7de8ebe22a6e64b272844369",
+      "assetSha256": "0a628e79c2fa967204506cea42208af0cb4b98fe7de8ebe22a6e64b272844369",
+      "assetFile": "assets/0a628e79c2fa967204506cea42208af0cb4b98fe7de8ebe22a6e64b272844369.svg",
       "repairs": [],
       "exportName": "IconUnderline"
     },
@@ -3270,9 +3271,9 @@
       "sourceKind": "main-audit",
       "sourceName": "AIDetailsDashIcon",
       "canonicalArtworkSha256": "16e2cfb0bcaf5a60e0fdec80f694ed43715825234c531fd3a4eb8ea5b7c6f734",
-      "artworkSha256": "3a111b0b17361f42e51e88129d7ddd1f9181a7c90b2e70f0fbf2b71bd7bbb973",
-      "assetSha256": "3a111b0b17361f42e51e88129d7ddd1f9181a7c90b2e70f0fbf2b71bd7bbb973",
-      "assetFile": "assets/3a111b0b17361f42e51e88129d7ddd1f9181a7c90b2e70f0fbf2b71bd7bbb973.svg",
+      "artworkSha256": "98cee4c63ee2d12aedfe9951eca0f47b7e20f1689f5409df560f067f4df0cab3",
+      "assetSha256": "98cee4c63ee2d12aedfe9951eca0f47b7e20f1689f5409df560f067f4df0cab3",
+      "assetFile": "assets/98cee4c63ee2d12aedfe9951eca0f47b7e20f1689f5409df560f067f4df0cab3.svg",
       "repairs": [],
       "exportName": "AIDetailsDashIcon"
     },
@@ -3464,9 +3465,9 @@
       "sourceKind": "main-audit",
       "sourceName": "AIDeleteNodeIcon",
       "canonicalArtworkSha256": "97a7743967f6923bd0817748a51ac8faac7dc125f657a5ac8748427e3128335f",
-      "artworkSha256": "b4bfb4c5cfc0e2c76f63842ece92a2c498df2059213feba3a525571efdf0bb61",
-      "assetSha256": "b4bfb4c5cfc0e2c76f63842ece92a2c498df2059213feba3a525571efdf0bb61",
-      "assetFile": "assets/b4bfb4c5cfc0e2c76f63842ece92a2c498df2059213feba3a525571efdf0bb61.svg",
+      "artworkSha256": "b1ffce7f92ec21dfa1e21272b64914acf6e9d06de7099a136b75bc75ea8d07f3",
+      "assetSha256": "b1ffce7f92ec21dfa1e21272b64914acf6e9d06de7099a136b75bc75ea8d07f3",
+      "assetFile": "assets/b1ffce7f92ec21dfa1e21272b64914acf6e9d06de7099a136b75bc75ea8d07f3.svg",
       "repairs": [],
       "exportName": "AIDeleteNodeIcon"
     },
@@ -3536,9 +3537,9 @@
       "sourceKind": "main-audit",
       "sourceName": "AISkippedNodeIcon",
       "canonicalArtworkSha256": "bc196ea4de6e7bd725a63c17691c3f9457b76f74b5becc105578371cdd047777",
-      "artworkSha256": "3122e0d8aca229d1d036dca8e8df059fc58d2fd9399def413ef28feb6e6636c5",
-      "assetSha256": "3122e0d8aca229d1d036dca8e8df059fc58d2fd9399def413ef28feb6e6636c5",
-      "assetFile": "assets/3122e0d8aca229d1d036dca8e8df059fc58d2fd9399def413ef28feb6e6636c5.svg",
+      "artworkSha256": "748163e0b062d980d5f23220870270264d0e6befd43ede5ea57ca65130350cb3",
+      "assetSha256": "748163e0b062d980d5f23220870270264d0e6befd43ede5ea57ca65130350cb3",
+      "assetFile": "assets/748163e0b062d980d5f23220870270264d0e6befd43ede5ea57ca65130350cb3.svg",
       "repairs": [],
       "exportName": "AISkippedNodeIcon"
     },
@@ -3581,9 +3582,9 @@
       "sourceKind": "main-audit",
       "sourceName": "AIToDoListPendingIcon",
       "canonicalArtworkSha256": "91d5f3dd7fba3d7a4b0b0804780d2cd384c2391c40e284a7749d2a73469461f7",
-      "artworkSha256": "cb722c8840a0f209f0a7463188729a33b3f1b2c06814a6b9678ad9753ac3832d",
-      "assetSha256": "cb722c8840a0f209f0a7463188729a33b3f1b2c06814a6b9678ad9753ac3832d",
-      "assetFile": "assets/cb722c8840a0f209f0a7463188729a33b3f1b2c06814a6b9678ad9753ac3832d.svg",
+      "artworkSha256": "1d91f9a338a7c1cbb0f4a03ae466401993157730f84e3fe8e39fc0e11453e8ae",
+      "assetSha256": "1d91f9a338a7c1cbb0f4a03ae466401993157730f84e3fe8e39fc0e11453e8ae",
+      "assetFile": "assets/1d91f9a338a7c1cbb0f4a03ae466401993157730f84e3fe8e39fc0e11453e8ae.svg",
       "repairs": [],
       "exportName": "AIToDoListPendingIcon"
     },
@@ -3611,9 +3612,9 @@
       "sourceKind": "main-audit",
       "sourceName": "UserIcon",
       "canonicalArtworkSha256": "b1a1150b3dfad97852d875ebbec01401157f6cc1f8ad3662da82dccb2a83374d",
-      "artworkSha256": "18456f029e1892995e55523908f790a794167511b93a007accc1c3f155f26644",
-      "assetSha256": "18456f029e1892995e55523908f790a794167511b93a007accc1c3f155f26644",
-      "assetFile": "assets/18456f029e1892995e55523908f790a794167511b93a007accc1c3f155f26644.svg",
+      "artworkSha256": "c62ba0f3a05475cbc4836b1054b37e33f8f4111698cd0bfd16d6fd637376cb8a",
+      "assetSha256": "c62ba0f3a05475cbc4836b1054b37e33f8f4111698cd0bfd16d6fd637376cb8a",
+      "assetFile": "assets/c62ba0f3a05475cbc4836b1054b37e33f8f4111698cd0bfd16d6fd637376cb8a.svg",
       "repairs": [],
       "exportName": "UserIcon"
     },
@@ -3641,9 +3642,9 @@
       "sourceKind": "main-audit",
       "sourceName": "InheritLineIcon",
       "canonicalArtworkSha256": "9de30054dc022bb633287e23d796fb27aefa664c57ad435a7f984c772ff21419",
-      "artworkSha256": "3e363d351e3f6ca0f6e8e9db22c1e1056c561ad8c91e6a164d8d6a331b119790",
-      "assetSha256": "3e363d351e3f6ca0f6e8e9db22c1e1056c561ad8c91e6a164d8d6a331b119790",
-      "assetFile": "assets/3e363d351e3f6ca0f6e8e9db22c1e1056c561ad8c91e6a164d8d6a331b119790.svg",
+      "artworkSha256": "f42cc8ed32fc11397c50224849da38546f4497b19f7c7c6e064f3bd9b8d7c3ac",
+      "assetSha256": "f42cc8ed32fc11397c50224849da38546f4497b19f7c7c6e064f3bd9b8d7c3ac",
+      "assetFile": "assets/f42cc8ed32fc11397c50224849da38546f4497b19f7c7c6e064f3bd9b8d7c3ac.svg",
       "repairs": [],
       "exportName": "InheritLineIcon"
     },
@@ -4080,9 +4081,9 @@
       "sourceKind": "main-audit",
       "sourceName": "YakitSpinLogoSvgIcon",
       "canonicalArtworkSha256": "2a63e5279205d9de233be749a31ed060ca0149cdfe5fc3d64a8971487e2f0e74",
-      "artworkSha256": "454ceeed7b37e72cfd5299243fd8cdd7fe5ee5f3e636ee2e666317c885d4de56",
-      "assetSha256": "454ceeed7b37e72cfd5299243fd8cdd7fe5ee5f3e636ee2e666317c885d4de56",
-      "assetFile": "assets/454ceeed7b37e72cfd5299243fd8cdd7fe5ee5f3e636ee2e666317c885d4de56.svg",
+      "artworkSha256": "11127cbb998b2a776cd338eacc0c63bb063af673fad1ca3a9b8398c29338d88d",
+      "assetSha256": "11127cbb998b2a776cd338eacc0c63bb063af673fad1ca3a9b8398c29338d88d",
+      "assetFile": "assets/11127cbb998b2a776cd338eacc0c63bb063af673fad1ca3a9b8398c29338d88d.svg",
       "repairs": [],
       "exportName": "YakitSpinLogoSvgIcon"
     },
@@ -4110,9 +4111,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PropertyIcon",
       "canonicalArtworkSha256": "e765b7136cace73994bd7321176e43659bf58fd2eacc16c291955568fa6f6948",
-      "artworkSha256": "4151e13a88bf33460587ab010b11d8d021b324a9656a67549e721f49c7484f90",
-      "assetSha256": "4151e13a88bf33460587ab010b11d8d021b324a9656a67549e721f49c7484f90",
-      "assetFile": "assets/4151e13a88bf33460587ab010b11d8d021b324a9656a67549e721f49c7484f90.svg",
+      "artworkSha256": "62ae6a50e4d83e4988818355e8a6f921630fb96a7ce7b923a6e0d3cacfcd8ab8",
+      "assetSha256": "62ae6a50e4d83e4988818355e8a6f921630fb96a7ce7b923a6e0d3cacfcd8ab8",
+      "assetFile": "assets/62ae6a50e4d83e4988818355e8a6f921630fb96a7ce7b923a6e0d3cacfcd8ab8.svg",
       "repairs": [
         { "id": "Frame 314/icon/Property 24", "kind": "unreferenced-presentation-id-removed" },
         { "id": "Vector", "kind": "unreferenced-presentation-id-removed" },
@@ -4223,9 +4224,9 @@
       "sourceKind": "main-audit",
       "sourceName": "DocumentDownloadSvgIcon",
       "canonicalArtworkSha256": "399daef18336aaef342e1e64101cd79a323552c52fe37abc0f16921d1f6bdada",
-      "artworkSha256": "ab2d0f1ee3eb7000740dffa1eb6ef10a5b4a348074f88c4402067d3b9755a018",
-      "assetSha256": "ab2d0f1ee3eb7000740dffa1eb6ef10a5b4a348074f88c4402067d3b9755a018",
-      "assetFile": "assets/ab2d0f1ee3eb7000740dffa1eb6ef10a5b4a348074f88c4402067d3b9755a018.svg",
+      "artworkSha256": "0bd918bde7181a55020f398c00d81fb3d57c5b8f9f73ace35c30b0479f8932c8",
+      "assetSha256": "0bd918bde7181a55020f398c00d81fb3d57c5b8f9f73ace35c30b0479f8932c8",
+      "assetFile": "assets/0bd918bde7181a55020f398c00d81fb3d57c5b8f9f73ace35c30b0479f8932c8.svg",
       "repairs": [],
       "exportName": "DocumentDownloadSvgIcon"
     },
@@ -4268,9 +4269,9 @@
       "sourceKind": "main-audit",
       "sourceName": "SoftwareRemoteSvgIcon",
       "canonicalArtworkSha256": "29a9cacce9f29e89ca0933ff657825940084ee57cf89ba9f7ba79a319b08ff90",
-      "artworkSha256": "4fcb3f297b61108f979091a22fea30b020aa6bfbebd393967db4a12cab96dc34",
-      "assetSha256": "4fcb3f297b61108f979091a22fea30b020aa6bfbebd393967db4a12cab96dc34",
-      "assetFile": "assets/4fcb3f297b61108f979091a22fea30b020aa6bfbebd393967db4a12cab96dc34.svg",
+      "artworkSha256": "8c68f6106ed8efa7f6bb26403d6e9cb4e17fe57b51826dd4450752b04a71acea",
+      "assetSha256": "8c68f6106ed8efa7f6bb26403d6e9cb4e17fe57b51826dd4450752b04a71acea",
+      "assetFile": "assets/8c68f6106ed8efa7f6bb26403d6e9cb4e17fe57b51826dd4450752b04a71acea.svg",
       "repairs": [],
       "exportName": "SoftwareRemoteSvgIcon"
     },
@@ -4478,9 +4479,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineAIAgentIcon",
       "canonicalArtworkSha256": "452cee665ce5de46f6e8b0b6e880658673b92525f306d23d84324b7936830eac",
-      "artworkSha256": "636e908bb9281503afde7eab6315a6efc370a11adb966aebd6f1cb9961a4af56",
-      "assetSha256": "636e908bb9281503afde7eab6315a6efc370a11adb966aebd6f1cb9961a4af56",
-      "assetFile": "assets/636e908bb9281503afde7eab6315a6efc370a11adb966aebd6f1cb9961a4af56.svg",
+      "artworkSha256": "70ace5ea0e6abcdb892c2c4b9d70c470c4c0d743a93a8af018f5014a7012f8fb",
+      "assetSha256": "70ace5ea0e6abcdb892c2c4b9d70c470c4c0d743a93a8af018f5014a7012f8fb",
+      "assetFile": "assets/70ace5ea0e6abcdb892c2c4b9d70c470c4c0d743a93a8af018f5014a7012f8fb.svg",
       "repairs": [],
       "exportName": "PrivateOutlineAIAgentIcon"
     },
@@ -4516,9 +4517,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineAuditHoleIcon",
       "canonicalArtworkSha256": "344b9235a995b5d7edc10b0aa400b8dcb5e13590705f2cc59f760316dfe2676b",
-      "artworkSha256": "7ec6dfd334c19da7da12373e6deaf866b78812ae96f6a5cfdfe6d00303852b95",
-      "assetSha256": "7ec6dfd334c19da7da12373e6deaf866b78812ae96f6a5cfdfe6d00303852b95",
-      "assetFile": "assets/7ec6dfd334c19da7da12373e6deaf866b78812ae96f6a5cfdfe6d00303852b95.svg",
+      "artworkSha256": "cb8635d270dedaddf3eeff28b25ca54c534d7eed082e85cb1866fa52f4570614",
+      "assetSha256": "cb8635d270dedaddf3eeff28b25ca54c534d7eed082e85cb1866fa52f4570614",
+      "assetFile": "assets/cb8635d270dedaddf3eeff28b25ca54c534d7eed082e85cb1866fa52f4570614.svg",
       "repairs": [],
       "exportName": "PrivateOutlineAuditHoleIcon"
     },
@@ -4531,9 +4532,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineBasicCrawlerIcon",
       "canonicalArtworkSha256": "37db19f317c945a0ec727543a9c4d2f8efb1ef5386c1f67cdeab38b0d45a9f26",
-      "artworkSha256": "60dc48ed2d9fac203c9d4b1e9c66be2d82535eb0cb330628c27d024900d29a54",
-      "assetSha256": "60dc48ed2d9fac203c9d4b1e9c66be2d82535eb0cb330628c27d024900d29a54",
-      "assetFile": "assets/60dc48ed2d9fac203c9d4b1e9c66be2d82535eb0cb330628c27d024900d29a54.svg",
+      "artworkSha256": "34e7ab6dc0677c35dc89c4cb8ceed9d9e28248f2d865f5b45d4a3c077bbfc0ac",
+      "assetSha256": "34e7ab6dc0677c35dc89c4cb8ceed9d9e28248f2d865f5b45d4a3c077bbfc0ac",
+      "assetFile": "assets/34e7ab6dc0677c35dc89c4cb8ceed9d9e28248f2d865f5b45d4a3c077bbfc0ac.svg",
       "repairs": [],
       "exportName": "PrivateOutlineBasicCrawlerIcon"
     },
@@ -4546,9 +4547,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineBatchPluginIcon",
       "canonicalArtworkSha256": "c95c45f9cb6a368034f0fbd00c197243b8167a9a8b80f1d9fdf68bbe112acfb6",
-      "artworkSha256": "76746250d24fe6d969d8950f14b058bdf3bc4b051f89c8e2f7ff56de79fe5c41",
-      "assetSha256": "76746250d24fe6d969d8950f14b058bdf3bc4b051f89c8e2f7ff56de79fe5c41",
-      "assetFile": "assets/76746250d24fe6d969d8950f14b058bdf3bc4b051f89c8e2f7ff56de79fe5c41.svg",
+      "artworkSha256": "189fd83a3a2ae5789f09a54e703db05eeef061fd139cd1f594b81535135ddc7e",
+      "assetSha256": "189fd83a3a2ae5789f09a54e703db05eeef061fd139cd1f594b81535135ddc7e",
+      "assetFile": "assets/189fd83a3a2ae5789f09a54e703db05eeef061fd139cd1f594b81535135ddc7e.svg",
       "repairs": [],
       "exportName": "PrivateOutlineBatchPluginIcon"
     },
@@ -4561,9 +4562,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineBruteIcon",
       "canonicalArtworkSha256": "c2ebc3ea5b307113acfdb09ad06056b85d602a78faa9bb9628802e00347fe712",
-      "artworkSha256": "49d84d5d56783be3baf5cb9a9a8ad2e0ae1f1f0406444e8d92621bb4296fe125",
-      "assetSha256": "49d84d5d56783be3baf5cb9a9a8ad2e0ae1f1f0406444e8d92621bb4296fe125",
-      "assetFile": "assets/49d84d5d56783be3baf5cb9a9a8ad2e0ae1f1f0406444e8d92621bb4296fe125.svg",
+      "artworkSha256": "ab204bc6728e3f953dcd360be574c72664fe79d9d7004025430a1344f0510e74",
+      "assetSha256": "ab204bc6728e3f953dcd360be574c72664fe79d9d7004025430a1344f0510e74",
+      "assetFile": "assets/ab204bc6728e3f953dcd360be574c72664fe79d9d7004025430a1344f0510e74.svg",
       "repairs": [],
       "exportName": "PrivateOutlineBruteIcon"
     },
@@ -4576,9 +4577,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineCodecIcon",
       "canonicalArtworkSha256": "5d1772ab68f190f9da3b7040cbaaed5e1e9dee6d48d8ae429b255f0745a80ac3",
-      "artworkSha256": "0c9a652318e9267bd7a208d9ad7c696215c517a81eee4646c80cbbe9eab84f73",
-      "assetSha256": "0c9a652318e9267bd7a208d9ad7c696215c517a81eee4646c80cbbe9eab84f73",
-      "assetFile": "assets/0c9a652318e9267bd7a208d9ad7c696215c517a81eee4646c80cbbe9eab84f73.svg",
+      "artworkSha256": "3d471bdf5f90ef7b9711c80981e6489b20588472af840fa8b8c86db399c9bbae",
+      "assetSha256": "3d471bdf5f90ef7b9711c80981e6489b20588472af840fa8b8c86db399c9bbae",
+      "assetFile": "assets/3d471bdf5f90ef7b9711c80981e6489b20588472af840fa8b8c86db399c9bbae.svg",
       "repairs": [],
       "exportName": "PrivateOutlineCodecIcon"
     },
@@ -4606,9 +4607,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineCVEIcon",
       "canonicalArtworkSha256": "7e7d195fda291ceebc259cac55d16ae75cad47537caee2679b5c894e22b51d6e",
-      "artworkSha256": "bb8517a7adc7504753ab4f2368138bfa67f1f56e0200d35c7a296b58f260e525",
-      "assetSha256": "bb8517a7adc7504753ab4f2368138bfa67f1f56e0200d35c7a296b58f260e525",
-      "assetFile": "assets/bb8517a7adc7504753ab4f2368138bfa67f1f56e0200d35c7a296b58f260e525.svg",
+      "artworkSha256": "0ab9742cd52b433792a457dc567dc344c32486c1a7a0f2955f70e03475756b8d",
+      "assetSha256": "0ab9742cd52b433792a457dc567dc344c32486c1a7a0f2955f70e03475756b8d",
+      "assetFile": "assets/0ab9742cd52b433792a457dc567dc344c32486c1a7a0f2955f70e03475756b8d.svg",
       "repairs": [],
       "exportName": "PrivateOutlineCVEIcon"
     },
@@ -4621,9 +4622,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineDataCompareIcon",
       "canonicalArtworkSha256": "110bebfde01d398edc70c30de6d2a28a7491b55c9ef0d0f62540f6c393781172",
-      "artworkSha256": "b60ffd99f4aa983058016a0fda91bcbd0d267da2ce9359b4d231e6a585077fa2",
-      "assetSha256": "b60ffd99f4aa983058016a0fda91bcbd0d267da2ce9359b4d231e6a585077fa2",
-      "assetFile": "assets/b60ffd99f4aa983058016a0fda91bcbd0d267da2ce9359b4d231e6a585077fa2.svg",
+      "artworkSha256": "706c1d150a7de1bdf6af3c88035de5fe6b402ed7a210290357a4675db372bd3c",
+      "assetSha256": "706c1d150a7de1bdf6af3c88035de5fe6b402ed7a210290357a4675db372bd3c",
+      "assetFile": "assets/706c1d150a7de1bdf6af3c88035de5fe6b402ed7a210290357a4675db372bd3c.svg",
       "repairs": [],
       "exportName": "PrivateOutlineDataCompareIcon"
     },
@@ -4636,9 +4637,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineDefaultPluginIcon",
       "canonicalArtworkSha256": "4f62ce81524fb25f42b9adf0bc39772462951e39b28ffd94cf1192f560f2e929",
-      "artworkSha256": "5338a9433cb90ac8ab16ccf7ad23f1cdb01593a0e211eb9c04d5007967f92dd4",
-      "assetSha256": "5338a9433cb90ac8ab16ccf7ad23f1cdb01593a0e211eb9c04d5007967f92dd4",
-      "assetFile": "assets/5338a9433cb90ac8ab16ccf7ad23f1cdb01593a0e211eb9c04d5007967f92dd4.svg",
+      "artworkSha256": "e68d3297302bb1653fc17b78523b01cede8802d92de5c966e9407946bac961c9",
+      "assetSha256": "e68d3297302bb1653fc17b78523b01cede8802d92de5c966e9407946bac961c9",
+      "assetFile": "assets/e68d3297302bb1653fc17b78523b01cede8802d92de5c966e9407946bac961c9.svg",
       "repairs": [],
       "exportName": "PrivateOutlineDefaultPluginIcon"
     },
@@ -4651,9 +4652,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineDirectoryScanningIcon",
       "canonicalArtworkSha256": "060050aeb68820e1729ce6b5181496e2834dbb3d740143d04d2bed99190de3a4",
-      "artworkSha256": "a83c0c65444419828b81cbd2922cc6db3cd336d7f9bc08ecfeb8e564d12e5851",
-      "assetSha256": "a83c0c65444419828b81cbd2922cc6db3cd336d7f9bc08ecfeb8e564d12e5851",
-      "assetFile": "assets/a83c0c65444419828b81cbd2922cc6db3cd336d7f9bc08ecfeb8e564d12e5851.svg",
+      "artworkSha256": "ef7c1190f8cf1e097d40ba8bedc38c1b8a8b43d45e801de3e2ad46aed03cc4e1",
+      "assetSha256": "ef7c1190f8cf1e097d40ba8bedc38c1b8a8b43d45e801de3e2ad46aed03cc4e1",
+      "assetFile": "assets/ef7c1190f8cf1e097d40ba8bedc38c1b8a8b43d45e801de3e2ad46aed03cc4e1.svg",
       "repairs": [],
       "exportName": "PrivateOutlineDirectoryScanningIcon"
     },
@@ -4666,9 +4667,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineDNSLogIcon",
       "canonicalArtworkSha256": "8a4debe522de1e0327c4f6057daa165823bffafa19841db93da1e184ace5abc7",
-      "artworkSha256": "64e4184ae406f02068d6d1a0f6965112740a27943cc76f5019f86487d654d655",
-      "assetSha256": "64e4184ae406f02068d6d1a0f6965112740a27943cc76f5019f86487d654d655",
-      "assetFile": "assets/64e4184ae406f02068d6d1a0f6965112740a27943cc76f5019f86487d654d655.svg",
+      "artworkSha256": "e67b866f5fedf582f7ad615864b87526317ea7a2cb4f286613b37c5118b9ac18",
+      "assetSha256": "e67b866f5fedf582f7ad615864b87526317ea7a2cb4f286613b37c5118b9ac18",
+      "assetFile": "assets/e67b866f5fedf582f7ad615864b87526317ea7a2cb4f286613b37c5118b9ac18.svg",
       "repairs": [],
       "exportName": "PrivateOutlineDNSLogIcon"
     },
@@ -4685,9 +4686,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineDomainIcon",
       "canonicalArtworkSha256": "55f42e85d5c53e7ff854fc7191f59eaf98a4ddf9898c1b9f169943ca4c2963a3",
-      "artworkSha256": "8c9b9f4c53473e9cca2a28b5726d8fc467cba1e36d44dba1f0c575fc9a0809ac",
-      "assetSha256": "8c9b9f4c53473e9cca2a28b5726d8fc467cba1e36d44dba1f0c575fc9a0809ac",
-      "assetFile": "assets/8c9b9f4c53473e9cca2a28b5726d8fc467cba1e36d44dba1f0c575fc9a0809ac.svg",
+      "artworkSha256": "c8152e4bb82d5051273cac361d515515a7e1c9302582732f7796b1e4dbb2f0c0",
+      "assetSha256": "c8152e4bb82d5051273cac361d515515a7e1c9302582732f7796b1e4dbb2f0c0",
+      "assetFile": "assets/c8152e4bb82d5051273cac361d515515a7e1c9302582732f7796b1e4dbb2f0c0.svg",
       "repairs": [],
       "exportName": "PrivateOutlineDomainIcon"
     },
@@ -4715,9 +4716,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineHTTPHistoryIcon",
       "canonicalArtworkSha256": "c028f262d623bc22e8e3e80348637971da6b997bfa497d7499070244e385ea56",
-      "artworkSha256": "39264dfd81a22370d8549ae4c4b5b48ea0d1389b8e36afdec3e6fdf62ea8dbc7",
-      "assetSha256": "39264dfd81a22370d8549ae4c4b5b48ea0d1389b8e36afdec3e6fdf62ea8dbc7",
-      "assetFile": "assets/39264dfd81a22370d8549ae4c4b5b48ea0d1389b8e36afdec3e6fdf62ea8dbc7.svg",
+      "artworkSha256": "a8050dcce2c105ce860f6baf6c015362f59e97448e3b825c6ae42c66585b1c89",
+      "assetSha256": "a8050dcce2c105ce860f6baf6c015362f59e97448e3b825c6ae42c66585b1c89",
+      "assetFile": "assets/a8050dcce2c105ce860f6baf6c015362f59e97448e3b825c6ae42c66585b1c89.svg",
       "repairs": [],
       "exportName": "PrivateOutlineHTTPHistoryIcon"
     },
@@ -4730,9 +4731,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineICMPSizeLogIcon",
       "canonicalArtworkSha256": "42299cc58ca0c0bb04faf8b1928c678cedf40cd66b544d9098c17dc0f319dff9",
-      "artworkSha256": "5ceeee256855b52a16c28e4bb89c977867075b7b4f41889926ef44f27902247b",
-      "assetSha256": "5ceeee256855b52a16c28e4bb89c977867075b7b4f41889926ef44f27902247b",
-      "assetFile": "assets/5ceeee256855b52a16c28e4bb89c977867075b7b4f41889926ef44f27902247b.svg",
+      "artworkSha256": "da80bc573dcd3330bd4c4ca727eb1e01dacc7d33c46328413c52155f25e5fe10",
+      "assetSha256": "da80bc573dcd3330bd4c4ca727eb1e01dacc7d33c46328413c52155f25e5fe10",
+      "assetFile": "assets/da80bc573dcd3330bd4c4ca727eb1e01dacc7d33c46328413c52155f25e5fe10.svg",
       "repairs": [],
       "exportName": "PrivateOutlineICMPSizeLogIcon"
     },
@@ -4745,9 +4746,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineMitmIcon",
       "canonicalArtworkSha256": "bc5d8a57901243709d2d8fc78a3992bb4940a2f7aa1b1f13aaaf590c2d87bf95",
-      "artworkSha256": "569211c19e72ae7478966bc2b6391e43dded9adde4b5041d2adcd14fa4602893",
-      "assetSha256": "569211c19e72ae7478966bc2b6391e43dded9adde4b5041d2adcd14fa4602893",
-      "assetFile": "assets/569211c19e72ae7478966bc2b6391e43dded9adde4b5041d2adcd14fa4602893.svg",
+      "artworkSha256": "a753735421844ac45337065c346f9a3ee555e0935975713c6e90c912bcd0c23a",
+      "assetSha256": "a753735421844ac45337065c346f9a3ee555e0935975713c6e90c912bcd0c23a",
+      "assetFile": "assets/a753735421844ac45337065c346f9a3ee555e0935975713c6e90c912bcd0c23a.svg",
       "repairs": [],
       "exportName": "PrivateOutlineMitmIcon"
     },
@@ -4760,9 +4761,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlinePayloadGeneraterIcon",
       "canonicalArtworkSha256": "6254ce2d0aab5ae337554e1e97ee1a6d4c0cb8cc2ae9920dfe9542d5b55a19e9",
-      "artworkSha256": "1e55c2966a6dba3dde39716614a42a67839a72f93448452bece49824d77cf0be",
-      "assetSha256": "1e55c2966a6dba3dde39716614a42a67839a72f93448452bece49824d77cf0be",
-      "assetFile": "assets/1e55c2966a6dba3dde39716614a42a67839a72f93448452bece49824d77cf0be.svg",
+      "artworkSha256": "76109a925209ccb3087c01abdb269e0c4570930de6e69510c10869b7a385b7eb",
+      "assetSha256": "76109a925209ccb3087c01abdb269e0c4570930de6e69510c10869b7a385b7eb",
+      "assetFile": "assets/76109a925209ccb3087c01abdb269e0c4570930de6e69510c10869b7a385b7eb.svg",
       "repairs": [],
       "exportName": "PrivateOutlinePayloadGeneraterIcon"
     },
@@ -4775,9 +4776,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlinePluginStoreIcon",
       "canonicalArtworkSha256": "99c9af549f66518ba32b570d697df9c8125f9cfc6a881337eafb8c565f03495b",
-      "artworkSha256": "cce19e5554063561d7cb4e7240503aa3fef8ed88422f92041cec9fcda828dec1",
-      "assetSha256": "cce19e5554063561d7cb4e7240503aa3fef8ed88422f92041cec9fcda828dec1",
-      "assetFile": "assets/cce19e5554063561d7cb4e7240503aa3fef8ed88422f92041cec9fcda828dec1.svg",
+      "artworkSha256": "a71712d5921a9bb1d73dd34369656d010b51ba741736358b0e740c2b1818a449",
+      "assetSha256": "a71712d5921a9bb1d73dd34369656d010b51ba741736358b0e740c2b1818a449",
+      "assetFile": "assets/a71712d5921a9bb1d73dd34369656d010b51ba741736358b0e740c2b1818a449.svg",
       "repairs": [],
       "exportName": "PrivateOutlinePluginStoreIcon"
     },
@@ -4790,9 +4791,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlinePocIcon",
       "canonicalArtworkSha256": "8caf5e1d1aec24e60730e76acfb1cb78ec302268436fea1ce0f3d4d30eb5f735",
-      "artworkSha256": "a4b069098f094ba30f9be4f664a5c00ace98a28998e19fe8af42bf704392587c",
-      "assetSha256": "a4b069098f094ba30f9be4f664a5c00ace98a28998e19fe8af42bf704392587c",
-      "assetFile": "assets/a4b069098f094ba30f9be4f664a5c00ace98a28998e19fe8af42bf704392587c.svg",
+      "artworkSha256": "a7e5858ea1258adea93ab20aff97751d447b7b07545b43f4282f3ba4abdcff39",
+      "assetSha256": "a7e5858ea1258adea93ab20aff97751d447b7b07545b43f4282f3ba4abdcff39",
+      "assetFile": "assets/a7e5858ea1258adea93ab20aff97751d447b7b07545b43f4282f3ba4abdcff39.svg",
       "repairs": [],
       "exportName": "PrivateOutlinePocIcon"
     },
@@ -4805,9 +4806,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlinePortsIcon",
       "canonicalArtworkSha256": "7c596c045a04891ee6a221b8072655e6ae61f248cd0f8dc9f326717b501647b6",
-      "artworkSha256": "b7d5046f8f6f9ec87a40e953f3277dacb7377e2b6d761aa987ffd3377efeb1da",
-      "assetSha256": "b7d5046f8f6f9ec87a40e953f3277dacb7377e2b6d761aa987ffd3377efeb1da",
-      "assetFile": "assets/b7d5046f8f6f9ec87a40e953f3277dacb7377e2b6d761aa987ffd3377efeb1da.svg",
+      "artworkSha256": "70299444892ccca39484486ceb232cd3d3f002d09f22000d1cc2d3cb12249644",
+      "assetSha256": "70299444892ccca39484486ceb232cd3d3f002d09f22000d1cc2d3cb12249644",
+      "assetFile": "assets/70299444892ccca39484486ceb232cd3d3f002d09f22000d1cc2d3cb12249644.svg",
       "repairs": [],
       "exportName": "PrivateOutlinePortsIcon"
     },
@@ -4820,9 +4821,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineProjectManagerIcon",
       "canonicalArtworkSha256": "5954205d2fd46464b379451a51d0c86d7802a85a2d402e4ed985765ffcbf80ef",
-      "artworkSha256": "f69d9cf6d67c26f8917945d8ccdbcca63f371023e7e84997a29853518454f970",
-      "assetSha256": "f69d9cf6d67c26f8917945d8ccdbcca63f371023e7e84997a29853518454f970",
-      "assetFile": "assets/f69d9cf6d67c26f8917945d8ccdbcca63f371023e7e84997a29853518454f970.svg",
+      "artworkSha256": "7ed0e4239aee1c084a3fa517e9fcab2ffab8f8c29104672e91ab49f4218b6ddc",
+      "assetSha256": "7ed0e4239aee1c084a3fa517e9fcab2ffab8f8c29104672e91ab49f4218b6ddc",
+      "assetFile": "assets/7ed0e4239aee1c084a3fa517e9fcab2ffab8f8c29104672e91ab49f4218b6ddc.svg",
       "repairs": [],
       "exportName": "PrivateOutlineProjectManagerIcon"
     },
@@ -4835,9 +4836,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineReportIcon",
       "canonicalArtworkSha256": "4e01bea5862b9bc0a1e2d11085d20215bd9e31dbd3624450f7db44d0f4c9b11b",
-      "artworkSha256": "a086751c40eb7b549b03352d9360ebc40f62ea54dea596fb6a865d85de898f63",
-      "assetSha256": "a086751c40eb7b549b03352d9360ebc40f62ea54dea596fb6a865d85de898f63",
-      "assetFile": "assets/a086751c40eb7b549b03352d9360ebc40f62ea54dea596fb6a865d85de898f63.svg",
+      "artworkSha256": "71b81d5e7bd5854f2ab230c80d2a9abf4aae53e7a85e0266a2318ec2d1c1eb70",
+      "assetSha256": "71b81d5e7bd5854f2ab230c80d2a9abf4aae53e7a85e0266a2318ec2d1c1eb70",
+      "assetFile": "assets/71b81d5e7bd5854f2ab230c80d2a9abf4aae53e7a85e0266a2318ec2d1c1eb70.svg",
       "repairs": [],
       "exportName": "PrivateOutlineReportIcon"
     },
@@ -4850,9 +4851,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineReverseServerIcon",
       "canonicalArtworkSha256": "662c20ee87d2104eb5204ea41752b884cdf0a41b188a4d9272ef61018a2e6266",
-      "artworkSha256": "7ef6638be4db07a4da635136d5d1eef1b9020601ce8e32b6e97b8b18faec7b21",
-      "assetSha256": "7ef6638be4db07a4da635136d5d1eef1b9020601ce8e32b6e97b8b18faec7b21",
-      "assetFile": "assets/7ef6638be4db07a4da635136d5d1eef1b9020601ce8e32b6e97b8b18faec7b21.svg",
+      "artworkSha256": "b6e1be9b40cd6f4b0e465d86ba859084d747fb67c127d0b183e0a661c5d4215a",
+      "assetSha256": "b6e1be9b40cd6f4b0e465d86ba859084d747fb67c127d0b183e0a661c5d4215a",
+      "assetFile": "assets/b6e1be9b40cd6f4b0e465d86ba859084d747fb67c127d0b183e0a661c5d4215a.svg",
       "repairs": [],
       "exportName": "PrivateOutlineReverseServerIcon"
     },
@@ -4865,9 +4866,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineRiskIcon",
       "canonicalArtworkSha256": "f89e4ac64bcd7a31743519f5935bcd8184489f21935cf3966ab273fa80f6c798",
-      "artworkSha256": "ec637a2a36592198f65b26bed689e0d320899cea0ea058d8a771e365f7654a47",
-      "assetSha256": "ec637a2a36592198f65b26bed689e0d320899cea0ea058d8a771e365f7654a47",
-      "assetFile": "assets/ec637a2a36592198f65b26bed689e0d320899cea0ea058d8a771e365f7654a47.svg",
+      "artworkSha256": "40f25b38f38ceaa8e6b07e33f8660b235e9f6e4c03d8112177752cb06e2c7f92",
+      "assetSha256": "40f25b38f38ceaa8e6b07e33f8660b235e9f6e4c03d8112177752cb06e2c7f92",
+      "assetFile": "assets/40f25b38f38ceaa8e6b07e33f8660b235e9f6e4c03d8112177752cb06e2c7f92.svg",
       "repairs": [],
       "exportName": "PrivateOutlineRiskIcon"
     },
@@ -4880,9 +4881,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineRuleManagementIcon",
       "canonicalArtworkSha256": "a2bbc8e5708ca858afde84b45dae976f3ccbbcccb930ea30e05ffa032bb58e20",
-      "artworkSha256": "82aac7926c7e28df15c720be5a5b5e8a2ba4c358cc98988a09194f70d62f7246",
-      "assetSha256": "82aac7926c7e28df15c720be5a5b5e8a2ba4c358cc98988a09194f70d62f7246",
-      "assetFile": "assets/82aac7926c7e28df15c720be5a5b5e8a2ba4c358cc98988a09194f70d62f7246.svg",
+      "artworkSha256": "dd6ecf1f91efdc1cc480ef52c4974100259c46c2498b3fbe7c7656c1c457f9db",
+      "assetSha256": "dd6ecf1f91efdc1cc480ef52c4974100259c46c2498b3fbe7c7656c1c457f9db",
+      "assetFile": "assets/dd6ecf1f91efdc1cc480ef52c4974100259c46c2498b3fbe7c7656c1c457f9db.svg",
       "repairs": [],
       "exportName": "PrivateOutlineRuleManagementIcon"
     },
@@ -4895,9 +4896,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineScanPortIcon",
       "canonicalArtworkSha256": "5b9d3eef0c8ddd869f7d36c243cab66834e75cfaf65ef60dc6f7a05df2746bf7",
-      "artworkSha256": "0d03eff314bf976ed0fdbfc3f021724dcd489210b6a33f9f48492c1d1c818a2f",
-      "assetSha256": "0d03eff314bf976ed0fdbfc3f021724dcd489210b6a33f9f48492c1d1c818a2f",
-      "assetFile": "assets/0d03eff314bf976ed0fdbfc3f021724dcd489210b6a33f9f48492c1d1c818a2f.svg",
+      "artworkSha256": "c40f74018fd5f48f9d728b331f77b3a3a1fe59cea9f041b73af150b856a89747",
+      "assetSha256": "c40f74018fd5f48f9d728b331f77b3a3a1fe59cea9f041b73af150b856a89747",
+      "assetFile": "assets/c40f74018fd5f48f9d728b331f77b3a3a1fe59cea9f041b73af150b856a89747.svg",
       "repairs": [],
       "exportName": "PrivateOutlineScanPortIcon"
     },
@@ -4910,9 +4911,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineShellReceiverIcon",
       "canonicalArtworkSha256": "2028a9689eaba8dd83d8e1497d240795cb71bf69a3fb76c5beae26a09adf7f78",
-      "artworkSha256": "4af8ead3475c602ceda5cc4a477afe5549c036c93d3cf5b2ec14f10d47f46821",
-      "assetSha256": "4af8ead3475c602ceda5cc4a477afe5549c036c93d3cf5b2ec14f10d47f46821",
-      "assetFile": "assets/4af8ead3475c602ceda5cc4a477afe5549c036c93d3cf5b2ec14f10d47f46821.svg",
+      "artworkSha256": "38a8648438d292337b93c7cf5d6fe77c603d551884fb32e1629a42bde364e4e9",
+      "assetSha256": "38a8648438d292337b93c7cf5d6fe77c603d551884fb32e1629a42bde364e4e9",
+      "assetFile": "assets/38a8648438d292337b93c7cf5d6fe77c603d551884fb32e1629a42bde364e4e9.svg",
       "repairs": [],
       "exportName": "PrivateOutlineShellReceiverIcon"
     },
@@ -4925,9 +4926,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineSpaceEngineIcon",
       "canonicalArtworkSha256": "78160b421861d97b47f0ae4215ce131a1586a654486c9d4ae4e50dd2c87ebbaa",
-      "artworkSha256": "b7ef8403c6e8a0bee0fe4a110cb1c90ba06bf8fefb0df84c5a108f975b8755e8",
-      "assetSha256": "b7ef8403c6e8a0bee0fe4a110cb1c90ba06bf8fefb0df84c5a108f975b8755e8",
-      "assetFile": "assets/b7ef8403c6e8a0bee0fe4a110cb1c90ba06bf8fefb0df84c5a108f975b8755e8.svg",
+      "artworkSha256": "b9a8bf31c932e8df00407e5e4080710bf140faf4deca77266ab0312836da73f5",
+      "assetSha256": "b9a8bf31c932e8df00407e5e4080710bf140faf4deca77266ab0312836da73f5",
+      "assetFile": "assets/b9a8bf31c932e8df00407e5e4080710bf140faf4deca77266ab0312836da73f5.svg",
       "repairs": [],
       "exportName": "PrivateOutlineSpaceEngineIcon"
     },
@@ -4940,9 +4941,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineSubDomainCollectionIcon",
       "canonicalArtworkSha256": "ee3d1d280413f337f38c89e0ea4809c5cee463b56fbc6085bde7f676e59098f7",
-      "artworkSha256": "7ba991d59ccd39abe39bea0089d5d4e71adbaf48f553c99097778facef6e8e31",
-      "assetSha256": "7ba991d59ccd39abe39bea0089d5d4e71adbaf48f553c99097778facef6e8e31",
-      "assetFile": "assets/7ba991d59ccd39abe39bea0089d5d4e71adbaf48f553c99097778facef6e8e31.svg",
+      "artworkSha256": "c7e748eb67140642c5f986c41f464867da5d66bb66f10b1ee9e82ac323e6b403",
+      "assetSha256": "c7e748eb67140642c5f986c41f464867da5d66bb66f10b1ee9e82ac323e6b403",
+      "assetFile": "assets/c7e748eb67140642c5f986c41f464867da5d66bb66f10b1ee9e82ac323e6b403.svg",
       "repairs": [],
       "exportName": "PrivateOutlineSubDomainCollectionIcon"
     },
@@ -4959,9 +4960,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineTCPPortLogIcon",
       "canonicalArtworkSha256": "bd2833742039917e4998cda734d9cc58b60b06471bd945420e8dd80be2363d3b",
-      "artworkSha256": "c67167d9853a00f2e1f72cdfb0f2ae9509d921135ee71258cf3ae383c52e6c79",
-      "assetSha256": "c67167d9853a00f2e1f72cdfb0f2ae9509d921135ee71258cf3ae383c52e6c79",
-      "assetFile": "assets/c67167d9853a00f2e1f72cdfb0f2ae9509d921135ee71258cf3ae383c52e6c79.svg",
+      "artworkSha256": "3836a381e2eeb6980ddf5775ee85b4cc0273a4e5e0e88b704e11a799f7b52ec0",
+      "assetSha256": "3836a381e2eeb6980ddf5775ee85b4cc0273a4e5e0e88b704e11a799f7b52ec0",
+      "assetFile": "assets/3836a381e2eeb6980ddf5775ee85b4cc0273a4e5e0e88b704e11a799f7b52ec0.svg",
       "repairs": [],
       "exportName": "PrivateOutlineTCPPortLogIcon"
     },
@@ -4974,9 +4975,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineWebFuzzerIcon",
       "canonicalArtworkSha256": "bd2a3f81dd739be19b74fd2db0497a8dee4364c11df70e9185cf8c7b512eaf0e",
-      "artworkSha256": "7d4098a406b17e683a6e0e82606aaea98bcc5cd403ca6d2b9894079e37c481f8",
-      "assetSha256": "7d4098a406b17e683a6e0e82606aaea98bcc5cd403ca6d2b9894079e37c481f8",
-      "assetFile": "assets/7d4098a406b17e683a6e0e82606aaea98bcc5cd403ca6d2b9894079e37c481f8.svg",
+      "artworkSha256": "e664438e8cfc5827cb08a795a25920dfcd0359361f184da5dfc4401fda4dd524",
+      "assetSha256": "e664438e8cfc5827cb08a795a25920dfcd0359361f184da5dfc4401fda4dd524",
+      "assetFile": "assets/e664438e8cfc5827cb08a795a25920dfcd0359361f184da5dfc4401fda4dd524.svg",
       "repairs": [],
       "exportName": "PrivateOutlineWebFuzzerIcon"
     },
@@ -4989,9 +4990,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateOutlineWebsocketFuzzerIcon",
       "canonicalArtworkSha256": "1c4d5acdbd89153c4dc3ef584da75cefbe5b0a812062ecd0ebd7026173412b20",
-      "artworkSha256": "fe6676be784e6b7db8d7b9c23a4cc2c4bb468cb82636fb2eb71487e1009e7868",
-      "assetSha256": "fe6676be784e6b7db8d7b9c23a4cc2c4bb468cb82636fb2eb71487e1009e7868",
-      "assetFile": "assets/fe6676be784e6b7db8d7b9c23a4cc2c4bb468cb82636fb2eb71487e1009e7868.svg",
+      "artworkSha256": "cdc8bc0ebbb534323d0ef648980acba592b10788465425685ca7c89509f7cc38",
+      "assetSha256": "cdc8bc0ebbb534323d0ef648980acba592b10788465425685ca7c89509f7cc38",
+      "assetFile": "assets/cdc8bc0ebbb534323d0ef648980acba592b10788465425685ca7c89509f7cc38.svg",
       "repairs": [],
       "exportName": "PrivateOutlineWebsocketFuzzerIcon"
     },
@@ -5004,9 +5005,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidAIAgentIcon",
       "canonicalArtworkSha256": "f58312ab82dcad8e5667da887cbd124bc2cac7c4e2f1d117e797dc4cc0bff2f9",
-      "artworkSha256": "1e9c34ea59010f32677eb65f815d2d3979e185d9200278ecf05008611261aade",
-      "assetSha256": "1e9c34ea59010f32677eb65f815d2d3979e185d9200278ecf05008611261aade",
-      "assetFile": "assets/1e9c34ea59010f32677eb65f815d2d3979e185d9200278ecf05008611261aade.svg",
+      "artworkSha256": "fe016837d2a849b5e30c430cd39c998263ed4040747e7d35dcb36acdddf6eb46",
+      "assetSha256": "fe016837d2a849b5e30c430cd39c998263ed4040747e7d35dcb36acdddf6eb46",
+      "assetFile": "assets/fe016837d2a849b5e30c430cd39c998263ed4040747e7d35dcb36acdddf6eb46.svg",
       "repairs": [],
       "exportName": "PrivateSolidAIAgentIcon"
     },
@@ -5019,9 +5020,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidAuditCodeIcon",
       "canonicalArtworkSha256": "54f1157bc3278338783d8847b42e211e2a81efdcac553e1de70fd7a7ab74422d",
-      "artworkSha256": "ebbf492c201320666d8150636d389a99f0f72df35992acb55675a12821972f12",
-      "assetSha256": "ebbf492c201320666d8150636d389a99f0f72df35992acb55675a12821972f12",
-      "assetFile": "assets/ebbf492c201320666d8150636d389a99f0f72df35992acb55675a12821972f12.svg",
+      "artworkSha256": "866cd41e16c110d10b8f6d64d8a25a4a7ea9b856b71f1da127b6db2042420581",
+      "assetSha256": "866cd41e16c110d10b8f6d64d8a25a4a7ea9b856b71f1da127b6db2042420581",
+      "assetFile": "assets/866cd41e16c110d10b8f6d64d8a25a4a7ea9b856b71f1da127b6db2042420581.svg",
       "repairs": [],
       "exportName": "PrivateSolidAuditCodeIcon"
     },
@@ -5038,9 +5039,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidAuditHoleIcon",
       "canonicalArtworkSha256": "48d978deb3c988f9435407d5dfb93795caa431c1a96d5d1ac71ffecc9b40c525",
-      "artworkSha256": "c2f83b953351f1086e3ca35b89e3540e8f6ffd6ca6cfa934bf52148f63d38665",
-      "assetSha256": "c2f83b953351f1086e3ca35b89e3540e8f6ffd6ca6cfa934bf52148f63d38665",
-      "assetFile": "assets/c2f83b953351f1086e3ca35b89e3540e8f6ffd6ca6cfa934bf52148f63d38665.svg",
+      "artworkSha256": "44b3802b572dd1731949890b1f8d7f8d6bc93a09073c672343db65baec1dd113",
+      "assetSha256": "44b3802b572dd1731949890b1f8d7f8d6bc93a09073c672343db65baec1dd113",
+      "assetFile": "assets/44b3802b572dd1731949890b1f8d7f8d6bc93a09073c672343db65baec1dd113.svg",
       "repairs": [],
       "exportName": "PrivateSolidAuditHoleIcon"
     },
@@ -5053,9 +5054,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidBasicCrawlerIcon",
       "canonicalArtworkSha256": "424ddba7a6b9bf6028cd35928f78c899497ccdb7e62d5ea5cdf40f54b2c54296",
-      "artworkSha256": "5e316052dd121ad3d2e066dbf2d3e26fb9cf1892d3dd8da92ea559f92bbb2ea8",
-      "assetSha256": "5e316052dd121ad3d2e066dbf2d3e26fb9cf1892d3dd8da92ea559f92bbb2ea8",
-      "assetFile": "assets/5e316052dd121ad3d2e066dbf2d3e26fb9cf1892d3dd8da92ea559f92bbb2ea8.svg",
+      "artworkSha256": "6e45c19e14f42f599aa6fb07991f66767c767df109e55eaabc76217047dc5ada",
+      "assetSha256": "6e45c19e14f42f599aa6fb07991f66767c767df109e55eaabc76217047dc5ada",
+      "assetFile": "assets/6e45c19e14f42f599aa6fb07991f66767c767df109e55eaabc76217047dc5ada.svg",
       "repairs": [],
       "exportName": "PrivateSolidBasicCrawlerIcon"
     },
@@ -5113,9 +5114,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidCodeScanIcon",
       "canonicalArtworkSha256": "157fee7ca69ca9bd14c9650f2d555382e86eb6e3b577f38d99ab01ee43177c7e",
-      "artworkSha256": "f3ecd1079329fd38971d5fe2c01a367cdefbe2a4d031cf1f487cff22fa561b99",
-      "assetSha256": "f3ecd1079329fd38971d5fe2c01a367cdefbe2a4d031cf1f487cff22fa561b99",
-      "assetFile": "assets/f3ecd1079329fd38971d5fe2c01a367cdefbe2a4d031cf1f487cff22fa561b99.svg",
+      "artworkSha256": "0a95f71d24750a5a3581241ab97cab1c156a73450ab1e1c30c68c28750e8a523",
+      "assetSha256": "0a95f71d24750a5a3581241ab97cab1c156a73450ab1e1c30c68c28750e8a523",
+      "assetFile": "assets/0a95f71d24750a5a3581241ab97cab1c156a73450ab1e1c30c68c28750e8a523.svg",
       "repairs": [],
       "exportName": "PrivateSolidCodeScanIcon"
     },
@@ -5132,9 +5133,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidCVEIcon",
       "canonicalArtworkSha256": "d95d62c6b3a7f0f10aac5975df0983a02acfcd7e39c924f060a5255e7706b9ef",
-      "artworkSha256": "607b52093f67f831bd5244eaec9e6f700dd102b0f77d7e539cede5a0a70de05b",
-      "assetSha256": "607b52093f67f831bd5244eaec9e6f700dd102b0f77d7e539cede5a0a70de05b",
-      "assetFile": "assets/607b52093f67f831bd5244eaec9e6f700dd102b0f77d7e539cede5a0a70de05b.svg",
+      "artworkSha256": "114428d0722ef3ccd9db4be727417ffbe27b220f9329641abe696d4d6b748f41",
+      "assetSha256": "114428d0722ef3ccd9db4be727417ffbe27b220f9329641abe696d4d6b748f41",
+      "assetFile": "assets/114428d0722ef3ccd9db4be727417ffbe27b220f9329641abe696d4d6b748f41.svg",
       "repairs": [],
       "exportName": "PrivateSolidCVEIcon"
     },
@@ -5162,9 +5163,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidDefaultPluginIcon",
       "canonicalArtworkSha256": "174f95125b824fe7ec5199bb7ca171557e1da3a7d0daac80fe4b285ef7f51a5d",
-      "artworkSha256": "97966944ca980cccc99e32f21953f06029f87d3fe5c4ed0bfab4a91c55456fed",
-      "assetSha256": "97966944ca980cccc99e32f21953f06029f87d3fe5c4ed0bfab4a91c55456fed",
-      "assetFile": "assets/97966944ca980cccc99e32f21953f06029f87d3fe5c4ed0bfab4a91c55456fed.svg",
+      "artworkSha256": "e81eb2fd3440a7d4145ff44925b7a080c9e0ec9f85a6d7962c470095dbe6620a",
+      "assetSha256": "e81eb2fd3440a7d4145ff44925b7a080c9e0ec9f85a6d7962c470095dbe6620a",
+      "assetFile": "assets/e81eb2fd3440a7d4145ff44925b7a080c9e0ec9f85a6d7962c470095dbe6620a.svg",
       "repairs": [],
       "exportName": "PrivateSolidDefaultPluginIcon"
     },
@@ -5181,9 +5182,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidDirectoryScanningIcon",
       "canonicalArtworkSha256": "f738eb16a4998f569572c50a27ff4431507feafd2f52183a631b02fc76d686f3",
-      "artworkSha256": "2bb62dee1a2f1ce1bfd80eeeb7b23608a721c7274c2a374b7f39059f4b7edb4c",
-      "assetSha256": "2bb62dee1a2f1ce1bfd80eeeb7b23608a721c7274c2a374b7f39059f4b7edb4c",
-      "assetFile": "assets/2bb62dee1a2f1ce1bfd80eeeb7b23608a721c7274c2a374b7f39059f4b7edb4c.svg",
+      "artworkSha256": "708b612c297a597123d5ad366531a3a55f74f5f2e4263fdb28bd2ed3d5ef2fe8",
+      "assetSha256": "708b612c297a597123d5ad366531a3a55f74f5f2e4263fdb28bd2ed3d5ef2fe8",
+      "assetFile": "assets/708b612c297a597123d5ad366531a3a55f74f5f2e4263fdb28bd2ed3d5ef2fe8.svg",
       "repairs": [],
       "exportName": "PrivateSolidDirectoryScanningIcon"
     },
@@ -5196,9 +5197,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidDNSLogIcon",
       "canonicalArtworkSha256": "5efcb95f9018d3c7f5ef654cf729112c8c8ae8c9fa77911fcabd9e545966f2de",
-      "artworkSha256": "0ec10acf3e0e4144d91c70d653523e47d027c3640a8ca14c0060eaa80c9b20be",
-      "assetSha256": "0ec10acf3e0e4144d91c70d653523e47d027c3640a8ca14c0060eaa80c9b20be",
-      "assetFile": "assets/0ec10acf3e0e4144d91c70d653523e47d027c3640a8ca14c0060eaa80c9b20be.svg",
+      "artworkSha256": "510f3a44a475abc69b5efe883ad06b8a70d5493079e62dae3bd561c13a52bed6",
+      "assetSha256": "510f3a44a475abc69b5efe883ad06b8a70d5493079e62dae3bd561c13a52bed6",
+      "assetFile": "assets/510f3a44a475abc69b5efe883ad06b8a70d5493079e62dae3bd561c13a52bed6.svg",
       "repairs": [],
       "exportName": "PrivateSolidDNSLogIcon"
     },
@@ -5230,9 +5231,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidFingerprintManageIcon",
       "canonicalArtworkSha256": "6b3e20db98cb79e3c1fff77371a0b98fb85286cd3973c6c7a50d3d2ee761ecd9",
-      "artworkSha256": "32d4f5d9905e9066ceab7beca624da7ce40255e1f753f00af40a3592dd0a6898",
-      "assetSha256": "32d4f5d9905e9066ceab7beca624da7ce40255e1f753f00af40a3592dd0a6898",
-      "assetFile": "assets/32d4f5d9905e9066ceab7beca624da7ce40255e1f753f00af40a3592dd0a6898.svg",
+      "artworkSha256": "603f8ccf208e72a86a14c4bb40ad5c6bca1ddc366eeaba36a3e90568a7b515ea",
+      "assetSha256": "603f8ccf208e72a86a14c4bb40ad5c6bca1ddc366eeaba36a3e90568a7b515ea",
+      "assetFile": "assets/603f8ccf208e72a86a14c4bb40ad5c6bca1ddc366eeaba36a3e90568a7b515ea.svg",
       "repairs": [],
       "exportName": "PrivateSolidFingerprintManageIcon"
     },
@@ -5249,9 +5250,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidHTTPHistoryIcon",
       "canonicalArtworkSha256": "065cd726bd63e8de5f25f6463494b6f0e6b3772431682e92f23c1fc746161932",
-      "artworkSha256": "0b70a071d46342d0061e86e5c016b8b52b17edb1e644b151a637182fbedfba77",
-      "assetSha256": "0b70a071d46342d0061e86e5c016b8b52b17edb1e644b151a637182fbedfba77",
-      "assetFile": "assets/0b70a071d46342d0061e86e5c016b8b52b17edb1e644b151a637182fbedfba77.svg",
+      "artworkSha256": "e0d83503b1f72a50d1dbdaf9866566ad630b497520738c9b420b4052ea67701d",
+      "assetSha256": "e0d83503b1f72a50d1dbdaf9866566ad630b497520738c9b420b4052ea67701d",
+      "assetFile": "assets/e0d83503b1f72a50d1dbdaf9866566ad630b497520738c9b420b4052ea67701d.svg",
       "repairs": [],
       "exportName": "PrivateSolidHTTPHistoryIcon"
     },
@@ -5362,9 +5363,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidProjectManagerIcon",
       "canonicalArtworkSha256": "864e2ea2255987cfef17343803f157edf947aa057bbea126d29d717079f51c0e",
-      "artworkSha256": "7b3aceff66504ffb92cec412d1f4d97a7c4391c0cb457111b89f4392848487e3",
-      "assetSha256": "7b3aceff66504ffb92cec412d1f4d97a7c4391c0cb457111b89f4392848487e3",
-      "assetFile": "assets/7b3aceff66504ffb92cec412d1f4d97a7c4391c0cb457111b89f4392848487e3.svg",
+      "artworkSha256": "01eb541e89e4b0add1a3ce697c741d0fa4928c5800e1135a25b79ea4a9062650",
+      "assetSha256": "01eb541e89e4b0add1a3ce697c741d0fa4928c5800e1135a25b79ea4a9062650",
+      "assetFile": "assets/01eb541e89e4b0add1a3ce697c741d0fa4928c5800e1135a25b79ea4a9062650.svg",
       "repairs": [],
       "exportName": "PrivateSolidProjectManagerIcon"
     },
@@ -5434,9 +5435,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidRuleManagementIcon",
       "canonicalArtworkSha256": "30db676e389436cf6949c4a67c81c34a20e35c601ecaf6608b3c5daf35d8f071",
-      "artworkSha256": "fdc8b799d5bb1f7beb6e834d9d67ea5ad26a621cd3e6f0452a1cadf3570f871e",
-      "assetSha256": "fdc8b799d5bb1f7beb6e834d9d67ea5ad26a621cd3e6f0452a1cadf3570f871e",
-      "assetFile": "assets/fdc8b799d5bb1f7beb6e834d9d67ea5ad26a621cd3e6f0452a1cadf3570f871e.svg",
+      "artworkSha256": "72ddc91feb2a82fa0905707001a3a42a948f23eb8690ec32c616ed0dcde9dfe0",
+      "assetSha256": "72ddc91feb2a82fa0905707001a3a42a948f23eb8690ec32c616ed0dcde9dfe0",
+      "assetFile": "assets/72ddc91feb2a82fa0905707001a3a42a948f23eb8690ec32c616ed0dcde9dfe0.svg",
       "repairs": [],
       "exportName": "PrivateSolidRuleManagementIcon"
     },
@@ -5468,9 +5469,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidShellReceiverIcon",
       "canonicalArtworkSha256": "7a4d8a314ddce17efce6a5adcbb046d03d6adc4d1a9277ed1d5b6c59d9e1a6cb",
-      "artworkSha256": "b40b8f51694fe0fd6ad2bc73075a538956c2b2c8493b737aaf9dca490d903d0a",
-      "assetSha256": "b40b8f51694fe0fd6ad2bc73075a538956c2b2c8493b737aaf9dca490d903d0a",
-      "assetFile": "assets/b40b8f51694fe0fd6ad2bc73075a538956c2b2c8493b737aaf9dca490d903d0a.svg",
+      "artworkSha256": "f14ce16d55435845bf0c3a43ca58018c131dee101b403a1dd497e89d3fde3f7a",
+      "assetSha256": "f14ce16d55435845bf0c3a43ca58018c131dee101b403a1dd497e89d3fde3f7a",
+      "assetFile": "assets/f14ce16d55435845bf0c3a43ca58018c131dee101b403a1dd497e89d3fde3f7a.svg",
       "repairs": [],
       "exportName": "PrivateSolidShellReceiverIcon"
     },
@@ -5487,9 +5488,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PrivateSolidSpaceEngineIcon",
       "canonicalArtworkSha256": "f17dadfcc882577717e49507918c5a934fd1cab772f13afbf8d7980d3ba5275f",
-      "artworkSha256": "5ca5d466bfd777abf72428f3a46574a0fd5234acfe148dbbcf380394ad8ca4f5",
-      "assetSha256": "5ca5d466bfd777abf72428f3a46574a0fd5234acfe148dbbcf380394ad8ca4f5",
-      "assetFile": "assets/5ca5d466bfd777abf72428f3a46574a0fd5234acfe148dbbcf380394ad8ca4f5.svg",
+      "artworkSha256": "47d797d58f832179b01132e3bc2846d599021318dc7443c80f649fba5af5af6c",
+      "assetSha256": "47d797d58f832179b01132e3bc2846d599021318dc7443c80f649fba5af5af6c",
+      "assetFile": "assets/47d797d58f832179b01132e3bc2846d599021318dc7443c80f649fba5af5af6c.svg",
       "repairs": [],
       "exportName": "PrivateSolidSpaceEngineIcon"
     },
@@ -5683,9 +5684,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicBlastingIcon",
       "canonicalArtworkSha256": "6a95682cd1fd772c8b85efbd16bd38e87c602a1b31afef997577eedb5012edf2",
-      "artworkSha256": "a384449f234e13c48cafe2990668deeb2f6856fbc1ebd9df627d6581896e05b7",
-      "assetSha256": "a384449f234e13c48cafe2990668deeb2f6856fbc1ebd9df627d6581896e05b7",
-      "assetFile": "assets/a384449f234e13c48cafe2990668deeb2f6856fbc1ebd9df627d6581896e05b7.svg",
+      "artworkSha256": "ca060f4c3961131305eaad5b259135acb2288291750e2e3fe6c9250a8e4cddf0",
+      "assetSha256": "ca060f4c3961131305eaad5b259135acb2288291750e2e3fe6c9250a8e4cddf0",
+      "assetFile": "assets/ca060f4c3961131305eaad5b259135acb2288291750e2e3fe6c9250a8e4cddf0.svg",
       "repairs": [],
       "exportName": "PublicBlastingIcon"
     },
@@ -5956,9 +5957,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicNotepadIcon",
       "canonicalArtworkSha256": "b264e672f124482964cafffdf9cfbce99156a1566b6ae8194671dece5e137a86",
-      "artworkSha256": "321c9cf1933b6cdcd60eeb8df83dbf0470ef4adad7cfa123c9e35022032cdaad",
-      "assetSha256": "321c9cf1933b6cdcd60eeb8df83dbf0470ef4adad7cfa123c9e35022032cdaad",
-      "assetFile": "assets/321c9cf1933b6cdcd60eeb8df83dbf0470ef4adad7cfa123c9e35022032cdaad.svg",
+      "artworkSha256": "04be9b7c6b8b9641353d72b3deb3241eb5398ad0e0a71768547dcd6faa85fe96",
+      "assetSha256": "04be9b7c6b8b9641353d72b3deb3241eb5398ad0e0a71768547dcd6faa85fe96",
+      "assetFile": "assets/04be9b7c6b8b9641353d72b3deb3241eb5398ad0e0a71768547dcd6faa85fe96.svg",
       "repairs": [],
       "exportName": "PublicNotepadIcon"
     },
@@ -6123,9 +6124,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicPublicToolLightbulbIcon",
       "canonicalArtworkSha256": "95c14616e8a6dfc9dc8064f6b0975b834fdeb0225a8c29b1f9d46ad2671d3afe",
-      "artworkSha256": "8b7d3db149661d19e66c624f95bfd21afad7b260de5329cba7e1d506261420e0",
-      "assetSha256": "8b7d3db149661d19e66c624f95bfd21afad7b260de5329cba7e1d506261420e0",
-      "assetFile": "assets/8b7d3db149661d19e66c624f95bfd21afad7b260de5329cba7e1d506261420e0.svg",
+      "artworkSha256": "1e0fc671818df379b7486a08761ecb6675f37631b5e3cd25b04266ab964387dc",
+      "assetSha256": "1e0fc671818df379b7486a08761ecb6675f37631b5e3cd25b04266ab964387dc",
+      "assetFile": "assets/1e0fc671818df379b7486a08761ecb6675f37631b5e3cd25b04266ab964387dc.svg",
       "repairs": [],
       "exportName": "PublicPublicToolLightbulbIcon"
     },
@@ -6222,9 +6223,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicSequenceAnimationIcon",
       "canonicalArtworkSha256": "e7e2f2f5c9ccb10af7459e4e2d2ff6e8e3ebd84e37c02df8bb4ea66faf2a1df1",
-      "artworkSha256": "ab5fcd057aae0700ea64493a51ebd2720c4ffff604bda7ba98ca159a9d62a4e8",
-      "assetSha256": "ab5fcd057aae0700ea64493a51ebd2720c4ffff604bda7ba98ca159a9d62a4e8",
-      "assetFile": "assets/ab5fcd057aae0700ea64493a51ebd2720c4ffff604bda7ba98ca159a9d62a4e8.svg",
+      "artworkSha256": "5a4207226363f4dcf48d89c2624a3138a28b38560474dcc5f08f61252e9a23b2",
+      "assetSha256": "5a4207226363f4dcf48d89c2624a3138a28b38560474dcc5f08f61252e9a23b2",
+      "assetFile": "assets/5a4207226363f4dcf48d89c2624a3138a28b38560474dcc5f08f61252e9a23b2.svg",
       "repairs": [],
       "exportName": "PublicSequenceAnimationIcon"
     },
@@ -6310,9 +6311,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolBasicCrawlerIcon",
       "canonicalArtworkSha256": "40c01b61989ff33ce6cefd1e3b94dd06d6bda73e21daa5ca32bcb0c99cd07a16",
-      "artworkSha256": "7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0",
-      "assetSha256": "7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0",
-      "assetFile": "assets/7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0.svg",
+      "artworkSha256": "b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf",
+      "assetSha256": "b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf",
+      "assetFile": "assets/b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf.svg",
       "repairs": [],
       "exportName": "PublicToolBasicCrawlerIcon"
     },
@@ -6325,9 +6326,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolCVEIcon",
       "canonicalArtworkSha256": "563c19bba73b57008d13fd15ba36030f258d17b8bbf7601fabd700f6f369dc1f",
-      "artworkSha256": "1a0309019c399f4d6c5c44ebdb30c1f6729455a7d058c777f1108e8d5eca912e",
-      "assetSha256": "1a0309019c399f4d6c5c44ebdb30c1f6729455a7d058c777f1108e8d5eca912e",
-      "assetFile": "assets/1a0309019c399f4d6c5c44ebdb30c1f6729455a7d058c777f1108e8d5eca912e.svg",
+      "artworkSha256": "cbdb30ad10f1c225a850aaf180e0826553201937b4c5e3d3a63fb63c98b38bc8",
+      "assetSha256": "cbdb30ad10f1c225a850aaf180e0826553201937b4c5e3d3a63fb63c98b38bc8",
+      "assetFile": "assets/cbdb30ad10f1c225a850aaf180e0826553201937b4c5e3d3a63fb63c98b38bc8.svg",
       "repairs": [],
       "exportName": "PublicToolCVEIcon"
     },
@@ -6344,9 +6345,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolDataCompareIcon",
       "canonicalArtworkSha256": "bf890cebe9a2f233398a27de2a8b285094b8e465aa2e8c7c89874142120302ea",
-      "artworkSha256": "fc7048dd6fef8d62d895504d71be9b89032a340ef037e57bd8b8f3ed8b8149de",
-      "assetSha256": "fc7048dd6fef8d62d895504d71be9b89032a340ef037e57bd8b8f3ed8b8149de",
-      "assetFile": "assets/fc7048dd6fef8d62d895504d71be9b89032a340ef037e57bd8b8f3ed8b8149de.svg",
+      "artworkSha256": "20bb1c535b1f040ae45825e9dea2c45d837c14abe5e1ec16eeef886d229e2706",
+      "assetSha256": "20bb1c535b1f040ae45825e9dea2c45d837c14abe5e1ec16eeef886d229e2706",
+      "assetFile": "assets/20bb1c535b1f040ae45825e9dea2c45d837c14abe5e1ec16eeef886d229e2706.svg",
       "repairs": [],
       "exportName": "PublicToolDataCompareIcon"
     },
@@ -6364,9 +6365,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolDBDomainIcon",
       "canonicalArtworkSha256": "1d107fe9e9a2fcb71f2240439516afc06f9f439cd8042e730afca10db844d9ba",
-      "artworkSha256": "bf3f855fc552d95d574db009881ec802c2340e0816e48452c979a0dffe34fbfd",
-      "assetSha256": "bf3f855fc552d95d574db009881ec802c2340e0816e48452c979a0dffe34fbfd",
-      "assetFile": "assets/bf3f855fc552d95d574db009881ec802c2340e0816e48452c979a0dffe34fbfd.svg",
+      "artworkSha256": "a2f764d097c0393089e7702844edd51e903983bcd2e51acc17b0a6564c4a0421",
+      "assetSha256": "a2f764d097c0393089e7702844edd51e903983bcd2e51acc17b0a6564c4a0421",
+      "assetFile": "assets/a2f764d097c0393089e7702844edd51e903983bcd2e51acc17b0a6564c4a0421.svg",
       "repairs": [],
       "exportName": "PublicToolDBDomainIcon"
     },
@@ -6383,9 +6384,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolDBHTTPHistoryIcon",
       "canonicalArtworkSha256": "6d5b1fd5b8cc934538b3c4151a37732be163c4bf000d1e10423ceabf4264aacc",
-      "artworkSha256": "23ada478c41916523751cd0ead358fad7db0277ec60c76c0c5eeb2ed9d1a6097",
-      "assetSha256": "23ada478c41916523751cd0ead358fad7db0277ec60c76c0c5eeb2ed9d1a6097",
-      "assetFile": "assets/23ada478c41916523751cd0ead358fad7db0277ec60c76c0c5eeb2ed9d1a6097.svg",
+      "artworkSha256": "4275e110ff7d6c66c6125946a1d0923aabdf048f26e922d39b5634585ff760a4",
+      "assetSha256": "4275e110ff7d6c66c6125946a1d0923aabdf048f26e922d39b5634585ff760a4",
+      "assetFile": "assets/4275e110ff7d6c66c6125946a1d0923aabdf048f26e922d39b5634585ff760a4.svg",
       "repairs": [],
       "exportName": "PublicToolDBHTTPHistoryIcon"
     },
@@ -6402,9 +6403,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolDBReportIcon",
       "canonicalArtworkSha256": "40c01b61989ff33ce6cefd1e3b94dd06d6bda73e21daa5ca32bcb0c99cd07a16",
-      "artworkSha256": "7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0",
-      "assetSha256": "7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0",
-      "assetFile": "assets/7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0.svg",
+      "artworkSha256": "b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf",
+      "assetSha256": "b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf",
+      "assetFile": "assets/b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf.svg",
       "repairs": [],
       "exportName": "PublicToolDBReportIcon"
     },
@@ -6417,9 +6418,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolDBRiskIcon",
       "canonicalArtworkSha256": "679305b54c6833a97cabcbc463b1b3d8bd53aa7efbf851024c6544e01c4eda9b",
-      "artworkSha256": "7bd29c60080cd6b036aac706ccc175f12e383e1fb13575906319b4149ba92a5e",
-      "assetSha256": "7bd29c60080cd6b036aac706ccc175f12e383e1fb13575906319b4149ba92a5e",
-      "assetFile": "assets/7bd29c60080cd6b036aac706ccc175f12e383e1fb13575906319b4149ba92a5e.svg",
+      "artworkSha256": "3731832e7124589e9c6dc66e3f28acd5fecc62b2afbfd5a8a2d0eeeecc9fa44a",
+      "assetSha256": "3731832e7124589e9c6dc66e3f28acd5fecc62b2afbfd5a8a2d0eeeecc9fa44a",
+      "assetFile": "assets/3731832e7124589e9c6dc66e3f28acd5fecc62b2afbfd5a8a2d0eeeecc9fa44a.svg",
       "repairs": [],
       "exportName": "PublicToolDBRiskIcon"
     },
@@ -6436,9 +6437,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolICMPSizeLogIcon",
       "canonicalArtworkSha256": "545724becf44364ffa58feee2f343b8c06127a6c61644993aabd81f128c02ca9",
-      "artworkSha256": "d380614f3943b3df69d0551a95ac1ba04d1f1062c6b1c62080df4b04cea3da97",
-      "assetSha256": "d380614f3943b3df69d0551a95ac1ba04d1f1062c6b1c62080df4b04cea3da97",
-      "assetFile": "assets/d380614f3943b3df69d0551a95ac1ba04d1f1062c6b1c62080df4b04cea3da97.svg",
+      "artworkSha256": "b0c64f7c835ed2701277d62b2e18a00db3e140d5a0b2d98de5336ecca0ce299d",
+      "assetSha256": "b0c64f7c835ed2701277d62b2e18a00db3e140d5a0b2d98de5336ecca0ce299d",
+      "assetFile": "assets/b0c64f7c835ed2701277d62b2e18a00db3e140d5a0b2d98de5336ecca0ce299d.svg",
       "repairs": [],
       "exportName": "PublicToolICMPSizeLogIcon"
     },
@@ -6455,9 +6456,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolModScanPortIcon",
       "canonicalArtworkSha256": "53573e301f4e4ec95dd817275f6ffa1cbde8bd08c29c54f91b4978af7ac764c0",
-      "artworkSha256": "de67cfb004aa95640abe8962e722ed96cf248784252a75de6753d215b07ccf44",
-      "assetSha256": "de67cfb004aa95640abe8962e722ed96cf248784252a75de6753d215b07ccf44",
-      "assetFile": "assets/de67cfb004aa95640abe8962e722ed96cf248784252a75de6753d215b07ccf44.svg",
+      "artworkSha256": "a0b81ac4d7c78121c778a2e6388cc7ddaf8bcdf4f3d4c87c38b910966fbdf2b7",
+      "assetSha256": "a0b81ac4d7c78121c778a2e6388cc7ddaf8bcdf4f3d4c87c38b910966fbdf2b7",
+      "assetFile": "assets/a0b81ac4d7c78121c778a2e6388cc7ddaf8bcdf4f3d4c87c38b910966fbdf2b7.svg",
       "repairs": [],
       "exportName": "PublicToolModScanPortIcon"
     },
@@ -6474,9 +6475,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolPayloadIcon",
       "canonicalArtworkSha256": "69b898d1a31890f30d84bd817aa71adc5ed0b1c6ffdd7b3956dd3be4d4073a2b",
-      "artworkSha256": "53f59074f74ef73cced257b86c2cbfda93891518ae9be8e660660ae77c657595",
-      "assetSha256": "53f59074f74ef73cced257b86c2cbfda93891518ae9be8e660660ae77c657595",
-      "assetFile": "assets/53f59074f74ef73cced257b86c2cbfda93891518ae9be8e660660ae77c657595.svg",
+      "artworkSha256": "4a724e7169772772c70c789dd071e9d1441278e775727e37370e073cb97e1a86",
+      "assetSha256": "4a724e7169772772c70c789dd071e9d1441278e775727e37370e073cb97e1a86",
+      "assetFile": "assets/4a724e7169772772c70c789dd071e9d1441278e775727e37370e073cb97e1a86.svg",
       "repairs": [],
       "exportName": "PublicToolPayloadIcon"
     },
@@ -6489,9 +6490,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolPluginHubIcon",
       "canonicalArtworkSha256": "a5e61b7fac76e3e0b30043a72f28bd14b7bd4a195182beb5d32c71f5057fda06",
-      "artworkSha256": "1a071f2c27a5a7d4a737724d8df7d18f1d78fb89887996a378147612afa3a0e9",
-      "assetSha256": "1a071f2c27a5a7d4a737724d8df7d18f1d78fb89887996a378147612afa3a0e9",
-      "assetFile": "assets/1a071f2c27a5a7d4a737724d8df7d18f1d78fb89887996a378147612afa3a0e9.svg",
+      "artworkSha256": "7b05dcd70b483e86e84e69ae9ef3625f759cfb2ace52f939c3bba3a81a84bf88",
+      "assetSha256": "7b05dcd70b483e86e84e69ae9ef3625f759cfb2ace52f939c3bba3a81a84bf88",
+      "assetFile": "assets/7b05dcd70b483e86e84e69ae9ef3625f759cfb2ace52f939c3bba3a81a84bf88.svg",
       "repairs": [],
       "exportName": "PublicToolPluginHubIcon"
     },
@@ -6508,9 +6509,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolReverseServerIcon",
       "canonicalArtworkSha256": "cc9f393f3379a1c545f230efb63b80aced049605d123587a496651f7f3a12fb9",
-      "artworkSha256": "3a140f91d36930517a532cec73948ce36b1dd6da395e5ff8cad6fa35e1a27817",
-      "assetSha256": "3a140f91d36930517a532cec73948ce36b1dd6da395e5ff8cad6fa35e1a27817",
-      "assetFile": "assets/3a140f91d36930517a532cec73948ce36b1dd6da395e5ff8cad6fa35e1a27817.svg",
+      "artworkSha256": "1ba0b5f8020129b9e03ac55ce9035b15d621597ca27a64412183e3c312ab314d",
+      "assetSha256": "1ba0b5f8020129b9e03ac55ce9035b15d621597ca27a64412183e3c312ab314d",
+      "assetFile": "assets/1ba0b5f8020129b9e03ac55ce9035b15d621597ca27a64412183e3c312ab314d.svg",
       "repairs": [],
       "exportName": "PublicToolReverseServerIcon"
     },
@@ -6523,9 +6524,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolScreenRecorderPageIcon",
       "canonicalArtworkSha256": "0e30b0203641f3f6ccd4b7b6d8e70f499ba8c85f17cb915714bc7da00343ab16",
-      "artworkSha256": "ac9becafa07680919343d7369f6961b3937a6d1dd9a72592ff27436cdadaaa13",
-      "assetSha256": "ac9becafa07680919343d7369f6961b3937a6d1dd9a72592ff27436cdadaaa13",
-      "assetFile": "assets/ac9becafa07680919343d7369f6961b3937a6d1dd9a72592ff27436cdadaaa13.svg",
+      "artworkSha256": "e597cc3c5b3ac49c05867607929971bfb6e8035ef3831e8d39358a9b8d04fb9c",
+      "assetSha256": "e597cc3c5b3ac49c05867607929971bfb6e8035ef3831e8d39358a9b8d04fb9c",
+      "assetFile": "assets/e597cc3c5b3ac49c05867607929971bfb6e8035ef3831e8d39358a9b8d04fb9c.svg",
       "repairs": [],
       "exportName": "PublicToolScreenRecorderPageIcon"
     },
@@ -6538,9 +6539,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolScreenRecordingIcon",
       "canonicalArtworkSha256": "8a779a4d32e2f83343cbf8a21a704f35ab82b7898c0f5063eeb74c1f62acaa77",
-      "artworkSha256": "2c96b825e568c7fda6d53bc455581ceb694cd2245b9e91c26854c1f10bd07252",
-      "assetSha256": "2c96b825e568c7fda6d53bc455581ceb694cd2245b9e91c26854c1f10bd07252",
-      "assetFile": "assets/2c96b825e568c7fda6d53bc455581ceb694cd2245b9e91c26854c1f10bd07252.svg",
+      "artworkSha256": "428f3f22135b441910ae0ec1617660aa30354993b1e0916c7847d70dda0d8f59",
+      "assetSha256": "428f3f22135b441910ae0ec1617660aa30354993b1e0916c7847d70dda0d8f59",
+      "assetFile": "assets/428f3f22135b441910ae0ec1617660aa30354993b1e0916c7847d70dda0d8f59.svg",
       "repairs": [],
       "exportName": "PublicToolScreenRecordingIcon"
     },
@@ -6557,9 +6558,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolScreenshotIcon",
       "canonicalArtworkSha256": "2a979faa9f55841b9fa2531cf49c36337b6e7aad4440aaaff1aed6d3bfb3a13a",
-      "artworkSha256": "b3ee19209fff69088c342bd20320c74b85d907c84d21e61f363c02f0410eb29e",
-      "assetSha256": "b3ee19209fff69088c342bd20320c74b85d907c84d21e61f363c02f0410eb29e",
-      "assetFile": "assets/b3ee19209fff69088c342bd20320c74b85d907c84d21e61f363c02f0410eb29e.svg",
+      "artworkSha256": "4d12a655739b28e2d5521bdd0758fca7607cd8d2f95dbd919e3d53a8bcaad85c",
+      "assetSha256": "4d12a655739b28e2d5521bdd0758fca7607cd8d2f95dbd919e3d53a8bcaad85c",
+      "assetFile": "assets/4d12a655739b28e2d5521bdd0758fca7607cd8d2f95dbd919e3d53a8bcaad85c.svg",
       "repairs": [],
       "exportName": "PublicToolScreenshotIcon"
     },
@@ -6576,9 +6577,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolShellReceiverIcon",
       "canonicalArtworkSha256": "3fd879c038247db6864db190fd892fa94fd9ca972f24846a08df112a153ceb4e",
-      "artworkSha256": "3ea3b893b4da50dbf694ea7aca7eb560c2e133e2bb59bccc3d7e18e505abee5c",
-      "assetSha256": "3ea3b893b4da50dbf694ea7aca7eb560c2e133e2bb59bccc3d7e18e505abee5c",
-      "assetFile": "assets/3ea3b893b4da50dbf694ea7aca7eb560c2e133e2bb59bccc3d7e18e505abee5c.svg",
+      "artworkSha256": "9e264cd7cc83bf2a1112a01d5b7853a8201ad762f1008539d4004ea41b771e95",
+      "assetSha256": "9e264cd7cc83bf2a1112a01d5b7853a8201ad762f1008539d4004ea41b771e95",
+      "assetFile": "assets/9e264cd7cc83bf2a1112a01d5b7853a8201ad762f1008539d4004ea41b771e95.svg",
       "repairs": [],
       "exportName": "PublicToolShellReceiverIcon"
     },
@@ -6595,9 +6596,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolSpaceEngineIcon",
       "canonicalArtworkSha256": "e5d8c55cc086ef534de71939c4da0c8fb314838f6ce504f7bdf32b2126e545ff",
-      "artworkSha256": "aa0f4e9d5a011ce9f11ebf06e97fd4584b594de4858dc85a6ed05eb93b393e12",
-      "assetSha256": "aa0f4e9d5a011ce9f11ebf06e97fd4584b594de4858dc85a6ed05eb93b393e12",
-      "assetFile": "assets/aa0f4e9d5a011ce9f11ebf06e97fd4584b594de4858dc85a6ed05eb93b393e12.svg",
+      "artworkSha256": "15afeea1c18e2707c0d749816b868c9e342d2688114826ede7cbc95c6230dfeb",
+      "assetSha256": "15afeea1c18e2707c0d749816b868c9e342d2688114826ede7cbc95c6230dfeb",
+      "assetFile": "assets/15afeea1c18e2707c0d749816b868c9e342d2688114826ede7cbc95c6230dfeb.svg",
       "repairs": [],
       "exportName": "PublicToolSpaceEngineIcon"
     },
@@ -6614,9 +6615,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolSubDomainCollectionIcon",
       "canonicalArtworkSha256": "e633d9940ceb2b5252dafc063daf637eaee039dda09c8f8b49d6f6e9674897ee",
-      "artworkSha256": "d66b1ba48c87988767a2956683da5e056ca5214333c25e87ada829371d580724",
-      "assetSha256": "d66b1ba48c87988767a2956683da5e056ca5214333c25e87ada829371d580724",
-      "assetFile": "assets/d66b1ba48c87988767a2956683da5e056ca5214333c25e87ada829371d580724.svg",
+      "artworkSha256": "49dd50652549c79edc3974ff683a9c50d0de0be015362f7c2653d69fc0185e42",
+      "assetSha256": "49dd50652549c79edc3974ff683a9c50d0de0be015362f7c2653d69fc0185e42",
+      "assetFile": "assets/49dd50652549c79edc3974ff683a9c50d0de0be015362f7c2653d69fc0185e42.svg",
       "repairs": [],
       "exportName": "PublicToolSubDomainCollectionIcon"
     },
@@ -6634,9 +6635,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolTCPPortLogIcon",
       "canonicalArtworkSha256": "aaac41c5015e52a14073d8155906dd13fef89de737946467916878850c9bd4dc",
-      "artworkSha256": "1ee48d6978225b38941cd819b92ae07b096eaff5de7e97208273f85ed11c29af",
-      "assetSha256": "1ee48d6978225b38941cd819b92ae07b096eaff5de7e97208273f85ed11c29af",
-      "assetFile": "assets/1ee48d6978225b38941cd819b92ae07b096eaff5de7e97208273f85ed11c29af.svg",
+      "artworkSha256": "a5f726b641d5a581acdb02f858e9ee6b30bd7c8b32525bf028b6f76efcf6254c",
+      "assetSha256": "a5f726b641d5a581acdb02f858e9ee6b30bd7c8b32525bf028b6f76efcf6254c",
+      "assetFile": "assets/a5f726b641d5a581acdb02f858e9ee6b30bd7c8b32525bf028b6f76efcf6254c.svg",
       "repairs": [],
       "exportName": "PublicToolTCPPortLogIcon"
     },
@@ -6653,9 +6654,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolVulinboxIcon",
       "canonicalArtworkSha256": "b650b31e77220bfabb3170842bd5256393b0ca38c7ab4410a5addc790cb003a4",
-      "artworkSha256": "670f292b68ed1b829513bcb986cd90ee5b5f1ba4bf456f24e1d6c25c476c1d3c",
-      "assetSha256": "670f292b68ed1b829513bcb986cd90ee5b5f1ba4bf456f24e1d6c25c476c1d3c",
-      "assetFile": "assets/670f292b68ed1b829513bcb986cd90ee5b5f1ba4bf456f24e1d6c25c476c1d3c.svg",
+      "artworkSha256": "49a262f680497b59f52244f6d96754b693f745e61682f73226f3153c7ee47b81",
+      "assetSha256": "49a262f680497b59f52244f6d96754b693f745e61682f73226f3153c7ee47b81",
+      "assetFile": "assets/49a262f680497b59f52244f6d96754b693f745e61682f73226f3153c7ee47b81.svg",
       "repairs": [],
       "exportName": "PublicToolVulinboxIcon"
     },
@@ -6672,9 +6673,9 @@
       "sourceKind": "main-audit",
       "sourceName": "PublicToolWebsocketFuzzerIcon",
       "canonicalArtworkSha256": "e347b7983d3351a882ebd6986c279954672e4f58a92f9640abfd0338547ef130",
-      "artworkSha256": "33c126b6662c3cbb79144933cd85bbc499cbe3ed225b3e6787ed7fdd6db6e914",
-      "assetSha256": "33c126b6662c3cbb79144933cd85bbc499cbe3ed225b3e6787ed7fdd6db6e914",
-      "assetFile": "assets/33c126b6662c3cbb79144933cd85bbc499cbe3ed225b3e6787ed7fdd6db6e914.svg",
+      "artworkSha256": "01da17c1c1108dc49af1233a28d6263060c4f12416a7848f23f131d1ba710f0c",
+      "assetSha256": "01da17c1c1108dc49af1233a28d6263060c4f12416a7848f23f131d1ba710f0c",
+      "assetFile": "assets/01da17c1c1108dc49af1233a28d6263060c4f12416a7848f23f131d1ba710f0c.svg",
       "repairs": [],
       "exportName": "PublicToolWebsocketFuzzerIcon"
     },
@@ -6719,16 +6720,16 @@
   ],
   "exports": [
     {
-      "assetFile": "assets/b4bfb4c5cfc0e2c76f63842ece92a2c498df2059213feba3a525571efdf0bb61.svg",
-      "artworkSha256": "b4bfb4c5cfc0e2c76f63842ece92a2c498df2059213feba3a525571efdf0bb61",
+      "assetFile": "assets/b1ffce7f92ec21dfa1e21272b64914acf6e9d06de7099a136b75bc75ea8d07f3.svg",
+      "artworkSha256": "b1ffce7f92ec21dfa1e21272b64914acf6e9d06de7099a136b75bc75ea8d07f3",
       "exportName": "AIDeleteNodeIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/ai-agent/chatTemplate/aiTaskExecutionDetails/icon.tsx::AIDeleteNodeIcon"
       ]
     },
     {
-      "assetFile": "assets/3a111b0b17361f42e51e88129d7ddd1f9181a7c90b2e70f0fbf2b71bd7bbb973.svg",
-      "artworkSha256": "3a111b0b17361f42e51e88129d7ddd1f9181a7c90b2e70f0fbf2b71bd7bbb973",
+      "assetFile": "assets/98cee4c63ee2d12aedfe9951eca0f47b7e20f1689f5409df560f067f4df0cab3.svg",
+      "artworkSha256": "98cee4c63ee2d12aedfe9951eca0f47b7e20f1689f5409df560f067f4df0cab3",
       "exportName": "AIDetailsDashIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/ai-agent/aiChatWelcome/icon.tsx::AIDetailsDashIcon"
@@ -6773,8 +6774,8 @@
       ]
     },
     {
-      "assetFile": "assets/3122e0d8aca229d1d036dca8e8df059fc58d2fd9399def413ef28feb6e6636c5.svg",
-      "artworkSha256": "3122e0d8aca229d1d036dca8e8df059fc58d2fd9399def413ef28feb6e6636c5",
+      "assetFile": "assets/748163e0b062d980d5f23220870270264d0e6befd43ede5ea57ca65130350cb3.svg",
+      "artworkSha256": "748163e0b062d980d5f23220870270264d0e6befd43ede5ea57ca65130350cb3",
       "exportName": "AISkippedNodeIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/ai-agent/chatTemplate/aiTaskExecutionDetails/icon.tsx::AISkippedNodeIcon"
@@ -6797,8 +6798,8 @@
       ]
     },
     {
-      "assetFile": "assets/cb722c8840a0f209f0a7463188729a33b3f1b2c06814a6b9678ad9753ac3832d.svg",
-      "artworkSha256": "cb722c8840a0f209f0a7463188729a33b3f1b2c06814a6b9678ad9753ac3832d",
+      "assetFile": "assets/1d91f9a338a7c1cbb0f4a03ae466401993157730f84e3fe8e39fc0e11453e8ae.svg",
+      "artworkSha256": "1d91f9a338a7c1cbb0f4a03ae466401993157730f84e3fe8e39fc0e11453e8ae",
       "exportName": "AIToDoListPendingIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/ai-re-act/aiReActChat/aiToDoList/icon.tsx::AIToDoListPendingIcon"
@@ -6825,8 +6826,8 @@
       "sourceKeys": ["app/renderer/src/main/src/components/CeUserMenu/icon.tsx::AlipayIcon"]
     },
     {
-      "assetFile": "assets/3337104d399e0d1f7bcd0661689fe3c9d0da6e64a1d5e49d1c991cd346f1ec78.svg",
-      "artworkSha256": "3337104d399e0d1f7bcd0661689fe3c9d0da6e64a1d5e49d1c991cd346f1ec78",
+      "assetFile": "assets/a9b458a337fb6e757362657b068b85abb46fe3bb6e9e8aa265a29f7cdad11699.svg",
+      "artworkSha256": "a9b458a337fb6e757362657b068b85abb46fe3bb6e9e8aa265a29f7cdad11699",
       "exportName": "ArrowDownIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::ArrowDownIcon"]
     },
@@ -6891,8 +6892,8 @@
       "sourceKeys": ["app/renderer/src/main/src/pages/KnowledgeBase/icon/sidebarIcon.tsx::CatIcon"]
     },
     {
-      "assetFile": "assets/06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c.svg",
-      "artworkSha256": "06961ab3b990c2b18f726821716e2951923c1500cb2499c161609e9014a9bb3c",
+      "assetFile": "assets/854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340.svg",
+      "artworkSha256": "854b46bdd5ab715722f6ab85637afdc7d4496905e50c1e3d47a3a98afc623340",
       "exportName": "CheckCircleOutlineIcon",
       "sourceKeys": [
         "app/renderer/engine-link-startup/src/assets/newIcon.tsx::CheckCircleOutlineIcon",
@@ -6957,8 +6958,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/commonProcessIcons.tsx::ClashIconSvgIcon"]
     },
     {
-      "assetFile": "assets/2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191.svg",
-      "artworkSha256": "2c89b62e0ba5ab1a9f84cde38862391853951cbbda8a804e6c996160f65b8191",
+      "assetFile": "assets/7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd.svg",
+      "artworkSha256": "7ee1f4d0579c91a87e46b157d26423b043b832d28e0553b6b51b92b2677f9fdd",
       "exportName": "CloseCircleIcon",
       "sourceKeys": [
         "app/renderer/engine-link-startup/src/assets/newIcon.tsx::CloseCircleIcon",
@@ -6966,8 +6967,8 @@
       ]
     },
     {
-      "assetFile": "assets/fa8e0acf74b0965e61e5fe154730bdc4dd103583f0d6f7c1430b961138876cc9.svg",
-      "artworkSha256": "fa8e0acf74b0965e61e5fe154730bdc4dd103583f0d6f7c1430b961138876cc9",
+      "assetFile": "assets/bc4867e4a7ee36d07e0b376406df1e555ed8ab6a587aa761f23b2b166c704ff2.svg",
+      "artworkSha256": "bc4867e4a7ee36d07e0b376406df1e555ed8ab6a587aa761f23b2b166c704ff2",
       "exportName": "ColorsAIIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/colors.tsx::ColorsAIIcon"]
     },
@@ -7002,8 +7003,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/colors.tsx::ColorsTaskNodesIcon"]
     },
     {
-      "assetFile": "assets/76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca.svg",
-      "artworkSha256": "76d3765dcd602453c5096c38ece2640826ddac06d16dbb5c327c16f2b2b9ecca",
+      "assetFile": "assets/4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022.svg",
+      "artworkSha256": "4386b9fe55ceb96d611e737fcec474a9a1968f5a165e621369eb20e8c1c23022",
       "exportName": "ControlMyselfIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/assets/icons.tsx::ControlMyselfIcon",
@@ -7038,8 +7039,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/commonProcessIcons.tsx::CursorIcon"]
     },
     {
-      "assetFile": "assets/35c2b63fdd5820dee26bbf8ad02c43762c44449c1929003c9ea76c59baba240f.svg",
-      "artworkSha256": "35c2b63fdd5820dee26bbf8ad02c43762c44449c1929003c9ea76c59baba240f",
+      "assetFile": "assets/6852cbc59001b4d0f9aa39f8cea3b60237628d6b11359c2cd82934f1b9c00a97.svg",
+      "artworkSha256": "6852cbc59001b4d0f9aa39f8cea3b60237628d6b11359c2cd82934f1b9c00a97",
       "exportName": "DesktopComputerSvgIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::DesktopComputerSvgIcon"]
     },
@@ -7066,8 +7067,8 @@
       ]
     },
     {
-      "assetFile": "assets/ab2d0f1ee3eb7000740dffa1eb6ef10a5b4a348074f88c4402067d3b9755a018.svg",
-      "artworkSha256": "ab2d0f1ee3eb7000740dffa1eb6ef10a5b4a348074f88c4402067d3b9755a018",
+      "assetFile": "assets/0bd918bde7181a55020f398c00d81fb3d57c5b8f9f73ace35c30b0479f8932c8.svg",
+      "artworkSha256": "0bd918bde7181a55020f398c00d81fb3d57c5b8f9f73ace35c30b0479f8932c8",
       "exportName": "DocumentDownloadSvgIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/softwareSettings/icon.tsx::DocumentDownloadSvgIcon"
@@ -7106,14 +7107,14 @@
       "sourceKeys": ["app/renderer/src/main/src/components/layout/globalStateIcon.tsx::ErrorIcon"]
     },
     {
-      "assetFile": "assets/74feebc2fecf465f8698c55e5976ce13a4274a18b9e239103d6a261c4236de4c.svg",
-      "artworkSha256": "74feebc2fecf465f8698c55e5976ce13a4274a18b9e239103d6a261c4236de4c",
+      "assetFile": "assets/9fc8b025288776d55a799cae96fc2ee78f2542690c7bd24685e127d2e76b9897.svg",
+      "artworkSha256": "9fc8b025288776d55a799cae96fc2ee78f2542690c7bd24685e127d2e76b9897",
       "exportName": "ExclamationIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::ExclamationIcon"]
     },
     {
-      "assetFile": "assets/9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9.svg",
-      "artworkSha256": "9a75cd93460a6503b5e21438e4e7389f1e9df8d528cbac670a30967bce3546c9",
+      "assetFile": "assets/d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f.svg",
+      "artworkSha256": "d0fb07c6945689a588069b6d1d74a05477182e2d6011dc2ddd85505aedd7d52f",
       "exportName": "ExclamationOutlineIcon",
       "sourceKeys": [
         "app/renderer/engine-link-startup/src/assets/newIcon.tsx::ExclamationOutlineIcon",
@@ -7153,8 +7154,8 @@
       "sourceKeys": ["app/renderer/src/main/src/pages/softwareSettings/icon.tsx::FolderOpenSvgIcon"]
     },
     {
-      "assetFile": "assets/4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f.svg",
-      "artworkSha256": "4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f",
+      "assetFile": "assets/d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf.svg",
+      "artworkSha256": "d33c0bc1ed9c931a8881751157951f75fbc8bc5f9f38233a3b5940fa773499bf",
       "exportName": "GooglePhotosLogoSvgIcon",
       "sourceKeys": [
         "app/renderer/engine-link-startup/src/assets/newIcon.tsx::GooglePhotosLogoSvgIcon",
@@ -7190,8 +7191,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::HollowLightningBoltIcon"]
     },
     {
-      "assetFile": "assets/210004e15dee0b31892585398068d8a6abb6dd78fe813b394cf9e1a44db003df.svg",
-      "artworkSha256": "210004e15dee0b31892585398068d8a6abb6dd78fe813b394cf9e1a44db003df",
+      "assetFile": "assets/c06b8302b19e23808747cfe35465027a69a959e4605ec7e2e5aac74ee36dea99.svg",
+      "artworkSha256": "c06b8302b19e23808747cfe35465027a69a959e4605ec7e2e5aac74ee36dea99",
       "exportName": "HomeIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::HomeIcon"]
     },
@@ -7220,68 +7221,68 @@
       ]
     },
     {
-      "assetFile": "assets/3c87208af64c38054fbf81f9355ae985c989d2b6f7234077a533eca42ba818c8.svg",
-      "artworkSha256": "3c87208af64c38054fbf81f9355ae985c989d2b6f7234077a533eca42ba818c8",
+      "assetFile": "assets/b43bf40a28f60ff16e60eb0f24d8cd10073904edc1a3c315b0332ef896f63a91.svg",
+      "artworkSha256": "b43bf40a28f60ff16e60eb0f24d8cd10073904edc1a3c315b0332ef896f63a91",
       "exportName": "IconBold",
       "sourceKeys": ["app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconBold"]
     },
     {
-      "assetFile": "assets/d9c09dcd51234fdab95c9a103fcefe48db741071f636ddd757b0470b1d40d9f3.svg",
-      "artworkSha256": "d9c09dcd51234fdab95c9a103fcefe48db741071f636ddd757b0470b1d40d9f3",
+      "assetFile": "assets/2369f70cabf49bf44677e34fc722ce0b2f4e0d57b2c877d48ec5ec900688650f.svg",
+      "artworkSha256": "2369f70cabf49bf44677e34fc722ce0b2f4e0d57b2c877d48ec5ec900688650f",
       "exportName": "IconCheckSquare",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconCheckSquare"
       ]
     },
     {
-      "assetFile": "assets/5a1c9c11572628d6ba6833090048fa6b6d845b69bb0afddca0b0e86dc1630647.svg",
-      "artworkSha256": "5a1c9c11572628d6ba6833090048fa6b6d845b69bb0afddca0b0e86dc1630647",
+      "assetFile": "assets/2e2374096828fe95b2839f21561215a7d028edec9424fdddb64f54a98b0ea875.svg",
+      "artworkSha256": "2e2374096828fe95b2839f21561215a7d028edec9424fdddb64f54a98b0ea875",
       "exportName": "IconCode2",
       "sourceKeys": ["app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconCode2"]
     },
     {
-      "assetFile": "assets/4bd9a4c5643664e8c585af12278dc5ec9fdb91e60b3d63d1f5d79a75c61a47df.svg",
-      "artworkSha256": "4bd9a4c5643664e8c585af12278dc5ec9fdb91e60b3d63d1f5d79a75c61a47df",
+      "assetFile": "assets/f7edd3039675d2a5b525b6ddef134641b7c8ca67ba61e29066e939d6ff8ab578.svg",
+      "artworkSha256": "f7edd3039675d2a5b525b6ddef134641b7c8ca67ba61e29066e939d6ff8ab578",
       "exportName": "IconCurlyBraces",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconCurlyBraces"
       ]
     },
     {
-      "assetFile": "assets/dc87dd8a8b42f225f3742f411e12f1f213f847000bde416ac337b763a2245c4b.svg",
-      "artworkSha256": "dc87dd8a8b42f225f3742f411e12f1f213f847000bde416ac337b763a2245c4b",
+      "assetFile": "assets/414df2d2842d7bbce04b12cd2c039d047b47e61912d89ef50df83638258f2019.svg",
+      "artworkSha256": "414df2d2842d7bbce04b12cd2c039d047b47e61912d89ef50df83638258f2019",
       "exportName": "IconFlipVertical",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconFlipVertical"
       ]
     },
     {
-      "assetFile": "assets/34410d8c9a8f9160be81c898cc8fe1aec328644bcab55287acabda87d113400e.svg",
-      "artworkSha256": "34410d8c9a8f9160be81c898cc8fe1aec328644bcab55287acabda87d113400e",
+      "assetFile": "assets/9df8465369013f01a25633b1c1de0e239446645d35de5aba6c199798dc63b5e8.svg",
+      "artworkSha256": "9df8465369013f01a25633b1c1de0e239446645d35de5aba6c199798dc63b5e8",
       "exportName": "IconHeading1",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconHeading1"
       ]
     },
     {
-      "assetFile": "assets/3ba20756d4d581b980f10ffc6f28b87257b98756acc8850d5487df57ed73c3d2.svg",
-      "artworkSha256": "3ba20756d4d581b980f10ffc6f28b87257b98756acc8850d5487df57ed73c3d2",
+      "assetFile": "assets/711b8857ef92a6206c1401297066afef7a0497a62e517d0a75af1819fa56796c.svg",
+      "artworkSha256": "711b8857ef92a6206c1401297066afef7a0497a62e517d0a75af1819fa56796c",
       "exportName": "IconHeading2",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconHeading2"
       ]
     },
     {
-      "assetFile": "assets/6e836cbc61f1cf233511d12bcd977088cd06b4012f1b01b74770662bbe641703.svg",
-      "artworkSha256": "6e836cbc61f1cf233511d12bcd977088cd06b4012f1b01b74770662bbe641703",
+      "assetFile": "assets/dff2b2994f367de5ae99d6423e9903858a06567626c98035fd0e88475c2c4292.svg",
+      "artworkSha256": "dff2b2994f367de5ae99d6423e9903858a06567626c98035fd0e88475c2c4292",
       "exportName": "IconHeading3",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconHeading3"
       ]
     },
     {
-      "assetFile": "assets/25f680ab73897fe240e23a65c20399f53d93403ade8a12e3bbe659515e219488.svg",
-      "artworkSha256": "25f680ab73897fe240e23a65c20399f53d93403ade8a12e3bbe659515e219488",
+      "assetFile": "assets/45e7831ec8e9fcedb96ea509916290bf4cad61a750c2a4b9df5315fc69f6c3b4.svg",
+      "artworkSha256": "45e7831ec8e9fcedb96ea509916290bf4cad61a750c2a4b9df5315fc69f6c3b4",
       "exportName": "IconItalic",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconItalic"
@@ -7312,8 +7313,8 @@
       ]
     },
     {
-      "assetFile": "assets/b8eb459830c388496d23b20f0231e633c2bed2ba2004590f484bf2dcf5163977.svg",
-      "artworkSha256": "b8eb459830c388496d23b20f0231e633c2bed2ba2004590f484bf2dcf5163977",
+      "assetFile": "assets/dc7a8f5f103bd50d2bd6bdd35a6a99a361f543762cc6195408d280f918ab9140.svg",
+      "artworkSha256": "dc7a8f5f103bd50d2bd6bdd35a6a99a361f543762cc6195408d280f918ab9140",
       "exportName": "IconQuote",
       "sourceKeys": ["app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconQuote"]
     },
@@ -7348,36 +7349,36 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::IconSolidTagIcon"]
     },
     {
-      "assetFile": "assets/16f00d445b7f1c82369a759e09133c64b677acc7eec1ec7c2611ba6825ecb2a6.svg",
-      "artworkSha256": "16f00d445b7f1c82369a759e09133c64b677acc7eec1ec7c2611ba6825ecb2a6",
+      "assetFile": "assets/2a1ce3b7b251131c9c0729060ace711bff109666b60692ef45565d07b2327ba1.svg",
+      "artworkSha256": "2a1ce3b7b251131c9c0729060ace711bff109666b60692ef45565d07b2327ba1",
       "exportName": "IconStrikethrough",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconStrikethrough"
       ]
     },
     {
-      "assetFile": "assets/d86ece995b84c51fe81ae5e9c36e562c6d6cb6d4b9db82dc63e6a8bbf51a9de7.svg",
-      "artworkSha256": "d86ece995b84c51fe81ae5e9c36e562c6d6cb6d4b9db82dc63e6a8bbf51a9de7",
+      "assetFile": "assets/e04b2d54620455c89e36901a2672ccee7049c70bea1d8cc5c88aff287c9d82bd.svg",
+      "artworkSha256": "e04b2d54620455c89e36901a2672ccee7049c70bea1d8cc5c88aff287c9d82bd",
       "exportName": "IconType",
       "sourceKeys": ["app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconType"]
     },
     {
-      "assetFile": "assets/439fa3b621980e8d557114c633bccec120c239b40db864343e9fdc1b0d0eabf9.svg",
-      "artworkSha256": "439fa3b621980e8d557114c633bccec120c239b40db864343e9fdc1b0d0eabf9",
+      "assetFile": "assets/0a628e79c2fa967204506cea42208af0cb4b98fe7de8ebe22a6e64b272844369.svg",
+      "artworkSha256": "0a628e79c2fa967204506cea42208af0cb4b98fe7de8ebe22a6e64b272844369",
       "exportName": "IconUnderline",
       "sourceKeys": [
         "app/renderer/src/main/src/components/MilkdownEditor/icon/icon.tsx::IconUnderline"
       ]
     },
     {
-      "assetFile": "assets/d9f20358189dc13793a9a788a822792ced1c69a797d0f482aa6c1cfc58639314.svg",
-      "artworkSha256": "d9f20358189dc13793a9a788a822792ced1c69a797d0f482aa6c1cfc58639314",
+      "assetFile": "assets/554b2eed096d9eb4213350f2d978de40fa09bec89c6dab724373f51ffa22b262.svg",
+      "artworkSha256": "554b2eed096d9eb4213350f2d978de40fa09bec89c6dab724373f51ffa22b262",
       "exportName": "ImportIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icons.tsx::ImportIcon"]
     },
     {
-      "assetFile": "assets/46f298832f17a38a22686336b2d918f8c08e1abb289555711e642a18e81ba82b.svg",
-      "artworkSha256": "46f298832f17a38a22686336b2d918f8c08e1abb289555711e642a18e81ba82b",
+      "assetFile": "assets/0d43e4db1ce69f6dad61309fb2acd2e165b5910044126287b90fc0ac7dd843b2.svg",
+      "artworkSha256": "0d43e4db1ce69f6dad61309fb2acd2e165b5910044126287b90fc0ac7dd843b2",
       "exportName": "ImportSvgIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::ImportSvgIcon"]
     },
@@ -7390,8 +7391,8 @@
       ]
     },
     {
-      "assetFile": "assets/3e363d351e3f6ca0f6e8e9db22c1e1056c561ad8c91e6a164d8d6a331b119790.svg",
-      "artworkSha256": "3e363d351e3f6ca0f6e8e9db22c1e1056c561ad8c91e6a164d8d6a331b119790",
+      "assetFile": "assets/f42cc8ed32fc11397c50224849da38546f4497b19f7c7c6e064f3bd9b8d7c3ac.svg",
+      "artworkSha256": "f42cc8ed32fc11397c50224849da38546f4497b19f7c7c6e064f3bd9b8d7c3ac",
       "exportName": "InheritLineIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/fuzzer/FuzzerSequence/icon.tsx::InheritLineIcon"
@@ -7557,8 +7558,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/commonProcessIcons.tsx::OpenvpnIcon"]
     },
     {
-      "assetFile": "assets/322af27f9dd83bd081345dd2f85de524edb2f927bebde50d96da46c7f52bf7fa.svg",
-      "artworkSha256": "322af27f9dd83bd081345dd2f85de524edb2f927bebde50d96da46c7f52bf7fa",
+      "assetFile": "assets/22859c8d1925c054a393eb61b60489acb4f2b3527f2b81d33156a1adc9da96d0.svg",
+      "artworkSha256": "22859c8d1925c054a393eb61b60489acb4f2b3527f2b81d33156a1adc9da96d0",
       "exportName": "OutlinCompileIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlinCompileIcon"]
     },
@@ -7577,8 +7578,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/colors.tsx::OutlineBotIcon"]
     },
     {
-      "assetFile": "assets/f538c7026f45de4911dee9e61937cb95645e267b6f96bc011843eca0bb30145b.svg",
-      "artworkSha256": "f538c7026f45de4911dee9e61937cb95645e267b6f96bc011843eca0bb30145b",
+      "assetFile": "assets/86207fac21ae6b5c8a97891fd4131a0f5347e4e0a6f06fdfa80c773642f03d3c.svg",
+      "artworkSha256": "86207fac21ae6b5c8a97891fd4131a0f5347e4e0a6f06fdfa80c773642f03d3c",
       "exportName": "OutlineBugIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineBugIcon"]
     },
@@ -7597,8 +7598,8 @@
       "sourceKeys": ["app/renderer/src/main/src/components/yakChat/icon.tsx::OutlineChartPieIcon"]
     },
     {
-      "assetFile": "assets/2b5a8eab645873e457db18481b46fdd20de03099a708513c81aca2286f869f99.svg",
-      "artworkSha256": "2b5a8eab645873e457db18481b46fdd20de03099a708513c81aca2286f869f99",
+      "assetFile": "assets/4018ec48a7ca7a70d35d33f1ac54b2bbf8c000d128e55bb66bf49c3b3ec4c866.svg",
+      "artworkSha256": "4018ec48a7ca7a70d35d33f1ac54b2bbf8c000d128e55bb66bf49c3b3ec4c866",
       "exportName": "OutlineConfiguredIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineConfiguredIcon"
@@ -7627,8 +7628,8 @@
       ]
     },
     {
-      "assetFile": "assets/22cfeff1e87510f5f96796edd736896ce832f4817cf4da852dd4bbe6cc25bf5a.svg",
-      "artworkSha256": "22cfeff1e87510f5f96796edd736896ce832f4817cf4da852dd4bbe6cc25bf5a",
+      "assetFile": "assets/c70c482f6480f74d118aa3f021386d148e7889a7c5e4d2ced5e3f521cfb11107.svg",
+      "artworkSha256": "c70c482f6480f74d118aa3f021386d148e7889a7c5e4d2ced5e3f521cfb11107",
       "exportName": "OutlineNotebookIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineNotebookIcon"
@@ -7663,16 +7664,16 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlinePayloadIcon"]
     },
     {
-      "assetFile": "assets/57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012.svg",
-      "artworkSha256": "57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012",
+      "assetFile": "assets/3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68.svg",
+      "artworkSha256": "3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68",
       "exportName": "OutlineReloadScanIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineReloadScanIcon"
       ]
     },
     {
-      "assetFile": "assets/57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012.svg",
-      "artworkSha256": "57677be40b0c4702abe8599c33ba64a514ed0c50d4b506011297ec4d5505a012",
+      "assetFile": "assets/3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68.svg",
+      "artworkSha256": "3d93717ba7fd28d05e7d53ed437c12039d9e7d9ac8fe47d92beefdedec440a68",
       "exportName": "OutlineScanRuleEditIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineScanRuleEditIcon"
@@ -7699,8 +7700,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineThoughtIcon"]
     },
     {
-      "assetFile": "assets/b95117f140e921db16836bbaf12b9f8289d4e125fdb675aa46066a52b761fa6e.svg",
-      "artworkSha256": "b95117f140e921db16836bbaf12b9f8289d4e125fdb675aa46066a52b761fa6e",
+      "assetFile": "assets/4cbb000b9469f4e3a4a871b3b09b1654b21985ec677f0493be90d3ec7962f358.svg",
+      "artworkSha256": "4cbb000b9469f4e3a4a871b3b09b1654b21985ec677f0493be90d3ec7962f358",
       "exportName": "OutlineTimeIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineTimeIcon"]
     },
@@ -7713,8 +7714,8 @@
       ]
     },
     {
-      "assetFile": "assets/1ada2df8af1489337737f321dc598f5b78ee403a778089fb1b637e19eb516cbf.svg",
-      "artworkSha256": "1ada2df8af1489337737f321dc598f5b78ee403a778089fb1b637e19eb516cbf",
+      "assetFile": "assets/af7ee9a0081db0ebd425a366f33388ffa31d5a16ca83c1678190457a2bebfd4e.svg",
+      "artworkSha256": "af7ee9a0081db0ebd425a366f33388ffa31d5a16ca83c1678190457a2bebfd4e",
       "exportName": "OutlineUnConfiguredIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/assets/icon/bespokeOutline.tsx::OutlineUnConfiguredIcon"
@@ -7778,14 +7779,14 @@
       ]
     },
     {
-      "assetFile": "assets/cc1d4a2f7eff6fddf9daaea1f2e4269bd5c063df197a3d63d95f44aafa0d6764.svg",
-      "artworkSha256": "cc1d4a2f7eff6fddf9daaea1f2e4269bd5c063df197a3d63d95f44aafa0d6764",
+      "assetFile": "assets/8debd3f8e9575eeb87124c8d517537306c9dfc6efaae98aa34b9b29f8461c4ec.svg",
+      "artworkSha256": "8debd3f8e9575eeb87124c8d517537306c9dfc6efaae98aa34b9b29f8461c4ec",
       "exportName": "PayFailedIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/CeUserMenu/icon.tsx::PayFailedIcon"]
     },
     {
-      "assetFile": "assets/f6bc0d02c7dc9df94b52cf10c15c2139974692bc98a5423cf58beb65067d780a.svg",
-      "artworkSha256": "f6bc0d02c7dc9df94b52cf10c15c2139974692bc98a5423cf58beb65067d780a",
+      "assetFile": "assets/ce72482dcd75b3f3b4303c59c1c953251a2cf47f5caf2efa55b2e31f36ac0e6a.svg",
+      "artworkSha256": "ce72482dcd75b3f3b4303c59c1c953251a2cf47f5caf2efa55b2e31f36ac0e6a",
       "exportName": "PaySuccessIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/CeUserMenu/icon.tsx::PaySuccessIcon"]
     },
@@ -7814,8 +7815,8 @@
       "sourceKeys": ["app/renderer/src/main/src/pages/plugins/icon.tsx::PluginTestWarningIcon"]
     },
     {
-      "assetFile": "assets/d614a71ca5138fef95db3b1ba9b87c5fc74513dd9af311480bb107a00e75cafd.svg",
-      "artworkSha256": "d614a71ca5138fef95db3b1ba9b87c5fc74513dd9af311480bb107a00e75cafd",
+      "assetFile": "assets/423abe87521be57b3d8c3198a4ca6768b23afad4995f8f13c55df75afaa945e0.svg",
+      "artworkSha256": "423abe87521be57b3d8c3198a4ca6768b23afad4995f8f13c55df75afaa945e0",
       "exportName": "PlusSmIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::PlusSmIcon"]
     },
@@ -7828,8 +7829,8 @@
       ]
     },
     {
-      "assetFile": "assets/636e908bb9281503afde7eab6315a6efc370a11adb966aebd6f1cb9961a4af56.svg",
-      "artworkSha256": "636e908bb9281503afde7eab6315a6efc370a11adb966aebd6f1cb9961a4af56",
+      "assetFile": "assets/70ace5ea0e6abcdb892c2c4b9d70c470c4c0d743a93a8af018f5014a7012f8fb.svg",
+      "artworkSha256": "70ace5ea0e6abcdb892c2c4b9d70c470c4c0d743a93a8af018f5014a7012f8fb",
       "exportName": "PrivateOutlineAIAgentIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineAIAgentIcon"]
     },
@@ -7842,38 +7843,38 @@
       ]
     },
     {
-      "assetFile": "assets/7ec6dfd334c19da7da12373e6deaf866b78812ae96f6a5cfdfe6d00303852b95.svg",
-      "artworkSha256": "7ec6dfd334c19da7da12373e6deaf866b78812ae96f6a5cfdfe6d00303852b95",
+      "assetFile": "assets/cb8635d270dedaddf3eeff28b25ca54c534d7eed082e85cb1866fa52f4570614.svg",
+      "artworkSha256": "cb8635d270dedaddf3eeff28b25ca54c534d7eed082e85cb1866fa52f4570614",
       "exportName": "PrivateOutlineAuditHoleIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineAuditHoleIcon"
       ]
     },
     {
-      "assetFile": "assets/60dc48ed2d9fac203c9d4b1e9c66be2d82535eb0cb330628c27d024900d29a54.svg",
-      "artworkSha256": "60dc48ed2d9fac203c9d4b1e9c66be2d82535eb0cb330628c27d024900d29a54",
+      "assetFile": "assets/34e7ab6dc0677c35dc89c4cb8ceed9d9e28248f2d865f5b45d4a3c077bbfc0ac.svg",
+      "artworkSha256": "34e7ab6dc0677c35dc89c4cb8ceed9d9e28248f2d865f5b45d4a3c077bbfc0ac",
       "exportName": "PrivateOutlineBasicCrawlerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineBasicCrawlerIcon"
       ]
     },
     {
-      "assetFile": "assets/76746250d24fe6d969d8950f14b058bdf3bc4b051f89c8e2f7ff56de79fe5c41.svg",
-      "artworkSha256": "76746250d24fe6d969d8950f14b058bdf3bc4b051f89c8e2f7ff56de79fe5c41",
+      "assetFile": "assets/189fd83a3a2ae5789f09a54e703db05eeef061fd139cd1f594b81535135ddc7e.svg",
+      "artworkSha256": "189fd83a3a2ae5789f09a54e703db05eeef061fd139cd1f594b81535135ddc7e",
       "exportName": "PrivateOutlineBatchPluginIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineBatchPluginIcon"
       ]
     },
     {
-      "assetFile": "assets/49d84d5d56783be3baf5cb9a9a8ad2e0ae1f1f0406444e8d92621bb4296fe125.svg",
-      "artworkSha256": "49d84d5d56783be3baf5cb9a9a8ad2e0ae1f1f0406444e8d92621bb4296fe125",
+      "assetFile": "assets/ab204bc6728e3f953dcd360be574c72664fe79d9d7004025430a1344f0510e74.svg",
+      "artworkSha256": "ab204bc6728e3f953dcd360be574c72664fe79d9d7004025430a1344f0510e74",
       "exportName": "PrivateOutlineBruteIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineBruteIcon"]
     },
     {
-      "assetFile": "assets/0c9a652318e9267bd7a208d9ad7c696215c517a81eee4646c80cbbe9eab84f73.svg",
-      "artworkSha256": "0c9a652318e9267bd7a208d9ad7c696215c517a81eee4646c80cbbe9eab84f73",
+      "assetFile": "assets/3d471bdf5f90ef7b9711c80981e6489b20588472af840fa8b8c86db399c9bbae.svg",
+      "artworkSha256": "3d471bdf5f90ef7b9711c80981e6489b20588472af840fa8b8c86db399c9bbae",
       "exportName": "PrivateOutlineCodecIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineCodecIcon"]
     },
@@ -7884,44 +7885,44 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineCodeScanIcon"]
     },
     {
-      "assetFile": "assets/bb8517a7adc7504753ab4f2368138bfa67f1f56e0200d35c7a296b58f260e525.svg",
-      "artworkSha256": "bb8517a7adc7504753ab4f2368138bfa67f1f56e0200d35c7a296b58f260e525",
+      "assetFile": "assets/0ab9742cd52b433792a457dc567dc344c32486c1a7a0f2955f70e03475756b8d.svg",
+      "artworkSha256": "0ab9742cd52b433792a457dc567dc344c32486c1a7a0f2955f70e03475756b8d",
       "exportName": "PrivateOutlineCVEIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineCVEIcon"]
     },
     {
-      "assetFile": "assets/b60ffd99f4aa983058016a0fda91bcbd0d267da2ce9359b4d231e6a585077fa2.svg",
-      "artworkSha256": "b60ffd99f4aa983058016a0fda91bcbd0d267da2ce9359b4d231e6a585077fa2",
+      "assetFile": "assets/706c1d150a7de1bdf6af3c88035de5fe6b402ed7a210290357a4675db372bd3c.svg",
+      "artworkSha256": "706c1d150a7de1bdf6af3c88035de5fe6b402ed7a210290357a4675db372bd3c",
       "exportName": "PrivateOutlineDataCompareIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineDataCompareIcon"
       ]
     },
     {
-      "assetFile": "assets/5338a9433cb90ac8ab16ccf7ad23f1cdb01593a0e211eb9c04d5007967f92dd4.svg",
-      "artworkSha256": "5338a9433cb90ac8ab16ccf7ad23f1cdb01593a0e211eb9c04d5007967f92dd4",
+      "assetFile": "assets/e68d3297302bb1653fc17b78523b01cede8802d92de5c966e9407946bac961c9.svg",
+      "artworkSha256": "e68d3297302bb1653fc17b78523b01cede8802d92de5c966e9407946bac961c9",
       "exportName": "PrivateOutlineDefaultPluginIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineDefaultPluginIcon"
       ]
     },
     {
-      "assetFile": "assets/a83c0c65444419828b81cbd2922cc6db3cd336d7f9bc08ecfeb8e564d12e5851.svg",
-      "artworkSha256": "a83c0c65444419828b81cbd2922cc6db3cd336d7f9bc08ecfeb8e564d12e5851",
+      "assetFile": "assets/ef7c1190f8cf1e097d40ba8bedc38c1b8a8b43d45e801de3e2ad46aed03cc4e1.svg",
+      "artworkSha256": "ef7c1190f8cf1e097d40ba8bedc38c1b8a8b43d45e801de3e2ad46aed03cc4e1",
       "exportName": "PrivateOutlineDirectoryScanningIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineDirectoryScanningIcon"
       ]
     },
     {
-      "assetFile": "assets/64e4184ae406f02068d6d1a0f6965112740a27943cc76f5019f86487d654d655.svg",
-      "artworkSha256": "64e4184ae406f02068d6d1a0f6965112740a27943cc76f5019f86487d654d655",
+      "assetFile": "assets/e67b866f5fedf582f7ad615864b87526317ea7a2cb4f286613b37c5118b9ac18.svg",
+      "artworkSha256": "e67b866f5fedf582f7ad615864b87526317ea7a2cb4f286613b37c5118b9ac18",
       "exportName": "PrivateOutlineDNSLogIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineDNSLogIcon"]
     },
     {
-      "assetFile": "assets/8c9b9f4c53473e9cca2a28b5726d8fc467cba1e36d44dba1f0c575fc9a0809ac.svg",
-      "artworkSha256": "8c9b9f4c53473e9cca2a28b5726d8fc467cba1e36d44dba1f0c575fc9a0809ac",
+      "assetFile": "assets/c8152e4bb82d5051273cac361d515515a7e1c9302582732f7796b1e4dbb2f0c0.svg",
+      "artworkSha256": "c8152e4bb82d5051273cac361d515515a7e1c9302582732f7796b1e4dbb2f0c0",
       "exportName": "PrivateOutlineDomainIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineDomainIcon"]
     },
@@ -7934,166 +7935,166 @@
       ]
     },
     {
-      "assetFile": "assets/39264dfd81a22370d8549ae4c4b5b48ea0d1389b8e36afdec3e6fdf62ea8dbc7.svg",
-      "artworkSha256": "39264dfd81a22370d8549ae4c4b5b48ea0d1389b8e36afdec3e6fdf62ea8dbc7",
+      "assetFile": "assets/a8050dcce2c105ce860f6baf6c015362f59e97448e3b825c6ae42c66585b1c89.svg",
+      "artworkSha256": "a8050dcce2c105ce860f6baf6c015362f59e97448e3b825c6ae42c66585b1c89",
       "exportName": "PrivateOutlineHTTPHistoryIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineHTTPHistoryIcon"
       ]
     },
     {
-      "assetFile": "assets/5ceeee256855b52a16c28e4bb89c977867075b7b4f41889926ef44f27902247b.svg",
-      "artworkSha256": "5ceeee256855b52a16c28e4bb89c977867075b7b4f41889926ef44f27902247b",
+      "assetFile": "assets/da80bc573dcd3330bd4c4ca727eb1e01dacc7d33c46328413c52155f25e5fe10.svg",
+      "artworkSha256": "da80bc573dcd3330bd4c4ca727eb1e01dacc7d33c46328413c52155f25e5fe10",
       "exportName": "PrivateOutlineICMPSizeLogIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineICMPSizeLogIcon"
       ]
     },
     {
-      "assetFile": "assets/569211c19e72ae7478966bc2b6391e43dded9adde4b5041d2adcd14fa4602893.svg",
-      "artworkSha256": "569211c19e72ae7478966bc2b6391e43dded9adde4b5041d2adcd14fa4602893",
+      "assetFile": "assets/a753735421844ac45337065c346f9a3ee555e0935975713c6e90c912bcd0c23a.svg",
+      "artworkSha256": "a753735421844ac45337065c346f9a3ee555e0935975713c6e90c912bcd0c23a",
       "exportName": "PrivateOutlineMitmIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineMitmIcon"]
     },
     {
-      "assetFile": "assets/1e55c2966a6dba3dde39716614a42a67839a72f93448452bece49824d77cf0be.svg",
-      "artworkSha256": "1e55c2966a6dba3dde39716614a42a67839a72f93448452bece49824d77cf0be",
+      "assetFile": "assets/76109a925209ccb3087c01abdb269e0c4570930de6e69510c10869b7a385b7eb.svg",
+      "artworkSha256": "76109a925209ccb3087c01abdb269e0c4570930de6e69510c10869b7a385b7eb",
       "exportName": "PrivateOutlinePayloadGeneraterIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlinePayloadGeneraterIcon"
       ]
     },
     {
-      "assetFile": "assets/cce19e5554063561d7cb4e7240503aa3fef8ed88422f92041cec9fcda828dec1.svg",
-      "artworkSha256": "cce19e5554063561d7cb4e7240503aa3fef8ed88422f92041cec9fcda828dec1",
+      "assetFile": "assets/a71712d5921a9bb1d73dd34369656d010b51ba741736358b0e740c2b1818a449.svg",
+      "artworkSha256": "a71712d5921a9bb1d73dd34369656d010b51ba741736358b0e740c2b1818a449",
       "exportName": "PrivateOutlinePluginStoreIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlinePluginStoreIcon"
       ]
     },
     {
-      "assetFile": "assets/a4b069098f094ba30f9be4f664a5c00ace98a28998e19fe8af42bf704392587c.svg",
-      "artworkSha256": "a4b069098f094ba30f9be4f664a5c00ace98a28998e19fe8af42bf704392587c",
+      "assetFile": "assets/a7e5858ea1258adea93ab20aff97751d447b7b07545b43f4282f3ba4abdcff39.svg",
+      "artworkSha256": "a7e5858ea1258adea93ab20aff97751d447b7b07545b43f4282f3ba4abdcff39",
       "exportName": "PrivateOutlinePocIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlinePocIcon"]
     },
     {
-      "assetFile": "assets/b7d5046f8f6f9ec87a40e953f3277dacb7377e2b6d761aa987ffd3377efeb1da.svg",
-      "artworkSha256": "b7d5046f8f6f9ec87a40e953f3277dacb7377e2b6d761aa987ffd3377efeb1da",
+      "assetFile": "assets/70299444892ccca39484486ceb232cd3d3f002d09f22000d1cc2d3cb12249644.svg",
+      "artworkSha256": "70299444892ccca39484486ceb232cd3d3f002d09f22000d1cc2d3cb12249644",
       "exportName": "PrivateOutlinePortsIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlinePortsIcon"]
     },
     {
-      "assetFile": "assets/f69d9cf6d67c26f8917945d8ccdbcca63f371023e7e84997a29853518454f970.svg",
-      "artworkSha256": "f69d9cf6d67c26f8917945d8ccdbcca63f371023e7e84997a29853518454f970",
+      "assetFile": "assets/7ed0e4239aee1c084a3fa517e9fcab2ffab8f8c29104672e91ab49f4218b6ddc.svg",
+      "artworkSha256": "7ed0e4239aee1c084a3fa517e9fcab2ffab8f8c29104672e91ab49f4218b6ddc",
       "exportName": "PrivateOutlineProjectManagerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineProjectManagerIcon"
       ]
     },
     {
-      "assetFile": "assets/a086751c40eb7b549b03352d9360ebc40f62ea54dea596fb6a865d85de898f63.svg",
-      "artworkSha256": "a086751c40eb7b549b03352d9360ebc40f62ea54dea596fb6a865d85de898f63",
+      "assetFile": "assets/71b81d5e7bd5854f2ab230c80d2a9abf4aae53e7a85e0266a2318ec2d1c1eb70.svg",
+      "artworkSha256": "71b81d5e7bd5854f2ab230c80d2a9abf4aae53e7a85e0266a2318ec2d1c1eb70",
       "exportName": "PrivateOutlineReportIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineReportIcon"]
     },
     {
-      "assetFile": "assets/7ef6638be4db07a4da635136d5d1eef1b9020601ce8e32b6e97b8b18faec7b21.svg",
-      "artworkSha256": "7ef6638be4db07a4da635136d5d1eef1b9020601ce8e32b6e97b8b18faec7b21",
+      "assetFile": "assets/b6e1be9b40cd6f4b0e465d86ba859084d747fb67c127d0b183e0a661c5d4215a.svg",
+      "artworkSha256": "b6e1be9b40cd6f4b0e465d86ba859084d747fb67c127d0b183e0a661c5d4215a",
       "exportName": "PrivateOutlineReverseServerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineReverseServerIcon"
       ]
     },
     {
-      "assetFile": "assets/ec637a2a36592198f65b26bed689e0d320899cea0ea058d8a771e365f7654a47.svg",
-      "artworkSha256": "ec637a2a36592198f65b26bed689e0d320899cea0ea058d8a771e365f7654a47",
+      "assetFile": "assets/40f25b38f38ceaa8e6b07e33f8660b235e9f6e4c03d8112177752cb06e2c7f92.svg",
+      "artworkSha256": "40f25b38f38ceaa8e6b07e33f8660b235e9f6e4c03d8112177752cb06e2c7f92",
       "exportName": "PrivateOutlineRiskIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineRiskIcon"]
     },
     {
-      "assetFile": "assets/82aac7926c7e28df15c720be5a5b5e8a2ba4c358cc98988a09194f70d62f7246.svg",
-      "artworkSha256": "82aac7926c7e28df15c720be5a5b5e8a2ba4c358cc98988a09194f70d62f7246",
+      "assetFile": "assets/dd6ecf1f91efdc1cc480ef52c4974100259c46c2498b3fbe7c7656c1c457f9db.svg",
+      "artworkSha256": "dd6ecf1f91efdc1cc480ef52c4974100259c46c2498b3fbe7c7656c1c457f9db",
       "exportName": "PrivateOutlineRuleManagementIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineRuleManagementIcon"
       ]
     },
     {
-      "assetFile": "assets/0d03eff314bf976ed0fdbfc3f021724dcd489210b6a33f9f48492c1d1c818a2f.svg",
-      "artworkSha256": "0d03eff314bf976ed0fdbfc3f021724dcd489210b6a33f9f48492c1d1c818a2f",
+      "assetFile": "assets/c40f74018fd5f48f9d728b331f77b3a3a1fe59cea9f041b73af150b856a89747.svg",
+      "artworkSha256": "c40f74018fd5f48f9d728b331f77b3a3a1fe59cea9f041b73af150b856a89747",
       "exportName": "PrivateOutlineScanPortIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineScanPortIcon"]
     },
     {
-      "assetFile": "assets/4af8ead3475c602ceda5cc4a477afe5549c036c93d3cf5b2ec14f10d47f46821.svg",
-      "artworkSha256": "4af8ead3475c602ceda5cc4a477afe5549c036c93d3cf5b2ec14f10d47f46821",
+      "assetFile": "assets/38a8648438d292337b93c7cf5d6fe77c603d551884fb32e1629a42bde364e4e9.svg",
+      "artworkSha256": "38a8648438d292337b93c7cf5d6fe77c603d551884fb32e1629a42bde364e4e9",
       "exportName": "PrivateOutlineShellReceiverIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineShellReceiverIcon"
       ]
     },
     {
-      "assetFile": "assets/b7ef8403c6e8a0bee0fe4a110cb1c90ba06bf8fefb0df84c5a108f975b8755e8.svg",
-      "artworkSha256": "b7ef8403c6e8a0bee0fe4a110cb1c90ba06bf8fefb0df84c5a108f975b8755e8",
+      "assetFile": "assets/b9a8bf31c932e8df00407e5e4080710bf140faf4deca77266ab0312836da73f5.svg",
+      "artworkSha256": "b9a8bf31c932e8df00407e5e4080710bf140faf4deca77266ab0312836da73f5",
       "exportName": "PrivateOutlineSpaceEngineIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineSpaceEngineIcon"
       ]
     },
     {
-      "assetFile": "assets/7ba991d59ccd39abe39bea0089d5d4e71adbaf48f553c99097778facef6e8e31.svg",
-      "artworkSha256": "7ba991d59ccd39abe39bea0089d5d4e71adbaf48f553c99097778facef6e8e31",
+      "assetFile": "assets/c7e748eb67140642c5f986c41f464867da5d66bb66f10b1ee9e82ac323e6b403.svg",
+      "artworkSha256": "c7e748eb67140642c5f986c41f464867da5d66bb66f10b1ee9e82ac323e6b403",
       "exportName": "PrivateOutlineSubDomainCollectionIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineSubDomainCollectionIcon"
       ]
     },
     {
-      "assetFile": "assets/c67167d9853a00f2e1f72cdfb0f2ae9509d921135ee71258cf3ae383c52e6c79.svg",
-      "artworkSha256": "c67167d9853a00f2e1f72cdfb0f2ae9509d921135ee71258cf3ae383c52e6c79",
+      "assetFile": "assets/3836a381e2eeb6980ddf5775ee85b4cc0273a4e5e0e88b704e11a799f7b52ec0.svg",
+      "artworkSha256": "3836a381e2eeb6980ddf5775ee85b4cc0273a4e5e0e88b704e11a799f7b52ec0",
       "exportName": "PrivateOutlineTCPPortLogIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineTCPPortLogIcon"
       ]
     },
     {
-      "assetFile": "assets/7d4098a406b17e683a6e0e82606aaea98bcc5cd403ca6d2b9894079e37c481f8.svg",
-      "artworkSha256": "7d4098a406b17e683a6e0e82606aaea98bcc5cd403ca6d2b9894079e37c481f8",
+      "assetFile": "assets/e664438e8cfc5827cb08a795a25920dfcd0359361f184da5dfc4401fda4dd524.svg",
+      "artworkSha256": "e664438e8cfc5827cb08a795a25920dfcd0359361f184da5dfc4401fda4dd524",
       "exportName": "PrivateOutlineWebFuzzerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineWebFuzzerIcon"
       ]
     },
     {
-      "assetFile": "assets/fe6676be784e6b7db8d7b9c23a4cc2c4bb468cb82636fb2eb71487e1009e7868.svg",
-      "artworkSha256": "fe6676be784e6b7db8d7b9c23a4cc2c4bb468cb82636fb2eb71487e1009e7868",
+      "assetFile": "assets/cdc8bc0ebbb534323d0ef648980acba592b10788465425685ca7c89509f7cc38.svg",
+      "artworkSha256": "cdc8bc0ebbb534323d0ef648980acba592b10788465425685ca7c89509f7cc38",
       "exportName": "PrivateOutlineWebsocketFuzzerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateOutlineWebsocketFuzzerIcon"
       ]
     },
     {
-      "assetFile": "assets/1e9c34ea59010f32677eb65f815d2d3979e185d9200278ecf05008611261aade.svg",
-      "artworkSha256": "1e9c34ea59010f32677eb65f815d2d3979e185d9200278ecf05008611261aade",
+      "assetFile": "assets/fe016837d2a849b5e30c430cd39c998263ed4040747e7d35dcb36acdddf6eb46.svg",
+      "artworkSha256": "fe016837d2a849b5e30c430cd39c998263ed4040747e7d35dcb36acdddf6eb46",
       "exportName": "PrivateSolidAIAgentIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidAIAgentIcon"]
     },
     {
-      "assetFile": "assets/ebbf492c201320666d8150636d389a99f0f72df35992acb55675a12821972f12.svg",
-      "artworkSha256": "ebbf492c201320666d8150636d389a99f0f72df35992acb55675a12821972f12",
+      "assetFile": "assets/866cd41e16c110d10b8f6d64d8a25a4a7ea9b856b71f1da127b6db2042420581.svg",
+      "artworkSha256": "866cd41e16c110d10b8f6d64d8a25a4a7ea9b856b71f1da127b6db2042420581",
       "exportName": "PrivateSolidAuditCodeIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidAuditCodeIcon"]
     },
     {
-      "assetFile": "assets/c2f83b953351f1086e3ca35b89e3540e8f6ffd6ca6cfa934bf52148f63d38665.svg",
-      "artworkSha256": "c2f83b953351f1086e3ca35b89e3540e8f6ffd6ca6cfa934bf52148f63d38665",
+      "assetFile": "assets/44b3802b572dd1731949890b1f8d7f8d6bc93a09073c672343db65baec1dd113.svg",
+      "artworkSha256": "44b3802b572dd1731949890b1f8d7f8d6bc93a09073c672343db65baec1dd113",
       "exportName": "PrivateSolidAuditHoleIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidAuditHoleIcon"]
     },
     {
-      "assetFile": "assets/5e316052dd121ad3d2e066dbf2d3e26fb9cf1892d3dd8da92ea559f92bbb2ea8.svg",
-      "artworkSha256": "5e316052dd121ad3d2e066dbf2d3e26fb9cf1892d3dd8da92ea559f92bbb2ea8",
+      "assetFile": "assets/6e45c19e14f42f599aa6fb07991f66767c767df109e55eaabc76217047dc5ada.svg",
+      "artworkSha256": "6e45c19e14f42f599aa6fb07991f66767c767df109e55eaabc76217047dc5ada",
       "exportName": "PrivateSolidBasicCrawlerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidBasicCrawlerIcon"
@@ -8120,14 +8121,14 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidCodecIcon"]
     },
     {
-      "assetFile": "assets/f3ecd1079329fd38971d5fe2c01a367cdefbe2a4d031cf1f487cff22fa561b99.svg",
-      "artworkSha256": "f3ecd1079329fd38971d5fe2c01a367cdefbe2a4d031cf1f487cff22fa561b99",
+      "assetFile": "assets/0a95f71d24750a5a3581241ab97cab1c156a73450ab1e1c30c68c28750e8a523.svg",
+      "artworkSha256": "0a95f71d24750a5a3581241ab97cab1c156a73450ab1e1c30c68c28750e8a523",
       "exportName": "PrivateSolidCodeScanIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidCodeScanIcon"]
     },
     {
-      "assetFile": "assets/607b52093f67f831bd5244eaec9e6f700dd102b0f77d7e539cede5a0a70de05b.svg",
-      "artworkSha256": "607b52093f67f831bd5244eaec9e6f700dd102b0f77d7e539cede5a0a70de05b",
+      "assetFile": "assets/114428d0722ef3ccd9db4be727417ffbe27b220f9329641abe696d4d6b748f41.svg",
+      "artworkSha256": "114428d0722ef3ccd9db4be727417ffbe27b220f9329641abe696d4d6b748f41",
       "exportName": "PrivateSolidCVEIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidCVEIcon"]
     },
@@ -8140,24 +8141,24 @@
       ]
     },
     {
-      "assetFile": "assets/97966944ca980cccc99e32f21953f06029f87d3fe5c4ed0bfab4a91c55456fed.svg",
-      "artworkSha256": "97966944ca980cccc99e32f21953f06029f87d3fe5c4ed0bfab4a91c55456fed",
+      "assetFile": "assets/e81eb2fd3440a7d4145ff44925b7a080c9e0ec9f85a6d7962c470095dbe6620a.svg",
+      "artworkSha256": "e81eb2fd3440a7d4145ff44925b7a080c9e0ec9f85a6d7962c470095dbe6620a",
       "exportName": "PrivateSolidDefaultPluginIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidDefaultPluginIcon"
       ]
     },
     {
-      "assetFile": "assets/2bb62dee1a2f1ce1bfd80eeeb7b23608a721c7274c2a374b7f39059f4b7edb4c.svg",
-      "artworkSha256": "2bb62dee1a2f1ce1bfd80eeeb7b23608a721c7274c2a374b7f39059f4b7edb4c",
+      "assetFile": "assets/708b612c297a597123d5ad366531a3a55f74f5f2e4263fdb28bd2ed3d5ef2fe8.svg",
+      "artworkSha256": "708b612c297a597123d5ad366531a3a55f74f5f2e4263fdb28bd2ed3d5ef2fe8",
       "exportName": "PrivateSolidDirectoryScanningIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidDirectoryScanningIcon"
       ]
     },
     {
-      "assetFile": "assets/0ec10acf3e0e4144d91c70d653523e47d027c3640a8ca14c0060eaa80c9b20be.svg",
-      "artworkSha256": "0ec10acf3e0e4144d91c70d653523e47d027c3640a8ca14c0060eaa80c9b20be",
+      "assetFile": "assets/510f3a44a475abc69b5efe883ad06b8a70d5493079e62dae3bd561c13a52bed6.svg",
+      "artworkSha256": "510f3a44a475abc69b5efe883ad06b8a70d5493079e62dae3bd561c13a52bed6",
       "exportName": "PrivateSolidDNSLogIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidDNSLogIcon"]
     },
@@ -8168,16 +8169,16 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidDomainIcon"]
     },
     {
-      "assetFile": "assets/32d4f5d9905e9066ceab7beca624da7ce40255e1f753f00af40a3592dd0a6898.svg",
-      "artworkSha256": "32d4f5d9905e9066ceab7beca624da7ce40255e1f753f00af40a3592dd0a6898",
+      "assetFile": "assets/603f8ccf208e72a86a14c4bb40ad5c6bca1ddc366eeaba36a3e90568a7b515ea.svg",
+      "artworkSha256": "603f8ccf208e72a86a14c4bb40ad5c6bca1ddc366eeaba36a3e90568a7b515ea",
       "exportName": "PrivateSolidFingerprintManageIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidFingerprintManageIcon"
       ]
     },
     {
-      "assetFile": "assets/0b70a071d46342d0061e86e5c016b8b52b17edb1e644b151a637182fbedfba77.svg",
-      "artworkSha256": "0b70a071d46342d0061e86e5c016b8b52b17edb1e644b151a637182fbedfba77",
+      "assetFile": "assets/e0d83503b1f72a50d1dbdaf9866566ad630b497520738c9b420b4052ea67701d.svg",
+      "artworkSha256": "e0d83503b1f72a50d1dbdaf9866566ad630b497520738c9b420b4052ea67701d",
       "exportName": "PrivateSolidHTTPHistoryIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidHTTPHistoryIcon"
@@ -8226,8 +8227,8 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidPortsIcon"]
     },
     {
-      "assetFile": "assets/7b3aceff66504ffb92cec412d1f4d97a7c4391c0cb457111b89f4392848487e3.svg",
-      "artworkSha256": "7b3aceff66504ffb92cec412d1f4d97a7c4391c0cb457111b89f4392848487e3",
+      "assetFile": "assets/01eb541e89e4b0add1a3ce697c741d0fa4928c5800e1135a25b79ea4a9062650.svg",
+      "artworkSha256": "01eb541e89e4b0add1a3ce697c741d0fa4928c5800e1135a25b79ea4a9062650",
       "exportName": "PrivateSolidProjectManagerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidProjectManagerIcon"
@@ -8254,8 +8255,8 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidRiskIcon"]
     },
     {
-      "assetFile": "assets/fdc8b799d5bb1f7beb6e834d9d67ea5ad26a621cd3e6f0452a1cadf3570f871e.svg",
-      "artworkSha256": "fdc8b799d5bb1f7beb6e834d9d67ea5ad26a621cd3e6f0452a1cadf3570f871e",
+      "assetFile": "assets/72ddc91feb2a82fa0905707001a3a42a948f23eb8690ec32c616ed0dcde9dfe0.svg",
+      "artworkSha256": "72ddc91feb2a82fa0905707001a3a42a948f23eb8690ec32c616ed0dcde9dfe0",
       "exportName": "PrivateSolidRuleManagementIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidRuleManagementIcon"
@@ -8268,16 +8269,16 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidScanPortIcon"]
     },
     {
-      "assetFile": "assets/b40b8f51694fe0fd6ad2bc73075a538956c2b2c8493b737aaf9dca490d903d0a.svg",
-      "artworkSha256": "b40b8f51694fe0fd6ad2bc73075a538956c2b2c8493b737aaf9dca490d903d0a",
+      "assetFile": "assets/f14ce16d55435845bf0c3a43ca58018c131dee101b403a1dd497e89d3fde3f7a.svg",
+      "artworkSha256": "f14ce16d55435845bf0c3a43ca58018c131dee101b403a1dd497e89d3fde3f7a",
       "exportName": "PrivateSolidShellReceiverIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidShellReceiverIcon"
       ]
     },
     {
-      "assetFile": "assets/5ca5d466bfd777abf72428f3a46574a0fd5234acfe148dbbcf380394ad8ca4f5.svg",
-      "artworkSha256": "5ca5d466bfd777abf72428f3a46574a0fd5234acfe148dbbcf380394ad8ca4f5",
+      "assetFile": "assets/47d797d58f832179b01132e3bc2846d599021318dc7443c80f649fba5af5af6c.svg",
+      "artworkSha256": "47d797d58f832179b01132e3bc2846d599021318dc7443c80f649fba5af5af6c",
       "exportName": "PrivateSolidSpaceEngineIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/privateIcon.tsx::PrivateSolidSpaceEngineIcon"
@@ -8312,8 +8313,8 @@
       ]
     },
     {
-      "assetFile": "assets/4151e13a88bf33460587ab010b11d8d021b324a9656a67549e721f49c7484f90.svg",
-      "artworkSha256": "4151e13a88bf33460587ab010b11d8d021b324a9656a67549e721f49c7484f90",
+      "assetFile": "assets/62ae6a50e4d83e4988818355e8a6f921630fb96a7ce7b923a6e0d3cacfcd8ab8.svg",
+      "artworkSha256": "62ae6a50e4d83e4988818355e8a6f921630fb96a7ce7b923a6e0d3cacfcd8ab8",
       "exportName": "PropertyIcon",
       "sourceKeys": ["app/renderer/src/main/src/pages/payloadManager/icon.tsx::PropertyIcon"]
     },
@@ -8372,8 +8373,8 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicBatchPluginIcon"]
     },
     {
-      "assetFile": "assets/a384449f234e13c48cafe2990668deeb2f6856fbc1ebd9df627d6581896e05b7.svg",
-      "artworkSha256": "a384449f234e13c48cafe2990668deeb2f6856fbc1ebd9df627d6581896e05b7",
+      "assetFile": "assets/ca060f4c3961131305eaad5b259135acb2288291750e2e3fe6c9250a8e4cddf0.svg",
+      "artworkSha256": "ca060f4c3961131305eaad5b259135acb2288291750e2e3fe6c9250a8e4cddf0",
       "exportName": "PublicBlastingIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicBlastingIcon"]
     },
@@ -8470,8 +8471,8 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicMitmIcon"]
     },
     {
-      "assetFile": "assets/321c9cf1933b6cdcd60eeb8df83dbf0470ef4adad7cfa123c9e35022032cdaad.svg",
-      "artworkSha256": "321c9cf1933b6cdcd60eeb8df83dbf0470ef4adad7cfa123c9e35022032cdaad",
+      "assetFile": "assets/04be9b7c6b8b9641353d72b3deb3241eb5398ad0e0a71768547dcd6faa85fe96.svg",
+      "artworkSha256": "04be9b7c6b8b9641353d72b3deb3241eb5398ad0e0a71768547dcd6faa85fe96",
       "exportName": "PublicNotepadIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicNotepadIcon"]
     },
@@ -8530,8 +8531,8 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicProjectManagerIcon"]
     },
     {
-      "assetFile": "assets/8b7d3db149661d19e66c624f95bfd21afad7b260de5329cba7e1d506261420e0.svg",
-      "artworkSha256": "8b7d3db149661d19e66c624f95bfd21afad7b260de5329cba7e1d506261420e0",
+      "assetFile": "assets/1e0fc671818df379b7486a08761ecb6675f37631b5e3cd25b04266ab964387dc.svg",
+      "artworkSha256": "1e0fc671818df379b7486a08761ecb6675f37631b5e3cd25b04266ab964387dc",
       "exportName": "PublicPublicToolLightbulbIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/publicIcon.tsx::PublicPublicToolLightbulbIcon"
@@ -8568,8 +8569,8 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicScanPortIcon"]
     },
     {
-      "assetFile": "assets/ab5fcd057aae0700ea64493a51ebd2720c4ffff604bda7ba98ca159a9d62a4e8.svg",
-      "artworkSha256": "ab5fcd057aae0700ea64493a51ebd2720c4ffff604bda7ba98ca159a9d62a4e8",
+      "assetFile": "assets/5a4207226363f4dcf48d89c2624a3138a28b38560474dcc5f08f61252e9a23b2.svg",
+      "artworkSha256": "5a4207226363f4dcf48d89c2624a3138a28b38560474dcc5f08f61252e9a23b2",
       "exportName": "PublicSequenceAnimationIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicSequenceAnimationIcon"]
     },
@@ -8600,134 +8601,134 @@
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicTCPPortLogIcon"]
     },
     {
-      "assetFile": "assets/7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0.svg",
-      "artworkSha256": "7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0",
+      "assetFile": "assets/b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf.svg",
+      "artworkSha256": "b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf",
       "exportName": "PublicToolBasicCrawlerIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolBasicCrawlerIcon"]
     },
     {
-      "assetFile": "assets/1a0309019c399f4d6c5c44ebdb30c1f6729455a7d058c777f1108e8d5eca912e.svg",
-      "artworkSha256": "1a0309019c399f4d6c5c44ebdb30c1f6729455a7d058c777f1108e8d5eca912e",
+      "assetFile": "assets/cbdb30ad10f1c225a850aaf180e0826553201937b4c5e3d3a63fb63c98b38bc8.svg",
+      "artworkSha256": "cbdb30ad10f1c225a850aaf180e0826553201937b4c5e3d3a63fb63c98b38bc8",
       "exportName": "PublicToolCVEIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolCVEIcon"]
     },
     {
-      "assetFile": "assets/fc7048dd6fef8d62d895504d71be9b89032a340ef037e57bd8b8f3ed8b8149de.svg",
-      "artworkSha256": "fc7048dd6fef8d62d895504d71be9b89032a340ef037e57bd8b8f3ed8b8149de",
+      "assetFile": "assets/20bb1c535b1f040ae45825e9dea2c45d837c14abe5e1ec16eeef886d229e2706.svg",
+      "artworkSha256": "20bb1c535b1f040ae45825e9dea2c45d837c14abe5e1ec16eeef886d229e2706",
       "exportName": "PublicToolDataCompareIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolDataCompareIcon"]
     },
     {
-      "assetFile": "assets/bf3f855fc552d95d574db009881ec802c2340e0816e48452c979a0dffe34fbfd.svg",
-      "artworkSha256": "bf3f855fc552d95d574db009881ec802c2340e0816e48452c979a0dffe34fbfd",
+      "assetFile": "assets/a2f764d097c0393089e7702844edd51e903983bcd2e51acc17b0a6564c4a0421.svg",
+      "artworkSha256": "a2f764d097c0393089e7702844edd51e903983bcd2e51acc17b0a6564c4a0421",
       "exportName": "PublicToolDBDomainIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolDBDomainIcon"]
     },
     {
-      "assetFile": "assets/23ada478c41916523751cd0ead358fad7db0277ec60c76c0c5eeb2ed9d1a6097.svg",
-      "artworkSha256": "23ada478c41916523751cd0ead358fad7db0277ec60c76c0c5eeb2ed9d1a6097",
+      "assetFile": "assets/4275e110ff7d6c66c6125946a1d0923aabdf048f26e922d39b5634585ff760a4.svg",
+      "artworkSha256": "4275e110ff7d6c66c6125946a1d0923aabdf048f26e922d39b5634585ff760a4",
       "exportName": "PublicToolDBHTTPHistoryIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolDBHTTPHistoryIcon"]
     },
     {
-      "assetFile": "assets/7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0.svg",
-      "artworkSha256": "7b7142676705c18a089137a2770c071dc80a8267b9d11e62fa4597568b5abec0",
+      "assetFile": "assets/b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf.svg",
+      "artworkSha256": "b54a106cf4c8c0b5a19a12344845bdff482f421df2f3e4021e3cc825c567caaf",
       "exportName": "PublicToolDBReportIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolDBReportIcon"]
     },
     {
-      "assetFile": "assets/7bd29c60080cd6b036aac706ccc175f12e383e1fb13575906319b4149ba92a5e.svg",
-      "artworkSha256": "7bd29c60080cd6b036aac706ccc175f12e383e1fb13575906319b4149ba92a5e",
+      "assetFile": "assets/3731832e7124589e9c6dc66e3f28acd5fecc62b2afbfd5a8a2d0eeeecc9fa44a.svg",
+      "artworkSha256": "3731832e7124589e9c6dc66e3f28acd5fecc62b2afbfd5a8a2d0eeeecc9fa44a",
       "exportName": "PublicToolDBRiskIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolDBRiskIcon"]
     },
     {
-      "assetFile": "assets/d380614f3943b3df69d0551a95ac1ba04d1f1062c6b1c62080df4b04cea3da97.svg",
-      "artworkSha256": "d380614f3943b3df69d0551a95ac1ba04d1f1062c6b1c62080df4b04cea3da97",
+      "assetFile": "assets/b0c64f7c835ed2701277d62b2e18a00db3e140d5a0b2d98de5336ecca0ce299d.svg",
+      "artworkSha256": "b0c64f7c835ed2701277d62b2e18a00db3e140d5a0b2d98de5336ecca0ce299d",
       "exportName": "PublicToolICMPSizeLogIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolICMPSizeLogIcon"]
     },
     {
-      "assetFile": "assets/de67cfb004aa95640abe8962e722ed96cf248784252a75de6753d215b07ccf44.svg",
-      "artworkSha256": "de67cfb004aa95640abe8962e722ed96cf248784252a75de6753d215b07ccf44",
+      "assetFile": "assets/a0b81ac4d7c78121c778a2e6388cc7ddaf8bcdf4f3d4c87c38b910966fbdf2b7.svg",
+      "artworkSha256": "a0b81ac4d7c78121c778a2e6388cc7ddaf8bcdf4f3d4c87c38b910966fbdf2b7",
       "exportName": "PublicToolModScanPortIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolModScanPortIcon"]
     },
     {
-      "assetFile": "assets/53f59074f74ef73cced257b86c2cbfda93891518ae9be8e660660ae77c657595.svg",
-      "artworkSha256": "53f59074f74ef73cced257b86c2cbfda93891518ae9be8e660660ae77c657595",
+      "assetFile": "assets/4a724e7169772772c70c789dd071e9d1441278e775727e37370e073cb97e1a86.svg",
+      "artworkSha256": "4a724e7169772772c70c789dd071e9d1441278e775727e37370e073cb97e1a86",
       "exportName": "PublicToolPayloadIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolPayloadIcon"]
     },
     {
-      "assetFile": "assets/1a071f2c27a5a7d4a737724d8df7d18f1d78fb89887996a378147612afa3a0e9.svg",
-      "artworkSha256": "1a071f2c27a5a7d4a737724d8df7d18f1d78fb89887996a378147612afa3a0e9",
+      "assetFile": "assets/7b05dcd70b483e86e84e69ae9ef3625f759cfb2ace52f939c3bba3a81a84bf88.svg",
+      "artworkSha256": "7b05dcd70b483e86e84e69ae9ef3625f759cfb2ace52f939c3bba3a81a84bf88",
       "exportName": "PublicToolPluginHubIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolPluginHubIcon"]
     },
     {
-      "assetFile": "assets/3a140f91d36930517a532cec73948ce36b1dd6da395e5ff8cad6fa35e1a27817.svg",
-      "artworkSha256": "3a140f91d36930517a532cec73948ce36b1dd6da395e5ff8cad6fa35e1a27817",
+      "assetFile": "assets/1ba0b5f8020129b9e03ac55ce9035b15d621597ca27a64412183e3c312ab314d.svg",
+      "artworkSha256": "1ba0b5f8020129b9e03ac55ce9035b15d621597ca27a64412183e3c312ab314d",
       "exportName": "PublicToolReverseServerIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolReverseServerIcon"]
     },
     {
-      "assetFile": "assets/ac9becafa07680919343d7369f6961b3937a6d1dd9a72592ff27436cdadaaa13.svg",
-      "artworkSha256": "ac9becafa07680919343d7369f6961b3937a6d1dd9a72592ff27436cdadaaa13",
+      "assetFile": "assets/e597cc3c5b3ac49c05867607929971bfb6e8035ef3831e8d39358a9b8d04fb9c.svg",
+      "artworkSha256": "e597cc3c5b3ac49c05867607929971bfb6e8035ef3831e8d39358a9b8d04fb9c",
       "exportName": "PublicToolScreenRecorderPageIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolScreenRecorderPageIcon"
       ]
     },
     {
-      "assetFile": "assets/2c96b825e568c7fda6d53bc455581ceb694cd2245b9e91c26854c1f10bd07252.svg",
-      "artworkSha256": "2c96b825e568c7fda6d53bc455581ceb694cd2245b9e91c26854c1f10bd07252",
+      "assetFile": "assets/428f3f22135b441910ae0ec1617660aa30354993b1e0916c7847d70dda0d8f59.svg",
+      "artworkSha256": "428f3f22135b441910ae0ec1617660aa30354993b1e0916c7847d70dda0d8f59",
       "exportName": "PublicToolScreenRecordingIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolScreenRecordingIcon"
       ]
     },
     {
-      "assetFile": "assets/b3ee19209fff69088c342bd20320c74b85d907c84d21e61f363c02f0410eb29e.svg",
-      "artworkSha256": "b3ee19209fff69088c342bd20320c74b85d907c84d21e61f363c02f0410eb29e",
+      "assetFile": "assets/4d12a655739b28e2d5521bdd0758fca7607cd8d2f95dbd919e3d53a8bcaad85c.svg",
+      "artworkSha256": "4d12a655739b28e2d5521bdd0758fca7607cd8d2f95dbd919e3d53a8bcaad85c",
       "exportName": "PublicToolScreenshotIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolScreenshotIcon"]
     },
     {
-      "assetFile": "assets/3ea3b893b4da50dbf694ea7aca7eb560c2e133e2bb59bccc3d7e18e505abee5c.svg",
-      "artworkSha256": "3ea3b893b4da50dbf694ea7aca7eb560c2e133e2bb59bccc3d7e18e505abee5c",
+      "assetFile": "assets/9e264cd7cc83bf2a1112a01d5b7853a8201ad762f1008539d4004ea41b771e95.svg",
+      "artworkSha256": "9e264cd7cc83bf2a1112a01d5b7853a8201ad762f1008539d4004ea41b771e95",
       "exportName": "PublicToolShellReceiverIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolShellReceiverIcon"]
     },
     {
-      "assetFile": "assets/aa0f4e9d5a011ce9f11ebf06e97fd4584b594de4858dc85a6ed05eb93b393e12.svg",
-      "artworkSha256": "aa0f4e9d5a011ce9f11ebf06e97fd4584b594de4858dc85a6ed05eb93b393e12",
+      "assetFile": "assets/15afeea1c18e2707c0d749816b868c9e342d2688114826ede7cbc95c6230dfeb.svg",
+      "artworkSha256": "15afeea1c18e2707c0d749816b868c9e342d2688114826ede7cbc95c6230dfeb",
       "exportName": "PublicToolSpaceEngineIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolSpaceEngineIcon"]
     },
     {
-      "assetFile": "assets/d66b1ba48c87988767a2956683da5e056ca5214333c25e87ada829371d580724.svg",
-      "artworkSha256": "d66b1ba48c87988767a2956683da5e056ca5214333c25e87ada829371d580724",
+      "assetFile": "assets/49dd50652549c79edc3974ff683a9c50d0de0be015362f7c2653d69fc0185e42.svg",
+      "artworkSha256": "49dd50652549c79edc3974ff683a9c50d0de0be015362f7c2653d69fc0185e42",
       "exportName": "PublicToolSubDomainCollectionIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolSubDomainCollectionIcon"
       ]
     },
     {
-      "assetFile": "assets/1ee48d6978225b38941cd819b92ae07b096eaff5de7e97208273f85ed11c29af.svg",
-      "artworkSha256": "1ee48d6978225b38941cd819b92ae07b096eaff5de7e97208273f85ed11c29af",
+      "assetFile": "assets/a5f726b641d5a581acdb02f858e9ee6b30bd7c8b32525bf028b6f76efcf6254c.svg",
+      "artworkSha256": "a5f726b641d5a581acdb02f858e9ee6b30bd7c8b32525bf028b6f76efcf6254c",
       "exportName": "PublicToolTCPPortLogIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolTCPPortLogIcon"]
     },
     {
-      "assetFile": "assets/670f292b68ed1b829513bcb986cd90ee5b5f1ba4bf456f24e1d6c25c476c1d3c.svg",
-      "artworkSha256": "670f292b68ed1b829513bcb986cd90ee5b5f1ba4bf456f24e1d6c25c476c1d3c",
+      "assetFile": "assets/49a262f680497b59f52244f6d96754b693f745e61682f73226f3153c7ee47b81.svg",
+      "artworkSha256": "49a262f680497b59f52244f6d96754b693f745e61682f73226f3153c7ee47b81",
       "exportName": "PublicToolVulinboxIcon",
       "sourceKeys": ["app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolVulinboxIcon"]
     },
     {
-      "assetFile": "assets/33c126b6662c3cbb79144933cd85bbc499cbe3ed225b3e6787ed7fdd6db6e914.svg",
-      "artworkSha256": "33c126b6662c3cbb79144933cd85bbc499cbe3ed225b3e6787ed7fdd6db6e914",
+      "assetFile": "assets/01da17c1c1108dc49af1233a28d6263060c4f12416a7848f23f131d1ba710f0c.svg",
+      "artworkSha256": "01da17c1c1108dc49af1233a28d6263060c4f12416a7848f23f131d1ba710f0c",
       "exportName": "PublicToolWebsocketFuzzerIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/routes/publicIcon.tsx::PublicToolWebsocketFuzzerIcon"
@@ -8764,8 +8765,8 @@
       "sourceKeys": ["app/renderer/src/main/src/components/CeUserMenu/icon.tsx::QrLoadingIcon"]
     },
     {
-      "assetFile": "assets/82176b9dbe8d7680fff0abc456618501f54bd0c08f20f822554293d15da30f51.svg",
-      "artworkSha256": "82176b9dbe8d7680fff0abc456618501f54bd0c08f20f822554293d15da30f51",
+      "assetFile": "assets/c5acda17be0e12a12d923820d53b94d5d0ff552b6b4c8bb7ecbae6b93f31be59.svg",
+      "artworkSha256": "c5acda17be0e12a12d923820d53b94d5d0ff552b6b4c8bb7ecbae6b93f31be59",
       "exportName": "QuitIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::QuitIcon"]
     },
@@ -8794,8 +8795,8 @@
       ]
     },
     {
-      "assetFile": "assets/38fce3941a6ac2514bc772efe38fb9ae58336a7603753d1426029ac2533ca4ea.svg",
-      "artworkSha256": "38fce3941a6ac2514bc772efe38fb9ae58336a7603753d1426029ac2533ca4ea",
+      "assetFile": "assets/e683f9cb37a1469315cceb9239a624f9cc00d56a2069c460ed3765bed4f4bd46.svg",
+      "artworkSha256": "e683f9cb37a1469315cceb9239a624f9cc00d56a2069c460ed3765bed4f4bd46",
       "exportName": "RefreshIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::RefreshIcon"]
     },
@@ -8809,8 +8810,8 @@
       ]
     },
     {
-      "assetFile": "assets/b07f48e8448b76ddaf08cc776e82e91139eb61d0daea65f402ac0e0a3ef83a48.svg",
-      "artworkSha256": "b07f48e8448b76ddaf08cc776e82e91139eb61d0daea65f402ac0e0a3ef83a48",
+      "assetFile": "assets/0519c8dde31ed447838571796eb47aa280c98cac8f2527ca7395f89414c20169.svg",
+      "artworkSha256": "0519c8dde31ed447838571796eb47aa280c98cac8f2527ca7395f89414c20169",
       "exportName": "RiskStateSvgIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/layout/icons.tsx::RiskStateSvgIcon"]
     },
@@ -8823,8 +8824,8 @@
       ]
     },
     {
-      "assetFile": "assets/bbbe0b92fa97cf67cf2bc7f8be53c885d81e40f349af5237ad6f0bbcefa0472f.svg",
-      "artworkSha256": "bbbe0b92fa97cf67cf2bc7f8be53c885d81e40f349af5237ad6f0bbcefa0472f",
+      "assetFile": "assets/c46bcbe285a763fe5da087e133a5eac2e28e12d6e7f67979bd9db9207039ab1a.svg",
+      "artworkSha256": "c46bcbe285a763fe5da087e133a5eac2e28e12d6e7f67979bd9db9207039ab1a",
       "exportName": "RocketIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/layout/globalStateIcon.tsx::RocketIcon"]
     },
@@ -8862,8 +8863,8 @@
       ]
     },
     {
-      "assetFile": "assets/ca4d2f0bc5bbd19c8956bf9c41ebcca36937084f4b78c41024c796cf6319511e.svg",
-      "artworkSha256": "ca4d2f0bc5bbd19c8956bf9c41ebcca36937084f4b78c41024c796cf6319511e",
+      "assetFile": "assets/b3d9c77144890357b5fbefe78384d9ecea22f7c9c7820699a37c5fbba276ca4f.svg",
+      "artworkSha256": "b3d9c77144890357b5fbefe78384d9ecea22f7c9c7820699a37c5fbba276ca4f",
       "exportName": "ShieldCheckIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::ShieldCheckIcon"]
     },
@@ -8898,8 +8899,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::SMViewGridAddIcon"]
     },
     {
-      "assetFile": "assets/4fcb3f297b61108f979091a22fea30b020aa6bfbebd393967db4a12cab96dc34.svg",
-      "artworkSha256": "4fcb3f297b61108f979091a22fea30b020aa6bfbebd393967db4a12cab96dc34",
+      "assetFile": "assets/8c68f6106ed8efa7f6bb26403d6e9cb4e17fe57b51826dd4450752b04a71acea.svg",
+      "artworkSha256": "8c68f6106ed8efa7f6bb26403d6e9cb4e17fe57b51826dd4450752b04a71acea",
       "exportName": "SoftwareRemoteSvgIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/softwareSettings/icon.tsx::SoftwareRemoteSvgIcon"
@@ -8935,14 +8936,14 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/colors.tsx::SolidCloudpluginIcon"]
     },
     {
-      "assetFile": "assets/6eeaeb1f328b8af37cc7e109f3053549b11ca5fda01f522d97558e3af1bc05be.svg",
-      "artworkSha256": "6eeaeb1f328b8af37cc7e109f3053549b11ca5fda01f522d97558e3af1bc05be",
+      "assetFile": "assets/6d3da649f86aeb07f68297ff82a0274ba2d6e3971dffd03e2986c7dd1c3774c9.svg",
+      "artworkSha256": "6d3da649f86aeb07f68297ff82a0274ba2d6e3971dffd03e2986c7dd1c3774c9",
       "exportName": "SolidCollectionPluginIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/colors.tsx::SolidCollectionPluginIcon"]
     },
     {
-      "assetFile": "assets/22d6f36d9404500e2eacf55f192396e12331d448ddb2a30d29447b2c9620b591.svg",
-      "artworkSha256": "22d6f36d9404500e2eacf55f192396e12331d448ddb2a30d29447b2c9620b591",
+      "assetFile": "assets/819ce9dc4716d3d45a0b63ecb20d07c7ab3afa7f7847ab3cec91cbe69766592a.svg",
+      "artworkSha256": "819ce9dc4716d3d45a0b63ecb20d07c7ab3afa7f7847ab3cec91cbe69766592a",
       "exportName": "SolidDocumentSearchPluginIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/assets/icon/colors.tsx::SolidDocumentSearchPluginIcon"
@@ -8955,8 +8956,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/newIcon.tsx::SolidDocumentTextIcon"]
     },
     {
-      "assetFile": "assets/90e380413dc126e0562b8a80452dcdc08d277360b9193f4e72bfe617db6c83d9.svg",
-      "artworkSha256": "90e380413dc126e0562b8a80452dcdc08d277360b9193f4e72bfe617db6c83d9",
+      "assetFile": "assets/897d00bf9268bda1baf56e7573a2f7d9d7a86291e30072f34e719f53c5f44d54.svg",
+      "artworkSha256": "897d00bf9268bda1baf56e7573a2f7d9d7a86291e30072f34e719f53c5f44d54",
       "exportName": "SolidFloatwinIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeSolid.tsx::SolidFloatwinIcon"]
     },
@@ -9031,26 +9032,26 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/colors.tsx::SolidPrivatepluginIcon"]
     },
     {
-      "assetFile": "assets/324ce2df3d9491720f43f61ee161d7ac9278d573e3bd765678c3dddd01fc8061.svg",
-      "artworkSha256": "324ce2df3d9491720f43f61ee161d7ac9278d573e3bd765678c3dddd01fc8061",
+      "assetFile": "assets/78effcbb757242bf93c8e955987326758bae706b583717558bda21777c43f23c.svg",
+      "artworkSha256": "78effcbb757242bf93c8e955987326758bae706b583717558bda21777c43f23c",
       "exportName": "SolidSparklesPluginIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/colors.tsx::SolidSparklesPluginIcon"]
     },
     {
-      "assetFile": "assets/d10acf0f725120bc1953c011c358071825419b686a2476e2e9373286bfc464df.svg",
-      "artworkSha256": "d10acf0f725120bc1953c011c358071825419b686a2476e2e9373286bfc464df",
+      "assetFile": "assets/a2fd23318624139aacb1de3af4f7cb0f068c3e8bd085da673e3ae0b751de4016.svg",
+      "artworkSha256": "a2fd23318624139aacb1de3af4f7cb0f068c3e8bd085da673e3ae0b751de4016",
       "exportName": "SolidTodownIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeSolid.tsx::SolidTodownIcon"]
     },
     {
-      "assetFile": "assets/54ed786d481486ea6758fb8f3d22a9305b5f7c6179d35a3b1103e350dd1c1f4e.svg",
-      "artworkSha256": "54ed786d481486ea6758fb8f3d22a9305b5f7c6179d35a3b1103e350dd1c1f4e",
+      "assetFile": "assets/1834ff652ffd9a883ea667fc9b845e939b08691e682a5488b9d7b62d44e90ea3.svg",
+      "artworkSha256": "1834ff652ffd9a883ea667fc9b845e939b08691e682a5488b9d7b62d44e90ea3",
       "exportName": "SolidToleftIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeSolid.tsx::SolidToleftIcon"]
     },
     {
-      "assetFile": "assets/75937d272da31d0bbd839a0645cad31a309b28cff660b1d929e4a0e344c82a1b.svg",
-      "artworkSha256": "75937d272da31d0bbd839a0645cad31a309b28cff660b1d929e4a0e344c82a1b",
+      "assetFile": "assets/c9f6ca140212861e17c5e5c67ab0b94583dfa3a511629f99fb34e717eea05770.svg",
+      "artworkSha256": "c9f6ca140212861e17c5e5c67ab0b94583dfa3a511629f99fb34e717eea05770",
       "exportName": "SolidTorightIcon",
       "sourceKeys": ["app/renderer/src/main/src/assets/icon/bespokeSolid.tsx::SolidTorightIcon"]
     },
@@ -9170,8 +9171,8 @@
       "sourceKeys": ["app/renderer/src/main/src/components/yakChat/icon.tsx::UIKitOutlineBugIcon"]
     },
     {
-      "assetFile": "assets/96e963d1d2703b11f47097bf6a8e190ae168c66b117ffe45da9a557e157ad2b4.svg",
-      "artworkSha256": "96e963d1d2703b11f47097bf6a8e190ae168c66b117ffe45da9a557e157ad2b4",
+      "assetFile": "assets/0b8f09d8e984dac59015caff6ea76fcd561d05bdd6a2dfc2aee0e079a50bf52e.svg",
+      "artworkSha256": "0b8f09d8e984dac59015caff6ea76fcd561d05bdd6a2dfc2aee0e079a50bf52e",
       "exportName": "UISettingSvgIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/layout/icons.tsx::UISettingSvgIcon"]
     },
@@ -9182,8 +9183,8 @@
       "sourceKeys": ["app/renderer/src/main/src/components/configNetwork/icon.tsx::UnionIcon"]
     },
     {
-      "assetFile": "assets/18456f029e1892995e55523908f790a794167511b93a007accc1c3f155f26644.svg",
-      "artworkSha256": "18456f029e1892995e55523908f790a794167511b93a007accc1c3f155f26644",
+      "assetFile": "assets/c62ba0f3a05475cbc4836b1054b37e33f8f4111698cd0bfd16d6fd637376cb8a.svg",
+      "artworkSha256": "c62ba0f3a05475cbc4836b1054b37e33f8f4111698cd0bfd16d6fd637376cb8a",
       "exportName": "UserIcon",
       "sourceKeys": ["app/renderer/src/main/src/pages/dataStatistics/icon.tsx::UserIcon"]
     },
@@ -9194,8 +9195,8 @@
       "sourceKeys": ["app/renderer/src/main/src/assets/commonProcessIcons.tsx::UToolsIcon"]
     },
     {
-      "assetFile": "assets/de050ebefa0c036e56556f18a6101e31ef82cf9d9e7658e9fc1dfe51f8759338.svg",
-      "artworkSha256": "de050ebefa0c036e56556f18a6101e31ef82cf9d9e7658e9fc1dfe51f8759338",
+      "assetFile": "assets/dc78c10923bf9c9dec68f7b8016514fe03db766ce75683fcdef304e451f5b7d2.svg",
+      "artworkSha256": "dc78c10923bf9c9dec68f7b8016514fe03db766ce75683fcdef304e451f5b7d2",
       "exportName": "VersionUpdateSvgIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/layout/icons.tsx::VersionUpdateSvgIcon"]
     },
@@ -9220,8 +9221,8 @@
       "sourceKeys": ["app/renderer/src/main/src/components/layout/globalStateIcon.tsx::WarningIcon"]
     },
     {
-      "assetFile": "assets/c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac.svg",
-      "artworkSha256": "c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac",
+      "assetFile": "assets/70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c.svg",
+      "artworkSha256": "70edb1b6130e5b268253e672422d98d9cda44725e3eb7eda968e924edfce456c",
       "exportName": "WinUIOpCloseSvgIcon",
       "sourceKeys": [
         "app/renderer/engine-link-startup/src/assets/newIcon.tsx::WinUIOpCloseSvgIcon",
@@ -9229,14 +9230,14 @@
       ]
     },
     {
-      "assetFile": "assets/5da0d328fe52b6c0ad49125cc948a491f806ecd228a955fcb55fb01fd26d1ee6.svg",
-      "artworkSha256": "5da0d328fe52b6c0ad49125cc948a491f806ecd228a955fcb55fb01fd26d1ee6",
+      "assetFile": "assets/edf645eea58f3dcbf80122a3290e8738766177b38ffe4ab6df9a0d022ce15718.svg",
+      "artworkSha256": "edf645eea58f3dcbf80122a3290e8738766177b38ffe4ab6df9a0d022ce15718",
       "exportName": "WinUIOpMaxSvgIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/layout/icons.tsx::WinUIOpMaxSvgIcon"]
     },
     {
-      "assetFile": "assets/ff436f72201b223d4e20686ffcb6c653ab9debebf3422f1be146881c15cac6f3.svg",
-      "artworkSha256": "ff436f72201b223d4e20686ffcb6c653ab9debebf3422f1be146881c15cac6f3",
+      "assetFile": "assets/65407e10c6cd689aa0733de7c195b1defefc256c7ff05c14d7a6c37cb58476f1.svg",
+      "artworkSha256": "65407e10c6cd689aa0733de7c195b1defefc256c7ff05c14d7a6c37cb58476f1",
       "exportName": "WinUIOpRestoreSvgIcon",
       "sourceKeys": ["app/renderer/src/main/src/components/layout/icons.tsx::WinUIOpRestoreSvgIcon"]
     },
@@ -9282,8 +9283,8 @@
       ]
     },
     {
-      "assetFile": "assets/454ceeed7b37e72cfd5299243fd8cdd7fe5ee5f3e636ee2e666317c885d4de56.svg",
-      "artworkSha256": "454ceeed7b37e72cfd5299243fd8cdd7fe5ee5f3e636ee2e666317c885d4de56",
+      "assetFile": "assets/11127cbb998b2a776cd338eacc0c63bb063af673fad1ca3a9b8398c29338d88d.svg",
+      "artworkSha256": "11127cbb998b2a776cd338eacc0c63bb063af673fad1ca3a9b8398c29338d88d",
       "exportName": "YakitSpinLogoSvgIcon",
       "sourceKeys": [
         "app/renderer/src/main/src/pages/KnowledgeBase/icon/sidebarIcon.tsx::YakitSpinLogoSvgIcon"

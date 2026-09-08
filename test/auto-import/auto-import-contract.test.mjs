@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import {
+  copyFileSync,
+  cpSync,
   existsSync,
   mkdtempSync,
   mkdirSync,
@@ -99,17 +101,20 @@ function verifyPrerequisites() {
   }
 }
 
-function linkPackage(fixtureRoot, packageRoot) {
+function copyPackage(fixtureRoot, packageRoot) {
   const scopeRoot = resolve(fixtureRoot, "node_modules/@yakit-libs");
   mkdirSync(scopeRoot, { recursive: true });
-  const manifest = JSON.parse(
-    readFileSync(resolve(packageRoot, "package.json"), "utf8"),
+  const packageJsonPath = resolve(packageRoot, "package.json");
+  const manifest = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+  const destination = resolve(
+    scopeRoot,
+    manifest.name.slice("@yakit-libs/".length),
   );
-  symlinkSync(
-    packageRoot,
-    resolve(scopeRoot, manifest.name.slice("@yakit-libs/".length)),
-    "dir",
-  );
+  mkdirSync(destination, { recursive: true });
+  copyFileSync(packageJsonPath, resolve(destination, "package.json"));
+  cpSync(resolve(packageRoot, "dist"), resolve(destination, "dist"), {
+    recursive: true,
+  });
   return manifest;
 }
 
@@ -127,7 +132,7 @@ function createFixture(suiteRoot, installSet, moduleResolution, syntax) {
   mkdirSync(fixtureRoot, { recursive: true });
   const dependencies = {};
   for (const packageKey of installSets[installSet]) {
-    const manifest = linkPackage(fixtureRoot, packageRoots[packageKey]);
+    const manifest = copyPackage(fixtureRoot, packageRoots[packageKey]);
     dependencies[manifest.name] = manifest.version;
   }
   linkConsumerDependency(

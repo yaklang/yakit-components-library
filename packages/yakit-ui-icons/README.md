@@ -48,6 +48,24 @@ export const HomeEntry = () => (
 
 `className`、`style`、事件、ARIA 属性和 `ref<HTMLSpanElement>` 属于外层 `span`；`size` 设置内层 SVG 的宽高。确需修改 SVG 表现属性时使用 `svgProps`，该入口不会接受内层事件、ARIA、焦点、ref 或内容注入。`color="currentColor"` 不产生内联颜色，可继续继承现有 Yakit/Ant 样式。
 
+所有内置图标描边默认采用 `stroke-width="1"`（SVG 用户单位），包括 Oldicon 和 Loading。宽度随图标尺寸与 `viewBox` 缩放，纯填充图形不增加描边。可调 Outline 和 Loading 的覆盖方式见下文。
+
+### 调整描边宽度
+
+350 个 Outline 图标（包括 `BugOutlined`、`QrcodeOutlined`）和 `Loading` 支持通过 `svgProps` 调整实际线宽，默认值仍为 `1`：
+
+```tsx
+<BugOutlined svgProps={{ strokeWidth: 2 }} />
+<HomeOutlined svgProps={{ style: { strokeWidth: 1.5 } }} />
+<Loading svgProps={{ strokeWidth: 0 }} />
+```
+
+优先级是 `svgProps.style.strokeWidth` → `svgProps.strokeWidth` → 图标原始默认值。`0` 会隐藏描边，混合图标中的填充细节仍然保留。支持合法 SVG 长度/百分比字符串；同元素 CSS 规则遵循正常层叠顺序。外层 `style` 仍属于 `span`，不提供顶层 `strokeWidth` 属性。
+
+原先展开为填充的二维码、标签、剪贴板、信号、火箭及语音图标已恢复为真实描边，默认线宽为 `1`。`TagOutlined` 的实心圆、火箭舷窗和其他独立填充细节保持实心，不随 `strokeWidth` 改变。`svgProps.strokeWidth={0}` 只隐藏线条。几何迁移的范围与兼容性说明见[线宽能力说明](../yakit-ui/docs/icon-stroke-capabilities.md)。
+
+Solid、Colorful、Oldicon 保持根 SVG 的原生属性透传；没有统一覆盖其内部固定宽度。`BugOutlined` 已从填充轮廓重建为真实描边，默认视觉改为与其他描边 Outline 一致的宽度 `1`。
+
 浏览器条件入口会自动关联静态 `icon.css`，根入口和 `/outline`、`/solid`、`/colorful` 多次导入时由打包器合并为一份样式；Node SSR 使用无 CSS 的通用入口，不会访问 DOM 或尝试加载 CSS 模块。无法识别 package `browser` condition 的自定义构建环境可显式导入 `@yakit-libs/yakit-ui-icons/icon.css`。
 
 多色、品牌、头像和状态类图标同样从根入口导出。它们会保留 Figma 定义的固定色、渐变与局部主题色；注册表中的 `paintMode` 可用于区分 `literal`、`mixed` 和 `currentColor` 行为。
@@ -95,7 +113,8 @@ import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon/PopoverArro
 浏览器条件入口会与其他图标入口一样关联 `icon.css`；Node/SSR 的 import 条件保持 CSS-free。
 `TaskWaitIcon` 是产品侧 DOM 动画而不是 SVG，不属于此兼容图标集合。
 
-`oldicon` 保留旧实现的几何、paint、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
+`oldicon` 保留旧实现的路径几何、颜色、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
+描边宽度是有意调整的兼容例外：统一为 1 SVG 用户单位，原有公开导出名称和来源映射不变。
 它不是第四个正式图标家族，不会进入根入口或 `iconRegistry`；新功能应优先选择
 `/outline`、`/solid` 或 `/colorful`。同名但图形不同的旧实现会使用来源限定的导出名，
 迁移时应按生成清单中的源文件映射选择，不能仅凭名称互换。

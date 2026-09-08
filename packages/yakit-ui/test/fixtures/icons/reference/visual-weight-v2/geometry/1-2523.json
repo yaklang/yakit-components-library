@@ -1,0 +1,100 @@
+{
+  "iou": 0.9980753125780527,
+  "contourDistance": 0.03125,
+  "boundsDelta": 0,
+  "oldTopology": {
+    "components": 3,
+    "holes": 0
+  },
+  "rebuiltTopology": {
+    "components": 3,
+    "holes": 0
+  },
+  "widths": {
+    "0": {
+      "edges": null,
+      "count": 0,
+      "topology": {
+        "components": 0,
+        "holes": 0
+      }
+    },
+    "1": {
+      "edges": [
+        2.5,
+        2.5,
+        21.46875,
+        21.46875
+      ],
+      "count": 66533,
+      "topology": {
+        "components": 3,
+        "holes": 0
+      }
+    },
+    "2": {
+      "edges": [
+        2,
+        2,
+        21.96875,
+        21.96875
+      ],
+      "count": 135943,
+      "topology": {
+        "components": 3,
+        "holes": 0
+      }
+    },
+    "3": {
+      "edges": [
+        1.5,
+        1.5,
+        22.46875,
+        22.46875
+      ],
+      "count": 208654,
+      "topology": {
+        "components": 3,
+        "holes": 0
+      }
+    },
+    "1.5": {
+      "edges": [
+        2.25,
+        2.25,
+        21.71875,
+        21.71875
+      ],
+      "count": 100196,
+      "topology": {
+        "components": 3,
+        "holes": 0
+      }
+    }
+  },
+  "thickness": [
+    {
+      "axis": "x",
+      "at": 12,
+      "from": 20,
+      "to": 22,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "axis": "x",
+      "at": 12,
+      "from": 16,
+      "to": 18,
+      "expected": 1,
+      "actual": 1
+    }
+  ],
+  "legacySvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M18.364 5.63599C21.8787 9.15071 21.8787 14.8492 18.364 18.3639M15.5355 8.46441C17.4882 10.417 17.4882 13.5829 15.5355 15.5355\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M7.04991 12.70675C7.19688 13.74171 7.6684 14.73944 8.46447 15.5355M3.46911 9.12597C2.41502 12.26278 3.13733 15.8652 5.63604 18.3639\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M11.2929 11.2929A1 1 0 0 1 12.7071 12.7071\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M3 3L21 21\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>",
+  "renderer": {
+    "browserVersion": "152.0.7977.76",
+    "rasterSize": 768,
+    "deviceScaleFactor": 1,
+    "alphaThreshold": 128
+  }
+}

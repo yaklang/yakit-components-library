@@ -189,10 +189,8 @@ const releaseSet = packDirectoryResult.packages.map((item) => item.package);
 const impactOutputPath = path.resolve(
   requiredEnvironment("RELEASE_IMPACT_OUTPUT"),
 );
-const impactProbeSet = impactProbesForRelease(
-  JSON.parse(await readFile(impactOutputPath, "utf8")),
-  releaseSet,
-);
+const impactResult = JSON.parse(await readFile(impactOutputPath, "utf8"));
+const impactProbeSet = impactProbesForRelease(impactResult, releaseSet);
 const compatibilityBaselineDownloads =
   releaseSet.length === 1
     ? [
@@ -215,6 +213,7 @@ const manifest = await createVerificationManifest({
   packArtifactDigest: artifact.digest,
   releaseSet,
   impactProbeSet,
+  deferredImpact: impactResult.deferredImpact,
   compatibilityBaselineSet,
   artifacts: packDirectoryResult.packages.map((item) => ({
     package: item.package,

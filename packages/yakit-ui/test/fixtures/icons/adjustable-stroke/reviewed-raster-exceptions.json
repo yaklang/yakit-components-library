@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "icon-adjustable-reviewed-raster-exceptions-v1",
+  "exceptions": [
+    {
+      "family": "outline",
+      "name": "PlugsOutlined",
+      "classification": "renderer-capture-variance",
+      "reason": "The frozen atlas differs from repeated and isolated Chrome 152 renders at one antialiased RGB pixel even though the source SHA and canonical serialized SVG are unchanged.",
+      "sourcePath": "packages/yakit-ui/src/icons/outline/6695-131133.svg",
+      "sourceSha256": "c35fbdea40bfcd2098426d6aae02386233f3d11a39fb66943bcf341f0e4dd1e8",
+      "baselineRgbaSha256": "81e927a9d49470c34e1df1d1696a1b62172901516581ccf6d664cabf517da864",
+      "repeatedRgbaSha256": "c5591b883b9d329e9a9d2f1cb253825a45c4b6b968fd68f09c7f32943c187267",
+      "sideBySideProof": {
+        "browserVersion": "152.0.7977.76",
+        "currentSvgEqualsFrozen": true,
+        "currentRgbaSha256": "c5591b883b9d329e9a9d2f1cb253825a45c4b6b968fd68f09c7f32943c187267",
+        "frozenSerializedSvgRgbaSha256": "c5591b883b9d329e9a9d2f1cb253825a45c4b6b968fd68f09c7f32943c187267",
+        "repeatRgbaSha256": "c5591b883b9d329e9a9d2f1cb253825a45c4b6b968fd68f09c7f32943c187267",
+        "currentVsFrozenSerializedChangedChannels": 0,
+        "currentVsRepeatChangedChannels": 0
+      },
+      "changed": [
+        { "x": 18, "y": 15, "channel": 0, "expected": 244, "actual": 241 },
+        { "x": 18, "y": 15, "channel": 1, "expected": 245, "actual": 242 },
+        { "x": 18, "y": 15, "channel": 2, "expected": 246, "actual": 243 }
+      ],
+      "changedChannels": 3,
+      "maxChannelDelta": 3
+    }
+  ]
+}

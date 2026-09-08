@@ -11,6 +11,9 @@ import figmaProvenance from '../fixtures/icons/reference/figma-outline-raw-prove
 import metricsBaseline from '../fixtures/icons/reference/outline-controls-298.json';
 import prechangeBaseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
+import strokeWidthFixture from '../fixtures/icons/stroke-width-1/before.json';
+import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -47,6 +50,32 @@ const wrapperOriginCorrections = new Map([
   ['1:2431', { x: 0, y: -24 }],
   ['1:2433', { x: 0, y: -24 }],
 ]);
+const historicalSourceByPath = new Map(
+  strokeWidthFixture.assets.map(({ afterPath, beforeSvg }) => [afterPath, beforeSvg]),
+);
+const historicalOutlineSource = (file: string) => {
+  const widthMigrationSource = historicalSourceByPath.get(`icons/outline/${file}`);
+  if (widthMigrationSource) return widthMigrationSource;
+  const review = visualWeightReviews.reviews.find((item) => item.file === file);
+  if (review) {
+    const original = readFileSync(
+      resolve(
+        packageRoot,
+        'test/fixtures/icons/reference/visual-weight-v2',
+        review.oldEvidence.path,
+      ),
+      'utf8',
+    );
+    expect(sha256(original)).toBe(review.oldSourceSha256);
+    return original;
+  }
+  return file === '1-3136.svg'
+    ? readFileSync(
+        resolve(packageRoot, 'test/fixtures/icons/adjustable-stroke/bug-original-expanded.svg'),
+        'utf8',
+      )
+    : readFileSync(resolve(outlineRoot, file), 'utf8');
+};
 
 interface PixelMetric {
   boundsDelta: number;
@@ -126,10 +155,7 @@ const candidateHtml = `<!doctype html><html><head><style>
   .map((placement) => {
     const file = sourceByNode.get(placement.exportedSourceNodeId);
     if (!file) throw new Error(`Missing local source for ${placement.exportedSourceNodeId}`);
-    const rawSource = readFileSync(resolve(outlineRoot, file), 'utf8').replace(
-      /^<\?xml[^>]*>\s*/i,
-      '',
-    );
+    const rawSource = historicalOutlineSource(file).replace(/^<\?xml[^>]*>\s*/i, '');
     const isAiOverride = placement.placementNodeId === aiInstanceNodeId;
     const source = isAiOverride ? withAiInstanceOverride(rawSource) : rawSource;
     const position = localPosition(placement);
@@ -163,17 +189,19 @@ const failsGlobalGate = ({ boundsDelta, centroidDelta, iou, mae }: PixelMetric) 
   centroidDelta > strokeWidthPolicyGates.centroidDeltaMaximum;
 
 beforeAll(async () => {
-  const { executablePath, version } = rendererProvenance.browser;
-  if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH !== executablePath) {
-    throw new Error(`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH must equal ${executablePath}`);
+  const { browserExecutablePath, browserVersion } = currentRenderContract.renderer;
+  if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH !== browserExecutablePath) {
+    throw new Error(`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH must equal ${browserExecutablePath}`);
   }
-  const browser = await chromium.launch({ executablePath, headless: true });
+  const browser = await chromium.launch({ executablePath: browserExecutablePath, headless: true });
   try {
-    if (browser.version() !== version) {
-      throw new Error(`Chrome version ${browser.version()} does not match frozen ${version}`);
+    if (browser.version() !== browserVersion) {
+      throw new Error(
+        `Chrome version ${browser.version()} does not match current contract ${browserVersion}`,
+      );
     }
     const page = await browser.newPage({
-      deviceScaleFactor: rendererProvenance.deviceScaleFactor,
+      deviceScaleFactor: currentRenderContract.raster.deviceScaleFactor,
       viewport: frameSize,
     });
     await page.setContent(candidateHtml, { waitUntil: 'load' });
@@ -331,10 +359,11 @@ beforeAll(async () => {
         throw new Error(`Missing remediation evidence: ${exportedSourceNodeId}`);
       }
       const figmaRawSvgSha256 = sha256(figmaComponent.svg);
-      const localRawSvgSha256 = sha256(readFileSync(resolve(outlineRoot, symbol.file)));
+      const currentLocalRawSvgSha256 = sha256(readFileSync(resolve(outlineRoot, symbol.file)));
+      const historicalLocalRawSvgSha256 = sha256(historicalOutlineSource(symbol.file));
       if (
         figmaRawSvgSha256 !== symbol.figmaRawSvgSha256 ||
-        localRawSvgSha256 !== symbol.localRawSvgSha256
+        currentLocalRawSvgSha256 !== symbol.localRawSvgSha256
       ) {
         throw new Error(`Unresolved remediation evidence: ${exportedSourceNodeId}`);
       }
@@ -365,7 +394,9 @@ beforeAll(async () => {
         file: symbol.file,
         geometrySha256: symbol.geometrySha256,
         iou: metric.iou,
-        localRawSvgSha256,
+        currentLocalRawSvgSha256,
+        historicalLocalRawSvgSha256,
+        localRawSvgSha256: historicalLocalRawSvgSha256,
         mae: metric.mae,
         normalizedAstSha256: symbol.normalizedAstSha256,
         row: index + 1,
@@ -385,7 +416,8 @@ beforeAll(async () => {
             status: 'replaced-by-current-figma-source',
           },
           rows: remediationRows,
-          schemaVersion: 'outline-remediation-report-v2',
+          comparisonMode: 'historical-pre-stroke-width-1-source-vs-frozen-figma-frame',
+          schemaVersion: 'outline-remediation-historical-report-v3',
           unresolved: [],
         },
         null,
@@ -397,8 +429,8 @@ beforeAll(async () => {
   }
 }, 30_000);
 
-describe('Outline pixel metrics v1', () => {
-  it('renders the exact 353-placement frame including all three instances', () => {
+describe('Historical Outline pixel diagnostics under the current renderer', () => {
+  it('replays the exact pre-stroke-width-1 353-placement frame including all three instances', () => {
     expect(currentMetrics).toHaveLength(353);
     expect(currentMetrics.filter(({ nodeType }) => nodeType === 'component')).toHaveLength(350);
     expect(currentMetrics.filter(({ nodeType }) => nodeType === 'instance')).toHaveLength(3);
@@ -436,7 +468,7 @@ describe('Outline pixel metrics v1', () => {
     expect(aiMetric && failsGlobalGate(aiMetric)).toBe(false);
   });
 
-  it('keeps all 298 controls inside the reviewed 1.5px-vs-Figma envelope', () => {
+  it('keeps all 298 historical controls inside the reviewed 1.5px-vs-Figma envelope', () => {
     const currentById = new Map(
       currentMetrics
         .filter(({ nodeType }) => nodeType !== 'instance')
@@ -452,8 +484,9 @@ describe('Outline pixel metrics v1', () => {
     expect(metricsBaseline.controls).toHaveLength(298);
     expect(manifest.strokeWidthPolicy).toEqual({
       strategy: 'local-uniform-stroke-v1',
-      value: '1.5',
+      value: '1',
     });
+    expect(rendererProvenance.browser.version).toBe('151.0.7922.174');
     expect(strokeWidthPolicyGates).toEqual({
       boundsDeltaMaximum: 2,
       centroidDeltaMaximum: 0.75,
@@ -485,6 +518,8 @@ describe('Outline pixel metrics v1', () => {
     };
     const requiredDigests = [
       'figmaRawSvgSha256',
+      'currentLocalRawSvgSha256',
+      'historicalLocalRawSvgSha256',
       'localRawSvgSha256',
       'normalizedAstSha256',
       'geometrySha256',

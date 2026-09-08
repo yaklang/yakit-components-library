@@ -4,13 +4,13 @@
 <rect  width="24" height="24" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#icon_295680557__mask_0)">
-<path  d="M21 12C21 16.9706 16.9706 21 12 21C11.3126 21 10.6432 20.9229 10 20.777" stroke="#353639" stroke-width="1.5"/>
-<path  d="M3 12C3 7.02944 7.02944 3 12 3C12.6874 3 13.3568 3.07706 14 3.22302" stroke="#353639" stroke-width="1.5"/>
-<circle  cx="16" cy="4" r="2" stroke="#353639" stroke-width="1.5"/>
-<circle  cx="8" cy="20" r="2" stroke="#353639" stroke-width="1.5"/>
-<path  d="M12.5 11V7.5L8 13H11.5L11.5 16.5L16 11L12.5 11Z" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M5 11L3 13L1 11" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M19 13L21 11L23 13" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M21 12C21 16.9706 16.9706 21 12 21C11.3126 21 10.6432 20.9229 10 20.777" stroke="#353639" stroke-width="1"/>
+<path  d="M3 12C3 7.02944 7.02944 3 12 3C12.6874 3 13.3568 3.07706 14 3.22302" stroke="#353639" stroke-width="1"/>
+<circle  cx="16" cy="4" r="2" stroke="#353639" stroke-width="1"/>
+<circle  cx="8" cy="20" r="2" stroke="#353639" stroke-width="1"/>
+<path  d="M12.5 11V7.5L8 13H11.5L11.5 16.5L16 11L12.5 11Z" stroke="#F28C45" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M5 11L3 13L1 11" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M19 13L21 11L23 13" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </g>
 </svg>

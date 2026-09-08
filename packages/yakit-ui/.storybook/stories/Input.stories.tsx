@@ -262,11 +262,6 @@ const searchArgTypes: SearchStory['argTypes'] = {
     description: '传给 Ant Design Search 的搜索图标；未传时由 `icon` 与 `iconPosition` 决定。',
     table: { type: { summary: 'ReactNode' } },
   },
-  loading: {
-    control: 'boolean',
-    description: '显示搜索操作的加载状态。',
-    table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-  },
   selector: {
     control: false,
     description:

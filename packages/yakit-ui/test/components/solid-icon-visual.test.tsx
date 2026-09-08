@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { solidIconRegistry } from '../../src/icons/registry';
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
-import contract from '../fixtures/icons/reference/solid-render-contract-v1.json';
+import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
 const roots: Root[] = [];
 const background = [248, 249, 250] as const;
@@ -22,7 +22,8 @@ const focusNodeIds = [
   '4936:115789',
   '4936:115788',
 ] as const;
-const strokePolicyNodeIds = new Set(contract.localStrokeWidthPolicy.nodeIds);
+const strokePolicyNodeIds = new Set(contract.strokeWidthPolicy.nodeIds);
+const figmaFourPixelNodeIds = new Set<string>(contract.strokeWidthPolicy.figmaFourPixelNodeIds);
 const colors = [contract.raster.defaultColor, '#123456'] as const;
 const rawByNodeId = new Map(
   [...raw.components, ...raw.supplementalComponents].map((record) => [record.nodeId, record.svg]),
@@ -94,8 +95,14 @@ const rasterize = async (source: string) => {
   return context.getImageData(0, 0, width, height).data;
 };
 
-const figmaSourceForColor = (source: string, color: string) =>
-  source.replace(/(fill|stroke)="#353639"/gi, `$1="${color}"`);
+const figmaSourceForColor = (source: string, color: string, nodeId: string) => {
+  const colored = source.replace(/(fill|stroke)="#353639"/gi, `$1="${color}"`);
+  if (!strokePolicyNodeIds.has(nodeId)) return colored;
+  return colored.replace(
+    /\bstroke-width=(['"])(?:\d+(?:\.\d*)?|\.\d+)\1/g,
+    (_attribute, quote: string) => `stroke-width=${quote}1${quote}`,
+  );
+};
 
 const localSourceForColor = (nodeId: string, color: string) => {
   const exportName = exportByNodeId.get(nodeId);
@@ -177,11 +184,11 @@ afterEach(() => {
   document.body.replaceChildren();
 });
 
-describe('Solid Figma pixel parity', () => {
-  it('runs under the frozen Chromium and raster contract', async () => {
+describe('Solid stroke-width-1 Figma pixel parity', () => {
+  it('runs under the current versioned Chromium and raster contract', async () => {
     const browserVersion = await (await cdp()).send('Browser.getVersion');
     expect(browserVersion.product).toBe(`Chrome/${contract.renderer.browserVersion}`);
-    expect(navigator.userAgent).toMatch(/(?:Headless)?Chrome\/151\./);
+    expect(navigator.userAgent).toMatch(/(?:Headless)?Chrome\/152\./);
     expect(devicePixelRatio).toBe(contract.raster.deviceScaleFactor);
     expect(contract.metrics).toEqual({
       rounding: 'half-up-six-decimals',
@@ -192,17 +199,12 @@ describe('Solid Figma pixel parity', () => {
       boundsEdgeDeltaMaximum: 0,
       centroidDeltaMaximum: 0.05,
     });
-    expect(contract.localStrokeWidthPolicy).toEqual({
+    expect(contract.strokeWidthPolicy).toEqual({
       strategy: 'local-uniform-stroke-v1',
-      figmaStrokeWidth: 4,
-      localStrokeWidth: 1.5,
-      nodeIds: ['4936:115787', '4936:115788', '4936:115789', '4936:115790'],
-      metrics: {
-        maeMaximum: 20.25,
-        iouMinimum: 0.8,
-        boundsEdgeDeltaMaximum: 0,
-        centroidDeltaMaximum: 1.75,
-      },
+      normalizedFigmaWidth: 1,
+      localWidth: 1,
+      nodeIds: ['16035:380989', '4936:115787', '4936:115788', '4936:115789', '4936:115790'],
+      figmaFourPixelNodeIds: ['4936:115787', '4936:115788', '4936:115789', '4936:115790'],
     });
   });
 
@@ -211,13 +213,18 @@ describe('Solid Figma pixel parity', () => {
     async (nodeId, color) => {
       const figmaSource = rawByNodeId.get(nodeId);
       expect(figmaSource, nodeId).toBeDefined();
+      const expectedSource = figmaSourceForColor(figmaSource!, color, nodeId);
+      if (strokePolicyNodeIds.has(nodeId)) {
+        const sourceWidth = figmaFourPixelNodeIds.has(nodeId) ? '4' : '1.5';
+        expect(figmaSource, nodeId).toContain(`stroke-width="${sourceWidth}"`);
+        expect(expectedSource, nodeId).toContain('stroke-width="1"');
+        expect(expectedSource, nodeId).not.toContain('stroke-width="4"');
+      }
       const metric = compare(
-        await rasterize(figmaSourceForColor(figmaSource!, color)),
+        await rasterize(expectedSource),
         await rasterize(localSourceForColor(nodeId, color)),
       );
-      const gates = strokePolicyNodeIds.has(nodeId)
-        ? contract.localStrokeWidthPolicy.metrics
-        : contract.metrics;
+      const gates = contract.metrics;
 
       expect(metric.mae, `${nodeId}:${color}:MAE`).toBeLessThanOrEqual(gates.maeMaximum);
       expect(metric.iou, `${nodeId}:${color}:IoU`).toBeGreaterThanOrEqual(gates.iouMinimum);

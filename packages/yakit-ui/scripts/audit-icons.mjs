@@ -1,3 +1,4 @@
+import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -800,13 +801,15 @@ function validateManifest(manifest, files, policy) {
     if (!symbol.localRawSvgSha256) errors.push('LOCAL_RAW_HASH_MISMATCH');
     if (!symbol.normalizedAstSha256) errors.push('AST_DIGEST_MISMATCH');
     if (!symbol.geometrySha256) errors.push('GEOMETRY_DIGEST_MISMATCH');
+    const reviewedGeometry = reviewedOutlineGeometry(symbol);
+    if (symbol.geometryReviewId !== reviewedGeometry) errors.push('GEOMETRY_REVIEW_MISMATCH');
     if (
-      symbol.figmaNormalizedAstSha256 !== symbol.normalizedAstSha256 ||
+      (!reviewedGeometry && symbol.figmaNormalizedAstSha256 !== symbol.normalizedAstSha256) ||
       symbol.localNormalizedAstSha256 !== symbol.normalizedAstSha256
     )
       errors.push('AST_DIGEST_MISMATCH');
     if (
-      symbol.figmaGeometrySha256 !== symbol.geometrySha256 ||
+      (!reviewedGeometry && symbol.figmaGeometrySha256 !== symbol.geometrySha256) ||
       symbol.localGeometrySha256 !== symbol.geometrySha256
     )
       errors.push('GEOMETRY_DIGEST_MISMATCH');
@@ -911,12 +914,16 @@ async function validateProvenanceEvidence({
         semanticEraseSourceId: sourceNodeId,
       }),
     );
+    const reviewedGeometry = policy.variant === 'outline' && reviewedOutlineGeometry(symbol);
     if (
       symbol.figmaNormalizedAstSha256 !== normalizedAstSha256 ||
-      symbol.normalizedAstSha256 !== normalizedAstSha256
+      (!reviewedGeometry && symbol.normalizedAstSha256 !== normalizedAstSha256)
     )
       errors.push('AST_DIGEST_MISMATCH');
-    if (symbol.figmaGeometrySha256 !== geometrySha256 || symbol.geometrySha256 !== geometrySha256)
+    if (
+      symbol.figmaGeometrySha256 !== geometrySha256 ||
+      (!reviewedGeometry && symbol.geometrySha256 !== geometrySha256)
+    )
       errors.push('GEOMETRY_DIGEST_MISMATCH');
     const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaSource, {
       normalizeFigmaPrimary: policy.variant === 'solid',
@@ -1167,16 +1174,16 @@ export async function auditIcons({
         solidPlacementSource,
         solidRawSource,
       ] = await Promise.all([
-          readFile(iconNameCatalogPath, 'utf8'),
-          readFile(outlineNameManifestPath, 'utf8'),
-          readFile(solidNameManifestPath, 'utf8'),
-          readFile(outlineNameIndexPath, 'utf8'),
-          readFile(solidNameIndexPath, 'utf8'),
-          readFile(outlineNamePlacementProvenancePath, 'utf8'),
-          readFile(outlineNameRawProvenancePath, 'utf8'),
-          readFile(solidNamePlacementProvenancePath, 'utf8'),
-          readFile(solidNameRawProvenancePath, 'utf8'),
-        ]);
+        readFile(iconNameCatalogPath, 'utf8'),
+        readFile(outlineNameManifestPath, 'utf8'),
+        readFile(solidNameManifestPath, 'utf8'),
+        readFile(outlineNameIndexPath, 'utf8'),
+        readFile(solidNameIndexPath, 'utf8'),
+        readFile(outlineNamePlacementProvenancePath, 'utf8'),
+        readFile(outlineNameRawProvenancePath, 'utf8'),
+        readFile(solidNamePlacementProvenancePath, 'utf8'),
+        readFile(solidNameRawProvenancePath, 'utf8'),
+      ]);
       const expectedCatalog = renderIconNameCatalog(
         buildIconNameCatalog({
           outlineIndexSource,
@@ -1235,7 +1242,8 @@ function parseArguments(argv) {
     else if (argument === '--index') options.indexPath = argv[++index];
     else if (argument === '--name-catalog') options.iconNameCatalogPath = argv[++index];
     else if (argument === '--outline-name-index') options.outlineNameIndexPath = argv[++index];
-    else if (argument === '--outline-name-manifest') options.outlineNameManifestPath = argv[++index];
+    else if (argument === '--outline-name-manifest')
+      options.outlineNameManifestPath = argv[++index];
     else if (argument === '--outline-name-placement-provenance')
       options.outlineNamePlacementProvenancePath = argv[++index];
     else if (argument === '--outline-name-raw-provenance')
@@ -1293,9 +1301,7 @@ async function main() {
     iconNameCatalogPath,
     outlineNameIndexPath: resolveOptional(options.outlineNameIndexPath),
     outlineNameManifestPath: resolveOptional(options.outlineNameManifestPath),
-    outlineNamePlacementProvenancePath: resolveOptional(
-      options.outlineNamePlacementProvenancePath,
-    ),
+    outlineNamePlacementProvenancePath: resolveOptional(options.outlineNamePlacementProvenancePath),
     outlineNameRawProvenancePath: resolveOptional(options.outlineNameRawProvenancePath),
     figmaRawProvenancePath,
     indexPath,

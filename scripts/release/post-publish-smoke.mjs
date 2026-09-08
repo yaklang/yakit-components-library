@@ -8,6 +8,8 @@ import path from "node:path";
 import process from "node:process";
 import { promisify } from "node:util";
 
+import { verifyDeferredRegistryBaseline } from "./release-deferrals.mjs";
+
 import { REMOVED_UI_RUNTIMES } from "./removed-ui-runtime-scan.mjs";
 
 const execute = promisify(execFile);
@@ -190,6 +192,23 @@ if (
   registryManifest.version !== packageVersion
 ) {
   throw new Error("registry package identity mismatch");
+}
+let deferralPolicy;
+try {
+  deferralPolicy = JSON.parse(
+    await readFile(
+      new URL("./release-deferral-policy.json", import.meta.url),
+      "utf8",
+    ),
+  );
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
+if (deferralPolicy) {
+  await verifyDeferredRegistryBaseline(deferralPolicy, {
+    name: packageName,
+    version: packageVersion,
+  });
 }
 if (packageName === "@yakit-libs/yakit-ui-icons") {
   const iconsFixture = await mkdtemp(

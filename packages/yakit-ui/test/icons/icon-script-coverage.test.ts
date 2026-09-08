@@ -33,7 +33,40 @@ describe('icon package script coverage', () => {
       'node scripts/colorful-audit.mjs && node scripts/colorful-entry-generator.mjs',
     );
     expect(scripts['audit:icons']).toBe(
-      'pnpm run audit:icons:outline && pnpm run audit:icons:solid && pnpm run audit:icons:colorful',
+      'pnpm run audit:icons:stroke && pnpm run audit:icons:adjustable && pnpm run audit:icons:outline && pnpm run audit:icons:solid && pnpm run audit:icons:colorful',
+    );
+  });
+
+  it('checks all production stroke widths and executes the migration and runtime regressions', () => {
+    expect(scripts['audit:icons:stroke']).toBe(
+      'node scripts/normalize-icon-stroke-width.mjs --check',
+    );
+    expect(scripts['test:ci']).toContain('pnpm run audit:icons:stroke');
+    expect(scripts['test:ci']).toContain('pnpm run test:icon-stroke-width');
+    for (const file of [
+      'icon-stroke-width.test.ts',
+      'oldicon-stroke-width.test.ts',
+      'icon-stroke-width-ssr.test.ts',
+    ])
+      expect(scripts['test:icon-stroke-width']).toContain(`test/icons/${file}`);
+    expect(scripts['test:icon-visual']).toContain('test/icons/icon-stroke-width-visual.test.ts');
+  });
+
+  it('wires adjustable stroke contracts, browser, geometry, visual, and consumer gates', () => {
+    expect(scripts['audit:icons:adjustable']).toBe(
+      'node config/generateIconStrokeContract.mjs --check',
+    );
+    expect(scripts['test:ci']).toContain('pnpm run test:icon-adjustable');
+    for (const file of ['transform', 'audit', 'geometry', 'ssr'])
+      expect(scripts['test:icon-adjustable']).toContain(
+        `test/icons/icon-adjustable-${file}.test.ts`,
+      );
+    expect(scripts['test:icon-adjustable']).toContain(
+      'test/components/icon-adjustable-runtime.test.tsx',
+    );
+    expect(scripts['test:icon-visual']).toContain('test/icons/icon-adjustable-visual.test.ts');
+    expect(scripts['test:icon-dist-consumer']).toContain(
+      'test/icons/icon-adjustable-consumer.test.ts',
     );
   });
 
@@ -81,6 +114,12 @@ describe('icon package script coverage', () => {
     expect(typeConfig).toMatch(/\*\.test\.tsx|solid-icon-public\.test\.tsx/);
     expect(scripts['test:icon-dist-consumer']).toContain('pnpm run build:lib');
     expect(scripts['test:icon-dist-consumer']).toContain('test/icons/dist-consumer.test.ts');
+    expect(scripts['test:icon-dist-consumer']).toContain(
+      'pnpm --filter @yakit-libs/yakit-ui-icons run build',
+    );
+    expect(scripts['test:icon-dist-consumer']).toContain(
+      'test/icons/icon-stroke-width-dist.test.ts',
+    );
   });
 
   it('keeps the Figma name contract and deterministic updater wired into package scripts', () => {

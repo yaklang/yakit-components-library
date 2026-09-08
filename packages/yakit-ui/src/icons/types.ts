@@ -17,7 +17,7 @@ type ForbiddenIconSvgProps =
   | 'children'
   | 'dangerouslySetInnerHTML';
 
-/** Presentation-only overrides for the icon's inner SVG. */
+/** Presentation-only overrides for the inner SVG; strokeWidth controls stroked Outline icons and Loading. */
 export type IconSvgProps = Omit<SVGProps<SVGSVGElement>, ForbiddenIconSvgProps>;
 
 /** Shared props for every icon exported by Yakit UI. */

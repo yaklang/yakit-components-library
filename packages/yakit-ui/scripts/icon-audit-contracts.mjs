@@ -4,7 +4,7 @@ export const POLICY_DIGEST_ALGORITHM_VERSION = 'policy-digest-canonical-json-v1'
 export const ID_HYGIENE_ALGORITHM_VERSION = 'solid-id-hygiene-v1';
 export const PAINT_SEMANTICS_ALGORITHM_VERSION = 'geometry-role-locator-v1';
 export const PAINT_COMPARISON_NORMALIZATION_VERSION = 'figma-primary-currentcolor-v1';
-export const ICON_STROKE_WIDTH = '1.5';
+export const ICON_STROKE_WIDTH = '1';
 export const ICON_STROKE_WIDTH_POLICY = Object.freeze({
   strategy: 'local-uniform-stroke-v1',
   value: ICON_STROKE_WIDTH,

@@ -118,3 +118,9 @@ void invalidSvgRef;
 void invalidSvgRole;
 void invalidSvgTabIndex;
 void svgProps;
+
+const adjustableWidth: IconProps = { svgProps: { strokeWidth: 0, style: { strokeWidth: '1px' } } };
+// @ts-expect-error strokeWidth belongs to svgProps, not the outer span API
+const invalidTopLevelWidth: IconProps = { strokeWidth: 2 };
+void adjustableWidth;
+void invalidTopLevelWidth;

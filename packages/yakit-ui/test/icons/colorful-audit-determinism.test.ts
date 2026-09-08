@@ -97,6 +97,20 @@ describe('colorful offline audit', () => {
     ).toThrow(/SVG_STRUCTURE_INVALID/);
   });
 
+  it('rejects attribute and inline-style stroke widths outside the shared policy', () => {
+    const svg = (attribute: string) =>
+      `<svg width="24" height="24" preserveAspectRatio="xMidYMid meet"><path d="M0 0L1 1" stroke="#000000" ${attribute}/></svg>`;
+    const audit = (sourceSvg: string) =>
+      auditColorfulInputs(
+        { inventory: canonicalOnlyInventory, sources: [{ ...sources[0], svg: sourceSvg }] },
+        { expectedGroupCount: 1, expectedRowCount: 1 },
+      );
+
+    expect(() => audit(svg('stroke-width="2"'))).toThrow(/STROKE_WIDTH_INVALID.*attribute/);
+    expect(() => audit(svg('style="stroke-width: 1.5"'))).toThrow(/STROKE_WIDTH_INVALID.*style/);
+    expect(() => audit(svg('stroke-width="1"'))).not.toThrow();
+  });
+
   it('accepts only pinned tokens whose light and dark values equal the Figma fallback', () => {
     const tokenCatalog = [
       { dark: '#FFFFFF', light: '#FFFFFF', name: '--fixed-white' },

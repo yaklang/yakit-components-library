@@ -54,6 +54,24 @@ package cannot enforce candidate ordering or install editor-private configuratio
 
 图标默认渲染为 `span.anticon.yakit-icon > svg`。`className`、`style`、事件、ARIA 属性和 `ref<HTMLSpanElement>` 作用于外层 `span`，`size` 与受限的 `svgProps` 作用于内层 SVG；浏览器入口自动关联静态兼容样式，Node SSR 入口保持无 CSS。无法识别 package `browser` condition 的自定义构建环境可显式导入 `@yakit-libs/yakit-ui/icons/icon.css`。
 
+### 调整描边宽度
+
+350 个 Outline 图标（包括 `BugOutlined`、`QrcodeOutlined`）和 `Loading` 支持通过 `svgProps` 调整实际线宽，默认值仍为 `1`：
+
+```tsx
+<BugOutlined svgProps={{ strokeWidth: 2 }} />
+<HomeOutlined svgProps={{ style: { strokeWidth: 1.5 } }} />
+<Loading svgProps={{ strokeWidth: 0 }} />
+```
+
+优先级是 `svgProps.style.strokeWidth` → `svgProps.strokeWidth` → 图标原始默认值。`0` 会隐藏描边，混合图标中的填充细节仍然保留。支持合法 SVG 长度/百分比字符串；同元素 CSS 规则遵循正常层叠顺序。外层 `style` 仍属于 `span`，不提供顶层 `strokeWidth` 属性。
+
+原先展开为填充的二维码、标签、剪贴板、信号、火箭及语音图标已恢复为真实描边，默认线宽为 `1`。`TagOutlined` 的实心圆、火箭舷窗和其他独立填充细节保持实心，不随 `strokeWidth` 改变。`svgProps.strokeWidth={0}` 只隐藏线条。几何迁移的范围与兼容性说明见[线宽能力说明](./docs/icon-stroke-capabilities.md)。
+
+Solid、Colorful、Oldicon 保持根 SVG 的原生属性透传；没有统一覆盖其内部固定宽度。`BugOutlined` 已从填充轮廓重建为真实描边，默认视觉改为与其他描边 Outline 一致的宽度 `1`。
+
+图标的内置描边统一为 `stroke-width="1"`，包括 Outline、Solid、Colorful、Loading 和独立图标包的 Oldicon。`1` 是 SVG 用户单位，会随 `size` / `viewBox` 缩放；纯填充图形不新增描边。Solid、Colorful、Oldicon 的根 SVG 属性保持原生继承行为。
+
 多色、品牌、头像和状态类图标可从 `@yakit-libs/yakit-ui/icons/colorful` 导入。它们保留 Figma 定义的固定色、渐变和局部主题色；`color` 只会影响使用 `currentColor` 的图层。
 
 带渐变、遮罩或裁剪的图标通过 React `useId()` 隔离 SVG fragment ID。一个页面存在多个独立 React root 时，每个 root 必须使用不同的 `identifierPrefix`；同一组 SSR 与 hydration 必须使用完全相同的 prefix。跨 root 重用 prefix 可能产生 DOM ID 冲突，`useId()` 本身不提供该跨 root 保证。

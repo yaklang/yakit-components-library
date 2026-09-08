@@ -11,6 +11,8 @@ import {
   validateColorfulInventory,
 } from './colorful-icon-contracts.mjs';
 import { auditColorfulFragmentFiles } from './colorful-fragments.mjs';
+import { ICON_STROKE_WIDTH } from './icon-audit-contracts.mjs';
+import { svgStrokeWidths } from './icon-stroke-width.mjs';
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PAINT_ATTRIBUTE = /\b(?:fill|stroke|stop-color|flood-color)\s*=\s*(["'])(.*?)\1/gi;
@@ -208,6 +210,16 @@ export function auditColorfulInputs(
   for (const source of sources) {
     assertSvgTagBalance(source.svg, source.path);
     assertSvgPathData(source.svg, source.path);
+    const invalidWidths = svgStrokeWidths(source.svg).filter(
+      ({ value }) => value.trim() !== ICON_STROKE_WIDTH,
+    );
+    if (invalidWidths.length > 0) {
+      const { surface, tag, value } = invalidWidths[0];
+      fail(
+        'STROKE_WIDTH_INVALID',
+        `${source.path}: ${tag} ${surface} stroke-width=${JSON.stringify(value)}`,
+      );
+    }
     const row = canonicalRows.find((candidate) => colorfulLocalFile(candidate) === source.path);
     if (row?.normalizedSvgSha256 && sha256(source.svg) !== row.normalizedSvgSha256)
       fail('LOCAL_SOURCE_HASH_MISMATCH', source.path);

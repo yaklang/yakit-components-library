@@ -5,6 +5,8 @@ import { chromium, type Browser } from 'playwright';
 import { createServer, type ViteDevServer } from 'vite';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
+import renderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 let browser: Browser;
 let server: ViteDevServer;
@@ -146,7 +148,7 @@ describe('Outline icon paint semantics in Chromium', () => {
     });
 
     const formula = 'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
-    expect(browser.version()).toMatch(/^151\./);
+    expect(browser.version()).toBe(renderContract.renderer.browserVersion);
     expect(results.supported).toBe(true);
     expect(results.default).toEqual({ base: '#353639', formula, relative: '#C0C6D1' });
     expect(results.custom).toEqual({ base: '#123456', formula, relative: '#9DC4EE' });

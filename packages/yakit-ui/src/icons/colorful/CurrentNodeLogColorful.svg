@@ -1,6 +1,6 @@
 <svg width="24" height="24" preserveAspectRatio="xMidYMid meet" overflow="visible" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g >
 <circle  cx="12" cy="12" r="12" fill="#F9C5A2"/>
-<circle  cx="12" cy="12" r="8" fill="#F28C45" stroke="var(--Colors-Use-Basic-White, #FFFFFF)" stroke-width="2"/>
+<circle  cx="12" cy="12" r="8" fill="#F28C45" stroke="var(--Colors-Use-Basic-White, #FFFFFF)" stroke-width="1"/>
 </g>
 </svg>

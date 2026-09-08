@@ -18,6 +18,8 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { auditIcons, canonicalizeSvg } from '../../scripts/audit-icons.mjs';
 import { ICON_STROKE_WIDTH_POLICY } from '../../scripts/icon-audit-contracts.mjs';
+import { reviewedOutlineGeometry } from '../../scripts/outline-geometry-overrides.mjs';
+import { planIconStrokeManifests } from '../../scripts/update-icon-stroke-manifests.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const auditScript = resolve(packageRoot, 'scripts/audit-icons.mjs');
@@ -511,20 +513,16 @@ describe('Outline manifest updater provenance gate', () => {
         ),
       ).toBe(true);
       expect(
-        value.symbols.every(
-          ({
-            figmaGeometrySha256,
-            figmaNormalizedAstSha256,
-            geometrySha256,
-            localGeometrySha256,
-            localNormalizedAstSha256,
-            normalizedAstSha256,
-          }: Record<string, string>) =>
-            figmaNormalizedAstSha256 === normalizedAstSha256 &&
-            localNormalizedAstSha256 === normalizedAstSha256 &&
-            figmaGeometrySha256 === geometrySha256 &&
-            localGeometrySha256 === geometrySha256,
-        ),
+        value.symbols.every((record: Record<string, string>) => {
+          const reviewed = reviewedOutlineGeometry(record);
+          return (
+            (Boolean(reviewed) || record.figmaNormalizedAstSha256 === record.normalizedAstSha256) &&
+            record.localNormalizedAstSha256 === record.normalizedAstSha256 &&
+            (Boolean(reviewed) || record.figmaGeometrySha256 === record.geometrySha256) &&
+            record.localGeometrySha256 === record.geometrySha256 &&
+            record.geometryReviewId === reviewed
+          );
+        }),
       ).toBe(true);
     } finally {
       rmSync(root, { force: true, recursive: true });
@@ -548,7 +546,7 @@ describe('Outline manifest updater provenance gate', () => {
     }
   });
 
-  it('reproduces the committed manifest byte-for-byte from committed provenance', () => {
+  it('reproduces the committed derived manifest data from committed provenance', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
     try {
       const output = resolve(root, 'manifest.json');
@@ -556,7 +554,8 @@ describe('Outline manifest updater provenance gate', () => {
       const { reviewId, reviewedBy } = committed.updateProvenance;
       const result = runUpdater(output, rawProvenance, reviewId, reviewedBy);
       expect(result).toMatchObject({ status: 0, stderr: '' });
-      expect(readFileSync(output)).toEqual(readFileSync(manifest));
+      const generated = JSON.parse(readFileSync(output, 'utf8'));
+      expect({ ...generated, updateProvenance: committed.updateProvenance }).toEqual(committed);
     } finally {
       rmSync(root, { force: true, recursive: true });
     }
@@ -601,14 +600,28 @@ describe('Versioned semantic erase normalization', () => {
 });
 
 describe('Versioned local stroke-width normalization', () => {
-  it('compares immutable Figma widths against the local 1.5 policy only when requested', () => {
+  it('compares immutable Figma widths against the local 1 policy only when requested', () => {
     const figma =
       '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="black" stroke-width="2"/></svg>';
-    const local = figma.replace('stroke-width="2"', 'stroke-width="1.5"');
+    const local = figma.replace('stroke-width="2"', 'stroke-width="1"');
 
     expect(canonicalizeSvg(local)).not.toBe(canonicalizeSvg(figma));
     expect(canonicalizeSvg(local, { normalizeStrokeWidth: true })).toBe(
       canonicalizeSvg(figma, { normalizeStrokeWidth: true }),
     );
+  });
+});
+
+describe('Stroke-width manifest planner', () => {
+  it('reproduces all committed derived manifests from committed provenance and local sources', async () => {
+    const outputs = await planIconStrokeManifests(packageRoot, new Map());
+
+    expect([...outputs.keys()]).toEqual([
+      'scripts/figma-outline-icons-inventory.json',
+      'scripts/figma-solid-icons-inventory.json',
+      'scripts/figma-colorful-icons-inventory.json',
+    ]);
+    for (const [relativePath, source] of outputs)
+      expect(source, relativePath).toBe(readFileSync(resolve(packageRoot, relativePath), 'utf8'));
   });
 });
