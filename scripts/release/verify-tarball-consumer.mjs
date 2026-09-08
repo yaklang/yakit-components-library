@@ -143,9 +143,10 @@ async function stopLauncher(launcher) {
   });
 }
 
-const packDirectory = process.argv[2];
-if (!packDirectory)
+const packDirectoryArgument = process.argv[2];
+if (!packDirectoryArgument)
   throw new Error("Usage: verify-tarball-consumer.mjs <pack-directory>");
+const packDirectory = path.resolve(packDirectoryArgument);
 let releaseManifest;
 try {
   releaseManifest = JSON.parse(
