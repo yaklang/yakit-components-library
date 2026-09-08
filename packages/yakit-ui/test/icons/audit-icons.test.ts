@@ -18,6 +18,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { auditIcons, canonicalizeSvg } from '../../scripts/audit-icons.mjs';
 import { ICON_STROKE_WIDTH_POLICY } from '../../scripts/icon-audit-contracts.mjs';
+import { reviewedOutlineGeometry } from '../../scripts/outline-geometry-overrides.mjs';
 import { planIconStrokeManifests } from '../../scripts/update-icon-stroke-manifests.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -512,20 +513,16 @@ describe('Outline manifest updater provenance gate', () => {
         ),
       ).toBe(true);
       expect(
-        value.symbols.every(
-          ({
-            figmaGeometrySha256,
-            figmaNormalizedAstSha256,
-            geometrySha256,
-            localGeometrySha256,
-            localNormalizedAstSha256,
-            normalizedAstSha256,
-          }: Record<string, string>) =>
-            figmaNormalizedAstSha256 === normalizedAstSha256 &&
-            localNormalizedAstSha256 === normalizedAstSha256 &&
-            figmaGeometrySha256 === geometrySha256 &&
-            localGeometrySha256 === geometrySha256,
-        ),
+        value.symbols.every((record: Record<string, string>) => {
+          const reviewed = reviewedOutlineGeometry(record);
+          return (
+            (Boolean(reviewed) || record.figmaNormalizedAstSha256 === record.normalizedAstSha256) &&
+            record.localNormalizedAstSha256 === record.normalizedAstSha256 &&
+            (Boolean(reviewed) || record.figmaGeometrySha256 === record.geometrySha256) &&
+            record.localGeometrySha256 === record.geometrySha256 &&
+            record.geometryReviewId === reviewed
+          );
+        }),
       ).toBe(true);
     } finally {
       rmSync(root, { force: true, recursive: true });

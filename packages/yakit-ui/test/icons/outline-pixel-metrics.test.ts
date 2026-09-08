@@ -13,6 +13,7 @@ import prechangeBaseline from '../fixtures/icons/reference/outline-prechange-bas
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
 import strokeWidthFixture from '../fixtures/icons/stroke-width-1/before.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -52,9 +53,29 @@ const wrapperOriginCorrections = new Map([
 const historicalSourceByPath = new Map(
   strokeWidthFixture.assets.map(({ afterPath, beforeSvg }) => [afterPath, beforeSvg]),
 );
-const historicalOutlineSource = (file: string) =>
-  historicalSourceByPath.get(`icons/outline/${file}`) ??
-  readFileSync(resolve(outlineRoot, file), 'utf8');
+const historicalOutlineSource = (file: string) => {
+  const widthMigrationSource = historicalSourceByPath.get(`icons/outline/${file}`);
+  if (widthMigrationSource) return widthMigrationSource;
+  const review = visualWeightReviews.reviews.find((item) => item.file === file);
+  if (review) {
+    const original = readFileSync(
+      resolve(
+        packageRoot,
+        'test/fixtures/icons/reference/visual-weight-v2',
+        review.oldEvidence.path,
+      ),
+      'utf8',
+    );
+    expect(sha256(original)).toBe(review.oldSourceSha256);
+    return original;
+  }
+  return file === '1-3136.svg'
+    ? readFileSync(
+        resolve(packageRoot, 'test/fixtures/icons/adjustable-stroke/bug-original-expanded.svg'),
+        'utf8',
+      )
+    : readFileSync(resolve(outlineRoot, file), 'utf8');
+};
 
 interface PixelMetric {
   boundsDelta: number;

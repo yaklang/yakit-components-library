@@ -11,6 +11,7 @@ import metrics from '../fixtures/icons/reference/outline-controls-298.json';
 import baseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -136,6 +137,21 @@ describe('Outline pre-change baseline', () => {
   it('keeps every control geometry equal to its pre-repair projection', () => {
     const changed = baseline.controls.filter(({ file, geometryProjectionSha256 }) => {
       const source = readFileSync(resolve(outlineRoot, file), 'utf8');
+      const review = visualWeightReviews.reviews.find((entry) => entry.file === file);
+      if (review) {
+        expect(review.status, file).toBe('promoted');
+        expect(sha256(source), file).toBe(review.candidateSourceSha256);
+        const original = readFileSync(
+          resolve(
+            packageRoot,
+            'test/fixtures/icons/reference/visual-weight-v2',
+            review.oldEvidence.path,
+          ),
+          'utf8',
+        );
+        expect(sha256(original), file).toBe(review.oldSourceSha256);
+        return sha256(geometryProjection(original, file)) !== geometryProjectionSha256;
+      }
       return sha256(geometryProjection(source, file)) !== geometryProjectionSha256;
     });
 

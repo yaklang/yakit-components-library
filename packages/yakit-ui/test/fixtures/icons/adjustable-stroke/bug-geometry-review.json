@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "bug-adjustable-geometry-review-v1",
+  "icon": "BugOutlined",
+  "sourceNode": {
+    "fileKey": "QWct5XE0Bg0bNDQ93eYgEw",
+    "nodeId": "1:3136",
+    "name": " Outline/bug",
+    "provenanceFile": "test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json",
+    "figmaRawSvgSha256": "dfbbeeab2616a24b43adf7df5d1ea77f6feac09b5995d32583693e55208f617a",
+    "geometrySource": "centerline-reconstructed-from-expanded-path",
+    "unexpandedCenterlineAvailable": false,
+    "reason": "The retained canonical Figma SVG contains only one expanded fill path. The reviewed centerline was reconstructed from its exact two-pixel offsets and preserves the body, head, six external legs, and midline topology."
+  },
+  "artifacts": {
+    "originalExpandedSvg": "test/fixtures/icons/adjustable-stroke/bug-original-expanded.svg",
+    "originalExpandedSvgSha256": "ce6f2466888a685a25272825c6e6df4b8b3b316087422af9565bfd2b40b3a2d4",
+    "reviewedWidth2Svg": "test/fixtures/icons/adjustable-stroke/bug-reviewed-width-2.svg",
+    "reviewedWidth2SvgSha256": "9f6c27782178a46cf951bd72d5767a28df7e4f7921c922c70b79557cfbea11c9",
+    "productionSvg": "src/icons/outline/1-3136.svg",
+    "productionSvgSha256": "b398e0bed6b707e38cffef99dbc51df32c09342d3ef703dc8b180a3b8b0d48ba"
+  },
+  "renderer": {
+    "browserProduct": "Google Chrome",
+    "browserVersion": "152.0.7977.76",
+    "browserExecutablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "browserExecutableSha256": "755178ee89130a6f1c94cc4ecb2289fe74240db3e7efe9ec69a6cfcd4b93a6ee",
+    "playwrightVersion": "1.55.0",
+    "rasterSize": 96,
+    "deviceScaleFactor": 1,
+    "viewBox": [0, 0, 24, 24],
+    "inkMaskAlphaThreshold": 8
+  },
+  "width2VersusOriginal": {
+    "iou": 0.981007,
+    "boundsEdgeDeltaViewBox": 0,
+    "centroidDeltaViewBox": 0.024579,
+    "gates": {
+      "iouMinimum": 0.95,
+      "boundsEdgeDeltaMaximum": 0.5,
+      "centroidDeltaMaximum": 0.25
+    },
+    "passed": true
+  },
+  "widths": {
+    "0": { "activePixels": 0, "bounds": null, "cropped": false },
+    "1": { "activePixels": 1727, "bounds": [6, 10, 89, 89], "cropped": false },
+    "1.5": { "activePixels": 2457, "bounds": [5, 9, 90, 90], "cropped": false },
+    "2": { "activePixels": 3144, "bounds": [4, 8, 91, 91], "cropped": false },
+    "3": { "activePixels": 4515, "bounds": [2, 6, 93, 93], "cropped": false }
+  },
+  "defaultStrokeWidth": 1,
+  "lineCap": "round",
+  "lineJoin": "round",
+  "pass": true
+}

@@ -13,6 +13,7 @@ export interface LoadingProps extends BaseIconProps {
 export type IconProps = LoadingProps;
 
 const LOADING_KEYFRAME = 'yakitIconLoadingSpin_b1a35c158267';
+const DEFAULT_LOADING_STROKE_WIDTH = 1;
 
 const LoadingSvg = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -26,7 +27,7 @@ const LoadingSvg = (props: SVGProps<SVGSVGElement>) => (
     <path
       d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3"
       stroke="currentColor"
-      strokeWidth={1}
+      strokeWidth={props.style?.strokeWidth ?? props.strokeWidth ?? DEFAULT_LOADING_STROKE_WIDTH}
       strokeLinecap="round"
       strokeLinejoin="round"
     />

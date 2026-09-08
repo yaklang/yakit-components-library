@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "icon-visual-weight-independent-review-v1",
+  "exportName": "QrcodeOutlined",
+  "file": "1-2249.svg",
+  "reviewer": "weight_regression-test-engineer",
+  "oldSourceSha256": "d0444b488be21435615941d2b8217751b268bb7b50a2658e88ca799f08a5056c",
+  "candidateSourceSha256": "1dabb62915a9c0a13a354ebee71f5dc03ec675de2c3f365d10775908beb363fc",
+  "specSha256": "c18ef1801e4c9ce321d20462d9261fd0ed3a295139293c04d60bd3e3bf46dce7",
+  "metricsSha256": "0afa0fa5779610e161038f90d492c8b19ead85f8266d32c0217062ad1d5ffc0a",
+  "visualMatrixSha256": "99f07ffb4ad255953eeecaf95366490f241363328d3b4b7c00ac6e02545fae4b",
+  "specificationVerdict": "pass",
+  "geometryVerdict": "pass",
+  "visualVerdict": "pass",
+  "findings": {
+    "sampleSegments": "The three fixed sections measure exactly 1 SVG unit and sample straight, non-junction portions of the vertical branch and locator-frame top/left edges.",
+    "topology": "Ten connected ink components are consistent with three locator frames plus seven disconnected branch/dot groups; all three locator holes remain open at old width and default width.",
+    "oldWidthReconstruction": "Width 2 reaches IoU 0.9979470888841455, contour distance 0.03125 SVG unit, and zero bounds delta against the immutable expanded source.",
+    "defaultVisual": "The 16/24/32/64 matrix visibly reduces line weight while retaining all locator frames, holes, branches, dots, round caps, and the intended QR identity."
+  },
+  "status": "visual-reviewed"
+}

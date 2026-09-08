@@ -1,5 +1,7 @@
 import svgr from 'vite-plugin-svgr';
 
+import { applyIconStrokeContract } from './iconStrokeContract';
+
 type SvgrPluginOptions = NonNullable<Parameters<typeof svgr>[0]>;
 type SvgrTemplate = NonNullable<NonNullable<SvgrPluginOptions['svgrOptions']>['template']>;
 
@@ -76,7 +78,9 @@ function appendInstanceSuffix(node: AstNode | AstNode[] | null | undefined): boo
   return changed;
 }
 
-const svgReactTemplate: SvgrTemplate = (variables, { tpl }) => {
+const svgReactTemplate: SvgrTemplate = (variables, { options, tpl }) => {
+  const filePath = (options as typeof options & { state?: { filePath?: string } }).state?.filePath;
+  if (filePath) applyIconStrokeContract(variables.jsx as unknown as AstNode, filePath);
   const hasFragments = appendInstanceSuffix(variables.jsx as unknown as AstNode);
 
   if (!hasFragments) {

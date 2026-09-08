@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "icon-visual-weight-independent-review-v1",
+  "reviewer": "weight_regression-test-engineer",
+  "specSha256": "75629c3471f6535933aa5154f9481218905c39651f1de23c39aaeb8ed758ecd9",
+  "status": "visual-reviewed",
+  "reviews": [
+    { "file": "1-2107.svg", "candidateSourceSha256": "8476955829dfa1a447992874f0e3c47564ea12c8ce633596f6eabdc57b2d9d6d", "metricsSha256": "6c20499d47d3bb13b6a459ace95804033e5baeeeedd816252ca4cb5f917e2bfc", "visualMatrixSha256": "5e8905f4adc8d880ebde1850b48e9f51b477864ecb1f809975cfe0bef6895877", "geometryVerdict": "pass", "visualVerdict": "pass" },
+    { "file": "1-2231.svg", "candidateSourceSha256": "5c939bfe1e03ea1888ac8b910939f70cfbc3a54684fdc514b506384a8314f86e", "metricsSha256": "6485b65329d1d3206d62710de0802f10d22f71239085aa17eb3cf431ba8e0483", "visualMatrixSha256": "d4292571f8e6b8619a16939463db3721882fd109a59f3b4a5727db1df36a2d54", "geometryVerdict": "pass", "visualVerdict": "pass", "note": "The radius-1.5 aperture dot remains a fixed semantic fill at every size and width zero." },
+    { "file": "1-2273.svg", "candidateSourceSha256": "a5b4742a1a4065ea31e98081cd9eaf869ee174d0c7a3ee4d28a071c5ade9d43c", "metricsSha256": "a6d92c584cd760df2e113cfecf35584c271fac1b6d15a1dca9ac1ece3856558e", "visualMatrixSha256": "ecd1ceba6ec98949272b0083976754e014ca0cfe46768751f0013a76ad7a069c", "geometryVerdict": "pass", "visualVerdict": "pass" },
+    { "file": "1-2407.svg", "candidateSourceSha256": "71f8c40cb62f660f8a1d1377943d6c429a04e8c20d5a4485805b91928d3552b5", "metricsSha256": "174a827fcee3a02d96b1190d85e6da56c8999f331734c3a06527aab5114d347d", "visualMatrixSha256": "293bb2da6c98c165b66b62f2b1c2fe127d7bfd5fe8c3a4324ab1565a5115ffbf", "geometryVerdict": "pass", "visualVerdict": "pass" },
+    { "file": "1-2519.svg", "candidateSourceSha256": "abb5c9d237da7e067c5aa862e45b363adf2ba7b0e8861758667c67ba378e7759", "metricsSha256": "5e79d9278fb43db3ac23b2939d10ed2de805d639893b745ba6c6473ba38159db", "visualMatrixSha256": "bfeaae1b05e19c0fd1f1057ec15b708aaae3b8b3e963d36ca4ee049fec0e4b3f", "geometryVerdict": "pass", "visualVerdict": "pass" },
+    { "file": "17117-250680.svg", "candidateSourceSha256": "49cc479fbb3aae24bd5a89a7c178df3f005135491b527c1d27bca412a46cc6b0", "metricsSha256": "6ef485cee5af1f6688c94157d97e45efaf2d8f536ddcdc7208db238681f6af67", "visualMatrixSha256": "ce7c40c7a6302e496c1e060376ecb7509b460087ff2419c040601ac0eb4b14b7", "geometryVerdict": "pass", "visualVerdict": "pass" }
+  ],
+  "findings": "All six old-width reconstructions pass the frozen geometric gates. The 16/24/32/64 matrices preserve identity, joins, holes, and semantic details while producing the intended width-1 default. No candidate is visibly cropped."
+}

@@ -114,7 +114,7 @@ export const buildIconRegistry = <TFamily extends IconFamily>(
 
 assertUniqueFigmaNames([...outlineIconNameCatalog, ...solidIconNameCatalog]);
 
-/** Figma's 24 × 24, 2px-stroke icon set. */
+/** 24 × 24 Outline icons: default stroke width 1, with independent filled details. */
 export const outlineIconRegistry = buildIconRegistry<'outline'>(
   OutlineIcons,
   outlineIconNameCatalog,

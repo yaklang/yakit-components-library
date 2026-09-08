@@ -69,7 +69,8 @@ describe('Solid paint semantics', () => {
         ]),
     );
 
-    expect(values).toHaveLength(462);
+    // 463 declarations after Bug, plus 30 from the 13 reviewed centerline repairs.
+    expect(values).toHaveLength(493);
     expect([...new Set(values.map((match) => match[1]))]).toEqual([ICON_STROKE_WIDTH]);
   });
 

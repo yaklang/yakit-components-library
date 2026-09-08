@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest';
 
 import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
 import colorfulManifest from '../../scripts/figma-colorful-icons-inventory.json';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
@@ -236,12 +237,18 @@ describe('Icon Storybook contract', () => {
     expect(iconStory.title).toBe('YakitUi/通用/Icon');
     expect(existsSync(resolve(storiesRoot, 'IconAudit.stories.tsx'))).toBe(false);
     expect(existsSync(resolve(storiesRoot, 'SolidIconAudit.stories.tsx'))).toBe(false);
-    expect(storyExports()).toEqual(storySpecs.map(({ exportName }) => exportName));
+    expect(storyExports()).toEqual([
+      ...storySpecs.map(({ exportName }) => exportName),
+      'StrokeWidth',
+      'VisualWeight',
+    ]);
     expect(
       Object.keys(iconStories)
         .filter((name) => name !== 'default')
         .sort(),
-    ).toEqual(storySpecs.map(({ exportName }) => exportName).sort());
+    ).toEqual(
+      [...storySpecs.map(({ exportName }) => exportName), 'StrokeWidth', 'VisualWeight'].sort(),
+    );
     for (const { displayName, exportName } of storySpecs) {
       expect(iconStories[exportName as keyof typeof iconStories]).toMatchObject({
         name: displayName,
@@ -251,6 +258,39 @@ describe('Icon Storybook contract', () => {
         `${exportName} requires a statically extractable Storybook name`,
       ).toContain(`export const ${exportName}: Story = {\n  name: '${displayName}',`);
     }
+  });
+
+  it('exposes an interactive stroke width example using the public SVG API', () => {
+    expect(iconStories.StrokeWidth).toMatchObject({
+      name: '描边宽度',
+      args: { strokeWidth: 1 },
+      argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
+    });
+    const markup = renderToStaticMarkup(
+      iconStories.StrokeWidth.render!({ strokeWidth: 0 }, {} as never),
+    );
+    expect(markup).toContain('stroke-width="0"');
+    for (const name of ['BugOutlined', 'HomeOutlined', 'StarOffOutlined', 'Loading'])
+      expect(markup).toContain(name);
+  });
+
+  it('shows all repaired icons beside frozen originals at three sizes on both backgrounds', () => {
+    expect(iconStories.VisualWeight).toMatchObject({
+      name: '线条粗细对照',
+      args: { strokeWidth: 1 },
+      argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
+    });
+    const markup = renderToStaticMarkup(
+      iconStories.VisualWeight.render!({ strokeWidth: 1.5 }, {} as never),
+    );
+    expect(markup.match(/<img\b/g)).toHaveLength(78);
+    expect(markup.match(/color:inherit/g)).toHaveLength(markup.match(/<svg\b/g)!.length);
+    for (const { exportName } of visualWeightReviews.reviews) {
+      for (const size of [16, 24, 32]) expect(markup).toContain(`${exportName} 修复前 ${size}px`);
+    }
+    expect(markup).toContain('stroke-width="1.5"');
+    expect(markup).toContain('默认线重参照');
+    expect(iconStorySource).not.toContain('二维码等固定填充轮廓不支持线宽调整');
   });
 
   it('renders every colorful category once in frozen Figma group order', () => {

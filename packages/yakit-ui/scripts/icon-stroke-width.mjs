@@ -52,3 +52,17 @@ export function normalizeSvgStrokeWidth(source) {
     );
   });
 }
+
+/** Recognize Loading's literal migration form or its reviewed configurable expression. */
+export function loadingStrokeWidthDefault(source) {
+  const widths = [...source.matchAll(/\bstrokeWidth\s*=\s*\{([^}]+)\}/g)];
+  if (widths.length !== 1) return undefined;
+  const expression = widths[0][1].replace(/\s+/g, '');
+  if (numericWidth.test(expression)) return expression;
+  if (expression !== 'props.style?.strokeWidth??props.strokeWidth??DEFAULT_LOADING_STROKE_WIDTH')
+    return undefined;
+  const declarations = [
+    ...source.matchAll(/\bconst\s+DEFAULT_LOADING_STROKE_WIDTH\s*=\s*(\d+(?:\.\d+)?)\s*;/g),
+  ];
+  return declarations.length === 1 ? declarations[0][1] : undefined;
+}

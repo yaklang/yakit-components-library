@@ -5,8 +5,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   AddPayloadOutlined,
+  FigmaIcon450351908Outlined,
   Goal2Outlined,
   LogoOutlined,
+  RocketOffOutlined,
   StarOffOutlined,
   Wrench1Outlined,
 } from '../../src/icons';
@@ -90,6 +92,18 @@ afterEach(() => {
 });
 
 describe('Outline icon fragment runtime', () => {
+  it('keeps the reconstructed clips local to each instance', () => {
+    const container = render(
+      <>
+        <FigmaIcon450351908Outlined svgProps={{ strokeWidth: 1 }} />
+        <FigmaIcon450351908Outlined svgProps={{ strokeWidth: 3 }} />
+        <RocketOffOutlined svgProps={{ strokeWidth: 1 }} />
+        <RocketOffOutlined svgProps={{ strokeWidth: 3 }} />
+      </>,
+    );
+    expect(container.querySelectorAll('clipPath')).toHaveLength(4);
+    expectOwnedFragments(container);
+  });
   it('assigns unique definition IDs to repeated instances', () => {
     const container = render(
       <>

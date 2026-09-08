@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { execFile as execFileCallback } from 'node:child_process';
 import { readFile, readdir, mkdir, writeFile, unlink, mkdtemp, rename, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -6,11 +7,21 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
-import { normalizeSvgStrokeWidth, svgStrokeWidths } from './icon-stroke-width.mjs';
+import {
+  loadingStrokeWidthDefault,
+  normalizeSvgStrokeWidth,
+  svgStrokeWidths,
+} from './icon-stroke-width.mjs';
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixturePath = 'test/fixtures/icons/stroke-width-1/before.json';
 const loadingPath = 'src/icons/loading/index.tsx';
+const visualWeightReviews = JSON.parse(
+  readFileSync(
+    new URL('../test/fixtures/icons/reference/visual-weight-v2/reviews.json', import.meta.url),
+    'utf8',
+  ),
+);
 const sha256 = (text) => createHash('sha256').update(text).digest('hex');
 const execFile = promisify(execFileCallback);
 const manifestPaths = new Set([
@@ -144,8 +155,7 @@ export async function checkIconStrokeWidths(root = packageRoot) {
     }
   }
   const loading = await readFile(path.join(root, loadingPath), 'utf8');
-  const widths = [...loading.matchAll(/\bstrokeWidth\s*=\s*\{([^}]+)\}/g)];
-  if (widths.length !== 1 || widths[0][1] !== '1')
+  if (loadingStrokeWidthDefault(loading) !== '1')
     errors.push(`${loadingPath}: expected strokeWidth={1}`);
   if (errors.length) throw new Error(`ICON_STROKE_WIDTH_INVALID\n${errors.join('\n')}`);
   return { svgFiles: files.length, loading: 1, violations: 0 };
@@ -228,8 +238,19 @@ export async function validateFrozenMigrationInputs(root, frozen, files) {
   for (const record of frozen.assets) {
     const file = fileSet.has(record.sourcePath) ? record.sourcePath : record.afterPath;
     const current = await readFile(path.join(root, 'src', file), 'utf8');
-    if (![record.beforeSha256, record.afterSha256].includes(sha256(current)))
-      throw new Error(`MIGRATION_INPUT_DRIFT: ${file}`);
+    const currentSha256 = sha256(current);
+    if ([record.beforeSha256, record.afterSha256].includes(currentSha256)) continue;
+    // A later geometry review may replace the exact normalized source pair.
+    const reviewed = visualWeightReviews.reviews.some(
+      (review) =>
+        file === `icons/outline/${review.file}` &&
+        visualWeightReviews.approvedFiles.includes(review.file) &&
+        review.status === 'promoted' &&
+        review.reviewVerdict === 'pass' &&
+        review.oldSourceSha256 === record.afterSha256 &&
+        review.candidateSourceSha256 === currentSha256,
+    );
+    if (!reviewed) throw new Error(`MIGRATION_INPUT_DRIFT: ${file}`);
   }
 }
 

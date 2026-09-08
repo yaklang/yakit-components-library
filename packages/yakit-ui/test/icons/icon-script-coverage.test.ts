@@ -33,7 +33,7 @@ describe('icon package script coverage', () => {
       'node scripts/colorful-audit.mjs && node scripts/colorful-entry-generator.mjs',
     );
     expect(scripts['audit:icons']).toBe(
-      'pnpm run audit:icons:stroke && pnpm run audit:icons:outline && pnpm run audit:icons:solid && pnpm run audit:icons:colorful',
+      'pnpm run audit:icons:stroke && pnpm run audit:icons:adjustable && pnpm run audit:icons:outline && pnpm run audit:icons:solid && pnpm run audit:icons:colorful',
     );
   });
 
@@ -50,6 +50,24 @@ describe('icon package script coverage', () => {
     ])
       expect(scripts['test:icon-stroke-width']).toContain(`test/icons/${file}`);
     expect(scripts['test:icon-visual']).toContain('test/icons/icon-stroke-width-visual.test.ts');
+  });
+
+  it('wires adjustable stroke contracts, browser, geometry, visual, and consumer gates', () => {
+    expect(scripts['audit:icons:adjustable']).toBe(
+      'node config/generateIconStrokeContract.mjs --check',
+    );
+    expect(scripts['test:ci']).toContain('pnpm run test:icon-adjustable');
+    for (const file of ['transform', 'audit', 'geometry', 'ssr'])
+      expect(scripts['test:icon-adjustable']).toContain(
+        `test/icons/icon-adjustable-${file}.test.ts`,
+      );
+    expect(scripts['test:icon-adjustable']).toContain(
+      'test/components/icon-adjustable-runtime.test.tsx',
+    );
+    expect(scripts['test:icon-visual']).toContain('test/icons/icon-adjustable-visual.test.ts');
+    expect(scripts['test:icon-dist-consumer']).toContain(
+      'test/icons/icon-adjustable-consumer.test.ts',
+    );
   });
 
   it('executes every Solid node and browser test from an explicit package aggregate', () => {

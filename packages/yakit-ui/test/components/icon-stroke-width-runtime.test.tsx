@@ -84,8 +84,8 @@ describe('default width across every rendered icon', () => {
     expect(svg.getAttribute('width')).toBe('32');
     expect(svg.getAttribute('stroke-width')).toBe('3');
     expect(getComputedStyle(svg).opacity).toBe('0.5');
-    // Existing child declarations remain explicit; root overrides still have their original semantics.
-    expect(getComputedStyle(svg.querySelector('path')!).strokeWidth).toBe('1px');
+    // Loading binds the presentation override to its actual stroke.
+    expect(getComputedStyle(svg.querySelector('path')!).strokeWidth).toBe('3px');
     expect(getComputedStyle(svg.querySelector('path')!).stroke).toBe('rgb(18, 52, 86)');
   });
 });

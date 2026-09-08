@@ -1,3 +1,4 @@
+import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -264,12 +265,24 @@ async function main() {
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
     );
-    if (figmaNormalizedAstSha256 !== localNormalizedAstSha256)
+    const geometryReviewId = reviewedOutlineGeometry({
+      exportedSourceNodeId: symbol.exportedSourceNodeId,
+      file,
+      figmaRawSvgSha256: sha256(figmaRawSource),
+      localRawSvgSha256: sha256(localSource),
+      figmaNormalizedAstSha256,
+      localNormalizedAstSha256,
+      figmaGeometrySha256,
+      localGeometrySha256,
+    });
+    if (!geometryReviewId && figmaNormalizedAstSha256 !== localNormalizedAstSha256)
       throw new Error(`normalized AST mismatch: ${file}`);
-    if (figmaGeometrySha256 !== localGeometrySha256) throw new Error(`geometry mismatch: ${file}`);
+    if (!geometryReviewId && figmaGeometrySha256 !== localGeometrySha256)
+      throw new Error(`geometry mismatch: ${file}`);
     const previous = prechangeByNode.get(symbol.exportedSourceNodeId);
     symbols.push({
       ...symbol,
+      ...(geometryReviewId ? { geometryReviewId } : {}),
       file,
       exportName: exportsByFile.get(file) ?? null,
       disposition:

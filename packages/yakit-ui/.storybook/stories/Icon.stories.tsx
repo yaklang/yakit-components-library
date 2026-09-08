@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import '../../../yakit-ui-icons/icon.css';
-
+import { BugOutlined, HomeOutlined, Loading, StarOffOutlined } from '../../src/icons';
+import visualWeightReviews from '../../test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
@@ -314,7 +315,7 @@ const IconGallery = () => (
     <IconSection
       icons={outlineIconRegistry}
       size={24}
-      subtitle="1 SVG unit stroke weight, 24×24 bounding box"
+      subtitle="24×24 · default stroke 1 · filled details retain their shape"
       title="Outline"
     />
     <IconSection
@@ -347,7 +348,7 @@ export const Outline: Story = {
     <IconSection
       icons={outlineIconRegistry}
       size={24}
-      subtitle="1 SVG unit stroke weight, 24×24 bounding box"
+      subtitle="24×24 · default stroke 1 · filled details retain their shape"
       title="Outline"
     />
   ),
@@ -443,4 +444,114 @@ export const Coding: Story = {
 export const Cursor: Story = {
   name: 'Colorful · 鼠标指针',
   render: () => <ColorfulCategoryGallery category="cursor" />,
+};
+
+const StrokeWidthGallery = ({ strokeWidth }: { strokeWidth: number }) => (
+  <section style={{ display: 'grid', gap: 16 }}>
+    <p>描边宽度：{strokeWidth}。可调 Outline 与 Loading 默认宽度为 1；0 隐藏描边。</p>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+      {[BugOutlined, HomeOutlined, StarOffOutlined, Loading].map((Icon) => (
+        <div key={Icon.displayName} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
+          <Icon size={32} svgProps={{ strokeWidth }} />
+          <span>{Icon.displayName}</span>
+        </div>
+      ))}
+    </div>
+    <p>二维码等轮廓已恢复为可调描边；实心圆点、舷窗等填充细节保留原样。</p>
+  </section>
+);
+
+export const StrokeWidth: StoryObj<typeof StrokeWidthGallery> = {
+  name: '描边宽度',
+  args: { strokeWidth: 1 },
+  argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
+  render: (args) => <StrokeWidthGallery {...args} />,
+};
+
+const originalWeightSources = import.meta.glob<string>(
+  '../../test/fixtures/icons/reference/visual-weight-v2/original/*.svg',
+  { eager: true, import: 'default', query: '?raw' },
+);
+const revisedWeightIcons = visualWeightReviews.reviews.map(({ exportName, file }) => {
+  const icon = outlineIconRegistry.find((entry) => entry.exportName === exportName);
+  const original =
+    originalWeightSources[`../../test/fixtures/icons/reference/visual-weight-v2/original/${file}`];
+  if (!icon || !original) throw new Error(`Missing visual-weight comparison: ${exportName}`);
+  return { ...icon, original };
+});
+
+const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
+  <section style={{ display: 'grid', gap: 24 }}>
+    <p>左侧为修复前，右侧为当前描边；每组依次展示 16、24、32px。当前线宽：{strokeWidth}。</p>
+    {['light', 'dark'].map((theme) => (
+      <section
+        key={theme}
+        style={{
+          background: theme === 'light' ? '#f8f9fa' : '#202225',
+          color: theme === 'light' ? '#353639' : '#f0f2f5',
+          padding: 20,
+          display: 'grid',
+          gap: 16,
+        }}
+      >
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          <span>默认线重参照</span>
+          <HomeOutlined color="inherit" size={24} />
+          <BugOutlined color="inherit" size={24} />
+        </div>
+        {revisedWeightIcons.map(({ Component, exportName, original }) => (
+          <div
+            key={exportName}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'center' }}
+          >
+            <span style={{ width: 250 }}>{exportName}</span>
+            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+              {[16, 24, 32].map((size) => (
+                <img
+                  key={size}
+                  alt={`${exportName} 修复前 ${size}px`}
+                  width={size}
+                  height={size}
+                  src={`data:image/svg+xml,${encodeURIComponent(original.replace('<svg ', `<svg style="color:${theme === 'light' ? '#353639' : '#f0f2f5'}" `))}`}
+                />
+              ))}
+            </div>
+            <span aria-hidden="true">→</span>
+            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+              {[16, 24, 32].map((size) => (
+                <Component key={size} color="inherit" size={size} svgProps={{ strokeWidth }} />
+              ))}
+            </div>
+          </div>
+        ))}
+        <p>实心细节与遮挡参照</p>
+        <div style={{ display: 'flex', gap: 24 }}>
+          {outlineIconRegistry
+            .filter(({ exportName }) =>
+              [
+                'ChatOutlined',
+                'QuestionMarkCircleOutlined',
+                'RocketOutlined',
+                'MCPOutlined',
+                'AIOutlined',
+                'StarOffOutlined',
+              ].includes(exportName),
+            )
+            .map(({ Component, exportName }) => (
+              <div key={exportName} style={{ display: 'grid', gap: 8, justifyItems: 'center' }}>
+                <Component color="inherit" size={24} svgProps={{ strokeWidth }} />
+                <small>{exportName}</small>
+              </div>
+            ))}
+        </div>
+      </section>
+    ))}
+  </section>
+);
+
+export const VisualWeight: StoryObj<typeof VisualWeightGallery> = {
+  name: '线条粗细对照',
+  args: { strokeWidth: 1 },
+  argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
+  render: (args) => <VisualWeightGallery {...args} />,
 };

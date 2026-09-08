@@ -416,6 +416,7 @@ test("component CI generates SSR fixtures before browser hydration tests", () =>
       command.startsWith("vitest run --config vitest.config.ts"),
     ),
   );
+  assert.ok(ciCommands.indexOf("pnpm run test:icon-adjustable") > 0);
 });
 
 test("pre-build types use source fixtures while built package contracts verify public subpaths", () => {

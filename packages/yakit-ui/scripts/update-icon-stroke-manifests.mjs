@@ -1,3 +1,4 @@
+import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -83,12 +84,22 @@ async function planOutlineManifest(packageRoot, sourcesMap) {
       const localGeometrySha256 = sha256(
         canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
       );
-      if (figmaNormalizedAstSha256 !== localNormalizedAstSha256)
+      const geometryReviewId = reviewedOutlineGeometry({
+        ...record,
+        figmaRawSvgSha256: sha256(figmaSource),
+        localRawSvgSha256: sha256(localSource),
+        figmaNormalizedAstSha256,
+        localNormalizedAstSha256,
+        figmaGeometrySha256,
+        localGeometrySha256,
+      });
+      if (!geometryReviewId && figmaNormalizedAstSha256 !== localNormalizedAstSha256)
         throw new Error(`NORMALIZED_AST_MISMATCH: outline/${record.file}`);
-      if (figmaGeometrySha256 !== localGeometrySha256)
+      if (!geometryReviewId && figmaGeometrySha256 !== localGeometrySha256)
         throw new Error(`GEOMETRY_MISMATCH: outline/${record.file}`);
       return {
         ...record,
+        ...(geometryReviewId ? { geometryReviewId } : {}),
         localRawSvgSha256: sha256(localSource),
         figmaNormalizedAstSha256,
         localNormalizedAstSha256,

@@ -1,11 +1,14 @@
+import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { chromium } from 'playwright';
 import { describe, expect, it } from 'vitest';
 
+import { loadingStrokeWidthDefault } from '../../scripts/icon-stroke-width.mjs';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 const root = process.cwd();
 const reportRoot = resolve(root, 'test-results/icons/stroke-width-1');
@@ -14,14 +17,29 @@ const widthOnlyOracle = (source: string) =>
 
 describe('current unit-width independent pixel oracle', () => {
   it('matches every changed SVG and Loading exactly, including risk samples at multiple sizes', async () => {
-    const records = before.assets.map((record) => ({
-      name: record.sourcePath,
-      expected: widthOnlyOracle(record.beforeSvg),
-      actual: readFileSync(resolve(root, 'src', record.afterPath), 'utf8'),
-      original: record.beforeSvg,
-    }));
+    const records = before.assets.map((record) => {
+      const actual = readFileSync(resolve(root, 'src', record.afterPath), 'utf8');
+      const review = visualWeightReviews.reviews.find(
+        (item) => record.afterPath === `icons/outline/${item.file}`,
+      );
+      if (review) {
+        expect(review.status).toBe('promoted');
+        expect(review.reviewVerdict).toBe('pass');
+        expect(review.oldSourceSha256).toBe(record.afterSha256);
+        expect(createHash('sha256').update(actual).digest('hex')).toBe(
+          review.candidateSourceSha256,
+        );
+      }
+      return {
+        name: record.sourcePath,
+        expected: review ? review.serializedSvg : widthOnlyOracle(record.beforeSvg),
+        actual,
+        original: record.beforeSvg,
+      };
+    });
     const loadingSource = readFileSync(resolve(root, 'src/icons/loading/index.tsx'), 'utf8');
-    const loadingWidth = /strokeWidth=\{([^}]+)\}/.exec(loadingSource)?.[1];
+    const loadingWidth = loadingStrokeWidthDefault(loadingSource);
+    expect(loadingWidth).toBe('1');
     const loadingD = /d="([^"]+)"/.exec(loadingSource)?.[1];
     records.push({
       name: 'icons/loading/index.tsx',
