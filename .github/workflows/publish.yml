@@ -151,6 +151,12 @@ jobs:
       pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
       impact-artifact-id: ${{ steps.upload-impact.outputs.artifact-id }}
     steps:
+      - name: Reserve disk space for isolated release builds
+        run: |
+          df -h /
+          # This Node/React release does not use the hosted runner's Android SDK.
+          sudo rm -rf /usr/local/lib/android
+          df -h /
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
         with:
