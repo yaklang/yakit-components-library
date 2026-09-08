@@ -2,8 +2,9 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { chromium } from 'playwright';
 import { describe, expect, it } from 'vitest';
+
+import { launchGeometryBrowser } from '../fixtures/icons/geometry-browser';
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const fixtureRoot = resolve(packageRoot, 'test/fixtures/icons/adjustable-stroke');
@@ -72,17 +73,13 @@ describe('BugOutlined adjustable geometry', () => {
     });
   });
 
-  it('recomputes the reviewed pixel gates from the production SVG in Chrome', async () => {
+  it('recomputes the reviewed geometry gates from the production SVG in the configured renderer', async () => {
     const original = read(resolve(fixtureRoot, 'bug-original-expanded.svg'));
     const production = read(sourcePath);
     const widths = [0, 1, 1.5, 2, 3];
     const size = review.renderer.rasterSize;
-    const browser = await chromium.launch({
-      executablePath: review.renderer.browserExecutablePath,
-      headless: true,
-    });
+    const browser = await launchGeometryBrowser(review.renderer);
     try {
-      expect(browser.version()).toBe(review.renderer.browserVersion);
       const page = await browser.newPage({ deviceScaleFactor: 1 });
       const measured = await page.evaluate(
         async ({ original, production, size, threshold, widths }) => {

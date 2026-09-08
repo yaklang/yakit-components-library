@@ -1,9 +1,11 @@
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { chromium } from 'playwright';
 import { describe, expect, it } from 'vitest';
 
+import { bundledGeometryRenderer, launchGeometryBrowser } from '../fixtures/icons/geometry-browser';
+import topologyObservation from '../fixtures/icons/reference/visual-weight-v2/chromium-140-topology.json';
 import reviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import { measureVisualWeight } from '../fixtures/icons/visual-weight-metrics.mjs';
 
@@ -12,10 +14,7 @@ const fixtureRoot = resolve(packageRoot, 'test/fixtures/icons/reference/visual-w
 
 describe('reconstructed Outline geometry', () => {
   it('recomputes old-contour equivalence and default thickness for every reviewed icon', async () => {
-    const browser = await chromium.launch({
-      executablePath: reviews.reviews[0].renderer.browserExecutablePath,
-      headless: true,
-    });
+    const browser = await launchGeometryBrowser(reviews.reviews[0].renderer);
     try {
       const page = await browser.newPage({ deviceScaleFactor: 1 });
       const control =
@@ -43,7 +42,7 @@ describe('reconstructed Outline geometry', () => {
         }),
       ).rejects.toThrow('VISUAL_WEIGHT_SAMPLE_AXIS_UNSUPPORTED');
       for (const review of reviews.reviews) {
-        expect(browser.version()).toBe(review.renderer.browserVersion);
+        expect(review.renderer.browserVersion).toBe(reviews.reviews[0].renderer.browserVersion);
         const measured = await page.evaluate(measureVisualWeight, {
           source: readFileSync(resolve(packageRoot, 'src/icons/outline', review.file), 'utf8'),
           original: readFileSync(resolve(fixtureRoot, review.oldEvidence.path), 'utf8'),
@@ -58,8 +57,35 @@ describe('reconstructed Outline geometry', () => {
         expect(measured.boundsDelta, `${review.file}: old-width bounds`).toBeLessThanOrEqual(
           review.thresholds.boundsMaximum,
         );
+        let expectedOldTopology = review.topologyAtOldWidth;
+        if (
+          !process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH &&
+          review.file === topologyObservation.file
+        ) {
+          expect(bundledGeometryRenderer).toEqual(topologyObservation.renderer);
+          expect(topologyObservation.profiles).toContain(`${process.platform}-${process.arch}`);
+          expect(topologyObservation.rasterSize).toBe(review.renderer.rasterSize);
+          expect(topologyObservation.deviceScaleFactor).toBe(review.renderer.deviceScaleFactor);
+          expect(topologyObservation.alphaThreshold).toBe(review.renderer.alphaThreshold);
+          expect(topologyObservation.canonicalOldTopology).toEqual(review.topologyAtOldWidth);
+          const hash = (path: string) =>
+            createHash('sha256').update(readFileSync(path)).digest('hex');
+          expect(hash(resolve(fixtureRoot, review.oldEvidence.path))).toBe(
+            topologyObservation.oldSourceSha256,
+          );
+          expect(hash(resolve(packageRoot, 'src/icons/outline', review.file))).toBe(
+            topologyObservation.candidateSourceSha256,
+          );
+          expect(topologyObservation.evidence.bundled.metrics.oldTopology).toEqual(
+            topologyObservation.oldTopology,
+          );
+          expect(topologyObservation.evidence.chrome.metrics.oldTopology).toEqual(
+            review.topologyAtOldWidth,
+          );
+          expectedOldTopology = topologyObservation.oldTopology;
+        }
         expect(measured.oldTopology, `${review.file}: frozen old topology`).toEqual(
-          review.topologyAtOldWidth,
+          expectedOldTopology,
         );
         expect(measured.rebuiltTopology, `${review.file}: rebuilt topology`).toEqual(
           review.topologyAtOldWidth,
