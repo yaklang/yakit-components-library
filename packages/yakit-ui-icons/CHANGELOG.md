@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.2.4
+
+### Patch Changes
+
+- Unify built-in icon stroke widths to one SVG user unit while preserving public exports and color behavior.
+- Support adjustable stroke widths for Outline icons and Loading, and rebuild filled contours in BugOutlined, QrcodeOutlined and other affected icons to correct heavy lines.
+
 ## 0.2.3
 
 ### Patch Changes
