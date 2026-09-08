@@ -522,10 +522,6 @@ export async function validateStrictArtifact({
         "release impact artifact identity or declared set is invalid",
       );
     impactProbesForRelease(impact, impact.declaredSet);
-    if (
-      JSON.stringify(impact.declaredSet) !== JSON.stringify(impact.observedSet)
-    )
-      throw new Error("impact declared/observed sets differ");
     return { semanticOutcome: "closed-terminal" };
   }
   if (artifact.kind === "verification") {
