@@ -14,6 +14,7 @@ import {
   verificationArchiveEntries,
 } from "../../scripts/release/collect-release-cutover-evidence.mjs";
 import { payloadHash } from "../../scripts/release/durable-release-state.mjs";
+import { buildDeferredImpact } from "../../scripts/release/release-deferrals.mjs";
 import {
   collectPaginated,
   evaluateReleaseCutover,
@@ -49,12 +50,18 @@ function impactDocument(releaseSet = [UI]) {
       package: packageName,
       kind: "impact-probe",
       nonPublishable: true,
+      baseRevision: CUTOVER,
+      headRevision: HEAD,
+      sourceHash: HASH,
       baseSourceHash: HASH,
       headSourceHash: HASH,
+      lockHash: HASH,
       baseLockHash: HASH,
       headLockHash: HASH,
+      toolchainHash: HASH,
       baseToolchainHash: HASH,
       headToolchainHash: HASH,
+      configHash: HASH,
       baseConfigHash: HASH,
       headConfigHash: HASH,
       snapshotHash: HASH,
@@ -67,6 +74,36 @@ function impactDocument(releaseSet = [UI]) {
       },
     })),
   };
+}
+
+function deferredImpactDocument() {
+  const impact = impactDocument([UI, ICONS]);
+  impact.declaredSet = [ICONS];
+  const deferredPolicy = {
+    schemaId: "yakit-ui-release-deferral/v1",
+    releases: [{ name: ICONS, version: "0.2.4" }],
+    deferred: [
+      {
+        package: UI,
+        version: "0.2.3",
+        distTag: "latest",
+        integrity: "sha512-Zml4dHVyZQ==",
+        sha256: HASH,
+        baseRevision: CUTOVER,
+        headSourceHash: HASH,
+        headLockHash: HASH,
+        headToolchainHash: HASH,
+        headConfigHash: HASH,
+        reason: "Release the icons package independently.",
+        followUpPath: "docs/pending-releases/README.md",
+      },
+    ],
+  };
+  impact.revisions = { head: HEAD };
+  impact.deferredImpact = buildDeferredImpact(deferredPolicy, [
+    impact.impactProbeSet.find((probe) => probe.package === UI),
+  ]);
+  return impact;
 }
 
 const policy = {
@@ -850,6 +887,36 @@ test("impact artifacts reject empty, unsupported, duplicate, reordered, and extr
         entries: ["release-impact.json", "extra.txt"],
       }),
     /archive entry set mismatch/,
+  );
+});
+
+test("impact artifacts accept only strictly validated package deferrals", async () => {
+  const artifact = {
+    kind: "release-impact",
+    name: "yakit-ui-release-impact-30",
+    workflowRunId: "30",
+    entries: ["release-impact.json"],
+  };
+  const validate = (value) =>
+    validateStrictArtifact({
+      artifact,
+      jsonDocuments: { "release-impact.json": { value } },
+    });
+
+  const deferred = deferredImpactDocument();
+  assert.deepEqual(await validate(deferred), {
+    semanticOutcome: "closed-terminal",
+  });
+
+  const missingPolicy = structuredClone(deferred);
+  delete missingPolicy.deferredImpact;
+  await assert.rejects(() => validate(missingPolicy), /observedSet/);
+
+  const tamperedProbe = structuredClone(deferred);
+  tamperedProbe.deferredImpact.probes[0].headSourceHash = "6".repeat(64);
+  await assert.rejects(
+    () => validate(tamperedProbe),
+    /headSourceHash mismatch/,
   );
 });
 
