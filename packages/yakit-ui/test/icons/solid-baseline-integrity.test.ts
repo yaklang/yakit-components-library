@@ -20,6 +20,7 @@ import placement from '../fixtures/icons/reference/figma-solid-placement-provena
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 import renderContract from '../fixtures/icons/reference/solid-render-contract-v1.json';
+import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const solidRoot = resolve(packageRoot, 'src/icons/solid');
@@ -124,7 +125,14 @@ describe('Solid icon baseline integrity', () => {
   });
 
   it('allows only the reviewed geometry and local stroke-width policy changes', () => {
-    const strokePolicyIds = ['4936:115787', '4936:115788', '4936:115789', '4936:115790'];
+    const strokePolicyIds = [
+      '16035:380989',
+      '4936:115787',
+      '4936:115788',
+      '4936:115789',
+      '4936:115790',
+    ];
+    const figmaFourPixelIds = new Set(['4936:115787', '4936:115788', '4936:115789', '4936:115790']);
     const changed = prechange.records
       .filter(({ geometrySha256: frozen, localFile }) => currentGeometry(localFile) !== frozen)
       .map(({ nodeId }) => nodeId)
@@ -142,7 +150,9 @@ describe('Solid icon baseline integrity', () => {
     for (const nodeId of strokePolicyIds) {
       const file = `${nodeId.replace(':', '-')}.svg`;
       const figma = rawByNodeId.get(nodeId)!;
-      expect(figma.svg, nodeId).toContain('stroke-width="4"');
+      expect(figma.svg, nodeId).toContain(
+        `stroke-width="${figmaFourPixelIds.has(nodeId) ? '4' : '1.5'}"`,
+      );
       expect(currentSource(file), file).toContain(`stroke-width="${ICON_STROKE_WIDTH}"`);
       expect(policyGeometrySha256(currentSource(file)), file).toBe(policyGeometrySha256(figma.svg));
     }
@@ -239,29 +249,15 @@ describe('Solid icon baseline integrity', () => {
     expect(await auditMutation(mutate)).toContain(token);
   });
 
-  it('freezes the browser, operating system, raster math, and thresholds', () => {
+  it('keeps the historical 4px-vs-1.5px browser and metric evidence immutable', () => {
     const { renderer } = renderContract;
-    expect(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH).toBe(renderer.browserExecutablePath);
-    expect(sha256(readFileSync(renderer.browserExecutablePath))).toBe(
-      renderer.browserExecutableSha256,
-    );
-    expect(
-      execFileSync(renderer.browserExecutablePath, ['--version'], { encoding: 'utf8' }).trim(),
-    ).toBe(`${renderer.browserProduct} ${renderer.browserVersion}`);
-    expect(execFileSync('/usr/bin/sw_vers', ['-productName'], { encoding: 'utf8' }).trim()).toBe(
-      renderer.operatingSystem.name,
-    );
-    expect(execFileSync('/usr/bin/sw_vers', ['-productVersion'], { encoding: 'utf8' }).trim()).toBe(
-      renderer.operatingSystem.version,
-    );
-    expect(execFileSync('/usr/bin/sw_vers', ['-buildVersion'], { encoding: 'utf8' }).trim()).toBe(
-      renderer.operatingSystem.build,
-    );
-    expect(process.arch).toBe(renderer.operatingSystem.architecture);
-    expect(
-      JSON.parse(readFileSync(resolve(packageRoot, 'node_modules/playwright/package.json'), 'utf8'))
-        .version,
-    ).toBe(renderer.playwrightVersion);
+    expect(renderer.browserVersion).toBe('151.0.7922.174');
+    expect(renderer.operatingSystem).toEqual({
+      name: 'macOS',
+      version: '15.7.7',
+      build: '24G720',
+      architecture: 'arm64',
+    });
     expect(renderContract.raster).toEqual({
       background: '#F8F9FA',
       cropHeight: 20,
@@ -290,6 +286,38 @@ describe('Solid icon baseline integrity', () => {
         boundsEdgeDeltaMaximum: 0,
         centroidDeltaMaximum: 1.75,
       },
+    });
+  });
+
+  it('binds current stroke-width-1 visual checks to the installed renderer', () => {
+    const { renderer } = currentRenderContract;
+    expect(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH).toBe(renderer.browserExecutablePath);
+    expect(sha256(readFileSync(renderer.browserExecutablePath))).toBe(
+      renderer.browserExecutableSha256,
+    );
+    expect(
+      execFileSync(renderer.browserExecutablePath, ['--version'], { encoding: 'utf8' }).trim(),
+    ).toBe(`${renderer.browserProduct} ${renderer.browserVersion}`);
+    expect(execFileSync('/usr/bin/sw_vers', ['-productName'], { encoding: 'utf8' }).trim()).toBe(
+      renderer.operatingSystem.name,
+    );
+    expect(execFileSync('/usr/bin/sw_vers', ['-productVersion'], { encoding: 'utf8' }).trim()).toBe(
+      renderer.operatingSystem.version,
+    );
+    expect(execFileSync('/usr/bin/sw_vers', ['-buildVersion'], { encoding: 'utf8' }).trim()).toBe(
+      renderer.operatingSystem.build,
+    );
+    expect(process.arch).toBe(renderer.operatingSystem.architecture);
+    expect(
+      JSON.parse(readFileSync(resolve(packageRoot, 'node_modules/playwright/package.json'), 'utf8'))
+        .version,
+    ).toBe(renderer.playwrightVersion);
+    expect(currentRenderContract.strokeWidthPolicy).toEqual({
+      strategy: 'local-uniform-stroke-v1',
+      normalizedFigmaWidth: 1,
+      localWidth: 1,
+      nodeIds: ['16035:380989', '4936:115787', '4936:115788', '4936:115789', '4936:115790'],
+      figmaFourPixelNodeIds: ['4936:115787', '4936:115788', '4936:115789', '4936:115790'],
     });
   });
 });

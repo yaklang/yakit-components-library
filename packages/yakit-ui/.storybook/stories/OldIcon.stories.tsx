@@ -86,7 +86,8 @@ const OldIconOverview = () => (
       <h1 style={{ color: '#353639', marginBottom: 8 }}>oldIcon 兼容图标</h1>
       <p style={{ color: '#686c73', lineHeight: 1.6, margin: 0 }}>
         这里收录 Yakit 迁移期间仍需保留的旧 SVG。它们通过 <code>{oldIconImportPath}</code>{' '}
-        独立导入，不进入正式图标 registry。
+        独立导入，不进入正式图标 registry。内置描边已统一为 1 SVG
+        用户单位，原有图形、颜色和导出名称保留。
       </p>
     </header>
     <div

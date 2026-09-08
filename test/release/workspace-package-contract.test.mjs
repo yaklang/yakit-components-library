@@ -409,9 +409,12 @@ test("component CI generates SSR fixtures before browser hydration tests", () =>
     manifest.scripts?.["test:ssr-fixtures"] ?? "",
     /test\/ssr\/native-components-ssr\.test\.tsx/,
   );
-  assert.match(
-    manifest.scripts?.["test:ci"] ?? "",
-    /^pnpm run test:ssr-fixtures && vitest run /,
+  const ciCommands = (manifest.scripts?.["test:ci"] ?? "").split(" && ");
+  assert.equal(ciCommands[0], "pnpm run test:ssr-fixtures");
+  assert.ok(
+    ciCommands.some((command) =>
+      command.startsWith("vitest run --config vitest.config.ts"),
+    ),
   );
 });
 

@@ -48,6 +48,8 @@ export const HomeEntry = () => (
 
 `className`、`style`、事件、ARIA 属性和 `ref<HTMLSpanElement>` 属于外层 `span`；`size` 设置内层 SVG 的宽高。确需修改 SVG 表现属性时使用 `svgProps`，该入口不会接受内层事件、ARIA、焦点、ref 或内容注入。`color="currentColor"` 不产生内联颜色，可继续继承现有 Yakit/Ant 样式。
 
+所有内置图标描边默认采用 `stroke-width="1"`（SVG 用户单位），包括 Oldicon 和 Loading。宽度随图标尺寸与 `viewBox` 缩放，纯填充图形不增加描边。`svgProps` / CSS 的覆盖能力保持原有语义：根 SVG 的 `strokeWidth` 不会替代子路径的显式宽度。
+
 浏览器条件入口会自动关联静态 `icon.css`，根入口和 `/outline`、`/solid`、`/colorful` 多次导入时由打包器合并为一份样式；Node SSR 使用无 CSS 的通用入口，不会访问 DOM 或尝试加载 CSS 模块。无法识别 package `browser` condition 的自定义构建环境可显式导入 `@yakit-libs/yakit-ui-icons/icon.css`。
 
 多色、品牌、头像和状态类图标同样从根入口导出。它们会保留 Figma 定义的固定色、渐变与局部主题色；注册表中的 `paintMode` 可用于区分 `literal`、`mixed` 和 `currentColor` 行为。
@@ -95,7 +97,8 @@ import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon/PopoverArro
 浏览器条件入口会与其他图标入口一样关联 `icon.css`；Node/SSR 的 import 条件保持 CSS-free。
 `TaskWaitIcon` 是产品侧 DOM 动画而不是 SVG，不属于此兼容图标集合。
 
-`oldicon` 保留旧实现的几何、paint、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
+`oldicon` 保留旧实现的路径几何、颜色、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
+描边宽度是有意调整的兼容例外：统一为 1 SVG 用户单位，原有公开导出名称和来源映射不变。
 它不是第四个正式图标家族，不会进入根入口或 `iconRegistry`；新功能应优先选择
 `/outline`、`/solid` 或 `/colorful`。同名但图形不同的旧实现会使用来源限定的导出名，
 迁移时应按生成清单中的源文件映射选择，不能仅凭名称互换。

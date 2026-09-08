@@ -12,6 +12,7 @@ import {
   inspectFragmentGraph,
   normalizeColorfulFragments,
 } from "../../packages/yakit-ui/scripts/colorful-fragments.mjs";
+import { normalizeSvgStrokeWidth } from "../../packages/yakit-ui/scripts/icon-stroke-width.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(scriptDirectory, "../..");
@@ -202,7 +203,8 @@ function prepareSvg(rawSvg) {
     canonical.svg,
     fragmentSeed(canonical.svg),
   );
-  const graph = inspectFragmentGraph(normalized.svg);
+  const emittedSvg = normalizeSvgStrokeWidth(normalized.svg);
+  const graph = inspectFragmentGraph(emittedSvg);
   const ownerIds = new Set(graph.owners.map(({ id }) => id));
   for (const { id } of graph.references)
     if (!ownerIds.has(id)) fail("FRAGMENT_ORPHAN_AFTER_NORMALIZE", id);
@@ -218,7 +220,7 @@ function prepareSvg(rawSvg) {
       })),
     ],
     canonicalArtworkSha256,
-    svg: normalized.svg,
+    svg: emittedSvg,
   };
 }
 
@@ -475,12 +477,17 @@ async function collect() {
       fragmentIds: "stable-content-qualified",
       nameCollision: "lexicographic-primary-with-source-qualified-secondary",
       orphanReferences: "remove-without-guess-pairing",
+      strokeWidth: {
+        strategy: "local-uniform-stroke-v1",
+        value: "1",
+      },
     },
     hashSemantics: {
       artworkSha256: "alias of assetSha256",
-      assetSha256: "SHA-256 of exact emitted SVG file bytes",
+      assetSha256:
+        "SHA-256 of exact emitted stroke-width-normalized SVG file bytes",
       canonicalArtworkSha256:
-        "SHA-256 after orphan cleanup and canonical fragment normalization",
+        "SHA-256 after orphan cleanup and canonical fragment normalization, before emitted stroke-width normalization",
       sourceSvgSha256: "SHA-256 of exact audit or direct-source SVG evidence",
     },
     sources,

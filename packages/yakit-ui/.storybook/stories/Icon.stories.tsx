@@ -314,13 +314,13 @@ const IconGallery = () => (
     <IconSection
       icons={outlineIconRegistry}
       size={24}
-      subtitle="2px stroke weight, 24×24 bounding box"
+      subtitle="1 SVG unit stroke weight, 24×24 bounding box"
       title="Outline"
     />
     <IconSection
       icons={solidIconRegistry}
       size={20}
-      subtitle="Solid fill, 20×20 bounding box"
+      subtitle="Solid fill, 1 SVG unit for stroked details, 20×20 bounding box"
       title="Solid"
     />
     <ColorfulIconGallery />
@@ -347,7 +347,7 @@ export const Outline: Story = {
     <IconSection
       icons={outlineIconRegistry}
       size={24}
-      subtitle="2px stroke weight, 24×24 bounding box"
+      subtitle="1 SVG unit stroke weight, 24×24 bounding box"
       title="Outline"
     />
   ),
@@ -359,7 +359,7 @@ export const Solid: Story = {
     <IconSection
       icons={solidIconRegistry}
       size={20}
-      subtitle="Solid fill, 20×20 bounding box"
+      subtitle="Solid fill, 1 SVG unit for stroked details, 20×20 bounding box"
       title="Solid"
     />
   ),

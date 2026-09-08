@@ -59,7 +59,7 @@ const auditSourceMutation = async (file: string, mutate: (source: string) => str
 };
 
 describe('Solid paint semantics', () => {
-  it('uses the exact 1.5 stroke-width policy across Outline and Solid sources', () => {
+  it('uses the exact 1 stroke-width policy across Outline and Solid sources', () => {
     const roots = [outlineRoot, solidRoot];
     const values = roots.flatMap((root) =>
       readdirSync(root)
@@ -133,7 +133,7 @@ describe('Solid paint semantics', () => {
 
   it('preserves the exact special-structure paint contracts', () => {
     expect(source('16035-380989.svg')).toMatch(
-      /fill="currentColor" stroke="white" stroke-width="1\.5"/,
+      /fill="currentColor" stroke="white" stroke-width="1"/,
     );
     expect(source('37831-7379.svg')).toContain('fill="#9CA3B1"');
     expect(source('37831-7379.svg')).toContain('fill="white"');
@@ -186,7 +186,7 @@ describe('Solid paint semantics', () => {
   it('rejects a stroke-width regression with a stable policy token', async () => {
     expect(
       await auditSourceMutation('16035-380989.svg', (svg) =>
-        svg.replace('stroke-width="1.5"', 'stroke-width="2"'),
+        svg.replace('stroke-width="1"', 'stroke-width="2"'),
       ),
     ).toContain('STROKE_WIDTH_INVALID');
   });

@@ -53,6 +53,17 @@ const groupBy = <T>(values: T[], key: (value: T) => string) => {
 describe('oldicon migration inventory', () => {
   it('covers exactly 408 unique Yakit source paths', () => {
     expect(inventory.schemaVersion).toBe(1);
+    expect(inventory.generationPolicy.strokeWidth).toEqual({
+      strategy: 'local-uniform-stroke-v1',
+      value: '1',
+    });
+    expect(inventory.hashSemantics).toMatchObject({
+      artworkSha256: 'alias of assetSha256',
+      assetSha256: 'SHA-256 of exact emitted stroke-width-normalized SVG file bytes',
+      canonicalArtworkSha256:
+        'SHA-256 after orphan cleanup and canonical fragment normalization, before emitted stroke-width normalization',
+      sourceSvgSha256: 'SHA-256 of exact audit or direct-source SVG evidence',
+    });
     expect(inventory.totals.sourcePaths).toBe(408);
     expect(inventory.entries).toHaveLength(408);
     expect(new Set(inventory.entries.map(sourceKey)).size).toBe(408);

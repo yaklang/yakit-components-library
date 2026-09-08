@@ -7,9 +7,12 @@ import {
   COLORFUL_GROUP_POLICY,
   COLORFUL_POLICY_ID,
   COLORFUL_SCHEMA_VERSION,
+  canonicalJson,
   colorfulLocalFile,
   validateColorfulInventory,
 } from './colorful-icon-contracts.mjs';
+import { ICON_STROKE_WIDTH_POLICY } from './icon-audit-contracts.mjs';
+import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs';
 
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPOSITORY_ROOT = path.resolve(PACKAGE_ROOT, '../..');
@@ -23,11 +26,28 @@ function fail(code, message) {
   throw new Error(`${code}: ${message}`);
 }
 
+function frozenIdentity(inventory) {
+  return inventory.rows.map((row) => ({
+    canonicalComponentNodeId: row.canonicalComponentNodeId,
+    category: row.category,
+    componentNodeId: row.componentNodeId ?? row.nodeId,
+    existingExportName: row.existingExportName,
+    existingFamily: row.existingFamily,
+    exportName: row.exportName,
+    localFile: row.localFile,
+    publicExposure: row.publicExposure,
+    rowDisposition: row.rowDisposition,
+    rowId: row.rowId,
+  }));
+}
+
 function inputs(args) {
   const values = [];
   for (let index = 0; index < args.length; index += 1)
     if (args[index] === '--input') values.push(path.resolve(REPOSITORY_ROOT, args[++index]));
-  return values.length > 0 ? values : DEFAULT_INPUTS.map((input) => path.resolve(REPOSITORY_ROOT, input));
+  return values.length > 0
+    ? values
+    : DEFAULT_INPUTS.map((input) => path.resolve(REPOSITORY_ROOT, input));
 }
 
 const compareNodeIds = (left, right) => {
@@ -47,11 +67,14 @@ const structuralSvgDigest = (svg) =>
     )
     .digest('hex');
 
+const svgSha256 = (svg) => createHash('sha256').update(svg, 'utf8').digest('hex');
+
 function normalizePartialRow(row, policyByGroup) {
   const groupNodeId = row.groupNodeId ?? row.groupId;
   const componentNodeId = row.componentNodeId ?? row.nodeId;
   const policy = policyByGroup.get(groupNodeId);
-  if (!policy) fail('INVENTORY_GROUP_UNKNOWN', `${componentNodeId ?? '<unknown>'} points to ${groupNodeId}`);
+  if (!policy)
+    fail('INVENTORY_GROUP_UNKNOWN', `${componentNodeId ?? '<unknown>'} points to ${groupNodeId}`);
   const localFile = row.localFile
     ?.replace(/^packages\/yakit-ui\//, '')
     .replace(/^src\/icons\//, '');
@@ -79,7 +102,7 @@ export async function classifyColorfulDuplicates(
       continue;
     }
     const localFile = colorfulLocalFile(row);
-    const svg = await readSource(localFile);
+    const svg = normalizeSvgStrokeWidth(await readSource(localFile));
     const key = `${row.width}x${row.height}:${row.paintMode}:${structuralSvgDigest(svg)}`;
     const owner = owners.get(key);
     if (!owner) {
@@ -101,7 +124,10 @@ export async function classifyColorfulDuplicates(
   return classified;
 }
 
-export async function mergeColorfulInventories(inputPaths) {
+export async function mergeColorfulInventories(
+  inputPaths,
+  readSource = (localFile) => readFile(path.join(PACKAGE_ROOT, 'src/icons', localFile), 'utf8'),
+) {
   const partials = await Promise.all(
     inputPaths.map(async (input) => JSON.parse(await readFile(input, 'utf8'))),
   );
@@ -115,12 +141,26 @@ export async function mergeColorfulInventories(inputPaths) {
         policyOrder.get(left.groupNodeId) - policyOrder.get(right.groupNodeId) ||
         compareNodeIds(left.componentNodeId, right.componentNodeId),
     );
-  const rows = await classifyColorfulDuplicates(normalizedRows);
+  const classifiedRows = await classifyColorfulDuplicates(normalizedRows, readSource);
+  const rows = await Promise.all(
+    classifiedRows.map(async (row) =>
+      row.rowDisposition === 'canonical-new'
+        ? {
+            ...row,
+            normalizedSvgSha256: svgSha256(
+              normalizeSvgStrokeWidth(await readSource(colorfulLocalFile(row))),
+            ),
+          }
+        : row,
+    ),
+  );
   const seenNodes = new Set();
   const seenExports = new Set();
   for (const row of rows) {
-    if (seenNodes.has(row.componentNodeId)) fail('INVENTORY_COMPONENT_DUPLICATE', row.componentNodeId);
-    if (row.exportName && seenExports.has(row.exportName)) fail('PUBLIC_EXPORT_DUPLICATE', row.exportName);
+    if (seenNodes.has(row.componentNodeId))
+      fail('INVENTORY_COMPONENT_DUPLICATE', row.componentNodeId);
+    if (row.exportName && seenExports.has(row.exportName))
+      fail('PUBLIC_EXPORT_DUPLICATE', row.exportName);
     seenNodes.add(row.componentNodeId);
     if (row.exportName) seenExports.add(row.exportName);
   }
@@ -136,6 +176,7 @@ export async function mergeColorfulInventories(inputPaths) {
   const inventory = {
     schemaVersion: COLORFUL_SCHEMA_VERSION,
     policyId: COLORFUL_POLICY_ID,
+    strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
     evidenceVersion: 'figma-colorful-context-assets-v1',
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     groups,
@@ -163,11 +204,18 @@ async function pruneUndeclaredSources(inventory) {
 }
 
 async function main(args = process.argv.slice(2)) {
-  const inventory = await mergeColorfulInventories(inputs(args));
   const output = path.join(PACKAGE_ROOT, 'scripts/figma-colorful-icons-inventory.json');
+  const existingSource = await readFile(output, 'utf8').catch(() => null);
+  const inventory = await mergeColorfulInventories(inputs(args));
+  if (
+    existingSource &&
+    canonicalJson(frozenIdentity(JSON.parse(existingSource))) !==
+      canonicalJson(frozenIdentity(inventory))
+  )
+    fail('COLORFUL_PUBLIC_IDENTITY_DRIFT', path.relative(PACKAGE_ROOT, output));
   const source = `${JSON.stringify(inventory, null, 2)}\n`;
   if (args.includes('--write')) await writeFile(output, source);
-  else if ((await readFile(output, 'utf8').catch(() => null)) !== source)
+  else if (existingSource !== source)
     fail('COLORFUL_INVENTORY_DRIFT', path.relative(PACKAGE_ROOT, output));
   const removed = args.includes('--prune') ? await pruneUndeclaredSources(inventory) : [];
   process.stdout.write(

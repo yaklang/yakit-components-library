@@ -107,8 +107,14 @@ describe('colorful inventory contracts', () => {
       rowId: '1:100/1:2',
     };
     const sources = new Map([
-      ['colorful/first.svg', '<svg><defs><clipPath id="icon_11__clip_0" /></defs></svg>'],
-      ['colorful/second.svg', '<svg>\n<defs><clipPath id="icon_12__clip_0" /></defs>\n</svg>'],
+      [
+        'colorful/first.svg',
+        '<svg><path stroke="black" stroke-width="2"/><defs><clipPath id="icon_11__clip_0" /></defs></svg>',
+      ],
+      [
+        'colorful/second.svg',
+        '<svg>\n<path stroke="black" stroke-width="1"/><defs><clipPath id="icon_12__clip_0" /></defs>\n</svg>',
+      ],
     ]);
     const rows = await classifyColorfulDuplicates(
       [first, second],

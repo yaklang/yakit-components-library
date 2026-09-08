@@ -54,6 +54,8 @@ package cannot enforce candidate ordering or install editor-private configuratio
 
 图标默认渲染为 `span.anticon.yakit-icon > svg`。`className`、`style`、事件、ARIA 属性和 `ref<HTMLSpanElement>` 作用于外层 `span`，`size` 与受限的 `svgProps` 作用于内层 SVG；浏览器入口自动关联静态兼容样式，Node SSR 入口保持无 CSS。无法识别 package `browser` condition 的自定义构建环境可显式导入 `@yakit-libs/yakit-ui/icons/icon.css`。
 
+图标的内置描边统一为 `stroke-width="1"`，包括 Outline、Solid、Colorful、Loading 和独立图标包的 Oldicon。`1` 是 SVG 用户单位，会随 `size` / `viewBox` 缩放；纯填充图形不新增描边。`svgProps` 和 CSS 继续保留原有覆盖行为，根 SVG 的 `strokeWidth` 不会覆盖子路径的显式宽度。
+
 多色、品牌、头像和状态类图标可从 `@yakit-libs/yakit-ui/icons/colorful` 导入。它们保留 Figma 定义的固定色、渐变和局部主题色；`color` 只会影响使用 `currentColor` 的图层。
 
 带渐变、遮罩或裁剪的图标通过 React `useId()` 隔离 SVG fragment ID。一个页面存在多个独立 React root 时，每个 root 必须使用不同的 `identifierPrefix`；同一组 SSR 与 hydration 必须使用完全相同的 prefix。跨 root 重用 prefix 可能产生 DOM ID 冲突，`useId()` 本身不提供该跨 root 保证。

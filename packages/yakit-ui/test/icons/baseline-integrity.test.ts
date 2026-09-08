@@ -10,6 +10,7 @@ import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
 import metrics from '../fixtures/icons/reference/outline-controls-298.json';
 import baseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
+import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -33,7 +34,7 @@ const canonicalizeSemanticEraseMask = (source: string, file?: string) => {
   if (!maskId) return source;
   const reference = `mask="url(#${maskId})"`;
   const localErasePath =
-    '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>';
   const baselineErasePath =
     '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
   const maskBlock = `<mask id="${maskId}" x="0" y="0" width="24" height="24" maskUnits="userSpaceOnUse" mask-type="luminance">\n<rect width="24" height="24" fill="white"/>\n${localErasePath}\n</mask>`;
@@ -103,7 +104,7 @@ const geometryProjection = (source: string, file?: string) => {
       if (included.has(name))
         attributes.push([
           name,
-          name === 'stroke-width' && value === '1.5' ? '2' : value.trim().replace(/\s+/g, ' '),
+          name === 'stroke-width' && value === '1' ? '2' : value.trim().replace(/\s+/g, ' '),
         ]);
       if (
         (name === 'clip-path' || name === 'mask' || name === 'href' || name === 'xlink:href') &&
@@ -231,25 +232,40 @@ describe('Outline pixel metrics v1 freeze', () => {
     });
   });
 
-  it('fails closed unless the exact frozen Chrome executable and version are installed', () => {
-    const { product, version, executablePath } = rendererProvenance.browser;
+  it('preserves the historical renderer evidence bound to the frozen metrics', () => {
+    const { product, version } = rendererProvenance.browser;
     expect(rendererProvenance.metricsCanonicalPayloadSha256).toBe(metrics.canonicalPayloadSha256);
     expect(product).toBe(metrics.provenance.renderer.browser);
-    expect(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH).toBe(executablePath);
-    expect(execFileSync(executablePath, ['--version'], { encoding: 'utf8' }).trim()).toBe(
-      `${product} ${version}`,
-    );
+    expect(version).toBe('151.0.7922.174');
+    expect(rendererProvenance.operatingSystem).toEqual({
+      name: 'macOS',
+      version: '15.7.7',
+      build: '24G720',
+    });
   });
 
-  it('fails closed unless the exact frozen macOS version and build are installed', () => {
+  it('runs current visual checks only under the recorded stroke-width-1 renderer', () => {
+    const { renderer } = currentRenderContract;
+    expect(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH).toBe(renderer.browserExecutablePath);
+    expect(sha256(readFileSync(renderer.browserExecutablePath))).toBe(
+      renderer.browserExecutableSha256,
+    );
+    expect(
+      execFileSync(renderer.browserExecutablePath, ['--version'], { encoding: 'utf8' }).trim(),
+    ).toBe(`${renderer.browserProduct} ${renderer.browserVersion}`);
     expect(execFileSync('/usr/bin/sw_vers', ['-productName'], { encoding: 'utf8' }).trim()).toBe(
-      rendererProvenance.operatingSystem.name,
+      renderer.operatingSystem.name,
     );
     expect(execFileSync('/usr/bin/sw_vers', ['-productVersion'], { encoding: 'utf8' }).trim()).toBe(
-      rendererProvenance.operatingSystem.version,
+      renderer.operatingSystem.version,
     );
     expect(execFileSync('/usr/bin/sw_vers', ['-buildVersion'], { encoding: 'utf8' }).trim()).toBe(
-      rendererProvenance.operatingSystem.build,
+      renderer.operatingSystem.build,
     );
+    expect(process.arch).toBe(renderer.operatingSystem.architecture);
+    expect(
+      JSON.parse(readFileSync(resolve(packageRoot, 'node_modules/playwright/package.json'), 'utf8'))
+        .version,
+    ).toBe(renderer.playwrightVersion);
   });
 });
