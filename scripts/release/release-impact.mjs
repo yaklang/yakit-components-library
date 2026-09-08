@@ -15,10 +15,19 @@ import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 
-export const PUBLIC_PACKAGES = [
-  "@yakit-libs/yakit-ui",
-  "@yakit-libs/yakit-ui-icons",
-];
+import {
+  buildDeferredImpact,
+  validateDeferredImpact,
+} from "./release-deferrals.mjs";
+
+import {
+  assertImpactOutputPublishSafe,
+  PUBLIC_PACKAGES,
+} from "./impact-probes.mjs";
+export {
+  assertImpactOutputPublishSafe,
+  PUBLIC_PACKAGES,
+} from "./impact-probes.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "../..");
 const WORKTREE = "WORKTREE";
@@ -547,6 +556,28 @@ export async function createIsolatedImpactSnapshots({
   }
 }
 
+async function revisionText(root, revision, file) {
+  return revision === WORKTREE
+    ? readFile(path.join(root, file), "utf8")
+    : runGit(["show", `${revision}:${file}`], root);
+}
+
+async function readDeferralPolicy(root, revision) {
+  const file = "scripts/release/release-deferral-policy.json";
+  if (revision !== WORKTREE) {
+    if (!runGit(["ls-tree", "--name-only", revision, "--", file], root).trim())
+      return undefined;
+  } else {
+    try {
+      await stat(path.join(root, file));
+    } catch (error) {
+      if (error.code === "ENOENT") return undefined;
+      throw error;
+    }
+  }
+  return JSON.parse(await revisionText(root, revision, file));
+}
+
 export async function computeReleaseImpact({
   root = ROOT,
   baseRevision,
@@ -661,7 +692,9 @@ export async function computeReleaseImpact({
       snapshots,
     };
   }
-  const status = exactSet(observedSet, declaredSet) ? "PASS" : "BLOCK";
+  let status = exactSet(observedSet, declaredSet) ? "PASS" : "BLOCK";
+  let deferralReason;
+  let deferredImpact;
   const toolchainIdentity = {
     node: process.version,
     pnpm: execFileSync("pnpm", ["--version"], { encoding: "utf8" }).trim(),
@@ -673,7 +706,10 @@ export async function computeReleaseImpact({
   };
   const impactProbeSet = [];
   for (const packageName of observedSet) {
-    const packageBaseRevision = resolvedBaseRevisions[packageName];
+    const packageBaseRevision = runGit(
+      ["rev-parse", `${resolvedBaseRevisions[packageName]}^{commit}`],
+      root,
+    ).trim();
     const sourcePaths =
       packageName === "@yakit-libs/yakit-ui"
         ? ["packages/yakit-ui"]
@@ -753,60 +789,71 @@ export async function computeReleaseImpact({
       ),
     });
   }
+  if (status === "BLOCK") {
+    try {
+      const policy = await readDeferralPolicy(root, headRevision);
+      if (policy) {
+        const deferredSet = observedSet.filter(
+          (name) => !declaredSet.includes(name),
+        );
+        if (!declaredSet.every((name) => observedSet.includes(name)))
+          throw new Error("deferral cannot authorize an unobserved release");
+        const probes = impactProbeSet.filter((probe) =>
+          deferredSet.includes(probe.package),
+        );
+        deferredImpact = buildDeferredImpact(policy, probes);
+        validateDeferredImpact(deferredImpact, {
+          releases: declaredSet.map((name) => ({
+            name,
+            version: expectedVersions[name],
+          })),
+          headRevision,
+        });
+        for (const item of policy.deferred) {
+          const file = `packages/${item.package.split("/").at(-1)}/package.json`;
+          for (const revision of [
+            resolvedBaseRevisions[item.package],
+            headRevision,
+          ]) {
+            const manifest = JSON.parse(
+              await revisionText(root, revision, file),
+            );
+            if (manifest.version !== item.version)
+              throw new Error(
+                `deferred ${item.package} version must remain ${item.version}`,
+              );
+          }
+          if (
+            !(await revisionText(root, headRevision, item.followUpPath)).trim()
+          )
+            throw new Error("deferred package follow-up record is empty");
+        }
+        status = "PASS";
+      }
+    } catch (error) {
+      deferredImpact = undefined;
+      deferralReason = `release deferral rejected: ${error.message}`;
+    }
+  }
   return {
     schemaId: "yakit-ui-release-impact/v1",
     status,
     reason:
       status === "PASS"
-        ? "observed and declared release sets match"
-        : `observed ${JSON.stringify(observedSet)} does not exactly match declared ${JSON.stringify(declaredSet)}`,
+        ? deferredImpact
+          ? "observed changes are released or explicitly deferred"
+          : "observed and declared release sets match"
+        : (deferralReason ??
+          `observed ${JSON.stringify(observedSet)} does not exactly match declared ${JSON.stringify(declaredSet)}`),
     revisions,
     observedSet,
     declaredSet,
     impactProbeSet,
     snapshots,
     packageSnapshots,
+    ...(deferredImpact ? { deferredImpact } : {}),
     toolchainIdentity,
   };
-}
-
-export function assertImpactOutputPublishSafe(result) {
-  for (const probe of result?.impactProbeSet ?? []) {
-    if (probe.kind !== "impact-probe" || probe.nonPublishable !== true)
-      throw new Error("invalid impact probe identity");
-    if (
-      Object.keys(probe).some(
-        (key) =>
-          key !== "nonPublishable" && /tarball|filename|tgz|publish/i.test(key),
-      )
-    )
-      throw new Error("impact probe contains publishable artifact fields");
-    for (const field of [
-      "baseSourceHash",
-      "headSourceHash",
-      "baseLockHash",
-      "headLockHash",
-      "baseToolchainHash",
-      "headToolchainHash",
-      "baseConfigHash",
-      "headConfigHash",
-      "snapshotHash",
-      "toolchainIdentityHash",
-    ])
-      if (!/^[0-9a-f]{64}$/i.test(probe[field] ?? ""))
-        throw new Error(`impact probe ${field} is incomplete`);
-    if (
-      !/^[0-9a-f]{64}$/i.test(probe.packageSnapshotHashes?.base ?? "") ||
-      !/^[0-9a-f]{64}$/i.test(probe.packageSnapshotHashes?.head ?? "") ||
-      !probe.toolchainIdentity?.node ||
-      !probe.toolchainIdentity?.pnpm ||
-      !probe.toolchainIdentity?.os?.platform ||
-      !probe.toolchainIdentity?.os?.release ||
-      !probe.toolchainIdentity?.os?.arch
-    )
-      throw new Error("impact probe runtime identity is incomplete");
-  }
-  return result;
 }
 
 export function impactProbesForRelease(result, releaseSet) {
@@ -817,17 +864,50 @@ export function impactProbesForRelease(result, releaseSet) {
     throw new Error(
       `release impact gate blocked: ${result.reason ?? "unknown"}`,
     );
-  for (const name of ["observedSet", "declaredSet"])
-    if (!exactSet(result[name], releaseSet))
-      throw new Error(`${name} does not exactly match the packed release set`);
+  if (!result.deferredImpact && !exactSet(result.observedSet, releaseSet))
+    throw new Error(
+      "observedSet does not exactly match the packed release set",
+    );
+  if (!exactSet(result.declaredSet, releaseSet))
+    throw new Error(
+      "declaredSet does not exactly match the packed release set",
+    );
+  const deferredSet =
+    result.deferredImpact?.policy.deferred.map((item) => item.package) ?? [];
+  if (result.deferredImpact) {
+    validateDeferredImpact(result.deferredImpact, {
+      headRevision: result.revisions.head,
+    });
+    if (
+      !exactSet(
+        result.deferredImpact.policy.releases.map((item) => item.name),
+        releaseSet,
+      )
+    )
+      throw new Error("deferral release set does not match packed release set");
+    const deferredProbes = result.impactProbeSet.filter((item) =>
+      deferredSet.includes(item.package),
+    );
+    if (stableJson(deferredProbes) !== stableJson(result.deferredImpact.probes))
+      throw new Error("deferred impact probes do not match observed evidence");
+  }
+  const expectedObserved = PUBLIC_PACKAGES.filter((name) =>
+    [...releaseSet, ...deferredSet].includes(name),
+  );
+  if (!exactSet(result.observedSet, expectedObserved))
+    throw new Error(
+      "observedSet does not exactly match released and deferred packages",
+    );
   if (
     !exactSet(
       result.impactProbeSet.map((item) => item.package),
-      releaseSet,
+      expectedObserved,
     )
   )
-    throw new Error("impactProbeSet does not exactly match the release set");
-  return result.impactProbeSet;
+    throw new Error("impactProbeSet does not exactly match observed packages");
+  return result.impactProbeSet.filter((item) =>
+    releaseSet.includes(item.package),
+  );
 }
 
 async function main() {

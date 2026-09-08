@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { validateDeferredImpact } from "./release-deferrals.mjs";
+
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -265,6 +267,15 @@ export async function createVerificationManifest(options) {
       options.compatibilityBaselineSet ?? [],
       releaseSet,
     ),
+    ...(options.deferredImpact
+      ? {
+          deferredImpact: validateDeferredImpact(options.deferredImpact, {
+            releases,
+            compatibilityBaselineSet: options.compatibilityBaselineSet,
+            headRevision: options.workflowCommitSha,
+          }),
+        }
+      : {}),
     packArtifact: {
       id: String(options.packArtifactId),
       digest: options.packArtifactDigest,
@@ -364,6 +375,17 @@ export async function validateVerificationManifest(manifest, options = {}) {
     );
   } catch (error) {
     failures.push(error.message);
+  }
+  if (manifest.deferredImpact !== undefined) {
+    try {
+      validateDeferredImpact(manifest.deferredImpact, {
+        releases: manifest.releases,
+        compatibilityBaselineSet: manifest.compatibilityBaselineSet,
+        headRevision: manifest.workflowCommitSha,
+      });
+    } catch (error) {
+      failures.push(error.message);
+    }
   }
   if (!Array.isArray(manifest.releases) || manifest.releases.length === 0)
     failures.push("releases must be a non-empty array");

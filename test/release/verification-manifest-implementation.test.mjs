@@ -357,3 +357,103 @@ test("v3 publication requires and revalidates the immutable outbox file", async 
     /publication outbox SHA-256 mismatch/,
   );
 });
+
+test("deferred UI evidence is sealed without adding a UI release or outbox entry", async () => {
+  const { buildDeferredImpact } = await import(
+    "../../scripts/release/release-deferrals.mjs"
+  );
+  const { manifest } = await fixture(["@yakit-libs/yakit-ui-icons"]);
+  const ui = "@yakit-libs/yakit-ui";
+  const hashes = Object.fromEntries(
+    [
+      "sourceHash",
+      "baseSourceHash",
+      "headSourceHash",
+      "lockHash",
+      "baseLockHash",
+      "headLockHash",
+      "toolchainHash",
+      "baseToolchainHash",
+      "headToolchainHash",
+      "configHash",
+      "baseConfigHash",
+      "headConfigHash",
+      "snapshotHash",
+      "toolchainIdentityHash",
+    ].map((key) => [key, "b".repeat(64)]),
+  );
+  const probe = {
+    package: ui,
+    kind: "impact-probe",
+    nonPublishable: true,
+    baseRevision: "b".repeat(40),
+    headRevision: manifest.workflowCommitSha,
+    ...hashes,
+    packageSnapshotHashes: { base: "c".repeat(64), head: "d".repeat(64) },
+    toolchainIdentity: {
+      node: "v24.12.0",
+      pnpm: "10.34.5",
+      os: { platform: "linux", release: "6", arch: "x64" },
+    },
+  };
+  const policy = {
+    schemaId: "yakit-ui-release-deferral/v1",
+    releases: [{ name: "@yakit-libs/yakit-ui-icons", version: "1.2.3" }],
+    deferred: [
+      {
+        package: ui,
+        version: "0.9.0",
+        distTag: "latest",
+        integrity: manifest.compatibilityBaselineSet[0].integrity,
+        sha256: manifest.compatibilityBaselineSet[0].sha256,
+        baseRevision: probe.baseRevision,
+        ...Object.fromEntries(
+          [
+            "headSourceHash",
+            "headLockHash",
+            "headToolchainHash",
+            "headConfigHash",
+          ].map((key) => [key, probe[key]]),
+        ),
+        reason: "UI release intentionally pending",
+        followUpPath: "docs/pending-releases/README.md",
+      },
+    ],
+  };
+  manifest.compatibilityBaselineSet[0].integrity =
+    "sha512-" + Buffer.alloc(64).toString("base64");
+  policy.deferred[0].integrity = manifest.compatibilityBaselineSet[0].integrity;
+  manifest.deferredImpact = buildDeferredImpact(policy, [probe]);
+  await validateVerificationManifest(manifest);
+  const outbox = createPublicationOutbox(manifest);
+  assert.equal(manifest.releases.length, 1);
+  assert.equal(manifest.releases[0].name, "@yakit-libs/yakit-ui-icons");
+  assert.deepEqual(Object.keys(outbox.records), [
+    "publish:@yakit-libs/yakit-ui-icons@1.2.3",
+  ]);
+  assert.deepEqual(
+    Object.values(outbox.records).map((record) => record.packageName),
+    ["@yakit-libs/yakit-ui-icons"],
+  );
+  for (const mutate of [
+    (value) => {
+      value.compatibilityBaselineSet[0].version = "0.9.1";
+    },
+    (value) => {
+      value.releases[0].version = "1.2.4";
+    },
+    (value) => {
+      value.deferredImpact.probes[0].headRevision = "c".repeat(40);
+    },
+    (value) => {
+      value.deferredImpact.probes[0].tarball = "ui.tgz";
+    },
+    (value) => {
+      value.deferredImpact.policy.deferred[0].headSourceHash = "e".repeat(64);
+    },
+  ]) {
+    const forged = structuredClone(manifest);
+    mutate(forged);
+    await assert.rejects(validateVerificationManifest(forged));
+  }
+});

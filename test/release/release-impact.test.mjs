@@ -437,3 +437,162 @@ test("initial icons fallback binds exact version, commit, and source snapshot", 
     { [UI]: `${UI}@0.0.0`, [ICONS]: iconsCommit },
   );
 });
+
+async function deferredFixture() {
+  const state = fixture();
+  for (const name of [UI, ICONS])
+    write(
+      state.root,
+      `packages/${name.split("/").at(-1)}/package.json`,
+      JSON.stringify({ name, version: "1.0.0" }),
+    );
+  git(state.root, "add", "packages");
+  git(state.root, "commit", "-qm", "versioned baseline");
+  state.base = git(state.root, "rev-parse", "HEAD");
+  write(
+    state.root,
+    "packages/yakit-ui-icons/package.json",
+    JSON.stringify({ name: ICONS, version: "1.0.1" }),
+  );
+  write(
+    state.root,
+    "packages/yakit-ui/src/icons/index.tsx",
+    "export const strokeWidth = 1;\n",
+  );
+  write(
+    state.root,
+    "docs/deferred-ui.md",
+    "UI change remains pending until its own reviewed version release.\n",
+  );
+  write(
+    state.headSnapshotDirectory,
+    "yakit-ui/dist/index.js",
+    "export const strokeWidth = 1;\n",
+  );
+  write(
+    state.headSnapshotDirectory,
+    "yakit-ui-icons/index.js",
+    "export const strokeWidth = 1;\n",
+  );
+  addVersionPackagesNoise(state, "yakit-ui-icons", "1.0.1");
+  const options = {
+    ...state,
+    root: state.root,
+    baseRevision: state.base,
+    declaredSetOverride: [ICONS],
+    expectedVersions: { [ICONS]: "1.0.1" },
+  };
+  const blocked = await computeReleaseImpact(options);
+  assert.equal(blocked.status, "BLOCK");
+  const probe = blocked.impactProbeSet.find((item) => item.package === UI);
+  const policy = {
+    schemaId: "yakit-ui-release-deferral/v1",
+    releases: [{ name: ICONS, version: "1.0.1" }],
+    deferred: [
+      {
+        package: UI,
+        version: "1.0.0",
+        distTag: "latest",
+        integrity: "sha512-" + Buffer.alloc(64).toString("base64"),
+        sha256: "f".repeat(64),
+        baseRevision: state.base,
+        ...Object.fromEntries(
+          [
+            "headSourceHash",
+            "headLockHash",
+            "headToolchainHash",
+            "headConfigHash",
+          ].map((key) => [key, probe[key]]),
+        ),
+        reason: "Defer UI while independently publishing icons",
+        followUpPath: "docs/deferred-ui.md",
+      },
+    ],
+  };
+  write(
+    state.root,
+    "scripts/release/release-deferral-policy.json",
+    JSON.stringify(policy),
+  );
+  return { state, options, policy };
+}
+
+test("explicit deferral preserves observed impact and only releases the selected package", async () => {
+  const { options } = await deferredFixture();
+  const result = await computeReleaseImpact(options);
+  assert.equal(result.status, "PASS", result.reason);
+  assert.deepEqual(result.observedSet, [UI, ICONS]);
+  assert.deepEqual(result.declaredSet, [ICONS]);
+  assert.deepEqual(
+    result.deferredImpact.probes.map((p) => p.package),
+    [UI],
+  );
+  assert.deepEqual(
+    impactProbesForRelease(result, [ICONS]).map((p) => p.package),
+    [ICONS],
+  );
+  assert.throws(
+    () => impactProbesForRelease(result, [UI, ICONS]),
+    /release set/,
+  );
+  const stripped = structuredClone(result);
+  delete stripped.deferredImpact;
+  assert.throws(() => impactProbesForRelease(stripped, [ICONS]), /observedSet/);
+  const forged = JSON.parse(JSON.stringify(result));
+  forged.deferredImpact.probes[0].packageSnapshotHashes.head = "0".repeat(64);
+  assert.throws(
+    () => impactProbesForRelease(forged, [ICONS]),
+    /deferred impact probes/,
+  );
+});
+
+for (const [name, mutate] of [
+  [
+    "source drift",
+    ({ state }) =>
+      write(state.root, "packages/yakit-ui/README.md", "unreviewed change"),
+  ],
+  ["lock drift", ({ state }) => write(state.root, "pnpm-lock.yaml", "changed")],
+  [
+    "wrong release version",
+    ({ options }) => {
+      options.expectedVersions[ICONS] = "1.0.2";
+    },
+  ],
+  [
+    "UI version bump",
+    ({ state }) =>
+      write(
+        state.root,
+        "packages/yakit-ui/package.json",
+        JSON.stringify({ name: UI, version: "1.0.1" }),
+      ),
+  ],
+  [
+    "missing followup",
+    ({ state }) => write(state.root, "docs/deferred-ui.md", ""),
+  ],
+  [
+    "malformed policy",
+    ({ state }) =>
+      write(state.root, "scripts/release/release-deferral-policy.json", "{"),
+  ],
+])
+  test(`explicit deferral blocks ${name}`, async () => {
+    const data = await deferredFixture();
+    mutate(data);
+    const result = await computeReleaseImpact(data.options);
+    assert.equal(result.status, "BLOCK", result.reason);
+    assert.throws(() => impactProbesForRelease(result, [ICONS]), /blocked/);
+  });
+
+test("deferral resolves release-tag baselines to their immutable commit", async () => {
+  const { state, options } = await deferredFixture();
+  git(state.root, "tag", `${UI}@1.0.0`, state.base);
+  const result = await computeReleaseImpact({
+    ...options,
+    baseRevisions: { [UI]: `${UI}@1.0.0`, [ICONS]: state.base },
+  });
+  assert.equal(result.status, "PASS", result.reason);
+  assert.equal(result.deferredImpact.probes[0].baseRevision, state.base);
+});
