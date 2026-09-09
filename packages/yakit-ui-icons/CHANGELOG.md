@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.2.5
+
+### Patch Changes
+
+- Normalize the visual weight of colorful Outline icons while preserving their fills, accents and public names.
+- Unify avatar badge outlines and restore the intended badge details at native icon sizes.
+
 ## 0.2.4
 
 ### Patch Changes

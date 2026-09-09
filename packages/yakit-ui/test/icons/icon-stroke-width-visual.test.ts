@@ -6,9 +6,13 @@ import { chromium } from 'playwright';
 import { describe, expect, it } from 'vitest';
 
 import { loadingStrokeWidthDefault } from '../../scripts/icon-stroke-width.mjs';
+import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
+import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
-import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+
+const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrections];
 
 const root = process.cwd();
 const reportRoot = resolve(root, 'test-results/icons/stroke-width-1');
@@ -22,6 +26,11 @@ describe('current unit-width independent pixel oracle', () => {
       const review = visualWeightReviews.reviews.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
+      const colorfulCorrection = colorfulCorrections.find((item) => item.file === record.afterPath);
+      if (colorfulCorrection) {
+        expect(colorfulCorrection.originalSha256).toBe(record.afterSha256);
+        expect(createHash('sha256').update(actual).digest('hex')).toBe(colorfulCorrection.sha256);
+      }
       if (review) {
         expect(review.status).toBe('promoted');
         expect(review.reviewVerdict).toBe('pass');
@@ -32,7 +41,9 @@ describe('current unit-width independent pixel oracle', () => {
       }
       return {
         name: record.sourcePath,
-        expected: review ? review.serializedSvg : widthOnlyOracle(record.beforeSvg),
+        expected:
+          colorfulCorrection?.svg ??
+          (review ? review.serializedSvg : widthOnlyOracle(record.beforeSvg)),
         actual,
         original: record.beforeSvg,
       };

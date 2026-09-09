@@ -482,7 +482,10 @@ const revisedWeightIcons = visualWeightReviews.reviews.map(({ exportName, file }
 
 const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
   <section style={{ display: 'grid', gap: 24 }}>
-    <p>左侧为修复前，右侧为当前描边；每组依次展示 16、24、32px。当前线宽：{strokeWidth}。</p>
+    <p>
+      左侧历史快照保留修复前的问题，供对照；右侧为当前组件，响应下方线宽控制。 每组依次展示
+      16、24、32px。当前线宽：{strokeWidth}。
+    </p>
     {['light', 'dark'].map((theme) => (
       <section
         key={theme}
@@ -505,23 +508,29 @@ const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
             style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'center' }}
           >
             <span style={{ width: 250 }}>{exportName}</span>
-            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-              {[16, 24, 32].map((size) => (
-                <img
-                  key={size}
-                  alt={`${exportName} 修复前 ${size}px`}
-                  width={size}
-                  height={size}
-                  src={`data:image/svg+xml,${encodeURIComponent(original.replace('<svg ', `<svg style="color:${theme === 'light' ? '#353639' : '#f0f2f5'}" `))}`}
-                />
-              ))}
-            </div>
+            <figure style={{ margin: 0, display: 'grid', gap: 8 }}>
+              <figcaption>修复前（历史快照）</figcaption>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+                {[16, 24, 32].map((size) => (
+                  <img
+                    key={size}
+                    alt={`${exportName} 修复前 ${size}px`}
+                    width={size}
+                    height={size}
+                    src={`data:image/svg+xml,${encodeURIComponent(original.replace('<svg ', `<svg style="color:${theme === 'light' ? '#353639' : '#f0f2f5'}" `))}`}
+                  />
+                ))}
+              </div>
+            </figure>
             <span aria-hidden="true">→</span>
-            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-              {[16, 24, 32].map((size) => (
-                <Component key={size} color="inherit" size={size} svgProps={{ strokeWidth }} />
-              ))}
-            </div>
+            <figure style={{ margin: 0, display: 'grid', gap: 8 }}>
+              <figcaption>当前组件</figcaption>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+                {[16, 24, 32].map((size) => (
+                  <Component key={size} color="inherit" size={size} svgProps={{ strokeWidth }} />
+                ))}
+              </div>
+            </figure>
           </div>
         ))}
         <p>实心细节与遮挡参照</p>

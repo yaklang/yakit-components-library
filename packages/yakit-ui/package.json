@@ -117,7 +117,7 @@
     "update:icons:colorful-entries": "node scripts/colorful-entry-generator.mjs --write",
     "audit:icons:adjustable": "node config/generateIconStrokeContract.mjs --check",
     "test:icon-adjustable": "vitest run --config vitest.node.config.ts test/icons/icon-adjustable-transform.test.ts test/icons/icon-adjustable-audit.test.ts test/icons/icon-adjustable-geometry.test.ts test/icons/icon-adjustable-ssr.test.ts && vitest run --config vitest.config.ts test/components/icon-adjustable-runtime.test.tsx",
-    "test:icon-visual-weight": "vitest run --config vitest.node.config.ts --maxWorkers=1 test/icons/icon-visual-weight.test.ts test/icons/icon-visual-weight-geometry.test.ts"
+    "test:icon-visual-weight": "vitest run --config vitest.node.config.ts --maxWorkers=1 test/icons/icon-visual-weight.test.ts test/icons/icon-visual-weight-geometry.test.ts test/icons/colorful-outline-weight.test.ts test/icons/avatar-badge-weight.test.ts"
   },
   "dependencies": {
     "@yakit-libs/color": "1.4.1",

@@ -16,6 +16,13 @@ import {
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixturePath = 'test/fixtures/icons/stroke-width-1/before.json';
 const loadingPath = 'src/icons/loading/index.tsx';
+const colorfulOutlineCorrections = JSON.parse(
+  readFileSync(new URL('../test/fixtures/icons/reference/colorful-outline-weight.json', import.meta.url), 'utf8'),
+);
+const avatarBadgeCorrections = JSON.parse(
+  readFileSync(new URL('../test/fixtures/icons/reference/avatar-badge-weight.json', import.meta.url), 'utf8'),
+);
+const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrections];
 const visualWeightReviews = JSON.parse(
   readFileSync(
     new URL('../test/fixtures/icons/reference/visual-weight-v2/reviews.json', import.meta.url),
@@ -250,7 +257,15 @@ export async function validateFrozenMigrationInputs(root, frozen, files) {
         review.oldSourceSha256 === record.afterSha256 &&
         review.candidateSourceSha256 === currentSha256,
     );
-    if (!reviewed) throw new Error(`MIGRATION_INPUT_DRIFT: ${file}`);
+    const colorfulReviewed = colorfulCorrections.some(
+      (correction) =>
+        correction.file === file &&
+        correction.originalSha256 === record.afterSha256 &&
+        sha256(correction.originalSvg) === record.afterSha256 &&
+        correction.sha256 === currentSha256 &&
+        correction.svg === current,
+    );
+    if (!reviewed && !colorfulReviewed) throw new Error(`MIGRATION_INPUT_DRIFT: ${file}`);
   }
 }
 

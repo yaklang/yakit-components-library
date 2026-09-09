@@ -284,6 +284,17 @@ describe('Icon Storybook contract', () => {
       iconStories.VisualWeight.render!({ strokeWidth: 1.5 }, {} as never),
     );
     expect(markup.match(/<img\b/g)).toHaveLength(78);
+    const comparisonGroups = [...markup.matchAll(/<figure\b[^>]*>([\s\S]*?)<\/figure>/g)];
+    expect(comparisonGroups).toHaveLength(52);
+    for (let index = 0; index < comparisonGroups.length; index += 2) {
+      const original = comparisonGroups[index][1];
+      const current = comparisonGroups[index + 1][1];
+      expect(original).toContain('<figcaption>修复前（历史快照）</figcaption>');
+      expect(original.match(/<img\b/g)).toHaveLength(3);
+      expect(current).toContain('<figcaption>当前组件</figcaption>');
+      expect(current.match(/<svg\b/g)).toHaveLength(3);
+      expect(current).toContain('stroke-width="1.5"');
+    }
     expect(markup.match(/color:inherit/g)).toHaveLength(markup.match(/<svg\b/g)!.length);
     for (const { exportName } of visualWeightReviews.reviews) {
       for (const size of [16, 24, 32]) expect(markup).toContain(`${exportName} 修复前 ${size}px`);

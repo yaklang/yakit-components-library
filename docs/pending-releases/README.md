@@ -1,9 +1,9 @@
 # Deferred Yakit UI icon changes
 
-The icon changes prepared in commit `45ae8c6` are released independently in
-`@yakit-libs/yakit-ui-icons@0.2.4`. `@yakit-libs/yakit-ui` stays at `0.2.3` on npm.
-Its current source contains the same icon improvements, but its rebuilt output
-is an impact probe and is not a release artifact.
+The icon changes prepared after `@yakit-libs/yakit-ui-icons@0.2.4` are released
+independently in `@yakit-libs/yakit-ui-icons@0.2.5`. `@yakit-libs/yakit-ui`
+stays at `0.2.3` on npm. Its current source contains the same icon improvements,
+but its rebuilt output is an impact probe and is not a release artifact.
 
 The two documents in this directory preserve the original UI Changeset bump
 levels and descriptions. They are outside `.changeset` so the icons-only release
