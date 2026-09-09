@@ -9,7 +9,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
@@ -23,8 +23,12 @@ import {
   svgFiles,
   validateFrozenMigrationInputs,
 } from '../../scripts/normalize-icon-stroke-width.mjs';
-import before from '../fixtures/icons/stroke-width-1/before.json';
+import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
+import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+import before from '../fixtures/icons/stroke-width-1/before.json';
+
+const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrections];
 
 const packageRoot = process.cwd();
 const digest = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
@@ -98,7 +102,13 @@ describe('all production icon migration contracts', () => {
       const review = visualWeightReviews.reviews.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
-      if (review) {
+      const colorfulCorrection = colorfulCorrections.find((item) => item.file === record.afterPath);
+      if (colorfulCorrection) {
+        expect(colorfulCorrection.originalSha256).toBe(record.afterSha256);
+        expect(colorfulCorrection.originalSvg).toBe(expected);
+        expect(actual).toBe(colorfulCorrection.svg);
+        expect(digest(actual)).toBe(colorfulCorrection.sha256);
+      } else if (review) {
         expect(review.status).toBe('promoted');
         expect(review.reviewVerdict).toBe('pass');
         expect(review.oldSourceSha256).toBe(record.afterSha256);
@@ -241,35 +251,41 @@ describe('stroke-width migration CLI safety', () => {
     }
   });
 
-  it('accepts only the exact later-reviewed geometry pair and rejects subsequent drift', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'icon-stroke-reviewed-'));
-    const sourcePath = 'icons/outline/14203-193724.svg';
-    const record = before.assets.find((item) => item.sourcePath === sourcePath)!;
-    const current = readFileSync(resolve(packageRoot, 'src', sourcePath), 'utf8');
-    try {
-      mkdirSync(resolve(root, 'src/icons/outline'), { recursive: true });
-      writeFileSync(resolve(root, 'src', sourcePath), current);
-      await expect(
-        validateFrozenMigrationInputs(root, { assets: [record] }, [sourcePath]),
-      ).resolves.toBeUndefined();
-      await expect(
-        validateFrozenMigrationInputs(
-          root,
-          { assets: [{ ...record, afterSha256: '0'.repeat(64) }] },
-          [sourcePath],
-        ),
-      ).rejects.toThrow('MIGRATION_INPUT_DRIFT');
-      writeFileSync(
-        resolve(root, 'src', sourcePath),
-        current.replace('stroke-width="1"', 'stroke-width="2"'),
-      );
-      await expect(
-        validateFrozenMigrationInputs(root, { assets: [record] }, [sourcePath]),
-      ).rejects.toThrow('MIGRATION_INPUT_DRIFT');
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
-  });
+  it.each([
+    'icons/outline/14203-193724.svg',
+    'icons/colorful/DataComparisonOutlineColorful.svg',
+    'icons/colorful/LuaAvatarColorful.svg',
+  ])(
+    'accepts only the exact later-reviewed geometry pair and rejects subsequent drift: %s',
+    async (sourcePath) => {
+      const root = mkdtempSync(join(tmpdir(), 'icon-stroke-reviewed-'));
+      const record = before.assets.find((item) => item.sourcePath === sourcePath)!;
+      const current = readFileSync(resolve(packageRoot, 'src', sourcePath), 'utf8');
+      try {
+        mkdirSync(dirname(resolve(root, 'src', sourcePath)), { recursive: true });
+        writeFileSync(resolve(root, 'src', sourcePath), current);
+        await expect(
+          validateFrozenMigrationInputs(root, { assets: [record] }, [sourcePath]),
+        ).resolves.toBeUndefined();
+        await expect(
+          validateFrozenMigrationInputs(
+            root,
+            { assets: [{ ...record, afterSha256: '0'.repeat(64) }] },
+            [sourcePath],
+          ),
+        ).rejects.toThrow('MIGRATION_INPUT_DRIFT');
+        writeFileSync(
+          resolve(root, 'src', sourcePath),
+          current.replace('stroke-width="1"', 'stroke-width="2"'),
+        );
+        await expect(
+          validateFrozenMigrationInputs(root, { assets: [record] }, [sourcePath]),
+        ).rejects.toThrow('MIGRATION_INPUT_DRIFT');
+      } finally {
+        rmSync(root, { force: true, recursive: true });
+      }
+    },
+  );
 
   it('fails before planning when a frozen migration input hash drifts', async () => {
     const root = mkdtempSync(join(tmpdir(), 'icon-stroke-input-'));
