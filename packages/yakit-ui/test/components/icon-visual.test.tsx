@@ -4,6 +4,11 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { outlineIconRegistry } from '../../src/icons/registry';
+import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
+
+const addedIconNames = new Set(
+  designUpdates.updates.filter(({ added }) => added).map(({ exportName }) => exportName),
+);
 
 const defectNames = new Set([
   'ArchiveRestoreOutlined',
@@ -135,6 +140,7 @@ describe('Outline remediation visual smoke', () => {
       ({ exportName }) =>
         !defectNames.has(exportName) &&
         !notebookGroupNames.has(exportName) &&
+        !addedIconNames.has(exportName) &&
         exportName !== 'LandPlotOutlined',
     );
 

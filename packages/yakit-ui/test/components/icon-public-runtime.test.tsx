@@ -48,11 +48,11 @@ afterEach(() => {
 });
 
 describe('Outline public component API', () => {
-  it('exposes exactly 350 current Figma icons from the package root', () => {
+  it('exposes exactly 356 current Figma icons from the package root', () => {
     const currentNames = manifest.symbols.map(({ exportName }) => exportName).sort();
     const registryNames = outlineIconRegistry.map(({ exportName }) => exportName).sort();
 
-    expect(currentNames).toHaveLength(350);
+    expect(currentNames).toHaveLength(356);
     expect(currentNames).toContain('LandPlotOutlined');
     expect(currentNames).toEqual(expect.arrayContaining([...notebookGroupExports]));
     expect(registryNames).toEqual(currentNames);
@@ -108,7 +108,7 @@ describe('Outline public component API', () => {
     const container = renderRegistry();
     const svgs = [...container.querySelectorAll<SVGSVGElement>('svg')];
 
-    expect(svgs).toHaveLength(350);
+    expect(svgs).toHaveLength(356);
     for (const svg of svgs) {
       const root = svg.parentElement as HTMLSpanElement;
       const name = root.dataset.iconName ?? '';

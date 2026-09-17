@@ -59,10 +59,10 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     frameNodeId: '46824:1930',
     strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
     expectedCounts: Object.freeze({
-      currentSymbols: 350,
+      currentSymbols: 356,
       instances: 3,
-      placements: 353,
-      publicExports: 350,
+      placements: 359,
+      publicExports: 356,
     }),
   }),
   'solid-v1': Object.freeze({

@@ -149,7 +149,7 @@ async function main() {
   if (
     figmaRawProvenance.fileKey !== 'QWct5XE0Bg0bNDQ93eYgEw' ||
     figmaRawProvenance.frameNodeId !== '46824:1930' ||
-    figmaRawProvenance.components?.length !== 350 ||
+    figmaRawProvenance.components?.length !== 356 ||
     figmaRawProvenance.instances?.length !== 3
   )
     throw new Error('Figma raw provenance identity/counts are invalid');
@@ -162,15 +162,15 @@ async function main() {
   if (
     placementProvenance.fileKey !== figmaRawProvenance.fileKey ||
     placementProvenance.frameNodeId !== figmaRawProvenance.frameNodeId ||
-    placementProvenance.currentSymbols?.length !== 350 ||
-    placementProvenance.placements?.length !== 353
+    placementProvenance.currentSymbols?.length !== 356 ||
+    placementProvenance.placements?.length !== 359
   )
     throw new Error('Figma placement provenance identity/counts are invalid');
   const placementSourceIds = new Set(
     placementProvenance.currentSymbols.map(({ exportedSourceNodeId }) => exportedSourceNodeId),
   );
   if (
-    placementSourceIds.size !== 350 ||
+    placementSourceIds.size !== 356 ||
     [...figmaComponents.keys()].some((nodeId) => !placementSourceIds.has(nodeId))
   )
     throw new Error('Figma placement/raw component sets differ');
@@ -178,8 +178,8 @@ async function main() {
   const prechangeByNode = new Map(
     prechange.exports.map((entry) => [entry.exportedSourceNodeId, entry]),
   );
-  if (sourceInventory.currentSymbols?.length !== 350 || sourceInventory.placements?.length !== 353)
-    throw new Error('source inventory must contain exactly 350 symbols and 353 placements');
+  if (sourceInventory.currentSymbols?.length !== 356 || sourceInventory.placements?.length !== 359)
+    throw new Error('source inventory must contain exactly 356 symbols and 359 placements');
   const instances = placementProvenance.placements.filter(
     ({ nodeType }) => nodeType === 'instance',
   );
@@ -306,20 +306,20 @@ async function main() {
   const missingExports = symbols.filter(({ exportName }) => !exportName).map(({ file }) => file);
   if (missingExports.length > 0)
     throw new Error(`missing public exports: ${missingExports.join(', ')}`);
-  if (exportsByFile.size !== 350)
-    throw new Error(`public export count must be 350, received ${exportsByFile.size}`);
+  if (exportsByFile.size !== 356)
+    throw new Error(`public export count must be 356, received ${exportsByFile.size}`);
   const manifest = {
     schemaVersion: 'figma-outline-icons-inventory-v1',
     complete: true,
     provenanceComplete: true,
     completenessScope:
-      'complete 353-placement, 350 Plugin API raw component SVG, and exact 3-instance override provenance',
+      'complete 359-placement, 356 canonical Figma component SVG (Plugin API and MCP asset provenance), and exact 3-instance override provenance',
     variant: 'outline',
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     frameName: 'outline',
     frameSize: { height: 1779, width: 457 },
-    expectedCounts: { currentSymbols: 350, instances: 3, placements: 353, publicExports: 350 },
+    expectedCounts: { currentSymbols: 356, instances: 3, placements: 359, publicExports: 356 },
     strokeWidthPolicy: policy.strokeWidthPolicy,
     sourceEvidence: {
       ...sourceInventory.sourceEvidence,

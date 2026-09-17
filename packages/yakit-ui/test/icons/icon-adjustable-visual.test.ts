@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest';
 
 import reviewedCellCapture from '../fixtures/icons/adjustable-stroke/reviewed-cell-capture.json';
 import reviewedRasterExceptions from '../fixtures/icons/adjustable-stroke/reviewed-raster-exceptions.json';
+import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import baseline from '../fixtures/icons/reference/stroke-runtime-prechange-v1/manifest.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
@@ -89,6 +90,14 @@ describe('adjustable icon pre-change runtime baseline', () => {
       });
       await page.goto(new URL('fixtures/icons/icon-adjustable-baseline.html', origin).href);
       await page.waitForFunction(() => document.documentElement.dataset.baselineReady === 'true');
+      // Restore the frozen atlas positions; additions have their own Figma geometry checks.
+      await page.evaluate(
+        (names) => {
+          for (const cell of document.querySelectorAll('[data-family="outline"]'))
+            if (names.includes(cell.getAttribute('data-icon-name') ?? '')) cell.remove();
+        },
+        designUpdates.updates.filter(({ added }) => added).map(({ exportName }) => exportName),
+      );
       const atlas = page.locator('#atlas');
       const actualRecords = await atlas.locator('[data-icon-name]').evaluateAll((cells) =>
         cells.map((cell) => ({
@@ -300,6 +309,21 @@ describe('adjustable icon pre-change runtime baseline', () => {
       for (const [index, expected] of baseline.records.entries()) {
         if (expected.family === 'outline' && expected.name === 'BugOutlined') continue;
         const identity = `${expected.family}:${expected.name}`;
+        const designUpdate =
+          expected.family === 'outline'
+            ? designUpdates.updates.find(({ exportName }) => exportName === expected.name)
+            : undefined;
+        if (designUpdate) {
+          const paths = (svg: string) =>
+            [...svg.matchAll(/\bd="([^"]*)"/g)].map((match) => match[1]);
+          expect(paths(actualRecords[index].serializedSvg), identity).toEqual(
+            paths(designUpdate.assetSvg),
+          );
+          expect(paths(expected.serializedSvg), identity).toEqual(
+            paths(designUpdate.previousLocalSvg!),
+          );
+          continue;
+        }
         const targetIndex =
           expected.family === 'outline'
             ? visualWeightReviews.reviews.findIndex((review) => review.exportName === expected.name)

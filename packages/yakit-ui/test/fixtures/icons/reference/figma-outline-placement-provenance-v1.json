@@ -3,8 +3,8 @@
   "fileKey": "QWct5XE0Bg0bNDQ93eYgEw",
   "frameNodeId": "46824:1930",
   "counts": {
-    "placements": 353,
-    "currentSymbols": 350,
+    "placements": 359,
+    "currentSymbols": 356,
     "instances": 3
   },
   "sourceEvidence": {
@@ -2828,7 +2828,7 @@
     {
       "placementNodeId": "1:2359",
       "nodeType": "component",
-      "name": " Outline/sparkles",
+      "name": "Outline/sparkles",
       "x": 176,
       "y": 1147,
       "width": 24,
@@ -2956,7 +2956,7 @@
     {
       "placementNodeId": "1:2375",
       "nodeType": "component",
-      "name": " Outline/light-bulb",
+      "name": "Outline/light-bulb",
       "x": 560,
       "y": 1147,
       "width": 24,
@@ -5288,20 +5288,65 @@
                   "visible": true,
                   "blendMode": "NORMAL",
                   "gradientStops": [
-                    { "color": { "r": 0.8627451062202454, "g": 0.3607843220233917, "b": 0.8745098114013672, "a": 1 }, "position": 0, "boundVariables": {} },
-                    { "color": { "r": 0.5333333611488342, "g": 0.3843137323856354, "b": 0.9725490212440491, "a": 1 }, "position": 0.6394230723381042, "boundVariables": {} },
-                    { "color": { "r": 0.2666666805744171, "g": 0.5764706134796143, "b": 1, "a": 1 }, "position": 1, "boundVariables": {} }
+                    {
+                      "color": {
+                        "r": 0.8627451062202454,
+                        "g": 0.3607843220233917,
+                        "b": 0.8745098114013672,
+                        "a": 1
+                      },
+                      "position": 0,
+                      "boundVariables": {}
+                    },
+                    {
+                      "color": {
+                        "r": 0.5333333611488342,
+                        "g": 0.3843137323856354,
+                        "b": 0.9725490212440491,
+                        "a": 1
+                      },
+                      "position": 0.6394230723381042,
+                      "boundVariables": {}
+                    },
+                    {
+                      "color": {
+                        "r": 0.2666666805744171,
+                        "g": 0.5764706134796143,
+                        "b": 1,
+                        "a": 1
+                      },
+                      "position": 1,
+                      "boundVariables": {}
+                    }
                   ],
                   "gradientTransform": [
-                    [0.7516543865203857, 0.24834559857845306, 4.912736883966318e-15],
-                    [-0.24834562838077545, 0.24834562838077545, 0.5]
+                    [
+                      0.7516543865203857,
+                      0.24834559857845306,
+                      4.912736883966318e-15
+                    ],
+                    [
+                      -0.24834562838077545,
+                      0.24834562838077545,
+                      0.5
+                    ]
                   ]
                 }
               ]
             },
             "mainComponentValue": {
               "fills": [
-                { "type": "SOLID", "color": { "r": 0.2078431397676468, "g": 0.21176470816135406, "b": 0.2235294133424759 }, "opacity": 1, "visible": true, "blendMode": "NORMAL" }
+                {
+                  "type": "SOLID",
+                  "color": {
+                    "r": 0.2078431397676468,
+                    "g": 0.21176470816135406,
+                    "b": 0.2235294133424759
+                  },
+                  "opacity": 1,
+                  "visible": true,
+                  "blendMode": "NORMAL"
+                }
               ]
             }
           },
@@ -5319,13 +5364,48 @@
                   "visible": true,
                   "blendMode": "NORMAL",
                   "gradientStops": [
-                    { "color": { "r": 0.8627451062202454, "g": 0.3607843220233917, "b": 0.8745098114013672, "a": 1 }, "position": 0, "boundVariables": {} },
-                    { "color": { "r": 0.5333333611488342, "g": 0.3843137323856354, "b": 0.9725490212440491, "a": 1 }, "position": 0.6394230723381042, "boundVariables": {} },
-                    { "color": { "r": 0.2666666805744171, "g": 0.5764706134796143, "b": 1, "a": 1 }, "position": 1, "boundVariables": {} }
+                    {
+                      "color": {
+                        "r": 0.8627451062202454,
+                        "g": 0.3607843220233917,
+                        "b": 0.8745098114013672,
+                        "a": 1
+                      },
+                      "position": 0,
+                      "boundVariables": {}
+                    },
+                    {
+                      "color": {
+                        "r": 0.5333333611488342,
+                        "g": 0.3843137323856354,
+                        "b": 0.9725490212440491,
+                        "a": 1
+                      },
+                      "position": 0.6394230723381042,
+                      "boundVariables": {}
+                    },
+                    {
+                      "color": {
+                        "r": 0.2666666805744171,
+                        "g": 0.5764706134796143,
+                        "b": 1,
+                        "a": 1
+                      },
+                      "position": 1,
+                      "boundVariables": {}
+                    }
                   ],
                   "gradientTransform": [
-                    [0.7516543865203857, 0.24834559857845306, 4.912736883966318e-15],
-                    [-0.24834562838077545, 0.24834562838077545, 0.5]
+                    [
+                      0.7516543865203857,
+                      0.24834559857845306,
+                      4.912736883966318e-15
+                    ],
+                    [
+                      -0.24834562838077545,
+                      0.24834562838077545,
+                      0.5
+                    ]
                   ]
                 }
               ],
@@ -5333,7 +5413,17 @@
             },
             "mainComponentValue": {
               "strokes": [
-                { "type": "SOLID", "color": { "r": 0.2078431397676468, "g": 0.21176470816135406, "b": 0.2235294133424759 }, "opacity": 1, "visible": true, "blendMode": "NORMAL" }
+                {
+                  "type": "SOLID",
+                  "color": {
+                    "r": 0.2078431397676468,
+                    "g": 0.21176470816135406,
+                    "b": 0.2235294133424759
+                  },
+                  "opacity": 1,
+                  "visible": true,
+                  "blendMode": "NORMAL"
+                }
               ],
               "strokeWeight": 2
             }
@@ -5737,6 +5827,102 @@
       "mainComponentId": "46879:8170",
       "mainComponentIdStatus": "canonical-source-self",
       "exportedSourceNodeId": "46879:8170",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "46992:25036",
+      "nodeType": "component",
+      "name": "Outline/Hourglass",
+      "x": 224,
+      "y": 2279,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "46992:25036",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "46992:25036",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47154:15989",
+      "nodeType": "component",
+      "name": "Outline/GitMerge",
+      "x": 272,
+      "y": 2279,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47154:15989",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47154:15989",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47154:15992",
+      "nodeType": "component",
+      "name": "Outline/LoaderPinwheel",
+      "x": 320,
+      "y": 2279,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47154:15992",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47154:15992",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47158:15995",
+      "nodeType": "component",
+      "name": "Outline/FolderArchive",
+      "x": 368,
+      "y": 2279,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47158:15995",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47158:15995",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47161:15998",
+      "nodeType": "component",
+      "name": "Outline/FileArchive",
+      "x": 416,
+      "y": 2279,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47161:15998",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47161:15998",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47184:9638",
+      "nodeType": "component",
+      "name": "Outline/Sparkles2",
+      "x": 464,
+      "y": 2279,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47184:9638",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47184:9638",
       "sourceResolution": "component-self",
       "overrideHash": null,
       "overrideHashStatus": "pending-updater-canonical-sha256",
@@ -6957,7 +7143,7 @@
     },
     {
       "exportedSourceNodeId": "1:2359",
-      "name": " Outline/sparkles",
+      "name": "Outline/sparkles",
       "width": 24,
       "height": 24,
       "nodeType": "component"
@@ -7013,7 +7199,7 @@
     },
     {
       "exportedSourceNodeId": "1:2375",
-      "name": " Outline/light-bulb",
+      "name": "Outline/light-bulb",
       "width": 24,
       "height": 24,
       "nodeType": "component"
@@ -8190,6 +8376,48 @@
     {
       "exportedSourceNodeId": "46879:8170",
       "name": "Outline/Timer",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "46992:25036",
+      "name": "Outline/Hourglass",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47154:15989",
+      "name": "Outline/GitMerge",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47154:15992",
+      "name": "Outline/LoaderPinwheel",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47158:15995",
+      "name": "Outline/FolderArchive",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47161:15998",
+      "name": "Outline/FileArchive",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47184:9638",
+      "name": "Outline/Sparkles2",
       "width": 24,
       "height": 24,
       "nodeType": "component"

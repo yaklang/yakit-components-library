@@ -1,7 +1,8 @@
 # Deferred Yakit UI icon changes
 
 The icon changes prepared after `@yakit-libs/yakit-ui-icons@0.2.4` are released
-independently in `@yakit-libs/yakit-ui-icons@0.2.5`. `@yakit-libs/yakit-ui`
+independently in `@yakit-libs/yakit-ui-icons@0.2.5` and `0.2.6`. The latter updates
+Sparkles and LightBulb and adds six Figma Outline icons. `@yakit-libs/yakit-ui`
 stays at `0.2.3` on npm. Its current source contains the same icon improvements,
 but its rebuilt output is an impact probe and is not a release artifact.
 

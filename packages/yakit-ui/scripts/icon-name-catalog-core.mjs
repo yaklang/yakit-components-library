@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-const EXPECTED_COUNTS = Object.freeze({ outline: 350, solid: 255, total: 605 });
+const EXPECTED_COUNTS = Object.freeze({ outline: 356, solid: 255, total: 611 });
 const VALID_STATUSES = new Set([
   'current',
   'supplement',
@@ -18,8 +18,7 @@ const trimmedFigmaName = (value) => {
   return trimmed.length === 0 ? null : trimmed;
 };
 
-const sourceNodeIdFromFile = (file) =>
-  path.basename(file, '.svg').replace(/^([^-]+)-/, '$1:');
+const sourceNodeIdFromFile = (file) => path.basename(file, '.svg').replace(/^([^-]+)-/, '$1:');
 
 export function parseIconIndexMapping(source) {
   const imports = new Map();
@@ -52,7 +51,9 @@ const nodeName = (entry, nodeKey) => ({
 function validateProvenancePair({ authoritative, authoritativeNodeKey, label, raw, rawNodeKey }) {
   const authoritativeRecords = authoritative.map((entry) => nodeName(entry, authoritativeNodeKey));
   const rawRecords = raw.map((entry) => nodeName(entry, rawNodeKey));
-  const authoritativeByNode = new Map(authoritativeRecords.map((entry) => [entry.nodeId, entry.name]));
+  const authoritativeByNode = new Map(
+    authoritativeRecords.map((entry) => [entry.nodeId, entry.name]),
+  );
   const rawByNode = new Map(rawRecords.map((entry) => [entry.nodeId, entry.name]));
   if (
     authoritativeByNode.size !== authoritativeRecords.length ||
@@ -94,7 +95,7 @@ function expectedRecords({
   const outlineLegacy = outlineManifest?.legacySources ?? [];
   const solidSymbols = solidManifest?.symbols ?? [];
   const solidSupplements = solidManifest?.supplementalSources ?? [];
-  if (outlineSymbols.length !== 350 || outlineLegacy.length !== 0)
+  if (outlineSymbols.length !== 356 || outlineLegacy.length !== 0)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'outline');
   if (solidSymbols.length !== 251 || solidSupplements.length !== 4)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'solid');
@@ -121,7 +122,7 @@ function expectedRecords({
     rawNodeKey: 'nodeId',
   });
   if (
-    outlineAuthoritative.length !== 350 ||
+    outlineAuthoritative.length !== 356 ||
     solidTargets.length !== 251 ||
     solidSupplementEvidence.length !== 4
   )
@@ -194,7 +195,10 @@ export function buildIconNameCatalog({
     outline: parseIconIndexMapping(outlineIndexSource),
     solid: parseIconIndexMapping(solidIndexSource),
   };
-  if (indexes.outline.size !== EXPECTED_COUNTS.outline || indexes.solid.size !== EXPECTED_COUNTS.solid)
+  if (
+    indexes.outline.size !== EXPECTED_COUNTS.outline ||
+    indexes.solid.size !== EXPECTED_COUNTS.solid
+  )
     fail('FIGMA_NAME_INDEX_COUNT_MISMATCH');
 
   const records = expectedRecords({
@@ -211,7 +215,8 @@ export function buildIconNameCatalog({
     if (!record.exportName || seenExports.has(record.exportName))
       fail('FIGMA_NAME_EXPORT_DUPLICATE', record.exportName);
     seenExports.add(record.exportName);
-    if (!VALID_STATUSES.has(record.sourceStatus)) fail('FIGMA_NAME_STATUS_UNKNOWN', record.sourceStatus);
+    if (!VALID_STATUSES.has(record.sourceStatus))
+      fail('FIGMA_NAME_STATUS_UNKNOWN', record.sourceStatus);
     if (record.figmaName) {
       if (seenFigmaNames.has(record.figmaName)) fail('FIGMA_NAME_DUPLICATE', record.figmaName);
       seenFigmaNames.add(record.figmaName);
@@ -226,7 +231,8 @@ export function buildIconNameCatalog({
 
   for (const [family, index] of Object.entries(indexes))
     for (const exportName of index.keys())
-      if (!seenExports.has(exportName)) fail('FIGMA_NAME_MAPPING_UNKNOWN', `${family}/${exportName}`);
+      if (!seenExports.has(exportName))
+        fail('FIGMA_NAME_MAPPING_UNKNOWN', `${family}/${exportName}`);
   if (records.length !== EXPECTED_COUNTS.total || seenExports.size !== EXPECTED_COUNTS.total)
     fail('FIGMA_NAME_CATALOG_INCOMPLETE');
 

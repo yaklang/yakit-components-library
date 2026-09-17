@@ -9,11 +9,12 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import manifest from '../../scripts/figma-outline-icons-inventory.json';
 import figmaProvenance from '../fixtures/icons/reference/figma-outline-raw-provenance-v1.json';
 import metricsBaseline from '../fixtures/icons/reference/outline-controls-298.json';
+import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import prechangeBaseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import strokeWidthFixture from '../fixtures/icons/stroke-width-1/before.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
-import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -148,10 +149,16 @@ const withAiInstanceOverride = (source: string) => {
     .replace(/(<svg\b[^>]*>)/, `$1${gradient}`)
     .replaceAll('"currentColor"', '"url(#outline-ai-instance-gradient)"');
 };
+const addedNodeIds = new Set(
+  designUpdates.updates.filter(({ added }) => added).map(({ nodeId }) => nodeId),
+);
+const historicalPlacements = manifest.placements.filter(
+  ({ exportedSourceNodeId }) => !addedNodeIds.has(exportedSourceNodeId),
+);
 const candidateHtml = `<!doctype html><html><head><style>
 *{box-sizing:border-box}html,body{margin:0;width:${frameSize.width}px;height:${frameSize.height}px;overflow:hidden;background:#f8f9fa}
 .icon{position:absolute;display:block;color:#353639}.icon>svg{display:block;width:100%;height:100%}
-</style></head><body>${manifest.placements
+</style></head><body>${historicalPlacements
   .map((placement) => {
     const file = sourceByNode.get(placement.exportedSourceNodeId);
     if (!file) throw new Error(`Missing local source for ${placement.exportedSourceNodeId}`);
@@ -162,7 +169,7 @@ const candidateHtml = `<!doctype html><html><head><style>
     return `<div class="icon" data-placement-id="${escapeHtml(placement.placementNodeId)}" data-node-type="${placement.nodeType}" data-instance-override="${isAiOverride ? 'figma-linear-gradient' : 'none'}" style="left:${position.x}px;top:${position.y}px;width:24px;height:24px;color:${publicDefaultColor(placement.exportedSourceNodeId)}">${source}</div>`;
   })
   .join('')}</body></html>`;
-const measurementRows = manifest.placements.map((placement) => {
+const measurementRows = historicalPlacements.map((placement) => {
   const position = localPosition(placement);
   return {
     exportedSourceNodeId: placement.exportedSourceNodeId,
