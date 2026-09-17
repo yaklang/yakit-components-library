@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.2.6
+
+### Patch Changes
+
+- Update `SparklesOutlined` and `LightBulbOutlined` to the latest Figma designs.
+- Add `HourglassOutlined`, `GitMergeOutlined`, `LoaderPinwheelOutlined`, `FolderArchiveOutlined`, `FileArchiveOutlined` and `Sparkles2Outlined`, with adjustable stroke widths and public exports.
+
 ## 0.2.5
 
 ### Patch Changes
