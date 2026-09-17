@@ -17,12 +17,24 @@ const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 const fixturePath = 'test/fixtures/icons/stroke-width-1/before.json';
 const loadingPath = 'src/icons/loading/index.tsx';
 const colorfulOutlineCorrections = JSON.parse(
-  readFileSync(new URL('../test/fixtures/icons/reference/colorful-outline-weight.json', import.meta.url), 'utf8'),
+  readFileSync(
+    new URL('../test/fixtures/icons/reference/colorful-outline-weight.json', import.meta.url),
+    'utf8',
+  ),
 );
 const avatarBadgeCorrections = JSON.parse(
-  readFileSync(new URL('../test/fixtures/icons/reference/avatar-badge-weight.json', import.meta.url), 'utf8'),
+  readFileSync(
+    new URL('../test/fixtures/icons/reference/avatar-badge-weight.json', import.meta.url),
+    'utf8',
+  ),
 );
 const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrections];
+const outlineDesignUpdates = JSON.parse(
+  readFileSync(
+    new URL('../test/fixtures/icons/reference/outline-design-updates-sep17.json', import.meta.url),
+    'utf8',
+  ),
+).updates;
 const visualWeightReviews = JSON.parse(
   readFileSync(
     new URL('../test/fixtures/icons/reference/visual-weight-v2/reviews.json', import.meta.url),
@@ -144,6 +156,16 @@ export async function checkIconStrokeWidths(root = packageRoot) {
       frozen.assets.map(({ sourcePath, afterPath }) => [sourcePath, afterPath]),
     );
     const expected = new Set(frozen.sourceInventory.map((file) => migrated.get(file) ?? file));
+    const designUpdatesPath = path.join(
+      root,
+      'test/fixtures/icons/reference/outline-design-updates-sep17.json',
+    );
+    try {
+      const { updates } = JSON.parse(await readFile(designUpdatesPath, 'utf8'));
+      for (const { added, file } of updates) if (added) expected.add(`icons/outline/${file}`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
     for (const file of files)
       if (!expected.has(file)) errors.push(`${file}: source is not registered in ${fixturePath}`);
     for (const file of expected)
@@ -265,7 +287,17 @@ export async function validateFrozenMigrationInputs(root, frozen, files) {
         correction.sha256 === currentSha256 &&
         correction.svg === current,
     );
-    if (!reviewed && !colorfulReviewed) throw new Error(`MIGRATION_INPUT_DRIFT: ${file}`);
+    const designUpdated = outlineDesignUpdates.some(
+      (update) =>
+        file === `icons/outline/${update.file}` &&
+        update.previousLocalSvg &&
+        sha256(update.previousLocalSvg) === record.afterSha256 &&
+        update.componentSvg
+          .replaceAll('#353639', 'currentColor')
+          .replaceAll('stroke-width="2"', 'stroke-width="1"') === current,
+    );
+    if (!reviewed && !colorfulReviewed && !designUpdated)
+      throw new Error(`MIGRATION_INPUT_DRIFT: ${file}`);
   }
 }
 

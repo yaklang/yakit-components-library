@@ -2149,12 +2149,12 @@ export const outlineStrokeContract = {
   '1-2359.svg': {
     classification: 'adjustable',
     file: '1-2359.svg',
-    sha256: 'e80f2304f5b858566afe781eb0a33d0d485ef30d5cfcd260df03bd87679d30a5',
+    sha256: '8437fcb402a80321fe551cf2f9cd1fa018a50dbdd4943ea38bdf686b882b7c9b',
     targets: [
       {
         element: 'path',
         expectedMatches: 1,
-        locator: [0],
+        locator: [0, 0],
         role: 'adjustable-primary',
         sourceDefault: '1',
         surface: 'attribute',
@@ -2285,12 +2285,12 @@ export const outlineStrokeContract = {
   '1-2375.svg': {
     classification: 'adjustable',
     file: '1-2375.svg',
-    sha256: 'd556889e83fdd17622f6aa23b61dd2f6d74da452ef56815570aeaf4a1a4cfc4b',
+    sha256: '47b35461a7c859f063b4f5f6d7dd008a0f71a70ccd80987070b01066b3d98b3d',
     targets: [
       {
         element: 'path',
         expectedMatches: 1,
-        locator: [0],
+        locator: [0, 0],
         role: 'adjustable-primary',
         sourceDefault: '1',
         surface: 'attribute',
@@ -6071,6 +6071,96 @@ export const outlineStrokeContract = {
         element: 'path',
         expectedMatches: 1,
         locator: [0],
+        role: 'adjustable-primary',
+        sourceDefault: '1',
+        surface: 'attribute',
+      },
+    ],
+  },
+  '46992-25036.svg': {
+    classification: 'adjustable',
+    file: '46992-25036.svg',
+    sha256: 'c5502f40cd39424e7336ef048331ce17238239bac8c2a5a918a6bab72e374d2c',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0, 0],
+        role: 'adjustable-primary',
+        sourceDefault: '1',
+        surface: 'attribute',
+      },
+    ],
+  },
+  '47154-15989.svg': {
+    classification: 'adjustable',
+    file: '47154-15989.svg',
+    sha256: 'ef50140921373108586daa6fb30da47aedc7aacee1f4796d4dead760cb4200bf',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0, 0],
+        role: 'adjustable-primary',
+        sourceDefault: '1',
+        surface: 'attribute',
+      },
+    ],
+  },
+  '47154-15992.svg': {
+    classification: 'adjustable',
+    file: '47154-15992.svg',
+    sha256: '6156e95b7002133d051518ee12a30c10d108f4fea03e4b163b0f772327b9d627',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0, 0],
+        role: 'adjustable-primary',
+        sourceDefault: '1',
+        surface: 'attribute',
+      },
+    ],
+  },
+  '47158-15995.svg': {
+    classification: 'adjustable',
+    file: '47158-15995.svg',
+    sha256: '4f6c91c1b353e54d621cc212fc382534f66de6f3442554e3020a89550b6293ce',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0, 0],
+        role: 'adjustable-primary',
+        sourceDefault: '1',
+        surface: 'attribute',
+      },
+    ],
+  },
+  '47161-15998.svg': {
+    classification: 'adjustable',
+    file: '47161-15998.svg',
+    sha256: 'a92ba80768b1a824e40fb0ecc88853f855c9cb23dbf1737f7ff9948a2372a988',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0, 0],
+        role: 'adjustable-primary',
+        sourceDefault: '1',
+        surface: 'attribute',
+      },
+    ],
+  },
+  '47184-9638.svg': {
+    classification: 'adjustable',
+    file: '47184-9638.svg',
+    sha256: '63e5ef718a04939727c4833e4bdedbbaea3209749655e6897ec37f2e14b76869',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0, 0],
         role: 'adjustable-primary',
         sourceDefault: '1',
         surface: 'attribute',

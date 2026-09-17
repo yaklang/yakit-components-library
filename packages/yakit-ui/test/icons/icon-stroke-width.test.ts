@@ -13,6 +13,7 @@ import { dirname, join, resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
 import { normalizeSvgStrokeWidth, svgStrokeWidths } from '../../scripts/icon-stroke-width.mjs';
 import {
   applyStrokeWidthMigrationPlan,
@@ -25,6 +26,7 @@ import {
 } from '../../scripts/normalize-icon-stroke-width.mjs';
 import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
+import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 
@@ -103,7 +105,17 @@ describe('all production icon migration contracts', () => {
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
       const colorfulCorrection = colorfulCorrections.find((item) => item.file === record.afterPath);
-      if (colorfulCorrection) {
+      const designUpdate = designUpdates.updates.find(
+        (item) => record.afterPath === `icons/outline/${item.file}`,
+      );
+      if (designUpdate) {
+        expect(designUpdate.previousLocalSvg).toBe(expected);
+        expect(actual).toBe(
+          designUpdate.componentSvg
+            .replaceAll('#353639', 'currentColor')
+            .replaceAll('stroke-width="2"', 'stroke-width="1"'),
+        );
+      } else if (colorfulCorrection) {
         expect(colorfulCorrection.originalSha256).toBe(record.afterSha256);
         expect(colorfulCorrection.originalSvg).toBe(expected);
         expect(actual).toBe(colorfulCorrection.svg);
@@ -134,20 +146,33 @@ describe('all production icon migration contracts', () => {
     const migrated = new Map(
       before.assets.map(({ sourcePath, afterPath }) => [sourcePath, afterPath]),
     );
-    const expected = before.sourceInventory.map((file) => migrated.get(file) ?? file).sort();
-    expect(expected).toHaveLength(1302);
+    const expected = [
+      ...before.sourceInventory.map((file) => migrated.get(file) ?? file),
+      ...designUpdates.updates
+        .filter(({ added }) => added)
+        .map(({ file }) => `icons/outline/${file}`),
+    ].sort();
+    expect(expected).toHaveLength(1308);
     expect(expected.filter((file) => file.startsWith('components/'))).toHaveLength(24);
     expect(await svgFiles(resolve(packageRoot, 'src'))).toEqual(expected);
     expect(await checkIconStrokeWidths(packageRoot)).toEqual({
-      svgFiles: 1302,
+      svgFiles: 1308,
       loading: 1,
       violations: 0,
     });
   });
 
-  it('leaves immutable Figma sources and historical evidence byte-for-byte intact', () => {
+  it('binds updated Figma provenance to the current manifest and preserves historical evidence', () => {
+    const updatedProvenance: Record<string, string> = {
+      'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json':
+        outlineManifest.sourceEvidence.figmaRawProvenanceSha256,
+      'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json':
+        outlineManifest.sourceEvidence.placementProvenanceSha256,
+    };
     for (const [file, hash] of Object.entries(before.provenanceHashes))
-      expect(digest(readFileSync(resolve(packageRoot, file))), file).toBe(hash);
+      expect(digest(readFileSync(resolve(packageRoot, file))), file).toBe(
+        updatedProvenance[file] ?? hash,
+      );
   });
 
   it('keeps every Oldicon public name and source identity', () => {
@@ -253,6 +278,8 @@ describe('stroke-width migration CLI safety', () => {
 
   it.each([
     'icons/outline/14203-193724.svg',
+    'icons/outline/1-2359.svg',
+    'icons/outline/1-2375.svg',
     'icons/colorful/DataComparisonOutlineColorful.svg',
     'icons/colorful/LuaAvatarColorful.svg',
   ])(

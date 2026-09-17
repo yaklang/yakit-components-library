@@ -71,9 +71,9 @@ const completeManifest = (source = validOutline) => {
     localRawSvgSha256: sha256(source),
     normalizedAstSha256,
   });
-  const placements = Array.from({ length: 353 }, (_, index) => {
-    const instance = index >= 350;
-    const exportedSourceNodeId = `${(index % 350) + 1}:1`;
+  const placements = Array.from({ length: 359 }, (_, index) => {
+    const instance = index >= 356;
+    const exportedSourceNodeId = `${(index % 356) + 1}:1`;
     return {
       exportedSourceNodeId,
       mainComponentId: exportedSourceNodeId,
@@ -86,7 +86,7 @@ const completeManifest = (source = validOutline) => {
   });
   return {
     complete: true,
-    expectedCounts: { currentSymbols: 350, instances: 3, placements: 353, publicExports: 350 },
+    expectedCounts: { currentSymbols: 356, instances: 3, placements: 359, publicExports: 356 },
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     instanceVerification: placements.slice(-3),
@@ -96,7 +96,7 @@ const completeManifest = (source = validOutline) => {
     provenanceComplete: true,
     sourceEvidence: {} as Record<string, string>,
     strokeWidthPolicy: { ...ICON_STROKE_WIDTH_POLICY },
-    symbols: Array.from({ length: 350 }, (_, index) => symbol(index)),
+    symbols: Array.from({ length: 356 }, (_, index) => symbol(index)),
     variant: 'outline',
   };
 };
@@ -490,7 +490,7 @@ describe('Outline manifest updater provenance gate', () => {
       { cwd: packageRoot, encoding: 'utf8' },
     );
 
-  it('writes only a complete 350/350/353/3 independently matched manifest', () => {
+  it('writes only a complete 356/356/359/3 independently matched manifest', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
     try {
       const output = resolve(root, 'manifest.json');
@@ -499,12 +499,12 @@ describe('Outline manifest updater provenance gate', () => {
       const value = JSON.parse(readFileSync(output, 'utf8'));
       expect(value).toMatchObject({ complete: true, provenanceComplete: true });
       expect(value.strokeWidthPolicy).toEqual(ICON_STROKE_WIDTH_POLICY);
-      expect(value.symbols).toHaveLength(350);
-      expect(value.placements).toHaveLength(353);
+      expect(value.symbols).toHaveLength(356);
+      expect(value.placements).toHaveLength(359);
       expect(value.instanceVerification).toHaveLength(3);
       expect(
         new Set(value.symbols.map((symbol: Record<string, string>) => symbol.exportName)).size,
-      ).toBe(350);
+      ).toBe(356);
       expect(value.legacySources).toEqual([]);
       expect(
         value.placements.every(

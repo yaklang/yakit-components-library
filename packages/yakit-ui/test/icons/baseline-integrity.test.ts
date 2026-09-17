@@ -8,10 +8,11 @@ import { describe, expect, it } from 'vitest';
 
 import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
 import metrics from '../fixtures/icons/reference/outline-controls-298.json';
+import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import baseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
-import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -136,7 +137,8 @@ describe('Outline pre-change baseline', () => {
 
   it('keeps every control geometry equal to its pre-repair projection', () => {
     const changed = baseline.controls.filter(({ file, geometryProjectionSha256 }) => {
-      const source = readFileSync(resolve(outlineRoot, file), 'utf8');
+      const update = designUpdates.updates.find((entry) => entry.file === file);
+      const source = update?.previousLocalSvg ?? readFileSync(resolve(outlineRoot, file), 'utf8');
       const review = visualWeightReviews.reviews.find((entry) => entry.file === file);
       if (review) {
         expect(review.status, file).toBe('promoted');

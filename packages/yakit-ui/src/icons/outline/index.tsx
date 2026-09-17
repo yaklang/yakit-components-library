@@ -353,6 +353,13 @@ import RotateCcwSquareOutlinedSvg from './46767-87745.svg?react';
 import RotateCcwOutlinedSvg from './46783-88121.svg?react';
 import TimerOutlinedSvg from './46879-8170.svg?react';
 
+import HourglassOutlinedSvg from './46992-25036.svg?react';
+import GitMergeOutlinedSvg from './47154-15989.svg?react';
+import LoaderPinwheelOutlinedSvg from './47154-15992.svg?react';
+import FolderArchiveOutlinedSvg from './47158-15995.svg?react';
+import FileArchiveOutlinedSvg from './47161-15998.svg?react';
+import Sparkles2OutlinedSvg from './47184-9638.svg?react';
+
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined');
 export const LocationMarkerOutlined = createIcon(
   LocationMarkerOutlinedSvg,
@@ -913,3 +920,13 @@ export const RotateCcwSquareOutlined = createIcon(
 export const BookMarkedOutlined = createIcon(BookMarkedOutlinedSvg, 'BookMarkedOutlined');
 export const BookMarked2Outlined = createIcon(BookMarked2OutlinedSvg, 'BookMarked2Outlined');
 export const TimerOutlined = createIcon(TimerOutlinedSvg, 'TimerOutlined');
+
+export const HourglassOutlined = createIcon(HourglassOutlinedSvg, 'HourglassOutlined');
+export const GitMergeOutlined = createIcon(GitMergeOutlinedSvg, 'GitMergeOutlined');
+export const LoaderPinwheelOutlined = createIcon(
+  LoaderPinwheelOutlinedSvg,
+  'LoaderPinwheelOutlined',
+);
+export const FolderArchiveOutlined = createIcon(FolderArchiveOutlinedSvg, 'FolderArchiveOutlined');
+export const FileArchiveOutlined = createIcon(FileArchiveOutlinedSvg, 'FileArchiveOutlined');
+export const Sparkles2Outlined = createIcon(Sparkles2OutlinedSvg, 'Sparkles2Outlined');
