@@ -7,6 +7,7 @@ import * as PackageApi from '../../src';
 import { DEFAULT_ICON_COLOR } from '../../src/icons/createIcon';
 import { solidIconNameCatalog } from '../../src/icons/figmaNameCatalog';
 import { solidIconRegistry } from '../../src/icons/registry';
+import nameMigration from '../fixtures/icons/english-name-migration.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 
 const roots: Root[] = [];
@@ -54,9 +55,13 @@ const expectPrimaryPaint = (container: HTMLElement, expectedColor: string) => {
 afterEach(clearRenders);
 
 describe('Solid public component API', () => {
-  it('preserves all 255 frozen mappings under the Solid suffix', () => {
+  it('preserves all 255 source mappings with English names and the Solid suffix', () => {
     const expectedNames = prechange.records
-      .map(({ exportName }) => exportName.replace(/Filled$/, 'Solid'))
+      .map(
+        ({ nodeId, exportName }) =>
+          nameMigration.rows.find((row) => row.family === 'solid' && row.sourceNodeId === nodeId)
+            ?.exportName ?? exportName.replace(/Filled$/, 'Solid'),
+      )
       .sort();
     const registryNames = solidIconRegistry.map(({ exportName }) => exportName).sort();
 
@@ -65,7 +70,7 @@ describe('Solid public component API', () => {
     expect(registryNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
     expect(registryNames.some((exportName) => exportName.endsWith('Filled'))).toBe(false);
     expect(registryNames).toContain('DownloadFigma12825Solid');
-    expect(registryNames).toContain('FigmaIcon2281144183Solid');
+    expect(registryNames).toContain('DragSortSolid');
     expect('HomeFilled' in PackageApi).toBe(false);
     expect(
       solidIconRegistry.every(

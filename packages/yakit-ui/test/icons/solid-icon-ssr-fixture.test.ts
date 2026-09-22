@@ -3,10 +3,10 @@ import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import {
-  FigmaIcon4936115787Solid,
-  FigmaIcon4936115788Solid,
-  FigmaIcon4936115789Solid,
-  FigmaIcon4936115790Solid,
+  FloatingSolid,
+  ParkBelowSolid,
+  ParkRightSolid,
+  ParkLeftSolid,
   PaintbrushSolid,
   PaperAirplaneSolid,
   PillSolid,
@@ -16,10 +16,10 @@ const fragmentIcons = [
   PaperAirplaneSolid,
   PaintbrushSolid,
   PillSolid,
-  FigmaIcon4936115787Solid,
-  FigmaIcon4936115790Solid,
-  FigmaIcon4936115789Solid,
-  FigmaIcon4936115788Solid,
+  FloatingSolid,
+  ParkLeftSolid,
+  ParkRightSolid,
+  ParkBelowSolid,
 ];
 const repeatedFragments = React.createElement(
   React.Fragment,

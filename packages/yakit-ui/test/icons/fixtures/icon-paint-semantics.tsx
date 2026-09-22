@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client';
 import '../../../../yakit-ui-icons/icon.css';
 import {
   EarOutlined,
-  FigmaIcon450351908Outlined,
+  DataComparisonOutlined,
   RocketLaunchOffOutlined,
   StarOffOutlined,
   SunOutlined,
@@ -61,10 +61,10 @@ const Fixture = () => (
       style={{ color: '#654321' }}
     />
 
-    <FigmaIcon450351908Outlined data-testid="data-compare-default" />
-    <FigmaIcon450351908Outlined color="#123456" data-testid="data-compare-custom" />
+    <DataComparisonOutlined data-testid="data-compare-default" />
+    <DataComparisonOutlined color="#123456" data-testid="data-compare-custom" />
     <span style={{ color: '#0a0a0a' }}>
-      <FigmaIcon450351908Outlined color="inherit" data-testid="data-compare-inherit" />
+      <DataComparisonOutlined color="inherit" data-testid="data-compare-inherit" />
     </span>
   </>
 );

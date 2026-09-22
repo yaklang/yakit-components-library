@@ -473,7 +473,8 @@ const originalWeightSources = import.meta.glob<string>(
   { eager: true, import: 'default', query: '?raw' },
 );
 const revisedWeightIcons = visualWeightReviews.reviews.map(({ exportName, file }) => {
-  const icon = outlineIconRegistry.find((entry) => entry.exportName === exportName);
+  const sourceNodeId = file.replace(/\.svg$/, '').replace('-', ':');
+  const icon = outlineIconRegistry.find((entry) => entry.sourceNodeId === sourceNodeId);
   const original =
     originalWeightSources[`../../test/fixtures/icons/reference/visual-weight-v2/original/${file}`];
   if (!icon || !original) throw new Error(`Missing visual-weight comparison: ${exportName}`);

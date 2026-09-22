@@ -6,7 +6,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { solidIconRegistry } from '../../src/icons/registry';
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
-import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
 const roots: Root[] = [];
@@ -28,11 +27,8 @@ const colors = [contract.raster.defaultColor, '#123456'] as const;
 const rawByNodeId = new Map(
   [...raw.components, ...raw.supplementalComponents].map((record) => [record.nodeId, record.svg]),
 );
-const definitionByExportName = new Map(
-  solidIconRegistry.map((definition) => [definition.exportName, definition]),
-);
-const exportByNodeId = new Map(
-  prechange.records.map((record) => [record.nodeId, record.exportName.replace(/Filled$/, 'Solid')]),
+const definitionByNodeId = new Map(
+  solidIconRegistry.map((definition) => [definition.sourceNodeId, definition]),
 );
 
 interface Bounds {
@@ -105,8 +101,7 @@ const figmaSourceForColor = (source: string, color: string, nodeId: string) => {
 };
 
 const localSourceForColor = (nodeId: string, color: string) => {
-  const exportName = exportByNodeId.get(nodeId);
-  const definition = exportName ? definitionByExportName.get(exportName) : undefined;
+  const definition = definitionByNodeId.get(nodeId);
   if (!definition) throw new Error(`Missing Solid component for ${nodeId}`);
   const container = render(<definition.Component color={color} size={20} />);
   const svg = container.querySelector('svg');

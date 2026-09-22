@@ -112,7 +112,7 @@ export const buildIconRegistry = <TFamily extends IconFamily>(
   return definitions as IconDefinition<TFamily>[];
 };
 
-assertUniqueFigmaNames([...outlineIconNameCatalog, ...solidIconNameCatalog]);
+// Figma display names can repeat; buildIconRegistry validates export and source identities.
 
 /** 24 × 24 Outline icons: default stroke width 1, with independent filled details. */
 export const outlineIconRegistry = buildIconRegistry<'outline'>(

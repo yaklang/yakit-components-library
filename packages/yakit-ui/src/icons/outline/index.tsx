@@ -62,7 +62,7 @@ import HeartOutlinedSvg from './1-2189.svg?react';
 import TrendingUpOutlinedSvg from './1-2191.svg?react';
 import ArrowCircleRightOutlinedSvg from './1-2193.svg?react';
 import MinusCircleOutlinedSvg from './1-2195.svg?react';
-import FigmaIcon22915169930OutlinedSvg from './22915-169930.svg?react';
+import AbandonOutlinedSvg from './22915-169930.svg?react';
 import ViewListOutlinedSvg from './1-2197.svg?react';
 import CurrencyRupeeOutlinedSvg from './1-2199.svg?react';
 import DotsCircleHorizontalOutlinedSvg from './1-2201.svg?react';
@@ -112,28 +112,28 @@ import TrashOutlinedSvg from './1-2287.svg?react';
 import Trash2OutlinedSvg from './30492-93384.svg?react';
 import RobotOutlinedSvg from './3101-83797.svg?react';
 import Play2OutlinedSvg from './280-11782.svg?react';
-import FigmaIcon28011794OutlinedSvg from './280-11794.svg?react';
-import FigmaIcon35020585OutlinedSvg from './350-20585.svg?react';
-import ArrowsOutlinedSvg from './287-15134.svg?react';
+import LogOutOutlinedSvg from './280-11794.svg?react';
+import ScreenshotOutlinedSvg from './350-20585.svg?react';
+import ArrowsCollapseOutlinedSvg from './287-15134.svg?react';
 import BugOutlinedSvg from './1-3136.svg?react';
 import ChromeOutlinedSvg from './6562-207833.svg?react';
-import FigmaIcon6708131177OutlinedSvg from './6708-131177.svg?react';
+import RemoteOutlinedSvg from './6708-131177.svg?react';
 import PlugsOutlinedSvg from './6695-131133.svg?react';
-import FigmaIcon2017756OutlinedSvg from './201-7756.svg?react';
-import FigmaIcon6480193584OutlinedSvg from './6480-193584.svg?react';
+import ExportOutlinedSvg from './201-7756.svg?react';
+import ImportOutlinedSvg from './6480-193584.svg?react';
 import LogOutlinedSvg from './8739-166467.svg?react';
 import Log2OutlinedSvg from './8990-150359.svg?react';
 import ScreenShareOffOutlinedSvg from './37148-26363.svg?react';
 import ScreenShareOutlinedSvg from './37148-26362.svg?react';
-import FigmaIcon2338925OutlinedSvg from './233-8925.svg?react';
-import FigmaIcon34227111185OutlinedSvg from './34227-111185.svg?react';
-import FigmaIcon348196674OutlinedSvg from './34819-6674.svg?react';
+import Filter2OutlinedSvg from './233-8925.svg?react';
+import Compilation2OutlinedSvg from './34227-111185.svg?react';
+import FlowOutlinedSvg from './34819-6674.svg?react';
 import Link2OutlinedSvg from './1-3058.svg?react';
 import LinkoutOutlinedSvg from './1-3057.svg?react';
 import ArchiveRestoreOutlinedSvg from './18256-183881.svg?react';
 import ArrowBigUpOutlinedSvg from './18256-183882.svg?react';
 import FileUpOutlinedSvg from './18256-183883.svg?react';
-import FigmaIcon34227111184OutlinedSvg from './34227-111184.svg?react';
+import CompilationOutlinedSvg from './34227-111184.svg?react';
 import Link2OffOutlinedSvg from './28376-283.svg?react';
 import Link2Figma28376288OutlinedSvg from './28376-288.svg?react';
 import SortAscendingOutlinedSvg from './1-2289.svg?react';
@@ -156,8 +156,8 @@ import ClipboardOutlinedSvg from './1-2321.svg?react';
 import CakeOutlinedSvg from './1-2323.svg?react';
 import DocumentSearchOutlinedSvg from './1-2325.svg?react';
 import ChipOutlinedSvg from './1-2327.svg?react';
-import FigmaIcon4866167279OutlinedSvg from './4866-167279.svg?react';
-import FigmaIcon5237120699OutlinedSvg from './5237-120699.svg?react';
+import EngineOutlinedSvg from './4866-167279.svg?react';
+import LoadingOutlinedSvg from './5237-120699.svg?react';
 import AcademicCapOutlinedSvg from './1-2329.svg?react';
 import VariableOutlinedSvg from './1-2331.svg?react';
 import CubeTransparentOutlinedSvg from './1-2333.svg?react';
@@ -268,11 +268,11 @@ import ArrowSmUpOutlinedSvg from './1-2993.svg?react';
 import ArrowSmRightOutlinedSvg from './1-2995.svg?react';
 import ArrowSmDownOutlinedSvg from './1-2997.svg?react';
 import ArrowSmLeftOutlinedSvg from './1-2999.svg?react';
-import FigmaIcon185545419OutlinedSvg from './1855-45419.svg?react';
+import LargeWindowOutlinedSvg from './1855-45419.svg?react';
 import StarOffOutlinedSvg from './38678-28634.svg?react';
 import CameraFigma9061150407OutlinedSvg from './9061-150407.svg?react';
-import FigmaIcon11100165929OutlinedSvg from './11100-165929.svg?react';
-import FigmaIcon13208172881OutlinedSvg from './13208-172881.svg?react';
+import LineBreakOutlinedSvg from './11100-165929.svg?react';
+import StorageOutlinedSvg from './13208-172881.svg?react';
 import RocketOffOutlinedSvg from './14203-193637.svg?react';
 import RocketOutlinedSvg from './37148-25909.svg?react';
 import RocketLaunchOutlinedSvg from './37148-25910.svg?react';
@@ -280,8 +280,8 @@ import RocketLaunchOffOutlinedSvg from './14203-193724.svg?react';
 import Wrench1OutlinedSvg from './31752-46880.svg?react';
 import CloseOutlinedSvg from './18256-183879.svg?react';
 import OpenOutlinedSvg from './18256-183880.svg?react';
-import FigmaIcon22849134660OutlinedSvg from './22849-134660.svg?react';
-import FigmaIcon22971301511OutlinedSvg from './22971-301511.svg?react';
+import SplitScreenOutlinedSvg from './22849-134660.svg?react';
+import Variable2OutlinedSvg from './22971-301511.svg?react';
 import DatabaseBackupOutlinedSvg from './15106-225789.svg?react';
 import ScanOutlinedSvg from './16884-235418.svg?react';
 import AddPayloadOutlinedSvg from './17117-250680.svg?react';
@@ -323,7 +323,7 @@ import ChevronsDownUpOutlinedSvg from './44999-1957.svg?react';
 import ChevronsUpDownOutlinedSvg from './44999-1959.svg?react';
 import ScrollTextOutlinedSvg from './45003-9600.svg?react';
 import LoaderOutlinedSvg from './45018-22401.svg?react';
-import FigmaIcon450351908OutlinedSvg from './45035-1908.svg?react';
+import DataComparisonOutlinedSvg from './45035-1908.svg?react';
 import PointerOutlinedSvg from './45031-5719.svg?react';
 import EarOffOutlinedSvg from './45033-2063.svg?react';
 import EarOutlinedSvg from './45035-1892.svg?react';
@@ -359,6 +359,10 @@ import LoaderPinwheelOutlinedSvg from './47154-15992.svg?react';
 import FolderArchiveOutlinedSvg from './47158-15995.svg?react';
 import FileArchiveOutlinedSvg from './47161-15998.svg?react';
 import Sparkles2OutlinedSvg from './47184-9638.svg?react';
+
+import IntentionOutlinedSvg from './47199-15022.svg?react';
+import GanttChartOutlinedSvg from './47252-26041.svg?react';
+import SquareGanttChartOutlinedSvg from './47254-26877.svg?react';
 
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined');
 export const LocationMarkerOutlined = createIcon(
@@ -444,10 +448,7 @@ export const ArrowCircleRightOutlined = createIcon(
   'ArrowCircleRightOutlined',
 );
 export const MinusCircleOutlined = createIcon(MinusCircleOutlinedSvg, 'MinusCircleOutlined');
-export const FigmaIcon22915169930Outlined = createIcon(
-  FigmaIcon22915169930OutlinedSvg,
-  'FigmaIcon22915169930Outlined',
-);
+export const AbandonOutlined = createIcon(AbandonOutlinedSvg, 'AbandonOutlined');
 export const ViewListOutlined = createIcon(ViewListOutlinedSvg, 'ViewListOutlined');
 export const CurrencyRupeeOutlined = createIcon(CurrencyRupeeOutlinedSvg, 'CurrencyRupeeOutlined');
 export const DotsCircleHorizontalOutlined = createIcon(
@@ -524,30 +525,18 @@ export const TrashOutlined = createIcon(TrashOutlinedSvg, 'TrashOutlined');
 export const Trash2Outlined = createIcon(Trash2OutlinedSvg, 'Trash2Outlined');
 export const RobotOutlined = createIcon(RobotOutlinedSvg, 'RobotOutlined');
 export const Play2Outlined = createIcon(Play2OutlinedSvg, 'Play2Outlined');
-export const FigmaIcon28011794Outlined = createIcon(
-  FigmaIcon28011794OutlinedSvg,
-  'FigmaIcon28011794Outlined',
+export const LogOutOutlined = createIcon(LogOutOutlinedSvg, 'LogOutOutlined');
+export const ScreenshotOutlined = createIcon(ScreenshotOutlinedSvg, 'ScreenshotOutlined');
+export const ArrowsCollapseOutlined = createIcon(
+  ArrowsCollapseOutlinedSvg,
+  'ArrowsCollapseOutlined',
 );
-export const FigmaIcon35020585Outlined = createIcon(
-  FigmaIcon35020585OutlinedSvg,
-  'FigmaIcon35020585Outlined',
-);
-export const ArrowsOutlined = createIcon(ArrowsOutlinedSvg, 'ArrowsOutlined');
 export const BugOutlined = createIcon(BugOutlinedSvg, 'BugOutlined');
 export const ChromeOutlined = createIcon(ChromeOutlinedSvg, 'ChromeOutlined');
-export const FigmaIcon6708131177Outlined = createIcon(
-  FigmaIcon6708131177OutlinedSvg,
-  'FigmaIcon6708131177Outlined',
-);
+export const RemoteOutlined = createIcon(RemoteOutlinedSvg, 'RemoteOutlined');
 export const PlugsOutlined = createIcon(PlugsOutlinedSvg, 'PlugsOutlined');
-export const FigmaIcon2017756Outlined = createIcon(
-  FigmaIcon2017756OutlinedSvg,
-  'FigmaIcon2017756Outlined',
-);
-export const FigmaIcon6480193584Outlined = createIcon(
-  FigmaIcon6480193584OutlinedSvg,
-  'FigmaIcon6480193584Outlined',
-);
+export const ExportOutlined = createIcon(ExportOutlinedSvg, 'ExportOutlined');
+export const ImportOutlined = createIcon(ImportOutlinedSvg, 'ImportOutlined');
 export const LogOutlined = createIcon(LogOutlinedSvg, 'LogOutlined');
 export const Log2Outlined = createIcon(Log2OutlinedSvg, 'Log2Outlined');
 export const ScreenShareOffOutlined = createIcon(
@@ -555,18 +544,9 @@ export const ScreenShareOffOutlined = createIcon(
   'ScreenShareOffOutlined',
 );
 export const ScreenShareOutlined = createIcon(ScreenShareOutlinedSvg, 'ScreenShareOutlined');
-export const FigmaIcon2338925Outlined = createIcon(
-  FigmaIcon2338925OutlinedSvg,
-  'FigmaIcon2338925Outlined',
-);
-export const FigmaIcon34227111185Outlined = createIcon(
-  FigmaIcon34227111185OutlinedSvg,
-  'FigmaIcon34227111185Outlined',
-);
-export const FigmaIcon348196674Outlined = createIcon(
-  FigmaIcon348196674OutlinedSvg,
-  'FigmaIcon348196674Outlined',
-);
+export const Filter2Outlined = createIcon(Filter2OutlinedSvg, 'Filter2Outlined');
+export const Compilation2Outlined = createIcon(Compilation2OutlinedSvg, 'Compilation2Outlined');
+export const FlowOutlined = createIcon(FlowOutlinedSvg, 'FlowOutlined');
 export const Link2Outlined = createIcon(Link2OutlinedSvg, 'Link2Outlined');
 export const LinkoutOutlined = createIcon(LinkoutOutlinedSvg, 'LinkoutOutlined');
 export const ArchiveRestoreOutlined = createIcon(
@@ -575,10 +555,7 @@ export const ArchiveRestoreOutlined = createIcon(
 );
 export const ArrowBigUpOutlined = createIcon(ArrowBigUpOutlinedSvg, 'ArrowBigUpOutlined');
 export const FileUpOutlined = createIcon(FileUpOutlinedSvg, 'FileUpOutlined');
-export const FigmaIcon34227111184Outlined = createIcon(
-  FigmaIcon34227111184OutlinedSvg,
-  'FigmaIcon34227111184Outlined',
-);
+export const CompilationOutlined = createIcon(CompilationOutlinedSvg, 'CompilationOutlined');
 export const Link2OffOutlined = createIcon(Link2OffOutlinedSvg, 'Link2OffOutlined');
 export const Link2Figma28376288Outlined = createIcon(
   Link2Figma28376288OutlinedSvg,
@@ -613,14 +590,8 @@ export const DocumentSearchOutlined = createIcon(
   'DocumentSearchOutlined',
 );
 export const ChipOutlined = createIcon(ChipOutlinedSvg, 'ChipOutlined');
-export const FigmaIcon4866167279Outlined = createIcon(
-  FigmaIcon4866167279OutlinedSvg,
-  'FigmaIcon4866167279Outlined',
-);
-export const FigmaIcon5237120699Outlined = createIcon(
-  FigmaIcon5237120699OutlinedSvg,
-  'FigmaIcon5237120699Outlined',
-);
+export const EngineOutlined = createIcon(EngineOutlinedSvg, 'EngineOutlined');
+export const LoadingOutlined = createIcon(LoadingOutlinedSvg, 'LoadingOutlined');
 export const AcademicCapOutlined = createIcon(AcademicCapOutlinedSvg, 'AcademicCapOutlined');
 export const VariableOutlined = createIcon(VariableOutlinedSvg, 'VariableOutlined');
 export const CubeTransparentOutlined = createIcon(
@@ -788,23 +759,14 @@ export const ArrowSmUpOutlined = createIcon(ArrowSmUpOutlinedSvg, 'ArrowSmUpOutl
 export const ArrowSmRightOutlined = createIcon(ArrowSmRightOutlinedSvg, 'ArrowSmRightOutlined');
 export const ArrowSmDownOutlined = createIcon(ArrowSmDownOutlinedSvg, 'ArrowSmDownOutlined');
 export const ArrowSmLeftOutlined = createIcon(ArrowSmLeftOutlinedSvg, 'ArrowSmLeftOutlined');
-export const FigmaIcon185545419Outlined = createIcon(
-  FigmaIcon185545419OutlinedSvg,
-  'FigmaIcon185545419Outlined',
-);
+export const LargeWindowOutlined = createIcon(LargeWindowOutlinedSvg, 'LargeWindowOutlined');
 export const StarOffOutlined = createIcon(StarOffOutlinedSvg, 'StarOffOutlined');
 export const CameraFigma9061150407Outlined = createIcon(
   CameraFigma9061150407OutlinedSvg,
   'CameraFigma9061150407Outlined',
 );
-export const FigmaIcon11100165929Outlined = createIcon(
-  FigmaIcon11100165929OutlinedSvg,
-  'FigmaIcon11100165929Outlined',
-);
-export const FigmaIcon13208172881Outlined = createIcon(
-  FigmaIcon13208172881OutlinedSvg,
-  'FigmaIcon13208172881Outlined',
-);
+export const LineBreakOutlined = createIcon(LineBreakOutlinedSvg, 'LineBreakOutlined');
+export const StorageOutlined = createIcon(StorageOutlinedSvg, 'StorageOutlined');
 export const RocketOffOutlined = createIcon(RocketOffOutlinedSvg, 'RocketOffOutlined');
 export const RocketOutlined = createIcon(RocketOutlinedSvg, 'RocketOutlined');
 export const RocketLaunchOutlined = createIcon(RocketLaunchOutlinedSvg, 'RocketLaunchOutlined');
@@ -815,14 +777,8 @@ export const RocketLaunchOffOutlined = createIcon(
 export const Wrench1Outlined = createIcon(Wrench1OutlinedSvg, 'Wrench1Outlined');
 export const CloseOutlined = createIcon(CloseOutlinedSvg, 'CloseOutlined');
 export const OpenOutlined = createIcon(OpenOutlinedSvg, 'OpenOutlined');
-export const FigmaIcon22849134660Outlined = createIcon(
-  FigmaIcon22849134660OutlinedSvg,
-  'FigmaIcon22849134660Outlined',
-);
-export const FigmaIcon22971301511Outlined = createIcon(
-  FigmaIcon22971301511OutlinedSvg,
-  'FigmaIcon22971301511Outlined',
-);
+export const SplitScreenOutlined = createIcon(SplitScreenOutlinedSvg, 'SplitScreenOutlined');
+export const Variable2Outlined = createIcon(Variable2OutlinedSvg, 'Variable2Outlined');
 export const DatabaseBackupOutlined = createIcon(
   DatabaseBackupOutlinedSvg,
   'DatabaseBackupOutlined',
@@ -879,9 +835,9 @@ export const ChevronsUpDownOutlined = createIcon(
 );
 export const ScrollTextOutlined = createIcon(ScrollTextOutlinedSvg, 'ScrollTextOutlined');
 export const LoaderOutlined = createIcon(LoaderOutlinedSvg, 'LoaderOutlined');
-export const FigmaIcon450351908Outlined = createIcon(
-  FigmaIcon450351908OutlinedSvg,
-  'FigmaIcon450351908Outlined',
+export const DataComparisonOutlined = createIcon(
+  DataComparisonOutlinedSvg,
+  'DataComparisonOutlined',
 );
 export const PointerOutlined = createIcon(PointerOutlinedSvg, 'PointerOutlined');
 export const EarOffOutlined = createIcon(EarOffOutlinedSvg, 'EarOffOutlined');
@@ -930,3 +886,10 @@ export const LoaderPinwheelOutlined = createIcon(
 export const FolderArchiveOutlined = createIcon(FolderArchiveOutlinedSvg, 'FolderArchiveOutlined');
 export const FileArchiveOutlined = createIcon(FileArchiveOutlinedSvg, 'FileArchiveOutlined');
 export const Sparkles2Outlined = createIcon(Sparkles2OutlinedSvg, 'Sparkles2Outlined');
+
+export const IntentionOutlined = createIcon(IntentionOutlinedSvg, 'IntentionOutlined');
+export const GanttChartOutlined = createIcon(GanttChartOutlinedSvg, 'GanttChartOutlined');
+export const SquareGanttChartOutlined = createIcon(
+  SquareGanttChartOutlinedSvg,
+  'SquareGanttChartOutlined',
+);

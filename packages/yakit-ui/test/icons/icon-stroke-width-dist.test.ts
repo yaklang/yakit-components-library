@@ -42,7 +42,7 @@ describe('Built icon stroke-width contract', () => {
     const coreIcons = await importBuilt(builtPath(coreDist, 'icons/index.js'));
     const dedicatedRoot = await importBuilt(builtPath(dedicatedDist, 'index.js'));
     const families = [
-      ['outline', 356],
+      ['outline', 359],
       ['solid', 255],
       ['colorful', 296],
     ] as const;
@@ -84,11 +84,11 @@ describe('Built icon stroke-width contract', () => {
     const modulePaths = [
       [coreDist, 'browser/icons/index.js', 'AcademicCapOutlined'],
       [coreDist, 'browser/icons/outline/index.js', 'AcademicCapOutlined'],
-      [coreDist, 'browser/icons/solid/index.js', 'FigmaIcon4936115787Solid'],
+      [coreDist, 'browser/icons/solid/index.js', 'FloatingSolid'],
       [coreDist, 'browser/icons/colorful/index.js', 'BugOutlineColorful'],
       [dedicatedDist, 'browser/index.js', 'AcademicCapOutlined'],
       [dedicatedDist, 'browser/outline/index.js', 'AcademicCapOutlined'],
-      [dedicatedDist, 'browser/solid/index.js', 'FigmaIcon4936115787Solid'],
+      [dedicatedDist, 'browser/solid/index.js', 'FloatingSolid'],
       [dedicatedDist, 'browser/colorful/index.js', 'BugOutlineColorful'],
       [dedicatedDist, 'browser/oldicon/index.js', 'RocketIcon'],
       [dedicatedDist, 'browser/oldicon/icons/RocketIcon.js', 'RocketIcon'],

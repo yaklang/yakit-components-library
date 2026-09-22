@@ -28,25 +28,25 @@ const SOLID_SUPPLEMENTS = [
   {
     nodeId: '4936:115787',
     localFile: 'solid/4936-115787.svg',
-    exportName: 'FigmaIcon4936115787Solid',
+    exportName: 'FloatingSolid',
     scopeRole: 'supplement',
   },
   {
     nodeId: '4936:115790',
     localFile: 'solid/4936-115790.svg',
-    exportName: 'FigmaIcon4936115790Solid',
+    exportName: 'ParkLeftSolid',
     scopeRole: 'supplement',
   },
   {
     nodeId: '4936:115789',
     localFile: 'solid/4936-115789.svg',
-    exportName: 'FigmaIcon4936115789Solid',
+    exportName: 'ParkRightSolid',
     scopeRole: 'supplement',
   },
   {
     nodeId: '4936:115788',
     localFile: 'solid/4936-115788.svg',
-    exportName: 'FigmaIcon4936115788Solid',
+    exportName: 'ParkBelowSolid',
     scopeRole: 'supplement',
   },
 ];
@@ -59,10 +59,10 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     frameNodeId: '46824:1930',
     strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
     expectedCounts: Object.freeze({
-      currentSymbols: 356,
+      currentSymbols: 359,
       instances: 3,
-      placements: 359,
-      publicExports: 356,
+      placements: 362,
+      publicExports: 359,
     }),
   }),
   'solid-v1': Object.freeze({
@@ -84,7 +84,7 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     }),
     targetMembershipSha256: '16b679e138399793f27a27b64c5e7573302416bcb81dd93fb91ed5796c2f415e',
     targetOrderSha256: '20beb1548e3309958bc085ed8cb699e141588c9c8c6a8fbe9c027925d37f1740',
-    publicMappingSha256: '1955dcdb5debc249410d92ced9ca8859ceb1d5e12c850697eae18c4eb40baa73',
+    publicMappingSha256: '2645f738fe6166fc0cd4679d4df79f0cad18cd1996fe9b45f1d27d148502d969',
     supplementalSources: Object.freeze(SOLID_SUPPLEMENTS.map((entry) => Object.freeze(entry))),
   }),
 });

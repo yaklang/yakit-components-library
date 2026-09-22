@@ -23,11 +23,11 @@
   },
   "targetMembershipSha256": "16b679e138399793f27a27b64c5e7573302416bcb81dd93fb91ed5796c2f415e",
   "targetOrderSha256": "20beb1548e3309958bc085ed8cb699e141588c9c8c6a8fbe9c027925d37f1740",
-  "publicMappingSha256": "1955dcdb5debc249410d92ced9ca8859ceb1d5e12c850697eae18c4eb40baa73",
+  "publicMappingSha256": "2645f738fe6166fc0cd4679d4df79f0cad18cd1996fe9b45f1d27d148502d969",
   "sourceEvidence": {
     "timestampFree": true,
-    "figmaRawProvenanceSha256": "a0f3343d8a1e4e5ef18e0ac0698c32d4805f82a26c1447188f0090f9240eacf4",
-    "placementProvenanceSha256": "b5b62f7666a713cfd78e32fdb8175d1a56e0555b5ce1b724f178fb8dac0c3d91",
+    "figmaRawProvenanceSha256": "f2a8a6bddab4987eb06375b879c2787c710c05e84f6705de7a5acf411ab2262f",
+    "placementProvenanceSha256": "7665718307708ad40c439a960db0f103b6baac22d459b01e2e9d004135384321",
     "prechangeBaselineSha256": "dfdf07132c04dcc3d15aca4b9d4656d7db85cca512b8a34c4fe5a7bc92e82e89",
     "prechangeBaselinePath": "test/fixtures/icons/reference/solid-local-prechange-controls-v1.json"
   },
@@ -543,9 +543,9 @@
     },
     {
       "nodeId": "2281:144183",
-      "name": "Solid/拖拽排序",
+      "name": "Solid/Drag-sort",
       "localFile": "solid/2281-144183.svg",
-      "exportName": "FigmaIcon2281144183Solid",
+      "exportName": "DragSortSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "ba2f72b91d811f66e1042282b2ccea819b6823f16a5153e6cd203f58f0e36787",
       "localRawSvgSha256": "09a17da14303c8d0d743a534944c120d68565f6c57e60132f2791996c245d355",
@@ -4912,9 +4912,9 @@
     },
     {
       "nodeId": "16035:380989",
-      "name": "Solid/导入",
+      "name": "Solid/Import",
       "localFile": "solid/16035-380989.svg",
-      "exportName": "FigmaIcon16035380989Solid",
+      "exportName": "ImportSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "4f46bb283c4ebaf041e0780842282fecf9221ee299dcbfcbd40704684ba9124f",
       "localRawSvgSha256": "85e51fd5caea8c822bec7f3b1390a29d7c103bc0969ef57389fca3b964922946",
@@ -4976,9 +4976,9 @@
     },
     {
       "nodeId": "6500:198204",
-      "name": "Solid/导出",
+      "name": "Solid/Export",
       "localFile": "solid/6500-198204.svg",
-      "exportName": "FigmaIcon6500198204Solid",
+      "exportName": "ExportSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "aa7be31132d6af4351d59d3c43e091d53a6901ede4ce86d1bfd19f23f403ca4c",
       "localRawSvgSha256": "53cbaf031e807ce360ba9aa220b47d637fa36595c80f2c04315eb940de64a025",
@@ -4997,9 +4997,9 @@
     },
     {
       "nodeId": "23101:329992",
-      "name": "Solid/弃用",
+      "name": "Solid/Abandon",
       "localFile": "solid/23101-329992.svg",
-      "exportName": "FigmaIcon23101329992Solid",
+      "exportName": "AbandonSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "fa4a36e3f1fa0692c956d8675dea245327d926534ba4ec18b57a70554c7c77d0",
       "localRawSvgSha256": "ac781ada74e20dcc032971aa0717752c40b6502a510c2ec5895edb6d01807165",
@@ -5061,9 +5061,9 @@
     },
     {
       "nodeId": "2249:69180",
-      "name": "Solid/端口",
+      "name": "Solid/port",
       "localFile": "solid/2249-69180.svg",
-      "exportName": "FigmaIcon224969180Solid",
+      "exportName": "PortSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "f55a04dbeb5802559991872386782ded88a1fa6e0df13f5f9c7eed15eb0354d4",
       "localRawSvgSha256": "f92d558847c6028057633c2ee590e2694033d0d836a21eb42bde0d1535750a2b",
@@ -5124,9 +5124,9 @@
     },
     {
       "nodeId": "16256:302540",
-      "name": "Solid/存储",
+      "name": "Solid/storage",
       "localFile": "solid/16256-302540.svg",
-      "exportName": "FigmaIcon16256302540Solid",
+      "exportName": "StorageSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "6a8f50c9bf5e0d1256ec563ed0e31d7a6dfc89b707998bb26e034f50a4b8e7d9",
       "localRawSvgSha256": "452089ddb0d760da42464d22ffdbb846ea20007dc76bd5567329fd932c5bd69b",
@@ -5145,9 +5145,9 @@
     },
     {
       "nodeId": "1855:45375",
-      "name": "Solid/minus-放大窗口",
+      "name": "Solid/minus-Enlarge window",
       "localFile": "solid/1855-45375.svg",
-      "exportName": "MinusFigma185545375Solid",
+      "exportName": "MinusEnlargeWindowSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "5b1f2dd4d0e0bcca5142cd98e37c4bc2e88ff6cae8576f6acc88ad3b37ada77f",
       "localRawSvgSha256": "06de3c5252fe73bc16b95b6b341e7eef3e88d2816bff8e00406f70bfb98334e5",
@@ -5166,9 +5166,9 @@
     },
     {
       "nodeId": "1855:45374",
-      "name": "Solid/minus-缩小窗口",
+      "name": "Solid/minus-Shrink window",
       "localFile": "solid/1855-45374.svg",
-      "exportName": "MinusFigma185545374Solid",
+      "exportName": "MinusShrinkWindowSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "afc99e26205bbf9a7a5a26dabc5b1ea834a828808677ed0af6cd34e2cd92b17d",
       "localRawSvgSha256": "b75d48d20bc1a10ca53650e6cfdc7003a4e3132f9d264ff248120529ecac2137",
@@ -5187,9 +5187,9 @@
     },
     {
       "nodeId": "16594:253276",
-      "name": "Solid/switch 配置",
+      "name": "Solid/switch Configuration",
       "localFile": "solid/16594-253276.svg",
-      "exportName": "SwitchSolid",
+      "exportName": "SwitchConfigurationSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "d67f981554b0c16642c2b4a4bd03f9b83a1e52c3b52b8230d747fea1172654c2",
       "localRawSvgSha256": "a4d33cda3977d4138343bb49e2c292a60bbf1f3014316dc04b8188b926df8478",
@@ -5318,9 +5318,9 @@
   "supplementalSources": [
     {
       "nodeId": "4936:115787",
-      "name": "Solid/浮窗",
+      "name": "Solid/Floating",
       "localFile": "solid/4936-115787.svg",
-      "exportName": "FigmaIcon4936115787Solid",
+      "exportName": "FloatingSolid",
       "scopeRole": "supplement",
       "figmaRawSvgSha256": "3c18135ff0e173cdb604a02cfff56ea2c3bd732cd5ecc311514ba3f38be1ce25",
       "localRawSvgSha256": "749370324d8c726b35527be17516a84ad1fc9b2266e6baf0543d212adb78aadc",
@@ -5339,9 +5339,9 @@
     },
     {
       "nodeId": "4936:115790",
-      "name": "Solid/靠左",
+      "name": "Solid/Park-left",
       "localFile": "solid/4936-115790.svg",
-      "exportName": "FigmaIcon4936115790Solid",
+      "exportName": "ParkLeftSolid",
       "scopeRole": "supplement",
       "figmaRawSvgSha256": "1360e02424883a5e5412d5d9d42591fc55bee37509e3b7c1e1a38b401063867e",
       "localRawSvgSha256": "978646e9ee1639ec479d468f80af4e60a2be2a3ee958b87d50d44e237b959380",
@@ -5360,9 +5360,9 @@
     },
     {
       "nodeId": "4936:115789",
-      "name": "Solid/靠右",
+      "name": "Solid/Park-right",
       "localFile": "solid/4936-115789.svg",
-      "exportName": "FigmaIcon4936115789Solid",
+      "exportName": "ParkRightSolid",
       "scopeRole": "supplement",
       "figmaRawSvgSha256": "89aee2273260bcf229de9b3561ea20321ea59dc30216915ec972813fecd0a8c4",
       "localRawSvgSha256": "45f7be8c13758735be6a899a1923216227a79c96709a6338a271699a29273a3f",
@@ -5381,9 +5381,9 @@
     },
     {
       "nodeId": "4936:115788",
-      "name": "Solid/靠下",
+      "name": "Solid/Park-below",
       "localFile": "solid/4936-115788.svg",
-      "exportName": "FigmaIcon4936115788Solid",
+      "exportName": "ParkBelowSolid",
       "scopeRole": "supplement",
       "figmaRawSvgSha256": "f937d8fb0458a97a1eb3e146605098e6f3a68fbef6fccc2b315d396bdca57584",
       "localRawSvgSha256": "1f3f201756b9c56b8b293b1db4bc3ad45c6fd71cafa19b46cd4214b88dad6d29",
@@ -5549,7 +5549,7 @@
     {
       "nodeId": "2281:144183",
       "localFile": "solid/2281-144183.svg",
-      "exportName": "FigmaIcon2281144183Solid",
+      "exportName": "DragSortSolid",
       "scopeRole": "target"
     },
     {
@@ -6797,7 +6797,7 @@
     {
       "nodeId": "16035:380989",
       "localFile": "solid/16035-380989.svg",
-      "exportName": "FigmaIcon16035380989Solid",
+      "exportName": "ImportSolid",
       "scopeRole": "target"
     },
     {
@@ -6815,13 +6815,13 @@
     {
       "nodeId": "6500:198204",
       "localFile": "solid/6500-198204.svg",
-      "exportName": "FigmaIcon6500198204Solid",
+      "exportName": "ExportSolid",
       "scopeRole": "target"
     },
     {
       "nodeId": "23101:329992",
       "localFile": "solid/23101-329992.svg",
-      "exportName": "FigmaIcon23101329992Solid",
+      "exportName": "AbandonSolid",
       "scopeRole": "target"
     },
     {
@@ -6839,7 +6839,7 @@
     {
       "nodeId": "2249:69180",
       "localFile": "solid/2249-69180.svg",
-      "exportName": "FigmaIcon224969180Solid",
+      "exportName": "PortSolid",
       "scopeRole": "target"
     },
     {
@@ -6857,25 +6857,25 @@
     {
       "nodeId": "16256:302540",
       "localFile": "solid/16256-302540.svg",
-      "exportName": "FigmaIcon16256302540Solid",
+      "exportName": "StorageSolid",
       "scopeRole": "target"
     },
     {
       "nodeId": "1855:45375",
       "localFile": "solid/1855-45375.svg",
-      "exportName": "MinusFigma185545375Solid",
+      "exportName": "MinusEnlargeWindowSolid",
       "scopeRole": "target"
     },
     {
       "nodeId": "1855:45374",
       "localFile": "solid/1855-45374.svg",
-      "exportName": "MinusFigma185545374Solid",
+      "exportName": "MinusShrinkWindowSolid",
       "scopeRole": "target"
     },
     {
       "nodeId": "16594:253276",
       "localFile": "solid/16594-253276.svg",
-      "exportName": "SwitchSolid",
+      "exportName": "SwitchConfigurationSolid",
       "scopeRole": "target"
     },
     {
@@ -6911,25 +6911,25 @@
     {
       "nodeId": "4936:115787",
       "localFile": "solid/4936-115787.svg",
-      "exportName": "FigmaIcon4936115787Solid",
+      "exportName": "FloatingSolid",
       "scopeRole": "supplement"
     },
     {
       "nodeId": "4936:115790",
       "localFile": "solid/4936-115790.svg",
-      "exportName": "FigmaIcon4936115790Solid",
+      "exportName": "ParkLeftSolid",
       "scopeRole": "supplement"
     },
     {
       "nodeId": "4936:115789",
       "localFile": "solid/4936-115789.svg",
-      "exportName": "FigmaIcon4936115789Solid",
+      "exportName": "ParkRightSolid",
       "scopeRole": "supplement"
     },
     {
       "nodeId": "4936:115788",
       "localFile": "solid/4936-115788.svg",
-      "exportName": "FigmaIcon4936115788Solid",
+      "exportName": "ParkBelowSolid",
       "scopeRole": "supplement"
     }
   ],

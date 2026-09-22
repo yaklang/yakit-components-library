@@ -26,7 +26,7 @@ import DocumentDuplicateSolidSvg from './1-2579.svg?react';
 import ArrowRightSolidSvg from './1-2581.svg?react';
 import CheckCircleSolidSvg from './1-2583.svg?react';
 import DotsVerticalSolidSvg from './1-2585.svg?react';
-import FigmaIcon2281144183SolidSvg from './2281-144183.svg?react';
+import DragSortSolidSvg from './2281-144183.svg?react';
 import CurrencyYenSolidSvg from './1-2587.svg?react';
 import ReceiptRefundSolidSvg from './1-2589.svg?react';
 import SunSolidSvg from './1-2591.svg?react';
@@ -234,24 +234,24 @@ import ArrowSmRightSolidSvg from './1-3003.svg?react';
 import ArrowSmDownSolidSvg from './1-3005.svg?react';
 import ArrowSmLeftSolidSvg from './1-3007.svg?react';
 import BugSolidSvg from './175-7009.svg?react';
-import FigmaIcon16035380989SolidSvg from './16035-380989.svg?react';
+import ImportSolidSvg from './16035-380989.svg?react';
 import AISolidSvg from './30345-236811.svg?react';
 import DocumentDocSolidSvg from './32242-38533.svg?react';
-import FigmaIcon6500198204SolidSvg from './6500-198204.svg?react';
-import FigmaIcon23101329992SolidSvg from './23101-329992.svg?react';
+import ExportSolidSvg from './6500-198204.svg?react';
+import AbandonSolidSvg from './23101-329992.svg?react';
 import PaintbrushSolidSvg from './22425-254718.svg?react';
 import PayloadSolidSvg from './3409-118983.svg?react';
-import FigmaIcon224969180SolidSvg from './2249-69180.svg?react';
+import PortSolidSvg from './2249-69180.svg?react';
 import GitHubSolidSvg from './7612-141119.svg?react';
 import CodecSolidSvg from './15460-250575.svg?react';
-import FigmaIcon16256302540SolidSvg from './16256-302540.svg?react';
-import MinusFigma185545375SolidSvg from './1855-45375.svg?react';
-import MinusFigma185545374SolidSvg from './1855-45374.svg?react';
-import FigmaIcon4936115787SolidSvg from './4936-115787.svg?react';
-import FigmaIcon4936115790SolidSvg from './4936-115790.svg?react';
-import FigmaIcon4936115789SolidSvg from './4936-115789.svg?react';
-import FigmaIcon4936115788SolidSvg from './4936-115788.svg?react';
-import SwitchSolidSvg from './16594-253276.svg?react';
+import StorageSolidSvg from './16256-302540.svg?react';
+import MinusEnlargeWindowSolidSvg from './1855-45375.svg?react';
+import MinusShrinkWindowSolidSvg from './1855-45374.svg?react';
+import FloatingSolidSvg from './4936-115787.svg?react';
+import ParkLeftSolidSvg from './4936-115790.svg?react';
+import ParkRightSolidSvg from './4936-115789.svg?react';
+import ParkBelowSolidSvg from './4936-115788.svg?react';
+import SwitchConfigurationSolidSvg from './16594-253276.svg?react';
 import YakitSolidSvg from './2248-69141.svg?react';
 import PointSolidSvg from './37330-17938.svg?react';
 import WinnowerSolidSvg from './37377-17319.svg?react';
@@ -288,10 +288,7 @@ export const DocumentDuplicateSolid = createIcon(
 export const ArrowRightSolid = createIcon(ArrowRightSolidSvg, 'ArrowRightSolid');
 export const CheckCircleSolid = createIcon(CheckCircleSolidSvg, 'CheckCircleSolid');
 export const DotsVerticalSolid = createIcon(DotsVerticalSolidSvg, 'DotsVerticalSolid');
-export const FigmaIcon2281144183Solid = createIcon(
-  FigmaIcon2281144183SolidSvg,
-  'FigmaIcon2281144183Solid',
-);
+export const DragSortSolid = createIcon(DragSortSolidSvg, 'DragSortSolid');
 export const CurrencyYenSolid = createIcon(CurrencyYenSolidSvg, 'CurrencyYenSolid');
 export const ReceiptRefundSolid = createIcon(ReceiptRefundSolidSvg, 'ReceiptRefundSolid');
 export const SunSolid = createIcon(SunSolidSvg, 'SunSolid');
@@ -535,57 +532,33 @@ export const ArrowSmRightSolid = createIcon(ArrowSmRightSolidSvg, 'ArrowSmRightS
 export const ArrowSmDownSolid = createIcon(ArrowSmDownSolidSvg, 'ArrowSmDownSolid');
 export const ArrowSmLeftSolid = createIcon(ArrowSmLeftSolidSvg, 'ArrowSmLeftSolid');
 export const BugSolid = createIcon(BugSolidSvg, 'BugSolid');
-export const FigmaIcon16035380989Solid = createIcon(
-  FigmaIcon16035380989SolidSvg,
-  'FigmaIcon16035380989Solid',
-);
+export const ImportSolid = createIcon(ImportSolidSvg, 'ImportSolid');
 export const AISolid = createIcon(AISolidSvg, 'AISolid');
 export const DocumentDocSolid = createIcon(DocumentDocSolidSvg, 'DocumentDocSolid');
-export const FigmaIcon6500198204Solid = createIcon(
-  FigmaIcon6500198204SolidSvg,
-  'FigmaIcon6500198204Solid',
-);
-export const FigmaIcon23101329992Solid = createIcon(
-  FigmaIcon23101329992SolidSvg,
-  'FigmaIcon23101329992Solid',
-);
+export const ExportSolid = createIcon(ExportSolidSvg, 'ExportSolid');
+export const AbandonSolid = createIcon(AbandonSolidSvg, 'AbandonSolid');
 export const PaintbrushSolid = createIcon(PaintbrushSolidSvg, 'PaintbrushSolid');
 export const PayloadSolid = createIcon(PayloadSolidSvg, 'PayloadSolid');
-export const FigmaIcon224969180Solid = createIcon(
-  FigmaIcon224969180SolidSvg,
-  'FigmaIcon224969180Solid',
-);
+export const PortSolid = createIcon(PortSolidSvg, 'PortSolid');
 export const GitHubSolid = createIcon(GitHubSolidSvg, 'GitHubSolid');
 export const CodecSolid = createIcon(CodecSolidSvg, 'CodecSolid');
-export const FigmaIcon16256302540Solid = createIcon(
-  FigmaIcon16256302540SolidSvg,
-  'FigmaIcon16256302540Solid',
+export const StorageSolid = createIcon(StorageSolidSvg, 'StorageSolid');
+export const MinusEnlargeWindowSolid = createIcon(
+  MinusEnlargeWindowSolidSvg,
+  'MinusEnlargeWindowSolid',
 );
-export const MinusFigma185545375Solid = createIcon(
-  MinusFigma185545375SolidSvg,
-  'MinusFigma185545375Solid',
+export const MinusShrinkWindowSolid = createIcon(
+  MinusShrinkWindowSolidSvg,
+  'MinusShrinkWindowSolid',
 );
-export const MinusFigma185545374Solid = createIcon(
-  MinusFigma185545374SolidSvg,
-  'MinusFigma185545374Solid',
+export const FloatingSolid = createIcon(FloatingSolidSvg, 'FloatingSolid');
+export const ParkLeftSolid = createIcon(ParkLeftSolidSvg, 'ParkLeftSolid');
+export const ParkRightSolid = createIcon(ParkRightSolidSvg, 'ParkRightSolid');
+export const ParkBelowSolid = createIcon(ParkBelowSolidSvg, 'ParkBelowSolid');
+export const SwitchConfigurationSolid = createIcon(
+  SwitchConfigurationSolidSvg,
+  'SwitchConfigurationSolid',
 );
-export const FigmaIcon4936115787Solid = createIcon(
-  FigmaIcon4936115787SolidSvg,
-  'FigmaIcon4936115787Solid',
-);
-export const FigmaIcon4936115790Solid = createIcon(
-  FigmaIcon4936115790SolidSvg,
-  'FigmaIcon4936115790Solid',
-);
-export const FigmaIcon4936115789Solid = createIcon(
-  FigmaIcon4936115789SolidSvg,
-  'FigmaIcon4936115789Solid',
-);
-export const FigmaIcon4936115788Solid = createIcon(
-  FigmaIcon4936115788SolidSvg,
-  'FigmaIcon4936115788Solid',
-);
-export const SwitchSolid = createIcon(SwitchSolidSvg, 'SwitchSolid');
 export const YakitSolid = createIcon(YakitSolidSvg, 'YakitSolid');
 export const PointSolid = createIcon(PointSolidSvg, 'PointSolid');
 export const WinnowerSolid = createIcon(WinnowerSolidSvg, 'WinnowerSolid');

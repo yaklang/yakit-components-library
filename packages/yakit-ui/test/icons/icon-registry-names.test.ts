@@ -64,22 +64,25 @@ describe('Figma icon registry name validation', () => {
     ).toEqual(['CommandOutlined']);
   });
 
-  it('keeps 610 non-null full Figma names unique while allowing exactly 94 leaf collisions', () => {
-    const monochromeRegistry = [...outlineIconRegistry, ...solidIconRegistry];
-    const fullNames = monochromeRegistry.flatMap(({ figmaName }) =>
-      figmaName === null ? [] : [figmaName],
-    );
-    const leafOwners = new Map<string, string[]>();
-    for (const fullName of fullNames) {
-      const leafName = fullName.slice(fullName.indexOf('/') + 1);
-      leafOwners.set(leafName, [...(leafOwners.get(leafName) ?? []), fullName]);
+  it('preserves the two distinct source icons named Outline/variable', () => {
+    const names = new Map<string, string[]>();
+    for (const { figmaName, exportName } of [...outlineIconRegistry, ...solidIconRegistry]) {
+      if (figmaName !== null) names.set(figmaName, [...(names.get(figmaName) ?? []), exportName]);
     }
-    const collisions = [...leafOwners.values()].filter((owners) => owners.length > 1);
-
-    expect(fullNames).toHaveLength(610);
-    expect(new Set(fullNames)).toHaveLength(610);
-    expect(collisions).toHaveLength(94);
-    expect(collisions.every((owners) => owners.length === 2)).toBe(true);
+    expect([...names].filter(([, owners]) => owners.length > 1)).toEqual([
+      ['Outline/variable', ['VariableOutlined', 'Variable2Outlined']],
+    ]);
+    const variables = outlineIconRegistry.filter(
+      ({ figmaName }) => figmaName === 'Outline/variable',
+    );
+    expect(variables.map(({ exportName, sourceNodeId }) => ({ exportName, sourceNodeId }))).toEqual(
+      [
+        { exportName: 'VariableOutlined', sourceNodeId: '1:2331' },
+        { exportName: 'Variable2Outlined', sourceNodeId: '22971:301511' },
+      ],
+    );
+    expect(variables.every(({ Component }) => Boolean(Component))).toBe(true);
+    expect(variables[0].Component).not.toBe(variables[1].Component);
   });
 
   it('maps all 296 colorful rows by unique export and source identity while preserving raw Figma names', () => {

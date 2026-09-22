@@ -7,9 +7,9 @@
     "nodeType": "GROUP",
     "name": "outline",
     "width": 457,
-    "height": 1779,
-    "placementCount": 359,
-    "componentCount": 356,
+    "height": 1827,
+    "placementCount": 362,
+    "componentCount": 359,
     "instanceCount": 3
   },
   "source": {
@@ -1609,13 +1609,13 @@
     },
     {
       "nodeId": "11100:165929",
-      "name": " Outline/换行",
+      "name": "Outline/line break",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M18.75 5.15881V11.6588C18.75 13.868 16.9591 15.6588 14.75 15.6588H5.75\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n<path d=\"M8.43213 12.4768L5.39157 15.5174C5.31346 15.5955 5.31346 15.7221 5.39157 15.8002L8.43213 18.8408\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "13208:172881",
-      "name": " Outline/存储",
+      "name": "Outline/storage",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M20.25 8.55938V19.5C20.25 19.6989 20.171 19.8897 20.0303 20.0303C19.8897 20.171 19.6989 20.25 19.5 20.25H4.5C4.30109 20.25 4.11032 20.171 3.96967 20.0303C3.82902 19.8897 3.75 19.6989 3.75 19.5V4.5C3.75 4.30109 3.82902 4.11033 3.96967 3.96967C4.11032 3.82902 4.30109 3.75 4.5 3.75H15.4406C15.538 3.74966 15.6345 3.76853 15.7246 3.80553C15.8147 3.84253 15.8966 3.89694 15.9656 3.96563L20.0344 8.03438C20.1031 8.10341 20.1575 8.18532 20.1945 8.27541C20.2315 8.36549 20.2503 8.46199 20.25 8.55938V8.55938Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M7.5 20.25V14.25C7.5 14.0511 7.57902 13.8603 7.71967 13.7197C7.86032 13.579 8.05109 13.5 8.25 13.5H15.75C15.9489 13.5 16.1397 13.579 16.2803 13.7197C16.421 13.8603 16.5 14.0511 16.5 14.25V20.25\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M14.25 6.75H9\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
@@ -1681,13 +1681,13 @@
     },
     {
       "nodeId": "1855:45419",
-      "name": " Outline/大窗口",
+      "name": "Outline/Large window",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "201:7756",
-      "name": " Outline/导出",
+      "name": "Outline/Export",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M8 9H5C3.89543 9 3 9.89543 3 11V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V11C21 9.89543 20.1046 9 19 9H16M15 6L12 3L9 6M12 3V13\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
@@ -1699,7 +1699,7 @@
     },
     {
       "nodeId": "22849:134660",
-      "name": " Outline/分屏",
+      "name": "Outline/split-screen",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M19 4H5C3.89543 4 3 4.79594 3 5.77778V18.2222C3 19.2041 3.89543 20 5 20H19C20.1046 20 21 19.2041 21 18.2222V5.77778C21 4.79594 20.1046 4 19 4Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M21 12L3 12\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
@@ -1711,19 +1711,19 @@
     },
     {
       "nodeId": "22915:169930",
-      "name": " Outline/弃用",
+      "name": "Outline/Abandon",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M23 12H1M20.1818 12C20.1818 16.4183 16.5187 20 12 20C7.48131 20 3.81818 16.4183 3.81818 12C3.81818 7.58172 7.48131 4 12 4C16.5187 4 20.1818 7.58172 20.1818 12Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "22971:301511",
-      "name": " Outline/变量",
+      "name": "Outline/variable",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M19 4H5C3.89543 4 3 4.79594 3 5.77778V18.2222C3 19.2041 3.89543 20 5 20H19C20.1046 20 21 19.2041 21 18.2222V5.77778C21 4.79594 20.1046 4 19 4Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M17 10L7 10\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M17 14L7 14\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "233:8925",
-      "name": " Outline/筛选",
+      "name": "Outline/filter2",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M4 7H20M6 12H18M9 17H15\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
@@ -1735,7 +1735,7 @@
     },
     {
       "nodeId": "280:11794",
-      "name": " Outline/退出",
+      "name": "Outline/Log out",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M8 4C7.6534 4.1716 7.31947 4.3648 7 4.57784C4.58803 6.18626 3 8.92538 3 12.034C3 16.9858 7.02944 21 12 21C16.9706 21 21 16.9858 21 12.034C21 8.92538 19.412 6.18626 17 4.57784C16.6805 4.3648 16.3466 4.1716 16 4M12 2V10\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n</svg>\n"
     },
@@ -1753,7 +1753,7 @@
     },
     {
       "nodeId": "287:15134",
-      "name": " Outline/arrows-收起",
+      "name": "Outline/arrows-collapse",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M19 9H15V5M15 9L20 4M5 9H9V5M9 9L4 4M19 15H15V19M15 15L20 20M5 15H9V19M9 15L4 20\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
@@ -1777,25 +1777,25 @@
     },
     {
       "nodeId": "34227:111184",
-      "name": " Outline/编译",
+      "name": "Outline/Compilation",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M10 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V4C4 3.46957 4.21071 2.96086 4.58579 2.58579C4.96086 2.21071 5.46957 2 6 2H14.5L20 7.5V13.75M14 2V8H20M19.465 17L22 19.5L19.465 22M15.535 22L13 19.5L15.535 17\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "34227:111185",
-      "name": " Outline/编译2",
+      "name": "Outline/Compilation2",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M11 16L13 8M15 10L17 12L15 14M9 14L7 12L9 10M5 20H19C20.1046 20 21 19.1046 21 18V6C21 4.89543 20.1046 4 19 4H5C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "34819:6674",
-      "name": " Outline/流量",
+      "name": "Outline/flow",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M1 12H5L7.5 16.5L10.5 3.5L14 20.5L17 8L18.5 12H23\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "350:20585",
-      "name": " Outline/截图",
+      "name": "Outline/screenshot",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M2 5H5M19 19V22M22 19H7C5.89543 19 5 18.1046 5 17V2M9 5H17C18.1046 5 19 5.89543 19 7V15\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n</svg>\n"
     },
@@ -2095,7 +2095,7 @@
     },
     {
       "nodeId": "45035:1908",
-      "name": "Outline/数据对比",
+      "name": "Outline/Data Comparison",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M3 6C3 4.89543 3.89543 4 5 4H12V20H5C3.89543 20 3 19.1046 3 18V6Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M11 8H8\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M11 12H7\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M11 16H7\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M12 21C11.4477 21 11 20.5523 11 20V4C11 3.44772 11.4477 3 12 3V21ZM19 3C20.6569 3 22 4.34315 22 6V18C22 19.6569 20.6569 21 19 21H14V19H19C19.5523 19 20 18.5523 20 18V6C20 5.44772 19.5523 5 19 5H14V3H19Z\" fill=\"#C0C6D1\"/>\n<path d=\"M18 8H15\" stroke=\"#C0C6D1\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M16 12H15\" stroke=\"#C0C6D1\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M17 16H15\" stroke=\"#C0C6D1\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M12 2V22\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n</svg>\n"
     },
@@ -2203,19 +2203,19 @@
     },
     {
       "nodeId": "4866:167279",
-      "name": " Outline/引擎",
+      "name": "Outline/engine",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M12.5 13L14 10M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM14 15C14 16.1046 13.1046 17 12 17C10.8954 17 10 16.1046 10 15C10 13.8954 10.8954 13 12 13C13.1046 13 14 13.8954 14 15Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "5237:120699",
-      "name": " Outline/加载",
+      "name": "Outline/loading",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
     {
       "nodeId": "6480:193584",
-      "name": " Outline/导入",
+      "name": "Outline/Import",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M10 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M20 4C17 4 12 8 12 13\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M15 12L12 15L9 12\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
@@ -2233,7 +2233,7 @@
     },
     {
       "nodeId": "6708:131177",
-      "name": " Outline/远程",
+      "name": "Outline/remote",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"2\" y=\"3\" width=\"20\" height=\"15\" rx=\"2\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M14.1718 6.99988L9.00015 6.99985V12.1714M9.00015 6.99985L16.0002 13.9999\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M8 21H16\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     },
@@ -2368,6 +2368,39 @@
       "source": {
         "tool": "figma_get_design_context",
         "assetSvg": "<svg preserveAspectRatio=\"none\" overflow=\"visible\" style=\"display: block;\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g id=\"Outline/Sparkles2\">\n<path id=\"Vector\" d=\"M20 3V7M22 5H18M4 17V19M5 18H3M9.93694 15.5C9.84766 15.1539 9.66728 14.8381 9.41456 14.5854C9.16184 14.3327 8.84601 14.1523 8.49994 14.063L2.36494 12.481C2.26027 12.4513 2.16815 12.3883 2.10255 12.3014C2.03696 12.2146 2.00146 12.1088 2.00146 12C2.00146 11.8912 2.03696 11.7854 2.10255 11.6986C2.16815 11.6118 2.26027 11.5487 2.36494 11.519L8.49994 9.93601C8.84589 9.84681 9.16163 9.66658 9.41434 9.41404C9.66705 9.16151 9.84751 8.84589 9.93694 8.50001L11.5189 2.36501C11.5483 2.25992 11.6113 2.16735 11.6983 2.1014C11.7852 2.03545 11.8913 1.99976 12.0004 1.99976C12.1096 1.99976 12.2157 2.03545 12.3026 2.1014C12.3896 2.16735 12.4525 2.25992 12.4819 2.36501L14.0629 8.50001C14.1522 8.84608 14.3326 9.1619 14.5853 9.41462C14.838 9.66734 15.1539 9.84773 15.4999 9.93701L21.6349 11.518C21.7404 11.5471 21.8335 11.61 21.8998 11.6971C21.9661 11.7841 22.002 11.8906 22.002 12C22.002 12.1094 21.9661 12.2159 21.8998 12.3029C21.8335 12.39 21.7404 12.4529 21.6349 12.482L15.4999 14.063C15.1539 14.1523 14.838 14.3327 14.5853 14.5854C14.3326 14.8381 14.1522 15.1539 14.0629 15.5L12.4809 21.635C12.4515 21.7401 12.3886 21.8327 12.3016 21.8986C12.2147 21.9646 12.1086 22.0003 11.9994 22.0003C11.8903 22.0003 11.7842 21.9646 11.6973 21.8986C11.6103 21.8327 11.5473 21.7401 11.5179 21.635L9.93694 15.5Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>\n</svg>\n"
+      }
+    },
+    {
+      "nodeId": "47199:15022",
+      "name": "Outline/Intention",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M9 9L12 11M12 11L15 9M12 11V15M9 23H15M5.63604 16.364C2.12132 12.8493 2.12132 7.15077 5.63604 3.63604C9.15076 0.121318 14.8492 0.121318 18.364 3.63604C21.8787 7.15077 21.8787 12.8493 18.364 16.364L17.3792 17.3488C17.1465 17.5814 16.4999 18.5465 16.2057 19H7.79435C7.66983 18.424 6.96011 17.6592 6.62082 17.3488L5.63604 16.364Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+      "source": {
+        "tool": "figma_use_figma",
+        "api": "exportAsync(SVG_STRING)",
+        "svgSimplifyStroke": false
+      }
+    },
+    {
+      "nodeId": "47252:26041",
+      "name": "Outline/GanttChart",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M8 6H18M6 12H15M11 18H18\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+      "source": {
+        "tool": "figma_use_figma",
+        "api": "exportAsync(SVG_STRING)",
+        "svgSimplifyStroke": false
+      }
+    },
+    {
+      "nodeId": "47254:26877",
+      "name": "Outline/SquareGanttChart",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M9 8H16M8 12H14M11 16H16M5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+      "source": {
+        "tool": "figma_use_figma",
+        "api": "exportAsync(SVG_STRING)",
+        "svgSimplifyStroke": false
       }
     }
   ]

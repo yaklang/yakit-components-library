@@ -52,7 +52,7 @@ export const HomeEntry = () => (
 
 ### 调整描边宽度
 
-350 个 Outline 图标（包括 `BugOutlined`、`QrcodeOutlined`）和 `Loading` 支持通过 `svgProps` 调整实际线宽，默认值仍为 `1`：
+359 个 Outline 图标（包括 `BugOutlined`、`QrcodeOutlined`）和 `Loading` 支持通过 `svgProps` 调整实际线宽，默认值仍为 `1`：
 
 ```tsx
 <BugOutlined svgProps={{ strokeWidth: 2 }} />

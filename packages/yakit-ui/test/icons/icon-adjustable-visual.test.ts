@@ -9,6 +9,7 @@ import { describe, expect, it } from 'vitest';
 import reviewedCellCapture from '../fixtures/icons/adjustable-stroke/reviewed-cell-capture.json';
 import reviewedRasterExceptions from '../fixtures/icons/adjustable-stroke/reviewed-raster-exceptions.json';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
+import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
 import baseline from '../fixtures/icons/reference/stroke-runtime-prechange-v1/manifest.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
@@ -96,7 +97,9 @@ describe('adjustable icon pre-change runtime baseline', () => {
           for (const cell of document.querySelectorAll('[data-family="outline"]'))
             if (names.includes(cell.getAttribute('data-icon-name') ?? '')) cell.remove();
         },
-        designUpdates.updates.filter(({ added }) => added).map(({ exportName }) => exportName),
+        [...designUpdates.updates, ...additions.updates]
+          .filter(({ added }) => added)
+          .map(({ exportName }) => exportName),
       );
       const atlas = page.locator('#atlas');
       const actualRecords = await atlas.locator('[data-icon-name]').evaluateAll((cells) =>

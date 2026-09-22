@@ -26,7 +26,7 @@
 | SpeechToTextOutlined                   | 信号线与字母线条             |
 | SpeechToText2Outlined                  | 麦克风、文本框与符号线条     |
 | RocketLaunchOffOutlined                | 原先填充的火箭与助推器轮廓   |
-| FigmaIcon450351908Outlined（数据对比） | 右侧浅色外框，保留双色       |
+| DataComparisonOutlined（数据对比） | 右侧浅色外框，保留双色       |
 
 Qrcode 等原宽为2的纯展开描边图标可使用宽度2近似恢复旧线重；RocketOff原结构宽约1.8，RocketLaunchOff和数据对比原有混合宽度，单一参数不承诺精确恢复所有旧像素。旧Figma源和修复前图形保留为历史证据，默认外观的有意改变有逐图复核目标。
 

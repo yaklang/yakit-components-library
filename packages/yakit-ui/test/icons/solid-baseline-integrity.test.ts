@@ -17,6 +17,7 @@ import {
   sortedPublicMapping,
 } from '../../scripts/icon-audit-contracts.mjs';
 import placement from '../fixtures/icons/reference/figma-solid-placement-provenance-v1.json';
+import nameMigration from '../fixtures/icons/english-name-migration.json';
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 import renderContract from '../fixtures/icons/reference/solid-render-contract-v1.json';
@@ -95,7 +96,7 @@ describe('Solid icon baseline integrity', () => {
     for (const orphan of prechange.staleOrphanFiles) expect(files).not.toContain(orphan);
   });
 
-  it('preserves all 255 public mappings while applying the Solid suffix migration', () => {
+  it('preserves all 255 source mappings through the Solid suffix and English name migrations', () => {
     const parsed = parseIconIndex(
       readFileSync(resolve(packageRoot, 'src/icons/solid/index.tsx'), 'utf8'),
     );
@@ -110,7 +111,9 @@ describe('Solid icon baseline integrity', () => {
     const frozen = prechange.records.map(({ nodeId, localFile, exportName, scopeRole }) => ({
       nodeId,
       localFile: `solid/${localFile}`,
-      exportName: exportName.replace(/Filled$/, 'Solid'),
+      exportName:
+        nameMigration.rows.find((row) => row.family === 'solid' && row.sourceNodeId === nodeId)
+          ?.exportName ?? exportName.replace(/Filled$/, 'Solid'),
       scopeRole,
     }));
 
