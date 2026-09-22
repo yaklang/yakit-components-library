@@ -110,7 +110,7 @@ try {
       records.filter((record) => record.family === family).length,
     ]),
   );
-  const expectedCounts = { colorful: 296, loading: 1, oldicon: 380, outline: 356, solid: 255 };
+  const expectedCounts = { colorful: 296, loading: 1, oldicon: 380, outline: 359, solid: 255 };
   if (
     Object.entries(expectedCounts).some(
       ([family, expectedCount]) => familyCounts[family] !== expectedCount,

@@ -5,30 +5,33 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { outlineIconRegistry } from '../../src/icons/registry';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
+import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
 
 const addedIconNames = new Set(
-  designUpdates.updates.filter(({ added }) => added).map(({ exportName }) => exportName),
+  [...designUpdates.updates, ...additions.updates]
+    .filter(({ added }) => added)
+    .map(({ exportName }) => exportName),
 );
 
 const defectNames = new Set([
   'ArchiveRestoreOutlined',
   'ArrowBigUpOutlined',
   'FileUpOutlined',
-  'FigmaIcon2017756Outlined',
+  'ExportOutlined',
   'StethoscopeOutlined',
-  'FigmaIcon22915169930Outlined',
-  'FigmaIcon2338925Outlined',
+  'AbandonOutlined',
+  'Filter2Outlined',
   'Play2Outlined',
-  'FigmaIcon28011794Outlined',
+  'LogOutOutlined',
   'Link2OffOutlined',
   'Link2Figma28376288Outlined',
-  'ArrowsOutlined',
+  'ArrowsCollapseOutlined',
   'Trash2Outlined',
   'RobotOutlined',
-  'FigmaIcon34227111184Outlined',
-  'FigmaIcon34227111185Outlined',
-  'FigmaIcon348196674Outlined',
-  'FigmaIcon35020585Outlined',
+  'CompilationOutlined',
+  'Compilation2Outlined',
+  'FlowOutlined',
+  'ScreenshotOutlined',
   'ScreenShareOutlined',
   'ScreenShareOffOutlined',
   'PositionOutlined',
@@ -36,11 +39,11 @@ const defectNames = new Set([
   'List1Outlined',
   'PillOutlined',
   'AnnotationCloseOutlined',
-  'FigmaIcon4866167279Outlined',
-  'FigmaIcon5237120699Outlined',
-  'FigmaIcon6480193584Outlined',
+  'EngineOutlined',
+  'LoadingOutlined',
+  'ImportOutlined',
   'ChromeOutlined',
-  'FigmaIcon6708131177Outlined',
+  'RemoteOutlined',
   'PlugsOutlined',
   'LogOutlined',
   'Log2Outlined',

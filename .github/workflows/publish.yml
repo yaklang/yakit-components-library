@@ -12,6 +12,11 @@ on:
         required: true
         type: boolean
         default: false
+      reconciliation_only:
+        description: Read-only reconciliation of an already published exact artifact (no retry)
+        required: false
+        type: boolean
+        default: false
       source_run_id:
         description: Source workflow run ID for recovery
         required: false
@@ -465,7 +470,7 @@ jobs:
           PACKAGE_VERSION: ${{ matrix.version }}
 
   recovery-verify:
-    if: github.event_name == 'workflow_dispatch' && inputs.recovery
+    if: github.event_name == 'workflow_dispatch' && inputs.recovery && !inputs.reconciliation_only
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -708,3 +713,60 @@ jobs:
           RELEASE_COMMIT: ${{ needs.recovery-verify.outputs.commit-sha }}
           PACKAGE_NAME: ${{ matrix.package }}
           PACKAGE_VERSION: ${{ matrix.version }}
+
+  reconcile-published:
+    if: github.event_name == 'workflow_dispatch' && inputs.reconciliation_only
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: read
+    env:
+      SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+      VERIFICATION_ARTIFACT_ID: ${{ inputs.verification_artifact_id }}
+      GITHUB_TOKEN: ${{ github.token }}
+      AUTHORIZE_PUBLICATION_RETRY: ${{ inputs.authorize_retry }}
+      INCIDENT_ID: ${{ inputs.incident_id }}
+    steps:
+      - name: Reject mixed recovery authority
+        run: |
+          test "$RECOVERY" = "false"
+          test "$AUTHORIZE_PUBLICATION_RETRY" = "false"
+          test -z "$INCIDENT_ID"
+          test -z "$RETRY_INTENT"
+          test -z "$RETRY_RECEIPT"
+        env:
+          RECOVERY: ${{ inputs.recovery }}
+          RETRY_INTENT: ${{ inputs.retry_intent_artifact_id }}
+          RETRY_RECEIPT: ${{ inputs.retry_receipt_artifact_id }}
+      - name: Check out reviewed reconciliation scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - name: Verify all published bytes and prepare reconciliation
+        run: node scripts/release/reconcile-published-artifact.mjs prepare .release/reconciliation
+      - name: Upload fully reconciled immutable intent
+        id: intent
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: yakit-ui-recovery-intent-${{ inputs.source_run_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .release/reconciliation/intent
+          if-no-files-found: error
+          retention-days: 30
+      - name: Bind durable intent and seal successful reconciliation receipt
+        run: node scripts/release/reconcile-published-artifact.mjs receipt .release/reconciliation
+        env:
+          PUBLICATION_INTENT_ARTIFACT_ID: ${{ steps.intent.outputs.artifact-id }}
+          PUBLICATION_INTENT_ARTIFACT_DIGEST: ${{ steps.intent.outputs.artifact-digest }}
+      - name: Upload validated append-only success receipt
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: yakit-ui-recovery-receipt-${{ inputs.source_run_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .release/reconciliation/receipt
+          if-no-files-found: error
+          retention-days: 30

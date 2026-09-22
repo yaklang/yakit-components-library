@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   AddPayloadOutlined,
-  FigmaIcon450351908Outlined,
+  DataComparisonOutlined,
   Goal2Outlined,
   LogoOutlined,
   RocketOffOutlined,
@@ -95,8 +95,8 @@ describe('Outline icon fragment runtime', () => {
   it('keeps the reconstructed clips local to each instance', () => {
     const container = render(
       <>
-        <FigmaIcon450351908Outlined svgProps={{ strokeWidth: 1 }} />
-        <FigmaIcon450351908Outlined svgProps={{ strokeWidth: 3 }} />
+        <DataComparisonOutlined svgProps={{ strokeWidth: 1 }} />
+        <DataComparisonOutlined svgProps={{ strokeWidth: 3 }} />
         <RocketOffOutlined svgProps={{ strokeWidth: 1 }} />
         <RocketOffOutlined svgProps={{ strokeWidth: 3 }} />
       </>,

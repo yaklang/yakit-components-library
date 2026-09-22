@@ -296,7 +296,11 @@ describe('Icon Storybook contract', () => {
       expect(current).toContain('stroke-width="1.5"');
     }
     expect(markup.match(/color:inherit/g)).toHaveLength(markup.match(/<svg\b/g)!.length);
-    for (const { exportName } of visualWeightReviews.reviews) {
+    for (const { file } of visualWeightReviews.reviews) {
+      const sourceNodeId = file.replace(/\.svg$/, '').replace('-', ':');
+      const { exportName } = outlineIconRegistry.find(
+        (icon) => icon.sourceNodeId === sourceNodeId,
+      )!;
       for (const size of [16, 24, 32]) expect(markup).toContain(`${exportName} 修复前 ${size}px`);
     }
     expect(markup).toContain('stroke-width="1.5"');

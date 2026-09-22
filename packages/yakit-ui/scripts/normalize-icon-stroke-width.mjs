@@ -156,15 +156,14 @@ export async function checkIconStrokeWidths(root = packageRoot) {
       frozen.assets.map(({ sourcePath, afterPath }) => [sourcePath, afterPath]),
     );
     const expected = new Set(frozen.sourceInventory.map((file) => migrated.get(file) ?? file));
-    const designUpdatesPath = path.join(
-      root,
-      'test/fixtures/icons/reference/outline-design-updates-sep17.json',
-    );
-    try {
-      const { updates } = JSON.parse(await readFile(designUpdatesPath, 'utf8'));
-      for (const { added, file } of updates) if (added) expected.add(`icons/outline/${file}`);
-    } catch (error) {
-      if (error.code !== 'ENOENT') throw error;
+    for (const fixture of ['outline-design-updates-sep17.json', 'outline-additions-sep22.json']) {
+      const designUpdatesPath = path.join(root, 'test/fixtures/icons/reference', fixture);
+      try {
+        const { updates } = JSON.parse(await readFile(designUpdatesPath, 'utf8'));
+        for (const { added, file } of updates) if (added) expected.add(`icons/outline/${file}`);
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+      }
     }
     for (const file of files)
       if (!expected.has(file)) errors.push(`${file}: source is not registered in ${fixturePath}`);

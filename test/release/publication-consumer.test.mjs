@@ -672,3 +672,71 @@ test("definitely not attempted receipt needs fresh exact registry evidence", asy
     "@yakit-libs/yakit-ui",
   );
 });
+
+test("read-only APPLIED reconciliation closes an ambiguous receipt without a publication side effect", async () => {
+  const root = await directory("yakit-applied-reconciliation-");
+  const initial = await artifactDirectory(root, "yakit-ui-publish-intent-42-1");
+  const receipt = await artifactDirectory(
+    root,
+    "yakit-ui-publish-receipt-42-1",
+  );
+  const outbox = createPublicationOutbox(manifest);
+  const common = { manifest, outbox, outboxSha256: "d".repeat(64), now };
+  await preparePublicationAttempt({
+    ...common,
+    stateDirectory: initial,
+    priorArtifactInventory: inventory(),
+    attemptId: "42:1",
+    observe: async () => "NOT_APPLIED",
+  });
+  await assert.rejects(
+    dispatchPreparedPublication({
+      ...common,
+      intentDirectory: initial,
+      receiptDirectory: receipt,
+      intentArtifactIdentity: { id: "1", digest: `sha256:${"a".repeat(64)}` },
+      observe: async () => "NOT_APPLIED",
+      observeAfterPublish: async () => "UNKNOWN",
+      publish: async () => {},
+    }),
+    /ambiguous/,
+  );
+  const priorArtifactInventory = inventory([
+    artifact(1, "yakit-ui-publish-intent-42-1", "a"),
+    artifact(2, "yakit-ui-publish-receipt-42-1", "b"),
+  ]);
+  const recovered = await directory("yakit-reconciled-intent-");
+  const result = await preparePublicationAttempt({
+    ...common,
+    stateDirectory: recovered,
+    priorStateRoot: root,
+    priorArtifactInventory,
+    attemptId: "43:1",
+    observe: async () => "APPLIED",
+  });
+  assert.deepEqual(result.pending, []);
+  const final = await directory("yakit-reconciled-receipt-");
+  let publishes = 0;
+  await dispatchPreparedPublication({
+    ...common,
+    intentDirectory: recovered,
+    receiptDirectory: final,
+    intentArtifactIdentity: { id: "3", digest: `sha256:${"c".repeat(64)}` },
+    observe: async () => "APPLIED",
+    publish: async () => {
+      publishes++;
+      throw new Error("forbidden");
+    },
+  });
+  assert.equal(publishes, 0);
+  const state = JSON.parse(
+    await readFile(path.join(final, "lifecycle-snapshot.json"), "utf8"),
+  );
+  const inbox = JSON.parse(
+    await readFile(path.join(final, "consumer-inbox.json"), "utf8"),
+  );
+  assert.equal(state.sourceRunId, "42");
+  assert.equal(state.phase, "RECEIPT");
+  assert.equal(state.releases[0].publishStatus, "published");
+  assert.equal(Object.values(inbox.records)[0].status, "SUCCEEDED");
+});

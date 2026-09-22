@@ -773,17 +773,17 @@ function validateManifest(manifest, files, policy) {
   const symbols = manifest.symbols ?? manifest.currentSymbols ?? [];
   const placements = manifest.placements ?? [];
   const expected = manifest.expectedCounts ?? {
-    currentSymbols: 356,
-    placements: 359,
-    publicExports: 356,
+    currentSymbols: 359,
+    placements: 362,
+    publicExports: 359,
   };
   if (
-    expected.currentSymbols !== 356 ||
-    expected.placements !== 359 ||
+    expected.currentSymbols !== 359 ||
+    expected.placements !== 362 ||
     expected.instances !== 3 ||
-    expected.publicExports !== 356 ||
-    symbols.length !== 356 ||
-    placements.length !== 359
+    expected.publicExports !== 359 ||
+    symbols.length !== 359 ||
+    placements.length !== 362
   )
     errors.push('MANIFEST_INCOMPLETE');
   if (manifest.fileKey === 'QWct5XE0Bg0bNDQ93eYgEw' && manifest.frameNodeId !== '46824:1930')

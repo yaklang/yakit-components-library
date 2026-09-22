@@ -426,7 +426,7 @@
       "order": 24,
       "placementNodeId": "2281:144183",
       "nodeType": "component",
-      "name": "Solid/拖拽排序",
+      "name": "Solid/Drag-sort",
       "x": null,
       "y": null,
       "width": 20,
@@ -3962,7 +3962,7 @@
       "order": 232,
       "placementNodeId": "16035:380989",
       "nodeType": "component",
-      "name": "Solid/导入",
+      "name": "Solid/Import",
       "x": null,
       "y": null,
       "width": 20,
@@ -4013,7 +4013,7 @@
       "order": 235,
       "placementNodeId": "6500:198204",
       "nodeType": "component",
-      "name": "Solid/导出",
+      "name": "Solid/Export",
       "x": null,
       "y": null,
       "width": 20,
@@ -4030,7 +4030,7 @@
       "order": 236,
       "placementNodeId": "23101:329992",
       "nodeType": "component",
-      "name": "Solid/弃用",
+      "name": "Solid/Abandon",
       "x": null,
       "y": null,
       "width": 20,
@@ -4081,7 +4081,7 @@
       "order": 239,
       "placementNodeId": "2249:69180",
       "nodeType": "component",
-      "name": "Solid/端口",
+      "name": "Solid/port",
       "x": null,
       "y": null,
       "width": 20,
@@ -4132,7 +4132,7 @@
       "order": 242,
       "placementNodeId": "16256:302540",
       "nodeType": "component",
-      "name": "Solid/存储",
+      "name": "Solid/storage",
       "x": null,
       "y": null,
       "width": 20,
@@ -4149,7 +4149,7 @@
       "order": 243,
       "placementNodeId": "1855:45375",
       "nodeType": "component",
-      "name": "Solid/minus-放大窗口",
+      "name": "Solid/minus-Enlarge window",
       "x": null,
       "y": null,
       "width": 20,
@@ -4166,7 +4166,7 @@
       "order": 244,
       "placementNodeId": "1855:45374",
       "nodeType": "component",
-      "name": "Solid/minus-缩小窗口",
+      "name": "Solid/minus-Shrink window",
       "x": null,
       "y": null,
       "width": 20,
@@ -4183,7 +4183,7 @@
       "order": 245,
       "placementNodeId": "16594:253276",
       "nodeType": "component",
-      "name": "Solid/switch 配置",
+      "name": "Solid/switch Configuration",
       "x": null,
       "y": null,
       "width": 20,
@@ -4405,7 +4405,7 @@
     },
     {
       "nodeId": "2281:144183",
-      "name": "Solid/拖拽排序",
+      "name": "Solid/Drag-sort",
       "nodeType": "COMPONENT"
     },
     {
@@ -5445,7 +5445,7 @@
     },
     {
       "nodeId": "16035:380989",
-      "name": "Solid/导入",
+      "name": "Solid/Import",
       "nodeType": "COMPONENT"
     },
     {
@@ -5460,12 +5460,12 @@
     },
     {
       "nodeId": "6500:198204",
-      "name": "Solid/导出",
+      "name": "Solid/Export",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "23101:329992",
-      "name": "Solid/弃用",
+      "name": "Solid/Abandon",
       "nodeType": "COMPONENT"
     },
     {
@@ -5480,7 +5480,7 @@
     },
     {
       "nodeId": "2249:69180",
-      "name": "Solid/端口",
+      "name": "Solid/port",
       "nodeType": "COMPONENT"
     },
     {
@@ -5495,22 +5495,22 @@
     },
     {
       "nodeId": "16256:302540",
-      "name": "Solid/存储",
+      "name": "Solid/storage",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "1855:45375",
-      "name": "Solid/minus-放大窗口",
+      "name": "Solid/minus-Enlarge window",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "1855:45374",
-      "name": "Solid/minus-缩小窗口",
+      "name": "Solid/minus-Shrink window",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "16594:253276",
-      "name": "Solid/switch 配置",
+      "name": "Solid/switch Configuration",
       "nodeType": "COMPONENT"
     },
     {
@@ -5542,35 +5542,35 @@
   "supplementalSources": [
     {
       "nodeId": "4936:115787",
-      "name": "Solid/浮窗",
+      "name": "Solid/Floating",
       "nodeType": "COMPONENT",
       "localFile": "4936-115787.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115787Solid"
+      "exportName": "FloatingSolid"
     },
     {
       "nodeId": "4936:115790",
-      "name": "Solid/靠左",
+      "name": "Solid/Park-left",
       "nodeType": "COMPONENT",
       "localFile": "4936-115790.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115790Solid"
+      "exportName": "ParkLeftSolid"
     },
     {
       "nodeId": "4936:115789",
-      "name": "Solid/靠右",
+      "name": "Solid/Park-right",
       "nodeType": "COMPONENT",
       "localFile": "4936-115789.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115789Solid"
+      "exportName": "ParkRightSolid"
     },
     {
       "nodeId": "4936:115788",
-      "name": "Solid/靠下",
+      "name": "Solid/Park-below",
       "nodeType": "COMPONENT",
       "localFile": "4936-115788.svg",
       "scopeRole": "supplement",
-      "exportName": "FigmaIcon4936115788Solid"
+      "exportName": "ParkBelowSolid"
     }
   ],
   "targetSymbols": [
@@ -5696,7 +5696,7 @@
     },
     {
       "nodeId": "2281:144183",
-      "name": "Solid/拖拽排序",
+      "name": "Solid/Drag-sort",
       "nodeType": "COMPONENT"
     },
     {
@@ -6736,7 +6736,7 @@
     },
     {
       "nodeId": "16035:380989",
-      "name": "Solid/导入",
+      "name": "Solid/Import",
       "nodeType": "COMPONENT"
     },
     {
@@ -6751,12 +6751,12 @@
     },
     {
       "nodeId": "6500:198204",
-      "name": "Solid/导出",
+      "name": "Solid/Export",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "23101:329992",
-      "name": "Solid/弃用",
+      "name": "Solid/Abandon",
       "nodeType": "COMPONENT"
     },
     {
@@ -6771,7 +6771,7 @@
     },
     {
       "nodeId": "2249:69180",
-      "name": "Solid/端口",
+      "name": "Solid/port",
       "nodeType": "COMPONENT"
     },
     {
@@ -6786,22 +6786,22 @@
     },
     {
       "nodeId": "16256:302540",
-      "name": "Solid/存储",
+      "name": "Solid/storage",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "1855:45375",
-      "name": "Solid/minus-放大窗口",
+      "name": "Solid/minus-Enlarge window",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "1855:45374",
-      "name": "Solid/minus-缩小窗口",
+      "name": "Solid/minus-Shrink window",
       "nodeType": "COMPONENT"
     },
     {
       "nodeId": "16594:253276",
-      "name": "Solid/switch 配置",
+      "name": "Solid/switch Configuration",
       "nodeType": "COMPONENT"
     },
     {

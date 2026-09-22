@@ -2,12 +2,12 @@ import type { ComponentType } from 'react';
 
 import {
   DownloadFigma12825Solid,
-  FigmaIcon16035380989Solid,
-  FigmaIcon2281144183Solid,
-  FigmaIcon4936115787Solid,
-  FigmaIcon4936115788Solid,
-  FigmaIcon4936115789Solid,
-  FigmaIcon4936115790Solid,
+  ImportSolid,
+  DragSortSolid,
+  FloatingSolid,
+  ParkBelowSolid,
+  ParkRightSolid,
+  ParkLeftSolid,
   PaintbrushSolid,
   PaperAirplaneSolid,
   PillSolid,
@@ -31,15 +31,15 @@ const registry = solidIconRegistry satisfies Array<{
 
 const examples = (
   <>
-    <FigmaIcon2281144183Solid aria-label="drag sort" color="#123456" size={20} />
+    <DragSortSolid aria-label="drag sort" color="#123456" size={20} />
     <PaperAirplaneSolid color="inherit" size="1em" />
     <PaintbrushSolid className="paintbrush" />
     <PillSolid style={{ color: '#654321' }} />
-    <FigmaIcon16035380989Solid aria-label="import" />
-    <FigmaIcon4936115787Solid />
-    <FigmaIcon4936115790Solid />
-    <FigmaIcon4936115789Solid />
-    <FigmaIcon4936115788Solid />
+    <ImportSolid aria-label="import" />
+    <FloatingSolid />
+    <ParkLeftSolid />
+    <ParkRightSolid />
+    <ParkBelowSolid />
     <DownloadFigma12825Solid />
   </>
 );

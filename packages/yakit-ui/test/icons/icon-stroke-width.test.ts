@@ -14,6 +14,7 @@ import { dirname, join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
+import solidManifest from '../../scripts/figma-solid-icons-inventory.json';
 import { normalizeSvgStrokeWidth, svgStrokeWidths } from '../../scripts/icon-stroke-width.mjs';
 import {
   applyStrokeWidthMigrationPlan,
@@ -27,6 +28,7 @@ import {
 import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
+import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 
@@ -148,15 +150,15 @@ describe('all production icon migration contracts', () => {
     );
     const expected = [
       ...before.sourceInventory.map((file) => migrated.get(file) ?? file),
-      ...designUpdates.updates
+      ...[...designUpdates.updates, ...additions.updates]
         .filter(({ added }) => added)
         .map(({ file }) => `icons/outline/${file}`),
     ].sort();
-    expect(expected).toHaveLength(1308);
+    expect(expected).toHaveLength(1311);
     expect(expected.filter((file) => file.startsWith('components/'))).toHaveLength(24);
     expect(await svgFiles(resolve(packageRoot, 'src'))).toEqual(expected);
     expect(await checkIconStrokeWidths(packageRoot)).toEqual({
-      svgFiles: 1308,
+      svgFiles: 1311,
       loading: 1,
       violations: 0,
     });
@@ -168,6 +170,10 @@ describe('all production icon migration contracts', () => {
         outlineManifest.sourceEvidence.figmaRawProvenanceSha256,
       'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json':
         outlineManifest.sourceEvidence.placementProvenanceSha256,
+      'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json':
+        solidManifest.sourceEvidence.figmaRawProvenanceSha256,
+      'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json':
+        solidManifest.sourceEvidence.placementProvenanceSha256,
     };
     for (const [file, hash] of Object.entries(before.provenanceHashes))
       expect(digest(readFileSync(resolve(packageRoot, file))), file).toBe(

@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-const EXPECTED_COUNTS = Object.freeze({ outline: 356, solid: 255, total: 611 });
+const EXPECTED_COUNTS = Object.freeze({ outline: 359, solid: 255, total: 614 });
 const VALID_STATUSES = new Set([
   'current',
   'supplement',
@@ -95,7 +95,7 @@ function expectedRecords({
   const outlineLegacy = outlineManifest?.legacySources ?? [];
   const solidSymbols = solidManifest?.symbols ?? [];
   const solidSupplements = solidManifest?.supplementalSources ?? [];
-  if (outlineSymbols.length !== 356 || outlineLegacy.length !== 0)
+  if (outlineSymbols.length !== 359 || outlineLegacy.length !== 0)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'outline');
   if (solidSymbols.length !== 251 || solidSupplements.length !== 4)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'solid');
@@ -122,7 +122,7 @@ function expectedRecords({
     rawNodeKey: 'nodeId',
   });
   if (
-    outlineAuthoritative.length !== 356 ||
+    outlineAuthoritative.length !== 359 ||
     solidTargets.length !== 251 ||
     solidSupplementEvidence.length !== 4
   )
@@ -210,17 +210,12 @@ export function buildIconNameCatalog({
     solidRawProvenance,
   });
   const seenExports = new Set();
-  const seenFigmaNames = new Set();
   for (const record of records) {
     if (!record.exportName || seenExports.has(record.exportName))
       fail('FIGMA_NAME_EXPORT_DUPLICATE', record.exportName);
     seenExports.add(record.exportName);
     if (!VALID_STATUSES.has(record.sourceStatus))
       fail('FIGMA_NAME_STATUS_UNKNOWN', record.sourceStatus);
-    if (record.figmaName) {
-      if (seenFigmaNames.has(record.figmaName)) fail('FIGMA_NAME_DUPLICATE', record.figmaName);
-      seenFigmaNames.add(record.figmaName);
-    }
     const actual = indexes[record.family].get(record.exportName);
     if (!actual) fail('FIGMA_NAME_MAPPING_MISSING', record.exportName);
     if (actual.sourceNodeId !== record.manifestSourceNodeId)

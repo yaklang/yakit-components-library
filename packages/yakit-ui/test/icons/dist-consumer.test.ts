@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   CommandOutlined,
-  FigmaIcon2281144183Solid,
+  DragSortSolid,
   LogoOutlined,
   NotebookOutlined,
   SpeechToText2Outlined,
@@ -45,9 +45,7 @@ describe('Published icon dist consumer', () => {
     const speech = outlineIconRegistry.find(
       ({ exportName }) => exportName === 'SpeechToText2Outlined',
     );
-    const drag = solidIconRegistry.find(
-      ({ exportName }) => exportName === 'FigmaIcon2281144183Solid',
-    );
+    const drag = solidIconRegistry.find(({ exportName }) => exportName === 'DragSortSolid');
 
     expect(speech).toMatchObject({
       Component: SpeechToText2Outlined,
@@ -56,10 +54,10 @@ describe('Published icon dist consumer', () => {
       name: 'Outline/Speech-to-text2',
     });
     expect(drag).toMatchObject({
-      Component: FigmaIcon2281144183Solid,
-      exportName: 'FigmaIcon2281144183Solid',
-      figmaName: 'Solid/拖拽排序',
-      name: 'Solid/拖拽排序',
+      Component: DragSortSolid,
+      exportName: 'DragSortSolid',
+      figmaName: 'Solid/Drag-sort',
+      name: 'Solid/Drag-sort',
     });
     expect(CommandOutlined.displayName).toBe('CommandOutlined');
     expect(NotebookOutlined.displayName).toBe('NotebookOutlined');

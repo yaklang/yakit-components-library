@@ -108,13 +108,13 @@ const runNameAudit = (overrides: Record<string, string> = {}) =>
   });
 
 describe('Figma icon name catalog', () => {
-  it('preserves all 611 public export mappings in manifest source order', () => {
+  it('preserves all 614 public export mappings in manifest source order', () => {
     const expected = buildIconNameCatalog(loadInputs());
     expect(figmaIconNameCatalog).toEqual(expected);
-    expect(figmaIconNameCatalog).toHaveLength(611);
-    expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(356);
+    expect(figmaIconNameCatalog).toHaveLength(614);
+    expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(359);
     expect(figmaIconNameCatalog.filter(({ family }) => family === 'solid')).toHaveLength(255);
-    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(611);
+    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(614);
   });
 
   it('keeps authoritative full Figma names byte-for-byte except outer whitespace', () => {
@@ -137,13 +137,13 @@ describe('Figma icon name catalog', () => {
         })),
     ).toEqual(notebookGroupMappings);
     expect(
-      figmaIconNameCatalog.find(({ exportName }) => exportName === 'FigmaIcon4936115787Solid'),
-    ).toMatchObject({ figmaName: 'Solid/浮窗', sourceStatus: 'supplement' });
+      figmaIconNameCatalog.find(({ exportName }) => exportName === 'FloatingSolid'),
+    ).toMatchObject({ figmaName: 'Solid/Floating', sourceStatus: 'supplement' });
     const names = figmaIconNameCatalog.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
     );
-    expect(names).toHaveLength(610);
-    expect(new Set(names)).toHaveLength(610);
+    expect(names).toHaveLength(613);
+    expect(new Set(names)).toHaveLength(612);
   });
 
   it.each([
