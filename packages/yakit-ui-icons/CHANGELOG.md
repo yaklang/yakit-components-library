@@ -1,5 +1,13 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.2.7
+
+### Patch Changes
+
+- Add `IntentionOutlined`, `GanttChartOutlined` and `SquareGanttChartOutlined`, including adjustable stroke widths and public exports.
+- **Breaking API migration:** rename 32 Outline/Solid exports to the English names in Figma. Previous exports are removed; update imports and JSX using the [migration table](https://github.com/yaklang/yakit-components-library/blob/main/docs/pending-releases/english-icon-names.md).
+- Allow distinct icon nodes to share a Figma display name while retaining unique public exports and source identities.
+
 ## 0.2.6
 
 ### Patch Changes
