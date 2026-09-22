@@ -143,3 +143,11 @@ Move deferred Changesets to `docs/pending-releases` with their bump levels and
 text intact. Restore them before that package's later release. This releases
 only the selected package through the existing verified-tarball and protected
 Trusted Publishing flow; it does not authorize publishing local candidate packs.
+
+### 已发布成功但旧回执不确定时的只读核对
+
+若 npm 已包含原验证产物，但旧发布回执为 ambiguous，普通发布与恢复仍由 cutover 阻止。将修复合入 `main` 后，可在 `Publish Yakit UI packages` 的 `main` 分支手动运行：`reconciliation_only=true`、`recovery=false`，并填写原 `source_run_id` 与精确 `verification_artifact_id`。保留 `authorize_retry=false`，不填写重试或 incident 参数。
+
+此独立任务仅持有 Actions/Contents 读取权限，不使用 npm 环境、npm 凭据或 OIDC。它验证原 push 工作流、仓库、分支、提交、14 天保留窗口、下载 ZIP 的 SHA-256、完整 manifest/outbox 和历史回执；每个发布包的版本、dist-tag、SHA-1、SRI 及实际 tarball 字节必须与验证产物一致。任一包缺失、身份冲突或状态未知均终止，不会重试发布。核对成功才上传新的不可变恢复 intent，并在再次核对后追加成功 receipt；不会修改旧证据。后续 cutover 仅关闭相同 source run、outbox 与完整发布集合的旧状态，其他不确定发布仍阻塞。
+
+只读核对完成后，重新触发正常发布流程；此入口不发布新版本，也不更新 GitHub release/tag。
