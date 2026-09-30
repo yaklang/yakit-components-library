@@ -34,7 +34,7 @@ const clearRenders = () => {
 
 const expectPrimaryPaint = (container: HTMLElement, expectedColor: string) => {
   const svgs = [...container.querySelectorAll<SVGSVGElement>('svg')];
-  expect(svgs).toHaveLength(255);
+  expect(svgs).toHaveLength(256);
   for (const svg of svgs) {
     const iconName = (svg.parentElement as HTMLSpanElement).dataset.iconName;
     const primary = [
@@ -66,7 +66,7 @@ describe('Solid public component API', () => {
     const registryNames = solidIconRegistry.map(({ exportName }) => exportName).sort();
 
     expect(expectedNames).toHaveLength(255);
-    expect(registryNames).toEqual(expectedNames);
+    expect(registryNames).toEqual([...expectedNames, 'ParkAboveSolid'].sort());
     expect(registryNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
     expect(registryNames.some((exportName) => exportName.endsWith('Filled'))).toBe(false);
     expect(registryNames).toContain('DownloadFigma12825Solid');

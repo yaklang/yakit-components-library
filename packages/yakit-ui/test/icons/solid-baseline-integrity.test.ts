@@ -16,8 +16,8 @@ import {
   policyDigest,
   sortedPublicMapping,
 } from '../../scripts/icon-audit-contracts.mjs';
-import placement from '../fixtures/icons/reference/figma-solid-placement-provenance-v1.json';
 import nameMigration from '../fixtures/icons/english-name-migration.json';
+import placement from '../fixtures/icons/reference/figma-solid-placement-provenance-v1.json';
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 import renderContract from '../fixtures/icons/reference/solid-render-contract-v1.json';
@@ -89,8 +89,8 @@ describe('Solid icon baseline integrity', () => {
     ).toBe(canonicalJson(policy.supplementalSources));
   });
 
-  it('contains exactly the 255 classified numeric sources and none of the stale orphans', () => {
-    expect(files).toHaveLength(255);
+  it('contains exactly the 256 classified numeric sources and none of the stale orphans', () => {
+    expect(files).toHaveLength(256);
     expect(files.every((file) => /^\d+(?:-\d+)+\.svg$/.test(file))).toBe(true);
     expect(prechange.staleOrphanFiles).toHaveLength(20);
     for (const orphan of prechange.staleOrphanFiles) expect(files).not.toContain(orphan);
@@ -120,27 +120,31 @@ describe('Solid icon baseline integrity', () => {
     expect(parsed.duplicateExports.size).toBe(0);
     expect(parsed.duplicateImports.size).toBe(0);
     expect(parsed.missingImportTargets.size).toBe(0);
-    expect(actual).toHaveLength(255);
+    expect(actual).toHaveLength(256);
     expect(prechange.records.every(({ exportName }) => exportName.endsWith('Filled'))).toBe(true);
     expect(actual.every(({ exportName }) => exportName.endsWith('Solid'))).toBe(true);
-    expect(sortedPublicMapping(actual)).toEqual(sortedPublicMapping(frozen));
+    expect(sortedPublicMapping(actual)).toEqual(
+      sortedPublicMapping([
+        ...frozen,
+        {
+          nodeId: '46709:8109',
+          localFile: 'solid/46709-8109.svg',
+          exportName: 'ParkAboveSolid',
+          scopeRole: 'supplement',
+        },
+      ]),
+    );
     expect(policyDigest(sortedPublicMapping(actual))).toBe(policy.publicMappingSha256);
   });
 
   it('allows only the reviewed geometry and local stroke-width policy changes', () => {
-    const strokePolicyIds = [
-      '16035:380989',
-      '4936:115787',
-      '4936:115788',
-      '4936:115789',
-      '4936:115790',
-    ];
-    const figmaFourPixelIds = new Set(['4936:115787', '4936:115788', '4936:115789', '4936:115790']);
+    const strokePolicyIds = ['16035:380989'];
+    const layoutIds = ['4936:115787', '4936:115788', '4936:115789', '4936:115790'];
     const changed = prechange.records
       .filter(({ geometrySha256: frozen, localFile }) => currentGeometry(localFile) !== frozen)
       .map(({ nodeId }) => nodeId)
       .sort();
-    expect(changed).toEqual(['2281:144183', ...strokePolicyIds].sort());
+    expect(changed).toEqual(['2281:144183', ...strokePolicyIds, ...layoutIds].sort());
 
     for (const row of prechange.records.filter(
       ({ nodeId }) => nodeId !== '2281:144183' && !strokePolicyIds.includes(nodeId),
@@ -153,9 +157,7 @@ describe('Solid icon baseline integrity', () => {
     for (const nodeId of strokePolicyIds) {
       const file = `${nodeId.replace(':', '-')}.svg`;
       const figma = rawByNodeId.get(nodeId)!;
-      expect(figma.svg, nodeId).toContain(
-        `stroke-width="${figmaFourPixelIds.has(nodeId) ? '4' : '1.5'}"`,
-      );
+      expect(figma.svg, nodeId).toContain('stroke-width="1.5"');
       expect(currentSource(file), file).toContain(`stroke-width="${ICON_STROKE_WIDTH}"`);
       expect(policyGeometrySha256(currentSource(file)), file).toBe(policyGeometrySha256(figma.svg));
     }
@@ -319,8 +321,8 @@ describe('Solid icon baseline integrity', () => {
       strategy: 'local-uniform-stroke-v1',
       normalizedFigmaWidth: 1,
       localWidth: 1,
-      nodeIds: ['16035:380989', '4936:115787', '4936:115788', '4936:115789', '4936:115790'],
-      figmaFourPixelNodeIds: ['4936:115787', '4936:115788', '4936:115789', '4936:115790'],
+      nodeIds: ['16035:380989'],
+      figmaFourPixelNodeIds: [],
     });
   });
 });

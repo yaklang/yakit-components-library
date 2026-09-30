@@ -1529,29 +1529,36 @@
       "nodeId": "4936:115787",
       "nodeType": "COMPONENT",
       "localFile": "4936-115787.svg",
-      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g id=\"Basic Icons\">\n<g id=\" Solid/&#230;&#181;&#174;&#231;&#170;&#151;\">\n<g id=\"Rectangle 78\">\n<mask id=\"path-2-inside-1_1_85\" fill=\"white\">\n<rect x=\"3\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\"/>\n</mask>\n<rect x=\"3\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\" stroke=\"#353639\" stroke-width=\"4\" mask=\"url(#path-2-inside-1_1_85)\"/>\n</g>\n<rect id=\"Rectangle 79\" x=\"2\" y=\"2\" width=\"12\" height=\"9\" rx=\"1\" fill=\"#353639\"/>\n<rect id=\"Rectangle 80\" x=\"1\" y=\"1\" width=\"12\" height=\"9\" rx=\"1\" fill=\"#353639\"/>\n</g>\n</g>\n</svg>\n",
+      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect opacity=\"0.6\" y=\"2\" width=\"13\" height=\"8\" rx=\"2\" fill=\"#353639\"/>\n<path d=\"M18 3C19.1046 3 20 3.89543 20 5V15C20 16.0357 19.2128 16.887 18.2041 16.9893L18 17H4L3.7959 16.9893C2.85435 16.8938 2.1062 16.1457 2.01074 15.2041L2 15V11H3V15C3 15.5523 3.44772 16 4 16H18C18.5523 16 19 15.5523 19 15V5C19 4.44772 18.5523 4 18 4H14V3H18Z\" fill=\"#353639\"/>\n</svg>\n",
       "name": "Solid/Floating"
     },
     {
       "nodeId": "4936:115790",
       "nodeType": "COMPONENT",
       "localFile": "4936-115790.svg",
-      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g id=\"Basic Icons\">\n<g id=\" Solid/&#233;&#157;&#160;&#229;&#183;&#166;\">\n<rect id=\"Rectangle 79\" x=\"2\" y=\"3\" width=\"6\" height=\"14\" rx=\"1\" fill=\"#353639\"/>\n<g id=\"Rectangle 78\">\n<mask id=\"path-3-inside-1_1_85\" fill=\"white\">\n<rect x=\"2\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\"/>\n</mask>\n<rect x=\"2\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\" stroke=\"#353639\" stroke-width=\"4\" mask=\"url(#path-3-inside-1_1_85)\"/>\n</g>\n</g>\n</g>\n</svg>\n",
+      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect opacity=\"0.6\" x=\"3\" y=\"5\" width=\"4\" height=\"10\" rx=\"0.5\" fill=\"#353639\"/>\n<rect x=\"1.5\" y=\"3.5\" width=\"17\" height=\"13\" rx=\"1.5\" stroke=\"#353639\"/>\n</svg>\n",
       "name": "Solid/Park-left"
     },
     {
       "nodeId": "4936:115789",
       "nodeType": "COMPONENT",
       "localFile": "4936-115789.svg",
-      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g id=\"Basic Icons\">\n<g id=\" Solid/&#233;&#157;&#160;&#229;&#143;&#179;\">\n<rect id=\"Rectangle 79\" x=\"12\" y=\"3\" width=\"6\" height=\"14\" rx=\"1\" fill=\"#353639\"/>\n<g id=\"Rectangle 78\">\n<mask id=\"path-3-inside-1_1_85\" fill=\"white\">\n<rect x=\"2\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\"/>\n</mask>\n<rect x=\"2\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\" stroke=\"#353639\" stroke-width=\"4\" mask=\"url(#path-3-inside-1_1_85)\"/>\n</g>\n</g>\n</g>\n</svg>\n",
+      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path opacity=\"0.6\" d=\"M13 5.5C13 5.22386 13.2239 5 13.5 5H16.5C16.7761 5 17 5.22386 17 5.5V14.5C17 14.7761 16.7761 15 16.5 15H13.5C13.2239 15 13 14.7761 13 14.5V5.5Z\" fill=\"#353639\"/>\n<rect x=\"1.5\" y=\"3.5\" width=\"17\" height=\"13\" rx=\"1.5\" stroke=\"#353639\"/>\n</svg>\n",
       "name": "Solid/Park-right"
     },
     {
       "nodeId": "4936:115788",
       "nodeType": "COMPONENT",
       "localFile": "4936-115788.svg",
-      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g id=\"Basic Icons\">\n<g id=\" Solid/&#233;&#157;&#160;&#228;&#184;&#139;\">\n<rect id=\"Rectangle 79\" x=\"2\" y=\"11\" width=\"16\" height=\"6\" rx=\"1\" fill=\"#353639\"/>\n<g id=\"Rectangle 78\">\n<mask id=\"path-3-inside-1_1_85\" fill=\"white\">\n<rect x=\"2\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\"/>\n</mask>\n<rect x=\"2\" y=\"3\" width=\"16\" height=\"14\" rx=\"1\" stroke=\"#353639\" stroke-width=\"4\" mask=\"url(#path-3-inside-1_1_85)\"/>\n</g>\n</g>\n</g>\n</svg>\n",
+      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path opacity=\"0.6\" d=\"M3 11.5C3 11.2239 3.22386 11 3.5 11H16.5C16.7761 11 17 11.2239 17 11.5V14.5C17 14.7761 16.7761 15 16.5 15H3.5C3.22386 15 3 14.7761 3 14.5V11.5Z\" fill=\"#353639\"/>\n<rect x=\"1.5\" y=\"3.5\" width=\"17\" height=\"13\" rx=\"1.5\" stroke=\"#353639\"/>\n</svg>\n",
       "name": "Solid/Park-below"
+    },
+    {
+      "nodeId": "46709:8109",
+      "nodeType": "COMPONENT",
+      "localFile": "46709-8109.svg",
+      "svg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path opacity=\"0.6\" d=\"M3 5.5C3 5.22386 3.22386 5 3.5 5H16.5C16.7761 5 17 5.22386 17 5.5V8.5C17 8.77614 16.7761 9 16.5 9H3.5C3.22386 9 3 8.77614 3 8.5V5.5Z\" fill=\"#353639\"/>\n<rect x=\"1.5\" y=\"3.5\" width=\"17\" height=\"13\" rx=\"1.5\" stroke=\"#353639\"/>\n</svg>\n",
+      "name": "Solid/Park-above"
     }
   ],
   "targetOrderSha256": "20beb1548e3309958bc085ed8cb699e141588c9c8c6a8fbe9c027925d37f1740"

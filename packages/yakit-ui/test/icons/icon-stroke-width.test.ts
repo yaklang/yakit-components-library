@@ -27,8 +27,9 @@ import {
 } from '../../scripts/normalize-icon-stroke-width.mjs';
 import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
-import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
+import solidRaw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
+import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 
@@ -107,10 +108,17 @@ describe('all production icon migration contracts', () => {
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
       const colorfulCorrection = colorfulCorrections.find((item) => item.file === record.afterPath);
+      const layoutUpdate = solidRaw.supplementalComponents.find(
+        (item) =>
+          ['4936:115787', '4936:115788', '4936:115789', '4936:115790'].includes(item.nodeId) &&
+          record.afterPath === `icons/solid/${item.nodeId.replace(':', '-')}.svg`,
+      );
       const designUpdate = designUpdates.updates.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
-      if (designUpdate) {
+      if (layoutUpdate) {
+        expect(actual).toBe(layoutUpdate.svg.replaceAll('#353639', 'currentColor'));
+      } else if (designUpdate) {
         expect(designUpdate.previousLocalSvg).toBe(expected);
         expect(actual).toBe(
           designUpdate.componentSvg
@@ -153,12 +161,13 @@ describe('all production icon migration contracts', () => {
       ...[...designUpdates.updates, ...additions.updates]
         .filter(({ added }) => added)
         .map(({ file }) => `icons/outline/${file}`),
+      'icons/solid/46709-8109.svg',
     ].sort();
-    expect(expected).toHaveLength(1311);
+    expect(expected).toHaveLength(1312);
     expect(expected.filter((file) => file.startsWith('components/'))).toHaveLength(24);
     expect(await svgFiles(resolve(packageRoot, 'src'))).toEqual(expected);
     expect(await checkIconStrokeWidths(packageRoot)).toEqual({
-      svgFiles: 1311,
+      svgFiles: 1312,
       loading: 1,
       violations: 0,
     });
@@ -288,6 +297,10 @@ describe('stroke-width migration CLI safety', () => {
     'icons/outline/1-2375.svg',
     'icons/colorful/DataComparisonOutlineColorful.svg',
     'icons/colorful/LuaAvatarColorful.svg',
+    'icons/solid/4936-115787.svg',
+    'icons/solid/4936-115788.svg',
+    'icons/solid/4936-115789.svg',
+    'icons/solid/4936-115790.svg',
   ])(
     'accepts only the exact later-reviewed geometry pair and rejects subsequent drift: %s',
     async (sourcePath) => {
@@ -309,7 +322,9 @@ describe('stroke-width migration CLI safety', () => {
         ).rejects.toThrow('MIGRATION_INPUT_DRIFT');
         writeFileSync(
           resolve(root, 'src', sourcePath),
-          current.replace('stroke-width="1"', 'stroke-width="2"'),
+          sourcePath.startsWith('icons/solid/')
+            ? current.replace('opacity="0.6"', 'opacity="0.7"')
+            : current.replace('stroke-width="1"', 'stroke-width="2"'),
         );
         await expect(
           validateFrozenMigrationInputs(root, { assets: [record] }, [sourcePath]),

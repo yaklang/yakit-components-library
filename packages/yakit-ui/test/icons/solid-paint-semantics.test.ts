@@ -69,13 +69,13 @@ describe('Solid paint semantics', () => {
         ]),
     );
 
-    // 463 declarations after Bug, plus 30 from the 13 reviewed centerline repairs.
-    expect(values).toHaveLength(493);
+    // The four refreshed layout glyphs no longer need mask strokes.
+    expect(values).toHaveLength(498);
     expect([...new Set(values.map((match) => match[1]))]).toEqual([ICON_STROKE_WIDTH]);
   });
 
   it('uses currentColor for every primary glyph and removes the legacy literal everywhere', () => {
-    expect(files).toHaveLength(255);
+    expect(files).toHaveLength(256);
     for (const file of files) {
       const svg = source(file);
       const rows = collectPaintSemantics(svg);
@@ -138,18 +138,9 @@ describe('Solid paint semantics', () => {
     );
     expect(source('37831-7379.svg')).toContain('fill="#9CA3B1"');
     expect(source('37831-7379.svg')).toContain('fill="white"');
-    for (const file of [
-      '1-2967.svg',
-      '22425-254718.svg',
-      '4936-115787.svg',
-      '4936-115788.svg',
-      '4936-115789.svg',
-      '4936-115790.svg',
-    ]) {
+    for (const file of ['1-2967.svg', '22425-254718.svg']) {
       expect(source(file), file).toMatch(/<(?:clipPath|mask)\b/);
       expect(source(file), file).toMatch(/(?:fill|stroke)="currentColor"/);
-      if (file.startsWith('4936-'))
-        expect(source(file), file).toContain(`stroke-width="${ICON_STROKE_WIDTH}"`);
     }
   });
 

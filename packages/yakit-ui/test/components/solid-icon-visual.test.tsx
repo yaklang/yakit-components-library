@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { solidIconRegistry } from '../../src/icons/registry';
 import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
+import layoutUpdates from '../fixtures/icons/reference/solid-layout-updates-sep30.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
 const roots: Root[] = [];
@@ -20,9 +21,9 @@ const focusNodeIds = [
   '4936:115790',
   '4936:115789',
   '4936:115788',
+  '46709:8109',
 ] as const;
 const strokePolicyNodeIds = new Set(contract.strokeWidthPolicy.nodeIds);
-const figmaFourPixelNodeIds = new Set<string>(contract.strokeWidthPolicy.figmaFourPixelNodeIds);
 const colors = [contract.raster.defaultColor, '#123456'] as const;
 const rawByNodeId = new Map(
   [...raw.components, ...raw.supplementalComponents].map((record) => [record.nodeId, record.svg]),
@@ -78,8 +79,9 @@ const loadImage = (source: string) =>
     image.src = blobUrl;
   });
 
-const rasterize = async (source: string) => {
-  const { cropHeight: height, cropWidth: width } = contract.raster;
+const rasterize = async (source: string, size = contract.raster.cropWidth) => {
+  const height = size;
+  const width = size;
   const canvas = document.createElement('canvas');
   canvas.height = height;
   canvas.width = width;
@@ -100,10 +102,10 @@ const figmaSourceForColor = (source: string, color: string, nodeId: string) => {
   );
 };
 
-const localSourceForColor = (nodeId: string, color: string) => {
+const localSourceForColor = (nodeId: string, color: string, size = 20) => {
   const definition = definitionByNodeId.get(nodeId);
   if (!definition) throw new Error(`Missing Solid component for ${nodeId}`);
-  const container = render(<definition.Component color={color} size={20} />);
+  const container = render(<definition.Component color={color} size={size} />);
   const svg = container.querySelector('svg');
   if (!svg) throw new Error(`Missing rendered SVG for ${nodeId}`);
   const standaloneSvg = svg.cloneNode(true) as SVGSVGElement;
@@ -198,8 +200,8 @@ describe('Solid stroke-width-1 Figma pixel parity', () => {
       strategy: 'local-uniform-stroke-v1',
       normalizedFigmaWidth: 1,
       localWidth: 1,
-      nodeIds: ['16035:380989', '4936:115787', '4936:115788', '4936:115789', '4936:115790'],
-      figmaFourPixelNodeIds: ['4936:115787', '4936:115788', '4936:115789', '4936:115790'],
+      nodeIds: ['16035:380989'],
+      figmaFourPixelNodeIds: [],
     });
   });
 
@@ -210,8 +212,7 @@ describe('Solid stroke-width-1 Figma pixel parity', () => {
       expect(figmaSource, nodeId).toBeDefined();
       const expectedSource = figmaSourceForColor(figmaSource!, color, nodeId);
       if (strokePolicyNodeIds.has(nodeId)) {
-        const sourceWidth = figmaFourPixelNodeIds.has(nodeId) ? '4' : '1.5';
-        expect(figmaSource, nodeId).toContain(`stroke-width="${sourceWidth}"`);
+        expect(figmaSource, nodeId).toContain('stroke-width="1.5"');
         expect(expectedSource, nodeId).toContain('stroke-width="1"');
         expect(expectedSource, nodeId).not.toContain('stroke-width="4"');
       }
@@ -229,6 +230,26 @@ describe('Solid stroke-width-1 Figma pixel parity', () => {
       expect(metric.centroidDelta, `${nodeId}:${color}:centroid`).toBeLessThanOrEqual(
         gates.centroidDeltaMaximum,
       );
+    },
+  );
+});
+
+describe('layout icon Figma parity at consumer sizes', () => {
+  it.each(
+    layoutUpdates.updates.flatMap(({ nodeId, svg }) =>
+      [16, 20, 32].flatMap((size) => colors.map((color) => ({ nodeId, svg, size, color }))),
+    ),
+  )(
+    'preserves inset panels and opacity for $nodeId at $size px / $color',
+    async ({ nodeId, svg, size, color }) => {
+      const reference = svg.replace(/(fill|stroke)="#353639"/gi, `$1="${color}"`);
+      const expected = await rasterize(reference, size);
+      const actual = await rasterize(localSourceForColor(nodeId, color, size), size);
+      let absoluteError = 0;
+      for (let index = 0; index < expected.length; index += 1) {
+        absoluteError += Math.abs(expected[index] - actual[index]);
+      }
+      expect(absoluteError / expected.length).toBeLessThanOrEqual(0.5);
     },
   );
 });

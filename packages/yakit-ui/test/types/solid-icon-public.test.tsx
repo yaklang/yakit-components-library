@@ -5,6 +5,7 @@ import {
   ImportSolid,
   DragSortSolid,
   FloatingSolid,
+  ParkAboveSolid,
   ParkBelowSolid,
   ParkRightSolid,
   ParkLeftSolid,
@@ -39,6 +40,7 @@ const examples = (
     <FloatingSolid />
     <ParkLeftSolid />
     <ParkRightSolid />
+    <ParkAboveSolid />
     <ParkBelowSolid />
     <DownloadFigma12825Solid />
   </>

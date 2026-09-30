@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   FloatingSolid,
+  ParkAboveSolid,
   ParkBelowSolid,
   ParkRightSolid,
   ParkLeftSolid,
@@ -19,6 +20,7 @@ const fragmentIcons = [
   FloatingSolid,
   ParkLeftSolid,
   ParkRightSolid,
+  ParkAboveSolid,
   ParkBelowSolid,
 ];
 const repeatedFragments = React.createElement(
@@ -49,9 +51,9 @@ describe('Solid icon server rendering', () => {
     ['default identifiers', fixtures.default],
     ['matching custom identifierPrefix', fixtures.custom],
   ])('renders %s with unique owner-local fragment IDs', (_label, fixture) => {
-    expect(fixture.serverIds).toHaveLength(16);
+    expect(fixture.serverIds).toHaveLength(8);
     expect(new Set(fixture.serverIds).size).toBe(fixture.serverIds.length);
-    expect(fixture.references).toHaveLength(16);
+    expect(fixture.references).toHaveLength(8);
     expect(fixture.references.every((reference) => fixture.serverIds.includes(reference))).toBe(
       true,
     );

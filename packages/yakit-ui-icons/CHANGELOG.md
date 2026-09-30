@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.2.8
+
+### Patch Changes
+
+- Correct `FloatingSolid`, `ParkLeftSolid`, `ParkRightSolid`, and `ParkBelowSolid` to match the current Figma geometry, inset spacing, and 60% fill opacity.
+- Add `ParkAboveSolid` with matching color and size behavior across the root and Solid exports.
+
 ## 0.2.7
 
 ### Patch Changes

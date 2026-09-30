@@ -49,6 +49,12 @@ const SOLID_SUPPLEMENTS = [
     exportName: 'ParkBelowSolid',
     scopeRole: 'supplement',
   },
+  {
+    nodeId: '46709:8109',
+    localFile: 'solid/46709-8109.svg',
+    exportName: 'ParkAboveSolid',
+    scopeRole: 'supplement',
+  },
 ];
 
 export const ICON_AUDIT_POLICIES = Object.freeze({
@@ -78,13 +84,13 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     prechangeBaselinePath: 'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json',
     expectedCounts: Object.freeze({
       targetSymbols: 251,
-      supplementalSources: 4,
-      publicExports: 255,
+      supplementalSources: 5,
+      publicExports: 256,
       orphanSources: 0,
     }),
     targetMembershipSha256: '16b679e138399793f27a27b64c5e7573302416bcb81dd93fb91ed5796c2f415e',
     targetOrderSha256: '20beb1548e3309958bc085ed8cb699e141588c9c8c6a8fbe9c027925d37f1740',
-    publicMappingSha256: '2645f738fe6166fc0cd4679d4df79f0cad18cd1996fe9b45f1d27d148502d969',
+    publicMappingSha256: '1393367d8192f225cbef5e98596d309f86eff314c8e8633d774908143bdccee2',
     supplementalSources: Object.freeze(SOLID_SUPPLEMENTS.map((entry) => Object.freeze(entry))),
   }),
 });

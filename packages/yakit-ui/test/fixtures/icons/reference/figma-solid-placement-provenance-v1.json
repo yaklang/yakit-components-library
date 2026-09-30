@@ -6,7 +6,7 @@
     "placements": 251,
     "currentSymbols": 251,
     "instances": 0,
-    "supplementalSources": 4
+    "supplementalSources": 5
   },
   "sourceEvidence": {
     "inventoryTool": "figma_use_figma",
@@ -5571,6 +5571,14 @@
       "localFile": "4936-115788.svg",
       "scopeRole": "supplement",
       "exportName": "ParkBelowSolid"
+    },
+    {
+      "nodeId": "46709:8109",
+      "name": "Solid/Park-above",
+      "nodeType": "COMPONENT",
+      "localFile": "46709-8109.svg",
+      "scopeRole": "supplement",
+      "exportName": "ParkAboveSolid"
     }
   ],
   "targetSymbols": [

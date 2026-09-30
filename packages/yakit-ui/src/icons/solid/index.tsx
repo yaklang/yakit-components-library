@@ -247,6 +247,7 @@ import CodecSolidSvg from './15460-250575.svg?react';
 import StorageSolidSvg from './16256-302540.svg?react';
 import MinusEnlargeWindowSolidSvg from './1855-45375.svg?react';
 import MinusShrinkWindowSolidSvg from './1855-45374.svg?react';
+import ParkAboveSolidSvg from './46709-8109.svg?react';
 import FloatingSolidSvg from './4936-115787.svg?react';
 import ParkLeftSolidSvg from './4936-115790.svg?react';
 import ParkRightSolidSvg from './4936-115789.svg?react';
@@ -555,6 +556,7 @@ export const FloatingSolid = createIcon(FloatingSolidSvg, 'FloatingSolid');
 export const ParkLeftSolid = createIcon(ParkLeftSolidSvg, 'ParkLeftSolid');
 export const ParkRightSolid = createIcon(ParkRightSolidSvg, 'ParkRightSolid');
 export const ParkBelowSolid = createIcon(ParkBelowSolidSvg, 'ParkBelowSolid');
+export const ParkAboveSolid = createIcon(ParkAboveSolidSvg, 'ParkAboveSolid');
 export const SwitchConfigurationSolid = createIcon(
   SwitchConfigurationSolidSvg,
   'SwitchConfigurationSolid',
