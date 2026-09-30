@@ -40,7 +40,7 @@ afterEach(() => {
 describe('default width across every rendered icon', () => {
   it('renders all 910 family icons, 380 Oldicons and Loading with unit-width strokes', () => {
     const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
-    expect(icons).toHaveLength(1291);
+    expect(icons).toHaveLength(1292);
     for (let index = 0; index < icons.length; index += 24) {
       const batch = icons.slice(index, index + 24);
       const mounted = render(
