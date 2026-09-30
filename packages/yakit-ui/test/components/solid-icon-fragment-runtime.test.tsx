@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   FloatingSolid,
+  ParkAboveSolid,
   ParkBelowSolid,
   ParkRightSolid,
   ParkLeftSolid,
@@ -31,6 +32,7 @@ const fragmentIcons = [
   FloatingSolid,
   ParkLeftSolid,
   ParkRightSolid,
+  ParkAboveSolid,
   ParkBelowSolid,
 ];
 const repeatedFragments = (
@@ -103,10 +105,10 @@ afterEach(() => {
 
 describe('Solid fragment runtime ownership', () => {
   it('assigns unique IDs to repeated and adversarial mixed fragment icons', () => {
-    expectOwnedFragments(render(repeatedFragments), 16);
+    expectOwnedFragments(render(repeatedFragments), 8);
   });
 
-  it('keeps all 255 registry sources owner-local when the whole family is mounted twice', () => {
+  it('keeps all 256 registry sources owner-local when the whole family is mounted twice', () => {
     const container = render(
       <StrictMode>
         {[0, 1].flatMap((copy) =>
@@ -116,8 +118,8 @@ describe('Solid fragment runtime ownership', () => {
         )}
       </StrictMode>,
     );
-    expect(container.querySelectorAll('svg')).toHaveLength(510);
-    expectOwnedFragments(container, 16);
+    expect(container.querySelectorAll('svg')).toHaveLength(512);
+    expectOwnedFragments(container, 8);
   });
 
   it.each(['default', 'custom'] as const)(
@@ -133,7 +135,7 @@ describe('Solid fragment runtime ownership', () => {
       expect([...container.querySelectorAll<SVGElement>('svg [id]')].map(({ id }) => id)).toEqual(
         serverIds,
       );
-      expectOwnedFragments(container, 16);
+      expectOwnedFragments(container, 8);
       consoleError.mockRestore();
       consoleWarn.mockRestore();
     },
@@ -146,7 +148,7 @@ describe('Solid fragment runtime ownership', () => {
       document.body.append(container);
       const root = createRoot(container);
       flushSync(() => root.render(<StrictMode>{repeatedFragments}</StrictMode>));
-      expectOwnedFragments(container, 16);
+      expectOwnedFragments(container, 8);
       flushSync(() => root.unmount());
       container.remove();
     }

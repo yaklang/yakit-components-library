@@ -76,7 +76,7 @@ describe('Solid audit determinism and read-only behavior', () => {
   });
 
   it('passes without network access', () => {
-    expect(first).toEqual({ status: 0, stderr: '', stdout: 'AUDIT_OK 255\n' });
+    expect(first).toEqual({ status: 0, stderr: '', stdout: 'AUDIT_OK 256\n' });
   });
 
   it('emits byte-identical timestamp-free output on consecutive runs', () => {

@@ -178,7 +178,7 @@ describe('Dedicated yakit-ui-icons package', () => {
     const solid = await import(exportTarget(iconsRoot, iconsManifest, './solid', 'import'));
     const exportNames = Object.keys(solid);
 
-    expect(exportNames).toHaveLength(255);
+    expect(exportNames).toHaveLength(256);
     expect(exportNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
     expect(exportNames).toContain('HomeSolid');
     expect(exportNames).not.toContain('HomeFilled');

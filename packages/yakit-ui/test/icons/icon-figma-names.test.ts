@@ -108,13 +108,13 @@ const runNameAudit = (overrides: Record<string, string> = {}) =>
   });
 
 describe('Figma icon name catalog', () => {
-  it('preserves all 614 public export mappings in manifest source order', () => {
+  it('preserves all 615 public export mappings in manifest source order', () => {
     const expected = buildIconNameCatalog(loadInputs());
     expect(figmaIconNameCatalog).toEqual(expected);
-    expect(figmaIconNameCatalog).toHaveLength(614);
+    expect(figmaIconNameCatalog).toHaveLength(615);
     expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(359);
-    expect(figmaIconNameCatalog.filter(({ family }) => family === 'solid')).toHaveLength(255);
-    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(614);
+    expect(figmaIconNameCatalog.filter(({ family }) => family === 'solid')).toHaveLength(256);
+    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(615);
   });
 
   it('keeps authoritative full Figma names byte-for-byte except outer whitespace', () => {
@@ -142,8 +142,8 @@ describe('Figma icon name catalog', () => {
     const names = figmaIconNameCatalog.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
     );
-    expect(names).toHaveLength(613);
-    expect(new Set(names)).toHaveLength(612);
+    expect(names).toHaveLength(614);
+    expect(new Set(names)).toHaveLength(613);
   });
 
   it.each([

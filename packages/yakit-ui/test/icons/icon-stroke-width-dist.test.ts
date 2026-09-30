@@ -43,14 +43,14 @@ describe('Built icon stroke-width contract', () => {
     const dedicatedRoot = await importBuilt(builtPath(dedicatedDist, 'index.js'));
     const families = [
       ['outline', 359],
-      ['solid', 255],
+      ['solid', 256],
       ['colorful', 296],
     ] as const;
 
-    expect(Object.keys(coreIcons)).toHaveLength(911);
+    expect(Object.keys(coreIcons)).toHaveLength(912);
     expect(Object.keys(dedicatedRoot)).toEqual(Object.keys(coreIcons));
-    expect(componentEntries(coreIcons)).toHaveLength(911);
-    expect(componentEntries(dedicatedRoot)).toHaveLength(911);
+    expect(componentEntries(coreIcons)).toHaveLength(912);
+    expect(componentEntries(dedicatedRoot)).toHaveLength(912);
     expectWidthOneMarkup('core-root:AcademicCapOutlined', coreRoot.AcademicCapOutlined);
     for (const [family, count] of families) {
       const core = await importBuilt(builtPath(coreDist, `icons/${family}/index.js`));

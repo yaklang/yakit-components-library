@@ -34,8 +34,10 @@
     "strategy": "local-uniform-stroke-v1",
     "normalizedFigmaWidth": 1,
     "localWidth": 1,
-    "nodeIds": ["16035:380989", "4936:115787", "4936:115788", "4936:115789", "4936:115790"],
-    "figmaFourPixelNodeIds": ["4936:115787", "4936:115788", "4936:115789", "4936:115790"]
+    "nodeIds": [
+      "16035:380989"
+    ],
+    "figmaFourPixelNodeIds": []
   },
   "historicalEvidence": {
     "outlineRendererProvenance": "test/fixtures/icons/reference/outline-renderer-provenance-v1.json",

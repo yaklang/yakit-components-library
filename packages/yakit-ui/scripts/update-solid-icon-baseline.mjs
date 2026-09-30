@@ -228,7 +228,7 @@ async function main() {
     complete: true,
     provenanceComplete: true,
     completenessScope:
-      '251 direct Solid frame components plus four explicit public compatibility supplements',
+      '251 direct Solid frame components plus five explicit public compatibility supplements',
     policyId: policy.id,
     variant: policy.variant,
     fileKey: policy.fileKey,

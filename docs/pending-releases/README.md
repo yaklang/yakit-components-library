@@ -1,12 +1,14 @@
 # Deferred Yakit UI icon changes
 
 The icon changes prepared after `@yakit-libs/yakit-ui-icons@0.2.4` are released
-independently in `@yakit-libs/yakit-ui-icons@0.2.5`, `0.2.6` and `0.2.7`. Version `0.2.6` updates
-Sparkles and LightBulb and adds six Figma Outline icons. Version `0.2.7` adds
-Intention, GanttChart and SquareGanttChart, and migrates 32 Outline/Solid exports
-to English names; see [the breaking name migration](./english-icon-names.md). `@yakit-libs/yakit-ui`
-stays at `0.2.3` on npm. Its current source contains the same icon improvements,
-but its rebuilt output is an impact probe and is not a release artifact.
+independently in icons versions `0.2.5`, `0.2.6`, `0.2.7` and `0.2.8`.
+Version `0.2.6` updates Sparkles and LightBulb and adds six Figma Outline icons.
+Version `0.2.7` adds Intention, GanttChart and SquareGanttChart, and migrates
+32 Outline/Solid exports to English names; see [the breaking name migration](./english-icon-names.md).
+Version `0.2.8` corrects Floating and the three existing Park icons and adds ParkAbove.
+`@yakit-libs/yakit-ui` stays at `0.2.3` on npm. Its current source contains the
+same icon improvements, but its rebuilt output is an impact probe and is not
+a release artifact.
 
 The two deferred Changeset documents in this directory preserve the original UI Changeset bump
 levels and descriptions. They are outside `.changeset` so the icons-only release

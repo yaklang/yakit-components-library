@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { loadingStrokeWidthDefault } from '../../scripts/icon-stroke-width.mjs';
 import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
+import solidRaw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
@@ -27,6 +28,11 @@ describe('current unit-width independent pixel oracle', () => {
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
       const colorfulCorrection = colorfulCorrections.find((item) => item.file === record.afterPath);
+      const layoutUpdate = solidRaw.supplementalComponents.find(
+        (item) =>
+          ['4936:115787', '4936:115788', '4936:115789', '4936:115790'].includes(item.nodeId) &&
+          record.afterPath === `icons/solid/${item.nodeId.replace(':', '-')}.svg`,
+      );
       if (colorfulCorrection) {
         expect(colorfulCorrection.originalSha256).toBe(record.afterSha256);
         expect(createHash('sha256').update(actual).digest('hex')).toBe(colorfulCorrection.sha256);
@@ -42,6 +48,7 @@ describe('current unit-width independent pixel oracle', () => {
       return {
         name: record.sourcePath,
         expected:
+          layoutUpdate?.svg.replaceAll('#353639', 'currentColor') ??
           colorfulCorrection?.svg ??
           (review ? review.serializedSvg : widthOnlyOracle(record.beforeSvg)),
         actual,

@@ -4313,6 +4313,13 @@ export const figmaIconNameCatalog = [
     sourceNodeId: '4936:115788',
     sourceStatus: 'supplement',
   },
+  {
+    exportName: 'ParkAboveSolid',
+    figmaName: 'Solid/Park-above',
+    family: 'solid',
+    sourceNodeId: '46709:8109',
+    sourceStatus: 'supplement',
+  },
 ] as const satisfies readonly IconFigmaNameEntry[];
 
 export const outlineIconNameCatalog = figmaIconNameCatalog.filter(

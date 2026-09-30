@@ -35,6 +35,12 @@ const outlineDesignUpdates = JSON.parse(
     'utf8',
   ),
 ).updates;
+const solidLayoutUpdates = JSON.parse(
+  readFileSync(
+    new URL('../test/fixtures/icons/reference/solid-layout-updates-sep30.json', import.meta.url),
+    'utf8',
+  ),
+).updates;
 const visualWeightReviews = JSON.parse(
   readFileSync(
     new URL('../test/fixtures/icons/reference/visual-weight-v2/reviews.json', import.meta.url),
@@ -164,6 +170,18 @@ export async function checkIconStrokeWidths(root = packageRoot) {
       } catch (error) {
         if (error.code !== 'ENOENT') throw error;
       }
+    }
+    try {
+      const { updates } = JSON.parse(
+        await readFile(
+          path.join(root, 'test/fixtures/icons/reference/solid-layout-updates-sep30.json'),
+          'utf8',
+        ),
+      );
+      for (const { added, nodeId } of updates)
+        if (added) expected.add(`icons/solid/${nodeId.replace(':', '-')}.svg`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
     }
     for (const file of files)
       if (!expected.has(file)) errors.push(`${file}: source is not registered in ${fixturePath}`);
@@ -295,7 +313,14 @@ export async function validateFrozenMigrationInputs(root, frozen, files) {
           .replaceAll('#353639', 'currentColor')
           .replaceAll('stroke-width="2"', 'stroke-width="1"') === current,
     );
-    if (!reviewed && !colorfulReviewed && !designUpdated)
+    const solidLayoutUpdated = solidLayoutUpdates.some(
+      (update) =>
+        file === `icons/solid/${update.nodeId.replace(':', '-')}.svg` &&
+        update.previousLocalSvg &&
+        sha256(update.previousLocalSvg) === record.afterSha256 &&
+        update.svg.replaceAll('#353639', 'currentColor') === current,
+    );
+    if (!reviewed && !colorfulReviewed && !designUpdated && !solidLayoutUpdated)
       throw new Error(`MIGRATION_INPUT_DRIFT: ${file}`);
   }
 }

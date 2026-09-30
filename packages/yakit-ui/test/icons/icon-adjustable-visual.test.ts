@@ -6,10 +6,12 @@ import { chromium } from 'playwright';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
+import { canonicalizeSvg } from '../../scripts/audit-icons.mjs';
 import reviewedCellCapture from '../fixtures/icons/adjustable-stroke/reviewed-cell-capture.json';
 import reviewedRasterExceptions from '../fixtures/icons/adjustable-stroke/reviewed-raster-exceptions.json';
-import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
+import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
+import layoutUpdates from '../fixtures/icons/reference/solid-layout-updates-sep30.json';
 import baseline from '../fixtures/icons/reference/stroke-runtime-prechange-v1/manifest.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
@@ -94,10 +96,10 @@ describe('adjustable icon pre-change runtime baseline', () => {
       // Restore the frozen atlas positions; additions have their own Figma geometry checks.
       await page.evaluate(
         (names) => {
-          for (const cell of document.querySelectorAll('[data-family="outline"]'))
+          for (const cell of document.querySelectorAll('[data-icon-name]'))
             if (names.includes(cell.getAttribute('data-icon-name') ?? '')) cell.remove();
         },
-        [...designUpdates.updates, ...additions.updates]
+        [...designUpdates.updates, ...additions.updates, ...layoutUpdates.updates]
           .filter(({ added }) => added)
           .map(({ exportName }) => exportName),
       );
@@ -312,6 +314,22 @@ describe('adjustable icon pre-change runtime baseline', () => {
       for (const [index, expected] of baseline.records.entries()) {
         if (expected.family === 'outline' && expected.name === 'BugOutlined') continue;
         const identity = `${expected.family}:${expected.name}`;
+        const layoutUpdate =
+          expected.family === 'solid'
+            ? layoutUpdates.updates.find(({ exportName }) => exportName === expected.name)
+            : undefined;
+        if (layoutUpdate) {
+          // The dedicated Solid browser parity suite verifies these refreshed Figma pixels.
+          // Compare drawable content here because createIcon supplies the runtime SVG wrapper.
+          const contents = (svg: string) => svg.replace(/^<svg[^>]*>/, '<svg>');
+          const options = { normalizeForegroundPaint: true, normalizeStrokeWidth: true };
+          expect(
+            canonicalizeSvg(contents(actualRecords[index].serializedSvg), options),
+            identity,
+          ).toBe(canonicalizeSvg(contents(layoutUpdate.svg), options));
+          continue;
+        }
+
         const designUpdate =
           expected.family === 'outline'
             ? designUpdates.updates.find(({ exportName }) => exportName === expected.name)
