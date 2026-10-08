@@ -13,7 +13,7 @@ export interface LoadingProps extends BaseIconProps {
 export type IconProps = LoadingProps;
 
 const LOADING_KEYFRAME = 'yakitIconLoadingSpin_b1a35c158267';
-const DEFAULT_LOADING_STROKE_WIDTH = 1;
+const DEFAULT_LOADING_STROKE_WIDTH = 1.5;
 
 const LoadingSvg = (props: SVGProps<SVGSVGElement>) => (
   <svg

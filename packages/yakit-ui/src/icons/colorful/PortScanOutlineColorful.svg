@@ -4,11 +4,11 @@
 <rect  width="24" height="24" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#icon_46929__mask_0)">
-<path d="M8 4.079C9.176 3.393 10.543 3 12 3C16.418 3 20 6.613 20 11.07C20 11.383 19.994 11.693 19.983 12M19.839 14C19.681 15.465 19.402 16.893 19.01 18.264" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M5.07 7.035C4.389 8.223 4 9.602 4 11.07C4 11.384 3.985 11.694 3.955 12M3.569 14C3.42 14.535 3.225 15.05 2.999 15.521" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M7.969 12C7.989 11.693 8 11.383 8 11.07C8 8.841 9.789 7.035 12 7.035C14.211 7.035 16 8.841 16 11.07C16 11.382 15.993 11.692 15.981 12M15.81 14C15.801 14.066 15.793 14.132 15.784 14.197M7.698 14C7.359 15.533 6.763 16.966 5.861 18.577" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M12 11.07C12 11.382 11.992 11.692 11.976 12M11.766 14C11.374 16.332 10.531 18.508 9.247 20.725M15.17 17.123C14.791 18.474 14.29 19.771 13.679 21" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M1 12H23" stroke="#F28C45" stroke-width="1" stroke-linecap="round"/>
+<path d="M8 4.079C9.176 3.393 10.543 3 12 3C16.418 3 20 6.613 20 11.07C20 11.383 19.994 11.693 19.983 12M19.839 14C19.681 15.465 19.402 16.893 19.01 18.264" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.07 7.035C4.389 8.223 4 9.602 4 11.07C4 11.384 3.985 11.694 3.955 12M3.569 14C3.42 14.535 3.225 15.05 2.999 15.521" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.969 12C7.989 11.693 8 11.383 8 11.07C8 8.841 9.789 7.035 12 7.035C14.211 7.035 16 8.841 16 11.07C16 11.382 15.993 11.692 15.981 12M15.81 14C15.801 14.066 15.793 14.132 15.784 14.197M7.698 14C7.359 15.533 6.763 16.966 5.861 18.577" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 11.07C12 11.382 11.992 11.692 11.976 12M11.766 14C11.374 16.332 10.531 18.508 9.247 20.725M15.17 17.123C14.791 18.474 14.29 19.771 13.679 21" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M1 12H23" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
 </g>
 </g>
 </svg>

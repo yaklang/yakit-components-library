@@ -27,8 +27,12 @@ const assertWidths = (element: Element, name: string) => {
     'path,circle,ellipse,line,polyline,polygon,rect,use,text',
   )) {
     const style = getComputedStyle(drawable);
-    if (style.stroke !== 'none')
-      expect(style.strokeWidth, `${name}: ${drawable.outerHTML}`).toBe('1px');
+    if (style.stroke !== 'none') {
+      // SVGs without a width declaration retain the browser's inherited default.
+      const declaredWidth = drawable.closest('[stroke-width], [style*="stroke-width"]');
+      const expectedWidth = declaredWidth ? '1.5px' : '1px';
+      expect(style.strokeWidth, `${name}: ${drawable.outerHTML}`).toBe(expectedWidth);
+    }
   }
 };
 afterEach(() => {
@@ -38,7 +42,7 @@ afterEach(() => {
 });
 
 describe('default width across every rendered icon', () => {
-  it('renders all 912 family icons, 380 Oldicons and Loading with unit-width strokes', () => {
+  it('renders all 912 family icons, 380 Oldicons and Loading with declared 1.5-width strokes', () => {
     const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
     expect(icons).toHaveLength(1293);
     for (let index = 0; index < icons.length; index += 24) {

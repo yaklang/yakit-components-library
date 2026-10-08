@@ -5,9 +5,9 @@
 </mask>
 <g mask="url(#icon_1_3058__mask_0)">
 <g>
-<path d="M16.9497 12.7071L19.7781 9.87871C21.3402 8.31662 21.3402 5.78396 19.7781 4.22186C18.216 2.65976 15.6834 2.65976 14.1213 4.22186L11.2929 7.05029" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-<path d="M15.5356 8.46448L8.46458 15.5355" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-<path d="M7.05029 11.293L4.22187 14.1214C2.65977 15.6835 2.65977 18.2162 4.22187 19.7783C5.78396 21.3404 8.31662 21.3404 9.87872 19.7783L12.7071 16.9498" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+<path d="M16.9497 12.7071L19.7781 9.87871C21.3402 8.31662 21.3402 5.78396 19.7781 4.22186C18.216 2.65976 15.6834 2.65976 14.1213 4.22186L11.2929 7.05029" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M15.5356 8.46448L8.46458 15.5355" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M7.05029 11.293L4.22187 14.1214C2.65977 15.6835 2.65977 18.2162 4.22187 19.7783C5.78396 21.3404 8.31662 21.3404 9.87872 19.7783L12.7071 16.9498" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
 </g>
 </g>
 </g>

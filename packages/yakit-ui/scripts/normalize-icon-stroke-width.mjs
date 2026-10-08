@@ -187,6 +187,15 @@ export async function checkIconStrokeWidths(root = packageRoot) {
     } catch (error) {
       if (error.code !== 'ENOENT') throw error;
     }
+    const inventoryPath = path.join(root, 'src/icons/oldicon/inventory.json');
+    try {
+      const inventory = JSON.parse(await readFile(inventoryPath, 'utf8'));
+      for (const file of expected)
+        if (file.startsWith('icons/oldicon/assets/')) expected.delete(file);
+      for (const entry of inventory.exports) expected.add(`icons/oldicon/${entry.assetFile}`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
     for (const file of files)
       if (!expected.has(file)) errors.push(`${file}: source is not registered in ${fixturePath}`);
     for (const file of expected)
@@ -199,14 +208,14 @@ export async function checkIconStrokeWidths(root = packageRoot) {
       const source = await readFile(path.join(root, 'src', file), 'utf8');
       normalizeSvgStrokeWidth(source);
       for (const { tag, value } of svgStrokeWidths(source))
-        if (value !== '1') errors.push(`${file}: ${tag} stroke-width=${value}`);
+        if (value !== '1.5') errors.push(`${file}: ${tag} stroke-width=${value}`);
     } catch (error) {
       errors.push(`${file}: ${error.message}`);
     }
   }
   const loading = await readFile(path.join(root, loadingPath), 'utf8');
-  if (loadingStrokeWidthDefault(loading) !== '1')
-    errors.push(`${loadingPath}: expected strokeWidth={1}`);
+  if (loadingStrokeWidthDefault(loading) !== '1.5')
+    errors.push(`${loadingPath}: expected strokeWidth={1.5}`);
   if (errors.length) throw new Error(`ICON_STROKE_WIDTH_INVALID\n${errors.join('\n')}`);
   return { svgFiles: files.length, loading: 1, violations: 0 };
 }
@@ -214,18 +223,19 @@ export async function checkIconStrokeWidths(root = packageRoot) {
 export async function planStrokeWidthMigration(root = packageRoot) {
   const { planOldiconStrokeWidth } = await import('./oldicon-stroke-width.mjs');
   const { planIconStrokeManifests } = await import('./update-icon-stroke-manifests.mjs');
-  const frozen = JSON.parse(await readFile(path.join(root, fixturePath), 'utf8'));
   const files = await svgFiles(path.join(root, 'src'));
-  const fileSet = new Set(files);
   const sourceMap = new Map();
   const changes = new Map();
   const removed = [];
-  await validateFrozenMigrationInputs(root, frozen, fileSet);
-  for (const record of frozen.assets) {
-    const file = fileSet.has(record.sourcePath) ? record.sourcePath : record.afterPath;
-    const current = await readFile(path.join(root, 'src', file), 'utf8');
-    sourceMap.set(file, normalizeSvgStrokeWidth(current));
-  }
+  const frozen = JSON.parse(await readFile(path.join(root, fixturePath), 'utf8'));
+  await validateFrozenMigrationInputs(
+    root,
+    {
+      ...frozen,
+      assets: frozen.assets.filter(({ sourcePath }) => !sourcePath.startsWith('icons/oldicon/')),
+    },
+    files,
+  );
   for (const file of files) {
     if (sourceMap.has(file)) continue;
     const current = await readFile(path.join(root, 'src', file), 'utf8');
@@ -276,7 +286,12 @@ export async function planStrokeWidthMigration(root = packageRoot) {
   if (inventoryText !== (await readFile(path.join(root, inventoryPath), 'utf8')))
     changes.set(inventoryPath, inventoryText);
   const loading = await readFile(path.join(root, loadingPath), 'utf8');
-  const nextLoading = loading.replace('strokeWidth={2}', 'strokeWidth={1}');
+  const nextLoading = loading
+    .replace(/strokeWidth=\{(?:1|2)\}/g, 'strokeWidth={1.5}')
+    .replace(
+      /DEFAULT_LOADING_STROKE_WIDTH = \d+(?:\.\d+)?;/,
+      'DEFAULT_LOADING_STROKE_WIDTH = 1.5;',
+    );
   if (loading !== nextLoading) changes.set(loadingPath, nextLoading);
   for (const [file, text] of await planIconStrokeManifests(root, sourceMap))
     if (text !== (await readFile(path.join(root, file), 'utf8'))) changes.set(file, text);
@@ -287,7 +302,9 @@ export async function validateFrozenMigrationInputs(root, frozen, files) {
   const fileSet = files instanceof Set ? files : new Set(files);
   for (const record of frozen.assets) {
     const file = fileSet.has(record.sourcePath) ? record.sourcePath : record.afterPath;
-    const current = await readFile(path.join(root, 'src', file), 'utf8');
+    const currentSource = await readFile(path.join(root, 'src', file), 'utf8');
+    // Compare the uniform width against unchanged historical width-1 evidence.
+    const current = currentSource.replaceAll('stroke-width="1.5"', 'stroke-width="1"');
     const currentSha256 = sha256(current);
     if ([record.beforeSha256, record.afterSha256].includes(currentSha256)) continue;
     // A later geometry review may replace the exact normalized source pair.

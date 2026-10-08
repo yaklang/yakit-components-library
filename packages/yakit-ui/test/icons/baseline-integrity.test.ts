@@ -36,7 +36,7 @@ const canonicalizeSemanticEraseMask = (source: string, file?: string) => {
   if (!maskId) return source;
   const reference = `mask="url(#${maskId})"`;
   const localErasePath =
-    '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>';
+    '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
   const baselineErasePath =
     '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
   const maskBlock = `<mask id="${maskId}" x="0" y="0" width="24" height="24" maskUnits="userSpaceOnUse" mask-type="luminance">\n<rect width="24" height="24" fill="white"/>\n${localErasePath}\n</mask>`;
@@ -106,7 +106,9 @@ const geometryProjection = (source: string, file?: string) => {
       if (included.has(name))
         attributes.push([
           name,
-          name === 'stroke-width' && value === '1' ? '2' : value.trim().replace(/\s+/g, ' '),
+          name === 'stroke-width' && ['1', '1.5'].includes(value)
+            ? '2'
+            : value.trim().replace(/\s+/g, ' '),
         ]);
       if (
         (name === 'clip-path' || name === 'mask' || name === 'href' || name === 'xlink:href') &&
@@ -142,7 +144,9 @@ describe('Outline pre-change baseline', () => {
       const review = visualWeightReviews.reviews.find((entry) => entry.file === file);
       if (review) {
         expect(review.status, file).toBe('promoted');
-        expect(sha256(source), file).toBe(review.candidateSourceSha256);
+        expect(sha256(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"')), file).toBe(
+          review.candidateSourceSha256,
+        );
         const original = readFileSync(
           resolve(
             packageRoot,

@@ -144,7 +144,7 @@ describe('Solid icon baseline integrity', () => {
       .filter(({ geometrySha256: frozen, localFile }) => currentGeometry(localFile) !== frozen)
       .map(({ nodeId }) => nodeId)
       .sort();
-    expect(changed).toEqual(['2281:144183', ...strokePolicyIds, ...layoutIds].sort());
+    expect(changed).toEqual(['2281:144183', ...layoutIds].sort());
 
     for (const row of prechange.records.filter(
       ({ nodeId }) => nodeId !== '2281:144183' && !strokePolicyIds.includes(nodeId),

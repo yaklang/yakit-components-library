@@ -31,7 +31,7 @@ const expectedSemanticFillFiles = ['1-2231.svg', '14203-193637.svg'];
 const digest = (contents: string | Buffer) => createHash('sha256').update(contents).digest('hex');
 const artifact = Buffer.from('artifact');
 const oldSource = Buffer.from('old source');
-const candidate = Buffer.from('candidate');
+const candidate = Buffer.from('<svg><path d="M4 12H20" stroke="black" stroke-width="1"/></svg>');
 const visualMatrix = Buffer.from('visual matrix');
 
 const validIndependentReview = (file = 'fixture.svg'): JsonRecord => ({
@@ -84,7 +84,7 @@ const validManifest = () => ({
   reviews: [validReview()],
   schemaVersion: 'icon-visual-weight-reviews-v2',
 });
-const validateFixture = (manifest: unknown) =>
+const validateFixture = (manifest: unknown, candidateSource = candidate) =>
   validateVisualWeightReviews(manifest, {
     expectedFiles: ['fixture.svg'],
     readArtifact: (path) => {
@@ -95,7 +95,7 @@ const validateFixture = (manifest: unknown) =>
       }
       return artifact;
     },
-    readCandidate: () => candidate,
+    readCandidate: () => candidateSource,
   });
 const validateFixtureWithIndependentReview = (
   manifest: ReturnType<typeof validManifest>,
@@ -118,6 +118,28 @@ const validateFixtureWithIndependentReview = (
 describe('visual weight review admission', () => {
   it('accepts a complete independently reviewed fixture', () => {
     expect(validateFixture(validManifest())).toHaveLength(1);
+  });
+
+  it('accepts the default-width migration against the immutable width-one review', () => {
+    const migratedCandidate = Buffer.from(
+      candidate.toString('utf8').replace('stroke-width="1"', 'stroke-width="1.5"'),
+    );
+    expect(validateFixture(validManifest(), migratedCandidate)).toHaveLength(1);
+  });
+
+  it.each([
+    ['geometry', 'd="M4 12H20"', 'd="M4 12H21"'],
+    ['unapproved width', 'stroke-width="1"', 'stroke-width="2"'],
+  ])('rejects %s drift after the default-width migration', (_label, before, after) => {
+    const changedCandidate = Buffer.from(
+      candidate
+        .toString('utf8')
+        .replace(before, after)
+        .replace('stroke-width="1"', 'stroke-width="1.5"'),
+    );
+    expect(() => validateFixture(validManifest(), changedCandidate)).toThrow(
+      /ICON_VISUAL_WEIGHT_CANDIDATE_SOURCE_DRIFT/,
+    );
   });
 
   it('rejects a review with missing evidence', () => {
@@ -321,7 +343,7 @@ describe('promoted visual weight sources', () => {
           if (value !== undefined) return value;
         }
       };
-      expect(inherited('stroke-width')).toBe('1');
+      expect(inherited('stroke-width')).toBe('1.5');
       expect(inherited('stroke')).toBeTruthy();
     }
   });
@@ -344,7 +366,7 @@ describe('promoted visual weight sources', () => {
         strokeWidth ??= current.attributes.get('stroke-width');
         insideDefinition ||= ['clipPath', 'mask'].includes(current.name);
       }
-      if (stroke) expect(strokeWidth).toBe('1');
+      if (stroke) expect(strokeWidth).toBe('1.5');
       else {
         expect(insideDefinition).toBe(true);
         expect(node.attributes.get('d')).toBeTruthy();

@@ -53,7 +53,7 @@ describe('adjustable icon runtime stroke contract', () => {
         const icon = container.querySelector(`[data-icon-name="${name}"]`)!;
         const widths = computedWidths(icon);
         expect(widths.length, name).toBeGreaterThan(0);
-        expect(new Set(widths), name).toEqual(new Set([`${strokeWidth ?? 1}px`]));
+        expect(new Set(widths), name).toEqual(new Set([`${strokeWidth ?? 1.5}px`]));
       }
     },
   );
@@ -68,7 +68,7 @@ describe('adjustable icon runtime stroke contract', () => {
     expect(new Set(computedWidths(container))).toEqual(new Set(['3px']));
 
     flushSync(() => root.render(<HomeOutlined />));
-    expect(new Set(computedWidths(container))).toEqual(new Set(['1px']));
+    expect(new Set(computedWidths(container))).toEqual(new Set(['1.5px']));
   });
 
   it('keeps two adjustable instances isolated', () => {
@@ -104,8 +104,8 @@ describe('adjustable icon runtime stroke contract', () => {
           (element) => getComputedStyle(element).strokeWidth,
         );
         expect(definition.length).toBeGreaterThan(0);
-        expect(new Set(visible)).toEqual(new Set([`${strokeWidth ?? 1}px`]));
-        expect(new Set(definition)).toEqual(new Set([`${strokeWidth ?? 1}px`]));
+        expect(new Set(visible)).toEqual(new Set([`${strokeWidth ?? 1.5}px`]));
+        expect(new Set(definition)).toEqual(new Set([`${strokeWidth ?? 1.5}px`]));
       }
     },
   );
@@ -138,7 +138,7 @@ describe('adjustable icon runtime stroke contract', () => {
         const icon = container.querySelector(`[data-icon-name="${exportName}"]`)!;
         const widths = computedWidths(icon);
         expect(widths.length, exportName).toBeGreaterThan(0);
-        expect(new Set(widths), exportName).toEqual(new Set([`${strokeWidth ?? 1}px`]));
+        expect(new Set(widths), exportName).toEqual(new Set([`${strokeWidth ?? 1.5}px`]));
       }
     },
   );

@@ -4,21 +4,21 @@
 <rect  width="24" height="24" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#icon_921761__mask_0)">
-<path  d="M6.33963 4.26816L11 1.57722C11.6188 1.21995 12.3811 1.21995 13 1.57722L17.9224 4.41954" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M20.6601 9.91943V14.8458C20.66 15.5602 20.2789 16.2204 19.6601 16.5772L15.1341 19.1907" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M9.1951 19.3808L4.33975 16.5772C3.72094 16.2204 3.33982 15.5602 3.33975 14.8458V9.92028" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M11.5 6.28868C11.8094 6.11004 12.1906 6.11004 12.5 6.28868L15.8301 8.21132C16.1395 8.38996 16.3301 8.72008 16.3301 9.07735V12.9226C16.3301 13.2799 16.1395 13.61 15.8301 13.7887L12.5 15.7113C12.1906 15.89 11.8094 15.89 11.5 15.7113L8.16987 13.7887C7.86047 13.61 7.66987 13.2799 7.66987 12.9226V9.07735C7.66987 8.72008 7.86047 8.38996 8.16987 8.21132L11.5 6.28868Z" stroke="#F28C45" stroke-width="1" stroke-linejoin="round"/>
+<path  d="M6.33963 4.26816L11 1.57722C11.6188 1.21995 12.3811 1.21995 13 1.57722L17.9224 4.41954" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M20.6601 9.91943V14.8458C20.66 15.5602 20.2789 16.2204 19.6601 16.5772L15.1341 19.1907" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M9.1951 19.3808L4.33975 16.5772C3.72094 16.2204 3.33982 15.5602 3.33975 14.8458V9.92028" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M11.5 6.28868C11.8094 6.11004 12.1906 6.11004 12.5 6.28868L15.8301 8.21132C16.1395 8.38996 16.3301 8.72008 16.3301 9.07735V12.9226C16.3301 13.2799 16.1395 13.61 15.8301 13.7887L12.5 15.7113C12.1906 15.89 11.8094 15.89 11.5 15.7113L8.16987 13.7887C7.86047 13.61 7.66987 13.2799 7.66987 12.9226V9.07735C7.66987 8.72008 7.86047 8.38996 8.16987 8.21132L11.5 6.28868Z" stroke="#F28C45" stroke-width="1.5" stroke-linejoin="round"/>
 <g >
-<path  d="M12.2859 20.8612L12.2106 11.5982" stroke="#353639" stroke-width="1" stroke-linecap="round"/>
-<circle  cx="12.2189" cy="20.9773" r="1.5" transform="rotate(120 12.2189 20.9773)" fill="var(--Colors-Use-Basic-White, #FFFFFF)" stroke="#F28C45" stroke-width="1"/>
+<path  d="M12.2859 20.8612L12.2106 11.5982" stroke="#353639" stroke-width="1.5" stroke-linecap="round"/>
+<circle  cx="12.2189" cy="20.9773" r="1.5" transform="rotate(120 12.2189 20.9773)" fill="var(--Colors-Use-Basic-White, #FFFFFF)" stroke="#F28C45" stroke-width="1.5"/>
 </g>
 <g >
-<path  d="M3.84808 6.64703L12 11.2656" stroke="#353639" stroke-width="1" stroke-linecap="round"/>
-<circle  cx="3.78107" cy="6.53099" r="1.5" transform="rotate(-120 3.78107 6.53099)" fill="var(--Colors-Use-Basic-White, #FFFFFF)" stroke="#F28C45" stroke-width="1"/>
+<path  d="M3.84808 6.64703L12 11.2656" stroke="#353639" stroke-width="1.5" stroke-linecap="round"/>
+<circle  cx="3.78107" cy="6.53099" r="1.5" transform="rotate(-120 3.78107 6.53099)" fill="var(--Colors-Use-Basic-White, #FFFFFF)" stroke="#F28C45" stroke-width="1.5"/>
 </g>
 <g >
-<path  d="M20.5 6.50001L12.3956 11.2673" stroke="#353639" stroke-width="1" stroke-linecap="round"/>
-<circle  cx="20.634" cy="6.5" r="1.5" fill="var(--Colors-Use-Basic-White, #FFFFFF)" stroke="#F28C45" stroke-width="1"/>
+<path  d="M20.5 6.50001L12.3956 11.2673" stroke="#353639" stroke-width="1.5" stroke-linecap="round"/>
+<circle  cx="20.634" cy="6.5" r="1.5" fill="var(--Colors-Use-Basic-White, #FFFFFF)" stroke="#F28C45" stroke-width="1.5"/>
 </g>
 </g>
 </g>

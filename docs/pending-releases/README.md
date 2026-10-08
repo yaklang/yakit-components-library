@@ -1,11 +1,12 @@
 # Deferred Yakit UI icon changes
 
 The icon changes prepared after `@yakit-libs/yakit-ui-icons@0.2.4` are released
-independently in icons versions `0.2.5`, `0.2.6`, `0.2.7` and `0.2.8`.
+independently in icons versions `0.2.5`, `0.2.6`, `0.2.7` `0.2.8` and `0.2.9`.
 Version `0.2.6` updates Sparkles and LightBulb and adds six Figma Outline icons.
 Version `0.2.7` adds Intention, GanttChart and SquareGanttChart, and migrates
 32 Outline/Solid exports to English names; see [the breaking name migration](./english-icon-names.md).
 Version `0.2.8` corrects Floating and the three existing Park icons and adds ParkAbove.
+Version `0.2.9` unifies icon strokes to 1.5 and corrects legacy Outline/view-grid.
 `@yakit-libs/yakit-ui` stays at `0.2.3` on npm. Its current source contains the
 same icon improvements, but its rebuilt output is an impact probe and is not
 a release artifact.

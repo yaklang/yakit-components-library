@@ -4,10 +4,10 @@
 <rect  width="24" height="24" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#icon_861761__mask_0)">
-<rect  x="4" y="3" width="16" height="18" rx="2" stroke="#353639" stroke-width="1"/>
-<path  d="M8 3V10.8382C8 10.9125 8.07823 10.9609 8.14472 10.9276L9.95528 10.0224C9.98343 10.0083 10.0166 10.0083 10.0447 10.0224L11.8553 10.9276C11.9218 10.9609 12 10.9125 12 10.8382V3" stroke="#F28C45" stroke-width="1" stroke-linecap="square"/>
-<path  d="M4 19C4 17.8954 4.89543 17 6 17H20V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19Z" stroke="#353639" stroke-width="1"/>
-<rect  x="4" y="3" width="16" height="18" rx="2" stroke="#353639" stroke-width="1"/>
+<rect  x="4" y="3" width="16" height="18" rx="2" stroke="#353639" stroke-width="1.5"/>
+<path  d="M8 3V10.8382C8 10.9125 8.07823 10.9609 8.14472 10.9276L9.95528 10.0224C9.98343 10.0083 10.0166 10.0083 10.0447 10.0224L11.8553 10.9276C11.9218 10.9609 12 10.9125 12 10.8382V3" stroke="#F28C45" stroke-width="1.5" stroke-linecap="square"/>
+<path  d="M4 19C4 17.8954 4.89543 17 6 17H20V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19Z" stroke="#353639" stroke-width="1.5"/>
+<rect  x="4" y="3" width="16" height="18" rx="2" stroke="#353639" stroke-width="1.5"/>
 </g>
 </g>
 </svg>

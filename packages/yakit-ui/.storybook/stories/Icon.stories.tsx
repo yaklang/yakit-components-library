@@ -448,7 +448,7 @@ export const Cursor: Story = {
 
 const StrokeWidthGallery = ({ strokeWidth }: { strokeWidth: number }) => (
   <section style={{ display: 'grid', gap: 16 }}>
-    <p>描边宽度：{strokeWidth}。可调 Outline 与 Loading 默认宽度为 1；0 隐藏描边。</p>
+    <p>描边宽度：{strokeWidth}。可调 Outline 与 Loading 默认宽度为 1.5；0 隐藏描边。</p>
     <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
       {[BugOutlined, HomeOutlined, StarOffOutlined, Loading].map((Icon) => (
         <div key={Icon.displayName} style={{ display: 'grid', justifyItems: 'center', gap: 8 }}>
@@ -463,7 +463,7 @@ const StrokeWidthGallery = ({ strokeWidth }: { strokeWidth: number }) => (
 
 export const StrokeWidth: StoryObj<typeof StrokeWidthGallery> = {
   name: '描边宽度',
-  args: { strokeWidth: 1 },
+  args: { strokeWidth: 1.5 },
   argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
   render: (args) => <StrokeWidthGallery {...args} />,
 };
@@ -561,7 +561,7 @@ const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
 
 export const VisualWeight: StoryObj<typeof VisualWeightGallery> = {
   name: '线条粗细对照',
-  args: { strokeWidth: 1 },
+  args: { strokeWidth: 1.5 },
   argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
   render: (args) => <VisualWeightGallery {...args} />,
 };

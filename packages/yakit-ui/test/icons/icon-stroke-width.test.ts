@@ -37,6 +37,11 @@ import before from '../fixtures/icons/stroke-width-1/before.json';
 const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrections];
 
 const packageRoot = process.cwd();
+const oldInventory = JSON.parse(
+  readFileSync(resolve(packageRoot, 'src/icons/oldicon/inventory.json'), 'utf8'),
+);
+const historicalWidth = (source: string) =>
+  source.replaceAll('stroke-width="1.5"', 'stroke-width="1"');
 const digest = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
 
 const createCheckRoot = () => {
@@ -45,11 +50,11 @@ const createCheckRoot = () => {
   mkdirSync(resolve(root, 'test/fixtures/icons/stroke-width-1'), { recursive: true });
   writeFileSync(
     resolve(root, 'src/icons/example.svg'),
-    '<svg><path stroke="currentColor" stroke-width="1"/></svg>',
+    '<svg><path stroke="currentColor" stroke-width="1.5"/></svg>',
   );
   writeFileSync(
     resolve(root, 'src/icons/loading/index.tsx'),
-    'export const Loading = () => <path d="M0 0" strokeWidth={1} />;\n',
+    'export const Loading = () => <path d="M0 0" strokeWidth={1.5} />;\n',
   );
   writeFileSync(
     resolve(root, 'test/fixtures/icons/stroke-width-1/before.json'),
@@ -63,10 +68,10 @@ describe('source stroke-width policy', () => {
     const source =
       '<svg viewBox="0 0 24 24"><g stroke="red" stroke-width="2"><path d="M1.5 2h3" style="stroke-width: 0.5;fill:none"/><defs><mask id="erase"><path stroke="black" stroke-width="4"/></mask></defs></g></svg>';
     const expected =
-      '<svg viewBox="0 0 24 24"><g stroke="red" stroke-width="1"><path d="M1.5 2h3" style="stroke-width: 1;fill:none"/><defs><mask id="erase"><path stroke="black" stroke-width="1"/></mask></defs></g></svg>';
+      '<svg viewBox="0 0 24 24"><g stroke="red" stroke-width="1.5"><path d="M1.5 2h3" style="stroke-width: 1.5;fill:none"/><defs><mask id="erase"><path stroke="black" stroke-width="1.5"/></mask></defs></g></svg>';
     expect(normalizeSvgStrokeWidth(source)).toBe(expected);
     expect(normalizeSvgStrokeWidth(expected)).toBe(expected);
-    expect(svgStrokeWidths(expected).map(({ value }) => value)).toEqual(['1', '1', '1']);
+    expect(svgStrokeWidths(expected).map(({ value }) => value)).toEqual(['1.5', '1.5', '1.5']);
   });
 
   it('keeps fill-only artwork, default widths, IDs and literal text intact', () => {
@@ -78,7 +83,7 @@ describe('source stroke-width policy', () => {
   it('preserves quoting and supports quoted greater-than attributes', () => {
     expect(
       normalizeSvgStrokeWidth('<svg data-label="a > b"><path stroke-width=\'2\'/></svg>'),
-    ).toBe('<svg data-label="a > b"><path stroke-width=\'1\'/></svg>');
+    ).toBe('<svg data-label="a > b"><path stroke-width=\'1.5\'/></svg>');
   });
 
   it.each(['0', '-1', '1px', '20%', 'inherit', 'var(--width)', 'calc(1 + 1)', 'NaN'])(
@@ -104,7 +109,14 @@ describe('all production icon migration contracts', () => {
       expect(digest(record.beforeSvg), record.sourcePath).toBe(record.beforeSha256);
       // Independent oracle: this is intentionally not the production transformer.
       const expected = record.beforeSvg.replace(/stroke-width=(['"])[^'"]+\1/g, 'stroke-width="1"');
-      const actual = readFileSync(resolve(packageRoot, 'src', record.afterPath), 'utf8');
+      const legacy = record.afterPath.startsWith('icons/oldicon/');
+      const assetHash = digest(
+        record.beforeSvg.replace(/stroke-width=(['"])[^'"]+\1/g, 'stroke-width="1.5"'),
+      );
+      const currentPath = legacy ? `icons/oldicon/assets/${assetHash}.svg` : record.afterPath;
+      const actual = historicalWidth(
+        readFileSync(resolve(packageRoot, 'src', currentPath), 'utf8'),
+      );
       const review = visualWeightReviews.reviews.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
@@ -158,7 +170,14 @@ describe('all production icon migration contracts', () => {
       before.assets.map(({ sourcePath, afterPath }) => [sourcePath, afterPath]),
     );
     const expected = [
-      ...before.sourceInventory.map((file) => migrated.get(file) ?? file),
+      ...before.sourceInventory
+        .map((file) => migrated.get(file) ?? file)
+        .filter((file) => !file.startsWith('icons/oldicon/assets/')),
+      ...new Set<string>(
+        oldInventory.exports.map(
+          (entry: { assetFile: string }) => `icons/oldicon/${entry.assetFile}`,
+        ),
+      ),
       ...[...designUpdates.updates, ...additions.updates, ...additionsSep30.updates]
         .filter(({ added }) => added)
         .map(({ file }) => `icons/outline/${file}`),
@@ -262,7 +281,7 @@ describe('stroke-width migration CLI safety', () => {
 
   it.each([
     ['attribute', '<svg><path stroke-width="2"/></svg>', /stroke-width=2/],
-    ['inline style', '<svg><path style="stroke-width: 1.5"/></svg>', /stroke-width=1\.5/],
+    ['inline style', '<svg><path style="stroke-width: 2.5"/></svg>', /stroke-width=2\.5/],
   ])('locates an invalid %s declaration', async (_label, source, diagnostic) => {
     const root = createCheckRoot();
     try {
@@ -285,7 +304,7 @@ describe('stroke-width migration CLI safety', () => {
         '<svg><path stroke-width="1"/></svg>',
       );
       await expect(checkIconStrokeWidths(root)).rejects.toThrow(
-        /unregistered\.svg: source is not registered[\s\S]*expected strokeWidth=\{1\}/,
+        /unregistered\.svg: source is not registered[\s\S]*expected strokeWidth=\{1\.5\}/,
       );
     } finally {
       rmSync(root, { force: true, recursive: true });
@@ -307,7 +326,9 @@ describe('stroke-width migration CLI safety', () => {
     async (sourcePath) => {
       const root = mkdtempSync(join(tmpdir(), 'icon-stroke-reviewed-'));
       const record = before.assets.find((item) => item.sourcePath === sourcePath)!;
-      const current = readFileSync(resolve(packageRoot, 'src', sourcePath), 'utf8');
+      const current = historicalWidth(
+        readFileSync(resolve(packageRoot, 'src', sourcePath), 'utf8'),
+      );
       try {
         mkdirSync(dirname(resolve(root, 'src', sourcePath)), { recursive: true });
         writeFileSync(resolve(root, 'src', sourcePath), current);

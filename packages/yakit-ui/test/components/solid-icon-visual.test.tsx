@@ -98,7 +98,7 @@ const figmaSourceForColor = (source: string, color: string, nodeId: string) => {
   if (!strokePolicyNodeIds.has(nodeId)) return colored;
   return colored.replace(
     /\bstroke-width=(['"])(?:\d+(?:\.\d*)?|\.\d+)\1/g,
-    (_attribute, quote: string) => `stroke-width=${quote}1${quote}`,
+    (_attribute, quote: string) => `stroke-width=${quote}1.5${quote}`,
   );
 };
 
@@ -213,7 +213,7 @@ describe('Solid stroke-width-1 Figma pixel parity', () => {
       const expectedSource = figmaSourceForColor(figmaSource!, color, nodeId);
       if (strokePolicyNodeIds.has(nodeId)) {
         expect(figmaSource, nodeId).toContain('stroke-width="1.5"');
-        expect(expectedSource, nodeId).toContain('stroke-width="1"');
+        expect(expectedSource, nodeId).toContain('stroke-width="1.5"');
         expect(expectedSource, nodeId).not.toContain('stroke-width="4"');
       }
       const metric = compare(

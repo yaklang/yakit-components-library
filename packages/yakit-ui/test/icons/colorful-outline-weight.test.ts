@@ -31,13 +31,17 @@ describe('colorful outline visual weight corrections', () => {
         resolve(import.meta.dirname, '../../src', correction.file),
         'utf8',
       );
-      expect(source, correction.name).toBe(correction.svg);
-      expect(digest(source)).toBe(correction.sha256);
+      expect(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"'), correction.name).toBe(
+        correction.svg,
+      );
+      expect(digest(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"'))).toBe(
+        correction.sha256,
+      );
       expect(digest(correction.originalSvg)).toBe(correction.originalSha256);
     }
   });
 
-  it('renders unit-width contours and keeps the DNS glyph counter open', async () => {
+  it('renders 1.5-width contours and keeps the DNS glyph counter open', async () => {
     const browser = await chromium.launch({ headless: true });
     try {
       const page = await browser.newPage();
@@ -79,7 +83,7 @@ describe('colorful outline visual weight corrections', () => {
         if (name.startsWith('original:')) {
           expect(thickness, name).toBeGreaterThan(name === 'original:DnsLog' ? 0.1 : 1.4);
         } else {
-          expect(thickness, name).toBeCloseTo(name === 'DnsLog' ? 0 : 1, 1);
+          expect(thickness, name).toBeCloseTo(name === 'DnsLog' ? 0 : 1.5, 1);
         }
       }
     } finally {

@@ -13,7 +13,7 @@ const packageRoot = resolve(import.meta.dirname, '../..');
 const fixtureRoot = resolve(packageRoot, 'test/fixtures/icons/reference/visual-weight-v2');
 
 describe('reconstructed Outline geometry', () => {
-  it('recomputes old-contour equivalence and default thickness for every reviewed icon', async () => {
+  it('recomputes old-contour equivalence and reviewed width-one thickness for every reviewed icon', async () => {
     const browser = await launchGeometryBrowser(reviews.reviews[0].renderer);
     try {
       const page = await browser.newPage({ deviceScaleFactor: 1 });
@@ -73,9 +73,16 @@ describe('reconstructed Outline geometry', () => {
           expect(hash(resolve(fixtureRoot, review.oldEvidence.path))).toBe(
             topologyObservation.oldSourceSha256,
           );
-          expect(hash(resolve(packageRoot, 'src/icons/outline', review.file))).toBe(
-            topologyObservation.candidateSourceSha256,
-          );
+          expect(
+            createHash('sha256')
+              .update(
+                readFileSync(
+                  resolve(packageRoot, 'src/icons/outline', review.file),
+                  'utf8',
+                ).replaceAll('stroke-width="1.5"', 'stroke-width="1"'),
+              )
+              .digest('hex'),
+          ).toBe(topologyObservation.candidateSourceSha256);
           expect(topologyObservation.evidence.bundled.metrics.oldTopology).toEqual(
             topologyObservation.oldTopology,
           );
@@ -90,9 +97,10 @@ describe('reconstructed Outline geometry', () => {
         expect(measured.rebuiltTopology, `${review.file}: rebuilt topology`).toEqual(
           review.topologyAtOldWidth,
         );
-        expect(measured.widths['1'].topology, `${review.file}: default topology`).toEqual(
-          review.topologyAtDefault,
-        );
+        expect(
+          measured.widths['1'].topology,
+          `${review.file}: reviewed width-one topology`,
+        ).toEqual(review.topologyAtDefault);
         for (const sample of measured.thickness) {
           expect(
             Math.abs(sample.actual - sample.expected),

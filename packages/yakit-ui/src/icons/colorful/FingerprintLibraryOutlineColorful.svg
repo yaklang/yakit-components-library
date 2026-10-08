@@ -5,11 +5,11 @@
 <rect  width="24" height="24" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#icon_3805162408__mask_0)">
-<path  d="M23 9L12 1L1 9" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M4 11V19C4 20.1046 4.89543 21 6 21H12M20 10V12" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M4 11C4 10.4477 4.44772 10 5 10H8V14H4V11Z" stroke="#F28C45" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M4 14H8V17C8 17.5523 7.55228 18 7 18H5C4.44772 18 4 17.5523 4 17V14Z" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M8 10H11C11.5523 10 12 10.4477 12 11V13C12 13.5523 11.5523 14 11 14H8V10Z" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M23 9L12 1L1 9" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M4 11V19C4 20.1046 4.89543 21 6 21H12M20 10V12" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M4 11C4 10.4477 4.44772 10 5 10H8V14H4V11Z" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M4 14H8V17C8 17.5523 7.55228 18 7 18H5C4.44772 18 4 17.5523 4 17V14Z" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M8 10H11C11.5523 10 12 10.4477 12 11V13C12 13.5523 11.5523 14 11 14H8V10Z" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 <g  clip-path="url(#icon_3805162408__clip_0)">
 <g >

@@ -23,7 +23,7 @@ describe('September 22 outline additions', () => {
     expect(source).toBe(
       icon.svg
         .replaceAll('#353639', 'currentColor')
-        .replaceAll('stroke-width="2"', 'stroke-width="1"'),
+        .replaceAll('stroke-width="2"', 'stroke-width="1.5"'),
     );
     const entry = outlineIconRegistry.find(({ sourceNodeId }) => sourceNodeId === icon.nodeId);
     expect(entry).toMatchObject({
@@ -41,7 +41,7 @@ describe('September 22 outline additions', () => {
       const markup = renderToStaticMarkup(createElement(Component, { svgProps: { strokeWidth } }));
       const widths = [...markup.matchAll(/stroke-width="([^"]*)"/g)].map((match) => match[1]);
       expect(widths.length).toBeGreaterThan(0);
-      expect(new Set(widths)).toEqual(new Set([String(strokeWidth ?? 1)]));
+      expect(new Set(widths)).toEqual(new Set([String(strokeWidth ?? 1.5)]));
       expect(markup).toContain('stroke="currentColor"');
     }
   });

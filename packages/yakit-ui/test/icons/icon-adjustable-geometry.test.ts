@@ -22,7 +22,9 @@ describe('BugOutlined adjustable geometry', () => {
     expect(sha256(read(resolve(fixtureRoot, 'bug-reviewed-width-2.svg')))).toBe(
       review.artifacts.reviewedWidth2SvgSha256,
     );
-    expect(sha256(read(sourcePath))).toBe(review.artifacts.productionSvgSha256);
+    expect(sha256(read(sourcePath).replaceAll('stroke-width="1.5"', 'stroke-width="1"'))).toBe(
+      review.artifacts.productionSvgSha256,
+    );
     expect(review.width2VersusOriginal).toMatchObject({
       passed: true,
       iou: expect.any(Number),
@@ -44,9 +46,9 @@ describe('BugOutlined adjustable geometry', () => {
     const source = read(sourcePath);
     const reviewedWidth2 = read(resolve(fixtureRoot, 'bug-reviewed-width-2.svg'));
 
-    expect(source.replace('stroke-width="1"', 'stroke-width="2"')).toBe(reviewedWidth2);
+    expect(source.replace('stroke-width="1.5"', 'stroke-width="2"')).toBe(reviewedWidth2);
     expect(source.match(/<path\b/g)).toHaveLength(1);
-    expect(source).toContain('fill="none" stroke="currentColor" stroke-width="1"');
+    expect(source).toContain('fill="none" stroke="currentColor" stroke-width="1.5"');
     expect(source).toContain('stroke-linecap="round" stroke-linejoin="round"');
     expect(source).not.toContain('<mask');
     expect(source).toContain('M2 13H5M19 13H22');
@@ -138,7 +140,7 @@ describe('BugOutlined adjustable geometry', () => {
           const variants: Record<string, ReturnType<typeof ink>> = {};
           for (const width of widths) {
             variants[String(width)] = ink(
-              await raster(production.replace('stroke-width="1"', `stroke-width="${width}"`)),
+              await raster(production.replace('stroke-width="1.5"', `stroke-width="${width}"`)),
             );
           }
           const width2 = variants['2'];

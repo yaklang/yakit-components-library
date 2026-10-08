@@ -403,10 +403,27 @@ async function collect() {
   }
   assignExportNames(entries);
 
+  // The legacy export uses the reviewed Figma Outline/view-grid artwork.
+  const viewGridSource = normalizeSvgStrokeWidth(
+    await readFile(
+      join(repositoryRoot, "packages/yakit-ui/src/icons/outline/1-2355.svg"),
+      "utf8",
+    ),
+  );
   const assets = new Map();
   const fragmentOwners = new Map();
   for (const entry of entries) {
-    const assetSource = preparedByRaw.get(entry.sourceSvgSha256).assetSource;
+    const assetSource =
+      entry.exportName === "OutlineViewGridIcon"
+        ? viewGridSource
+        : preparedByRaw.get(entry.sourceSvgSha256).assetSource;
+    if (entry.exportName === "OutlineViewGridIcon") {
+      entry.artworkSha256 = sha256(assetSource);
+      entry.assetSha256 = entry.artworkSha256;
+      entry.assetFile = `assets/${entry.artworkSha256}.svg`;
+      entry.dimensions = dimensionsFromSvg(assetSource);
+      entry.paintValues = ["currentColor"];
+    }
     const existingAsset = assets.get(entry.assetFile);
     if (existingAsset && existingAsset !== assetSource)
       fail("ASSET_HASH_COLLISION", entry.assetFile);
@@ -479,7 +496,7 @@ async function collect() {
       orphanReferences: "remove-without-guess-pairing",
       strokeWidth: {
         strategy: "local-uniform-stroke-v1",
-        value: "1",
+        value: "1.5",
       },
     },
     hashSemantics: {

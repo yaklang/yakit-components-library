@@ -18,12 +18,15 @@ const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrec
 const root = process.cwd();
 const reportRoot = resolve(root, 'test-results/icons/stroke-width-1');
 const widthOnlyOracle = (source: string) =>
-  source.replace(/stroke-width=(['"])[^'"]+\1/g, 'stroke-width="1"');
+  source.replace(/stroke-width=(['"])[^'"]+\1/g, 'stroke-width="1.5"');
 
-describe('current unit-width independent pixel oracle', () => {
+describe('current 1.5-width independent pixel oracle', () => {
   it('matches every changed SVG and Loading exactly, including risk samples at multiple sizes', async () => {
     const records = before.assets.map((record) => {
-      const actual = readFileSync(resolve(root, 'src', record.afterPath), 'utf8');
+      const currentPath = record.afterPath.startsWith('icons/oldicon/assets/')
+        ? `icons/oldicon/assets/${createHash('sha256').update(widthOnlyOracle(record.beforeSvg)).digest('hex')}.svg`
+        : record.afterPath;
+      const actual = readFileSync(resolve(root, 'src', currentPath), 'utf8');
       const review = visualWeightReviews.reviews.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
@@ -35,29 +38,36 @@ describe('current unit-width independent pixel oracle', () => {
       );
       if (colorfulCorrection) {
         expect(colorfulCorrection.originalSha256).toBe(record.afterSha256);
-        expect(createHash('sha256').update(actual).digest('hex')).toBe(colorfulCorrection.sha256);
+        expect(
+          createHash('sha256')
+            .update(actual.replaceAll('stroke-width="1.5"', 'stroke-width="1"'))
+            .digest('hex'),
+        ).toBe(colorfulCorrection.sha256);
       }
       if (review) {
         expect(review.status).toBe('promoted');
         expect(review.reviewVerdict).toBe('pass');
         expect(review.oldSourceSha256).toBe(record.afterSha256);
-        expect(createHash('sha256').update(actual).digest('hex')).toBe(
-          review.candidateSourceSha256,
-        );
+        expect(
+          createHash('sha256')
+            .update(actual.replaceAll('stroke-width="1.5"', 'stroke-width="1"'))
+            .digest('hex'),
+        ).toBe(review.candidateSourceSha256);
       }
       return {
         name: record.sourcePath,
-        expected:
+        expected: widthOnlyOracle(
           layoutUpdate?.svg.replaceAll('#353639', 'currentColor') ??
-          colorfulCorrection?.svg ??
-          (review ? review.serializedSvg : widthOnlyOracle(record.beforeSvg)),
+            colorfulCorrection?.svg ??
+            (review ? review.serializedSvg : record.beforeSvg),
+        ),
         actual,
         original: record.beforeSvg,
       };
     });
     const loadingSource = readFileSync(resolve(root, 'src/icons/loading/index.tsx'), 'utf8');
     const loadingWidth = loadingStrokeWidthDefault(loadingSource);
-    expect(loadingWidth).toBe('1');
+    expect(loadingWidth).toBe('1.5');
     const loadingD = /d="([^"]+)"/.exec(loadingSource)?.[1];
     records.push({
       name: 'icons/loading/index.tsx',
@@ -170,7 +180,7 @@ describe('current unit-width independent pixel oracle', () => {
           const pixels: Uint8ClampedArray[] = [];
           for (const [label, source] of [
             ['Before', record.original],
-            ['Width 1', record.actual],
+            ['Width 1.5', record.actual],
           ]) {
             const holder = document.createElement('div');
             holder.setAttribute(

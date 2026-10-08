@@ -109,11 +109,11 @@ describe('Oldicon stroke-width migration plan', () => {
     });
     expect(result.inventory.generationPolicy.strokeWidth).toEqual({
       strategy: 'local-uniform-stroke-v1',
-      value: '1',
+      value: '1.5',
     });
     for (const [newAssetFile, source] of result.assets) {
       expect(newAssetFile).toBe(assetFile(source));
-      expect(source).toContain('stroke-width="1"');
+      expect(source).toContain('stroke-width="1.5"');
     }
   });
 

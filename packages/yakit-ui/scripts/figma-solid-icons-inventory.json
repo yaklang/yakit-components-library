@@ -9,7 +9,7 @@
   "frameNodeId": "46824:1931",
   "strokeWidthPolicy": {
     "strategy": "local-uniform-stroke-v1",
-    "value": "1"
+    "value": "1.5"
   },
   "policyDigestAlgorithmVersion": "policy-digest-canonical-json-v1",
   "idHygieneAlgorithmVersion": "solid-id-hygiene-v1",
@@ -4917,15 +4917,15 @@
       "exportName": "ImportSolid",
       "scopeRole": "target",
       "figmaRawSvgSha256": "4f46bb283c4ebaf041e0780842282fecf9221ee299dcbfcbd40704684ba9124f",
-      "localRawSvgSha256": "85e51fd5caea8c822bec7f3b1390a29d7c103bc0969ef57389fca3b964922946",
-      "figmaNormalizedAstSha256": "38ddbffebde28dee3d33f5babdea9276fe5dff7b43130039dcfc635e9614e93e",
-      "localNormalizedAstSha256": "38ddbffebde28dee3d33f5babdea9276fe5dff7b43130039dcfc635e9614e93e",
-      "normalizedAstSha256": "38ddbffebde28dee3d33f5babdea9276fe5dff7b43130039dcfc635e9614e93e",
-      "figmaGeometrySha256": "b8b539f21fb6f3206b830534053f672f78c9bbe2cfae43b10bed77337986d814",
-      "localGeometrySha256": "b8b539f21fb6f3206b830534053f672f78c9bbe2cfae43b10bed77337986d814",
-      "geometrySha256": "b8b539f21fb6f3206b830534053f672f78c9bbe2cfae43b10bed77337986d814",
-      "figmaPaintSemanticsSha256": "211cf800b9920b546f2abce85bb8f719a2629ba5c50a24a4e916805815025f8c",
-      "localPaintSemanticsSha256": "211cf800b9920b546f2abce85bb8f719a2629ba5c50a24a4e916805815025f8c",
+      "localRawSvgSha256": "0d5f8b67528dce1d488ecf37c559c474dbdbde97e882f8d95b8dc3acf18feedf",
+      "figmaNormalizedAstSha256": "5fafe36e2b4b45da0f20a256d79315e0b0310fddd3fa43b7bd595b1443fe25cc",
+      "localNormalizedAstSha256": "5fafe36e2b4b45da0f20a256d79315e0b0310fddd3fa43b7bd595b1443fe25cc",
+      "normalizedAstSha256": "5fafe36e2b4b45da0f20a256d79315e0b0310fddd3fa43b7bd595b1443fe25cc",
+      "figmaGeometrySha256": "05ebc71aed5c22bd7785d152e7322ddfbfe32dca1b7ee9729998a6562e9b2b96",
+      "localGeometrySha256": "05ebc71aed5c22bd7785d152e7322ddfbfe32dca1b7ee9729998a6562e9b2b96",
+      "geometrySha256": "05ebc71aed5c22bd7785d152e7322ddfbfe32dca1b7ee9729998a6562e9b2b96",
+      "figmaPaintSemanticsSha256": "1ba0f1301d7fbb0fded5283dba58cb88b15612c1db0c4b4d186e7e246ab31622",
+      "localPaintSemanticsSha256": "1ba0f1301d7fbb0fded5283dba58cb88b15612c1db0c4b4d186e7e246ab31622",
       "minimumDrawableCount": 2,
       "paintRoles": [
         "foreground-cutout-literal",

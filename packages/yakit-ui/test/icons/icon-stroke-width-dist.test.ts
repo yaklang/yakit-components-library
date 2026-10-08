@@ -23,7 +23,7 @@ const componentEntries = (module: Record<string, unknown>) =>
       (typeof entry[1] === 'object' && entry[1] !== null && '$$typeof' in entry[1]),
   );
 
-const expectWidthOneMarkup = (name: string, Component: ComponentType) => {
+const expectDefaultWidthMarkup = (name: string, Component: ComponentType) => {
   const markup = renderToStaticMarkup(React.createElement(Component));
   expect(markup, name).toContain('<svg');
   const widths = [
@@ -31,7 +31,7 @@ const expectWidthOneMarkup = (name: string, Component: ComponentType) => {
     ...[...markup.matchAll(/\bstyle="[^"]*stroke-width:\s*([^;"\s]+)/g)].map((match) => match[1]),
   ];
   expect(
-    widths.filter((width) => width !== '1'),
+    widths.filter((width) => width !== '1.5'),
     name,
   ).toEqual([]);
 };
@@ -51,7 +51,7 @@ describe('Built icon stroke-width contract', () => {
     expect(Object.keys(dedicatedRoot)).toEqual(Object.keys(coreIcons));
     expect(componentEntries(coreIcons)).toHaveLength(912);
     expect(componentEntries(dedicatedRoot)).toHaveLength(912);
-    expectWidthOneMarkup('core-root:AcademicCapOutlined', coreRoot.AcademicCapOutlined);
+    expectDefaultWidthMarkup('core-root:AcademicCapOutlined', coreRoot.AcademicCapOutlined);
     for (const [family, count] of families) {
       const core = await importBuilt(builtPath(coreDist, `icons/${family}/index.js`));
       const dedicated = await importBuilt(builtPath(dedicatedDist, `${family}/index.js`));
@@ -59,10 +59,10 @@ describe('Built icon stroke-width contract', () => {
       expect(Object.keys(dedicated), `dedicated:${family}`).toEqual(Object.keys(core));
     }
     for (const [name, Component] of componentEntries(coreIcons)) {
-      expectWidthOneMarkup(`core-icons:${name}`, Component);
+      expectDefaultWidthMarkup(`core-icons:${name}`, Component);
     }
     for (const [name, Component] of componentEntries(dedicatedRoot)) {
-      expectWidthOneMarkup(`dedicated-root:${name}`, Component);
+      expectDefaultWidthMarkup(`dedicated-root:${name}`, Component);
     }
   });
 
@@ -73,14 +73,14 @@ describe('Built icon stroke-width contract', () => {
 
     for (const exportName of exportNames) {
       const Component = barrel[exportName] as ComponentType;
-      expectWidthOneMarkup(`oldicon-barrel:${exportName}`, Component);
+      expectDefaultWidthMarkup(`oldicon-barrel:${exportName}`, Component);
       const deep = await importBuilt(builtPath(dedicatedDist, `oldicon/icons/${exportName}.js`));
       expect(Object.keys(deep)).toEqual([exportName]);
-      expectWidthOneMarkup(`oldicon-deep:${exportName}`, deep[exportName]);
+      expectDefaultWidthMarkup(`oldicon-deep:${exportName}`, deep[exportName]);
     }
   });
 
-  it('renders representative built browser entries at computed stroke-width 1', async () => {
+  it('renders representative built browser entries at computed stroke-width 1.5', async () => {
     const modulePaths = [
       [coreDist, 'browser/icons/index.js', 'AcademicCapOutlined'],
       [coreDist, 'browser/icons/outline/index.js', 'AcademicCapOutlined'],
@@ -151,7 +151,7 @@ describe('Built icon stroke-width contract', () => {
         .then((value) => value.jsonValue());
       expect(result.entries).toBe(modulePaths.length);
       expect(result.widths.length).toBeGreaterThan(0);
-      expect(new Set(result.widths)).toEqual(new Set(['1px']));
+      expect(new Set(result.widths)).toEqual(new Set(['1.5px']));
     } finally {
       await browser.close();
       await server.close();

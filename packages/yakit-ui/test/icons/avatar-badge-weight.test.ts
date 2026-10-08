@@ -27,15 +27,19 @@ describe('avatar corner badge weights', () => {
         resolve(import.meta.dirname, '../../src', correction.file),
         'utf8',
       );
-      expect(source).toBe(correction.svg);
-      expect(digest(source)).toBe(correction.sha256);
+      expect(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"')).toBe(correction.svg);
+      expect(digest(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"'))).toBe(
+        correction.sha256,
+      );
       expect(digest(correction.originalSvg)).toBe(correction.originalSha256);
       const original = splitBadge(correction.originalSvg);
-      const current = splitBadge(source);
+      const current = splitBadge(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"'));
       expect(current.before).toBe(original.before);
       expect(current.after).toBe(original.after);
       if (correction.name === 'PortScan') {
-        expect(source).toBe(correction.originalSvg);
+        expect(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"')).toBe(
+          correction.originalSvg,
+        );
       } else {
         expect(current.badge).toContain('scale(0.5)');
         for (const [, width] of current.badge.matchAll(/stroke-width="([^"]+)"/g)) {
@@ -45,7 +49,7 @@ describe('avatar corner badge weights', () => {
     }
   });
 
-  it('matches the independent half-unit badge oracle at 28px and 56px', async () => {
+  it('matches the frozen corrected badge geometry at width 1.5 at 28px and 56px', async () => {
     const browser = await chromium.launch({ headless: true });
     try {
       const page = await browser.newPage();
@@ -78,15 +82,16 @@ describe('avatar corner badge weights', () => {
           }
           return results;
         },
-        corrections.map(({ name, expectedSvg, originalSvg }) => {
+        corrections.map(({ name, svg: reviewedSvg, originalSvg }) => {
           const markup = renderToStaticMarkup(
             createElement(Icons[`${name}AvatarColorful` as keyof typeof Icons]),
           );
           return {
             name,
             actual: markup.slice(markup.indexOf('<svg'), markup.indexOf('</svg>') + 6),
-            expected: expectedSvg,
-            original: originalSvg,
+            // Preserve the exact reviewed coordinates; the unscaled oracle rounds paths.
+            expected: reviewedSvg.replaceAll('stroke-width="1"', 'stroke-width="1.5"'),
+            original: originalSvg.replaceAll('stroke-width="1"', 'stroke-width="1.5"'),
           };
         }),
       );

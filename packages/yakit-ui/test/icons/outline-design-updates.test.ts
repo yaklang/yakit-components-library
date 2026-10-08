@@ -31,7 +31,7 @@ describe('September Figma outline design updates', () => {
     expect(local).toBe(
       update.componentSvg
         .replaceAll('#353639', 'currentColor')
-        .replaceAll('stroke-width="2"', 'stroke-width="1"'),
+        .replaceAll('stroke-width="2"', 'stroke-width="1.5"'),
     );
     expect(local).toContain('viewBox="0 0 24 24"');
     if (update.exportName === 'HourglassOutlined')
@@ -50,7 +50,7 @@ describe('September Figma outline design updates', () => {
         );
         const strokes = [...markup.matchAll(/stroke-width="([^"]*)"/g)].map((match) => match[1]);
         expect(strokes.length).toBeGreaterThan(0);
-        expect(new Set(strokes)).toEqual(new Set([String(strokeWidth ?? 1)]));
+        expect(new Set(strokes)).toEqual(new Set([String(strokeWidth ?? 1.5)]));
         expect(markup).toContain('stroke="currentColor"');
       }
     },

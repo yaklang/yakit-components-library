@@ -3,7 +3,7 @@
   "releases": [
     {
       "name": "@yakit-libs/yakit-ui-icons",
-      "version": "0.3.0"
+      "version": "0.2.9"
     }
   ],
   "deferred": [
@@ -14,11 +14,11 @@
       "integrity": "sha512-Cf/Wopo2BxZzO1hF5/Siwhoj+P6BZZJsEW2BToOP9mWjnKQa6O4AUMqk/4dvMEsGNMLjpHshwZ/D1+Vc21KGFg==",
       "sha256": "d7963628d04ea1ad1475a8220f42f80326dc03f78116f4cfd91b3f5daa81b03a",
       "baseRevision": "2ae1c3c9a41746ec57b820d226a7f91153d90a9d",
-      "headSourceHash": "ea00550e36d2bd954addf5415d8925b60772c541eb0178499af99f7a53d7ec22",
+      "headSourceHash": "11eed9c6bde21c174a8a306c2ed162143167d9dff325d0596485cc3b7061ba84",
       "headLockHash": "989e1835f709b4ecbe6cf2b25892096743a31e2004de0885abded0d9dbdfc33d",
       "headToolchainHash": "a62844d9d389a4689b5b20e01f72ce68acab99e5f52955ad1d9a3feab95e2251",
       "headConfigHash": "6d4c22c12d177addcbae8f50629e60f0bee60f1a41daa42d5e3b4b528eb86e54",
-      "reason": "Release icons 0.3.0 independently; defer UI while npm UI stays at 0.2.3. UI source includes the new ArrowUpToLineOutlined icon wiring but is not republished.",
+      "reason": "Release icons 0.2.9 independently; defer UI shared-source icon stroke changes and view-grid correction, alongside prior pending icon updates, while npm UI stays at 0.2.3.",
       "followUpPath": "docs/pending-releases/README.md"
     }
   ]
