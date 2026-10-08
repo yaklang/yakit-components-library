@@ -29,6 +29,7 @@ import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-wei
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
 import solidRaw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
+import additionsSep30 from '../fixtures/icons/reference/outline-additions-sep30.json';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
@@ -158,7 +159,7 @@ describe('all production icon migration contracts', () => {
     );
     const expected = [
       ...before.sourceInventory.map((file) => migrated.get(file) ?? file),
-      ...[...designUpdates.updates, ...additions.updates]
+      ...[...designUpdates.updates, ...additions.updates, ...additionsSep30.updates]
         .filter(({ added }) => added)
         .map(({ file }) => `icons/outline/${file}`),
       'icons/solid/46709-8109.svg',
