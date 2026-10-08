@@ -55,7 +55,7 @@ describe('oldicon migration inventory', () => {
     expect(inventory.schemaVersion).toBe(1);
     expect(inventory.generationPolicy.strokeWidth).toEqual({
       strategy: 'local-uniform-stroke-v1',
-      value: '1',
+      value: '1.5',
     });
     expect(inventory.hashSemantics).toMatchObject({
       artworkSha256: 'alias of assetSha256',

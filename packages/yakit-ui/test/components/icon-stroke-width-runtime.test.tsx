@@ -28,7 +28,7 @@ const assertWidths = (element: Element, name: string) => {
   )) {
     const style = getComputedStyle(drawable);
     if (style.stroke !== 'none')
-      expect(style.strokeWidth, `${name}: ${drawable.outerHTML}`).toBe('1px');
+      expect(style.strokeWidth, `${name}: ${drawable.outerHTML}`).toBe('1.5px');
   }
 };
 afterEach(() => {
@@ -38,7 +38,7 @@ afterEach(() => {
 });
 
 describe('default width across every rendered icon', () => {
-  it('renders all 912 family icons, 380 Oldicons and Loading with unit-width strokes', () => {
+  it('renders all 912 family icons, 380 Oldicons and Loading with 1.5-width strokes', () => {
     const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
     expect(icons).toHaveLength(1293);
     for (let index = 0; index < icons.length; index += 24) {

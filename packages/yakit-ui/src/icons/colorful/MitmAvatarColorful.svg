@@ -10,9 +10,9 @@
 <rect  width="24" height="24" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#icon_3722135748__mask_0)">
-<path  d="M3.0 8C3.0 5.79086 4.79086 4 7.0 4H17.0C19.20914 4 21.0 5.79086 21.0 8V13.0C21.0 15.20914 19.20914 17.0 17.0 17.0H7.0C4.79086 17.0 3.0 15.20914 3.0 13.0V8Z" fill="#4A94F8" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M2 20L22 20" stroke="#353639" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path fill="none" d="M6 11.0H8.50L10 7.0L12 14L14.50 8.50L15.50 11.0H18" stroke="var(--Colors-Use-Basic-White, #FFFFFF)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M3.0 8C3.0 5.79086 4.79086 4 7.0 4H17.0C19.20914 4 21.0 5.79086 21.0 8V13.0C21.0 15.20914 19.20914 17.0 17.0 17.0H7.0C4.79086 17.0 3.0 15.20914 3.0 13.0V8Z" fill="#4A94F8" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path  d="M2 20L22 20" stroke="#353639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill="none" d="M6 11.0H8.50L10 7.0L12 14L14.50 8.50L15.50 11.0H18" stroke="var(--Colors-Use-Basic-White, #FFFFFF)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </g>
 </g></svg>

@@ -321,7 +321,7 @@ describe('promoted visual weight sources', () => {
           if (value !== undefined) return value;
         }
       };
-      expect(inherited('stroke-width')).toBe('1');
+      expect(inherited('stroke-width')).toBe('1.5');
       expect(inherited('stroke')).toBeTruthy();
     }
   });
@@ -344,7 +344,7 @@ describe('promoted visual weight sources', () => {
         strokeWidth ??= current.attributes.get('stroke-width');
         insideDefinition ||= ['clipPath', 'mask'].includes(current.name);
       }
-      if (stroke) expect(strokeWidth).toBe('1');
+      if (stroke) expect(strokeWidth).toBe('1.5');
       else {
         expect(insideDefinition).toBe(true);
         expect(node.attributes.get('d')).toBeTruthy();

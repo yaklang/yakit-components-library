@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.2.9
+
+### Patch Changes
+
+- Set built-in icon stroke widths to `1.5`, including Outline, Solid, Colorful, Oldicon and Loading, while preserving presentation overrides.
+- Correct legacy `OutlineViewGridIcon` to match the four hollow rounded cells in Figma `Outline/view-grid`.
+
 ## 0.3.0
 
 ### Minor Changes

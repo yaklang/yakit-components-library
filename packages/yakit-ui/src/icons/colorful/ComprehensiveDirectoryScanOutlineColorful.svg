@@ -4,9 +4,9 @@
 <rect  width="24" height="24" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#icon_46943__mask_0)">
-<path d="M5 14V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V14M5 12V5C5 3.89543 5.89543 3 7 3H12.5859C12.8511 3 13.1054 3.10536 13.2929 3.29289L18.7071 8.70711C18.8946 8.89464 19 9.14899 19 9.41406V12" stroke="#353639" stroke-width="1"/>
-<path d="M9 16H15M9 11H15" stroke="#353639" stroke-width="1" stroke-linecap="round"/>
-<path  d="M1 12H23" stroke="#F28C45" stroke-width="1" stroke-linecap="round"/>
+<path d="M5 14V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V14M5 12V5C5 3.89543 5.89543 3 7 3H12.5859C12.8511 3 13.1054 3.10536 13.2929 3.29289L18.7071 8.70711C18.8946 8.89464 19 9.14899 19 9.41406V12" stroke="#353639" stroke-width="1.5"/>
+<path d="M9 16H15M9 11H15" stroke="#353639" stroke-width="1.5" stroke-linecap="round"/>
+<path  d="M1 12H23" stroke="#F28C45" stroke-width="1.5" stroke-linecap="round"/>
 </g>
 </g>
 </svg>

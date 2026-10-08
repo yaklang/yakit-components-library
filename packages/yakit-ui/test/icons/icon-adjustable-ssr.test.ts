@@ -32,7 +32,7 @@ describe('adjustable icon CSS-free SSR contract', () => {
       expect(markup, name).toContain('<svg');
       expect(widths(markup).length, name).toBeGreaterThan(0);
       expect(new Set(widths(markup)), `${name}:${strokeWidth}`).toEqual(
-        new Set([String(strokeWidth ?? 1)]),
+        new Set([String(strokeWidth ?? 1.5)]),
       );
     }
   });
@@ -44,7 +44,7 @@ describe('adjustable icon CSS-free SSR contract', () => {
     expect(
       new Set(widths(render(HomeOutlined, { strokeWidth: 2, style: { strokeWidth: 0 } }))),
     ).toEqual(new Set(['0']));
-    expect(new Set(widths(render(HomeOutlined)))).toEqual(new Set(['1']));
-    expect(new Set(widths(render(Loading)))).toEqual(new Set(['1']));
+    expect(new Set(widths(render(HomeOutlined)))).toEqual(new Set(['1.5']));
+    expect(new Set(widths(render(Loading)))).toEqual(new Set(['1.5']));
   });
 });

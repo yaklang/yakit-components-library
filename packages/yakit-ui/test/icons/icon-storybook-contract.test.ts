@@ -263,7 +263,7 @@ describe('Icon Storybook contract', () => {
   it('exposes an interactive stroke width example using the public SVG API', () => {
     expect(iconStories.StrokeWidth).toMatchObject({
       name: '描边宽度',
-      args: { strokeWidth: 1 },
+      args: { strokeWidth: 1.5 },
       argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
     });
     const markup = renderToStaticMarkup(
@@ -277,7 +277,7 @@ describe('Icon Storybook contract', () => {
   it('shows all repaired icons beside frozen originals at three sizes on both backgrounds', () => {
     expect(iconStories.VisualWeight).toMatchObject({
       name: '线条粗细对照',
-      args: { strokeWidth: 1 },
+      args: { strokeWidth: 1.5 },
       argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
     });
     const markup = renderToStaticMarkup(

@@ -57,7 +57,7 @@ export function planOldiconStrokeWidth(inventory, assetsMap) {
     ...nextInventory.generationPolicy,
     strokeWidth: {
       strategy: 'local-uniform-stroke-v1',
-      value: '1',
+      value: '1.5',
     },
   };
   nextInventory.hashSemantics = {
