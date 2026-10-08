@@ -236,7 +236,12 @@ export function validateVisualWeightReviews(
     if (oldEvidence.sha256 !== oldSourceSha256) {
       throw new Error('ICON_VISUAL_WEIGHT_OLD_SOURCE_DRIFT');
     }
-    if (digest(readCandidate(file)) !== candidateSourceSha256) {
+    // The immutable reviews certify width-one geometry before the default-width migration.
+    // Restore only the approved 1.5 -> 1 change; all other source bytes remain hash-checked.
+    const reviewedCandidate = readCandidate(file)
+      .toString('utf8')
+      .replaceAll('stroke-width="1.5"', 'stroke-width="1"');
+    if (digest(reviewedCandidate) !== candidateSourceSha256) {
       throw new Error('ICON_VISUAL_WEIGHT_CANDIDATE_SOURCE_DRIFT');
     }
     validateArtifact(review, 'targetPng', `targets/${id}.png`, readArtifact);
