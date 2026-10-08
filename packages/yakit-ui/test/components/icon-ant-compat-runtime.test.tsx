@@ -247,7 +247,7 @@ describe('Ant-compatible icon color', () => {
 });
 
 describe('Ant-compatible registry and Loading contracts', () => {
-  it('wraps all 911 generated registry icons', () => {
+  it('wraps all 912 generated registry icons', () => {
     const container = render(
       <>
         {iconRegistry.map(({ Component, exportName }) => (
@@ -256,8 +256,8 @@ describe('Ant-compatible registry and Loading contracts', () => {
       </>,
     );
 
-    expect(iconRegistry).toHaveLength(911);
-    expect(container.querySelectorAll(':scope > span.anticon.yakit-icon')).toHaveLength(911);
+    expect(iconRegistry).toHaveLength(912);
+    expect(container.querySelectorAll(':scope > span.anticon.yakit-icon')).toHaveLength(912);
     expect(container.querySelectorAll(':scope > svg')).toHaveLength(0);
   });
 
