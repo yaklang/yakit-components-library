@@ -79,7 +79,7 @@ describe('adjustable icon runtime stroke contract', () => {
       </>,
     );
     expect(new Set(computedWidths(container.querySelector('[data-width="1"]')!))).toEqual(
-      new Set(['1.5px']),
+      new Set(['1px']),
     );
     expect(new Set(computedWidths(container.querySelector('[data-width="3"]')!))).toEqual(
       new Set(['3px']),
