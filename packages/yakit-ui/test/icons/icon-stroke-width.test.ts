@@ -163,11 +163,11 @@ describe('all production icon migration contracts', () => {
         .map(({ file }) => `icons/outline/${file}`),
       'icons/solid/46709-8109.svg',
     ].sort();
-    expect(expected).toHaveLength(1312);
+    expect(expected).toHaveLength(1313);
     expect(expected.filter((file) => file.startsWith('components/'))).toHaveLength(24);
     expect(await svgFiles(resolve(packageRoot, 'src'))).toEqual(expected);
     expect(await checkIconStrokeWidths(packageRoot)).toEqual({
-      svgFiles: 1312,
+      svgFiles: 1313,
       loading: 1,
       violations: 0,
     });
