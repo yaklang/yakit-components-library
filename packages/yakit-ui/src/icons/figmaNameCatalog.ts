@@ -2529,6 +2529,13 @@ export const figmaIconNameCatalog = [
     sourceStatus: 'current',
   },
   {
+    exportName: 'ArrowUpToLineOutlined',
+    figmaName: 'Outline/ArrowUpToLine',
+    family: 'outline',
+    sourceNodeId: '47297:32125',
+    sourceStatus: 'current',
+  },
+  {
     exportName: 'MailSolid',
     figmaName: 'Solid/Mail',
     family: 'solid',

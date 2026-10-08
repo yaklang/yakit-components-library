@@ -2,7 +2,7 @@
   "schemaVersion": "figma-outline-icons-inventory-v1",
   "complete": true,
   "provenanceComplete": true,
-  "completenessScope": "complete 362-placement, 359 canonical Figma component SVG (Plugin API and MCP asset provenance), and exact 3-instance override provenance",
+  "completenessScope": "complete 363-placement, 360 canonical Figma component SVG (Plugin API and MCP asset provenance), and exact 3-instance override provenance",
   "variant": "outline",
   "fileKey": "QWct5XE0Bg0bNDQ93eYgEw",
   "frameNodeId": "46824:1930",
@@ -12,10 +12,10 @@
     "width": 457
   },
   "expectedCounts": {
-    "currentSymbols": 359,
+    "currentSymbols": 360,
     "instances": 3,
-    "placements": 362,
-    "publicExports": 359
+    "placements": 363,
+    "publicExports": 360
   },
   "strokeWidthPolicy": {
     "strategy": "local-uniform-stroke-v1",
@@ -30,8 +30,8 @@
     "sourceInventorySha256": "d13d114baafffe969db7aab67a07d0953a0b39afebee04b531c7e556031474da",
     "prechangeBaselineSha256": "362a76e87d66a2977aa8cee810a52136409594ac7015c556108a1ebb75586842",
     "basicManifestSha256": "da79aa54d7c8c0f5eb6167709cc3fb7fc2cd8ee472fc0c24a228788172333f53",
-    "figmaRawProvenanceSha256": "4ec95ab58c46946970dab812524a800d3343dd22e2632cf4693a254ab76cebe7",
-    "placementProvenanceSha256": "d13d114baafffe969db7aab67a07d0953a0b39afebee04b531c7e556031474da"
+    "figmaRawProvenanceSha256": "a55778ec537c62e75b995e0f4a0faabf92585545de251385d75a3ab1c6d19f0f",
+    "placementProvenanceSha256": "d5e7541b6ada897cb57e6c761076a7a83b9e98acf7e6ffb7d68bcb8142d7a6ce"
   },
   "updateProvenance": {
     "reviewId": "icon-stroke-width-1",
@@ -5995,6 +5995,22 @@
       "mainComponentId": "47254:26877",
       "mainComponentIdStatus": "self_symbol",
       "exportedSourceNodeId": "47254:26877",
+      "sourceResolution": "component-self",
+      "overrideHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "overrideHashStatus": "captured",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47297:32125",
+      "nodeType": "component",
+      "name": "Outline/ArrowUpToLine",
+      "x": 224,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47297:32125",
+      "mainComponentIdStatus": "self_symbol",
+      "exportedSourceNodeId": "47297:32125",
       "sourceResolution": "component-self",
       "overrideHash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
       "overrideHashStatus": "captured",
@@ -12856,6 +12872,25 @@
       "figmaGeometrySha256": "a9b84f3a1b9d42ef24a783603bea38429c73387146e5a6a2bc4618f942edaa00",
       "localGeometrySha256": "a9b84f3a1b9d42ef24a783603bea38429c73387146e5a6a2bc4618f942edaa00",
       "geometrySha256": "a9b84f3a1b9d42ef24a783603bea38429c73387146e5a6a2bc4618f942edaa00"
+    },
+    {
+      "exportedSourceNodeId": "47297:32125",
+      "name": "Outline/ArrowUpToLine",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component",
+      "file": "47297-32125.svg",
+      "exportName": "ArrowUpToLineOutlined",
+      "disposition": "matching",
+      "figmaRawSvgSha256": "40cbff693f564ebf5f4e0adcf0ec11991d4f45487cbd753217a130aaa7d6a0a7",
+      "figmaRawSvgStatus": "captured-canonical-source",
+      "localRawSvgSha256": "b8176c3f0fa48d54f5b13b88ca424579e3645de019a1bb440c2b09957bcb9bb6",
+      "figmaNormalizedAstSha256": "c16da6e262bd79226d2209728345aad3ee12123e3b5c2fde6a84ac0f4aa9cb42",
+      "localNormalizedAstSha256": "c16da6e262bd79226d2209728345aad3ee12123e3b5c2fde6a84ac0f4aa9cb42",
+      "normalizedAstSha256": "c16da6e262bd79226d2209728345aad3ee12123e3b5c2fde6a84ac0f4aa9cb42",
+      "figmaGeometrySha256": "19814313de71dfc856232941419c9d75794d2665383b5bbbd81e59183f48a08f",
+      "localGeometrySha256": "19814313de71dfc856232941419c9d75794d2665383b5bbbd81e59183f48a08f",
+      "geometrySha256": "19814313de71dfc856232941419c9d75794d2665383b5bbbd81e59183f48a08f"
     }
   ],
   "instanceVerification": [

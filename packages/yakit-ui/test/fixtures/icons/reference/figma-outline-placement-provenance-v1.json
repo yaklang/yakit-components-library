@@ -3,8 +3,8 @@
   "fileKey": "QWct5XE0Bg0bNDQ93eYgEw",
   "frameNodeId": "46824:1930",
   "counts": {
-    "placements": 362,
-    "currentSymbols": 359,
+    "placements": 363,
+    "currentSymbols": 360,
     "instances": 3
   },
   "sourceEvidence": {
@@ -5975,6 +5975,22 @@
       "overrideHash": null,
       "overrideHashStatus": "pending-updater-canonical-sha256",
       "overridePayload": null
+    },
+    {
+      "placementNodeId": "47297:32125",
+      "nodeType": "component",
+      "name": "Outline/ArrowUpToLine",
+      "x": 224,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47297:32125",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47297:32125",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
     }
   ],
   "currentSymbols": [
@@ -8487,6 +8503,13 @@
     {
       "exportedSourceNodeId": "47254:26877",
       "name": "Outline/SquareGanttChart",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47297:32125",
+      "name": "Outline/ArrowUpToLine",
       "width": 24,
       "height": 24,
       "nodeType": "component"
