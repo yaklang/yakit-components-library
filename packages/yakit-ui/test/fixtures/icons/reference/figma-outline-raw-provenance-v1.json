@@ -8,8 +8,8 @@
     "name": "outline",
     "width": 457,
     "height": 1827,
-    "placementCount": 362,
-    "componentCount": 359,
+    "placementCount": 363,
+    "componentCount": 360,
     "instanceCount": 3
   },
   "source": {
@@ -2402,6 +2402,12 @@
         "api": "exportAsync(SVG_STRING)",
         "svgSimplifyStroke": false
       }
+    },
+    {
+      "nodeId": "47297:32125",
+      "name": "Outline/ArrowUpToLine",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M5 3H19M6 13L12 7L18 13M12 7V21\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     }
   ]
 }

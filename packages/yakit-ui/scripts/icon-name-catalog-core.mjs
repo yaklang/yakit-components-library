@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-const EXPECTED_COUNTS = Object.freeze({ outline: 359, solid: 256, total: 615 });
+const EXPECTED_COUNTS = Object.freeze({ outline: 360, solid: 256, total: 616 });
 const VALID_STATUSES = new Set([
   'current',
   'supplement',
@@ -95,7 +95,7 @@ function expectedRecords({
   const outlineLegacy = outlineManifest?.legacySources ?? [];
   const solidSymbols = solidManifest?.symbols ?? [];
   const solidSupplements = solidManifest?.supplementalSources ?? [];
-  if (outlineSymbols.length !== 359 || outlineLegacy.length !== 0)
+  if (outlineSymbols.length !== 360 || outlineLegacy.length !== 0)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'outline');
   if (solidSymbols.length !== 251 || solidSupplements.length !== 5)
     fail('FIGMA_NAME_MANIFEST_COUNT_MISMATCH', 'solid');
@@ -122,7 +122,7 @@ function expectedRecords({
     rawNodeKey: 'nodeId',
   });
   if (
-    outlineAuthoritative.length !== 359 ||
+    outlineAuthoritative.length !== 360 ||
     solidTargets.length !== 251 ||
     solidSupplementEvidence.length !== 5
   )

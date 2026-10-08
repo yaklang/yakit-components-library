@@ -360,6 +360,7 @@ import {
   Grid2x2CheckOutlined,
   Settings2Outlined,
   TimelineOutlined,
+  ArrowUpToLineOutlined,
   type IconProps,
   outlineIconRegistry,
 } from '../../src';
@@ -724,6 +725,7 @@ const publicOutlineComponents: readonly ComponentType<IconProps>[] = [
   Grid2x2CheckOutlined,
   Settings2Outlined,
   TimelineOutlined,
+  ArrowUpToLineOutlined,
 ];
 
 const outlineRegistry = outlineIconRegistry satisfies Array<{

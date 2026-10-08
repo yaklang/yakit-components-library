@@ -6212,6 +6212,21 @@ export const outlineStrokeContract = {
       },
     ],
   },
+  '47297-32125.svg': {
+    classification: 'adjustable',
+    file: '47297-32125.svg',
+    sha256: 'b8176c3f0fa48d54f5b13b88ca424579e3645de019a1bb440c2b09957bcb9bb6',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0],
+        role: 'adjustable-primary',
+        sourceDefault: '1',
+        surface: 'attribute',
+      },
+    ],
+  },
   '4866-167279.svg': {
     classification: 'adjustable',
     file: '4866-167279.svg',

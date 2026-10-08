@@ -162,7 +162,11 @@ export async function checkIconStrokeWidths(root = packageRoot) {
       frozen.assets.map(({ sourcePath, afterPath }) => [sourcePath, afterPath]),
     );
     const expected = new Set(frozen.sourceInventory.map((file) => migrated.get(file) ?? file));
-    for (const fixture of ['outline-design-updates-sep17.json', 'outline-additions-sep22.json']) {
+    for (const fixture of [
+      'outline-design-updates-sep17.json',
+      'outline-additions-sep22.json',
+      'outline-additions-sep30.json',
+    ]) {
       const designUpdatesPath = path.join(root, 'test/fixtures/icons/reference', fixture);
       try {
         const { updates } = JSON.parse(await readFile(designUpdatesPath, 'utf8'));

@@ -6,9 +6,10 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { outlineIconRegistry } from '../../src/icons/registry';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
+import additionsSep30 from '../fixtures/icons/reference/outline-additions-sep30.json';
 
 const addedIconNames = new Set(
-  [...designUpdates.updates, ...additions.updates]
+  [...designUpdates.updates, ...additions.updates, ...additionsSep30.updates]
     .filter(({ added }) => added)
     .map(({ exportName }) => exportName),
 );

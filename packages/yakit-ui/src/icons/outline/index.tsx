@@ -363,6 +363,7 @@ import Sparkles2OutlinedSvg from './47184-9638.svg?react';
 import IntentionOutlinedSvg from './47199-15022.svg?react';
 import GanttChartOutlinedSvg from './47252-26041.svg?react';
 import SquareGanttChartOutlinedSvg from './47254-26877.svg?react';
+import ArrowUpToLineOutlinedSvg from './47297-32125.svg?react';
 
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined');
 export const LocationMarkerOutlined = createIcon(
@@ -893,3 +894,4 @@ export const SquareGanttChartOutlined = createIcon(
   SquareGanttChartOutlinedSvg,
   'SquareGanttChartOutlined',
 );
+export const ArrowUpToLineOutlined = createIcon(ArrowUpToLineOutlinedSvg, 'ArrowUpToLineOutlined');
