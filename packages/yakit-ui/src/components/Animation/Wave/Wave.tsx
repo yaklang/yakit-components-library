@@ -5,6 +5,7 @@ import {
   useRef,
   useCallback,
   useEffect,
+  version,
   type FC,
   type ReactNode,
   type MouseEvent,
@@ -31,6 +32,9 @@ type WaveChildProps = {
 };
 
 const prefixCls = 'yakit-wave';
+
+// React 18 将子元素 ref 存在元素自身并从 props 剥离；React 19 起移入 props。
+const isReact19OrLater = Number.parseInt(version, 10) >= 19;
 
 const assignRef = <T,>(ref: Ref<T> | undefined, value: T | null) => {
   if (typeof ref === 'function') ref(value);
@@ -101,7 +105,9 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
   }, []);
 
   const childRef = isValidElement(children)
-    ? ((children as ReactElement<WaveChildProps>).props as WaveChildProps).ref
+    ? isReact19OrLater
+      ? (children as ReactElement<WaveChildProps>).props.ref
+      : (children as ReactElement & { ref?: Ref<HTMLElement> }).ref
     : undefined;
   const mergedRef = useCallback(
     (node: HTMLElement | null) => {
