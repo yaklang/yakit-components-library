@@ -88,6 +88,9 @@ if (manifest.license !== 'MIT') {
 if (manifest.dependencies?.['@yakit-libs/color'] !== '1.4.1') {
   failures.push('@yakit-libs/color must be pinned to 1.4.1');
 }
+if (manifest.dependencies?.antd !== '^6.6.7') {
+  failures.push('antd must be declared as the ^6.6.7 runtime dependency');
+}
 for (const dependencyType of [
   'dependencies',
   'optionalDependencies',
@@ -171,7 +174,6 @@ for (const sourceFile of [
   path.join(packageRoot, 'vitest.config.ts'),
   path.join(packageRoot, 'vitest.node.config.ts'),
   path.join(repositoryRoot, 'package.json'),
-  path.join(repositoryRoot, 'pnpm-lock.yaml'),
 ]) {
   try {
     const runtimes = findRemovedUiRuntimeReferences(await readFile(sourceFile, 'utf8'));

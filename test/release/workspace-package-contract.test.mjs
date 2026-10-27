@@ -141,7 +141,9 @@ test("icon package has a narrow public, color, and React contract", () => {
     "./registry",
     "./solid",
   ]);
-  assert.deepEqual(manifest.peerDependencies, { react: "^18.2.0" });
+  assert.deepEqual(manifest.peerDependencies, {
+    react: "^18.2.0 || ^19.0.0",
+  });
   assert.deepEqual(manifest.dependencies, {
     "@yakit-libs/color": "1.4.1",
   });
@@ -215,13 +217,16 @@ test("React runtimes are peers, removed UI runtimes are absent, and package-owne
   }
   assert.equal(manifest.peerDependencies?.["@emotion/react"], undefined);
   assert.equal(manifest.devDependencies?.["@emotion/react"], undefined);
-  for (const name of ["@yakit-libs/color", "classnames"]) {
+  for (const name of ["@yakit-libs/color", "antd", "classnames"]) {
     assert.ok(
       manifest.dependencies?.[name],
       `${name} must be a direct dependency`,
     );
   }
   assert.equal(manifest.dependencies?.["@yakit-libs/color"], "1.4.1");
+  assert.equal(manifest.dependencies?.antd, "^6.6.7");
+  assert.equal(manifest.peerDependencies?.react, "^18.2.0 || ^19.0.0");
+  assert.equal(manifest.peerDependencies?.["react-dom"], "^18.2.0 || ^19.0.0");
   assert.equal(manifest.devDependencies?.["@emotion/styled"], undefined);
 });
 
@@ -311,7 +316,7 @@ test("component consumers install only the package's current runtime contract", 
     ),
     readFileSync(join(root, "scripts/release/post-publish-smoke.mjs"), "utf8"),
   ];
-  const removedInstallArguments = ["ant" + "d@", "@ant-design/" + "cssinjs@"];
+  const removedInstallArguments = ["@ant-design/" + "cssinjs@"];
 
   assert.match(readme, /pnpm add @yakit-libs\/yakit-ui react react-dom/);
   for (const removed of removedInstallArguments) {
@@ -333,8 +338,7 @@ test("component consumers install only the package's current runtime contract", 
 });
 
 test("published-output scanner rejects removed runtime imports and resolutions", () => {
-  const firstRuntime = "ant" + "d";
-  const secondRuntime = "@ant-design/" + "cssinjs";
+  const firstRuntime = "@ant-design/" + "cssinjs";
 
   assert.deepEqual(
     findRemovedUiRuntimeReferences(
@@ -344,9 +348,9 @@ test("published-output scanner rejects removed runtime imports and resolutions",
   );
   assert.deepEqual(
     findRemovedUiRuntimeReferences(
-      `resolved /node_modules/${secondRuntime}/dist/index.js`,
+      `resolved /node_modules/${firstRuntime}/dist/index.js`,
     ),
-    [secondRuntime],
+    [firstRuntime],
   );
   assert.deepEqual(
     findRemovedUiRuntimeReferences("const standard = true;"),
@@ -383,7 +387,6 @@ test("package verification hard-gates every final zero-dependency surface", () =
     "'dist'",
     "'src'",
     "'storybook-static'",
-    "'pnpm-lock.yaml'",
     "'vite.config.ts'",
     "'vitest.config.ts'",
     "'vitest.node.config.ts'",

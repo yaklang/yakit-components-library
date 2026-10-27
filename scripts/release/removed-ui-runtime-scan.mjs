@@ -1,7 +1,10 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
-export const REMOVED_UI_RUNTIMES = ["ant" + "d", "@ant-design/" + "cssinjs"];
+// antd 6 uses @ant-design/cssinjs transitively. Scan package source and
+// published output for direct usage, but do not reject lockfiles or installed
+// dependency trees containing antd's implementation dependency.
+export const REMOVED_UI_RUNTIMES = ["@ant-design/" + "cssinjs"];
 
 // Published output follows a zero-token policy. Any occurrence can identify a
 // bundled import, source-map source, resolution path, or generated dependency

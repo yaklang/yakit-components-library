@@ -17,33 +17,8 @@ import process from "node:process";
 import { promisify } from "node:util";
 
 import { findPackageTarball } from "./verify-pack-directory.mjs";
-import { REMOVED_UI_RUNTIMES } from "./removed-ui-runtime-scan.mjs";
 
 const execute = promisify(execFile);
-
-function findDependencies(tree, names, found = new Set()) {
-  for (const [name, dependency] of Object.entries(tree.dependencies ?? {})) {
-    if (names.includes(name)) found.add(name);
-    if (dependency && typeof dependency === "object") {
-      findDependencies(dependency, names, found);
-    }
-  }
-  return found;
-}
-
-async function assertRemovedUiRuntimesAreAbsent(directory) {
-  const { stdout } = await execute("npm", ["ls", "--all", "--json"], {
-    cwd: directory,
-    env: publicRegistryEnvironment(),
-    maxBuffer: 16 * 1024 * 1024,
-  });
-  const found = [...findDependencies(JSON.parse(stdout), REMOVED_UI_RUNTIMES)];
-  if (found.length > 0) {
-    throw new Error(
-      `consumer installation resolved removed UI runtimes: ${found.join(", ")}`,
-    );
-  }
-}
 
 function publicRegistryEnvironment() {
   const environment = { ...process.env };
@@ -228,7 +203,6 @@ try {
       maxBuffer: 16 * 1024 * 1024,
     },
   );
-  await assertRemovedUiRuntimesAreAbsent(fixture);
   await writeFile(
     path.join(fixture, "index.html"),
     '<!doctype html><html><body><div id="app"></div><script type="module" src="/consumer.mjs"></script></body></html>\n',
@@ -309,6 +283,16 @@ try {
   );
   if (installedManifest.name !== "@yakit-libs/yakit-ui")
     throw new Error("installed tarball identity mismatch");
+  if (installedManifest.dependencies?.antd !== "^6.6.7")
+    throw new Error("installed yakit-ui tarball does not declare antd ^6.6.7");
+  const antdManifest = JSON.parse(
+    await readFile(
+      path.join(fixture, "node_modules/antd/package.json"),
+      "utf8",
+    ),
+  );
+  if (!/^6\./.test(antdManifest.version))
+    throw new Error("installed yakit-ui tarball did not resolve antd 6");
   const installedIconsManifest = JSON.parse(
     await readFile(
       path.join(
@@ -321,7 +305,7 @@ try {
   if (
     installedIconsManifest.name !== "@yakit-libs/yakit-ui-icons" ||
     JSON.stringify(installedIconsManifest.peerDependencies) !==
-      JSON.stringify({ react: "^18.2.0" }) ||
+      JSON.stringify({ react: "^18.2.0 || ^19.0.0" }) ||
     JSON.stringify(installedIconsManifest.dependencies) !==
       JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
     installedIconsManifest.peerDependenciesMeta
@@ -457,7 +441,7 @@ try {
         bundler: "passed",
         package: `${installedManifest.name}@${installedManifest.version}`,
         iconsPackage: `${installedIconsManifest.name}@${installedIconsManifest.version}`,
-        removedUiRuntimes: "absent",
+        runtimeDependencies: "passed",
         pnpmStrictLayout: "passed",
         ssr: "passed",
         storybook: "passed",

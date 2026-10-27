@@ -23,6 +23,13 @@ export interface WaveProps extends BaseProps {
   animation?: 'wave' | false;
 }
 
+type WaveChildProps = {
+  ref?: Ref<HTMLElement>;
+  className?: string;
+  onMouseUp?: (e: MouseEvent<HTMLElement>) => void;
+  onKeyUp?: (e: KeyboardEvent<HTMLElement>) => void;
+};
+
 const prefixCls = 'yakit-wave';
 
 const assignRef = <T,>(ref: Ref<T> | undefined, value: T | null) => {
@@ -94,7 +101,7 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
   }, []);
 
   const childRef = isValidElement(children)
-    ? (children as ReactElement & { ref?: Ref<HTMLElement> }).ref
+    ? ((children as ReactElement<WaveChildProps>).props as WaveChildProps).ref
     : undefined;
   const mergedRef = useCallback(
     (node: HTMLElement | null) => {
@@ -106,17 +113,18 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
 
   if (!isValidElement(children)) return children as ReactNode;
 
-  const child = children as ReactElement & { ref?: Ref<HTMLElement> };
+  const child = children as ReactElement<WaveChildProps> & { ref?: Ref<HTMLElement> };
+  const childProps: WaveChildProps = child.props;
 
   return cloneElement(child, {
     ref: mergedRef,
-    className: classNames(children.props.className, classes),
+    className: classNames(childProps.className, classes),
     onMouseUp: (e: MouseEvent<HTMLElement>) => {
-      children.props.onMouseUp?.(e);
+      childProps.onMouseUp?.(e);
       if (animation === 'wave') showWave();
     },
     onKeyUp: (e: KeyboardEvent<HTMLElement>) => {
-      children.props.onKeyUp?.(e);
+      childProps.onKeyUp?.(e);
       if (animation === 'wave' && (e.key === 'Enter' || e.key === ' ')) {
         showWave();
       }

@@ -44,6 +44,7 @@ const createIconsTarball = (
   directory,
   {
     excessFiles = false,
+    legacyPeer = false,
     omitOldicon = false,
     oversized = false,
     oversizedOldicon = false,
@@ -120,7 +121,9 @@ const createIconsTarball = (
       name: "@yakit-libs/yakit-ui-icons",
       version,
       dependencies: { "@yakit-libs/color": "1.4.1" },
-      peerDependencies: { react: "^18.2.0" },
+      peerDependencies: {
+        react: legacyPeer ? "^18.2.0" : "^18.2.0 || ^19.0.0",
+      },
       exports: {
         "./oldicon/*": {
           types: "./dist/oldicon/icons/*.d.ts",
@@ -162,6 +165,15 @@ test("pack verifier accepts an icons-only releaseSet", async () => {
   assert.deepEqual(
     result.packages.map((item) => item.package),
     ["@yakit-libs/yakit-ui-icons"],
+  );
+});
+
+test("pack verifier rejects icons that no longer peer on React 19", async () => {
+  const directory = mkdtempSync(join(tmpdir(), "yakit-icons-legacy-peer-"));
+  createIconsTarball(directory, { legacyPeer: true });
+  await assert.rejects(
+    () => verifyPackDirectory({ directory }),
+    /must peer only on react \^18\.2\.0 \|\| \^19\.0\.0/,
   );
 });
 

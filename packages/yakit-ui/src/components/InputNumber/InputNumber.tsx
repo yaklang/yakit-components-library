@@ -147,8 +147,8 @@ const InternalInputNumber = <T extends InputNumberValue = InputNumberValue>(
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const composingRef = useRef(false);
-  const repeatDelayRef = useRef<number>();
-  const repeatIntervalRef = useRef<number>();
+  const repeatDelayRef = useRef<number | undefined>(undefined);
+  const repeatIntervalRef = useRef<number | undefined>(undefined);
   const mouseStepRef = useRef(false);
   const [innerValue, setInnerValue] = useState<T | null>(defaultValue);
   const [editing, setEditing] = useState(false);
