@@ -14,11 +14,21 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 import { findPackageTarball } from "./verify-pack-directory.mjs";
 
 const execute = promisify(execFile);
+
+// 没有发布清单时，装的是当前打出来的包，要检查。
+// 有清单时，只有这个包属于本次发布，才检查新契约；其余情况装的是旧基线。
+export function shouldVerifyInstalledContract(releaseManifest, packageName) {
+  return (
+    !releaseManifest ||
+    Boolean(releaseManifest.releaseSet?.includes(packageName))
+  );
+}
 
 function publicRegistryEnvironment() {
   const environment = { ...process.env };
@@ -118,6 +128,15 @@ async function stopLauncher(launcher) {
   });
 }
 
+const isDirectRun =
+  Boolean(process.argv[1]) &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+  await runConsumerVerification();
+}
+
+async function runConsumerVerification() {
 const packDirectoryArgument = process.argv[2];
 if (!packDirectoryArgument)
   throw new Error("Usage: verify-tarball-consumer.mjs <pack-directory>");
@@ -283,16 +302,20 @@ try {
   );
   if (installedManifest.name !== "@yakit-libs/yakit-ui")
     throw new Error("installed tarball identity mismatch");
-  if (installedManifest.dependencies?.antd !== "^6.6.7")
-    throw new Error("installed yakit-ui tarball does not declare antd ^6.6.7");
-  const antdManifest = JSON.parse(
-    await readFile(
-      path.join(fixture, "node_modules/antd/package.json"),
-      "utf8",
-    ),
-  );
-  if (!/^6\./.test(antdManifest.version))
-    throw new Error("installed yakit-ui tarball did not resolve antd 6");
+  if (shouldVerifyInstalledContract(releaseManifest, "@yakit-libs/yakit-ui")) {
+    if (installedManifest.dependencies?.antd !== "^6.6.7")
+      throw new Error(
+        "installed yakit-ui tarball does not declare antd ^6.6.7",
+      );
+    const antdManifest = JSON.parse(
+      await readFile(
+        path.join(fixture, "node_modules/antd/package.json"),
+        "utf8",
+      ),
+    );
+    if (!/^6\./.test(antdManifest.version))
+      throw new Error("installed yakit-ui tarball did not resolve antd 6");
+  }
   const installedIconsManifest = JSON.parse(
     await readFile(
       path.join(
@@ -302,16 +325,21 @@ try {
       "utf8",
     ),
   );
+  if (installedIconsManifest.name !== "@yakit-libs/yakit-ui-icons")
+    throw new Error("installed icons tarball identity mismatch");
   if (
-    installedIconsManifest.name !== "@yakit-libs/yakit-ui-icons" ||
-    JSON.stringify(installedIconsManifest.peerDependencies) !==
+    shouldVerifyInstalledContract(
+      releaseManifest,
+      "@yakit-libs/yakit-ui-icons",
+    ) &&
+    (JSON.stringify(installedIconsManifest.peerDependencies) !==
       JSON.stringify({ react: "^18.2.0 || ^19.0.0" }) ||
-    JSON.stringify(installedIconsManifest.dependencies) !==
-      JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
-    installedIconsManifest.peerDependenciesMeta
+      JSON.stringify(installedIconsManifest.dependencies) !==
+        JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
+      installedIconsManifest.peerDependenciesMeta)
   )
     throw new Error(
-      "installed icons tarball identity, color dependency, or React peer contract mismatch",
+      "installed icons tarball color dependency or React peer contract mismatch",
     );
   const installedColorManifest = JSON.parse(
     await readFile(
@@ -453,4 +481,5 @@ try {
   );
 } finally {
   await rm(fixture, { force: true, recursive: true });
+}
 }
