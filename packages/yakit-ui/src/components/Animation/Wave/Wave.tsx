@@ -5,6 +5,7 @@ import {
   useRef,
   useCallback,
   useEffect,
+  version,
   type FC,
   type ReactNode,
   type MouseEvent,
@@ -23,7 +24,17 @@ export interface WaveProps extends BaseProps {
   animation?: 'wave' | false;
 }
 
+type WaveChildProps = {
+  ref?: Ref<HTMLElement>;
+  className?: string;
+  onMouseUp?: (e: MouseEvent<HTMLElement>) => void;
+  onKeyUp?: (e: KeyboardEvent<HTMLElement>) => void;
+};
+
 const prefixCls = 'yakit-wave';
+
+// React 18 将子元素 ref 存在元素自身并从 props 剥离；React 19 起移入 props。
+const isReact19OrLater = Number.parseInt(version, 10) >= 19;
 
 const assignRef = <T,>(ref: Ref<T> | undefined, value: T | null) => {
   if (typeof ref === 'function') ref(value);
@@ -94,7 +105,9 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
   }, []);
 
   const childRef = isValidElement(children)
-    ? (children as ReactElement & { ref?: Ref<HTMLElement> }).ref
+    ? isReact19OrLater
+      ? (children as ReactElement<WaveChildProps>).props.ref
+      : (children as ReactElement & { ref?: Ref<HTMLElement> }).ref
     : undefined;
   const mergedRef = useCallback(
     (node: HTMLElement | null) => {
@@ -106,17 +119,18 @@ export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassN
 
   if (!isValidElement(children)) return children as ReactNode;
 
-  const child = children as ReactElement & { ref?: Ref<HTMLElement> };
+  const child = children as ReactElement<WaveChildProps> & { ref?: Ref<HTMLElement> };
+  const childProps: WaveChildProps = child.props;
 
   return cloneElement(child, {
     ref: mergedRef,
-    className: classNames(children.props.className, classes),
+    className: classNames(childProps.className, classes),
     onMouseUp: (e: MouseEvent<HTMLElement>) => {
-      children.props.onMouseUp?.(e);
+      childProps.onMouseUp?.(e);
       if (animation === 'wave') showWave();
     },
     onKeyUp: (e: KeyboardEvent<HTMLElement>) => {
-      children.props.onKeyUp?.(e);
+      childProps.onKeyUp?.(e);
       if (animation === 'wave' && (e.key === 'Enter' || e.key === ' ')) {
         showWave();
       }

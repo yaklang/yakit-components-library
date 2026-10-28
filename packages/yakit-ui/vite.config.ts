@@ -56,7 +56,7 @@ export default defineConfig(({ mode }) => {
         },
         rollupOptions: {
           external: (id) =>
-            ['@yakit-libs/color', 'classnames', 'react', 'react-dom'].some(
+            ['@yakit-libs/color', 'antd', 'classnames', 'react', 'react-dom'].some(
               (dependency) => id === dependency || id.startsWith(`${dependency}/`),
             ),
         },

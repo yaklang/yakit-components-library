@@ -10,8 +10,6 @@ import { promisify } from "node:util";
 
 import { verifyDeferredRegistryBaseline } from "./release-deferrals.mjs";
 
-import { REMOVED_UI_RUNTIMES } from "./removed-ui-runtime-scan.mjs";
-
 const execute = promisify(execFile);
 
 function requiredEnvironment(name) {
@@ -49,30 +47,6 @@ async function run(command, args, options = {}) {
         );
     });
   });
-}
-
-function findDependencies(tree, names, found = new Set()) {
-  for (const [name, dependency] of Object.entries(tree.dependencies ?? {})) {
-    if (names.includes(name)) found.add(name);
-    if (dependency && typeof dependency === "object") {
-      findDependencies(dependency, names, found);
-    }
-  }
-  return found;
-}
-
-async function assertRemovedUiRuntimesAreAbsent(directory) {
-  const { stdout } = await execute("npm", ["ls", "--all", "--json"], {
-    cwd: directory,
-    env: publicRegistryEnvironment(),
-    maxBuffer: 16 * 1024 * 1024,
-  });
-  const found = [...findDependencies(JSON.parse(stdout), REMOVED_UI_RUNTIMES)];
-  if (found.length > 0) {
-    throw new Error(
-      `consumer installation resolved removed UI runtimes: ${found.join(", ")}`,
-    );
-  }
 }
 
 const delay = (milliseconds) =>
@@ -262,7 +236,7 @@ if (packageName === "@yakit-libs/yakit-ui-icons") {
     );
     if (
       JSON.stringify(installedManifest.peerDependencies) !==
-        JSON.stringify({ react: "^18.2.0" }) ||
+        JSON.stringify({ react: "^18.2.0 || ^19.0.0" }) ||
       JSON.stringify(installedManifest.dependencies) !==
         JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
       installedManifest.peerDependenciesMeta
@@ -327,7 +301,6 @@ await run(
   ],
   { cwd: fixture, env: publicRegistryEnvironment() },
 );
-await assertRemovedUiRuntimesAreAbsent(fixture);
 await writeFile(
   path.join(fixture, "index.html"),
   '<!doctype html><html><body><div id="app"></div><script type="module" src="/consumer.mjs"></script></body></html>\n',
@@ -379,6 +352,22 @@ const installedManifest = JSON.parse(
 );
 if (installedManifest.version !== packageVersion)
   throw new Error("installed package version mismatch");
+if (packageName === "@yakit-libs/yakit-ui") {
+  if (
+    installedManifest.dependencies?.antd !== registryManifest.dependencies?.antd
+  )
+    throw new Error(
+      "installed package antd dependency does not match the registry manifest",
+    );
+  const antdManifest = JSON.parse(
+    await readFile(
+      path.join(fixture, "node_modules/antd/package.json"),
+      "utf8",
+    ),
+  );
+  if (!/^6\./.test(antdManifest.version))
+    throw new Error("installed package did not resolve antd 6");
+}
 const cssPath = path.join(installedPackage, "dist/index.css");
 await access(cssPath);
 if (!(await readFile(cssPath, "utf8")).trim())
@@ -427,7 +416,7 @@ console.log(
       distTag,
       bundler: "passed",
       package: `${packageName}@${packageVersion}`,
-      removedUiRuntimes: "absent",
+      runtimeDependencies: "passed",
       storybook: "passed",
       typescript: "passed",
     },

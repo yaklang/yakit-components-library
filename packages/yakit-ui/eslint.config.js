@@ -103,6 +103,7 @@ export default [
       'vite.config.ts',
       'vitest.config.ts',
       'vitest.node.config.ts',
+      'vitest.react18.config.ts',
     ],
     languageOptions: {
       globals: globals.node,

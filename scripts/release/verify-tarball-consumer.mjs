@@ -14,35 +14,20 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 import { findPackageTarball } from "./verify-pack-directory.mjs";
-import { REMOVED_UI_RUNTIMES } from "./removed-ui-runtime-scan.mjs";
 
 const execute = promisify(execFile);
 
-function findDependencies(tree, names, found = new Set()) {
-  for (const [name, dependency] of Object.entries(tree.dependencies ?? {})) {
-    if (names.includes(name)) found.add(name);
-    if (dependency && typeof dependency === "object") {
-      findDependencies(dependency, names, found);
-    }
-  }
-  return found;
-}
-
-async function assertRemovedUiRuntimesAreAbsent(directory) {
-  const { stdout } = await execute("npm", ["ls", "--all", "--json"], {
-    cwd: directory,
-    env: publicRegistryEnvironment(),
-    maxBuffer: 16 * 1024 * 1024,
-  });
-  const found = [...findDependencies(JSON.parse(stdout), REMOVED_UI_RUNTIMES)];
-  if (found.length > 0) {
-    throw new Error(
-      `consumer installation resolved removed UI runtimes: ${found.join(", ")}`,
-    );
-  }
+// 没有发布清单时，装的是当前打出来的包，要检查。
+// 有清单时，只有这个包属于本次发布，才检查新契约；其余情况装的是旧基线。
+export function shouldVerifyInstalledContract(releaseManifest, packageName) {
+  return (
+    !releaseManifest ||
+    Boolean(releaseManifest.releaseSet?.includes(packageName))
+  );
 }
 
 function publicRegistryEnvironment() {
@@ -143,6 +128,15 @@ async function stopLauncher(launcher) {
   });
 }
 
+const isDirectRun =
+  Boolean(process.argv[1]) &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+  await runConsumerVerification();
+}
+
+async function runConsumerVerification() {
 const packDirectoryArgument = process.argv[2];
 if (!packDirectoryArgument)
   throw new Error("Usage: verify-tarball-consumer.mjs <pack-directory>");
@@ -228,7 +222,6 @@ try {
       maxBuffer: 16 * 1024 * 1024,
     },
   );
-  await assertRemovedUiRuntimesAreAbsent(fixture);
   await writeFile(
     path.join(fixture, "index.html"),
     '<!doctype html><html><body><div id="app"></div><script type="module" src="/consumer.mjs"></script></body></html>\n',
@@ -309,6 +302,20 @@ try {
   );
   if (installedManifest.name !== "@yakit-libs/yakit-ui")
     throw new Error("installed tarball identity mismatch");
+  if (shouldVerifyInstalledContract(releaseManifest, "@yakit-libs/yakit-ui")) {
+    if (installedManifest.dependencies?.antd !== "^6.6.7")
+      throw new Error(
+        "installed yakit-ui tarball does not declare antd ^6.6.7",
+      );
+    const antdManifest = JSON.parse(
+      await readFile(
+        path.join(fixture, "node_modules/antd/package.json"),
+        "utf8",
+      ),
+    );
+    if (!/^6\./.test(antdManifest.version))
+      throw new Error("installed yakit-ui tarball did not resolve antd 6");
+  }
   const installedIconsManifest = JSON.parse(
     await readFile(
       path.join(
@@ -318,16 +325,21 @@ try {
       "utf8",
     ),
   );
+  if (installedIconsManifest.name !== "@yakit-libs/yakit-ui-icons")
+    throw new Error("installed icons tarball identity mismatch");
   if (
-    installedIconsManifest.name !== "@yakit-libs/yakit-ui-icons" ||
-    JSON.stringify(installedIconsManifest.peerDependencies) !==
-      JSON.stringify({ react: "^18.2.0" }) ||
-    JSON.stringify(installedIconsManifest.dependencies) !==
-      JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
-    installedIconsManifest.peerDependenciesMeta
+    shouldVerifyInstalledContract(
+      releaseManifest,
+      "@yakit-libs/yakit-ui-icons",
+    ) &&
+    (JSON.stringify(installedIconsManifest.peerDependencies) !==
+      JSON.stringify({ react: "^18.2.0 || ^19.0.0" }) ||
+      JSON.stringify(installedIconsManifest.dependencies) !==
+        JSON.stringify({ "@yakit-libs/color": "1.4.1" }) ||
+      installedIconsManifest.peerDependenciesMeta)
   )
     throw new Error(
-      "installed icons tarball identity, color dependency, or React peer contract mismatch",
+      "installed icons tarball color dependency or React peer contract mismatch",
     );
   const installedColorManifest = JSON.parse(
     await readFile(
@@ -457,7 +469,7 @@ try {
         bundler: "passed",
         package: `${installedManifest.name}@${installedManifest.version}`,
         iconsPackage: `${installedIconsManifest.name}@${installedIconsManifest.version}`,
-        removedUiRuntimes: "absent",
+        runtimeDependencies: "passed",
         pnpmStrictLayout: "passed",
         ssr: "passed",
         storybook: "passed",
@@ -469,4 +481,5 @@ try {
   );
 } finally {
   await rm(fixture, { force: true, recursive: true });
+}
 }

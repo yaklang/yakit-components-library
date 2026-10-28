@@ -11,6 +11,9 @@ const executablePath = (
 
 export default defineConfig({
   plugins: [createSvgReactPlugin()],
+  define: {
+    __EXPECTED_REACT_MAJOR__: JSON.stringify('19'),
+  },
   optimizeDeps: {
     include: [
       'react',

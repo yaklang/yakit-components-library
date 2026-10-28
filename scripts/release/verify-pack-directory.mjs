@@ -279,10 +279,10 @@ export async function verifyPackageTarball(tarball) {
     }
     if (
       JSON.stringify(manifest.peerDependencies) !==
-      JSON.stringify({ react: "^18.2.0" })
+      JSON.stringify({ react: "^18.2.0 || ^19.0.0" })
     )
       failures.push(
-        "@yakit-libs/yakit-ui-icons must peer only on react ^18.2.0",
+        "@yakit-libs/yakit-ui-icons must peer only on react ^18.2.0 || ^19.0.0",
       );
     if (
       JSON.stringify(manifest.dependencies) !==

@@ -205,9 +205,9 @@ if (
 }
 if (
   JSON.stringify(manifest.peerDependencies) !==
-  JSON.stringify({ react: "^18.2.0" })
+  JSON.stringify({ react: "^18.2.0 || ^19.0.0" })
 ) {
-  failures.push("react ^18.2.0 must be the only peer dependency");
+  failures.push("react ^18.2.0 || ^19.0.0 must be the only peer dependency");
 }
 if (
   JSON.stringify(manifest.dependencies) !==

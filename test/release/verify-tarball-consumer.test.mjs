@@ -13,6 +13,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import test from "node:test";
 
 const UI = "@yakit-libs/yakit-ui";
@@ -20,6 +21,9 @@ const ICONS = "@yakit-libs/yakit-ui-icons";
 const verifier = path.resolve(
   import.meta.dirname,
   "../../scripts/release/verify-tarball-consumer.mjs",
+);
+const { shouldVerifyInstalledContract } = await import(
+  pathToFileURL(verifier).href,
 );
 
 function createTarball(directory, packageName, version, filename) {
@@ -112,6 +116,18 @@ test("CLI resolves a relative verified directory before changing consumer cwd", 
   assert.ok(argumentsPassed.includes(realpathSync(state.candidate)));
   for (const tarball of [state.baseline, state.candidate])
     assert.equal(path.isAbsolute(tarball), true);
+});
+
+test("new package contracts are skipped for compatibility baselines", () => {
+  const iconsOnly = { releaseSet: [ICONS] };
+  const uiOnly = { releaseSet: [UI] };
+
+  assert.equal(shouldVerifyInstalledContract(iconsOnly, UI), false);
+  assert.equal(shouldVerifyInstalledContract(iconsOnly, ICONS), true);
+  assert.equal(shouldVerifyInstalledContract(uiOnly, UI), true);
+  assert.equal(shouldVerifyInstalledContract(uiOnly, ICONS), false);
+  assert.equal(shouldVerifyInstalledContract(undefined, UI), true);
+  assert.equal(shouldVerifyInstalledContract(undefined, ICONS), true);
 });
 
 test("relative directory normalization preserves baseline digest validation", (t) => {
