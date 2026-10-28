@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { flushSync } from 'react-dom';
 import { hydrateRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -189,24 +189,6 @@ describe('native Wave behavior', () => {
     expect(effect).not.toBeNull();
     effect?.dispatchEvent(new Event('transitionend'));
     expect(button.querySelector('.yakit-wave-holder')).toBeNull();
-  });
-
-  it('merges object and callback child refs with its internal animation ref', () => {
-    const objectRef = createRef<HTMLButtonElement>();
-    const callbackRef = vi.fn<(node: HTMLButtonElement | null) => void>();
-    const object = render(
-      <Wave animation="wave">
-        <button ref={objectRef}>Object ref</button>
-      </Wave>,
-    );
-    const callback = render(
-      <Wave animation="wave">
-        <button ref={callbackRef}>Callback ref</button>
-      </Wave>,
-    );
-
-    expect(objectRef.current).toBe(object.container.querySelector('button'));
-    expect(callbackRef).toHaveBeenLastCalledWith(callback.container.querySelector('button'));
   });
 
   it('does not leave a holder behind when reduced motion is requested', () => {

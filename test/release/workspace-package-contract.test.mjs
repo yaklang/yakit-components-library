@@ -390,6 +390,7 @@ test("package verification hard-gates every final zero-dependency surface", () =
     "'vite.config.ts'",
     "'vitest.config.ts'",
     "'vitest.node.config.ts'",
+    "'vitest.react18.config.ts'",
   ]) {
     assert.ok(
       verifier.includes(surface),
@@ -418,6 +419,10 @@ test("component CI generates SSR fixtures before browser hydration tests", () =>
     ciCommands.some((command) =>
       command.startsWith("vitest run --config vitest.config.ts"),
     ),
+  );
+  assert.ok(
+    ciCommands.some((command) => command.includes("vitest.react18.config.ts")),
+    "component CI must rerun the Wave ref case on React 18",
   );
   assert.ok(ciCommands.indexOf("pnpm run test:icon-adjustable") > 0);
 });

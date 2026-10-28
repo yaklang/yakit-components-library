@@ -354,9 +354,15 @@ importers:
       react:
         specifier: ^19.1.0
         version: 19.1.0
+      react-18:
+        specifier: npm:react@18.3.1
+        version: react@18.3.1
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
+      react-dom-18:
+        specifier: npm:react-dom@18.3.1
+        version: react-dom@18.3.1(react@19.1.0)
       storybook:
         specifier: 8.6.14
         version: 8.6.14(prettier@3.6.2)
@@ -8185,6 +8191,12 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
       react: 18.3.1
+      scheduler: 0.23.2
+
+  react-dom@18.3.1(react@19.1.0):
+    dependencies:
+      loose-envify: 1.4.0
+      react: 19.1.0
       scheduler: 0.23.2
 
   react-dom@19.1.0(react@19.1.0):

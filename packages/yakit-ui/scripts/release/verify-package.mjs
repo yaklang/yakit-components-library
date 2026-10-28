@@ -173,6 +173,7 @@ for (const sourceFile of [
   path.join(packageRoot, 'vite.config.ts'),
   path.join(packageRoot, 'vitest.config.ts'),
   path.join(packageRoot, 'vitest.node.config.ts'),
+  path.join(packageRoot, 'vitest.react18.config.ts'),
   path.join(repositoryRoot, 'package.json'),
 ]) {
   try {
