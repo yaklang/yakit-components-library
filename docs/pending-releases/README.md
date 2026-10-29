@@ -11,10 +11,10 @@ Version `0.2.9` unifies icon strokes to 1.5 and corrects legacy Outline/view-gri
 same icon improvements, but its rebuilt output is an impact probe and is not
 a release artifact.
 
-The two deferred Changeset documents in this directory preserve the original UI Changeset bump
+The deferred Changeset documents in this directory preserve the original UI Changeset bump
 levels and descriptions. They are outside `.changeset` so the icons-only release
 does not create a UI Version Packages change. Before the next UI release, move
-both documents back to `.changeset` and review the resulting version and package
+the deferred Changeset documents back to `.changeset` and review the resulting version and package
 changes. Do not discard them or treat the UI changes as already published.
 
 The checked-in `scripts/release/release-deferral-policy.json` permits only the
@@ -22,3 +22,15 @@ recorded icons release identity and exact UI source, lock, toolchain and config
 hashes against the recorded UI release baseline. Further changes require a new
 reviewed policy or a normal release of all observed packages. Consumer verification
 uses the frozen registry UI counterpart rather than the deferred UI build.
+
+## Planned icons 0.3.0 release
+
+Only `@yakit-libs/yakit-ui-icons` is scheduled for version `0.3.0`: React 19
+compatibility, four new Outline arrow icons, and Figma-bound theme colors for
+six menu icons. `@yakit-libs/yakit-ui` remains at its published version `0.2.3`.
+
+The UI portion of the React 19 / antd 6 Changeset is preserved in
+[react19-antd6-deps.md](./react19-antd6-deps.md), with its original minor bump
+and description. Restore it alongside the other deferred Changesets before
+the next UI release. The shared-source icon additions and menu theme changes
+also need to be included in that future UI release's notes.
