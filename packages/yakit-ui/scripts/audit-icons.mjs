@@ -527,6 +527,7 @@ function inspectSvg({ manifest, relativePath, source, variant }) {
       for (const { attribute, value } of paintValues(node)) {
         if (
           value === 'currentColor' ||
+          value === 'var(--Colors-Use-Neutral-Text-1-Title, #353639)' ||
           value === 'none' ||
           value.startsWith('url(') ||
           (attribute === 'color' && value === relativeCurrentColorValue)
@@ -773,17 +774,17 @@ function validateManifest(manifest, files, policy) {
   const symbols = manifest.symbols ?? manifest.currentSymbols ?? [];
   const placements = manifest.placements ?? [];
   const expected = manifest.expectedCounts ?? {
-    currentSymbols: 360,
-    placements: 363,
-    publicExports: 360,
+    currentSymbols: 364,
+    placements: 367,
+    publicExports: 364,
   };
   if (
-    expected.currentSymbols !== 360 ||
-    expected.placements !== 363 ||
+    expected.currentSymbols !== 364 ||
+    expected.placements !== 367 ||
     expected.instances !== 3 ||
-    expected.publicExports !== 360 ||
-    symbols.length !== 360 ||
-    placements.length !== 363
+    expected.publicExports !== 364 ||
+    symbols.length !== 364 ||
+    placements.length !== 367
   )
     errors.push('MANIFEST_INCOMPLETE');
   if (manifest.fileKey === 'QWct5XE0Bg0bNDQ93eYgEw' && manifest.frameNodeId !== '46824:1930')

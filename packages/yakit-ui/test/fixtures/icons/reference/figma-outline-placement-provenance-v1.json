@@ -3,8 +3,8 @@
   "fileKey": "QWct5XE0Bg0bNDQ93eYgEw",
   "frameNodeId": "46824:1930",
   "counts": {
-    "placements": 363,
-    "currentSymbols": 360,
+    "placements": 367,
+    "currentSymbols": 364,
     "instances": 3
   },
   "sourceEvidence": {
@@ -5991,6 +5991,70 @@
       "overrideHash": null,
       "overrideHashStatus": "pending-updater-canonical-sha256",
       "overridePayload": null
+    },
+    {
+      "placementNodeId": "47351:7055",
+      "nodeType": "component",
+      "name": "Outline/ArrowUpFromDot",
+      "x": 320,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47351:7055",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47351:7055",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47385:1963",
+      "nodeType": "component",
+      "name": "Outline/arrows-up-down",
+      "x": 368,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47385:1963",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47385:1963",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47385:1964",
+      "nodeType": "component",
+      "name": "Outline/arrows-transfer-up",
+      "x": 416,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47385:1964",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47385:1964",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
+    },
+    {
+      "placementNodeId": "47385:1965",
+      "nodeType": "component",
+      "name": "Outline/arrows-transfer-down",
+      "x": 464,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "47385:1965",
+      "mainComponentIdStatus": "canonical-source-self",
+      "exportedSourceNodeId": "47385:1965",
+      "sourceResolution": "component-self",
+      "overrideHash": null,
+      "overrideHashStatus": "pending-updater-canonical-sha256",
+      "overridePayload": null
     }
   ],
   "currentSymbols": [
@@ -8510,6 +8574,34 @@
     {
       "exportedSourceNodeId": "47297:32125",
       "name": "Outline/ArrowUpToLine",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47351:7055",
+      "name": "Outline/ArrowUpFromDot",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47385:1963",
+      "name": "Outline/arrows-up-down",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47385:1964",
+      "name": "Outline/arrows-transfer-up",
+      "width": 24,
+      "height": 24,
+      "nodeType": "component"
+    },
+    {
+      "exportedSourceNodeId": "47385:1965",
+      "name": "Outline/arrows-transfer-down",
       "width": 24,
       "height": 24,
       "nodeType": "component"

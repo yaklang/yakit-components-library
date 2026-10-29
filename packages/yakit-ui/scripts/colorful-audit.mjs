@@ -162,7 +162,7 @@ function assertSvgPathData(svg, sourcePath) {
   }
 }
 
-function inspectPaint(value, sourcePath, tokenCatalog) {
+function inspectPaint(value, sourcePath, tokenCatalog, themePaintBindings = []) {
   const paint = value.trim();
   if (paint === 'none' || paint === 'currentColor' || /^url\(/.test(paint)) return;
   const token = TOKEN_PAINT.exec(paint);
@@ -171,7 +171,14 @@ function inspectPaint(value, sourcePath, tokenCatalog) {
     if (tokenCatalog) {
       const definition = tokenCatalog.find(({ name }) => name === token[1]);
       if (!definition) fail('COLOR_TOKEN_UNKNOWN', `${sourcePath}: ${token[1]}`);
-      if (definition.light !== fallback || definition.dark !== fallback)
+      const figmaBoundThemePaint = themePaintBindings.some(
+        (binding) =>
+          binding.token === token[1] &&
+          binding.fallbackHex === fallback &&
+          /^VariableID:/.test(binding.figmaVariableId ?? '') &&
+          binding.sourceNodeIds?.length > 0,
+      );
+      if (definition.light !== fallback || (!figmaBoundThemePaint && definition.dark !== fallback))
         fail('COLOR_TOKEN_FALLBACK_MISMATCH', `${sourcePath}: ${paint}`);
     }
     return;
@@ -231,10 +238,10 @@ export function auditColorfulInputs(
     if (row?.width !== undefined && (width !== row.width || height !== row.height))
       fail('VIEWPORT_MISMATCH', source.path);
     for (const match of source.svg.matchAll(PAINT_ATTRIBUTE))
-      inspectPaint(match[2], source.path, tokenCatalog);
+      inspectPaint(match[2], source.path, tokenCatalog, row?.themePaintBindings);
     for (const style of source.svg.matchAll(STYLE_ATTRIBUTE))
       for (const match of style[2].matchAll(STYLE_PAINT))
-        inspectPaint(match[1], source.path, tokenCatalog);
+        inspectPaint(match[1], source.path, tokenCatalog, row?.themePaintBindings);
   }
   const fragmentSummary = auditColorfulFragmentFiles(sources);
   const sourceDigests = sources

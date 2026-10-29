@@ -8,8 +8,8 @@
     "name": "outline",
     "width": 457,
     "height": 1827,
-    "placementCount": 363,
-    "componentCount": 360,
+    "placementCount": 367,
+    "componentCount": 364,
     "instanceCount": 3
   },
   "source": {
@@ -2408,6 +2408,30 @@
       "name": "Outline/ArrowUpToLine",
       "nodeType": "COMPONENT",
       "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M5 3H19M6 13L12 7L18 13M12 7V21\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "47351:7055",
+      "name": "Outline/ArrowUpFromDot",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M19 9L12 2L5 9M12 2V16M13 21C13 21.5523 12.5523 22 12 22C11.4477 22 11 21.5523 11 21C11 20.4477 11.4477 20 12 20C12.5523 20 13 20.4477 13 21Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "47385:1963",
+      "name": "Outline/arrows-up-down",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M7 3V21M4 6L7 3L10 6M14 18L17 21L20 18M17 21V3\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "47385:1964",
+      "name": "Outline/arrows-transfer-up",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M7 21V15M4 18L7 21L10 18M14 6L17 3L20 6M17 3V21M7 3V5M7 9V11\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+    },
+    {
+      "nodeId": "47385:1965",
+      "name": "Outline/arrows-transfer-down",
+      "nodeType": "COMPONENT",
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M17 3V9M14 6L17 3L20 6M4 18L7 21L10 18M7 21V3M17 21V19M17 15V13\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
     }
   ]
 }

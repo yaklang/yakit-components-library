@@ -297,7 +297,7 @@
       "rowDisposition": "canonical-new",
       "publicExposure": "canonical",
       "category": "primary-function-menu",
-      "paintMode": "literal",
+      "paintMode": "mixed",
       "sourceStatus": "current",
       "acquisitionStatus": "figma-node-export-subtree",
       "componentWidth": 44,
@@ -308,7 +308,7 @@
       "assetIntrinsicHeight": 44,
       "assetViewBox": "0 0 44 44",
       "rawSvgSha256": "c522700f330e11ef90afe2f9781f52a1e46b59a5abfda0a346e88c21e505e089",
-      "normalizedSvgSha256": "c522700f330e11ef90afe2f9781f52a1e46b59a5abfda0a346e88c21e505e089",
+      "normalizedSvgSha256": "b621e53fa452306d6a358f6ed43c3677e1b04b3fe4fafc1bf02ff1bbf5eef2f8",
       "retrievedAt": "2026-08-25T10:23:47.996Z",
       "sourceUrl": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Yakit-Design-System-V1.0?node-id=37150-32170&m=dev",
       "sourceAssetEvidence": "unique semantic subtree corroborated by per-component get_design_context",
@@ -320,7 +320,41 @@
         "discarded giant page clip; retained unique semantic component subtree and referenced defs closure"
       ],
       "componentNodeId": "37150:32170",
-      "rowId": "37150:33924/37150:32170"
+      "rowId": "37150:33924/37150:32170",
+      "themePaintBindings": [
+        {
+          "token": "--Colors-Use-Neutral-Text-1-Title",
+          "fallbackHex": "#353639",
+          "figmaVariableId": "VariableID:34701:3820",
+          "sourceNodeIds": [
+            "37150:32172",
+            "37150:32173",
+            "37150:32174",
+            "37150:32176",
+            "37150:32177",
+            "37150:32179",
+            "37150:32181",
+            "37150:32182"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-Primary",
+          "fallbackHex": "#F28C45",
+          "figmaVariableId": "VariableID:34624:51344",
+          "sourceNodeIds": [
+            "37150:32175",
+            "37150:32180"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-Border",
+          "fallbackHex": "#F9C5A2",
+          "figmaVariableId": "VariableID:34624:51343",
+          "sourceNodeIds": [
+            "37150:32178"
+          ]
+        }
+      ]
     },
     {
       "groupNodeId": "37150:33924",
@@ -837,7 +871,7 @@
       "rowDisposition": "canonical-new",
       "publicExposure": "canonical",
       "category": "primary-function-menu",
-      "paintMode": "literal",
+      "paintMode": "mixed",
       "sourceStatus": "current",
       "acquisitionStatus": "figma-node-export-subtree",
       "componentWidth": 44,
@@ -848,7 +882,7 @@
       "assetIntrinsicHeight": 44,
       "assetViewBox": "0 0 44 44",
       "rawSvgSha256": "161bdd91966e70f0914b8b9d8e9094d7746ba66e76dc3bcb956060965cf2d002",
-      "normalizedSvgSha256": "161bdd91966e70f0914b8b9d8e9094d7746ba66e76dc3bcb956060965cf2d002",
+      "normalizedSvgSha256": "222cfdd3503f9fad7ae8c36469dd09d2154a97cbe52714402aad08d1e1fa4125",
       "retrievedAt": "2026-08-25T10:23:47.996Z",
       "sourceUrl": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Yakit-Design-System-V1.0?node-id=44683-2001&m=dev",
       "sourceAssetEvidence": "unique semantic subtree corroborated by per-component get_design_context",
@@ -860,7 +894,53 @@
         "discarded giant page clip; retained unique semantic component subtree and referenced defs closure"
       ],
       "componentNodeId": "44683:2001",
-      "rowId": "37150:33924/44683:2001"
+      "rowId": "37150:33924/44683:2001",
+      "themePaintBindings": [
+        {
+          "token": "--Colors-Use-Neutral-Text-1-Title",
+          "fallbackHex": "#353639",
+          "figmaVariableId": "VariableID:34701:3820",
+          "sourceNodeIds": [
+            "44683:1978",
+            "44683:1979",
+            "44683:1982",
+            "44683:1980",
+            "44683:1987",
+            "44683:1989",
+            "44683:1995",
+            "44683:1996",
+            "44683:1997",
+            "44683:1998",
+            "44683:1999",
+            "44683:2000"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-Primary",
+          "fallbackHex": "#F28C45",
+          "figmaVariableId": "VariableID:34624:51344",
+          "sourceNodeIds": [
+            "44683:1983",
+            "44683:1985",
+            "44683:1981",
+            "44683:1988",
+            "44683:1990",
+            "44683:1991",
+            "44683:1992",
+            "44683:1993",
+            "44683:1994"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-On-Primary",
+          "fallbackHex": "#FEF5EE",
+          "figmaVariableId": "VariableID:34701:3808",
+          "sourceNodeIds": [
+            "44683:1984",
+            "44683:1986"
+          ]
+        }
+      ]
     },
     {
       "groupNodeId": "37150:33924",
@@ -1635,7 +1715,7 @@
       "rowDisposition": "canonical-new",
       "publicExposure": "canonical",
       "category": "secondary-menu",
-      "paintMode": "literal",
+      "paintMode": "mixed",
       "sourceStatus": "current",
       "acquisitionStatus": "figma-node-export-subtree",
       "componentWidth": 32,
@@ -1646,7 +1726,7 @@
       "assetIntrinsicHeight": 32,
       "assetViewBox": "0 0 32 32",
       "rawSvgSha256": "7cc41ba7ae856cc44664642ed15994b8d44f277e66bb2594e95e3142e5831332",
-      "normalizedSvgSha256": "7cc41ba7ae856cc44664642ed15994b8d44f277e66bb2594e95e3142e5831332",
+      "normalizedSvgSha256": "2896fc86fb790f3ce12c012a0d44edee09b73001ce07d43cc3ba274f3ebeb9fb",
       "retrievedAt": "2026-08-25T10:23:47.996Z",
       "sourceUrl": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Yakit-Design-System-V1.0?node-id=45074-33180&m=dev",
       "sourceAssetEvidence": "unique semantic subtree corroborated by per-component get_design_context",
@@ -1658,7 +1738,35 @@
         "discarded giant page clip; retained unique semantic component subtree and referenced defs closure"
       ],
       "componentNodeId": "45074:33180",
-      "rowId": "37151:13894/45074:33180"
+      "rowId": "37151:13894/45074:33180",
+      "themePaintBindings": [
+        {
+          "token": "--Colors-Use-Main-Primary",
+          "fallbackHex": "#F28C45",
+          "figmaVariableId": "VariableID:34624:51344",
+          "sourceNodeIds": [
+            "45074:33172",
+            "45074:33173"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Neutral-Text-1-Title",
+          "fallbackHex": "#353639",
+          "figmaVariableId": "VariableID:34701:3820",
+          "sourceNodeIds": [
+            "45074:33174",
+            "45074:33179"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Basic-Background",
+          "fallbackHex": "#FFFFFF",
+          "figmaVariableId": "VariableID:34614:51335",
+          "sourceNodeIds": [
+            "45074:33176"
+          ]
+        }
+      ]
     },
     {
       "groupNodeId": "37151:13894",
@@ -1671,7 +1779,7 @@
       "rowDisposition": "canonical-new",
       "publicExposure": "canonical",
       "category": "secondary-menu",
-      "paintMode": "literal",
+      "paintMode": "mixed",
       "sourceStatus": "current",
       "acquisitionStatus": "figma-context-composed",
       "componentWidth": 32,
@@ -1682,13 +1790,50 @@
       "assetIntrinsicHeight": 32,
       "assetViewBox": "0 0 32 32",
       "rawSvgSha256": "1081365674066abee7c795dd10775c970b900ed239cf2d6e00f88b1d8922123d",
-      "normalizedSvgSha256": "1081365674066abee7c795dd10775c970b900ed239cf2d6e00f88b1d8922123d",
+      "normalizedSvgSha256": "b328845e9cd79186415675a677b18e50813ceca5b9f80fafd072f4fb5d9086cd",
       "retrievedAt": "2026-08-25T10:23:47.996Z",
       "sourceUrl": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Yakit-Design-System-V1.0?node-id=45171-106981&m=dev",
       "sourceAssetEvidence": "exact context leaf assets composed with Figma absolute layout",
       "namingBasis": "stable PascalCase translation of Figma semantic data-name + necessary state/category disambiguation + Colorful",
       "componentNodeId": "45171:106981",
-      "rowId": "37151:13894/45171:106981"
+      "rowId": "37151:13894/45171:106981",
+      "themePaintBindings": [
+        {
+          "token": "--Colors-Use-Neutral-Text-1-Title",
+          "fallbackHex": "#353639",
+          "figmaVariableId": "VariableID:34701:3820",
+          "sourceNodeIds": [
+            "45172:110575",
+            "45172:110589"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Basic-Background",
+          "fallbackHex": "#FFFFFF",
+          "figmaVariableId": "VariableID:34614:51335",
+          "sourceNodeIds": [
+            "45171:106970",
+            "45171:106964"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-Primary",
+          "fallbackHex": "#F28C45",
+          "figmaVariableId": "VariableID:34624:51344",
+          "sourceNodeIds": [
+            "45172:110579",
+            "45171:106966"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-On-Primary",
+          "fallbackHex": "#FEF5EE",
+          "figmaVariableId": "VariableID:34701:3808",
+          "sourceNodeIds": [
+            "45330:113839"
+          ]
+        }
+      ]
     },
     {
       "groupNodeId": "37151:13894",
@@ -1701,7 +1846,7 @@
       "rowDisposition": "canonical-new",
       "publicExposure": "canonical",
       "category": "secondary-menu",
-      "paintMode": "literal",
+      "paintMode": "mixed",
       "sourceStatus": "current",
       "acquisitionStatus": "figma-node-export-subtree",
       "componentWidth": 32,
@@ -1712,7 +1857,7 @@
       "assetIntrinsicHeight": 32,
       "assetViewBox": "0 0 32 32",
       "rawSvgSha256": "96a51c11b3507587d37c0caa079d06f20ec3f1ac389a493aab7f6d954e93d26b",
-      "normalizedSvgSha256": "96a51c11b3507587d37c0caa079d06f20ec3f1ac389a493aab7f6d954e93d26b",
+      "normalizedSvgSha256": "ba2908d72a45015976533effb72126391303c8115e97f3c3dd7b9ae970fe6e92",
       "retrievedAt": "2026-08-25T10:23:47.996Z",
       "sourceUrl": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Yakit-Design-System-V1.0?node-id=45172-110544&m=dev",
       "sourceAssetEvidence": "unique semantic subtree corroborated by per-component get_design_context",
@@ -1724,7 +1869,35 @@
         "discarded giant page clip; retained unique semantic component subtree and referenced defs closure"
       ],
       "componentNodeId": "45172:110544",
-      "rowId": "37151:13894/45172:110544"
+      "rowId": "37151:13894/45172:110544",
+      "themePaintBindings": [
+        {
+          "token": "--Colors-Use-Neutral-Disable",
+          "fallbackHex": "#C0C6D1",
+          "figmaVariableId": "VariableID:34701:3815",
+          "sourceNodeIds": [
+            "45172:110557"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-Primary",
+          "fallbackHex": "#F28C45",
+          "figmaVariableId": "VariableID:34624:51344",
+          "sourceNodeIds": [
+            "45172:110559",
+            "45172:110563",
+            "45172:110564"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Neutral-Text-1-Title",
+          "fallbackHex": "#353639",
+          "figmaVariableId": "VariableID:34701:3820",
+          "sourceNodeIds": [
+            "45172:110573"
+          ]
+        }
+      ]
     },
     {
       "groupNodeId": "37151:13894",
@@ -1737,7 +1910,7 @@
       "rowDisposition": "canonical-new",
       "publicExposure": "canonical",
       "category": "secondary-menu",
-      "paintMode": "literal",
+      "paintMode": "mixed",
       "sourceStatus": "current",
       "acquisitionStatus": "figma-node-export-subtree",
       "componentWidth": 32,
@@ -1748,7 +1921,7 @@
       "assetIntrinsicHeight": 32,
       "assetViewBox": "0 0 32 32",
       "rawSvgSha256": "c4fef5cc381ee171b8d970c8e042d8c05df32b38a93b0246ddb52e8310fe3330",
-      "normalizedSvgSha256": "8c0a95208e4a464a7146ba096c40754e6851d66ba2158a7f9e8cb5cf42cc7da7",
+      "normalizedSvgSha256": "076f899cc7c33d02452ab035860b53c48278864e5a81969d6e7c3a4cb735c5d1",
       "retrievedAt": "2026-08-25T10:23:47.996Z",
       "sourceUrl": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Yakit-Design-System-V1.0?node-id=46718-12237&m=dev",
       "sourceAssetEvidence": "unique semantic subtree corroborated by per-component get_design_context",
@@ -1760,7 +1933,44 @@
         "discarded giant page clip; retained unique semantic component subtree and referenced defs closure"
       ],
       "componentNodeId": "46718:12237",
-      "rowId": "37151:13894/46718:12237"
+      "rowId": "37151:13894/46718:12237",
+      "themePaintBindings": [
+        {
+          "token": "--Colors-Use-Neutral-Text-1-Title",
+          "fallbackHex": "#353639",
+          "figmaVariableId": "VariableID:34701:3820",
+          "sourceNodeIds": [
+            "46718:12215",
+            "46718:12217",
+            "46719:7535"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-Border",
+          "fallbackHex": "#F9C5A2",
+          "figmaVariableId": "VariableID:34624:51343",
+          "sourceNodeIds": [
+            "46718:12216"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-On-Primary",
+          "fallbackHex": "#FEF5EE",
+          "figmaVariableId": "VariableID:34701:3808",
+          "sourceNodeIds": [
+            "46718:12219"
+          ]
+        },
+        {
+          "token": "--Colors-Use-Main-Primary",
+          "fallbackHex": "#F28C45",
+          "figmaVariableId": "VariableID:34624:51344",
+          "sourceNodeIds": [
+            "46718:12221",
+            "46718:12222"
+          ]
+        }
+      ]
     },
     {
       "groupNodeId": "37202:12895",

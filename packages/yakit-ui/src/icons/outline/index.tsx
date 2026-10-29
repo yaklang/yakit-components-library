@@ -365,6 +365,11 @@ import GanttChartOutlinedSvg from './47252-26041.svg?react';
 import SquareGanttChartOutlinedSvg from './47254-26877.svg?react';
 import ArrowUpToLineOutlinedSvg from './47297-32125.svg?react';
 
+import ArrowUpFromDotOutlinedSvg from './47351-7055.svg?react';
+import ArrowsUpDownOutlinedSvg from './47385-1963.svg?react';
+import ArrowsTransferUpOutlinedSvg from './47385-1964.svg?react';
+import ArrowsTransferDownOutlinedSvg from './47385-1965.svg?react';
+
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined');
 export const LocationMarkerOutlined = createIcon(
   LocationMarkerOutlinedSvg,
@@ -895,3 +900,17 @@ export const SquareGanttChartOutlined = createIcon(
   'SquareGanttChartOutlined',
 );
 export const ArrowUpToLineOutlined = createIcon(ArrowUpToLineOutlinedSvg, 'ArrowUpToLineOutlined');
+
+export const ArrowUpFromDotOutlined = createIcon(
+  ArrowUpFromDotOutlinedSvg,
+  'ArrowUpFromDotOutlined',
+);
+export const ArrowsUpDownOutlined = createIcon(ArrowsUpDownOutlinedSvg, 'ArrowsUpDownOutlined');
+export const ArrowsTransferUpOutlined = createIcon(
+  ArrowsTransferUpOutlinedSvg,
+  'ArrowsTransferUpOutlined',
+);
+export const ArrowsTransferDownOutlined = createIcon(
+  ArrowsTransferDownOutlinedSvg,
+  'ArrowsTransferDownOutlined',
+);

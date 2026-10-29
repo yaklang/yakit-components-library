@@ -125,7 +125,7 @@ describe('adjustable icon runtime stroke contract', () => {
     'applies width %s to every adjustable Outline and Loading',
     (strokeWidth) => {
       const adjustable = outlineIconRegistry;
-      expect(adjustable).toHaveLength(360);
+      expect(adjustable).toHaveLength(364);
       const { container } = render(
         <>
           {adjustable.map(({ Component, exportName }) => (

@@ -71,9 +71,9 @@ const completeManifest = (source = validOutline) => {
     localRawSvgSha256: sha256(source),
     normalizedAstSha256,
   });
-  const placements = Array.from({ length: 363 }, (_, index) => {
-    const instance = index >= 360;
-    const exportedSourceNodeId = `${(index % 360) + 1}:1`;
+  const placements = Array.from({ length: 367 }, (_, index) => {
+    const instance = index >= 364;
+    const exportedSourceNodeId = `${(index % 364) + 1}:1`;
     return {
       exportedSourceNodeId,
       mainComponentId: exportedSourceNodeId,
@@ -86,7 +86,7 @@ const completeManifest = (source = validOutline) => {
   });
   return {
     complete: true,
-    expectedCounts: { currentSymbols: 360, instances: 3, placements: 363, publicExports: 360 },
+    expectedCounts: { currentSymbols: 364, instances: 3, placements: 367, publicExports: 364 },
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     instanceVerification: placements.slice(-3),
@@ -96,7 +96,7 @@ const completeManifest = (source = validOutline) => {
     provenanceComplete: true,
     sourceEvidence: {} as Record<string, string>,
     strokeWidthPolicy: { ...ICON_STROKE_WIDTH_POLICY },
-    symbols: Array.from({ length: 360 }, (_, index) => symbol(index)),
+    symbols: Array.from({ length: 364 }, (_, index) => symbol(index)),
     variant: 'outline',
   };
 };
@@ -174,6 +174,24 @@ describe('Outline icon audit check mode', () => {
 });
 
 describe('Outline icon audit structural failures', () => {
+  it('accepts the Figma title token only with its verified fallback', async () => {
+    for (const [paint, accepted] of [
+      ['var(--Colors-Use-Neutral-Text-1-Title, #353639)', true],
+      ['var(--Colors-Use-Neutral-Text-1-Title, #F28C45)', false],
+      ['var(--unverified-color, #353639)', false],
+    ] as const) {
+      await withFixture(
+        { 'outline/example.svg': validOutline.replaceAll('currentColor', paint) },
+        async (root) => {
+          const result = await auditIcons({ root });
+          expect(result.failures.some(({ token }) => token === 'FOREGROUND_LITERAL')).toBe(
+            !accepted,
+          );
+        },
+      );
+    }
+  });
+
   it.each([
     ['XML_INVALID', '<svg>'],
     [
@@ -490,7 +508,7 @@ describe('Outline manifest updater provenance gate', () => {
       { cwd: packageRoot, encoding: 'utf8' },
     );
 
-  it('writes only a complete 360/360/363/3 independently matched manifest', () => {
+  it('writes only a complete 364/364/367/3 independently matched manifest', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
     try {
       const output = resolve(root, 'manifest.json');
@@ -499,12 +517,12 @@ describe('Outline manifest updater provenance gate', () => {
       const value = JSON.parse(readFileSync(output, 'utf8'));
       expect(value).toMatchObject({ complete: true, provenanceComplete: true });
       expect(value.strokeWidthPolicy).toEqual(ICON_STROKE_WIDTH_POLICY);
-      expect(value.symbols).toHaveLength(360);
-      expect(value.placements).toHaveLength(363);
+      expect(value.symbols).toHaveLength(364);
+      expect(value.placements).toHaveLength(367);
       expect(value.instanceVerification).toHaveLength(3);
       expect(
         new Set(value.symbols.map((symbol: Record<string, string>) => symbol.exportName)).size,
-      ).toBe(360);
+      ).toBe(364);
       expect(value.legacySources).toEqual([]);
       expect(
         value.placements.every(

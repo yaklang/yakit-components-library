@@ -149,6 +149,44 @@ describe('colorful offline audit', () => {
     ).toThrow(/COLOR_TOKEN_FALLBACK_MISMATCH/);
   });
 
+  it('allows a theme-changing token only with matching Figma binding evidence', () => {
+    const binding = {
+      token: '--theme-orange',
+      fallbackHex: '#F28C45',
+      figmaVariableId: 'VariableID:34624:51344',
+      sourceNodeIds: ['44683:1983'],
+    };
+    const audit = (bindings: object[], fallback = '#F28C45') =>
+      auditColorfulInputs(
+        {
+          inventory: {
+            ...canonicalOnlyInventory,
+            rows: [{ ...canonicalOnlyInventory.rows[0], themePaintBindings: bindings }],
+          },
+          sources: [
+            {
+              ...sources[0],
+              svg: `<svg width="24" height="24" preserveAspectRatio="xMidYMid meet"><path d="M0 0L1 1" fill="var(--theme-orange, ${fallback})"/></svg>`,
+            },
+          ],
+        },
+        {
+          expectedGroupCount: 1,
+          expectedRowCount: 1,
+          tokenCatalog: [{ name: '--theme-orange', light: '#F28C45', dark: '#DB752E' }],
+        },
+      );
+    expect(() => audit([binding])).not.toThrow();
+    expect(() => audit([])).toThrow(/COLOR_TOKEN_FALLBACK_MISMATCH/);
+    expect(() => audit([{ ...binding, sourceNodeIds: [] }])).toThrow(
+      /COLOR_TOKEN_FALLBACK_MISMATCH/,
+    );
+    expect(() => audit([{ ...binding, token: '--other' }])).toThrow(
+      /COLOR_TOKEN_FALLBACK_MISMATCH/,
+    );
+    expect(() => audit([binding], '#FFFFFF')).toThrow(/COLOR_TOKEN_FALLBACK_MISMATCH/);
+  });
+
   it('fails closed on invalid or non-finite path data', () => {
     const svg = (data: string) =>
       `<svg width="24" height="24" preserveAspectRatio="xMidYMid meet"><path d="${data}" /></svg>`;

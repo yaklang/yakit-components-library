@@ -166,6 +166,7 @@ export async function checkIconStrokeWidths(root = packageRoot) {
       'outline-design-updates-sep17.json',
       'outline-additions-sep22.json',
       'outline-additions-sep30.json',
+      'outline-additions-oct29.json',
     ]) {
       const designUpdatesPath = path.join(root, 'test/fixtures/icons/reference', fixture);
       try {

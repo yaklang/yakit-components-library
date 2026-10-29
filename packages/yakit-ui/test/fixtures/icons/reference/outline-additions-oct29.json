@@ -1,0 +1,59 @@
+{
+  "fileKey": "QWct5XE0Bg0bNDQ93eYgEw",
+  "frameNodeId": "46824:1930",
+  "source": "figma_use_figma exportAsync(SVG_STRING), svgSimplifyStroke=false",
+  "updates": [
+    {
+      "nodeId": "47351:7055",
+      "name": "Outline/ArrowUpFromDot",
+      "x": 320,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M19 9L12 2L5 9M12 2V16M13 21C13 21.5523 12.5523 22 12 22C11.4477 22 11 21.5523 11 21C11 20.4477 11.4477 20 12 20C12.5523 20 13 20.4477 13 21Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+      "file": "47351-7055.svg",
+      "exportName": "ArrowUpFromDotOutlined",
+      "figmaName": "Outline/ArrowUpFromDot",
+      "added": true
+    },
+    {
+      "nodeId": "47385:1963",
+      "name": "Outline/arrows-up-down",
+      "x": 368,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M7 3V21M4 6L7 3L10 6M14 18L17 21L20 18M17 21V3\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+      "file": "47385-1963.svg",
+      "exportName": "ArrowsUpDownOutlined",
+      "figmaName": "Outline/arrows-up-down",
+      "added": true
+    },
+    {
+      "nodeId": "47385:1964",
+      "name": "Outline/arrows-transfer-up",
+      "x": 416,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M7 21V15M4 18L7 21L10 18M14 6L17 3L20 6M17 3V21M7 3V5M7 9V11\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+      "file": "47385-1964.svg",
+      "exportName": "ArrowsTransferUpOutlined",
+      "figmaName": "Outline/arrows-transfer-up",
+      "added": true
+    },
+    {
+      "nodeId": "47385:1965",
+      "name": "Outline/arrows-transfer-down",
+      "x": 464,
+      "y": 2327,
+      "width": 24,
+      "height": 24,
+      "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M17 3V9M14 6L17 3L20 6M4 18L7 21L10 18M7 21V3M17 21V19M17 15V13\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+      "file": "47385-1965.svg",
+      "exportName": "ArrowsTransferDownOutlined",
+      "figmaName": "Outline/arrows-transfer-down",
+      "added": true
+    }
+  ]
+}
