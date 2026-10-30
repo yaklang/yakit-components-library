@@ -28,6 +28,7 @@ import {
 import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
 import solidRaw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
+import additionsOct29 from '../fixtures/icons/reference/outline-additions-oct29.json';
 import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
 import additionsSep30 from '../fixtures/icons/reference/outline-additions-sep30.json';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
@@ -178,16 +179,21 @@ describe('all production icon migration contracts', () => {
           (entry: { assetFile: string }) => `icons/oldicon/${entry.assetFile}`,
         ),
       ),
-      ...[...designUpdates.updates, ...additions.updates, ...additionsSep30.updates]
+      ...[
+        ...designUpdates.updates,
+        ...additions.updates,
+        ...additionsSep30.updates,
+        ...additionsOct29.updates,
+      ]
         .filter(({ added }) => added)
         .map(({ file }) => `icons/outline/${file}`),
       'icons/solid/46709-8109.svg',
     ].sort();
-    expect(expected).toHaveLength(1313);
+    expect(expected).toHaveLength(1317);
     expect(expected.filter((file) => file.startsWith('components/'))).toHaveLength(24);
     expect(await svgFiles(resolve(packageRoot, 'src'))).toEqual(expected);
     expect(await checkIconStrokeWidths(packageRoot)).toEqual({
-      svgFiles: 1313,
+      svgFiles: 1317,
       loading: 1,
       violations: 0,
     });
