@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { YakitTheme } from '../theme';
 
 import type { YakitButtonToken } from './YakitButton';
+import type { YakitCardToken } from './YakitCard';
 import type { YakitCheckboxToken } from './YakitCheckbox';
 import type { YakitRadioToken } from './YakitRadio';
 import type { YakitSelectToken } from './YakitSelect';
@@ -13,6 +14,7 @@ import type { YakitTreeToken } from './YakitTree';
 // 扩展的组件 tokens
 export interface YakitThemeComponents {
   YakitButton?: Partial<YakitButtonToken>;
+  YakitCard?: Partial<YakitCardToken>;
   YakitCheckbox?: Partial<YakitCheckboxToken>;
   YakitRadio?: Partial<YakitRadioToken>;
   YakitSwitch?: Partial<YakitSwitchToken>;

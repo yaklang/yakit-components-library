@@ -22,6 +22,7 @@ export const YakitConfigContextProvider: FC<
       token: {
         ...mergeDefined(parent.token, theme?.token),
         YakitButton: mergeDefined(parent.token.YakitButton ?? {}, theme?.components?.YakitButton),
+        YakitCard: mergeDefined(parent.token.YakitCard ?? {}, theme?.components?.YakitCard),
         YakitCheckbox: mergeDefined(
           parent.token.YakitCheckbox ?? {},
           theme?.components?.YakitCheckbox,

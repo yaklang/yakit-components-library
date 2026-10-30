@@ -132,3 +132,6 @@ export type {
   SwitchSize,
   YakitSwitchProps,
 } from './Switch';
+
+export { default as Card, YakitCard } from './Card';
+export type { CardProps, CardSize, CardStyles, CardVariant, YakitCardProps } from './Card';
