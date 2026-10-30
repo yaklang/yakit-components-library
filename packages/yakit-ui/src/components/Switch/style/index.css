@@ -1,0 +1,477 @@
+/* Switch — Figma sm-12 / md-16 / lg-20 + 主项目 maxLarge
+ * 尺寸：Figma md = 主项目旧 = 28×16 / handle 12（一致）。
+ * 用 button.ant-switch.yakit-switch.* 提高优先级，避免 antd5 css-in-js 默认 44×22 盖过。
+ * hover：产品不要轨道变色（主项目旧 scss 亦锁死 hover）。
+ * innerText：对齐 antd Switch 双文案垂直堆叠 + margin-inline 滑动，禁止 absolute 左右散开。
+ * has-children：必须 width:auto（选择器含 button，压过固定宽），inner 不设 width:100%，
+ *   才能按文案固有宽度撑开；button + inner 均 overflow:hidden，切换时只露一侧字。
+ */
+
+.yakit-switch {
+  --yakit-switch-track: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+  --yakit-switch-track-checked: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  --yakit-switch-track-disabled: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
+  --yakit-switch-track-checked-disabled: var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  --yakit-switch-handle: var(--Colors-Use-Basic-White, #ffffff);
+  --yakit-switch-handle-disabled: var(--Colors-Use-Neutral-Bg, #f8f9fa);
+  --yakit-switch-handle-checked-disabled: var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee));
+  --yakit-switch-inner: var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee));
+  --yakit-switch-label: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title, #353639));
+  --yakit-switch-description: var(--yakit-color-text-help, var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1));
+  --yakit-switch-shadow: 0 1px 2px var(--Colors-Use-Basic-Shadow, #17171714);
+  --yakit-switch-track-padding: 2px;
+  --yakit-switch-duration: 0.2s;
+
+  /* 仅放 .ant-switch.yakit-switch 未覆盖的声明；几何/背景见下方双前缀块 */
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: 'PingFang SC', sans-serif;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  position: relative;
+  transition: background-color var(--yakit-switch-duration) ease;
+  user-select: none;
+}
+
+/* 无内文默认固定宽；含 button 提高优先级压过 antd */
+.ant-switch.yakit-switch,
+button.ant-switch.yakit-switch {
+  background: var(--yakit-switch-track);
+  border: none;
+  border-radius: var(--yakit-switch-border-radius, 999px);
+  box-sizing: border-box;
+  display: inline-block;
+  height: var(--yakit-switch-height, 16px);
+  line-height: var(--yakit-switch-height, 16px);
+  min-width: var(--yakit-switch-min-width, 28px);
+  overflow: hidden;
+  width: var(--yakit-switch-min-width, 28px);
+  opacity: 1;
+  vertical-align: middle;
+}
+
+.yakit-switch:focus-visible {
+  outline: 2px solid var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  outline-offset: 2px;
+}
+
+.ant-switch.yakit-switch:hover:not(.yakit-switch-disabled):not(.yakit-switch-loading),
+.yakit-switch:hover:not(.yakit-switch-disabled):not(.yakit-switch-loading) {
+  background: var(--yakit-switch-track);
+}
+
+.yakit-switch-checked,
+.ant-switch.yakit-switch.yakit-switch-checked,
+button.ant-switch.yakit-switch.yakit-switch-checked {
+  background: var(--yakit-switch-track-checked);
+}
+
+.ant-switch.yakit-switch.yakit-switch-checked:hover:not(.yakit-switch-disabled):not(.yakit-switch-loading),
+button.ant-switch.yakit-switch.yakit-switch-checked:hover:not(.yakit-switch-disabled):not(.yakit-switch-loading),
+.yakit-switch-checked:hover:not(.yakit-switch-disabled):not(.yakit-switch-loading) {
+  background: var(--yakit-switch-track-checked);
+}
+
+.yakit-switch-disabled,
+.yakit-switch-loading {
+  cursor: not-allowed;
+}
+
+.yakit-switch-disabled:not(.yakit-switch-checked),
+.ant-switch.yakit-switch.yakit-switch-disabled:not(.yakit-switch-checked),
+button.ant-switch.yakit-switch.yakit-switch-disabled:not(.yakit-switch-checked) {
+  background: var(--yakit-switch-track-disabled);
+  opacity: 1;
+}
+
+.yakit-switch-disabled.yakit-switch-checked,
+.ant-switch.yakit-switch.yakit-switch-disabled.yakit-switch-checked,
+button.ant-switch.yakit-switch.yakit-switch-disabled.yakit-switch-checked {
+  background: var(--yakit-switch-track-checked-disabled);
+  opacity: 1;
+}
+
+.yakit-switch-handle,
+.ant-switch.yakit-switch .yakit-switch-handle,
+.ant-switch.yakit-switch .ant-switch-handle {
+  background: var(--yakit-switch-handle);
+  border-radius: 50%;
+  box-shadow: var(--yakit-switch-shadow);
+  height: var(--yakit-switch-handle-size, 12px);
+  inset-inline-start: var(--yakit-switch-track-padding, 2px);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: inset-inline-start var(--yakit-switch-duration) ease, left var(--yakit-switch-duration) ease,
+    background-color var(--yakit-switch-duration) ease;
+  width: var(--yakit-switch-handle-size, 12px);
+  z-index: 1;
+}
+
+.yakit-switch-handle::before,
+.ant-switch.yakit-switch .ant-switch-handle::before {
+  display: none;
+  content: none;
+}
+
+.yakit-switch-checked .yakit-switch-handle,
+.ant-switch.yakit-switch-checked .yakit-switch-handle,
+.ant-switch.yakit-switch-checked .ant-switch-handle {
+  inset-inline-start: calc(100% - var(--yakit-switch-handle-size, 12px) - var(--yakit-switch-track-padding, 2px));
+}
+
+.yakit-switch-disabled:not(.yakit-switch-checked) .yakit-switch-handle {
+  background: var(--yakit-switch-handle-disabled);
+  box-shadow: none;
+}
+
+.yakit-switch-disabled.yakit-switch-checked .yakit-switch-handle {
+  background: var(--yakit-switch-handle-checked-disabled);
+  box-shadow: none;
+}
+
+.yakit-switch-loading-icon {
+  align-items: center;
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+.yakit-switch-checked .yakit-switch-loading-icon {
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+}
+
+/* inner：对齐 antd — block + overflow hidden + padding-inline；无 width:100% 以免锁死 has-children */
+.yakit-switch-inner,
+.ant-switch.yakit-switch .yakit-switch-inner,
+.ant-switch.yakit-switch .ant-switch-inner {
+  box-sizing: border-box;
+  color: var(--yakit-switch-inner);
+  display: block;
+  font-weight: 500;
+  height: 100%;
+  overflow: hidden;
+  padding-inline-start: var(--yakit-switch-inner-max-margin, 14px);
+  padding-inline-end: var(--yakit-switch-inner-min-margin, 5px);
+  pointer-events: none;
+  position: relative;
+  transition: padding-inline-start var(--yakit-switch-duration) ease-in-out,
+    padding-inline-end var(--yakit-switch-duration) ease-in-out;
+  border-radius: 100px;
+}
+
+.yakit-switch-checked .yakit-switch-inner,
+.ant-switch.yakit-switch-checked .yakit-switch-inner,
+.ant-switch.yakit-switch-checked .ant-switch-inner {
+  padding-inline-start: var(--yakit-switch-inner-min-margin, 5px);
+  padding-inline-end: var(--yakit-switch-inner-max-margin, 14px);
+}
+
+/* 双文案垂直堆叠 + margin-inline（antd 5），勿 absolute + 双端 opacity */
+.yakit-switch-inner-checked,
+.yakit-switch-inner-unchecked,
+.ant-switch.yakit-switch .yakit-switch-inner-checked,
+.ant-switch.yakit-switch .yakit-switch-inner-unchecked,
+.ant-switch.yakit-switch .ant-switch-inner-checked,
+.ant-switch.yakit-switch .ant-switch-inner-unchecked {
+  align-items: center;
+  box-sizing: border-box;
+  color: inherit;
+  display: flex;
+  font-size: inherit;
+  height: var(--yakit-switch-height, 16px);
+  justify-content: center;
+  /* 行高贴字号；不做额外 translateY，靠 flex 垂直居中（此前 +1.5px 会光学偏下） */
+  line-height: 1;
+  pointer-events: none;
+  position: static;
+  transform: none;
+  transition: margin-inline-start var(--yakit-switch-duration) ease-in-out,
+    margin-inline-end var(--yakit-switch-duration) ease-in-out;
+  opacity: 1;
+  white-space: nowrap;
+}
+
+/*
+ * 主项目 antd 5（hashed:false）会给内文 span 加 min-height: trackHeight（22px，
+ * small 16px）；库内的内文高度由 --yakit-switch-height 决定，必须压掉 min-height，
+ * 否则 large 的 20px span 会被顶成 22px，上下两层文案错位 2px 并被裁切。
+ * 选择器用 button + 4 个 class（0,4,1）压过 antd 的 .ant-switch-small 规则（0,4,0）。
+ */
+button.ant-switch.yakit-switch .ant-switch-inner .ant-switch-inner-checked,
+button.ant-switch.yakit-switch .ant-switch-inner .ant-switch-inner-unchecked {
+  min-height: 0;
+}
+
+.yakit-switch-inner-checked,
+.ant-switch.yakit-switch .yakit-switch-inner-checked {
+  margin-inline-start: calc(
+    -100% + var(--yakit-switch-handle-size, 12px) + var(--yakit-switch-track-padding, 2px) * 2 -
+      var(--yakit-switch-inner-max-margin, 14px) * 2
+  );
+  margin-inline-end: calc(
+    100% - var(--yakit-switch-handle-size, 12px) - var(--yakit-switch-track-padding, 2px) * 2 +
+      var(--yakit-switch-inner-max-margin, 14px) * 2
+  );
+}
+
+.yakit-switch-inner-unchecked,
+.ant-switch.yakit-switch .yakit-switch-inner-unchecked {
+  margin-top: calc(var(--yakit-switch-height, 16px) * -1);
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+.yakit-switch-checked .yakit-switch-inner-checked,
+.ant-switch.yakit-switch-checked .yakit-switch-inner-checked {
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+.yakit-switch-checked .yakit-switch-inner-unchecked,
+.ant-switch.yakit-switch-checked .yakit-switch-inner-unchecked {
+  margin-inline-start: calc(
+    100% - var(--yakit-switch-handle-size, 12px) - var(--yakit-switch-track-padding, 2px) * 2 +
+      var(--yakit-switch-inner-max-margin, 14px) * 2
+  );
+  margin-inline-end: calc(
+    -100% + var(--yakit-switch-handle-size, 12px) + var(--yakit-switch-track-padding, 2px) * 2 -
+      var(--yakit-switch-inner-max-margin, 14px) * 2
+  );
+}
+
+/* ---------- sizes：无内文固定宽高；有内文 width:auto（button 选择器压过固定宽） ---------- */
+
+.yakit-switch-small,
+.ant-switch.yakit-switch.yakit-switch-small,
+button.ant-switch.yakit-switch.yakit-switch-small {
+  --yakit-switch-height: var(--yakit-switch-height-sm, 12px);
+  --yakit-switch-min-width: var(--yakit-switch-min-width-sm, 20px);
+  --yakit-switch-handle-size: var(--yakit-switch-handle-size-sm, 8px);
+  --yakit-switch-inner-min-margin: 2px;
+  --yakit-switch-inner-max-margin: 10px;
+  height: var(--yakit-switch-height-sm, 12px);
+  line-height: var(--yakit-switch-height-sm, 12px);
+  min-width: var(--yakit-switch-min-width-sm, 20px);
+  width: var(--yakit-switch-min-width-sm, 20px);
+}
+
+.yakit-switch-small.yakit-switch-has-children,
+.ant-switch.yakit-switch.yakit-switch-small.yakit-switch-has-children,
+button.ant-switch.yakit-switch.yakit-switch-small.yakit-switch-has-children {
+  min-width: 28px;
+  overflow: hidden;
+  width: auto;
+}
+
+.yakit-switch-small .yakit-switch-inner {
+  font-size: 10px;
+}
+
+.yakit-switch-middle,
+.ant-switch.yakit-switch.yakit-switch-middle,
+button.ant-switch.yakit-switch.yakit-switch-middle {
+  --yakit-switch-height: var(--yakit-switch-height-md, 16px);
+  --yakit-switch-min-width: var(--yakit-switch-min-width-md, 28px);
+  --yakit-switch-handle-size: var(--yakit-switch-handle-size-md, 12px);
+  --yakit-switch-inner-min-margin: 5px;
+  --yakit-switch-inner-max-margin: 14px;
+  height: var(--yakit-switch-height-md, 16px);
+  line-height: var(--yakit-switch-height-md, 16px);
+  min-width: var(--yakit-switch-min-width-md, 28px);
+  width: var(--yakit-switch-min-width-md, 28px);
+}
+
+.yakit-switch-middle.yakit-switch-has-children,
+.ant-switch.yakit-switch.yakit-switch-middle.yakit-switch-has-children,
+button.ant-switch.yakit-switch.yakit-switch-middle.yakit-switch-has-children {
+  min-width: 36px;
+  overflow: hidden;
+  width: auto;
+}
+
+.yakit-switch-middle .yakit-switch-inner {
+  font-size: 10px;
+}
+
+.yakit-switch-large,
+.ant-switch.yakit-switch.yakit-switch-large,
+button.ant-switch.yakit-switch.yakit-switch-large {
+  --yakit-switch-height: var(--yakit-switch-height-lg, 20px);
+  --yakit-switch-min-width: var(--yakit-switch-min-width-lg, 36px);
+  --yakit-switch-handle-size: var(--yakit-switch-handle-size-lg, 16px);
+  --yakit-switch-inner-min-margin: 6px;
+  --yakit-switch-inner-max-margin: 18px;
+  height: var(--yakit-switch-height-lg, 20px);
+  line-height: var(--yakit-switch-height-lg, 20px);
+  min-width: var(--yakit-switch-min-width-lg, 36px);
+  width: var(--yakit-switch-min-width-lg, 36px);
+}
+
+.yakit-switch-large.yakit-switch-has-children,
+.ant-switch.yakit-switch.yakit-switch-large.yakit-switch-has-children,
+button.ant-switch.yakit-switch.yakit-switch-large.yakit-switch-has-children {
+  min-width: 44px;
+  overflow: hidden;
+  width: auto;
+}
+
+.yakit-switch-large .yakit-switch-inner {
+  font-size: 11px;
+}
+
+.yakit-switch-max-large,
+.ant-switch.yakit-switch.yakit-switch-max-large,
+button.ant-switch.yakit-switch.yakit-switch-max-large {
+  --yakit-switch-height: var(--yakit-switch-height-xl, 22px);
+  --yakit-switch-min-width: var(--yakit-switch-min-width-xl, 44px);
+  --yakit-switch-handle-size: var(--yakit-switch-handle-size-xl, 18px);
+  --yakit-switch-inner-min-margin: 2px;
+  --yakit-switch-inner-max-margin: 20px;
+  height: var(--yakit-switch-height-xl, 22px);
+  line-height: var(--yakit-switch-height-xl, 22px);
+  min-width: var(--yakit-switch-min-width-xl, 44px);
+  width: var(--yakit-switch-min-width-xl, 44px);
+}
+
+.yakit-switch-max-large.yakit-switch-has-children,
+.ant-switch.yakit-switch.yakit-switch-max-large.yakit-switch-has-children,
+button.ant-switch.yakit-switch.yakit-switch-max-large.yakit-switch-has-children {
+  min-width: 52px;
+  overflow: hidden;
+  width: auto;
+}
+
+.yakit-switch-max-large .yakit-switch-inner {
+  font-size: 12px;
+}
+
+/* 尺寸由 TSX 的 size prop（svg 宽高属性）提供，此处仅统一图标描边 */
+.yakit-switch-middle-icon,
+.yakit-switch-large-icon {
+  display: inline-flex;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.yakit-switch-middle-icon svg,
+.yakit-switch-large-icon svg {
+  stroke-width: 1.5px;
+}
+
+.yakit-switch-middle.yakit-switch-has-children .yakit-switch-inner-checked,
+.yakit-switch-middle.yakit-switch-has-children .yakit-switch-inner-unchecked {
+  height: 16px;
+  line-height: 1;
+}
+
+.yakit-switch-large.yakit-switch-has-children .yakit-switch-inner-checked,
+.yakit-switch-large.yakit-switch-has-children .yakit-switch-inner-unchecked {
+  height: 20px;
+  line-height: 1;
+}
+
+.yakit-switch-wrapper {
+  display: inline-flex;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.yakit-switch-field {
+  align-items: flex-start;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'PingFang SC', sans-serif;
+  gap: var(--yakit-switch-gap, 8px);
+  margin: 0;
+  user-select: none;
+  vertical-align: top;
+}
+
+.yakit-switch-field-disabled,
+.yakit-switch-field:has(.yakit-switch-loading) {
+  cursor: not-allowed;
+}
+
+.yakit-switch-field-disabled .yakit-switch-label,
+.yakit-switch-field-disabled .yakit-switch-description {
+  color: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+}
+
+.yakit-switch-content {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.yakit-switch-label {
+  color: var(--yakit-switch-label);
+}
+
+.yakit-switch-description {
+  color: var(--yakit-switch-description);
+}
+
+.yakit-switch-field-small .yakit-switch-label {
+  font-size: var(--yakit-switch-font-size-md, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-switch-line-height-md, 16px);
+}
+
+.yakit-switch-field-small .yakit-switch-description {
+  font-size: var(--yakit-switch-description-font-size, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-switch-description-line-height, 16px);
+}
+
+.yakit-switch-field-middle .yakit-switch-label {
+  font-size: var(--yakit-switch-font-size-md, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-switch-line-height-md, 16px);
+}
+
+.yakit-switch-field-middle .yakit-switch-description {
+  font-size: var(--yakit-switch-description-font-size, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-switch-description-line-height, 16px);
+}
+
+.yakit-switch-field-large .yakit-switch-label {
+  font-size: var(--yakit-switch-font-size-lg, 14px);
+  letter-spacing: 0.1px;
+  line-height: var(--yakit-switch-line-height-lg, 20px);
+}
+
+.yakit-switch-field-large .yakit-switch-description {
+  font-size: var(--yakit-switch-description-font-size, 12px);
+  letter-spacing: 0.1px;
+  line-height: var(--yakit-switch-description-line-height, 16px);
+}
+
+.yakit-switch-field-max-large .yakit-switch-label {
+  font-size: var(--yakit-switch-font-size-lg, 14px);
+  letter-spacing: 0.1px;
+  line-height: var(--yakit-switch-line-height-lg, 20px);
+}
+
+.yakit-switch-field-max-large .yakit-switch-description {
+  font-size: var(--yakit-switch-description-font-size, 12px);
+  letter-spacing: 0.1px;
+  line-height: var(--yakit-switch-description-line-height, 16px);
+}
+
+.yakit-switch-field-small,
+.yakit-switch-field-middle {
+  align-items: center;
+}
+
+.yakit-switch-field-large:not(:has(.yakit-switch-description)),
+.yakit-switch-field-max-large:not(:has(.yakit-switch-description)) {
+  align-items: center;
+}
