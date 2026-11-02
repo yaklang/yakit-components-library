@@ -96,3 +96,22 @@ export type {
 
 export { default as Spin } from './Spin';
 export type { SpinGetContainer, SpinIndicator, SpinProps, SpinRef, SpinSize } from './Spin';
+
+export { default as Radio, RadioButton, YakitRadioButtons } from './Radio';
+export type {
+  RadioButtonsSize,
+  RadioChangeEvent,
+  RadioChangeEventTarget,
+  RadioGroupButtonStyle,
+  RadioGroupOption,
+  RadioGroupOptionType,
+  RadioGroupOrientation,
+  RadioGroupProps,
+  RadioOptionType,
+  RadioButtonProps,
+  RadioProps,
+  RadioRef,
+  RadioSize,
+  RadioValue,
+  YakitRadioButtonsProps,
+} from './Radio';

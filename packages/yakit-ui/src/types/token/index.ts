@@ -4,6 +4,7 @@ import type { YakitTheme } from '../theme';
 
 import type { YakitButtonToken } from './YakitButton';
 import type { YakitCheckboxToken } from './YakitCheckbox';
+import type { YakitRadioToken } from './YakitRadio';
 import type { YakitSelectToken } from './YakitSelect';
 import type { YakitTagToken } from './YakitTag';
 import type { YakitTreeToken } from './YakitTree';
@@ -12,6 +13,7 @@ import type { YakitTreeToken } from './YakitTree';
 export interface YakitThemeComponents {
   YakitButton?: Partial<YakitButtonToken>;
   YakitCheckbox?: Partial<YakitCheckboxToken>;
+  YakitRadio?: Partial<YakitRadioToken>;
   YakitTag?: Partial<YakitTagToken>;
   YakitSelect?: Partial<YakitSelectToken>;
   YakitTree?: YakitTreeToken;
