@@ -1,5 +1,14 @@
 export { default as Button } from './Button';
-export type { ButtonProps } from './Button';
+export type {
+  ButtonColors,
+  ButtonGroupProps,
+  ButtonHTMLType,
+  ButtonLoading,
+  ButtonProps,
+  ButtonShape,
+  ButtonSize,
+  ButtonType,
+} from './Button';
 
 export { default as Input } from './Input';
 export type {

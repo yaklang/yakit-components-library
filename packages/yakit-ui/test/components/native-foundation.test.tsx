@@ -163,7 +163,7 @@ describe('native Button behavior', () => {
     loadingButton?.click();
     disabledButton?.click();
     expect(loadingButton).toBeDisabled();
-    expect(loadingButton).toHaveAttribute('aria-busy', 'true');
+    expect(loadingButton).not.toHaveAttribute('aria-busy');
     expect(loadingButton).toHaveClass('yakit-btn-icon-end');
     expect(disabledButton).toBeDisabled();
     expect(onLoadingClick).not.toHaveBeenCalled();
