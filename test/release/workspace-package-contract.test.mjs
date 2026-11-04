@@ -281,7 +281,7 @@ test("repository dry-run installs and verifies a disposable exact tarball", () =
   );
 });
 
-test("icon consumers install color directly and verify pnpm's strict layout", () => {
+test("icon consumers install icons separately and declare color for direct theme API use", () => {
   const readme = readFileSync(
     join(root, "packages/yakit-ui-icons/README.md"),
     "utf8",
@@ -291,11 +291,14 @@ test("icon consumers install color directly and verify pnpm's strict layout", ()
     "utf8",
   );
 
-  assert.match(
-    readme,
-    /pnpm add @yakit-libs\/yakit-ui-icons @yakit-libs\/color@1\.4\.1 react/,
+  assert.match(readme, /^pnpm add @yakit-libs\/yakit-ui-icons[\t ]*\r?$/m);
+  assert.match(readme, /^pnpm add @yakit-libs\/color@1\.4\.1[\t ]*\r?$/m);
+  const iconManifest = readJson(
+    join(root, "packages/yakit-ui-icons/package.json"),
   );
+  assert.ok(readme.includes(iconManifest.peerDependencies.react));
   assert.match(readme, /@yakit-libs\/color\/preview/);
+  assert.match(readme, /applyThemeColors\(theme, getColors\(theme\)\)/);
   assert.doesNotMatch(readme, /@yakit-libs\/color\/dist\/index\.css/);
   assert.match(consumerVerifier, /node-linker=isolated/);
   assert.match(consumerVerifier, /@yakit-libs\/color@1\.4\.1/);
