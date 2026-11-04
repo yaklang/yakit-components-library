@@ -35,6 +35,9 @@ export type {
   InputNumberValue,
 } from './InputNumber';
 
+export { default as Modal } from './Modal';
+export type { ModalLayout, ModalProps, ModalSize, ModalStatus, ModalVariant } from './Modal';
+
 export { default as ConfigProvider } from './ConfigProvider';
 export type {
   CustomThemeConfig,
