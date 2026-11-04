@@ -6,7 +6,7 @@ description: 为 yakit-components-library 生成中文提交信息或完成用�
 # 项目提交
 
 1. 读取 `git status --short`、`git rev-parse HEAD` 和完整 `git diff --cached`。暂存区非空时只提交暂存内容。暂存区为空时读取工作区 diff 和未跟踪文件；按用户已明确授权的范围暂存具体路径，范围不明确时先展示清单并询问，不能默认 `git add -A`。
-2. 读取 `git log -10 --format='%h%n%B'`，结合全部选定改动归纳提交意图。本项目采用中文 `<type>(<scope>): <subject>`，没有清晰 scope 时省略。常用 scope 为 icons、release、agents。同类改动合并为一行；多种类型分别一行，仍为一个 commit。不要逐文件罗列，不写 WIP、misc、修改、调整或手写 PR 编号。
+2. 读取 `git log -10 --format='%h%n%B'`，结合全部选定改动归纳提交意图。本项目采用中文 `<type>(<scope>): <subject>`，没有清晰 scope 时省略。常用 scope 为 icons、release、agents。同一事项的改动合并描述，不同事项分别一行；同一种 type 可以出现多次，不因类型相同而合并独立事项，仍为一个 commit。不要逐文件罗列，不写 WIP、misc、修改、调整或手写 PR 编号。
 3. 用户仅要求 message 时，到这里仅返回文本，不暂存、不提交。没有改动则如实说明。
 4. 提交前展示完整 message 和文件清单，取得覆盖当前范围与 message 的明确确认。使用环境允许的交互工具；若当前会话已确认同一范围与 message，不重复询问。用户取消则停止，保留已授权的暂存结果。
 5. 再读 HEAD、暂存区文件清单和完整 diff；如果内容发生变化，重新预览确认。将 message 按真实换行写入临时文件，通过 `git commit -F <临时文件>` 提交，使用 finally/trap 清理临时文件。不要使用 `git commit -m`，避免命令替换破坏正文。
@@ -17,6 +17,7 @@ description: 为 yakit-components-library 生成中文提交信息或完成用�
 示例（同一个 commit）：
 
 ```text
-feat(icons): 添加箭头图标
+feat(icons): 支持 Figma 来源导入
+feat(icons): 支持图标一键更新
 fix(icons): 修复菜单图标的主题颜色适配
 ```
