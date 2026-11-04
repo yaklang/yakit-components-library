@@ -1,18 +1,25 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
+import { ICON_STROKE_WIDTH } from '../../scripts/icon-audit-contracts.mjs';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import metrics from '../fixtures/icons/reference/outline-controls-298.json';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import baseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 import rendererProvenance from '../fixtures/icons/reference/outline-renderer-provenance-v1.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+
+const outlineManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/outline.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -31,12 +38,15 @@ const semanticEraseMasks = new Map([
   ['14203-193724.svg', 'icon_14203_193724__mask_0'],
   ['38678-28634.svg', 'icon_38678_28634__mask_0'],
 ]);
-const canonicalizeSemanticEraseMask = (source: string, file?: string) => {
+const canonicalizeSemanticEraseMask = (
+  source: string,
+  file: string | undefined,
+  eraseStrokeWidth: string,
+) => {
   const maskId = file ? semanticEraseMasks.get(file) : undefined;
   if (!maskId) return source;
   const reference = `mask="url(#${maskId})"`;
-  const localErasePath =
-    '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const localErasePath = `<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="${eraseStrokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>`;
   const baselineErasePath =
     '<path d="M3.6001 1.19995L22.2677 19.8676" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
   const maskBlock = `<mask id="${maskId}" x="0" y="0" width="24" height="24" maskUnits="userSpaceOnUse" mask-type="luminance">\n<rect width="24" height="24" fill="white"/>\n${localErasePath}\n</mask>`;
@@ -63,8 +73,12 @@ const canonicalizeSemanticEraseMask = (source: string, file?: string) => {
   return canonical;
 };
 
-const geometryProjection = (source: string, file?: string) => {
-  source = canonicalizeSemanticEraseMask(source, file);
+const geometryProjection = (
+  source: string,
+  file?: string,
+  eraseStrokeWidth = ICON_STROKE_WIDTH,
+) => {
+  source = canonicalizeSemanticEraseMask(source, file, eraseStrokeWidth);
   const included = new Set([
     'viewBox',
     'd',
@@ -140,14 +154,15 @@ describe('Outline pre-change baseline', () => {
   it('keeps every control geometry equal to its pre-repair projection', () => {
     const changed = baseline.controls.filter(({ file, geometryProjectionSha256 }) => {
       const update = designUpdates.updates.find((entry) => entry.file === file);
-      const source = update?.previousLocalSvg ?? readFileSync(resolve(outlineRoot, file), 'utf8');
+      const source =
+        update?.previousLocalSvg ?? readIconInputSync(resolve(outlineRoot, file), 'utf8');
       const review = visualWeightReviews.reviews.find((entry) => entry.file === file);
       if (review) {
         expect(review.status, file).toBe('promoted');
         expect(sha256(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"')), file).toBe(
           review.candidateSourceSha256,
         );
-        const original = readFileSync(
+        const original = readIconInputSync(
           resolve(
             packageRoot,
             'test/fixtures/icons/reference/visual-weight-v2',
@@ -156,7 +171,8 @@ describe('Outline pre-change baseline', () => {
           'utf8',
         );
         expect(sha256(original), file).toBe(review.oldSourceSha256);
-        return sha256(geometryProjection(original, file)) !== geometryProjectionSha256;
+        // Frozen pre-review evidence uses width 1; production uses the current policy.
+        return sha256(geometryProjection(original, file, '1')) !== geometryProjectionSha256;
       }
       return sha256(geometryProjection(source, file)) !== geometryProjectionSha256;
     });
@@ -165,7 +181,7 @@ describe('Outline pre-change baseline', () => {
   });
 
   it('replaces the legacy Notebook geometry with the current canonical Figma source', () => {
-    const notebook = readFileSync(resolve(outlineRoot, baseline.legacyNotebook.file), 'utf8');
+    const notebook = readIconInputSync(resolve(outlineRoot, baseline.legacyNotebook.file), 'utf8');
     expect(sha256(geometryProjection(notebook))).not.toBe(
       baseline.legacyNotebook.geometryProjectionSha256,
     );
@@ -201,7 +217,7 @@ describe('Outline pixel metrics v1 freeze', () => {
   });
 
   it('binds the metrics to the independently captured Figma frame', () => {
-    const reference = readFileSync(
+    const reference = readIconInputSync(
       resolve(packageRoot, 'test/fixtures/icons/reference/outline-frame-46824-1930.png'),
     );
     expect(sha256(reference)).toBe(metrics.provenance.figmaReferenceSha256);
@@ -269,7 +285,7 @@ describe('Outline pixel metrics v1 freeze', () => {
   it('runs current visual checks only under the recorded stroke-width-1 renderer', () => {
     const { renderer } = currentRenderContract;
     expect(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH).toBe(renderer.browserExecutablePath);
-    expect(sha256(readFileSync(renderer.browserExecutablePath))).toBe(
+    expect(sha256(readIconInputSync(renderer.browserExecutablePath))).toBe(
       renderer.browserExecutableSha256,
     );
     expect(
@@ -286,8 +302,9 @@ describe('Outline pixel metrics v1 freeze', () => {
     );
     expect(process.arch).toBe(renderer.operatingSystem.architecture);
     expect(
-      JSON.parse(readFileSync(resolve(packageRoot, 'node_modules/playwright/package.json'), 'utf8'))
-        .version,
+      JSON.parse(
+        readIconInputSync(resolve(packageRoot, 'node_modules/playwright/package.json'), 'utf8'),
+      ).version,
     ).toBe(renderer.playwrightVersion);
   });
 });

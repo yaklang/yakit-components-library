@@ -1,3 +1,6 @@
+import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs';
+import { readIconSources } from './icon-source-data.mjs';
+const colorfulSource = readIconSources().colorful;
 import { createHash } from 'node:crypto';
 
 export const COLORFUL_SCHEMA_VERSION = 'colorful-inventory-v1';
@@ -35,24 +38,14 @@ export const COLORFUL_ICON_CATEGORIES = Object.freeze([
   'coding',
   'cursor',
 ]);
-export const COLORFUL_GROUP_POLICY = Object.freeze([
-  Object.freeze({ category: 'primary-function-menu', nodeId: '37150:33924', rowCount: 22 }),
-  Object.freeze({ category: 'secondary-menu', nodeId: '37151:13894', rowCount: 25 }),
-  Object.freeze({ category: 'basic', nodeId: '37202:12895', rowCount: 82 }),
-  Object.freeze({ category: 'yakit-logo', nodeId: '37154:12454', rowCount: 24 }),
-  Object.freeze({ category: 'penetration-logo', nodeId: '46336:19565', rowCount: 6 }),
-  Object.freeze({ category: 'ai-model', nodeId: '38803:60728', rowCount: 28 }),
-  Object.freeze({ category: 'avatar', nodeId: '37202:11692', rowCount: 9 }),
-  Object.freeze({ category: 'plugin-source', nodeId: '37154:11668', rowCount: 5 }),
-  Object.freeze({ category: 'risk-level', nodeId: '37152:11621', rowCount: 6 }),
-  Object.freeze({ category: 'log-task-node', nodeId: '37153:13463', rowCount: 30 }),
-  Object.freeze({ category: 'file-type', nodeId: '37154:11749', rowCount: 8 }),
-  Object.freeze({ category: 'browser', nodeId: '37155:19557', rowCount: 7 }),
-  Object.freeze({ category: 'operating-system', nodeId: '44537:34387', rowCount: 6 }),
-  Object.freeze({ category: 'social-media', nodeId: '44554:2134', rowCount: 8 }),
-  Object.freeze({ category: 'coding', nodeId: '37155:20075', rowCount: 25 }),
-  Object.freeze({ category: 'cursor', nodeId: '37151:14445', rowCount: 5 }),
-]);
+export const COLORFUL_GROUP_POLICY = Object.freeze(
+  colorfulSource.groups.map((group) =>
+    Object.freeze({
+      ...group,
+      rowCount: colorfulSource.records.filter((row) => row.groupNodeId === group.nodeId).length,
+    }),
+  ),
+);
 
 const ALLOWED_STATE_PAIRS = new Set([
   'canonical-new/canonical',
@@ -136,7 +129,12 @@ export function validateColorfulRow(row, { requireProvenance = false } = {}) {
       for (const field of ['rawSvgSha256', 'normalizedSvgSha256'])
         if (!/^[a-f0-9]{64}$/.test(row[field] ?? ''))
           fail('FIGMA_PROVENANCE_INVALID', `${rowId} requires ${field}`);
-      if (!Number.isFinite(row.width) || row.width <= 0 || !Number.isFinite(row.height) || row.height <= 0)
+      if (
+        !Number.isFinite(row.width) ||
+        row.width <= 0 ||
+        !Number.isFinite(row.height) ||
+        row.height <= 0
+      )
         fail('FIGMA_PROVENANCE_INVALID', `${rowId} requires positive dimensions`);
       if (Number.isNaN(Date.parse(row.retrievedAt ?? '')))
         fail('FIGMA_PROVENANCE_INVALID', `${rowId} requires retrievedAt`);
@@ -177,13 +175,15 @@ export function validateColorfulRow(row, { requireProvenance = false } = {}) {
 }
 
 const countValues = (rows, field, values) =>
-  Object.fromEntries(values.map((value) => [value, rows.filter((row) => row[field] === value).length]));
+  Object.fromEntries(
+    values.map((value) => [value, rows.filter((row) => row[field] === value).length]),
+  );
 
 export function validateColorfulInventory(
   inventory,
   {
-    expectedGroupCount = 16,
-    expectedRowCount = 296,
+    expectedGroupCount = colorfulSource.groups.length,
+    expectedRowCount = colorfulSource.records.length,
     requireFrozenClassification = false,
     requireProvenance = false,
   } = {},
@@ -199,14 +199,27 @@ export function validateColorfulInventory(
   if (new Set(groupIds).size !== groupIds.length)
     fail('INVENTORY_GROUP_DUPLICATE', 'group node ids must be unique');
   if (groupIds.length !== expectedGroupCount)
-    fail('INVENTORY_COUNT_MISMATCH', `expected ${expectedGroupCount} groups, received ${groupIds.length}`);
+    fail(
+      'INVENTORY_COUNT_MISMATCH',
+      `expected ${expectedGroupCount} groups, received ${groupIds.length}`,
+    );
   if (inventory.rows.length !== expectedRowCount)
-    fail('INVENTORY_COUNT_MISMATCH', `expected ${expectedRowCount} rows, received ${inventory.rows.length}`);
-  if (expectedGroupCount === 16 && expectedRowCount === 296) {
+    fail(
+      'INVENTORY_COUNT_MISMATCH',
+      `expected ${expectedRowCount} rows, received ${inventory.rows.length}`,
+    );
+  if (
+    expectedGroupCount === colorfulSource.groups.length &&
+    expectedRowCount === colorfulSource.records.length
+  ) {
     const expectedGroups = new Map(COLORFUL_GROUP_POLICY.map((group) => [group.nodeId, group]));
     for (const group of inventory.groups) {
       const expected = expectedGroups.get(group.nodeId);
-      if (!expected || expected.category !== group.category || expected.rowCount !== group.expectedRowCount)
+      if (
+        !expected ||
+        expected.category !== group.category ||
+        expected.rowCount !== group.expectedRowCount
+      )
         fail('GROUP_MEMBERSHIP_MISMATCH', group.nodeId);
     }
     if (inventory.groups.some((group) => !expectedGroups.has(group.nodeId)))
@@ -253,7 +266,10 @@ export function validateColorfulInventory(
     if (group.expectedRowCount === undefined) continue;
     const actual = inventory.rows.filter((row) => row.groupNodeId === group.nodeId).length;
     if (actual !== group.expectedRowCount)
-      fail('INVENTORY_COUNT_MISMATCH', `${group.nodeId} expected ${group.expectedRowCount}, received ${actual}`);
+      fail(
+        'INVENTORY_COUNT_MISMATCH',
+        `${group.nodeId} expected ${group.expectedRowCount}, received ${actual}`,
+      );
   }
 
   const rowDispositionCounts = countValues(inventory.rows, 'rowDisposition', ROW_DISPOSITIONS);
@@ -296,4 +312,47 @@ export function validateColorfulInventory(
   )
     fail('POLICY_CONTRACT_MISMATCH', 'frozen classification differs from reviewed rows');
   return summary;
+}
+
+// Classify candidates without writing files or changing existing source records.
+const structuralSvgDigest = (svg) =>
+  createHash('sha256')
+    .update(
+      svg
+        .replace(/icon_\d+__/g, 'icon_SOURCE__')
+        .replace(/>\s+</g, '><')
+        .trim(),
+      'utf8',
+    )
+    .digest('hex');
+
+export async function classifyColorfulDuplicates(rows, readSource) {
+  const owners = new Map();
+  const classified = [];
+  for (const row of rows) {
+    if (row.rowDisposition !== 'canonical-new') {
+      classified.push(row);
+      continue;
+    }
+    const localFile = colorfulLocalFile(row);
+    const svg = normalizeSvgStrokeWidth(await readSource(localFile));
+    const key = `${row.width}x${row.height}:${row.paintMode}:${structuralSvgDigest(svg)}`;
+    const owner = owners.get(key);
+    if (!owner) {
+      owners.set(key, row);
+      classified.push(row);
+      continue;
+    }
+    const duplicate = {
+      ...row,
+      canonicalComponentNodeId: owner.componentNodeId,
+      duplicateEvidenceDigest: key,
+      publicExposure: 'semantic-alias',
+      rowDisposition: 'duplicate-colorful',
+    };
+    delete duplicate.localFile;
+    delete duplicate.paintMode;
+    classified.push(duplicate);
+  }
+  return classified;
 }

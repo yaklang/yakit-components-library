@@ -1,5 +1,4 @@
-import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,37 +6,24 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { auditIcons } from '../../scripts/audit-icons.mjs';
-import {
-  buildIconNameCatalog,
-  renderIconNameCatalog,
-} from '../../scripts/icon-name-catalog-core.mjs';
+import { buildIconNameCatalog } from '../../scripts/icon-name-catalog-core.mjs';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import { figmaIconNameCatalog } from '../../src/icons/figmaNameCatalog';
+
+import { expectedFigmaNames, iconCounts } from './icon-inventory';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const paths = {
   catalog: resolve(packageRoot, 'src/icons/figmaNameCatalog.ts'),
   icons: resolve(packageRoot, 'src/icons'),
   outlineIndex: resolve(packageRoot, 'src/icons/outline/index.tsx'),
-  outlineManifest: resolve(packageRoot, 'scripts/figma-outline-icons-inventory.json'),
-  outlinePlacement: resolve(
-    packageRoot,
-    'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json',
-  ),
-  outlineRaw: resolve(
-    packageRoot,
-    'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json',
-  ),
+  outlineManifest: resolve(packageRoot, 'config/icon-sources/outline.json#manifest'),
+  outlinePlacement: resolve(packageRoot, 'config/icon-sources/outline.json#placement'),
+  outlineRaw: resolve(packageRoot, 'config/icon-sources/outline.json#raw'),
   solidIndex: resolve(packageRoot, 'src/icons/solid/index.tsx'),
-  solidManifest: resolve(packageRoot, 'scripts/figma-solid-icons-inventory.json'),
-  solidPlacement: resolve(
-    packageRoot,
-    'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json',
-  ),
-  solidRaw: resolve(
-    packageRoot,
-    'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json',
-  ),
-  updater: resolve(packageRoot, 'scripts/update-icon-name-catalog.mjs'),
+  solidManifest: resolve(packageRoot, 'config/icon-sources/solid.json#manifest'),
+  solidPlacement: resolve(packageRoot, 'config/icon-sources/solid.json#placement'),
+  solidRaw: resolve(packageRoot, 'config/icon-sources/solid.json#raw'),
 };
 const notebookGroupMappings = [
   { exportName: 'NotebookOutlined', figmaName: 'Outline/Notebook', sourceStatus: 'current' },
@@ -79,14 +65,14 @@ const notebookGroupExportNames = new Set<string>(
 );
 
 const loadInputs = () => ({
-  outlineIndexSource: readFileSync(paths.outlineIndex, 'utf8'),
-  outlineManifest: JSON.parse(readFileSync(paths.outlineManifest, 'utf8')),
-  outlinePlacementProvenance: JSON.parse(readFileSync(paths.outlinePlacement, 'utf8')),
-  outlineRawProvenance: JSON.parse(readFileSync(paths.outlineRaw, 'utf8')),
-  solidIndexSource: readFileSync(paths.solidIndex, 'utf8'),
-  solidManifest: JSON.parse(readFileSync(paths.solidManifest, 'utf8')),
-  solidPlacementProvenance: JSON.parse(readFileSync(paths.solidPlacement, 'utf8')),
-  solidRawProvenance: JSON.parse(readFileSync(paths.solidRaw, 'utf8')),
+  outlineIndexSource: readIconInputSync(paths.outlineIndex, 'utf8'),
+  outlineManifest: JSON.parse(readIconInputSync(paths.outlineManifest, 'utf8')),
+  outlinePlacementProvenance: JSON.parse(readIconInputSync(paths.outlinePlacement, 'utf8')),
+  outlineRawProvenance: JSON.parse(readIconInputSync(paths.outlineRaw, 'utf8')),
+  solidIndexSource: readIconInputSync(paths.solidIndex, 'utf8'),
+  solidManifest: JSON.parse(readIconInputSync(paths.solidManifest, 'utf8')),
+  solidPlacementProvenance: JSON.parse(readIconInputSync(paths.solidPlacement, 'utf8')),
+  solidRawProvenance: JSON.parse(readIconInputSync(paths.solidRaw, 'utf8')),
 });
 
 const runNameAudit = (overrides: Record<string, string> = {}) =>
@@ -108,13 +94,19 @@ const runNameAudit = (overrides: Record<string, string> = {}) =>
   });
 
 describe('Figma icon name catalog', () => {
-  it('preserves all 620 public export mappings in manifest source order', () => {
+  it('preserves all inventoried public export mappings in manifest source order', () => {
     const expected = buildIconNameCatalog(loadInputs());
     expect(figmaIconNameCatalog).toEqual(expected);
-    expect(figmaIconNameCatalog).toHaveLength(620);
-    expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(364);
-    expect(figmaIconNameCatalog.filter(({ family }) => family === 'solid')).toHaveLength(256);
-    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(620);
+    expect(figmaIconNameCatalog).toHaveLength(iconCounts.figmaCatalog);
+    expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(
+      iconCounts.outline,
+    );
+    expect(figmaIconNameCatalog.filter(({ family }) => family === 'solid')).toHaveLength(
+      iconCounts.solid,
+    );
+    expect(new Set(figmaIconNameCatalog.map(({ exportName }) => exportName))).toHaveLength(
+      iconCounts.figmaCatalog,
+    );
   });
 
   it('keeps authoritative full Figma names byte-for-byte except outer whitespace', () => {
@@ -142,8 +134,8 @@ describe('Figma icon name catalog', () => {
     const names = figmaIconNameCatalog.flatMap(({ figmaName }) =>
       figmaName === null ? [] : [figmaName],
     );
-    expect(names).toHaveLength(619);
-    expect(new Set(names)).toHaveLength(618);
+    expect([...names].sort()).toEqual([...expectedFigmaNames].sort());
+    expect(new Set(names).size).toBe(new Set(expectedFigmaNames).size);
   });
 
   it.each([
@@ -177,7 +169,10 @@ describe('Figma icon name catalog', () => {
       writeFileSync(forgedManifest, JSON.stringify(inputs.outlineManifest));
       writeFileSync(
         forgedCatalog,
-        readFileSync(paths.catalog, 'utf8').replace(originalName.trim(), 'Outline/Forged-mail'),
+        readIconInputSync(paths.catalog, 'utf8').replace(
+          originalName.trim(),
+          'Outline/Forged-mail',
+        ),
       );
       const result = await runNameAudit({
         iconNameCatalogPath: forgedCatalog,
@@ -234,32 +229,9 @@ describe('Figma icon name catalog', () => {
     const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'yakit-icon-names-'));
     try {
       const mutatedCatalog = resolve(temporaryRoot, 'figmaNameCatalog.ts');
-      writeFileSync(mutatedCatalog, `${readFileSync(paths.catalog, 'utf8')}\n`);
+      writeFileSync(mutatedCatalog, `${readIconInputSync(paths.catalog, 'utf8')}\n`);
       const result = await runNameAudit({ iconNameCatalogPath: mutatedCatalog });
       expect(result.failures.map(({ token }) => token)).toContain('FIGMA_NAME_CATALOG_CHANGED');
-    } finally {
-      rmSync(temporaryRoot, { force: true, recursive: true });
-    }
-  });
-});
-
-describe('Figma icon name catalog updater', () => {
-  it('is non-overwriting by default and replays byte-identically when explicitly replaced', () => {
-    const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'yakit-icon-name-update-'));
-    const output = resolve(temporaryRoot, 'figmaNameCatalog.ts');
-    const run = (...extra: string[]) =>
-      spawnSync(process.execPath, [paths.updater, '--output', output, ...extra], {
-        cwd: packageRoot,
-        encoding: 'utf8',
-      });
-    try {
-      expect(run().status).toBe(0);
-      expect(readFileSync(output, 'utf8')).toBe(
-        renderIconNameCatalog(buildIconNameCatalog(loadInputs())),
-      );
-      expect(run()).toMatchObject({ status: 2 });
-      expect(run('--replace-existing').status).toBe(0);
-      expect(readFileSync(output, 'utf8')).toBe(readFileSync(paths.catalog, 'utf8'));
     } finally {
       rmSync(temporaryRoot, { force: true, recursive: true });
     }

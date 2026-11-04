@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import * as Icons from '../../src/icons';
 import * as OldIcons from '../../src/icons/oldicon';
+import { iconCounts, iconExports } from '../icons/icon-inventory';
 
 const internalAssets = import.meta.glob('../../src/components/**/*.svg', {
   query: '?raw',
@@ -42,9 +43,10 @@ afterEach(() => {
 });
 
 describe('default width across every rendered icon', () => {
-  it('renders all 916 family icons, 380 Oldicons and Loading with declared 1.5-width strokes', () => {
+  it('renders all inventoried family icons, Oldicons and Loading with declared 1.5-width strokes', () => {
     const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
-    expect(icons).toHaveLength(1297);
+    expect(icons).toHaveLength(iconCounts.all);
+    expect(icons.map(([name]) => name).sort()).toEqual([...iconExports.all].sort());
     for (let index = 0; index < icons.length; index += 24) {
       const batch = icons.slice(index, index + 24);
       const mounted = render(

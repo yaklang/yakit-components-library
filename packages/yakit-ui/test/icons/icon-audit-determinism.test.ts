@@ -1,21 +1,25 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { readdirSync, statSync } from 'node:fs';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { beforeAll, describe, expect, it } from 'vitest';
+
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
+
+import { iconCounts } from './icon-inventory';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
 const trackedRoots = [
   resolve(packageRoot, 'scripts/audit-icons.mjs'),
   resolve(packageRoot, 'scripts/icon-audit-contracts.mjs'),
-  resolve(packageRoot, 'scripts/figma-solid-icons-inventory.json'),
+  resolve(packageRoot, 'config/icon-sources/solid.json'),
   resolve(packageRoot, 'src/icons/solid'),
   resolve(packageRoot, 'src/icons/solid/index.tsx'),
-  resolve(packageRoot, 'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json'),
-  resolve(packageRoot, 'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json'),
+  resolve(packageRoot, 'config/icon-sources/solid.json'),
+  resolve(packageRoot, 'config/icon-sources/solid.json'),
   resolve(packageRoot, 'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json'),
 ];
 const snapshot = () => {
@@ -25,7 +29,7 @@ const snapshot = () => {
       for (const child of readdirSync(entry).sort()) visit(resolve(entry, child));
       return;
     }
-    result[relative(packageRoot, entry)] = sha256(readFileSync(entry));
+    result[relative(packageRoot, entry)] = sha256(readIconInputSync(entry));
   };
   trackedRoots.forEach(visit);
   return result;
@@ -39,13 +43,13 @@ const runAudit = () => {
       '--policy',
       'solid-v1',
       '--manifest',
-      'scripts/figma-solid-icons-inventory.json',
+      'config/icon-sources/solid.json#manifest',
       '--index',
       'src/icons/solid/index.tsx',
       '--figma-raw-provenance',
-      'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json',
+      'config/icon-sources/solid.json#raw',
       '--placement-provenance',
-      'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json',
+      'config/icon-sources/solid.json#placement',
     ],
     {
       cwd: packageRoot,
@@ -76,7 +80,7 @@ describe('Solid audit determinism and read-only behavior', () => {
   });
 
   it('passes without network access', () => {
-    expect(first).toEqual({ status: 0, stderr: '', stdout: 'AUDIT_OK 256\n' });
+    expect(first).toEqual({ status: 0, stderr: '', stdout: `AUDIT_OK ${iconCounts.solid}\n` });
   });
 
   it('emits byte-identical timestamp-free output on consecutive runs', () => {

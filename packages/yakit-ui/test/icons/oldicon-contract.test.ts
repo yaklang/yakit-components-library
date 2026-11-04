@@ -1,18 +1,27 @@
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { createElement, Fragment, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import * as OldIcons from '../../src/icons/oldicon';
-import inventory from '../../src/icons/oldicon/inventory.json';
+
+import { oldiconSourceCounts } from './icon-inventory';
+
+const inventory = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/oldicon.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const oldiconRoot = resolve(packageRoot, 'src/icons/oldicon');
 const packageManifest = JSON.parse(
-  readFileSync(resolve(packageRoot, '../yakit-ui-icons/package.json'), 'utf8'),
+  readIconInputSync(resolve(packageRoot, '../yakit-ui-icons/package.json'), 'utf8'),
 );
 const sha256 = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
 
@@ -20,7 +29,8 @@ type InventoryEntry = (typeof inventory.entries)[number];
 type IconComponent = ComponentType<Record<string, unknown>>;
 
 const sourceKey = ({ sourceFile, sourceName }: InventoryEntry) => `${sourceFile}::${sourceName}`;
-const assetSource = (assetFile: string) => readFileSync(resolve(oldiconRoot, assetFile), 'utf8');
+const assetSource = (assetFile: string) =>
+  readIconInputSync(resolve(oldiconRoot, assetFile), 'utf8');
 const svgAttributes = (source: string) => {
   const attributes = source.match(/<svg\b([^>]*)>/)?.[1] ?? '';
   const value = (name: string) =>
@@ -64,9 +74,9 @@ describe('oldicon migration inventory', () => {
         'SHA-256 after orphan cleanup and canonical fragment normalization, before emitted stroke-width normalization',
       sourceSvgSha256: 'SHA-256 of exact audit or direct-source SVG evidence',
     });
-    expect(inventory.totals.sourcePaths).toBe(408);
-    expect(inventory.entries).toHaveLength(408);
-    expect(new Set(inventory.entries.map(sourceKey)).size).toBe(408);
+    expect(inventory.totals.sourcePaths).toBe(oldiconSourceCounts.entries);
+    expect(inventory.entries).toHaveLength(oldiconSourceCounts.entries);
+    expect(new Set(inventory.entries.map(sourceKey)).size).toBe(oldiconSourceCounts.entries);
     expect(inventory.totals.sourceNames).toBe(
       new Set(inventory.entries.map(({ sourceName }) => sourceName)).size,
     );
@@ -133,8 +143,8 @@ describe('oldicon migration inventory', () => {
     ]);
     expect(inventory.sources.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256))).toBe(true);
     const repairedEntries = inventory.entries.filter(({ repairs }) => repairs.length > 0);
-    expect(inventory.totals.repairedSourcePaths).toBe(12);
-    expect(repairedEntries).toHaveLength(12);
+    expect(inventory.totals.repairedSourcePaths).toBe(oldiconSourceCounts.repaired);
+    expect(repairedEntries).toHaveLength(oldiconSourceCounts.repaired);
     expect(
       repairedEntries
         .flatMap(({ repairs }) => repairs)
@@ -181,12 +191,12 @@ describe('oldicon package entry and server rendering', () => {
 
     expect(iconFiles).toEqual(exportNames.map((exportName) => `${exportName}.tsx`));
     expect(exportNames).not.toContain('TaskWaitIcon');
-    const barrel = readFileSync(resolve(oldiconRoot, 'index.tsx'), 'utf8');
+    const barrel = readIconInputSync(resolve(oldiconRoot, 'index.tsx'), 'utf8');
     expect(barrel).not.toContain('?react');
     expect(barrel).not.toContain('createIcon(');
     for (const { assetFile, exportName } of inventory.exports) {
       expect(barrel).toContain(`export { ${exportName} } from './icons/${exportName}.js';`);
-      const source = readFileSync(resolve(oldiconRoot, 'icons', `${exportName}.tsx`), 'utf8');
+      const source = readIconInputSync(resolve(oldiconRoot, 'icons', `${exportName}.tsx`), 'utf8');
       expect(source).toContain(`from '../${assetFile}?react';`);
       expect(source).toContain(`export const ${exportName} = createIcon(`);
       expect(source.match(/\.svg\?react/g)).toHaveLength(1);

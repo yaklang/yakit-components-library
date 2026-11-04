@@ -5,6 +5,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
+import { ICON_STROKE_WIDTH } from '../../scripts/icon-audit-contracts.mjs';
 import * as Icons from '../../src/icons';
 import { outlineIconRegistry } from '../../src/icons/registry';
 import additions from '../fixtures/icons/reference/outline-additions-sep30.json';
@@ -21,7 +22,7 @@ describe('September 30 outline additions', () => {
     expect(source).toBe(
       icon.svg
         .replaceAll('#353639', 'currentColor')
-        .replaceAll('stroke-width="2"', 'stroke-width="1"'),
+        .replaceAll('stroke-width="2"', `stroke-width="${ICON_STROKE_WIDTH}"`),
     );
     const entry = outlineIconRegistry.find(({ sourceNodeId }) => sourceNodeId === icon.nodeId);
     expect(entry).toMatchObject({
@@ -35,11 +36,11 @@ describe('September 30 outline additions', () => {
 
   it.each(additions.updates)('supports public SVG stroke overrides for $exportName', (icon) => {
     const Component = Icons[icon.exportName as keyof typeof Icons];
-    for (const strokeWidth of [undefined, 0, 1.5, 2, 3]) {
+    for (const strokeWidth of [undefined, 0, 1, 1.5, 2, 3]) {
       const markup = renderToStaticMarkup(createElement(Component, { svgProps: { strokeWidth } }));
       const widths = [...markup.matchAll(/stroke-width="([^"]*)"/g)].map((match) => match[1]);
       expect(widths.length).toBeGreaterThan(0);
-      expect(new Set(widths)).toEqual(new Set([String(strokeWidth ?? 1)]));
+      expect(new Set(widths)).toEqual(new Set([String(strokeWidth ?? ICON_STROKE_WIDTH)]));
       expect(markup).toContain('stroke="currentColor"');
     }
   });

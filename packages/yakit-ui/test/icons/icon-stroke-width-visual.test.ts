@@ -1,17 +1,21 @@
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { chromium } from 'playwright';
 import { describe, expect, it } from 'vitest';
 
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import { loadingStrokeWidthDefault } from '../../scripts/icon-stroke-width.mjs';
 import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
-import solidRaw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
+
+const solidRaw = JSON.parse(
+  readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
+);
 
 const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrections];
 
@@ -26,7 +30,7 @@ describe('current 1.5-width independent pixel oracle', () => {
       const currentPath = record.afterPath.startsWith('icons/oldicon/assets/')
         ? `icons/oldicon/assets/${createHash('sha256').update(widthOnlyOracle(record.beforeSvg)).digest('hex')}.svg`
         : record.afterPath;
-      const actual = readFileSync(resolve(root, 'src', currentPath), 'utf8');
+      const actual = readIconInputSync(resolve(root, 'src', currentPath), 'utf8');
       const review = visualWeightReviews.reviews.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
@@ -65,7 +69,7 @@ describe('current 1.5-width independent pixel oracle', () => {
         original: record.beforeSvg,
       };
     });
-    const loadingSource = readFileSync(resolve(root, 'src/icons/loading/index.tsx'), 'utf8');
+    const loadingSource = readIconInputSync(resolve(root, 'src/icons/loading/index.tsx'), 'utf8');
     const loadingWidth = loadingStrokeWidthDefault(loadingSource);
     expect(loadingWidth).toBe('1.5');
     const loadingD = /d="([^"]+)"/.exec(loadingSource)?.[1];

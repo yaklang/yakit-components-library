@@ -4,8 +4,8 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import solidSource from '../../config/icon-sources/solid.json';
 import { solidIconRegistry } from '../../src/icons/registry';
-import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import layoutUpdates from '../fixtures/icons/reference/solid-layout-updates-sep30.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
@@ -25,9 +25,7 @@ const focusNodeIds = [
 ] as const;
 const strokePolicyNodeIds = new Set(contract.strokeWidthPolicy.nodeIds);
 const colors = [contract.raster.defaultColor, '#123456'] as const;
-const rawByNodeId = new Map(
-  [...raw.components, ...raw.supplementalComponents].map((record) => [record.nodeId, record.svg]),
-);
+const rawByNodeId = new Map(solidSource.records.map((record) => [record.nodeId, record.raw.svg]));
 const definitionByNodeId = new Map(
   solidIconRegistry.map((definition) => [definition.sourceNodeId, definition]),
 );

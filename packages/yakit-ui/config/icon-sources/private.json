@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    "components/InputNumber/assets/chevron-down-l.svg",
+    "components/InputNumber/assets/chevron-down-m.svg",
+    "components/InputNumber/assets/chevron-down-s.svg",
+    "components/InputNumber/assets/chevron-left-l-active.svg",
+    "components/InputNumber/assets/chevron-left-l.svg",
+    "components/InputNumber/assets/chevron-left-m.svg",
+    "components/InputNumber/assets/chevron-left-s.svg",
+    "components/InputNumber/assets/chevron-right-l-active.svg",
+    "components/InputNumber/assets/chevron-right-l-hover.svg",
+    "components/InputNumber/assets/chevron-right-l.svg",
+    "components/InputNumber/assets/chevron-right-m.svg",
+    "components/InputNumber/assets/chevron-right-s-active.svg",
+    "components/InputNumber/assets/chevron-right-s.svg",
+    "components/InputNumber/assets/chevron-up-l.svg",
+    "components/InputNumber/assets/chevron-up-m.svg",
+    "components/InputNumber/assets/chevron-up-s.svg",
+    "components/SearchInput/assets/chevron-down.svg",
+    "components/SearchInput/assets/search-default.svg",
+    "components/SearchInput/assets/search-disabled.svg",
+    "components/SearchInput/assets/search-dropdown.svg",
+    "components/SearchInput/assets/search-focus.svg",
+    "components/SearchInput/assets/search-hover.svg",
+    "components/SearchInput/assets/search-icon-only.svg",
+    "components/SearchInput/assets/search-white.svg"
+  ]
+}

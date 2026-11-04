@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { auditColorfulInputs, canonicalJson } from '../../scripts/colorful-audit.mjs';
+import { ICON_STROKE_WIDTH } from '../../scripts/icon-audit-contracts.mjs';
 
 const fixtureRoot = resolve(import.meta.dirname, '../fixtures/icons/colorful');
 const inventory = JSON.parse(readFileSync(resolve(fixtureRoot, 'contract-sample.json'), 'utf8'));
@@ -106,9 +107,16 @@ describe('colorful offline audit', () => {
         { expectedGroupCount: 1, expectedRowCount: 1 },
       );
 
-    expect(() => audit(svg('stroke-width="2"'))).toThrow(/STROKE_WIDTH_INVALID.*attribute/);
-    expect(() => audit(svg('style="stroke-width: 1.5"'))).toThrow(/STROKE_WIDTH_INVALID.*style/);
-    expect(() => audit(svg('stroke-width="1"'))).not.toThrow();
+    for (const width of ['1', '2']) {
+      expect(() => audit(svg(`stroke-width="${width}"`))).toThrow(
+        /STROKE_WIDTH_INVALID.*attribute/,
+      );
+      expect(() => audit(svg(`style="stroke-width: ${width}"`))).toThrow(
+        /STROKE_WIDTH_INVALID.*style/,
+      );
+    }
+    expect(() => audit(svg(`stroke-width="${ICON_STROKE_WIDTH}"`))).not.toThrow();
+    expect(() => audit(svg(`style="stroke-width: ${ICON_STROKE_WIDTH}"`))).not.toThrow();
   });
 
   it('accepts only pinned tokens whose light and dark values equal the Figma fallback', () => {

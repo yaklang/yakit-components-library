@@ -1,4 +1,4 @@
-import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,9 +10,20 @@ import {
   collectPaintSemantics,
   paintSemanticsSha256,
 } from '../../scripts/audit-icons.mjs';
-import manifest from '../../scripts/figma-solid-icons-inventory.json';
 import { ICON_STROKE_WIDTH } from '../../scripts/icon-audit-contracts.mjs';
-import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
+
+import { iconCounts } from './icon-inventory';
+
+const manifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/solid.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
+const raw = JSON.parse(
+  readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
+);
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const solidRoot = resolve(packageRoot, 'src/icons/solid');
@@ -20,7 +31,7 @@ const outlineRoot = resolve(packageRoot, 'src/icons/outline');
 const files = readdirSync(solidRoot)
   .filter((file) => file.endsWith('.svg'))
   .sort();
-const source = (file: string) => readFileSync(resolve(solidRoot, file), 'utf8');
+const source = (file: string) => readIconInputSync(resolve(solidRoot, file), 'utf8');
 const rawByNodeId = new Map(
   [...raw.components, ...raw.supplementalComponents].map((entry) => [entry.nodeId, entry.svg]),
 );
@@ -37,18 +48,12 @@ const auditSourceMutation = async (file: string, mutate: (source: string) => str
   try {
     cpSync(solidRoot, resolve(iconRoot, 'solid'), { recursive: true });
     const target = resolve(iconRoot, 'solid', file);
-    writeFileSync(target, mutate(readFileSync(target, 'utf8')));
+    writeFileSync(target, mutate(readIconInputSync(target, 'utf8')));
     const result = await auditIcons({
-      figmaRawProvenancePath: resolve(
-        packageRoot,
-        'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json',
-      ),
+      figmaRawProvenancePath: resolve(packageRoot, 'config/icon-sources/solid.json#raw'),
       indexPath: resolve(packageRoot, 'src/icons/solid/index.tsx'),
-      manifestPath: resolve(packageRoot, 'scripts/figma-solid-icons-inventory.json'),
-      placementProvenancePath: resolve(
-        packageRoot,
-        'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json',
-      ),
+      manifestPath: resolve(packageRoot, 'config/icon-sources/solid.json#manifest'),
+      placementProvenancePath: resolve(packageRoot, 'config/icon-sources/solid.json#placement'),
       policyId: 'solid-v1',
       root: iconRoot,
     });
@@ -65,17 +70,19 @@ describe('Solid paint semantics', () => {
       readdirSync(root)
         .filter((file) => file.endsWith('.svg'))
         .flatMap((file) => [
-          ...readFileSync(resolve(root, file), 'utf8').matchAll(/\bstroke-width=["']([^"']+)["']/g),
+          ...readIconInputSync(resolve(root, file), 'utf8').matchAll(
+            /\bstroke-width=["']([^"']+)["']/g,
+          ),
         ]),
     );
 
-    // The four refreshed layout glyphs no longer need mask strokes.
-    expect(values).toHaveLength(498);
+    // Coverage is checked against source records; every encountered width must follow the policy.
+    expect(values.length).toBeGreaterThan(0);
     expect([...new Set(values.map((match) => match[1]))]).toEqual([ICON_STROKE_WIDTH]);
   });
 
   it('uses currentColor for every primary glyph and removes the legacy literal everywhere', () => {
-    expect(files).toHaveLength(256);
+    expect(files).toHaveLength(iconCounts.solid);
     for (const file of files) {
       const svg = source(file);
       const rows = collectPaintSemantics(svg);

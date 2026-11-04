@@ -1,9 +1,7 @@
 import type { ComponentType } from 'react';
 import { describe, expect, it } from 'vitest';
 
-import colorfulManifest from '../../scripts/figma-colorful-icons-inventory.json';
-import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
-import solidManifest from '../../scripts/figma-solid-icons-inventory.json';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import {
   assertUniqueFigmaNames,
   buildIconRegistry,
@@ -14,6 +12,27 @@ import {
   solidIconRegistry,
 } from '../../src/icons/registry';
 import type { IconProps } from '../../src/icons/types';
+
+import { iconCounts } from './icon-inventory';
+
+const colorfulManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/colorful.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
+const outlineManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/outline.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
+const solidManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/solid.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const DummyIcon = (() => null) as ComponentType<IconProps>;
 const entry = (
@@ -85,7 +104,7 @@ describe('Figma icon registry name validation', () => {
     expect(variables[0].Component).not.toBe(variables[1].Component);
   });
 
-  it('maps all 296 colorful rows by unique export and source identity while preserving raw Figma names', () => {
+  it('maps all inventoried colorful rows by unique export and source identity while preserving raw Figma names', () => {
     const publicRows = colorfulManifest.rows.filter(({ publicExposure }) =>
       ['canonical', 'semantic-alias'].includes(publicExposure),
     );
@@ -93,7 +112,7 @@ describe('Figma icon registry name validation', () => {
       colorfulIconRegistry.map((definition) => [definition.exportName, definition]),
     );
 
-    expect(colorfulManifest.rows).toHaveLength(296);
+    expect(colorfulManifest.rows).toHaveLength(iconCounts.colorful);
     expect(colorfulIconRegistry).toHaveLength(publicRows.length);
     expect(new Set(colorfulIconRegistry.map(({ exportName }) => exportName))).toHaveLength(
       colorfulIconRegistry.length,

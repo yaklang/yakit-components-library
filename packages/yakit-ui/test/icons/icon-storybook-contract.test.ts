@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -7,18 +7,25 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
-import colorfulManifest from '../../scripts/figma-colorful-icons-inventory.json';
-import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
   solidIconRegistry,
 } from '../../src/icons/registry';
+import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+
+const colorfulManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/colorful.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const storiesRoot = resolve(packageRoot, '.storybook/stories');
 const colorfulIconsRoot = resolve(packageRoot, 'src/icons/colorful');
-const iconStorySource = readFileSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8');
+const iconStorySource = readIconInputSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8');
 const iconStoryMarkup = renderToStaticMarkup(createElement(iconStory.component));
 const colorfulStorySpecs = [
   {
@@ -374,19 +381,35 @@ describe('Icon Storybook contract', () => {
   it('uses the visual Figma node order inside audited colorful stories', () => {
     const basicMarkup = renderStory(iconStories.Basic);
     const basicExports = renderedExports(basicMarkup);
-    expect(basicExports).toHaveLength(82);
-    expect(basicExports.slice(0, 41).every((name) => name.endsWith('SolidColorful'))).toBe(true);
-    expect(basicExports.slice(41).every((name) => name.endsWith('OutlineColorful'))).toBe(true);
+    const historicalBasic = new Set(
+      colorfulManifest.rows
+        .filter((row) => row.category === 'basic')
+        .slice(0, 82)
+        .map((row) => row.exportName),
+    );
+    const historicalExports = basicExports.filter((name) => historicalBasic.has(name));
+    expect(historicalExports).toHaveLength(82);
+    expect(historicalExports.slice(0, 41).every((name) => name.endsWith('SolidColorful'))).toBe(
+      true,
+    );
+    expect(historicalExports.slice(41).every((name) => name.endsWith('OutlineColorful'))).toBe(
+      true,
+    );
     expect(renderedSourceNodeIds(basicMarkup).slice(0, 3)).toEqual([
       '37151:15203',
       '37151:15202',
       '37151:15201',
     ]);
-    expect(renderedSourceNodeIds(basicMarkup).slice(-3)).toEqual([
-      '38051:62408',
-      '38723:88885',
-      '44983:1900',
-    ]);
+    expect(
+      renderedSourceNodeIds(basicMarkup)
+        .filter((id) =>
+          colorfulManifest.rows
+            .filter((row) => row.category === 'basic')
+            .slice(0, 82)
+            .some((row) => row.nodeId === id),
+        )
+        .slice(-3),
+    ).toEqual(['38051:62408', '38723:88885', '44983:1900']);
 
     for (const [category, expected] of Object.entries(figmaStorySourceNodeOrder)) {
       const story = colorfulStorySpecs.find((spec) => spec.category === category);
@@ -394,18 +417,18 @@ describe('Icon Storybook contract', () => {
       expect(
         renderedSourceNodeIds(
           renderStory(iconStories[story!.exportName as keyof typeof iconStories]),
-        ),
+        ).filter((id) => expected.includes(id)),
         category,
       ).toEqual(expected);
     }
   });
 
   it('keeps the two unbacked Memfit compositions on their exact Figma geometry', () => {
-    const horizontal = readFileSync(
+    const horizontal = readIconInputSync(
       resolve(colorfulIconsRoot, 'MemfitLogoHorizontalColorful.svg'),
       'utf8',
     );
-    const vertical = readFileSync(
+    const vertical = readIconInputSync(
       resolve(colorfulIconsRoot, 'MemfitLogoVerticalColorful.svg'),
       'utf8',
     );

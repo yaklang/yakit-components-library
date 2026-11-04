@@ -1,46 +1,44 @@
 import { createHash } from 'node:crypto';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  readdirSync,
-  rmSync,
-  statSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import outlineManifest from '../../scripts/figma-outline-icons-inventory.json';
-import solidManifest from '../../scripts/figma-solid-icons-inventory.json';
-import { normalizeSvgStrokeWidth, svgStrokeWidths } from '../../scripts/icon-stroke-width.mjs';
 import {
-  applyStrokeWidthMigrationPlan,
-  captureStrokeWidthInputs,
   checkIconStrokeWidths,
-  planStrokeWidthMigration,
-  runStrokeWidthMigration,
+  runIconStrokeCheck,
   svgFiles,
-  validateFrozenMigrationInputs,
-} from '../../scripts/normalize-icon-stroke-width.mjs';
+} from '../../scripts/check-icon-stroke-width.mjs';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
+import { normalizeSvgStrokeWidth, svgStrokeWidths } from '../../scripts/icon-stroke-width.mjs';
 import avatarBadgeCorrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 import colorfulOutlineCorrections from '../fixtures/icons/reference/colorful-outline-weight.json';
-import solidRaw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
-import additionsOct29 from '../fixtures/icons/reference/outline-additions-oct29.json';
-import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
-import additionsSep30 from '../fixtures/icons/reference/outline-additions-sep30.json';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 
+import { iconSourceFiles, privateIconSourceFiles } from './icon-inventory';
+
+const outlineManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/outline.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
+const solidManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/solid.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
+const solidRaw = JSON.parse(
+  readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
+);
+
 const colorfulCorrections = [...colorfulOutlineCorrections, ...avatarBadgeCorrections];
 
 const packageRoot = process.cwd();
-const oldInventory = JSON.parse(
-  readFileSync(resolve(packageRoot, 'src/icons/oldicon/inventory.json'), 'utf8'),
-);
 const historicalWidth = (source: string) =>
   source.replaceAll('stroke-width="1.5"', 'stroke-width="1"');
 const digest = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
@@ -48,9 +46,10 @@ const digest = (value: string | Buffer) => createHash('sha256').update(value).di
 const createCheckRoot = () => {
   const root = mkdtempSync(join(tmpdir(), 'icon-stroke-check-'));
   mkdirSync(resolve(root, 'src/icons/loading'), { recursive: true });
+  mkdirSync(resolve(root, 'src/icons/outline'), { recursive: true });
   mkdirSync(resolve(root, 'test/fixtures/icons/stroke-width-1'), { recursive: true });
   writeFileSync(
-    resolve(root, 'src/icons/example.svg'),
+    resolve(root, 'src/icons/outline/example.svg'),
     '<svg><path stroke="currentColor" stroke-width="1.5"/></svg>',
   );
   writeFileSync(
@@ -59,13 +58,28 @@ const createCheckRoot = () => {
   );
   writeFileSync(
     resolve(root, 'test/fixtures/icons/stroke-width-1/before.json'),
-    JSON.stringify({ assets: [], sourceInventory: ['icons/example.svg'] }),
+    JSON.stringify({ assets: [], sourceInventory: ['icons/outline/example.svg'] }),
   );
+  mkdirSync(resolve(root, 'config/icon-sources'), { recursive: true });
+  writeFileSync(
+    resolve(root, 'config/icon-sources/private.json'),
+    JSON.stringify({ schemaVersion: 1, files: [] }),
+  );
+  for (const family of ['outline', 'solid', 'colorful', 'oldicon', 'loading']) {
+    writeFileSync(
+      resolve(root, `config/icon-sources/${family}.json`),
+      JSON.stringify({
+        schemaVersion: 1,
+        family,
+        records: family === 'outline' ? [{ file: 'example.svg' }] : [],
+      }),
+    );
+  }
   return root;
 };
 
 describe('source stroke-width policy', () => {
-  it('sets positive literal attribute and inline style widths to one without changing artwork', () => {
+  it('sets positive literal attribute and inline style widths to 1.5 without changing artwork', () => {
     const source =
       '<svg viewBox="0 0 24 24"><g stroke="red" stroke-width="2"><path d="M1.5 2h3" style="stroke-width: 0.5;fill:none"/><defs><mask id="erase"><path stroke="black" stroke-width="4"/></mask></defs></g></svg>';
     const expected =
@@ -103,7 +117,7 @@ describe('source stroke-width policy', () => {
   });
 });
 
-describe('all production icon migration contracts', () => {
+describe('current icon compatibility and historical evidence', () => {
   it('preserves all non-width bytes against independent frozen inputs', () => {
     expect(before.assets).toHaveLength(543);
     for (const record of before.assets) {
@@ -116,7 +130,7 @@ describe('all production icon migration contracts', () => {
       );
       const currentPath = legacy ? `icons/oldicon/assets/${assetHash}.svg` : record.afterPath;
       const actual = historicalWidth(
-        readFileSync(resolve(packageRoot, 'src', currentPath), 'utf8'),
+        readIconInputSync(resolve(packageRoot, 'src', currentPath), 'utf8'),
       );
       const review = visualWeightReviews.reviews.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
@@ -149,7 +163,7 @@ describe('all production icon migration contracts', () => {
         expect(review.reviewVerdict).toBe('pass');
         expect(review.oldSourceSha256).toBe(record.afterSha256);
         expect(
-          readFileSync(
+          readIconInputSync(
             resolve(
               packageRoot,
               'test/fixtures/icons/reference/visual-weight-v2',
@@ -167,116 +181,119 @@ describe('all production icon migration contracts', () => {
   });
 
   it('covers component-local SVGs as well as every public family and Loading', async () => {
-    const migrated = new Map(
-      before.assets.map(({ sourcePath, afterPath }) => [sourcePath, afterPath]),
-    );
-    const expected = [
-      ...before.sourceInventory
-        .map((file) => migrated.get(file) ?? file)
-        .filter((file) => !file.startsWith('icons/oldicon/assets/')),
-      ...new Set<string>(
-        oldInventory.exports.map(
-          (entry: { assetFile: string }) => `icons/oldicon/${entry.assetFile}`,
-        ),
+    const expected = [...privateIconSourceFiles, ...iconSourceFiles].sort();
+    expect(privateIconSourceFiles).toEqual(
+      expect.arrayContaining(
+        before.sourceInventory.filter((file) => file.startsWith('components/')),
       ),
-      ...[
-        ...designUpdates.updates,
-        ...additions.updates,
-        ...additionsSep30.updates,
-        ...additionsOct29.updates,
-      ]
-        .filter(({ added }) => added)
-        .map(({ file }) => `icons/outline/${file}`),
-      'icons/solid/46709-8109.svg',
-    ].sort();
-    expect(expected).toHaveLength(1317);
-    expect(expected.filter((file) => file.startsWith('components/'))).toHaveLength(24);
+    );
     expect(await svgFiles(resolve(packageRoot, 'src'))).toEqual(expected);
     expect(await checkIconStrokeWidths(packageRoot)).toEqual({
-      svgFiles: 1317,
+      svgFiles: expected.length,
       loading: 1,
       violations: 0,
     });
   });
 
-  it('binds updated Figma provenance to the current manifest and preserves historical evidence', () => {
-    const updatedProvenance: Record<string, string> = {
-      'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json':
-        outlineManifest.sourceEvidence.figmaRawProvenanceSha256,
-      'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json':
-        outlineManifest.sourceEvidence.placementProvenanceSha256,
-      'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json':
-        solidManifest.sourceEvidence.figmaRawProvenanceSha256,
-      'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json':
-        solidManifest.sourceEvidence.placementProvenanceSha256,
+  it('checks current source consistency separately from retained historical file hashes', () => {
+    const updatedProvenance: Record<string, { input: string; hash: string }> = {
+      'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json': {
+        input: 'config/icon-sources/outline.json#raw',
+        hash: outlineManifest.sourceEvidence.figmaRawProvenanceSha256,
+      },
+      'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json': {
+        input: 'config/icon-sources/outline.json#placement',
+        hash: outlineManifest.sourceEvidence.placementProvenanceSha256,
+      },
+      'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json': {
+        input: 'config/icon-sources/solid.json#raw',
+        hash: solidManifest.sourceEvidence.figmaRawProvenanceSha256,
+      },
+      'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json': {
+        input: 'config/icon-sources/solid.json#placement',
+        hash: solidManifest.sourceEvidence.placementProvenanceSha256,
+      },
     };
-    for (const [file, hash] of Object.entries(before.provenanceHashes))
-      expect(digest(readFileSync(resolve(packageRoot, file))), file).toBe(
-        updatedProvenance[file] ?? hash,
+    // These projections are current data, not byte-for-byte historical snapshots.
+    // Historical retrieval by baselineCommit is documented in docs/icon-history/README.md.
+    for (const [file, current] of Object.entries(updatedProvenance)) {
+      expect(Object.keys(before.provenanceHashes)).toContain(file);
+      expect(digest(readIconInputSync(resolve(packageRoot, current.input))), file).toBe(
+        current.hash,
       );
+    }
+    // Only retained historical files are compared with the frozen hashes here.
+    for (const [file, hash] of Object.entries(before.provenanceHashes)) {
+      if (updatedProvenance[file]) continue;
+      expect(digest(readIconInputSync(resolve(packageRoot, file))), file).toBe(hash);
+    }
   });
 
   it('keeps every Oldicon public name and source identity', () => {
     expect(before.baselineCommit).toMatch(/^[a-f0-9]{40}$/);
     expect(before.baselineCommit).toBe('2ae1c3c9a41746ec57b820d226a7f91153d90a9d');
     const inventory = JSON.parse(
-      readFileSync(resolve(packageRoot, 'src/icons/oldicon/inventory.json'), 'utf8'),
+      readIconInputSync(resolve(packageRoot, 'config/icon-sources/oldicon.json#manifest'), 'utf8'),
     );
     expect(
-      inventory.exports.map(
-        ({ exportName, sourceKeys }: { exportName: string; sourceKeys: string[] }) => ({
+      inventory.exports
+        .filter(({ exportName }: { exportName: string }) =>
+          before.oldiconExports.some((entry) => entry.exportName === exportName),
+        )
+        .map(({ exportName, sourceKeys }: { exportName: string; sourceKeys: string[] }) => ({
           exportName,
           sourceKeys,
-        }),
-      ),
+        })),
     ).toEqual(before.oldiconExports);
     expect(
-      inventory.entries.map(
-        ({
-          sourceFile,
-          sourceName,
-          exportName,
-          canonicalArtworkSha256,
-          sourceSvgSha256,
-        }: Record<string, string>) => ({
-          sourceFile,
-          sourceName,
-          exportName,
-          canonicalArtworkSha256,
-          sourceSvgSha256,
-        }),
-      ),
+      inventory.entries
+        .filter(({ sourceFile, sourceName }: Record<string, string>) =>
+          before.oldiconSourceIdentity.some(
+            (entry) => entry.sourceFile === sourceFile && entry.sourceName === sourceName,
+          ),
+        )
+        .map(
+          ({
+            sourceFile,
+            sourceName,
+            exportName,
+            canonicalArtworkSha256,
+            sourceSvgSha256,
+          }: Record<string, string>) => ({
+            sourceFile,
+            sourceName,
+            exportName,
+            canonicalArtworkSha256,
+            sourceSvgSha256,
+          }),
+        ),
     ).toEqual(before.oldiconSourceIdentity);
-  });
-
-  it('plans no additional writes or removals on a migrated checkout', async () => {
-    const result = await planStrokeWidthMigration(packageRoot);
-    expect([...result.changes.keys()]).toEqual([]);
-    expect(result.removed).toEqual([]);
   });
 });
 
-describe('stroke-width migration CLI safety', () => {
+describe('read-only stroke-width check CLI', () => {
   it('keeps --check read-only, including source and inventory mtimes', async () => {
     const root = createCheckRoot();
     const paths = [
-      'src/icons/example.svg',
+      'src/icons/outline/example.svg',
       'src/icons/loading/index.tsx',
       'test/fixtures/icons/stroke-width-1/before.json',
     ];
     try {
       const beforeState = paths.map((file) => ({
-        contents: readFileSync(resolve(root, file), 'utf8'),
+        contents: readIconInputSync(resolve(root, file), 'utf8'),
         mtimeNs: statSync(resolve(root, file), { bigint: true }).mtimeNs,
       }));
-      await expect(runStrokeWidthMigration(['--check'], root)).resolves.toEqual({
+      await expect(runIconStrokeCheck(['--write'], root)).rejects.toThrow(/never writes files/);
+      await expect(runIconStrokeCheck(['--capture'], root)).rejects.toThrow(/never writes files/);
+      await expect(runIconStrokeCheck(['--check'], root)).resolves.toEqual({
         svgFiles: 1,
         loading: 1,
         violations: 0,
       });
       expect(
         paths.map((file) => ({
-          contents: readFileSync(resolve(root, file), 'utf8'),
+          contents: readIconInputSync(resolve(root, file), 'utf8'),
           mtimeNs: statSync(resolve(root, file), { bigint: true }).mtimeNs,
         })),
       ).toEqual(beforeState);
@@ -291,7 +308,7 @@ describe('stroke-width migration CLI safety', () => {
   ])('locates an invalid %s declaration', async (_label, source, diagnostic) => {
     const root = createCheckRoot();
     try {
-      writeFileSync(resolve(root, 'src/icons/example.svg'), source);
+      writeFileSync(resolve(root, 'src/icons/outline/example.svg'), source);
       await expect(checkIconStrokeWidths(root)).rejects.toThrow(diagnostic);
     } finally {
       rmSync(root, { force: true, recursive: true });
@@ -312,192 +329,6 @@ describe('stroke-width migration CLI safety', () => {
       await expect(checkIconStrokeWidths(root)).rejects.toThrow(
         /unregistered\.svg: source is not registered[\s\S]*expected strokeWidth=\{1\.5\}/,
       );
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
-  });
-
-  it.each([
-    'icons/outline/14203-193724.svg',
-    'icons/outline/1-2359.svg',
-    'icons/outline/1-2375.svg',
-    'icons/colorful/DataComparisonOutlineColorful.svg',
-    'icons/colorful/LuaAvatarColorful.svg',
-    'icons/solid/4936-115787.svg',
-    'icons/solid/4936-115788.svg',
-    'icons/solid/4936-115789.svg',
-    'icons/solid/4936-115790.svg',
-  ])(
-    'accepts only the exact later-reviewed geometry pair and rejects subsequent drift: %s',
-    async (sourcePath) => {
-      const root = mkdtempSync(join(tmpdir(), 'icon-stroke-reviewed-'));
-      const record = before.assets.find((item) => item.sourcePath === sourcePath)!;
-      const current = historicalWidth(
-        readFileSync(resolve(packageRoot, 'src', sourcePath), 'utf8'),
-      );
-      try {
-        mkdirSync(dirname(resolve(root, 'src', sourcePath)), { recursive: true });
-        writeFileSync(resolve(root, 'src', sourcePath), current);
-        await expect(
-          validateFrozenMigrationInputs(root, { assets: [record] }, [sourcePath]),
-        ).resolves.toBeUndefined();
-        await expect(
-          validateFrozenMigrationInputs(
-            root,
-            { assets: [{ ...record, afterSha256: '0'.repeat(64) }] },
-            [sourcePath],
-          ),
-        ).rejects.toThrow('MIGRATION_INPUT_DRIFT');
-        writeFileSync(
-          resolve(root, 'src', sourcePath),
-          sourcePath.startsWith('icons/solid/')
-            ? current.replace('opacity="0.6"', 'opacity="0.7"')
-            : current.replace('stroke-width="1"', 'stroke-width="2"'),
-        );
-        await expect(
-          validateFrozenMigrationInputs(root, { assets: [record] }, [sourcePath]),
-        ).rejects.toThrow('MIGRATION_INPUT_DRIFT');
-      } finally {
-        rmSync(root, { force: true, recursive: true });
-      }
-    },
-  );
-
-  it('fails before planning when a frozen migration input hash drifts', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'icon-stroke-input-'));
-    const source = '<svg><path stroke-width="2"/></svg>';
-    try {
-      mkdirSync(resolve(root, 'src/icons'), { recursive: true });
-      writeFileSync(resolve(root, 'src/icons/example.svg'), source);
-      const frozen = {
-        assets: [
-          {
-            sourcePath: 'icons/example.svg',
-            afterPath: 'icons/example.svg',
-            beforeSha256: digest(source),
-            afterSha256: digest('<svg><path stroke-width="1"/></svg>'),
-          },
-        ],
-      };
-      await expect(
-        validateFrozenMigrationInputs(root, frozen, ['icons/example.svg']),
-      ).resolves.toBeUndefined();
-      writeFileSync(resolve(root, 'src/icons/example.svg'), '<svg><path stroke-width="3"/></svg>');
-      await expect(
-        validateFrozenMigrationInputs(root, frozen, ['icons/example.svg']),
-      ).rejects.toThrow(/MIGRATION_INPUT_DRIFT: icons\/example\.svg/);
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
-  });
-
-  it('captures an explicit truthful commit once and never overwrites the oracle', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'icon-stroke-capture-'));
-    const baselineCommit = 'a'.repeat(40);
-    try {
-      mkdirSync(resolve(root, 'src/icons/oldicon'), { recursive: true });
-      mkdirSync(resolve(root, 'src/icons/loading'), { recursive: true });
-      mkdirSync(resolve(root, 'test/fixtures/icons/reference'), { recursive: true });
-      writeFileSync(resolve(root, 'src/icons/example.svg'), '<svg><path stroke-width="2"/></svg>');
-      writeFileSync(
-        resolve(root, 'src/icons/oldicon/inventory.json'),
-        JSON.stringify({ entries: [], exports: [] }),
-      );
-      writeFileSync(
-        resolve(root, 'src/icons/loading/index.tsx'),
-        'export const Loading = () => <path d="M0 0" strokeWidth={2} />;\n',
-      );
-
-      await expect(captureStrokeWidthInputs(root, { baselineCommit })).resolves.toMatchObject({
-        captured: 1,
-        scanned: 1,
-      });
-      const captured = JSON.parse(
-        readFileSync(resolve(root, 'test/fixtures/icons/stroke-width-1/before.json'), 'utf8'),
-      );
-      expect(captured.baselineCommit).toBe(baselineCommit);
-      await expect(captureStrokeWidthInputs(root, { baselineCommit })).rejects.toMatchObject({
-        code: 'EEXIST',
-      });
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
-  });
-
-  it('stages bounded writes, removes only obsolete Oldicon assets, and cleans staging', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'icon-stroke-apply-'));
-    const stagingParent = mkdtempSync(join(tmpdir(), 'icon-stroke-staging-parent-'));
-    const obsoleteAsset = `src/icons/oldicon/assets/${'a'.repeat(64)}.svg`;
-    try {
-      mkdirSync(resolve(root, 'src/icons/oldicon/assets'), { recursive: true });
-      writeFileSync(resolve(root, 'src/icons/example.svg'), 'before');
-      writeFileSync(resolve(root, obsoleteAsset), 'obsolete');
-      await applyStrokeWidthMigrationPlan(
-        root,
-        {
-          changes: new Map([['src/icons/example.svg', 'after']]),
-          removed: [obsoleteAsset],
-        },
-        { stagingParent },
-      );
-      expect(readFileSync(resolve(root, 'src/icons/example.svg'), 'utf8')).toBe('after');
-      await expect(
-        applyStrokeWidthMigrationPlan(root, {
-          changes: new Map([['src/icons/example.svg', 'must-not-apply']]),
-          removed: ['src/icons/oldicon/assets/obsolete.svg'],
-        }),
-      ).rejects.toThrow(/MIGRATION_PATH_OUT_OF_SCOPE/);
-      expect(readFileSync(resolve(root, 'src/icons/example.svg'), 'utf8')).toBe('after');
-      expect(readdirSync(resolve(root, 'src/icons/oldicon/assets'))).toEqual([]);
-      expect(readdirSync(stagingParent)).toEqual([]);
-      await applyStrokeWidthMigrationPlan(
-        root,
-        { changes: new Map(), removed: [] },
-        { stagingParent },
-      );
-      expect(readdirSync(stagingParent)).toEqual([]);
-      await expect(
-        applyStrokeWidthMigrationPlan(
-          root,
-          { changes: new Map([['../escape.svg', 'unsafe']]), removed: [] },
-          { stagingParent },
-        ),
-      ).rejects.toThrow(/MIGRATION_PATH_OUT_OF_SCOPE/);
-      expect(readdirSync(stagingParent)).toEqual([]);
-      await expect(
-        applyStrokeWidthMigrationPlan(
-          root,
-          {
-            changes: new Map([['src/icons/example.svg', 'must-not-apply']]),
-            removed: ['src/icons/example.svg'],
-          },
-          { stagingParent },
-        ),
-      ).rejects.toThrow(/MIGRATION_PATH_OUT_OF_SCOPE/);
-      expect(readFileSync(resolve(root, 'src/icons/example.svg'), 'utf8')).toBe('after');
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-      rmSync(stagingParent, { force: true, recursive: true });
-    }
-  });
-
-  it('keeps dry-run output informative without applying its planned writes', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'icon-stroke-dry-run-'));
-    try {
-      mkdirSync(resolve(root, 'src/icons'), { recursive: true });
-      writeFileSync(resolve(root, 'src/icons/example.svg'), 'before');
-      const planMigration = async () => ({
-        changes: new Map([['src/icons/example.svg', 'after']]),
-        removed: [],
-      });
-      await expect(runStrokeWidthMigration([], root, { planMigration })).resolves.toEqual({
-        mode: 'dry-run',
-        changedFiles: 1,
-        removedFiles: 0,
-        paths: ['src/icons/example.svg'],
-        removed: [],
-      });
-      expect(readFileSync(resolve(root, 'src/icons/example.svg'), 'utf8')).toBe('before');
     } finally {
       rmSync(root, { force: true, recursive: true });
     }

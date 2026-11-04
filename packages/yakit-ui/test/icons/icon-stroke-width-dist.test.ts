@@ -6,8 +6,17 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import oldiconInventory from '../../src/icons/oldicon/inventory.json';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import renderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+
+import { iconCounts, iconExports } from './icon-inventory';
+
+const oldiconInventory = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/oldicon.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const repositoryRoot = resolve(packageRoot, '../..');
@@ -42,20 +51,22 @@ describe('Built icon stroke-width contract', () => {
     const coreIcons = await importBuilt(builtPath(coreDist, 'icons/index.js'));
     const dedicatedRoot = await importBuilt(builtPath(dedicatedDist, 'index.js'));
     const families = [
-      ['outline', 364],
-      ['solid', 256],
-      ['colorful', 296],
+      ['outline', iconCounts.outline],
+      ['solid', iconCounts.solid],
+      ['colorful', iconCounts.colorful],
     ] as const;
 
-    expect(Object.keys(coreIcons)).toHaveLength(917);
+    expect(Object.keys(coreIcons)).toHaveLength(iconCounts.root);
+    expect(Object.keys(coreIcons).sort()).toEqual([...iconExports.root].sort());
     expect(Object.keys(dedicatedRoot)).toEqual(Object.keys(coreIcons));
-    expect(componentEntries(coreIcons)).toHaveLength(917);
-    expect(componentEntries(dedicatedRoot)).toHaveLength(917);
+    expect(componentEntries(coreIcons)).toHaveLength(iconCounts.root);
+    expect(componentEntries(dedicatedRoot)).toHaveLength(iconCounts.root);
     expectDefaultWidthMarkup('core-root:AcademicCapOutlined', coreRoot.AcademicCapOutlined);
     for (const [family, count] of families) {
       const core = await importBuilt(builtPath(coreDist, `icons/${family}/index.js`));
       const dedicated = await importBuilt(builtPath(dedicatedDist, `${family}/index.js`));
       expect(Object.keys(core), `core:${family}`).toHaveLength(count);
+      expect(Object.keys(core).sort(), `core:${family}`).toEqual([...iconExports[family]].sort());
       expect(Object.keys(dedicated), `dedicated:${family}`).toEqual(Object.keys(core));
     }
     for (const [name, Component] of componentEntries(coreIcons)) {

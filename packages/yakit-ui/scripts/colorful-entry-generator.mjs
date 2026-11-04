@@ -1,4 +1,6 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { readIconInput } from './icon-source-documents.mjs';
+import { readIconSources } from './icon-source-data.mjs';
+const colorfulSource = readIconSources().colorful;
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -133,14 +135,20 @@ function option(args, name, fallback) {
 }
 
 export async function runColorfulEntryGenerator(args = process.argv.slice(2)) {
+  if (args.includes('--write'))
+    fail('COLORFUL_ENTRY_WRITE_RETIRED', 'Use pnpm icons:update --family colorful');
   const manifestPath = path.resolve(
     PACKAGE_ROOT,
-    option(args, '--manifest', 'scripts/figma-colorful-icons-inventory.json'),
+    option(args, '--manifest', 'config/icon-sources/colorful.json#manifest'),
   );
-  const inventory = JSON.parse(await readFile(manifestPath, 'utf8'));
+  const inventory = JSON.parse(await readIconInput(manifestPath, 'utf8'));
   validateColorfulInventory(inventory, {
-    expectedGroupCount: Number(option(args, '--expected-groups', '16')),
-    expectedRowCount: Number(option(args, '--expected-rows', '296')),
+    expectedGroupCount: Number(
+      option(args, '--expected-groups', String(colorfulSource.groups.length)),
+    ),
+    expectedRowCount: Number(
+      option(args, '--expected-rows', String(colorfulSource.records.length)),
+    ),
     requireFrozenClassification: true,
     requireProvenance: true,
   });
@@ -164,12 +172,8 @@ export async function runColorfulEntryGenerator(args = process.argv.slice(2)) {
       }),
     })),
   );
-  if (args.includes('--write')) {
-    await Promise.all(outputs.map((output) => writeFile(output.path, output.content)));
-    return `COLORFUL_ENTRIES_WRITTEN ${publicRows(inventory).length}\n`;
-  }
   for (const output of outputs) {
-    const current = await readFile(output.path, 'utf8').catch(() => null);
+    const current = await readIconInput(output.path, 'utf8').catch(() => null);
     if (current !== output.content)
       fail('COLORFUL_ENTRY_DRIFT', path.relative(PACKAGE_ROOT, output.path));
   }

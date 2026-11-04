@@ -1,6 +1,7 @@
+import { readIconInput } from './icon-source-documents.mjs';
 import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -114,18 +115,19 @@ async function main() {
   const prechangePath = path.resolve(args.get('prechange-baseline'));
   const figmaRawProvenancePath = path.resolve(
     args.get('figma-raw-provenance') ??
-      path.join(packageRoot, 'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json'),
+      path.join(packageRoot, 'config/icon-sources/outline.json#raw'),
   );
   const placementProvenancePath = path.resolve(
     args.get('placement-provenance') ??
       path.join(
         packageRoot,
-        'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json',
+        'config/icon-sources/outline.json#placement',
       ),
   );
-  const output = path.resolve(
-    args.get('output') ?? path.join(packageRoot, 'scripts/figma-outline-icons-inventory.json'),
-  );
+  if (!args.get('output')) throw new Error('review export requires an explicit --output path; use icons:update for normal updates');
+  const output = path.resolve(args.get('output'));
+  if (output.includes('#') || output.startsWith(path.join(packageRoot, 'config/icon-sources') + path.sep))
+    throw new Error('review output must not overwrite canonical icon sources');
   const basicManifestPath = path.join(packageRoot, 'scripts/figma-basic-icons-inventory.json');
   const [
     sourceInventoryText,
@@ -135,12 +137,12 @@ async function main() {
     figmaRawProvenanceText,
     placementProvenanceText,
   ] = await Promise.all([
-    readFile(sourceInventoryPath, 'utf8'),
-    readFile(prechangePath, 'utf8'),
-    readFile(path.join(packageRoot, 'src/icons/outline/index.tsx'), 'utf8'),
-    readFile(basicManifestPath, 'utf8'),
-    readFile(figmaRawProvenancePath, 'utf8'),
-    readFile(placementProvenancePath, 'utf8'),
+    readIconInput(sourceInventoryPath, 'utf8'),
+    readIconInput(prechangePath, 'utf8'),
+    readIconInput(path.join(packageRoot, 'src/icons/outline/index.tsx'), 'utf8'),
+    readIconInput(basicManifestPath, 'utf8'),
+    readIconInput(figmaRawProvenancePath, 'utf8'),
+    readIconInput(placementProvenancePath, 'utf8'),
   ]);
   const sourceInventory = JSON.parse(sourceInventoryText);
   const prechange = JSON.parse(prechangeText);
@@ -149,8 +151,8 @@ async function main() {
   if (
     figmaRawProvenance.fileKey !== 'QWct5XE0Bg0bNDQ93eYgEw' ||
     figmaRawProvenance.frameNodeId !== '46824:1930' ||
-    figmaRawProvenance.components?.length !== 364 ||
-    figmaRawProvenance.instances?.length !== 3
+    figmaRawProvenance.components?.length !== policy.expectedCounts.currentSymbols ||
+    figmaRawProvenance.instances?.length !== policy.expectedCounts.instances
   )
     throw new Error('Figma raw provenance identity/counts are invalid');
   const figmaComponents = new Map(
@@ -162,15 +164,15 @@ async function main() {
   if (
     placementProvenance.fileKey !== figmaRawProvenance.fileKey ||
     placementProvenance.frameNodeId !== figmaRawProvenance.frameNodeId ||
-    placementProvenance.currentSymbols?.length !== 364 ||
-    placementProvenance.placements?.length !== 367
+    placementProvenance.currentSymbols?.length !== policy.expectedCounts.currentSymbols ||
+    placementProvenance.placements?.length !== policy.expectedCounts.placements
   )
     throw new Error('Figma placement provenance identity/counts are invalid');
   const placementSourceIds = new Set(
     placementProvenance.currentSymbols.map(({ exportedSourceNodeId }) => exportedSourceNodeId),
   );
   if (
-    placementSourceIds.size !== 364 ||
+    placementSourceIds.size !== policy.expectedCounts.currentSymbols ||
     [...figmaComponents.keys()].some((nodeId) => !placementSourceIds.has(nodeId))
   )
     throw new Error('Figma placement/raw component sets differ');
@@ -178,12 +180,15 @@ async function main() {
   const prechangeByNode = new Map(
     prechange.exports.map((entry) => [entry.exportedSourceNodeId, entry]),
   );
-  if (sourceInventory.currentSymbols?.length !== 364 || sourceInventory.placements?.length !== 367)
-    throw new Error('source inventory must contain exactly 364 symbols and 367 placements');
+  if (
+    sourceInventory.currentSymbols?.length !== policy.expectedCounts.currentSymbols ||
+    sourceInventory.placements?.length !== policy.expectedCounts.placements
+  )
+    throw new Error('source inventory counts must match the registered sources');
   const instances = placementProvenance.placements.filter(
     ({ nodeType }) => nodeType === 'instance',
   );
-  if (instances.length !== 3)
+  if (instances.length !== policy.expectedCounts.instances)
     throw new Error(
       `source inventory must contain exactly 3 instances, received ${instances.length}`,
     );
@@ -220,7 +225,7 @@ async function main() {
   const paintExceptions = [];
   for (const symbol of placementProvenance.currentSymbols) {
     const file = `${symbol.exportedSourceNodeId.replace(':', '-')}.svg`;
-    const localSource = await readFile(path.join(packageRoot, 'src/icons/outline', file), 'utf8');
+    const localSource = await readIconInput(path.join(packageRoot, 'src/icons/outline', file), 'utf8');
     if (invalidStrokeWidths(localSource).length > 0)
       throw new Error(`stroke-width policy mismatch: ${file}`);
     const figmaRawSource = figmaComponents.get(symbol.exportedSourceNodeId)?.svg;
@@ -306,20 +311,22 @@ async function main() {
   const missingExports = symbols.filter(({ exportName }) => !exportName).map(({ file }) => file);
   if (missingExports.length > 0)
     throw new Error(`missing public exports: ${missingExports.join(', ')}`);
-  if (exportsByFile.size !== 364)
-    throw new Error(`public export count must be 364, received ${exportsByFile.size}`);
+  if (exportsByFile.size !== policy.expectedCounts.currentSymbols)
+    throw new Error(
+      `public export count must be ${policy.expectedCounts.publicExports}, received ${exportsByFile.size}`,
+    );
   const manifest = {
     schemaVersion: 'figma-outline-icons-inventory-v1',
     complete: true,
     provenanceComplete: true,
     completenessScope:
-      'complete 367-placement, 364 canonical Figma component SVG (Plugin API and MCP asset provenance), and exact 3-instance override provenance',
+      'Registered source records; does not assert a complete remote Figma frame scan',
     variant: 'outline',
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     frameName: 'outline',
     frameSize: { height: 1827, width: 457 },
-    expectedCounts: { currentSymbols: 364, instances: 3, placements: 367, publicExports: 364 },
+    expectedCounts: { ...policy.expectedCounts },
     strokeWidthPolicy: policy.strokeWidthPolicy,
     sourceEvidence: {
       ...sourceInventory.sourceEvidence,

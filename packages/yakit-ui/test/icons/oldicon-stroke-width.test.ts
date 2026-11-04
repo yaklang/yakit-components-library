@@ -4,7 +4,11 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import { planOldiconStrokeWidth } from '../../scripts/oldicon-stroke-width.mjs';
+
+import { iconCounts } from './icon-inventory';
+import { oldiconSourceCounts } from './icon-inventory';
 
 const sha256 = (value: string) => createHash('sha256').update(value).digest('hex');
 const assetFile = (source: string) => `assets/${sha256(source)}.svg`;
@@ -138,7 +142,9 @@ describe('Oldicon stroke-width migration plan', () => {
   it('plans the committed inventory offline while preserving all public mappings', () => {
     const packageRoot = resolve(import.meta.dirname, '../..');
     const oldiconRoot = resolve(packageRoot, 'src/icons/oldicon');
-    const inventory = JSON.parse(readFileSync(resolve(oldiconRoot, 'inventory.json'), 'utf8'));
+    const inventory = JSON.parse(
+      readIconInputSync(resolve(packageRoot, 'config/icon-sources/oldicon.json#manifest'), 'utf8'),
+    );
     const assets = new Map<string, string>();
     for (const { assetFile: path } of inventory.exports) {
       if (!assets.has(path)) assets.set(path, readFileSync(resolve(oldiconRoot, path), 'utf8'));
@@ -156,8 +162,8 @@ describe('Oldicon stroke-width migration plan', () => {
     );
     const result = planOldiconStrokeWidth(inventory, assets);
 
-    expect(result.inventory.entries).toHaveLength(408);
-    expect(result.inventory.exports).toHaveLength(380);
+    expect(result.inventory.entries).toHaveLength(oldiconSourceCounts.entries);
+    expect(result.inventory.exports).toHaveLength(iconCounts.oldicon);
     expect(
       result.inventory.entries.map(
         ({ exportName, sourceFile, sourceName }: Record<string, string>) =>
@@ -173,6 +179,6 @@ describe('Oldicon stroke-width migration plan', () => {
     expect(result.inventory.entries.map(({ repairs }: { repairs: unknown[] }) => repairs)).toEqual(
       beforeRepairs,
     );
-    expect(result.inventory.totals.repairedSourcePaths).toBe(12);
+    expect(result.inventory.totals.repairedSourcePaths).toBe(oldiconSourceCounts.repaired);
   });
 });

@@ -1,13 +1,12 @@
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { chromium } from 'playwright';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import manifest from '../../scripts/figma-outline-icons-inventory.json';
-import figmaProvenance from '../fixtures/icons/reference/figma-outline-raw-provenance-v1.json';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import metricsBaseline from '../fixtures/icons/reference/outline-controls-298.json';
 import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
 import prechangeBaseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
@@ -15,6 +14,16 @@ import rendererProvenance from '../fixtures/icons/reference/outline-renderer-pro
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import strokeWidthFixture from '../fixtures/icons/stroke-width-1/before.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+
+const manifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/outline.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
+const figmaProvenance = JSON.parse(
+  readIconInputSync(new URL('../../config/icon-sources/outline.json#raw', import.meta.url), 'utf8'),
+);
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/icons/outline');
@@ -59,7 +68,7 @@ const historicalOutlineSource = (file: string) => {
   if (widthMigrationSource) return widthMigrationSource;
   const review = visualWeightReviews.reviews.find((item) => item.file === file);
   if (review) {
-    const original = readFileSync(
+    const original = readIconInputSync(
       resolve(
         packageRoot,
         'test/fixtures/icons/reference/visual-weight-v2',
@@ -71,11 +80,11 @@ const historicalOutlineSource = (file: string) => {
     return original;
   }
   return file === '1-3136.svg'
-    ? readFileSync(
+    ? readIconInputSync(
         resolve(packageRoot, 'test/fixtures/icons/adjustable-stroke/bug-original-expanded.svg'),
         'utf8',
       )
-    : readFileSync(resolve(outlineRoot, file), 'utf8');
+    : readIconInputSync(resolve(outlineRoot, file), 'utf8');
 };
 
 interface PixelMetric {
@@ -213,7 +222,7 @@ beforeAll(async () => {
     });
     await page.setContent(candidateHtml, { waitUntil: 'load' });
     const candidatePng = await page.screenshot({ omitBackground: false });
-    const referencePng = readFileSync(referencePath);
+    const referencePng = readIconInputSync(referencePath);
     const result = await page.evaluate(
       async ({ aiPlacementNodeId, candidate, frameHeight, frameWidth, reference, rows }) => {
         const decode = async (base64: string) => {
@@ -366,7 +375,7 @@ beforeAll(async () => {
         throw new Error(`Missing remediation evidence: ${exportedSourceNodeId}`);
       }
       const figmaRawSvgSha256 = sha256(figmaComponent.svg);
-      const currentLocalRawSvgSha256 = sha256(readFileSync(resolve(outlineRoot, symbol.file)));
+      const currentLocalRawSvgSha256 = sha256(readIconInputSync(resolve(outlineRoot, symbol.file)));
       const historicalLocalRawSvgSha256 = sha256(historicalOutlineSource(symbol.file));
       if (
         figmaRawSvgSha256 !== symbol.figmaRawSvgSha256 ||
@@ -517,7 +526,7 @@ describe('Historical Outline pixel diagnostics under the current renderer', () =
   });
 
   it('writes a deterministic resolved 52-row report with the previous Notebook recorded', () => {
-    const first = readFileSync(reportPath, 'utf8');
+    const first = readIconInputSync(reportPath, 'utf8');
     const report = JSON.parse(first) as {
       previousNotebookControl: { exportName: string; sourceNodeId: string; status: string };
       rows: Array<Record<string, unknown>>;
@@ -572,6 +581,6 @@ describe('Historical Outline pixel diagnostics under the current renderer', () =
         status: 'replaced-by-current-figma-source',
       }),
     );
-    expect(readFileSync(reportPath, 'utf8')).toBe(first);
+    expect(readIconInputSync(reportPath, 'utf8')).toBe(first);
   });
 });

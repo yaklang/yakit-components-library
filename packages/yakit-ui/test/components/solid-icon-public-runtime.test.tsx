@@ -9,6 +9,7 @@ import { solidIconNameCatalog } from '../../src/icons/figmaNameCatalog';
 import { solidIconRegistry } from '../../src/icons/registry';
 import nameMigration from '../fixtures/icons/english-name-migration.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
+import { iconCounts } from '../icons/icon-inventory';
 
 const roots: Root[] = [];
 const render = (node: React.ReactNode) => {
@@ -34,7 +35,7 @@ const clearRenders = () => {
 
 const expectPrimaryPaint = (container: HTMLElement, expectedColor: string) => {
   const svgs = [...container.querySelectorAll<SVGSVGElement>('svg')];
-  expect(svgs).toHaveLength(256);
+  expect(svgs).toHaveLength(iconCounts.solid);
   for (const svg of svgs) {
     const iconName = (svg.parentElement as HTMLSpanElement).dataset.iconName;
     const primary = [

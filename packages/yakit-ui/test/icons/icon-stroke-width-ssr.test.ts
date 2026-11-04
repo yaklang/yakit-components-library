@@ -5,10 +5,13 @@ import { describe, expect, it } from 'vitest';
 import * as Icons from '../../src/icons';
 import * as OldIcons from '../../src/icons/oldicon';
 
+import { iconCounts, iconExports } from './icon-inventory';
+
 describe('1.5-width server rendered icons without CSS', () => {
   it('preserves all exports and emits no legacy width declarations', () => {
     const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
-    expect(icons).toHaveLength(1297);
+    expect(icons).toHaveLength(iconCounts.all);
+    expect(icons.map(([name]) => name).sort()).toEqual([...iconExports.all].sort());
     for (const [name, Icon] of icons) {
       const markup = renderToStaticMarkup(createElement(Icon, { 'aria-label': name }));
       expect(markup, name).toContain('<svg');

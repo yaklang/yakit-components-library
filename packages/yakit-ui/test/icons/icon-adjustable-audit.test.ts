@@ -1,13 +1,19 @@
-import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
 import { auditIcons } from '../../scripts/audit-icons.mjs';
-import manifest from '../../scripts/figma-outline-icons-inventory.json';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import reviews from '../../scripts/outline-geometry-overrides.json';
 import { reviewedOutlineGeometry } from '../../scripts/outline-geometry-overrides.mjs';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+
+const manifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/outline.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const bug = manifest.symbols.find(({ exportName }) => exportName === 'BugOutlined')!;
 
@@ -47,23 +53,14 @@ describe('reviewed adjustable geometry audit', () => {
     const result = await auditIcons({
       root: resolve(root, 'src/icons'),
       indexPath: resolve(root, 'src/icons/outline/index.tsx'),
-      manifestPath: resolve(root, 'scripts/figma-outline-icons-inventory.json'),
+      manifestPath: resolve(root, 'config/icon-sources/outline.json#manifest'),
       policyId: 'outline-v1',
-      figmaRawProvenancePath: resolve(
-        root,
-        'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json',
-      ),
-      placementProvenancePath: resolve(
-        root,
-        'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json',
-      ),
+      figmaRawProvenancePath: resolve(root, 'config/icon-sources/outline.json#raw'),
+      placementProvenancePath: resolve(root, 'config/icon-sources/outline.json#placement'),
     });
     expect(result.failures).toEqual([]);
     const raw = JSON.parse(
-      readFileSync(
-        resolve(root, 'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json'),
-        'utf8',
-      ),
+      readIconInputSync(resolve(root, 'config/icon-sources/outline.json#raw'), 'utf8'),
     );
     expect(
       raw.components.find(({ nodeId }: { nodeId: string }) => nodeId === '1:3136').svg,

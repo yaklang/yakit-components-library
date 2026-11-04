@@ -115,14 +115,14 @@ function collectTargets(root, file, coupledCutouts) {
 
 export function generateIconStrokeContract(
   root = outlineRoot,
-  { coupledCutouts = coupledCutoutFiles, fixedFill = fixedFillDispositions } = {},
+  { coupledCutouts = coupledCutoutFiles, fixedFill = fixedFillDispositions, sources } = {},
 ) {
-  const files = readdirSync(root)
+  const files = (sources ? [...sources.keys()] : readdirSync(root))
     .filter((file) => file.endsWith('.svg'))
     .sort();
   const entries = {};
   for (const file of files) {
-    const source = readFileSync(resolve(root, file), 'utf8');
+    const source = sources ? sources.get(file) : readFileSync(resolve(root, file), 'utf8');
     const targets = collectTargets(parseSvg(source), file, coupledCutouts);
     if (targets.length === 0) {
       const reason = fixedFill.get(file);

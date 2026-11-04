@@ -4,20 +4,10 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { outlineIconRegistry } from '../../src/icons/registry';
-import additionsOct29 from '../fixtures/icons/reference/outline-additions-oct29.json';
-import additions from '../fixtures/icons/reference/outline-additions-sep22.json';
-import additionsSep30 from '../fixtures/icons/reference/outline-additions-sep30.json';
-import designUpdates from '../fixtures/icons/reference/outline-design-updates-sep17.json';
+import frozenControls from '../fixtures/icons/reference/outline-controls-298.json';
 
-const addedIconNames = new Set(
-  [
-    ...designUpdates.updates,
-    ...additions.updates,
-    ...additionsSep30.updates,
-    ...additionsOct29.updates,
-  ]
-    .filter(({ added }) => added)
-    .map(({ exportName }) => exportName),
+const frozenControlIds = new Set(
+  frozenControls.controls.map(({ exportedSourceNodeId }) => exportedSourceNodeId),
 );
 
 const defectNames = new Set([
@@ -146,14 +136,12 @@ describe('Outline remediation visual smoke', () => {
   });
 
   it('keeps the 298 frozen controls in the public registry', () => {
-    const controls = outlineIconRegistry.filter(
-      ({ exportName }) =>
-        !defectNames.has(exportName) &&
-        !notebookGroupNames.has(exportName) &&
-        !addedIconNames.has(exportName) &&
-        exportName !== 'LandPlotOutlined',
+    const controls = outlineIconRegistry.filter(({ sourceNodeId }) =>
+      frozenControlIds.has(sourceNodeId),
     );
-
+    expect(controls.map(({ sourceNodeId }) => sourceNodeId).sort()).toEqual(
+      [...frozenControlIds].sort(),
+    );
     expect(controls).toHaveLength(298);
   });
 });

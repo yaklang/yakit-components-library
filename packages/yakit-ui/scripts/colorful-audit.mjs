@@ -1,5 +1,8 @@
+import { readIconInput } from './icon-source-documents.mjs';
+import { readIconSources } from './icon-source-data.mjs';
+const colorfulSource = readIconSources().colorful;
 import { createHash } from 'node:crypto';
-import { readFile, readdir } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -162,7 +165,13 @@ function assertSvgPathData(svg, sourcePath) {
   }
 }
 
-function inspectPaint(value, sourcePath, tokenCatalog, themePaintBindings = []) {
+function inspectPaint(
+  value,
+  sourcePath,
+  tokenCatalog,
+  themePaintBindings = [],
+  projectPaintBindings = [],
+) {
   const paint = value.trim();
   if (paint === 'none' || paint === 'currentColor' || /^url\(/.test(paint)) return;
   const token = TOKEN_PAINT.exec(paint);
@@ -171,6 +180,8 @@ function inspectPaint(value, sourcePath, tokenCatalog, themePaintBindings = []) 
     if (tokenCatalog) {
       const definition = tokenCatalog.find(({ name }) => name === token[1]);
       if (!definition) fail('COLOR_TOKEN_UNKNOWN', `${sourcePath}: ${token[1]}`);
+      // Explicit project mappings are not Figma variable evidence; allow their chosen fallback.
+      if (projectPaintBindings.includes(paint)) return;
       const figmaBoundThemePaint = themePaintBindings.some(
         (binding) =>
           binding.token === token[1] &&
@@ -193,8 +204,8 @@ function inspectPaint(value, sourcePath, tokenCatalog, themePaintBindings = []) 
 export function auditColorfulInputs(
   { inventory, sources },
   {
-    expectedGroupCount = 16,
-    expectedRowCount = 296,
+    expectedGroupCount = colorfulSource.groups.length,
+    expectedRowCount = colorfulSource.records.length,
     requireFrozenClassification = false,
     requireProvenance = false,
     tokenCatalog,
@@ -238,10 +249,22 @@ export function auditColorfulInputs(
     if (row?.width !== undefined && (width !== row.width || height !== row.height))
       fail('VIEWPORT_MISMATCH', source.path);
     for (const match of source.svg.matchAll(PAINT_ATTRIBUTE))
-      inspectPaint(match[2], source.path, tokenCatalog, row?.themePaintBindings);
+      inspectPaint(
+        match[2],
+        source.path,
+        tokenCatalog,
+        row?.themePaintBindings,
+        row?.projectPaintBindings,
+      );
     for (const style of source.svg.matchAll(STYLE_ATTRIBUTE))
       for (const match of style[2].matchAll(STYLE_PAINT))
-        inspectPaint(match[1], source.path, tokenCatalog, row?.themePaintBindings);
+        inspectPaint(
+          match[1],
+          source.path,
+          tokenCatalog,
+          row?.themePaintBindings,
+          row?.projectPaintBindings,
+        );
   }
   const fragmentSummary = auditColorfulFragmentFiles(sources);
   const sourceDigests = sources
@@ -267,7 +290,7 @@ async function listSvgFiles(root, relativeRoot = root) {
     else if (entry.name.endsWith('.svg'))
       files.push({
         path: path.relative(relativeRoot, absolute).split(path.sep).join('/'),
-        svg: await readFile(absolute, 'utf8'),
+        svg: await readIconInput(absolute, 'utf8'),
       });
   }
   return files;
@@ -276,10 +299,10 @@ async function listSvgFiles(root, relativeRoot = root) {
 export async function runColorfulAuditCli(args = process.argv.slice(2)) {
   const manifestPath = path.resolve(
     PACKAGE_ROOT,
-    option(args, '--manifest', 'scripts/figma-colorful-icons-inventory.json'),
+    option(args, '--manifest', 'config/icon-sources/colorful.json#manifest'),
   );
   const sourceRoot = path.resolve(PACKAGE_ROOT, option(args, '--source-root', 'src/icons'));
-  const inventory = JSON.parse(await readFile(manifestPath, 'utf8'));
+  const inventory = JSON.parse(await readIconInput(manifestPath, 'utf8'));
   const tokenCatalog = await loadPinnedTokenCatalog();
   const sources = (await listSvgFiles(path.join(sourceRoot, 'colorful'), sourceRoot)).sort(
     (left, right) => left.path.localeCompare(right.path),
@@ -287,8 +310,12 @@ export async function runColorfulAuditCli(args = process.argv.slice(2)) {
   const result = auditColorfulInputs(
     { inventory, sources },
     {
-      expectedGroupCount: Number(option(args, '--expected-groups', '16')),
-      expectedRowCount: Number(option(args, '--expected-rows', '296')),
+      expectedGroupCount: Number(
+        option(args, '--expected-groups', String(colorfulSource.groups.length)),
+      ),
+      expectedRowCount: Number(
+        option(args, '--expected-rows', String(colorfulSource.records.length)),
+      ),
       requireFrozenClassification: true,
       requireProvenance: true,
       tokenCatalog,

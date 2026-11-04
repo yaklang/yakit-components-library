@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import {
   renderColorfulBarrel,
   renderColorfulCatalog,
+  runColorfulEntryGenerator,
 } from '../../scripts/colorful-entry-generator.mjs';
 
 const inventory = JSON.parse(
@@ -16,6 +17,11 @@ const inventory = JSON.parse(
 );
 
 describe('colorful public entry generator', () => {
+  it('rejects the retired standalone write command before reading or writing files', async () => {
+    await expect(
+      runColorfulEntryGenerator(['--write', '--manifest', 'missing.json']),
+    ).rejects.toThrow(/COLORFUL_ENTRY_WRITE_RETIRED/);
+  });
   it('imports canonical assets once and emits aliases without duplicate SVGs', () => {
     const output = renderColorfulBarrel(inventory);
     expect(output.match(/\.svg\?react/g)).toHaveLength(1);

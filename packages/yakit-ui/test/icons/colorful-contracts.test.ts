@@ -5,10 +5,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   COLORFUL_SCHEMA_VERSION,
+  classifyColorfulDuplicates,
   validateColorfulInventory,
   validateColorfulRow,
 } from '../../scripts/colorful-icon-contracts.mjs';
-import { classifyColorfulDuplicates } from '../../scripts/colorful-inventory-merge.mjs';
 
 const sample = JSON.parse(
   readFileSync(

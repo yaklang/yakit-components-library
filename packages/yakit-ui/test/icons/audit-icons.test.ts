@@ -5,7 +5,6 @@ import {
   mkdirSync,
   mkdtempSync,
   readdirSync,
-  readFileSync,
   rmSync,
   statSync,
   writeFileSync,
@@ -16,23 +15,21 @@ import { fileURLToPath } from 'node:url';
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { auditIcons, canonicalizeSvg } from '../../scripts/audit-icons.mjs';
-import { ICON_STROKE_WIDTH_POLICY } from '../../scripts/icon-audit-contracts.mjs';
+import { auditIcons as auditWithPolicy, canonicalizeSvg } from '../../scripts/audit-icons.mjs';
+import {
+  getIconAuditPolicy,
+  ICON_STROKE_WIDTH_POLICY,
+} from '../../scripts/icon-audit-contracts.mjs';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import { reviewedOutlineGeometry } from '../../scripts/outline-geometry-overrides.mjs';
 import { planIconStrokeManifests } from '../../scripts/update-icon-stroke-manifests.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const auditScript = resolve(packageRoot, 'scripts/audit-icons.mjs');
 const updaterScript = resolve(packageRoot, 'scripts/update-outline-icon-baseline.mjs');
-const manifest = resolve(packageRoot, 'scripts/figma-outline-icons-inventory.json');
-const placementProvenance = resolve(
-  packageRoot,
-  'test/fixtures/icons/reference/figma-outline-placement-provenance-v1.json',
-);
-const rawProvenance = resolve(
-  packageRoot,
-  'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json',
-);
+const manifest = resolve(packageRoot, 'config/icon-sources/outline.json#manifest');
+const placementProvenance = resolve(packageRoot, 'config/icon-sources/outline.json#placement');
+const rawProvenance = resolve(packageRoot, 'config/icon-sources/outline.json#raw');
 const prechangeBaseline = resolve(
   packageRoot,
   'test/fixtures/icons/reference/outline-prechange-baseline-v1.json',
@@ -42,6 +39,14 @@ const sha256 = (value: Buffer | string) => createHash('sha256').update(value).di
 const validOutline =
   '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor"/></svg>';
 const dataCompareFormula = 'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
+
+const fixtureCounts = { currentSymbols: 4, instances: 3, placements: 7, publicExports: 4 };
+const auditIcons = (options: Parameters<typeof auditWithPolicy>[0]) =>
+  auditWithPolicy({
+    ...options,
+    policyOverride: { ...getIconAuditPolicy('outline-v1'), expectedCounts: fixtureCounts },
+  });
+const liveCounts = getIconAuditPolicy('outline-v1').expectedCounts;
 
 const completeManifest = (source = validOutline) => {
   const normalizedAstSha256 = sha256(
@@ -71,9 +76,9 @@ const completeManifest = (source = validOutline) => {
     localRawSvgSha256: sha256(source),
     normalizedAstSha256,
   });
-  const placements = Array.from({ length: 367 }, (_, index) => {
-    const instance = index >= 364;
-    const exportedSourceNodeId = `${(index % 364) + 1}:1`;
+  const placements = Array.from({ length: fixtureCounts.placements }, (_, index) => {
+    const instance = index >= fixtureCounts.currentSymbols;
+    const exportedSourceNodeId = `${(index % fixtureCounts.currentSymbols) + 1}:1`;
     return {
       exportedSourceNodeId,
       mainComponentId: exportedSourceNodeId,
@@ -86,7 +91,7 @@ const completeManifest = (source = validOutline) => {
   });
   return {
     complete: true,
-    expectedCounts: { currentSymbols: 364, instances: 3, placements: 367, publicExports: 364 },
+    expectedCounts: { ...fixtureCounts },
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     instanceVerification: placements.slice(-3),
@@ -96,7 +101,7 @@ const completeManifest = (source = validOutline) => {
     provenanceComplete: true,
     sourceEvidence: {} as Record<string, string>,
     strokeWidthPolicy: { ...ICON_STROKE_WIDTH_POLICY },
-    symbols: Array.from({ length: 364 }, (_, index) => symbol(index)),
+    symbols: Array.from({ length: fixtureCounts.currentSymbols }, (_, index) => symbol(index)),
     variant: 'outline',
   };
 };
@@ -120,7 +125,7 @@ const snapshot = (roots: string[]) => {
   const result: Record<string, string> = {};
   const visit = (path: string) => {
     if (!statSync(path).isDirectory()) {
-      result[relative(packageRoot, path)] = sha256(readFileSync(path));
+      result[relative(packageRoot, path)] = sha256(readIconInputSync(path));
       return;
     }
     for (const entry of readdirSync(path).sort()) visit(resolve(path, entry));
@@ -514,15 +519,15 @@ describe('Outline manifest updater provenance gate', () => {
       const output = resolve(root, 'manifest.json');
       const result = runUpdater(output);
       expect(result).toMatchObject({ status: 0, stderr: '' });
-      const value = JSON.parse(readFileSync(output, 'utf8'));
+      const value = JSON.parse(readIconInputSync(output, 'utf8'));
       expect(value).toMatchObject({ complete: true, provenanceComplete: true });
       expect(value.strokeWidthPolicy).toEqual(ICON_STROKE_WIDTH_POLICY);
-      expect(value.symbols).toHaveLength(364);
-      expect(value.placements).toHaveLength(367);
+      expect(value.symbols).toHaveLength(liveCounts.currentSymbols);
+      expect(value.placements).toHaveLength(liveCounts.placements);
       expect(value.instanceVerification).toHaveLength(3);
       expect(
         new Set(value.symbols.map((symbol: Record<string, string>) => symbol.exportName)).size,
-      ).toBe(364);
+      ).toBe(liveCounts.publicExports);
       expect(value.legacySources).toEqual([]);
       expect(
         value.placements.every(
@@ -550,7 +555,7 @@ describe('Outline manifest updater provenance gate', () => {
   it('fails before writing when independent Figma/local geometry differs', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
     try {
-      const altered = JSON.parse(readFileSync(rawProvenance, 'utf8'));
+      const altered = JSON.parse(readIconInputSync(rawProvenance, 'utf8'));
       altered.components[0].svg = altered.components[0].svg.replace('M3 8', 'M4 8');
       const alteredPath = resolve(root, 'altered.json');
       const output = resolve(root, 'manifest.json');
@@ -568,11 +573,11 @@ describe('Outline manifest updater provenance gate', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
     try {
       const output = resolve(root, 'manifest.json');
-      const committed = JSON.parse(readFileSync(manifest, 'utf8'));
+      const committed = JSON.parse(readIconInputSync(manifest, 'utf8'));
       const { reviewId, reviewedBy } = committed.updateProvenance;
       const result = runUpdater(output, rawProvenance, reviewId, reviewedBy);
       expect(result).toMatchObject({ status: 0, stderr: '' });
-      const generated = JSON.parse(readFileSync(output, 'utf8'));
+      const generated = JSON.parse(readIconInputSync(output, 'utf8'));
       expect({ ...generated, updateProvenance: committed.updateProvenance }).toEqual(committed);
     } finally {
       rmSync(root, { force: true, recursive: true });
@@ -635,11 +640,13 @@ describe('Stroke-width manifest planner', () => {
     const outputs = await planIconStrokeManifests(packageRoot, new Map());
 
     expect([...outputs.keys()]).toEqual([
-      'scripts/figma-outline-icons-inventory.json',
-      'scripts/figma-solid-icons-inventory.json',
-      'scripts/figma-colorful-icons-inventory.json',
+      'config/icon-sources/outline.json#manifest',
+      'config/icon-sources/solid.json#manifest',
+      'config/icon-sources/colorful.json#manifest',
     ]);
     for (const [relativePath, source] of outputs)
-      expect(source, relativePath).toBe(readFileSync(resolve(packageRoot, relativePath), 'utf8'));
+      expect(source, relativePath).toBe(
+        readIconInputSync(resolve(packageRoot, relativePath), 'utf8'),
+      );
   });
 });

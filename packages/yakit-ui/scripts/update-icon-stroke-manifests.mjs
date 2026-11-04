@@ -1,6 +1,6 @@
 import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { canonicalizeSvg, paintSemanticsSha256 } from './audit-icons.mjs';
@@ -8,31 +8,32 @@ import { ICON_STROKE_WIDTH_POLICY } from './icon-audit-contracts.mjs';
 import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs';
 
 const MANIFEST_PATHS = Object.freeze({
-  colorful: 'scripts/figma-colorful-icons-inventory.json',
-  outline: 'scripts/figma-outline-icons-inventory.json',
-  solid: 'scripts/figma-solid-icons-inventory.json',
+  colorful: 'config/icon-sources/colorful.json#manifest',
+  outline: 'config/icon-sources/outline.json#manifest',
+  solid: 'config/icon-sources/solid.json#manifest',
 });
 const RAW_PROVENANCE_PATHS = Object.freeze({
-  outline: 'test/fixtures/icons/reference/figma-outline-raw-provenance-v1.json',
-  solid: 'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json',
+  outline: 'config/icon-sources/outline.json#raw',
+  solid: 'config/icon-sources/solid.json#raw',
 });
 const DATA_COMPARE_RELATIVE_CURRENT_COLOR =
   'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
 
 const sha256 = (source) => createHash('sha256').update(source).digest('hex');
 
-async function readJson(packageRoot, relativePath) {
-  return JSON.parse(await readFile(path.join(packageRoot, relativePath), 'utf8'));
+function readJson(packageRoot, relativePath, documents) {
+  if (documents?.has(relativePath)) return structuredClone(documents.get(relativePath));
+  throw new Error(`ICON_DOCUMENT_REQUIRED: ${relativePath}`);
 }
 
-async function sourceFrom(sourcesMap, packageRoot, relativePath) {
+function sourceFrom(sourcesMap, packageRoot, relativePath) {
   const normalized = relativePath.replace(/^src\//, '');
   const source =
     sourcesMap.get(normalized) ??
     sourcesMap.get(`src/${normalized}`) ??
     sourcesMap.get(relativePath);
   return normalizeSvgStrokeWidth(
-    source ?? (await readFile(path.join(packageRoot, 'src', normalized), 'utf8')),
+    source ?? readFileSync(path.join(packageRoot, 'src', normalized), 'utf8'),
   );
 }
 
@@ -60,76 +61,71 @@ function outlineCanonicalOptions(sourceNodeId, geometryOnly = false) {
   };
 }
 
-async function planOutlineManifest(packageRoot, sourcesMap) {
-  const [manifest, provenance] = await Promise.all([
-    readJson(packageRoot, MANIFEST_PATHS.outline),
-    readJson(packageRoot, RAW_PROVENANCE_PATHS.outline),
-  ]);
+function planOutlineManifest(packageRoot, sourcesMap, documents) {
+  const [manifest, provenance] = [
+    readJson(packageRoot, MANIFEST_PATHS.outline, documents),
+    readJson(packageRoot, RAW_PROVENANCE_PATHS.outline, documents),
+  ];
   const figmaByNode = rawSourcesByNode(provenance);
-  const symbols = await Promise.all(
-    manifest.symbols.map(async (record) => {
-      const localSource = await sourceFrom(sourcesMap, packageRoot, `icons/outline/${record.file}`);
-      const figmaSource = figmaByNode.get(record.exportedSourceNodeId);
-      if (!figmaSource)
-        throw new Error(`FIGMA_RAW_SOURCE_MISSING: outline/${record.exportedSourceNodeId}`);
-      const figmaNormalizedAstSha256 = sha256(
-        canonicalizeSvg(figmaSource, outlineCanonicalOptions(record.exportedSourceNodeId)),
-      );
-      const localNormalizedAstSha256 = sha256(
-        canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId)),
-      );
-      const figmaGeometrySha256 = sha256(
-        canonicalizeSvg(figmaSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
-      );
-      const localGeometrySha256 = sha256(
-        canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
-      );
-      const geometryReviewId = reviewedOutlineGeometry({
-        ...record,
-        figmaRawSvgSha256: sha256(figmaSource),
-        localRawSvgSha256: sha256(localSource),
-        figmaNormalizedAstSha256,
-        localNormalizedAstSha256,
-        figmaGeometrySha256,
-        localGeometrySha256,
-      });
-      if (!geometryReviewId && figmaNormalizedAstSha256 !== localNormalizedAstSha256)
-        throw new Error(`NORMALIZED_AST_MISMATCH: outline/${record.file}`);
-      if (!geometryReviewId && figmaGeometrySha256 !== localGeometrySha256)
-        throw new Error(`GEOMETRY_MISMATCH: outline/${record.file}`);
-      return {
-        ...record,
-        ...(geometryReviewId ? { geometryReviewId } : {}),
-        localRawSvgSha256: sha256(localSource),
-        figmaNormalizedAstSha256,
-        localNormalizedAstSha256,
-        normalizedAstSha256: localNormalizedAstSha256,
-        figmaGeometrySha256,
-        localGeometrySha256,
-        geometrySha256: localGeometrySha256,
-      };
-    }),
-  );
+  const symbols = manifest.symbols.map((record) => {
+    const localSource = sourceFrom(sourcesMap, packageRoot, `icons/outline/${record.file}`);
+    const figmaSource = figmaByNode.get(record.exportedSourceNodeId);
+    if (!figmaSource)
+      throw new Error(`FIGMA_RAW_SOURCE_MISSING: outline/${record.exportedSourceNodeId}`);
+    const figmaNormalizedAstSha256 = sha256(
+      canonicalizeSvg(figmaSource, outlineCanonicalOptions(record.exportedSourceNodeId)),
+    );
+    const localNormalizedAstSha256 = sha256(
+      canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId)),
+    );
+    const figmaGeometrySha256 = sha256(
+      canonicalizeSvg(figmaSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
+    );
+    const localGeometrySha256 = sha256(
+      canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
+    );
+    const geometryReviewId = reviewedOutlineGeometry({
+      ...record,
+      figmaRawSvgSha256: sha256(figmaSource),
+      localRawSvgSha256: sha256(localSource),
+      figmaNormalizedAstSha256,
+      localNormalizedAstSha256,
+      figmaGeometrySha256,
+      localGeometrySha256,
+    });
+    if (!geometryReviewId && figmaNormalizedAstSha256 !== localNormalizedAstSha256)
+      throw new Error(`NORMALIZED_AST_MISMATCH: outline/${record.file}`);
+    if (!geometryReviewId && figmaGeometrySha256 !== localGeometrySha256)
+      throw new Error(`GEOMETRY_MISMATCH: outline/${record.file}`);
+    return {
+      ...record,
+      ...(geometryReviewId ? { geometryReviewId } : {}),
+      figmaRawSvgSha256: sha256(figmaSource),
+      localRawSvgSha256: sha256(localSource),
+      figmaNormalizedAstSha256,
+      localNormalizedAstSha256,
+      normalizedAstSha256: localNormalizedAstSha256,
+      figmaGeometrySha256,
+      localGeometrySha256,
+      geometrySha256: localGeometrySha256,
+    };
+  });
   return {
     ...manifest,
     strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
-    updateProvenance: {
-      reviewId: 'icon-stroke-width-1',
-      reviewedBy: 'codex',
-      updater: 'scripts/update-icon-stroke-manifests.mjs',
-    },
+    // Preserve actual historical review metadata; generation is not a review.
     symbols,
   };
 }
 
-async function planSolidManifest(packageRoot, sourcesMap) {
-  const [manifest, provenance] = await Promise.all([
-    readJson(packageRoot, MANIFEST_PATHS.solid),
-    readJson(packageRoot, RAW_PROVENANCE_PATHS.solid),
-  ]);
+function planSolidManifest(packageRoot, sourcesMap, documents) {
+  const [manifest, provenance] = [
+    readJson(packageRoot, MANIFEST_PATHS.solid, documents),
+    readJson(packageRoot, RAW_PROVENANCE_PATHS.solid, documents),
+  ];
   const figmaByNode = rawSourcesByNode(provenance);
-  const updateRecord = async (record) => {
-    const localSource = await sourceFrom(sourcesMap, packageRoot, `icons/${record.localFile}`);
+  const updateRecord = (record) => {
+    const localSource = sourceFrom(sourcesMap, packageRoot, `icons/${record.localFile}`);
     const figmaSource = figmaByNode.get(record.nodeId);
     if (!figmaSource) throw new Error(`FIGMA_RAW_SOURCE_MISSING: solid/${record.nodeId}`);
     const normalizedOptions = {
@@ -157,6 +153,7 @@ async function planSolidManifest(packageRoot, sourcesMap) {
       throw new Error(`PAINT_SEMANTICS_MISMATCH: ${record.localFile}`);
     return {
       ...record,
+      figmaRawSvgSha256: sha256(figmaSource),
       localRawSvgSha256: sha256(localSource),
       figmaNormalizedAstSha256,
       localNormalizedAstSha256,
@@ -168,31 +165,25 @@ async function planSolidManifest(packageRoot, sourcesMap) {
       localPaintSemanticsSha256,
     };
   };
-  const symbols = await Promise.all(manifest.symbols.map(updateRecord));
-  const supplementalSources = await Promise.all(manifest.supplementalSources.map(updateRecord));
+  const symbols = manifest.symbols.map(updateRecord);
+  const supplementalSources = manifest.supplementalSources.map(updateRecord);
   return {
     ...manifest,
     strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
-    updateProvenance: {
-      reviewId: 'icon-stroke-width-1',
-      reviewedBy: 'codex',
-      updater: 'scripts/update-icon-stroke-manifests.mjs',
-    },
+    // Preserve actual historical review metadata; generation is not a review.
     symbols,
     supplementalSources,
   };
 }
 
-async function planColorfulManifest(packageRoot, sourcesMap) {
-  const manifest = await readJson(packageRoot, MANIFEST_PATHS.colorful);
-  const rows = await Promise.all(
-    manifest.rows.map(async (record) => {
-      if (record.rowDisposition !== 'canonical-new') return record;
-      const localFile = record.localFile.replace(/^src\/icons\//, '');
-      const localSource = await sourceFrom(sourcesMap, packageRoot, `icons/${localFile}`);
-      return { ...record, normalizedSvgSha256: sha256(localSource) };
-    }),
-  );
+function planColorfulManifest(packageRoot, sourcesMap, documents) {
+  const manifest = readJson(packageRoot, MANIFEST_PATHS.colorful, documents);
+  const rows = manifest.rows.map((record) => {
+    if (record.rowDisposition !== 'canonical-new') return record;
+    const localFile = record.localFile.replace(/^src\/icons\//, '');
+    const localSource = sourceFrom(sourcesMap, packageRoot, `icons/${localFile}`);
+    return { ...record, normalizedSvgSha256: sha256(localSource) };
+  });
   const { schemaVersion, policyId, evidenceVersion, ...rest } = manifest;
   delete rest.strokeWidthPolicy;
   return {
@@ -205,16 +196,24 @@ async function planColorfulManifest(packageRoot, sourcesMap) {
   };
 }
 
-export async function planIconStrokeManifests(packageRoot, sourcesMap) {
+export function deriveIconStrokeManifests(packageRoot, sourcesMap, documents) {
   if (!(sourcesMap instanceof Map)) throw new TypeError('sourcesMap must be a Map');
-  const [outline, solid, colorful] = await Promise.all([
-    planOutlineManifest(packageRoot, sourcesMap),
-    planSolidManifest(packageRoot, sourcesMap),
-    planColorfulManifest(packageRoot, sourcesMap),
-  ]);
+  const [outline, solid, colorful] = [
+    planOutlineManifest(packageRoot, sourcesMap, documents),
+    planSolidManifest(packageRoot, sourcesMap, documents),
+    planColorfulManifest(packageRoot, sourcesMap, documents),
+  ];
   return new Map([
     [MANIFEST_PATHS.outline, formattedJson(outline)],
     [MANIFEST_PATHS.solid, formattedJson(solid)],
     [MANIFEST_PATHS.colorful, formattedJson(colorful)],
   ]);
+}
+
+export async function planIconStrokeManifests(packageRoot, sourcesMap, documents) {
+  if (!documents) {
+    const { buildIconDocuments } = await import('./icon-source-documents.mjs');
+    documents = buildIconDocuments(packageRoot);
+  }
+  return deriveIconStrokeManifests(packageRoot, sourcesMap, documents);
 }

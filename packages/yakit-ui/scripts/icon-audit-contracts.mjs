@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto';
+import { readIconSources, sourceCounts } from './icon-source-data.mjs';
+const sources = readIconSources();
 
 export const POLICY_DIGEST_ALGORITHM_VERSION = 'policy-digest-canonical-json-v1';
 export const ID_HYGIENE_ALGORITHM_VERSION = 'solid-id-hygiene-v1';
@@ -24,38 +26,14 @@ export function policyDigest(value) {
   return createHash('sha256').update(canonicalJson(value), 'utf8').digest('hex');
 }
 
-const SOLID_SUPPLEMENTS = [
-  {
-    nodeId: '4936:115787',
-    localFile: 'solid/4936-115787.svg',
-    exportName: 'FloatingSolid',
-    scopeRole: 'supplement',
-  },
-  {
-    nodeId: '4936:115790',
-    localFile: 'solid/4936-115790.svg',
-    exportName: 'ParkLeftSolid',
-    scopeRole: 'supplement',
-  },
-  {
-    nodeId: '4936:115789',
-    localFile: 'solid/4936-115789.svg',
-    exportName: 'ParkRightSolid',
-    scopeRole: 'supplement',
-  },
-  {
-    nodeId: '4936:115788',
-    localFile: 'solid/4936-115788.svg',
-    exportName: 'ParkBelowSolid',
-    scopeRole: 'supplement',
-  },
-  {
-    nodeId: '46709:8109',
-    localFile: 'solid/46709-8109.svg',
-    exportName: 'ParkAboveSolid',
-    scopeRole: 'supplement',
-  },
-];
+const solidMapping = sources.solid.records.map(({ nodeId, file, exportName, scopeRole }) => ({
+  nodeId,
+  localFile: `solid/${file}`,
+  exportName,
+  scopeRole,
+}));
+const SOLID_SUPPLEMENTS = solidMapping.filter((r) => r.scopeRole === 'supplement');
+const solidIds = solidMapping.filter((r) => r.scopeRole === 'target').map((r) => r.nodeId);
 
 export const ICON_AUDIT_POLICIES = Object.freeze({
   'outline-v1': Object.freeze({
@@ -64,12 +42,7 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
     strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
-    expectedCounts: Object.freeze({
-      currentSymbols: 364,
-      instances: 3,
-      placements: 367,
-      publicExports: 364,
-    }),
+    expectedCounts: Object.freeze(sourceCounts(sources.outline)),
   }),
   'solid-v1': Object.freeze({
     id: 'solid-v1',
@@ -82,15 +55,10 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     paintComparisonNormalizationVersion: PAINT_COMPARISON_NORMALIZATION_VERSION,
     strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
     prechangeBaselinePath: 'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json',
-    expectedCounts: Object.freeze({
-      targetSymbols: 251,
-      supplementalSources: 5,
-      publicExports: 256,
-      orphanSources: 0,
-    }),
-    targetMembershipSha256: '16b679e138399793f27a27b64c5e7573302416bcb81dd93fb91ed5796c2f415e',
-    targetOrderSha256: '20beb1548e3309958bc085ed8cb699e141588c9c8c6a8fbe9c027925d37f1740',
-    publicMappingSha256: '1393367d8192f225cbef5e98596d309f86eff314c8e8633d774908143bdccee2',
+    expectedCounts: Object.freeze(sourceCounts(sources.solid)),
+    targetMembershipSha256: policyDigest([...solidIds].sort()),
+    targetOrderSha256: policyDigest(solidIds),
+    publicMappingSha256: policyDigest(sortedPublicMapping(solidMapping)),
     supplementalSources: Object.freeze(SOLID_SUPPLEMENTS.map((entry) => Object.freeze(entry))),
   }),
 });

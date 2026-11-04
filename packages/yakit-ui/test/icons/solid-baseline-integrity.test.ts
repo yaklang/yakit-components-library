@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,7 +8,6 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { auditIcons, canonicalizeSvg, parseIconIndex } from '../../scripts/audit-icons.mjs';
-import manifest from '../../scripts/figma-solid-icons-inventory.json';
 import {
   ICON_STROKE_WIDTH,
   canonicalJson,
@@ -16,12 +15,27 @@ import {
   policyDigest,
   sortedPublicMapping,
 } from '../../scripts/icon-audit-contracts.mjs';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import nameMigration from '../fixtures/icons/english-name-migration.json';
-import placement from '../fixtures/icons/reference/figma-solid-placement-provenance-v1.json';
-import raw from '../fixtures/icons/reference/figma-solid-raw-provenance-v1.json';
 import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 import renderContract from '../fixtures/icons/reference/solid-render-contract-v1.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+
+const manifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/solid.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
+const placement = JSON.parse(
+  readIconInputSync(
+    new URL('../../config/icon-sources/solid.json#placement', import.meta.url),
+    'utf8',
+  ),
+);
+const raw = JSON.parse(
+  readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
+);
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const solidRoot = resolve(packageRoot, 'src/icons/solid');
@@ -33,7 +47,7 @@ const policyGeometrySha256 = (source: string) =>
 const files = readdirSync(solidRoot)
   .filter((file) => file.endsWith('.svg'))
   .sort();
-const currentSource = (file: string) => readFileSync(resolve(solidRoot, file), 'utf8');
+const currentSource = (file: string) => readIconInputSync(resolve(solidRoot, file), 'utf8');
 const currentGeometry = (file: string) => geometrySha256(currentSource(file));
 const targetIds = placement.targetSymbols.map(({ nodeId }) => nodeId);
 const supplementIds = placement.supplementalSources.map(({ nodeId }) => nodeId);
@@ -50,16 +64,10 @@ const auditMutation = async (mutate: (value: SolidManifest) => void) => {
     const manifestPath = resolve(temporaryRoot, 'manifest.json');
     writeFileSync(manifestPath, JSON.stringify(value));
     const result = await auditIcons({
-      figmaRawProvenancePath: resolve(
-        packageRoot,
-        'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json',
-      ),
+      figmaRawProvenancePath: resolve(packageRoot, 'config/icon-sources/solid.json#raw'),
       indexPath: resolve(packageRoot, 'src/icons/solid/index.tsx'),
       manifestPath,
-      placementProvenancePath: resolve(
-        packageRoot,
-        'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json',
-      ),
+      placementProvenancePath: resolve(packageRoot, 'config/icon-sources/solid.json#placement'),
       policyId: 'solid-v1',
       root: resolve(packageRoot, 'src/icons'),
     });
@@ -71,8 +79,8 @@ const auditMutation = async (mutate: (value: SolidManifest) => void) => {
 
 describe('Solid icon baseline integrity', () => {
   it('matches the updater-immutable target membership, order, and supplement contract', () => {
-    expect(targetIds).toHaveLength(251);
-    expect(new Set(targetIds).size).toBe(251);
+    expect(targetIds).toHaveLength(policy.expectedCounts.targetSymbols);
+    expect(new Set(targetIds).size).toBe(policy.expectedCounts.targetSymbols);
     expect(policyDigest(targetIds)).toBe(policy.targetOrderSha256);
     expect(policyDigest([...targetIds].sort())).toBe(policy.targetMembershipSha256);
     expect(raw.components.map(({ nodeId }) => nodeId)).toEqual(targetIds);
@@ -90,7 +98,7 @@ describe('Solid icon baseline integrity', () => {
   });
 
   it('contains exactly the 256 classified numeric sources and none of the stale orphans', () => {
-    expect(files).toHaveLength(256);
+    expect(files).toHaveLength(policy.expectedCounts.publicExports);
     expect(files.every((file) => /^\d+(?:-\d+)+\.svg$/.test(file))).toBe(true);
     expect(prechange.staleOrphanFiles).toHaveLength(20);
     for (const orphan of prechange.staleOrphanFiles) expect(files).not.toContain(orphan);
@@ -98,7 +106,7 @@ describe('Solid icon baseline integrity', () => {
 
   it('preserves all 255 source mappings through the Solid suffix and English name migrations', () => {
     const parsed = parseIconIndex(
-      readFileSync(resolve(packageRoot, 'src/icons/solid/index.tsx'), 'utf8'),
+      readIconInputSync(resolve(packageRoot, 'src/icons/solid/index.tsx'), 'utf8'),
     );
     const actual = [...parsed.exports].map(([exportName, localFile]) => ({
       nodeId: localFile?.replace(/\.svg$/, '').replace('-', ':'),
@@ -120,7 +128,7 @@ describe('Solid icon baseline integrity', () => {
     expect(parsed.duplicateExports.size).toBe(0);
     expect(parsed.duplicateImports.size).toBe(0);
     expect(parsed.missingImportTargets.size).toBe(0);
-    expect(actual).toHaveLength(256);
+    expect(actual).toHaveLength(policy.expectedCounts.publicExports);
     expect(prechange.records.every(({ exportName }) => exportName.endsWith('Filled'))).toBe(true);
     expect(actual.every(({ exportName }) => exportName.endsWith('Solid'))).toBe(true);
     expect(sortedPublicMapping(actual)).toEqual(
@@ -297,7 +305,7 @@ describe('Solid icon baseline integrity', () => {
   it('binds current stroke-width-1 visual checks to the installed renderer', () => {
     const { renderer } = currentRenderContract;
     expect(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH).toBe(renderer.browserExecutablePath);
-    expect(sha256(readFileSync(renderer.browserExecutablePath))).toBe(
+    expect(sha256(readIconInputSync(renderer.browserExecutablePath))).toBe(
       renderer.browserExecutableSha256,
     );
     expect(
@@ -314,8 +322,9 @@ describe('Solid icon baseline integrity', () => {
     );
     expect(process.arch).toBe(renderer.operatingSystem.architecture);
     expect(
-      JSON.parse(readFileSync(resolve(packageRoot, 'node_modules/playwright/package.json'), 'utf8'))
-        .version,
+      JSON.parse(
+        readIconInputSync(resolve(packageRoot, 'node_modules/playwright/package.json'), 'utf8'),
+      ).version,
     ).toBe(renderer.playwrightVersion);
     expect(currentRenderContract.strokeWidthPolicy).toEqual({
       strategy: 'local-uniform-stroke-v1',

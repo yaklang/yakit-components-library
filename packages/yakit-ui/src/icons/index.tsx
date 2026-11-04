@@ -1,5 +1,4 @@
 import Loading from './loading/index.js';
-
 export { Loading };
 export type { LoadingProps } from './loading/index.js';
 export * from './colorful/index.js';

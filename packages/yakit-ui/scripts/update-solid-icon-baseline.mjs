@@ -1,5 +1,6 @@
+import { readIconInput } from './icon-source-documents.mjs';
 import { createHash } from 'node:crypto';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -82,13 +83,13 @@ async function main() {
   const policy = getIconAuditPolicy('solid-v1');
   const rawPath = path.resolve(
     args.get('figma-raw-provenance') ??
-      path.join(packageRoot, 'test/fixtures/icons/reference/figma-solid-raw-provenance-v1.json'),
+      path.join(packageRoot, 'config/icon-sources/solid.json#raw'),
   );
   const placementPath = path.resolve(
     args.get('placement-provenance') ??
       path.join(
         packageRoot,
-        'test/fixtures/icons/reference/figma-solid-placement-provenance-v1.json',
+        'config/icon-sources/solid.json#placement',
       ),
   );
   const prechangePath = path.resolve(
@@ -98,14 +99,15 @@ async function main() {
         'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json',
       ),
   );
-  const output = path.resolve(
-    args.get('output') ?? path.join(packageRoot, 'scripts/figma-solid-icons-inventory.json'),
-  );
+  if (!args.get('output')) throw new Error('review export requires an explicit --output path; use icons:update for normal updates');
+  const output = path.resolve(args.get('output'));
+  if (output.includes('#') || output.startsWith(path.join(packageRoot, 'config/icon-sources') + path.sep))
+    throw new Error('review output must not overwrite canonical icon sources');
   const [rawText, placementText, prechangeText, indexSource] = await Promise.all([
-    readFile(rawPath, 'utf8'),
-    readFile(placementPath, 'utf8'),
-    readFile(prechangePath, 'utf8'),
-    readFile(path.join(packageRoot, 'src/icons/solid/index.tsx'), 'utf8'),
+    readIconInput(rawPath, 'utf8'),
+    readIconInput(placementPath, 'utf8'),
+    readIconInput(prechangePath, 'utf8'),
+    readIconInput(path.join(packageRoot, 'src/icons/solid/index.tsx'), 'utf8'),
   ]);
   const raw = JSON.parse(rawText);
   const placement = JSON.parse(placementText);
@@ -157,7 +159,7 @@ async function main() {
     const nodeId = evidence.nodeId ?? evidence.exportedSourceNodeId;
     const file = `${nodeId.replace(':', '-')}.svg`;
     const localFile = `solid/${file}`;
-    const localSource = await readFile(path.join(packageRoot, 'src/icons', localFile), 'utf8');
+    const localSource = await readIconInput(path.join(packageRoot, 'src/icons', localFile), 'utf8');
     if (invalidStrokeWidths(localSource).length > 0)
       throw new Error(`stroke-width policy mismatch: ${localFile}`);
     const figma = rawComponents.get(nodeId);

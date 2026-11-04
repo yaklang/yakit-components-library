@@ -1,6 +1,6 @@
 import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
-import { readFile, readdir } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -18,6 +18,11 @@ import {
 import { buildIconNameCatalog, renderIconNameCatalog } from './icon-name-catalog-core.mjs';
 
 export { canonicalJson } from './icon-audit-contracts.mjs';
+
+// Load source projections lazily: the document builder also uses this module's SVG parser.
+async function readIconInput(...args) {
+  return (await import('./icon-source-documents.mjs')).readIconInput(...args);
+}
 
 const DRAWABLES = new Set([
   'circle',
@@ -469,7 +474,7 @@ function paintValues(node) {
   return values;
 }
 
-function inspectSvg({ manifest, relativePath, source, variant }) {
+export function inspectSvg({ manifest, relativePath, source, variant }) {
   const errors = [];
   let root;
   try {
@@ -746,7 +751,7 @@ async function validateSolidPrechangeEvidence({ manifest, policy }) {
   if (manifest.sourceEvidence?.prechangeBaselinePath !== policy.prechangeBaselinePath)
     return ['PRECHANGE_BASELINE_MISMATCH'];
   try {
-    const source = await readFile(path.join(PACKAGE_ROOT, policy.prechangeBaselinePath));
+    const source = await readIconInput(path.join(PACKAGE_ROOT, policy.prechangeBaselinePath));
     return sha256(source) === manifest.sourceEvidence.prechangeBaselineSha256
       ? []
       : ['PRECHANGE_BASELINE_MISMATCH'];
@@ -773,18 +778,12 @@ function validateManifest(manifest, files, policy) {
     if (!manifest.sourceEvidence?.[field]) errors.push('MANIFEST_INCOMPLETE');
   const symbols = manifest.symbols ?? manifest.currentSymbols ?? [];
   const placements = manifest.placements ?? [];
-  const expected = manifest.expectedCounts ?? {
-    currentSymbols: 364,
-    placements: 367,
-    publicExports: 364,
-  };
+  const expected = policy.expectedCounts;
   if (
-    expected.currentSymbols !== 364 ||
-    expected.placements !== 367 ||
-    expected.instances !== 3 ||
-    expected.publicExports !== 364 ||
-    symbols.length !== 364 ||
-    placements.length !== 367
+    canonicalJson(manifest.expectedCounts) !== canonicalJson(expected) ||
+    symbols.length !== expected.currentSymbols ||
+    placements.length !== expected.placements ||
+    placements.filter((r) => r.nodeType === 'instance').length !== expected.instances
   )
     errors.push('MANIFEST_INCOMPLETE');
   if (manifest.fileKey === 'QWct5XE0Bg0bNDQ93eYgEw' && manifest.frameNodeId !== '46824:1930')
@@ -816,7 +815,10 @@ function validateManifest(manifest, files, policy) {
       errors.push('GEOMETRY_DIGEST_MISMATCH');
   }
   const instances = placements.filter(({ nodeType }) => nodeType === 'instance');
-  if (instances.length !== 3 || manifest.instanceVerification?.length !== 3)
+  if (
+    instances.length !== expected.instances ||
+    manifest.instanceVerification?.length !== expected.instances
+  )
     errors.push('MANIFEST_INCOMPLETE');
   for (const placement of placements) {
     if (!placement.placementNodeId || !placement.exportedSourceNodeId)
@@ -867,8 +869,8 @@ async function validateProvenanceEvidence({
   if (!manifest || !figmaRawProvenancePath || !placementProvenancePath) return [];
   const errors = [];
   const [rawText, placementText] = await Promise.all([
-    readFile(figmaRawProvenancePath, 'utf8'),
-    readFile(placementProvenancePath, 'utf8'),
+    readIconInput(figmaRawProvenancePath, 'utf8'),
+    readIconInput(placementProvenancePath, 'utf8'),
   ]);
   if (sha256(rawText) !== manifest.sourceEvidence?.figmaRawProvenanceSha256)
     errors.push('FIGMA_RAW_HASH_MISMATCH');
@@ -1016,7 +1018,7 @@ async function validateIndex({ files, indexPath, manifest, root }) {
   const errors = [];
   let indexSource;
   try {
-    indexSource = await readFile(indexPath, 'utf8');
+    indexSource = await readIconInput(indexPath, 'utf8');
   } catch (error) {
     if (error.code === 'ENOENT') return ['IMPORT_MISSING'];
     throw error;
@@ -1032,7 +1034,7 @@ async function validateIndex({ files, indexPath, manifest, root }) {
   );
   for (const file of parsed.importFiles.keys()) {
     try {
-      await readFile(path.join(root, variant, file));
+      await readIconInput(path.join(root, variant, file));
     } catch (error) {
       if (error.code === 'ENOENT') errors.push('IMPORT_MISSING');
       else throw error;
@@ -1082,22 +1084,23 @@ export async function auditIcons({
   manifestPath,
   placementProvenancePath,
   policyId,
+  policyOverride,
   root,
   solidNameIndexPath,
   solidNameManifestPath,
   solidNamePlacementProvenancePath,
   solidNameRawProvenancePath,
 }) {
-  const manifest = manifestPath ? JSON.parse(await readFile(manifestPath, 'utf8')) : undefined;
+  const manifest = manifestPath ? JSON.parse(await readIconInput(manifestPath, 'utf8')) : undefined;
   const resolvedPolicyId = policyId ?? manifest?.policyId ?? 'outline-v1';
-  const policy = getIconAuditPolicy(resolvedPolicyId);
+  const policy = policyOverride ?? getIconAuditPolicy(resolvedPolicyId);
   const files = await listSvgFiles(
     root,
     policyId || manifest?.policyId || manifest?.variant ? [policy.variant] : undefined,
   );
   const failures = [];
   for (const file of files) {
-    const source = await readFile(file.absolutePath, 'utf8');
+    const source = await readIconInput(file.absolutePath, 'utf8');
     inspectSvg({
       manifest,
       relativePath: file.relativePath,
@@ -1107,7 +1110,7 @@ export async function auditIcons({
   }
   const owners = new Map();
   for (const file of files) {
-    const source = await readFile(file.absolutePath, 'utf8');
+    const source = await readIconInput(file.absolutePath, 'utf8');
     let svg;
     try {
       svg = parseSvg(source);
@@ -1131,7 +1134,7 @@ export async function auditIcons({
   );
   if (basicManifestPath && manifest?.sourceEvidence?.basicManifestSha256) {
     try {
-      const basicSource = await readFile(basicManifestPath);
+      const basicSource = await readIconInput(basicManifestPath);
       if (sha256(basicSource) !== manifest.sourceEvidence.basicManifestSha256)
         failures.push({ path: basicManifestPath, token: 'BASIC_MANIFEST_CHANGED' });
     } catch (error) {
@@ -1175,15 +1178,15 @@ export async function auditIcons({
         solidPlacementSource,
         solidRawSource,
       ] = await Promise.all([
-        readFile(iconNameCatalogPath, 'utf8'),
-        readFile(outlineNameManifestPath, 'utf8'),
-        readFile(solidNameManifestPath, 'utf8'),
-        readFile(outlineNameIndexPath, 'utf8'),
-        readFile(solidNameIndexPath, 'utf8'),
-        readFile(outlineNamePlacementProvenancePath, 'utf8'),
-        readFile(outlineNameRawProvenancePath, 'utf8'),
-        readFile(solidNamePlacementProvenancePath, 'utf8'),
-        readFile(solidNameRawProvenancePath, 'utf8'),
+        readIconInput(iconNameCatalogPath, 'utf8'),
+        readIconInput(outlineNameManifestPath, 'utf8'),
+        readIconInput(solidNameManifestPath, 'utf8'),
+        readIconInput(outlineNameIndexPath, 'utf8'),
+        readIconInput(solidNameIndexPath, 'utf8'),
+        readIconInput(outlineNamePlacementProvenancePath, 'utf8'),
+        readIconInput(outlineNameRawProvenancePath, 'utf8'),
+        readIconInput(solidNamePlacementProvenancePath, 'utf8'),
+        readIconInput(solidNameRawProvenancePath, 'utf8'),
       ]);
       const expectedCatalog = renderIconNameCatalog(
         buildIconNameCatalog({
@@ -1287,14 +1290,14 @@ async function main() {
     options.figmaRawProvenancePath ??
       path.join(
         packageRoot,
-        `test/fixtures/icons/reference/figma-${policy.variant}-raw-provenance-v1.json`,
+        `config/icon-sources/${policy.variant}.json#raw`,
       ),
   );
   const placementProvenancePath = path.resolve(
     options.placementProvenancePath ??
       path.join(
         packageRoot,
-        `test/fixtures/icons/reference/figma-${policy.variant}-placement-provenance-v1.json`,
+        `config/icon-sources/${policy.variant}.json#placement`,
       ),
   );
   const result = await auditIcons({

@@ -3,11 +3,12 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import manifest from '../../scripts/figma-outline-icons-inventory.json';
+import outlineSource from '../../config/icon-sources/outline.json';
 import * as PackageApi from '../../src';
 import { DEFAULT_ICON_COLOR } from '../../src/icons/createIcon';
 import { outlineIconNameCatalog } from '../../src/icons/figmaNameCatalog';
 import { outlineIconRegistry } from '../../src/icons/registry';
+import { iconCounts } from '../icons/icon-inventory';
 
 const roots: Root[] = [];
 const render = (node: React.ReactNode) => {
@@ -48,11 +49,11 @@ afterEach(() => {
 });
 
 describe('Outline public component API', () => {
-  it('exposes exactly 364 current Figma icons from the package root', () => {
-    const currentNames = manifest.symbols.map(({ exportName }) => exportName).sort();
+  it('exposes every inventoried current Figma icon from the package root', () => {
+    const currentNames = outlineSource.records.map(({ exportName }) => exportName).sort();
     const registryNames = outlineIconRegistry.map(({ exportName }) => exportName).sort();
 
-    expect(currentNames).toHaveLength(364);
+    expect(currentNames).toHaveLength(iconCounts.outline);
     expect(currentNames).toContain('LandPlotOutlined');
     expect(currentNames).toEqual(expect.arrayContaining([...notebookGroupExports]));
     expect(registryNames).toEqual(currentNames);
@@ -108,7 +109,7 @@ describe('Outline public component API', () => {
     const container = renderRegistry();
     const svgs = [...container.querySelectorAll<SVGSVGElement>('svg')];
 
-    expect(svgs).toHaveLength(364);
+    expect(svgs).toHaveLength(iconCounts.outline);
     for (const svg of svgs) {
       const root = svg.parentElement as HTMLSpanElement;
       const name = root.dataset.iconName ?? '';

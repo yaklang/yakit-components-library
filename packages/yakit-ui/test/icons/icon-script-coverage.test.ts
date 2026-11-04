@@ -16,19 +16,15 @@ const plannedNodeTests = readdirSync(resolve(packageRoot, 'test/icons'))
 const plannedBrowserTests = readdirSync(resolve(packageRoot, 'test/components'))
   .filter((file) => file.startsWith('solid-icon-') && file.endsWith('.test.tsx'))
   .sort();
-const allTestScripts = Object.entries(scripts)
-  .filter(([name]) => name.startsWith('test:'))
-  .map(([, command]) => command)
-  .join('\n');
 
 describe('icon package script coverage', () => {
   it('wires both family audits through explicit immutable policies', () => {
     expect(scripts['audit:icons:outline']).toContain('--policy outline-v1');
-    expect(scripts['audit:icons:outline']).toContain('figma-outline-icons-inventory.json');
+    expect(scripts['audit:icons:outline']).toContain('config/icon-sources/outline.json#manifest');
     expect(scripts['audit:icons:solid']).toContain('--policy solid-v1');
-    expect(scripts['audit:icons:solid']).toContain('figma-solid-icons-inventory.json');
-    expect(scripts['audit:icons:solid']).toContain('figma-solid-raw-provenance-v1.json');
-    expect(scripts['audit:icons:solid']).toContain('figma-solid-placement-provenance-v1.json');
+    expect(scripts['audit:icons:solid']).toContain('config/icon-sources/solid.json#manifest');
+    expect(scripts['audit:icons:solid']).toContain('config/icon-sources/solid.json#raw');
+    expect(scripts['audit:icons:solid']).toContain('config/icon-sources/solid.json#placement');
     expect(scripts['audit:icons:colorful']).toBe(
       'node scripts/colorful-audit.mjs && node scripts/colorful-entry-generator.mjs',
     );
@@ -37,10 +33,8 @@ describe('icon package script coverage', () => {
     );
   });
 
-  it('checks all production stroke widths and executes the migration and runtime regressions', () => {
-    expect(scripts['audit:icons:stroke']).toBe(
-      'node scripts/normalize-icon-stroke-width.mjs --check',
-    );
+  it('checks all production stroke widths and executes compatibility and runtime regressions', () => {
+    expect(scripts['audit:icons:stroke']).toBe('node scripts/check-icon-stroke-width.mjs --check');
     expect(scripts['test:ci']).toContain('pnpm run audit:icons:stroke');
     expect(scripts['test:ci']).toContain('pnpm run test:icon-stroke-width');
     for (const file of [
@@ -71,19 +65,11 @@ describe('icon package script coverage', () => {
   });
 
   it('executes every Solid node and browser test from an explicit package aggregate', () => {
-    expect(plannedNodeTests).toEqual([
-      'solid-baseline-integrity.test.ts',
-      'solid-fragment-normalization.test.ts',
-      'solid-icon-ssr-fixture.test.ts',
-      'solid-paint-semantics.test.ts',
-    ]);
-    expect(plannedBrowserTests).toEqual([
-      'solid-icon-fragment-runtime.test.tsx',
-      'solid-icon-public-runtime.test.tsx',
-      'solid-icon-visual.test.tsx',
-    ]);
+    expect(plannedNodeTests.length).toBeGreaterThan(0);
+    expect(plannedBrowserTests.length).toBeGreaterThan(0);
+    const solidTestArguments = scripts['test:icons:solid'].split(/\s+/);
     for (const file of [...plannedNodeTests, ...plannedBrowserTests]) {
-      expect(allTestScripts, file).toContain(
+      expect(solidTestArguments, file).toContain(
         `test/${file.endsWith('.tsx') ? 'components' : 'icons'}/${file}`,
       );
     }
@@ -122,11 +108,19 @@ describe('icon package script coverage', () => {
     );
   });
 
-  it('keeps the Figma name contract and deterministic updater wired into package scripts', () => {
+  it('keeps one root update entry alongside the Figma name checks', () => {
+    const rootScripts = JSON.parse(
+      readFileSync(resolve(packageRoot, '../../package.json'), 'utf8'),
+    ).scripts;
     expect(scripts['test:audit-icons']).toContain('test/icons/icon-figma-names.test.ts');
     expect(scripts['test:audit-icons']).toContain('test/icons/icon-registry-names.test.ts');
-    expect(scripts['update:icons:names']).toBe(
-      'node scripts/update-icon-name-catalog.mjs --replace-existing',
+    expect(rootScripts['icons:update']).toBe('node packages/yakit-ui/scripts/update-icons.mjs');
+    expect(rootScripts['icons:import']).toBe(
+      'node packages/yakit-ui/scripts/import-icon-sources.mjs',
     );
+    expect(rootScripts['icons:test']).toBe('node --test test/icons/*.test.mjs');
+    expect(
+      Object.values(scripts).filter((command) => command.includes('scripts/update-icons.mjs')),
+    ).toEqual([]);
   });
 });

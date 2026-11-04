@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Loading, LogoOutlined, QuestionMarkCircleOutlined } from '../../src/icons';
 import { iconRegistry } from '../../src/icons/registry';
+import { iconCounts, iconExports } from '../icons/icon-inventory';
 
 const roots: Root[] = [];
 const render = (node: React.ReactNode) => {
@@ -247,7 +248,7 @@ describe('Ant-compatible icon color', () => {
 });
 
 describe('Ant-compatible registry and Loading contracts', () => {
-  it('wraps all 916 generated registry icons', () => {
+  it('wraps all inventoried registry icons', () => {
     const container = render(
       <>
         {iconRegistry.map(({ Component, exportName }) => (
@@ -256,8 +257,13 @@ describe('Ant-compatible registry and Loading contracts', () => {
       </>,
     );
 
-    expect(iconRegistry).toHaveLength(916);
-    expect(container.querySelectorAll(':scope > span.anticon.yakit-icon')).toHaveLength(916);
+    expect(iconRegistry).toHaveLength(iconCounts.registry);
+    expect(iconRegistry.map(({ exportName }) => exportName).sort()).toEqual(
+      [...iconExports.registry].sort(),
+    );
+    expect(container.querySelectorAll(':scope > span.anticon.yakit-icon')).toHaveLength(
+      iconCounts.registry,
+    );
     expect(container.querySelectorAll(':scope > svg')).toHaveLength(0);
   });
 

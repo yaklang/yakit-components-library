@@ -12,6 +12,7 @@ import {
   StarOffOutlined,
 } from '../../src/icons';
 import { outlineIconRegistry } from '../../src/icons/registry';
+import { iconCounts } from '../icons/icon-inventory';
 
 const roots: Root[] = [];
 const render = (node: React.ReactNode) => {
@@ -125,7 +126,7 @@ describe('adjustable icon runtime stroke contract', () => {
     'applies width %s to every adjustable Outline and Loading',
     (strokeWidth) => {
       const adjustable = outlineIconRegistry;
-      expect(adjustable).toHaveLength(364);
+      expect(adjustable).toHaveLength(iconCounts.outline);
       const { container } = render(
         <>
           {adjustable.map(({ Component, exportName }) => (
