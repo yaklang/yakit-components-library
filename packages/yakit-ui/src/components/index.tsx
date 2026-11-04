@@ -43,3 +43,31 @@ export type {
   YakitLocale,
   YakitThemeMode,
 } from './ConfigProvider';
+
+export {
+  default as Dropdown,
+  DropdownButton,
+  YakitDropdownMenu,
+  DropdownMenuPanel,
+} from './Dropdown';
+export type {
+  DropdownArrowOptions,
+  DropdownButtonProps,
+  DropdownButtonType,
+  DropdownMenuDivider,
+  DropdownMenuGroup,
+  DropdownMenuInfo,
+  DropdownMenuItem,
+  DropdownMenuItemType,
+  DropdownMenuItemTypeUnion,
+  DropdownMenuProps,
+  DropdownMenuSize,
+  DropdownMenuType,
+  DropdownPlacement,
+  DropdownProps,
+  DropdownSemanticClassNames,
+  DropdownSemanticInfo,
+  DropdownSemanticStyles,
+  DropdownTrigger,
+  YakitDropdownMenuProps,
+} from './Dropdown';

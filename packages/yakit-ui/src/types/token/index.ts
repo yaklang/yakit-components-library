@@ -3,11 +3,13 @@ import type { ReactNode } from 'react';
 import type { YakitTheme } from '../theme';
 
 import type { YakitButtonToken } from './YakitButton';
+import type { YakitDropdownToken } from './YakitDropdown';
 import type { YakitTagToken } from './YakitTag';
 
 // 扩展的组件 tokens
 export interface YakitThemeComponents {
   YakitButton?: Partial<YakitButtonToken>;
+  YakitDropdown?: Partial<YakitDropdownToken>;
   YakitTag?: Partial<YakitTagToken>;
 }
 
