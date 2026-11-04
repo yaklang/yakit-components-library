@@ -71,3 +71,13 @@ export type {
   DropdownTrigger,
   YakitDropdownMenuProps,
 } from './Dropdown';
+
+export { default as Menu, MenuGroup, MenuItem, MenuSubGroup } from './Menu';
+export type {
+  MenuGroupProps,
+  MenuItemProps,
+  MenuItemSize,
+  MenuProps,
+  MenuSelectInfo,
+  MenuSubGroupProps,
+} from './Menu';
