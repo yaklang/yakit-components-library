@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import '../../../yakit-ui-icons/icon.css';
-import { BugOutlined, HomeOutlined, Loading, StarOffOutlined } from '../../src/icons';
-import visualWeightReviews from '../../test/fixtures/icons/reference/visual-weight-v2/reviews.json';
+import '@yakit-libs/yakit-ui-icons/icon.css';
+import { BugOutlined, HomeOutlined, Loading, StarOffOutlined } from '@yakit-libs/yakit-ui-icons';
+import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
   solidIconRegistry,
   type ColorfulIconCategory,
   type IconDefinition,
-} from '../../src/icons/registry';
+} from '@yakit-libs/yakit-ui-icons/registry';
 
 interface ColorfulCategoryPresentation {
   category: ColorfulIconCategory;
@@ -469,14 +469,16 @@ export const StrokeWidth: StoryObj<typeof StrokeWidthGallery> = {
 };
 
 const originalWeightSources = import.meta.glob<string>(
-  '../../test/fixtures/icons/reference/visual-weight-v2/original/*.svg',
+  '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/original/*.svg',
   { eager: true, import: 'default', query: '?raw' },
 );
 const revisedWeightIcons = visualWeightReviews.reviews.map(({ exportName, file }) => {
   const sourceNodeId = file.replace(/\.svg$/, '').replace('-', ':');
   const icon = outlineIconRegistry.find((entry) => entry.sourceNodeId === sourceNodeId);
   const original =
-    originalWeightSources[`../../test/fixtures/icons/reference/visual-weight-v2/original/${file}`];
+    originalWeightSources[
+      `../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/original/${file}`
+    ];
   if (!icon || !original) throw new Error(`Missing visual-weight comparison: ${exportName}`);
   return { ...icon, original };
 });

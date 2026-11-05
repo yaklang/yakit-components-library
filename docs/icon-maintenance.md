@@ -1,5 +1,11 @@
 # 图标怎么添加和更新
 
+公共图标源码、来源和专属测试由 `packages/yakit-ui-icons` 独立维护。UI 通过 `@yakit-libs/yakit-ui-icons` 的公开入口使用图标；仓库内依赖为 `workspace:^`，打包时转换成正常版本范围。不要跨目录导入图标包的 `src` 或原始 SVG。
+
+UI 组件私有 SVG 和 `packages/yakit-ui/config/icon-sources/private.json` 仍归 UI。根目录的 `icons:update` 先检查私有资源登记，再更新公共图标；图标包自己的 `icons:update` 不依赖 UI。`pnpm icons:verify-isolation` 会在没有 UI 源码的临时目录验证公共图标生成、审计、工作流、类型、构建和产物。
+
+Storybook 继续由 UI 统一展示。UI 的 `storybook`、`start:dev`、`dev` 命令先构建图标包，再启动图标构建监听；直接运行集成测试前先构建图标包。历史资料的位置与内容校验见 [源码归属与历史资料](../packages/yakit-ui-icons/docs/source-layout.md)。
+
 可以把 **Figma 图标节点链接或 nodeId** 发给 Agent，支持一次提供多个，也可以混合提供。nodeId 支持 `47351:7055` 和 `47351-7055` 两种写法。
 
 > 使用 `.agents/skills/sync-icon-sources/SKILL.md`，把节点 `47351:7055` 同步到图标库。
@@ -11,7 +17,7 @@ Agent 先检查这些节点在项目里是否已经存在，再按用户意图�
 以下是 Agent 接收链接或 nodeId 时的处理要求：
 
 1. **确定 Figma 文件和节点。** 链接中直接提取 fileKey 和 nodeId；只给 nodeId 时，先从项目来源记录或当前对话中确定所属 Figma 文件。nodeId 只在同一个 Figma 文件内唯一，不能单凭数字认定是同一个图标。无法唯一确定文件时，弹框请用户补充文件链接或 fileKey。调用导入脚本前，由 Agent 将 fileKey 和 nodeId 组合成完整链接；脚本的 `url` 输入格式保持不变。
-2. **检查所有分类。** 在 `packages/yakit-ui/config/icon-sources/` 的所有分类及内部图标记录中查找，结合已有 SVG、导出和历史来源确认对应关系，不能只检查 Outline 或只按 SVG 文件名判断。列出命中的分类、公开导出名（如有）和本地文件路径；只命中历史记录或来源与文件不一致时，明确说明，不能直接当作全新图标新增。
+2. **检查所有分类。** 在 `packages/yakit-ui-icons/config/icon-sources/` 的所有分类中查找，并检查 `packages/yakit-ui/config/icon-sources/private.json` 的内部图标记录，结合已有 SVG、导出和历史来源确认对应关系，不能只检查 Outline 或只按 SVG 文件名判断。列出命中的分类、公开导出名（如有）和本地文件路径；只命中历史记录或来源与文件不一致时，明确说明，不能直接当作全新图标新增。
 3. **已存在但用户没说要做什么时，先弹框询问。** 例如用户只发了链接或 nodeId，没有提出具体问题，也没有说明更新范围，Agent 应在弹框中说明“项目里已有这个图标”，让用户选择“查看现有图标与来源”“只更新来源记录”或“同步更新图标库”。用户回答前，只做只读检查，不覆盖来源、SVG 或导出。多个节点可以合并询问，并分别标明哪些已存在、哪些未找到。
 4. **用户已经说清楚，就按要求处理。** 用户只问“这个图标存在吗”，就回答检查结果；用户已明确要求更新来源或同步图标库，就在该范围内继续，不因节点已存在而重复询问。没有找到的节点按新增流程处理，但用户只发节点、没有表达新增或同步意图时，也先确认要做什么。
 
@@ -38,7 +44,7 @@ pnpm icons:test                     # 在临时目录验证导入、生成、失
 
 ## 哪些是来源，哪些是结果
 
-- `packages/yakit-ui/config/icon-sources/`：唯一日常维护入口，按五个分类保存。Outline/Solid 每个节点一条记录，合并原始 SVG、摆放证据、导出对应关系；Colorful 保留分组和多色规则；Oldicon 按共享素材合并来源与别名；Loading 保存手写组件入口。`private.json` 登记组件内部 SVG，只校验完整性，不导出。
+- `packages/yakit-ui-icons/config/icon-sources/`：唯一日常维护入口，按五个分类保存。Outline/Solid 每个节点一条记录，合并原始 SVG、摆放证据、导出对应关系；Colorful 保留分组和多色规则；Oldicon 按共享素材合并来源与别名；Loading 保存手写组件入口。UI 包的 `config/icon-sources/private.json` 登记组件内部 SVG，只校验完整性，不导出。
 - Outline、Solid、Colorful 三份旧清单、Outline/Solid 四份 raw/placement 文件，以及 Oldicon inventory 已移除。需要这些数据的脚本和测试，通过 `icon-source-documents.mjs` 从唯一来源即时计算，不再保存另一份 JSON。
 - 各分类导出、名称目录和线宽配置仍是构建需要的生成文件，用 `icons:update` 更新。
 - 历史图片、prechange baseline、figma-basic 旧清单、已有带日期的设计更新、人工审查记录：独立对照证据，普通更新不会重写。原始 Figma SVG 不等于主题化后的生产 SVG。
@@ -58,6 +64,7 @@ Loading 等手写组件的动画和 props 仍需要编写代码；在 `loading.j
 先运行 `pnpm icons:update --check` 和相关测试，再构建需要验证的包：
 
 ```sh
+pnpm --filter @yakit-libs/yakit-ui-icons run build
 pnpm --filter @yakit-libs/yakit-ui run test:ci
 pnpm --filter @yakit-libs/yakit-ui run build:package
 pnpm --filter @yakit-libs/yakit-ui-icons run build
@@ -75,8 +82,8 @@ pnpm --filter @yakit-libs/yakit-ui-icons run build
 ## 日常命令与历史工具的边界
 
 - 日常更新入口统一在仓库根目录：`pnpm icons:update` 更新全部分类，`pnpm icons:update --family solid` 更新 Solid，`pnpm icons:update --family colorful` 更新 Colorful。旧的 `update:icons:solid`、`update:icons:names`、`update:icons:colorful`、`update:icons:colorful-entries` 已删除，不再保留重复别名。
-- `audit:icons:stroke` 使用 `scripts/check-icon-stroke-width.mjs --check`，只读检查来源登记和描边，拒绝 `--write`、`--capture`。旧的 `normalize-icon-stroke-width.mjs` 已原样归档到 `docs/icon-history/normalize-icon-stroke-width-maintained.mjs.txt`，不再提供可执行入口。迁移专属测试已移除，当前描边、兼容性及历史证据校验继续保留。
+- `audit:icons:stroke` 使用 `scripts/check-icon-stroke-width.mjs --check`，只读检查来源登记和描边，拒绝 `--write`、`--capture`。旧的 `normalize-icon-stroke-width.mjs` 已原样归档到 `packages/yakit-ui-icons/docs/icon-history/normalize-icon-stroke-width-maintained.mjs.txt`，不再提供可执行入口。迁移专属测试已移除，当前描边、兼容性及历史证据校验继续保留。
 - `colorful-entry-generator.mjs` 保留共享渲染函数和只读检查，不再接受 `--write`；日常写入统一走 `icons:update`。
-- 两份没有直接代码引用但包含独有证据的旧记录已原样移至 [图标历史记录](icon-history/README.md)。该目录记录原路径与内容哈希，既不参与日常生成，也不随当前图标修改。
-- 已删除来源文件的旧路径、Bug 审查节点和历史哈希的查询方法见 [来源追溯说明](icon-history/README.md#已移除的来源文件怎么查)。当前来源与当前 manifest 一致，不等于历史文件字节未变；历史字节通过冻结的提交号及哈希单独核验。
-- `capture-icon-adjustable-baseline.mjs` 的后续维护版已原样归档为历史目录中的 `.mjs.txt`；真正用于历史基线采集的原版仍保留在 `adjustable-stroke/historical-capture.mjs.txt`。两个版本不可互换，也不参与日常命令，详见 [版本区别](icon-history/README.md#两个采集脚本版本的区别)。
+- 两份没有直接代码引用但包含独有证据的旧记录已原样移至 [图标历史记录](../packages/yakit-ui-icons/docs/icon-history/README.md)。该目录记录原路径与内容哈希，既不参与日常生成，也不随当前图标修改。
+- 已删除来源文件的旧路径、Bug 审查节点和历史哈希的查询方法见 [来源追溯说明](../packages/yakit-ui-icons/docs/source-layout.md#已移除的来源文件怎么查)。当前来源与当前 manifest 一致，不等于历史文件字节未变；历史字节通过冻结的提交号及哈希单独核验。
+- `capture-icon-adjustable-baseline.mjs` 的后续维护版已原样归档为历史目录中的 `.mjs.txt`；真正用于历史基线采集的原版仍保留在 `adjustable-stroke/historical-capture.mjs.txt`。两个版本不可互换，也不参与日常命令，详见 [版本区别](../packages/yakit-ui-icons/docs/source-layout.md#两个采集脚本版本的区别)。

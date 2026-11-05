@@ -13,10 +13,52 @@ import {
   releaseVersionsFromPublishPlan,
   resolveReleaseImpactBaselines,
   snapshotHash,
+  iconSourcePaths,
 } from "../../scripts/release/release-impact.mjs";
 
 const UI = "@yakit-libs/yakit-ui";
 const ICONS = "@yakit-libs/yakit-ui-icons";
+
+test("icon source ownership is selected separately for historical and migrated revisions", async () => {
+  const state = fixture();
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: state.base }),
+    ["packages/yakit-ui-icons", "packages/yakit-ui/src/icons"],
+  );
+  write(state.root, "packages/yakit-ui-icons/src/index.tsx", "export {};\n");
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: "WORKTREE" }),
+    ["packages/yakit-ui-icons"],
+  );
+  const before = await snapshotHash({
+    root: state.root,
+    revision: "WORKTREE",
+    paths: await iconSourcePaths({ root: state.root, revision: "WORKTREE" }),
+  });
+  write(
+    state.root,
+    "packages/yakit-ui/src/icons/index.tsx",
+    'export * from "@yakit-libs/yakit-ui-icons";\n',
+  );
+  assert.equal(
+    await snapshotHash({
+      root: state.root,
+      revision: "WORKTREE",
+      paths: await iconSourcePaths({ root: state.root, revision: "WORKTREE" }),
+    }),
+    before,
+  );
+  git(state.root, "add", ".");
+  git(state.root, "commit", "-qm", "migrate icon ownership");
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: "HEAD" }),
+    ["packages/yakit-ui-icons"],
+  );
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: state.base }),
+    ["packages/yakit-ui-icons", "packages/yakit-ui/src/icons"],
+  );
+});
 
 function write(root, file, content) {
   mkdirSync(path.dirname(path.join(root, file)), { recursive: true });

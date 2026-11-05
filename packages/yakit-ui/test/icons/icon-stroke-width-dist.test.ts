@@ -6,14 +6,14 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
-import renderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
 
-import { iconCounts, iconExports } from './icon-inventory';
+import { iconCounts, iconExports } from '../../../yakit-ui-icons/test/icons/icon-inventory';
 
 const oldiconInventory = JSON.parse(
   readIconInputSync(
-    new URL('../../config/icon-sources/oldicon.json#manifest', import.meta.url),
+    new URL('../../../yakit-ui-icons/config/icon-sources/oldicon.json#manifest', import.meta.url),
     'utf8',
   ),
 );

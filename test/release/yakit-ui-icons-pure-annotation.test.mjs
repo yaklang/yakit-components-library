@@ -8,7 +8,7 @@ test("icons package build enables the shared createIcon pure annotation transfor
     "utf8",
   );
   const transform = await readFile(
-    "packages/yakit-ui/config/svgReactTransform.ts",
+    "packages/yakit-ui-icons/config/svgReactTransform.ts",
     "utf8",
   );
   assert.match(config, /createIconPureAnnotationPlugin\(\)/);

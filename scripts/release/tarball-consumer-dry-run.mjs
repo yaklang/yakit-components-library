@@ -21,6 +21,7 @@ function credentialFreeEnvironment() {
   environment.npm_config_audit = "false";
   environment.npm_config_fund = "false";
   environment.npm_config_registry = "https://registry.npmjs.org/";
+  environment.npm_config_ignore_scripts = "true";
   return environment;
 }
 
@@ -33,8 +34,8 @@ try {
     env: credentialFreeEnvironment(),
   });
   await execute(
-    "npm",
-    ["pack", "--ignore-scripts", "--json", "--pack-destination", packDirectory],
+    "pnpm",
+    ["pack", "--json", "--pack-destination", packDirectory],
     {
       cwd: packageDirectory,
       env: credentialFreeEnvironment(),
@@ -42,8 +43,8 @@ try {
     },
   );
   await execute(
-    "npm",
-    ["pack", "--ignore-scripts", "--json", "--pack-destination", packDirectory],
+    "pnpm",
+    ["pack", "--json", "--pack-destination", packDirectory],
     {
       cwd: iconsPackageDirectory,
       env: credentialFreeEnvironment(),

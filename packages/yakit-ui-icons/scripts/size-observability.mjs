@@ -138,7 +138,7 @@ async function measureToolOwnership() {
     "utf8",
   );
   const importer = lock.match(
-    /\n  packages\/yakit-ui-icons:\n([\s\S]*?)(?=\n\S|\n  [^ ]|$)/,
+    /\n {2}packages\/yakit-ui-icons:\n([\s\S]*?)(?=\n\S|\n {2}[^ ]|$)/,
   )?.[1];
   const lockDirectExact =
     importer?.includes("      esbuild:\n") === true &&
@@ -1075,11 +1075,6 @@ function subtractSizes(measurement, control) {
 async function linkDependency(fixtureRoot, dependency) {
   const candidates = [
     path.join(packageRoot, "node_modules", ...dependency.split("/")),
-    path.join(
-      packageRoot,
-      "../yakit-ui/node_modules",
-      ...dependency.split("/"),
-    ),
   ];
   let source;
   for (const candidate of candidates) {
@@ -1101,7 +1096,7 @@ async function linkDependency(fixtureRoot, dependency) {
   await symlink(source, target, "dir");
 }
 
-async function prepareFixture(extractedPackage) {
+async function _prepareFixture(extractedPackage) {
   const fixtureRoot = await mkdtemp(
     path.join(os.tmpdir(), "yakit-icon-size-fixture-"),
   );
@@ -1178,7 +1173,7 @@ async function collectInstalledPackages(rootPaths) {
   };
 }
 
-async function measureInstalledGraph(fixture, manifest, artifactSha256) {
+async function _measureInstalledGraph(fixture, manifest, artifactSha256) {
   const react = await installedDependencyRecord(
     fixture.fixtureRoot,
     "react",
@@ -1268,11 +1263,6 @@ async function measureInstalledGraph(fixture, manifest, artifactSha256) {
 async function workspaceDependencyVersion(dependency) {
   const candidates = [
     path.join(packageRoot, "node_modules", ...dependency.split("/")),
-    path.join(
-      packageRoot,
-      "../yakit-ui/node_modules",
-      ...dependency.split("/"),
-    ),
   ];
   for (const candidate of candidates) {
     try {
@@ -1683,7 +1673,7 @@ export async function measureTarball(tarballInput) {
   let fixtureRoot;
   let installRoot;
   try {
-    const { extractedPackage, manifest, metrics } = await inspectArtifact(
+    const { manifest, metrics } = await inspectArtifact(
       tarball,
       workRoot,
     );

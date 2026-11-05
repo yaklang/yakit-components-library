@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useMemo, type FC } from 'react';
 
 import useYakitConfig from '../../hooks/useYakitConfig';
-import Loading from '../../icons/loading';
+import { Loading } from '@yakit-libs/yakit-ui-icons';
 import { getYakitTokenVariables } from '../../styles/tokenVariables';
 import type { YakitCSSProperties } from '../../styles/tokenVariables';
 import { returnOrFalse } from '../../utils';

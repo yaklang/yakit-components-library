@@ -7,5 +7,8 @@
     "noEmit": true,
     "tsBuildInfoFile": "../../node_modules/.tmp/tsconfig.light-icon-nodenext.tsbuildinfo"
   },
-  "include": ["../../src/vite-env.d.ts", "light-icon-nodenext.mts"]
+  "include": [
+    "../../src/vite-env.d.ts",
+    "light-icon-nodenext.mts"
+  ]
 }

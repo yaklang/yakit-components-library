@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import '../../../yakit-ui-icons/icon.css';
+import '@yakit-libs/yakit-ui-icons/icon.css';
 
-import oldiconSource from '../../config/icon-sources/oldicon.json';
-import * as OldIcons from '../../src/icons/oldicon';
-import type { IconComponent } from '../../src/icons/oldicon';
+import oldiconSource from '../../../yakit-ui-icons/config/icon-sources/oldicon.json';
+import * as OldIcons from '@yakit-libs/yakit-ui-icons/oldicon';
+import type { IconComponent } from '@yakit-libs/yakit-ui-icons/oldicon';
 
 type OldIconSourceRow = {
   exportName: string;

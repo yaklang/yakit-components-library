@@ -34,3 +34,7 @@ The UI portion of the React 19 / antd 6 Changeset is preserved in
 and description. Restore it alongside the other deferred Changesets before
 the next UI release. The shared-source icon additions and menu theme changes
 also need to be included in that future UI release's notes.
+
+## 公共图标源码迁移后的发布边界
+
+公共图标独立迁移改变了 UI 的依赖和兼容入口。现有 UI 延期发布记录及冻结哈希没有自动更新；此前只发布 icons 的批准范围不能直接覆盖新的 UI 产物。下一次准备发布时，应重新评估发布集合、UI 对 icons 的版本范围及延期事项，不能仅重算哈希绕过检查。

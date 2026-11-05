@@ -7,24 +7,24 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
+import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
   solidIconRegistry,
 } from '../../src/icons/registry';
-import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 const colorfulManifest = JSON.parse(
   readIconInputSync(
-    new URL('../../config/icon-sources/colorful.json#manifest', import.meta.url),
+    new URL('../../../yakit-ui-icons/config/icon-sources/colorful.json#manifest', import.meta.url),
     'utf8',
   ),
 );
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const storiesRoot = resolve(packageRoot, '.storybook/stories');
-const colorfulIconsRoot = resolve(packageRoot, 'src/icons/colorful');
+const colorfulIconsRoot = resolve(packageRoot, '../yakit-ui-icons/src/colorful');
 const iconStorySource = readIconInputSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8');
 const iconStoryMarkup = renderToStaticMarkup(createElement(iconStory.component));
 const colorfulStorySpecs = [

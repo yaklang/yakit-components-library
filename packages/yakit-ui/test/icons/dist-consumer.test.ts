@@ -65,7 +65,12 @@ describe('Published icon dist consumer', () => {
   });
 
   it('publishes the complete icon registry metadata declaration', () => {
-    const declaration = readFileSync(resolve(process.cwd(), 'dist/icons/registry.d.ts'), 'utf8');
+    const compatibility = readFileSync(resolve(process.cwd(), 'dist/icons/registry.d.ts'), 'utf8');
+    expect(compatibility).toContain("export * from '@yakit-libs/yakit-ui-icons/registry'");
+    const declaration = readFileSync(
+      resolve(process.cwd(), '../yakit-ui-icons/dist/registry.d.ts'),
+      'utf8',
+    );
 
     for (const field of [
       'Component:',

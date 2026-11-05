@@ -46,6 +46,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build React-only icon package
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
+
       - name: Verify generated icon files offline
         run: pnpm icons:update --check && pnpm icons:test
 
@@ -54,6 +57,15 @@ jobs:
 
       - name: Verify release configuration policies
         run: pnpm run release:test
+
+      - name: Verify icon package independence
+        run: pnpm icons:verify-isolation
+
+      - name: Verify immutable icon history
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run verify:history
+
+      - name: Lint icons
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run lint
 
       - name: Lint yakit-ui
         run: pnpm --filter @yakit-libs/yakit-ui run lint
@@ -65,16 +77,13 @@ jobs:
         run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
 
       - name: Run component tests
-        run: pnpm --filter @yakit-libs/yakit-ui run test:ci
+        run: pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui run test:icon-integration
 
       - name: Audit icons
-        run: pnpm --filter @yakit-libs/yakit-ui run audit:icons
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run audit:icons
 
       - name: Build package and Storybook
         run: pnpm --filter @yakit-libs/yakit-ui run build:package
-
-      - name: Build React-only icon package
-        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
 
       - name: Verify icon auto-import contracts
         run: pnpm run test:auto-import

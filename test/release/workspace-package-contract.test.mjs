@@ -247,7 +247,7 @@ test("yakit-ui generates its published theme CSS with color 1.4.1", () => {
   );
   assert.match(
     manifest.scripts?.["build:lib"] ?? "",
-    /^pnpm run generate:color-css && /,
+    /pnpm run generate:color-css && /,
   );
   assert.match(publicEntry, /import '\.\/styles\/index\.css';/);
   assert.match(baseStyles, /@import '\.\/color\.css';/);
@@ -402,32 +402,36 @@ test("package verification hard-gates every final zero-dependency surface", () =
   }
 });
 
-test("component CI generates SSR fixtures before browser hydration tests", () => {
-  const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
-  assert.match(
-    manifest.scripts?.["test:ssr-fixtures"] ?? "",
-    /test\/icons\/icon-ssr-fixture\.test\.ts/,
-  );
-  assert.match(
-    manifest.scripts?.["test:ssr-fixtures"] ?? "",
-    /test\/icons\/solid-icon-ssr-fixture\.test\.ts/,
-  );
-  assert.match(
-    manifest.scripts?.["test:ssr-fixtures"] ?? "",
-    /test\/ssr\/native-components-ssr\.test\.tsx/,
-  );
-  const ciCommands = (manifest.scripts?.["test:ci"] ?? "").split(" && ");
-  assert.equal(ciCommands[0], "pnpm run test:ssr-fixtures");
+test("each package generates SSR fixtures before its own browser tests", () => {
+  const ui = readJson(join(root, "packages/yakit-ui/package.json"));
+  const icons = readJson(join(root, "packages/yakit-ui-icons/package.json"));
+  for (const fixture of [
+    "icon-ssr-fixture.test.ts",
+    "solid-icon-ssr-fixture.test.ts",
+  ])
+    assert.ok(
+      icons.scripts["test:ssr-fixtures"].includes(`test/icons/${fixture}`),
+    );
   assert.ok(
-    ciCommands.some((command) =>
-      command.startsWith("vitest run --config vitest.config.ts"),
+    ui.scripts["test:ssr-fixtures"].includes(
+      "test/ssr/native-components-ssr.test.tsx",
     ),
   );
+  for (const manifest of [ui, icons]) {
+    const commands = manifest.scripts["test:ci"].split(" && ");
+    const browser = commands.findIndex((command) =>
+      command.startsWith("vitest run --config vitest.config.ts"),
+    );
+    assert.ok(commands.indexOf("pnpm run test:ssr-fixtures") < browser);
+    assert.ok(browser >= 0);
+  }
   assert.ok(
-    ciCommands.some((command) => command.includes("vitest.react18.config.ts")),
-    "component CI must rerun the Wave ref case on React 18",
+    ui.scripts["test:ci"].startsWith(
+      "pnpm --filter @yakit-libs/yakit-ui-icons run test:ci",
+    ),
   );
-  assert.ok(ciCommands.indexOf("pnpm run test:icon-adjustable") > 0);
+  assert.ok(ui.scripts["test:ci"].includes("vitest.react18.config.ts"));
+  assert.ok(icons.scripts["test:ci"].includes("pnpm run test:icon-adjustable"));
 });
 
 test("pre-build types use source fixtures while built package contracts verify public subpaths", () => {
@@ -448,15 +452,25 @@ test("pre-build types use source fixtures while built package contracts verify p
   assert.deepEqual(libraryTypes.exclude, ["src/icons/oldicon"]);
   assert.deepEqual(sourceTypes.include, [
     "../../src/vite-env.d.ts",
-    "colorful-icon-public.test.tsx",
-    "icon-ant-compat-public.test.tsx",
-    "icon-public.test.tsx",
     "input-public.test.tsx",
-    "solid-icon-public.test.tsx",
   ]);
+  const iconTypes = readJson(
+    join(root, "packages/yakit-ui-icons/test/types/tsconfig.json"),
+  );
+  assert.ok(iconTypes.include.includes("*.test.tsx"));
+  for (const file of [
+    "colorful-icon-public",
+    "icon-ant-compat-public",
+    "icon-public",
+    "solid-icon-public",
+  ])
+    assert.ok(
+      existsSync(
+        join(root, `packages/yakit-ui-icons/test/types/${file}.test.tsx`),
+      ),
+    );
   assert.deepEqual(publicTypes.include, [
     "../../src/vite-env.d.ts",
-    "colorful-icon-public.test.tsx",
     "light-icon-public.test.tsx",
   ]);
   assert.match(

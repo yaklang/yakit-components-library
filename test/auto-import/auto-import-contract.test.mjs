@@ -135,6 +135,9 @@ function createFixture(suiteRoot, installSet, moduleResolution, syntax) {
     const manifest = copyPackage(fixtureRoot, packageRoots[packageKey]);
     dependencies[manifest.name] = manifest.version;
   }
+  // Installing UI now installs icons transitively, without making it a direct
+  // dependency of the consumer's package.json.
+  if (installSet === "ui-only") copyPackage(fixtureRoot, packageRoots.icons);
   linkConsumerDependency(
     fixtureRoot,
     "react",

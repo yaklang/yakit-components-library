@@ -7,6 +7,8 @@ description: 根据用户给出的一个或多个 Figma 图标节点 URL，通�
 
 先读 [输入格式与字段来源](references/source-input.md) 和项目 `docs/icon-maintenance.md`。
 
+公共来源位于 `packages/yakit-ui-icons/config/icon-sources/`，生产源码位于该包的 `src/`；另查 UI 的 `packages/yakit-ui/config/icon-sources/private.json`，避免将私有组件资源重复接入。图标包可独立构建与检查；涉及 UI 或 Storybook 时先构建图标包。
+
 ## 获取
 
 1. 解析用户提供的 URL，提取 fileKey、node-id（将 `123-456` 转为 `123:456`）。只处理用户指定节点，不因父页面或工具返回更多节点而扩大范围。

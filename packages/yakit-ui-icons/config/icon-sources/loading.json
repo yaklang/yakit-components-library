@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "family": "loading",
+  "records": [
+    {
+      "exportName": "Loading",
+      "file": "loading/index.tsx",
+      "typeExports": [
+        "LoadingProps"
+      ],
+      "source": {
+        "kind": "handwritten",
+        "path": "src/loading/index.tsx"
+      }
+    }
+  ]
+}

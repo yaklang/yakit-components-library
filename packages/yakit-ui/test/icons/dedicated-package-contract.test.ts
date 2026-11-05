@@ -7,7 +7,7 @@ import ts from 'typescript';
 import { build } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import { iconCounts, iconExports } from './icon-inventory';
+import { iconCounts, iconExports } from '../../../yakit-ui-icons/test/icons/icon-inventory';
 
 const coreRoot = process.cwd();
 const iconsRoot = resolve(coreRoot, '../yakit-ui-icons');

@@ -205,16 +205,16 @@ jobs:
           path: .release/release-impact.json
           if-no-files-found: error
           retention-days: 30
+      - name: Build React-only icon package exactly once
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
       - name: Lint and type-check
-        run: pnpm --filter @yakit-libs/yakit-ui run lint && pnpm --filter @yakit-libs/yakit-ui run test:types
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run lint && pnpm --filter @yakit-libs/yakit-ui run lint && pnpm --filter @yakit-libs/yakit-ui run test:types
       - name: Install the pinned Playwright browser
         run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
       - name: Run component and icon tests
-        run: pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui run audit:icons
+        run: pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui-icons run audit:icons
       - name: Build package exactly once
         run: pnpm --filter @yakit-libs/yakit-ui run build:package
-      - name: Build React-only icon package exactly once
-        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
       - name: Verify icon auto-import contracts
         run: pnpm run test:auto-import
       - name: Verify lightweight and dedicated icon package contracts
