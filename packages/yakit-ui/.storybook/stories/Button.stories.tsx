@@ -99,7 +99,7 @@ const COMPONENT_DOCS = [
   '',
   '## 代码演示',
   '',
-  '下方按「总览（Controls）→ 尺寸 → 形状 → 图标 → 类型 → 颜色 → 错误色 → 加载 → 链接 → 禁用 → Yakit 状态 → 按钮组」组织示例。',
+  '下方按「总览（Controls）→ 尺寸 → 形状 → 图标 → 类型 → 颜色 → 危险态 → 加载 → 链接 → 禁用 → Yakit 状态 → 按钮组」组织示例。',
   '',
   '## API',
   '',
@@ -109,7 +109,7 @@ const COMPONENT_DOCS = [
   '| --- | --- | --- | --- |',
   '| type | 按钮类型 | `primary` \\| `secondary1` \\| `secondary2` \\| `outline1` \\| `outline2` \\| `text` \\| `text2` \\| `link1` \\| `link2` | `primary` |',
   '| colors | 语义色。和 `danger` 同时存在时以 `colors` 为准 | `primary` \\| `success` \\| `danger` \\| `infoBlue` | - |',
-  '| danger | 错误色，仅在未传 `colors` 时生效 | `boolean` | `false` |',
+  '| danger | 危险色，仅在未传 `colors` 时生效 | `boolean` | `false` |',
   '| size | 尺寸 | `small` \\| `medium` \\| `large` \\| `huge` | `medium` |',
   '| shape | 圆角形态。`round` 为全圆角 | `default` \\| `round` | `default` |',
   '| icon | 图标 | `ReactNode` | - |',
@@ -207,7 +207,7 @@ const meta: Meta<typeof Button> = {
       control: { type: 'boolean' },
     },
     danger: {
-      description: '错误色。仅在未传 colors 时生效',
+      description: '危险色。仅在未传 colors 时生效',
       table: { defaultValue: { summary: 'false' } },
       control: { type: 'boolean' },
     },
@@ -420,14 +420,14 @@ export const Colors: Story = {
   ),
 };
 
-/** 错误色 */
-export const ErrorVariants: Story = {
-  name: '错误色',
+/** 危险态 */
+export const DangerVariants: Story = {
+  name: '危险态',
   parameters: {
     docs: {
       description: {
         story:
-          '`danger` 只在没传 `colors` 时把按钮切到错误色。各类型的悬停和按下按设计稿的 Error 状态处理。',
+          '`danger` 只在没传 `colors` 时把按钮切到 danger 色。各类型的悬停和按下按设计稿的 danger 状态处理。',
       },
     },
   },

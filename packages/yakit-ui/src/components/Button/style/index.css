@@ -169,7 +169,9 @@
   --yakit-btn-color-focus: var(--yakit-color-error-focus);
   --yakit-btn-color-hover: var(--yakit-color-error-hover);
   --yakit-btn-color-pressed: var(--yakit-color-error-pressed);
-  --yakit-btn-color-text: var(--yakit-color-error-text);
+  /* 设计稿（Figma 37109:13940 等 Primary Error 变体）danger 文字用的是 Main 色
+     系的 On-Primary 淡色（#fef5ee），不是 Error-On-Primary（#fef0f0）。 */
+  --yakit-btn-color-text: var(--yakit-color-primary-text);
 }
 
 .yakit-btn-color-infoBlue {
@@ -190,12 +192,14 @@
 
 .yakit-btn-primary:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-hover);
   color: var(--yakit-btn-color-text);
 }
 
-.yakit-btn-primary:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-primary:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-text);
 }
@@ -213,12 +217,14 @@
 
 .yakit-btn-secondary1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-secondary1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-secondary1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-pressed);
 }
@@ -236,12 +242,14 @@
 
 .yakit-btn-secondary2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-secondary2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-secondary2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-pressed);
 }
@@ -254,7 +262,7 @@
 
 .yakit-btn-secondary2.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(
     .yakit-btn-active
-  ):not(:disabled):not([aria-disabled='true']) {
+  ):not(:disabled):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-base);
 }
@@ -267,13 +275,15 @@
 
 .yakit-btn-outline1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-base);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-outline1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-outline1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-pressed);
@@ -294,13 +304,15 @@
 
 .yakit-btn-outline2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-surface);
   border-color: var(--yakit-btn-color-base);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-outline2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-outline2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-surface);
   border-color: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-pressed);
@@ -317,7 +329,9 @@
     .yakit-btn-color-danger,
     .yakit-btn-color-success,
     .yakit-btn-color-infoBlue
-  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-base);
   color: var(--yakit-btn-color-base);
@@ -327,7 +341,9 @@
     .yakit-btn-color-danger,
     .yakit-btn-color-success,
     .yakit-btn-color-infoBlue
-  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-pressed);
@@ -361,20 +377,24 @@
 
 .yakit-btn-text:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-text:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-text:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-pressed);
 }
 
 .yakit-btn-text2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ),
-.yakit-btn-text2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  ):not(:active):not(.yakit-btn-in-group),
+.yakit-btn-text2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-neutral-bg-hover);
   color: var(--yakit-btn-neutral-text);
 }
@@ -383,7 +403,9 @@
     .yakit-btn-color-danger,
     .yakit-btn-color-success,
     .yakit-btn-color-infoBlue
-  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   color: var(--yakit-btn-color-base);
 }
@@ -392,34 +414,40 @@
     .yakit-btn-color-danger,
     .yakit-btn-color-success,
     .yakit-btn-color-infoBlue
-  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-pressed);
 }
 
 .yakit-btn-link1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-hover);
 }
 
 .yakit-btn-link1.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(
     :disabled
-  ):not([aria-disabled='true']) {
+  ):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-link1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-link1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   color: var(--yakit-btn-color-pressed);
 }
 
 .yakit-btn-link2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
     [aria-disabled='true']
-  ) {
+  ):not(:active):not(.yakit-btn-in-group) {
   color: var(--yakit-color-primary);
 }
 
-.yakit-btn-link2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-link2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   color: var(--yakit-color-primary-pressed);
 }
 
@@ -427,7 +455,9 @@
     .yakit-btn-color-danger,
     .yakit-btn-color-success,
     .yakit-btn-color-infoBlue
-  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-base);
 }
 
@@ -435,7 +465,9 @@
     .yakit-btn-color-danger,
     .yakit-btn-color-success,
     .yakit-btn-color-infoBlue
-  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   color: var(--yakit-btn-color-pressed);
 }
 
@@ -521,6 +553,12 @@
 .yakit-btn-group > .yakit-btn-huge.yakit-btn-icon-only {
   padding: 6px 7px;
   width: auto;
+}
+
+/* 组轨道 overflow: hidden 会裁掉向外画的焦点环（outline-offset: 0 时环
+   一半在边框外），组内改为向内画，保证完整可见。 */
+.yakit-btn-group > .yakit-btn:focus-visible {
+  outline-offset: -2px;
 }
 
 .yakit-btn-group
