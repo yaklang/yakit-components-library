@@ -91,9 +91,9 @@ describe('Outline public component API', () => {
       outlineIconRegistry.find(({ exportName }) => exportName === 'CommandOutlined'),
     ).toMatchObject({
       exportName: 'CommandOutlined',
-      figmaName: null,
-      name: 'CommandOutlined',
-      sourceStatus: 'unnamed-in-figma',
+      figmaName: 'Outline/Command',
+      name: 'Outline/Command',
+      sourceStatus: 'current',
     });
     expect(
       outlineIconRegistry.find(({ exportName }) => exportName === 'NotebookOutlined'),

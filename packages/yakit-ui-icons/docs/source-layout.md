@@ -10,7 +10,7 @@
 | 公共图标测试与基线 | `test/` | UI 的对应图标测试目录 |
 | 历史审查及归档工具 | `docs/icon-history/` | 仓库级 `docs/icon-history/` |
 
-完整原路径、目标路径和迁移前哈希见 [迁移清单](source-relocation.json)。其中 `immutable` 标记迁移时的素材或证据；日常 SVG 和来源仍可正常更新，`verify:history` 只持续冻结历史基线、截图和归档资料。
+完整原路径、目标路径和迁移前哈希见 [迁移清单](source-relocation.json)。其中 `immutable` 标记迁移时的素材或证据；日常 SVG 和来源仍可正常更新，`verify:history` 只持续冻结历史基线、截图和归档资料。`scripts/*.json` 中的来源清单和几何配置属于维护数据，可以更新；迁移清单里的原始哈希仍保留，用于追溯迁移时的内容。
 
 ```sh
 pnpm --filter @yakit-libs/yakit-ui-icons run verify:history

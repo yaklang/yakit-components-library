@@ -80,7 +80,8 @@ describe('Figma icon registry name validation', () => {
       iconRegistry
         .filter(({ figmaName }) => figmaName === null)
         .map(({ exportName }) => exportName),
-    ).toEqual(['CommandOutlined']);
+    ).toEqual([]);
+    expect(registryByExport.get('CommandOutlined')?.figmaName).toBe('Outline/Command');
   });
 
   it('preserves the two distinct source icons named Outline/variable', () => {

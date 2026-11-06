@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-import geometryReviews from '../../../scripts/outline-geometry-overrides.json';
+import { restoreReviewedPaint } from './icon-reviewed-paint';
 
 export type JsonRecord = Record<string, unknown>;
 
@@ -239,19 +239,8 @@ export function validateVisualWeightReviews(
       throw new Error('ICON_VISUAL_WEIGHT_OLD_SOURCE_DRIFT');
     }
     // The immutable reviews certify width-one geometry before the default-width migration.
-    // Restore only the approved 1.5 -> 1 change; all other source bytes remain hash-checked.
-    let candidate = readCandidate(file).toString('utf8');
-    const paintRevision = geometryReviews.paintRevisions.find(
-      (revision) => revision.file === file && revision.localRawSvgSha256 === digest(candidate),
-    );
-    if (paintRevision) {
-      candidate = candidate.replaceAll(
-        'opacity="0.5"',
-        'color="rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))"',
-      );
-      if (digest(candidate) !== paintRevision.previousLocalRawSvgSha256)
-        throw new Error('ICON_PAINT_REVISION_GEOMETRY_DRIFT');
-    }
+    // Restore the approved paint and 1.5 -> 1 changes; all source bytes remain hash-checked.
+    const candidate = restoreReviewedPaint(file, readCandidate(file).toString('utf8'));
     const reviewedCandidate = candidate.replaceAll('stroke-width="1.5"', 'stroke-width="1"');
     if (digest(reviewedCandidate) !== candidateSourceSha256) {
       throw new Error('ICON_VISUAL_WEIGHT_CANDIDATE_SOURCE_DRIFT');

@@ -14,6 +14,8 @@ import rendererProvenance from '../fixtures/icons/reference/outline-renderer-pro
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
+import { restoreReviewedPaint } from './helpers/icon-reviewed-paint';
+
 const outlineManifest = JSON.parse(
   readIconInputSync(
     new URL('../../config/icon-sources/outline.json#manifest', import.meta.url),
@@ -159,9 +161,12 @@ describe('Outline pre-change baseline', () => {
       const review = visualWeightReviews.reviews.find((entry) => entry.file === file);
       if (review) {
         expect(review.status, file).toBe('promoted');
-        expect(sha256(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"')), file).toBe(
-          review.candidateSourceSha256,
-        );
+        expect(
+          sha256(
+            restoreReviewedPaint(file, source).replaceAll('stroke-width="1.5"', 'stroke-width="1"'),
+          ),
+          file,
+        ).toBe(review.candidateSourceSha256);
         const original = readIconInputSync(
           resolve(
             packageRoot,

@@ -499,11 +499,26 @@ describe('Outline index and manifest failures', () => {
 describe('Outline manifest updater provenance gate', () => {
   const runUpdater = (
     output: string,
-    figmaRawProvenance = rawProvenance,
-    reviewId = 'audit-test',
-    reviewedBy = 'vitest',
-  ) =>
-    spawnSync(
+    {
+      figmaRawProvenance = rawProvenance,
+      reviewId = 'audit-test',
+      reviewedBy = 'vitest',
+      ci,
+      replaceExisting = false,
+    }: {
+      figmaRawProvenance?: string;
+      reviewId?: string;
+      reviewedBy?: string;
+      ci?: string;
+      replaceExisting?: boolean;
+    } = {},
+  ) => {
+    // Successful update cases write only to their temporary directories. Simulate
+    // local execution in the child without changing the test runner's CI setting.
+    const env = { ...process.env };
+    delete env.CI;
+    if (ci !== undefined) env.CI = ci;
+    return spawnSync(
       process.execPath,
       [
         updaterScript,
@@ -519,16 +534,38 @@ describe('Outline manifest updater provenance gate', () => {
         reviewedBy,
         '--output',
         output,
+        ...(replaceExisting ? ['--replace-existing'] : []),
       ],
-      { cwd: packageRoot, encoding: 'utf8' },
+      { cwd: packageRoot, encoding: 'utf8', env },
     );
+  };
+
+  it.each([false, true])('prohibits CI writes even with an existing output: %s', (existing) => {
+    const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
+    const parentCI = process.env.CI;
+    try {
+      const output = resolve(root, 'manifest.json');
+      if (existing) writeFileSync(output, '{"preserve":"existing baseline"}\n');
+      const before = snapshot([root]);
+      const result = runUpdater(output, { ci: 'true', replaceExisting: existing });
+      expect(result.status).toBe(2);
+      expect(result.stderr).toContain('baseline updates are prohibited in CI');
+      expect(result.stdout).not.toContain('OUTLINE_BASELINE_UPDATED');
+      expect(snapshot([root])).toEqual(before);
+      expect(process.env.CI).toBe(parentCI);
+    } finally {
+      rmSync(root, { force: true, recursive: true });
+    }
+  });
 
   it('writes only a complete independently matched manifest', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
+    const parentCI = process.env.CI;
     try {
       const output = resolve(root, 'manifest.json');
       const result = runUpdater(output);
       expect(result).toMatchObject({ status: 0, stderr: '' });
+      expect(process.env.CI).toBe(parentCI);
       const value = JSON.parse(readIconInputSync(output, 'utf8'));
       expect(value).toMatchObject({ complete: true, provenanceComplete: true });
       expect(value.strokeWidthPolicy).toEqual(ICON_STROKE_WIDTH_POLICY);
@@ -571,7 +608,7 @@ describe('Outline manifest updater provenance gate', () => {
       const alteredPath = resolve(root, 'altered.json');
       const output = resolve(root, 'manifest.json');
       writeFileSync(alteredPath, JSON.stringify(altered));
-      const result = runUpdater(output, alteredPath);
+      const result = runUpdater(output, { figmaRawProvenance: alteredPath });
       expect(result.status).toBe(2);
       expect(result.stderr).toContain('normalized AST mismatch');
       expect(existsSync(output)).toBe(false);
@@ -586,7 +623,7 @@ describe('Outline manifest updater provenance gate', () => {
       const output = resolve(root, 'manifest.json');
       const committed = JSON.parse(readIconInputSync(manifest, 'utf8'));
       const { reviewId, reviewedBy } = committed.updateProvenance;
-      const result = runUpdater(output, rawProvenance, reviewId, reviewedBy);
+      const result = runUpdater(output, { reviewId, reviewedBy });
       expect(result).toMatchObject({ status: 0, stderr: '' });
       const generated = JSON.parse(readIconInputSync(output, 'utf8'));
       // "added" records import history; reconstruction independently reports geometric matching.

@@ -13,6 +13,8 @@ import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/re
 import before from '../fixtures/icons/stroke-width-1/before.json';
 import contract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
+import { applyReviewedPaint, restoreReviewedPaint } from './helpers/icon-reviewed-paint';
+
 const solidRaw = JSON.parse(
   readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
 );
@@ -52,7 +54,12 @@ describe('current 1.5-width independent pixel oracle', () => {
         expect(review.oldSourceSha256).toBe(record.afterSha256);
         expect(
           createHash('sha256')
-            .update(actual.replaceAll('stroke-width="1.5"', 'stroke-width="1"'))
+            .update(
+              restoreReviewedPaint(review.file, actual).replaceAll(
+                'stroke-width="1.5"',
+                'stroke-width="1"',
+              ),
+            )
             .digest('hex'),
         ).toBe(review.candidateSourceSha256);
       }
@@ -61,7 +68,8 @@ describe('current 1.5-width independent pixel oracle', () => {
         expected: solidUpdate
           ? solidUpdate.svg.replaceAll('#353639', 'currentColor')
           : widthOnlyOracle(
-              colorfulCorrection?.svg ?? (review ? review.serializedSvg : record.beforeSvg),
+              colorfulCorrection?.svg ??
+                (review ? applyReviewedPaint(review.file, review.serializedSvg) : record.beforeSvg),
             ),
         actual,
         original: record.beforeSvg,

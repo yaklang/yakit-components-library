@@ -9,6 +9,8 @@ import topologyObservation from '../fixtures/icons/reference/visual-weight-v2/ch
 import reviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import { measureVisualWeight } from '../fixtures/icons/visual-weight-metrics.mjs';
 
+import { restoreReviewedPaint } from './helpers/icon-reviewed-paint';
+
 const packageRoot = resolve(import.meta.dirname, '../..');
 const fixtureRoot = resolve(packageRoot, 'test/fixtures/icons/reference/visual-weight-v2');
 
@@ -44,7 +46,11 @@ describe('reconstructed Outline geometry', () => {
       for (const review of reviews.reviews) {
         expect(review.renderer.browserVersion).toBe(reviews.reviews[0].renderer.browserVersion);
         const measured = await page.evaluate(measureVisualWeight, {
-          source: readFileSync(resolve(packageRoot, 'src/outline', review.file), 'utf8'),
+          // Measure geometry using the reviewed paint; current half-opacity is checked separately.
+          source: restoreReviewedPaint(
+            review.file,
+            readFileSync(resolve(packageRoot, 'src/outline', review.file), 'utf8'),
+          ),
           original: readFileSync(resolve(fixtureRoot, review.oldEvidence.path), 'utf8'),
           spec: review,
         });

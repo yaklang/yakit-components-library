@@ -19,6 +19,7 @@ import designUpdates from '../fixtures/icons/reference/outline-design-updates-se
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 
+import { restoreReviewedPaint } from './helpers/icon-reviewed-paint';
 import { iconSourceFiles } from './icon-inventory';
 
 const outlineManifest = JSON.parse(
@@ -181,7 +182,17 @@ describe('current icon compatibility and historical evidence', () => {
             'utf8',
           ),
         ).toBe(expected);
-        expect(digest(actual), record.afterPath).toBe(review.candidateSourceSha256);
+        expect(
+          digest(
+            historicalWidth(
+              restoreReviewedPaint(
+                review.file,
+                readIconInputSync(resolve(packageRoot, 'src', currentPath), 'utf8'),
+              ),
+            ),
+          ),
+          record.afterPath,
+        ).toBe(review.candidateSourceSha256);
       } else {
         expect(actual, record.sourcePath).toBe(expected);
         expect(digest(actual), record.afterPath).toBe(record.afterSha256);
