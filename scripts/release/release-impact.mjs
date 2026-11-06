@@ -16,6 +16,7 @@ import path from "node:path";
 import process from "node:process";
 
 import {
+  assertDeferredReleaseScope,
   buildDeferredImpact,
   validateDeferredImpact,
 } from "./release-deferrals.mjs";
@@ -823,10 +824,16 @@ export async function computeReleaseImpact({
       ),
     });
   }
-  if (status === "BLOCK") {
-    try {
-      const policy = await readDeferralPolicy(root, headRevision);
-      if (policy) {
+  try {
+    const policy = await readDeferralPolicy(root, headRevision);
+    if (policy) {
+      // An active deferral also constrains an otherwise matching release set:
+      // publishing both changed packages must not silently bypass the policy.
+      assertDeferredReleaseScope(
+        policy,
+        declaredSet.map((name) => ({ name, version: expectedVersions[name] })),
+      );
+      if (status === "BLOCK") {
         const deferredSet = observedSet.filter(
           (name) => !declaredSet.includes(name),
         );
@@ -864,10 +871,11 @@ export async function computeReleaseImpact({
         }
         status = "PASS";
       }
-    } catch (error) {
-      deferredImpact = undefined;
-      deferralReason = `release deferral rejected: ${error.message}`;
     }
+  } catch (error) {
+    status = "BLOCK";
+    deferredImpact = undefined;
+    deferralReason = `release deferral rejected: ${error.message}`;
   }
   return {
     schemaId: "yakit-ui-release-impact/v1",

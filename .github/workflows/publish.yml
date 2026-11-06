@@ -88,6 +88,11 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Validate branch and Changesets prerelease state
         run: pnpm run release:preflight
+      - name: Verify deferred release scope
+        run: |
+          # Prerelease checkouts may have origin/main without a local main branch.
+          git show-ref --verify --quiet refs/heads/main || git branch --no-track main refs/remotes/origin/main
+          pnpm run release:deferral-check
       - name: Collect complete cutover evidence
         run: >-
           node scripts/release/collect-release-cutover-evidence.mjs
@@ -185,6 +190,8 @@ jobs:
         env:
           PUBLISH_PLAN_BASE64: ${{ needs.select-mode.outputs.publish-plan-base64 }}
           PUBLISH_PLAN_SHA256: ${{ needs.select-mode.outputs.publish-plan-sha256 }}
+      - name: Verify exact deferred publish scope
+        run: pnpm run release:deferral-check --publish-plan .release/publish-plan/publish-plan.json
       - name: Verify workspace and release state
         run: pnpm run release:workspace-check && pnpm run release:preflight
       - name: Run release policy tests

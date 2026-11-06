@@ -12,6 +12,7 @@
     "changeset:status": "changeset status",
     "version-packages": "changeset version",
     "release:workspace-check": "node scripts/release/check-workspace-boundary.mjs",
+    "release:deferral-check": "node scripts/release/check-release-deferral.mjs",
     "release:preflight": "node scripts/release/check-release-state.mjs",
     "release:policy:init": "node scripts/release/package-policy.mjs init",
     "release:policy:check": "node scripts/release/package-policy.mjs check",

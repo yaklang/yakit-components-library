@@ -27,6 +27,23 @@ test("CI workflow has no publish credential or OIDC authority", () => {
   );
 });
 
+test("CI and release selection check deferrals, and packing checks the exact publish plan", () => {
+  const jobs = extractWorkflowJobs(workflow("publish.yml"));
+  assert.match(workflow("ci.yml"), /pnpm run release:deferral-check/);
+  const selector = jobs.get("select-mode") ?? "";
+  assert.ok(selector.indexOf("pnpm run release:deferral-check") >= 0);
+  assert.ok(
+    selector.indexOf("pnpm run release:deferral-check") <
+      selector.indexOf("uses: changesets/action/select-mode"),
+  );
+  const build = jobs.get("build-and-pack") ?? "";
+  const check = build.indexOf(
+    "pnpm run release:deferral-check --publish-plan .release/publish-plan/publish-plan.json",
+  );
+  assert.ok(check > build.indexOf("publish-plan-job-output.mjs restore"));
+  assert.ok(check < build.indexOf("uses: changesets/action/pack"));
+});
+
 test("CI and publish verification gate the icon auto-import contract", () => {
   const command = "run: pnpm run test:auto-import";
   const builds = [

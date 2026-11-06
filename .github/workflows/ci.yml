@@ -46,6 +46,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify deferred release scope
+        run: |
+          # PR checkouts may have origin/main without a local main branch.
+          git show-ref --verify --quiet refs/heads/main || git branch --no-track main refs/remotes/origin/main
+          pnpm run release:deferral-check
+
       - name: Build React-only icon package
         run: pnpm --filter @yakit-libs/yakit-ui-icons run build
 

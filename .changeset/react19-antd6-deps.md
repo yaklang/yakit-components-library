@@ -1,5 +1,5 @@
 ---
-"@yakit-libs/yakit-ui-icons": minor
+"@yakit-libs/yakit-ui-icons": patch
 ---
 
 Add React 19 support to the icon package while retaining React 18 compatibility.

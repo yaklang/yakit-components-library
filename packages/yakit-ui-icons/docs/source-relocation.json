@@ -2049,12 +2049,6 @@
       "immutable": false
     },
     {
-      "from": "packages/yakit-ui/src/icons/oldicon/.DS_Store",
-      "to": "packages/yakit-ui-icons/src/oldicon/.DS_Store",
-      "sha256": "9182f3e784a55dc6354759197363830e11ad9ea4c5134c2a8e7ed887b2e6b308",
-      "immutable": false
-    },
-    {
       "from": "packages/yakit-ui/src/icons/oldicon/assets/00017f4a2ba1884d5464c8e7a92b93d4b26b92acbe1271c09a64bd6a5b2c91f0.svg",
       "to": "packages/yakit-ui-icons/src/oldicon/assets/00017f4a2ba1884d5464c8e7a92b93d4b26b92acbe1271c09a64bd6a5b2c91f0.svg",
       "sha256": "00017f4a2ba1884d5464c8e7a92b93d4b26b92acbe1271c09a64bd6a5b2c91f0",

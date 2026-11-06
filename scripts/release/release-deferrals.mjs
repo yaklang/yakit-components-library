@@ -52,7 +52,7 @@ function validateFollowUpPath(value) {
     throw new Error("deferred followUpPath must be a safe docs markdown path");
 }
 
-function validatePolicy(policy) {
+export function validateDeferralPolicy(policy) {
   exactKeys(policy, ["schemaId", "releases", "deferred"], "deferral policy");
   if (policy.schemaId !== SCHEMA_ID)
     throw new Error("unsupported release deferral policy");
@@ -159,6 +159,20 @@ export function hashDeferralPolicy(policy) {
     .digest("hex");
 }
 
+export function assertDeferredReleaseScope(policy, releases) {
+  validateDeferralPolicy(policy);
+  if (
+    !Array.isArray(releases) ||
+    JSON.stringify(
+      releases.map((release) => ({
+        name: release?.name,
+        version: release?.version,
+      })),
+    ) !== JSON.stringify(policy.releases)
+  )
+    throw new Error("release context does not exactly match deferral policy");
+}
+
 export function validateDeferredImpact(
   evidence,
   { releases, compatibilityBaselineSet, headRevision } = {},
@@ -168,7 +182,7 @@ export function validateDeferredImpact(
     ["policy", "policySha256", "probes"],
     "deferral evidence",
   );
-  const policy = validatePolicy(evidence.policy);
+  const policy = validateDeferralPolicy(evidence.policy);
   if (!HASH_PATTERN.test(evidence.policySha256 ?? ""))
     throw new Error("deferral policy hash is invalid");
   if (evidence.policySha256 !== hashDeferralPolicy(policy))
@@ -177,18 +191,7 @@ export function validateDeferredImpact(
     throw new Error("deferral evidence must contain exactly one impact probe");
   validateProbe(evidence.probes[0], policy.deferred[0], headRevision);
 
-  if (releases !== undefined) {
-    if (
-      !Array.isArray(releases) ||
-      JSON.stringify(
-        releases.map((release) => ({
-          name: release?.name,
-          version: release?.version,
-        })),
-      ) !== JSON.stringify(policy.releases)
-    )
-      throw new Error("release context does not exactly match deferral policy");
-  }
+  if (releases !== undefined) assertDeferredReleaseScope(policy, releases);
   if (compatibilityBaselineSet !== undefined) {
     if (
       !Array.isArray(compatibilityBaselineSet) ||
@@ -233,7 +236,7 @@ export async function verifyDeferredRegistryBaseline(
       release?.version === releasedIdentity?.version,
   );
   if (!applies) return [];
-  validatePolicy(policy);
+  validateDeferralPolicy(policy);
 
   const verified = [];
   for (const deferred of policy.deferred) {

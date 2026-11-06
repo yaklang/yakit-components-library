@@ -638,3 +638,16 @@ test("deferral resolves release-tag baselines to their immutable commit", async 
   assert.equal(result.status, "PASS", result.reason);
   assert.equal(result.deferredImpact.probes[0].baseRevision, state.base);
 });
+
+test("an active deferral rejects publishing UI even when all observed packages are declared", async () => {
+  const { options } = await deferredFixture();
+  const result = await computeReleaseImpact({
+    ...options,
+    declaredSetOverride: [UI, ICONS],
+    expectedVersions: { [UI]: "1.0.0", [ICONS]: "1.0.1" },
+  });
+  assert.deepEqual(result.observedSet, [UI, ICONS]);
+  assert.deepEqual(result.declaredSet, [UI, ICONS]);
+  assert.equal(result.status, "BLOCK");
+  assert.match(result.reason, /release context does not exactly match deferral policy/);
+});
