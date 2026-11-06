@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 import Button from '../../src/components/Button';
 import Modal, { type ModalProps, type ModalSize } from '../../src/components/Modal';
@@ -106,7 +106,6 @@ const DialogPreview = ({ size, variant }: { size: ModalSize; variant: ModalProps
 
 const EngineMissing = () => (
   <Modal
-    cancelText="取消"
     footer={
       <>
         <Button size="huge" type="outline2">
@@ -125,6 +124,7 @@ const EngineMissing = () => (
     getContainer={false}
     icon={<ExclamationSolid color="var(--Colors-Use-Main-Primary)" size={32} />}
     layout="alert"
+    onHelp={() => undefined}
     open
     title="未安装引擎"
   >
@@ -155,6 +155,7 @@ const EngineInstalling = () => (
     getContainer={false}
     icon={<CloudDownloadSolid color="var(--Colors-Use-Main-Primary)" size={32} />}
     layout="alert"
+    onHelp={() => undefined}
     open
     showOk={false}
     title="引擎安装中..."
@@ -190,6 +191,7 @@ const StatusPreview = ({
     getContainer={false}
     layout="alert"
     okText="Done"
+    onHelp={() => undefined}
     open
     status={status}
     title={title}
@@ -207,14 +209,11 @@ const OpenExample = () => {
         打开对话框
       </Button>
       <Modal
-        cancelText="No"
+        {...dialogArgs}
         footerExtra={<DemoSwitch size="small" />}
-        okText="Yes"
         onCancel={() => setOpen(false)}
         onOk={() => setOpen(false)}
         open={open}
-        subTitle="这里是辅助性内容"
-        title="Title"
       >
         <ContentPlaceholder />
       </Modal>
@@ -222,10 +221,58 @@ const OpenExample = () => {
   );
 };
 
+const CANVAS_BG = 'var(--Colors-Use-Basic-Background)';
+const CANVAS_FG = 'var(--Colors-Use-Neutral-Text-1-Title)';
+
 const meta = {
-  title: 'YakitUi/反馈/Modal',
+  title: 'YakitUi/通用/Modal',
   component: Modal,
-  parameters: { layout: 'padded' },
+  decorators: [
+    (Story, context) => {
+      const theme = (context.globals.theme as 'light' | 'dark') ?? 'light';
+      // Scope dark/light canvas paint to Modal stories only (not global preview).
+      useEffect(() => {
+        const root = document.getElementById('storybook-root');
+        const prev = root
+          ? {
+              background: root.style.background,
+              color: root.style.color,
+              minHeight: root.style.minHeight,
+            }
+          : null;
+        if (root) {
+          root.style.background = CANVAS_BG;
+          root.style.color = CANVAS_FG;
+          root.style.minHeight = '100%';
+        }
+        return () => {
+          if (!root || !prev) return;
+          root.style.background = prev.background;
+          root.style.color = prev.color;
+          root.style.minHeight = prev.minHeight;
+        };
+      }, [theme]);
+
+      return (
+        <div
+          data-theme={theme}
+          style={{
+            background: CANVAS_BG,
+            boxSizing: 'border-box',
+            color: CANVAS_FG,
+            minHeight: '100%',
+            minWidth: 0,
+          }}
+        >
+          <Story />
+        </div>
+      );
+    },
+  ],
+  parameters: {
+    backgrounds: { disable: true },
+    layout: 'padded',
+  },
   tags: ['autodocs'],
   argTypes: {
     layout: { control: 'select', options: ['dialog', 'alert'] },

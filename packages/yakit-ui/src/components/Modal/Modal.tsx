@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type FC,
 } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -14,8 +15,8 @@ import useYakitConfig from '../../hooks/useYakitConfig';
 import { QuestionMarkCircleOutlined, XOutlined } from '../../icons/outline';
 import {
   CheckCircleSolid,
-  ExclamationCircleSolid,
   ExclamationSolid,
+  XCircleSolid,
   InformationCircleSolid,
 } from '../../icons/solid';
 import type { IconComponent } from '../../icons/types';
@@ -24,7 +25,7 @@ import Button from '../Button';
 
 import './style/index.css';
 
-import type { ModalProps, ModalStatus } from './type';
+import type { ModalFooterContext, ModalProps, ModalStatus } from './type';
 
 const prefix = 'yakit-modal';
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -33,7 +34,7 @@ const STATUS_ICONS: Record<ModalStatus, { Icon: IconComponent; color: string }> 
   info: { Icon: InformationCircleSolid, color: 'var(--Colors-Use-Purple-Primary)' },
   success: { Icon: CheckCircleSolid, color: 'var(--Colors-Use-Success-Primary)' },
   warning: { Icon: ExclamationSolid, color: 'var(--Colors-Use-Warning-Primary)' },
-  error: { Icon: ExclamationCircleSolid, color: 'var(--Colors-Use-Error-Primary)' },
+  error: { Icon: XCircleSolid, color: 'var(--Colors-Use-Error-Primary)' },
 };
 
 const StatusGlyph = ({ status }: { status: ModalStatus }) => {
@@ -53,11 +54,64 @@ const FOCUSABLE = [
 const resolveContainer = (getContainer: ModalProps['getContainer']) => {
   if (getContainer === false || typeof document === 'undefined') return null;
   if (typeof getContainer === 'function') return getContainer();
+  if (typeof getContainer === 'string') {
+    return document.querySelector<HTMLElement>(getContainer) ?? document.body;
+  }
   return getContainer ?? document.body;
 };
 
+/** Multiple open Modals share one body scroll lock. */
+let bodyLockCount = 0;
+let previousBodyOverflow = '';
+
+const lockBodyScroll = () => {
+  if (typeof document === 'undefined') return;
+  if (bodyLockCount === 0) {
+    previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+  }
+  bodyLockCount += 1;
+};
+
+const unlockBodyScroll = () => {
+  if (typeof document === 'undefined') return;
+  bodyLockCount = Math.max(0, bodyLockCount - 1);
+  if (bodyLockCount === 0) {
+    document.body.style.overflow = previousBodyOverflow;
+  }
+};
+
+/** Only the topmost Modal handles Escape. */
+const escapeStack: Array<() => void> = [];
+
+const onDocumentEscape = (event: KeyboardEvent) => {
+  if (event.key !== 'Escape') return;
+  const top = escapeStack[escapeStack.length - 1];
+  if (!top) return;
+  event.preventDefault();
+  top();
+};
+
+const pushEscapeHandler = (handler: () => void) => {
+  if (typeof document === 'undefined') return () => undefined;
+  if (escapeStack.length === 0) {
+    document.addEventListener('keydown', onDocumentEscape);
+  }
+  escapeStack.push(handler);
+  return () => {
+    const index = escapeStack.lastIndexOf(handler);
+    if (index >= 0) escapeStack.splice(index, 1);
+    if (escapeStack.length === 0) {
+      document.removeEventListener('keydown', onDocumentEscape);
+    }
+  };
+};
+
+const textTitleAttr = (value: unknown) => (typeof value === 'string' ? value : undefined);
+
 export const Modal = ({
   open: openProp,
+  visible,
   defaultOpen = false,
   layout = 'dialog',
   variant = 'basic',
@@ -70,74 +124,99 @@ export const Modal = ({
   children,
   footer,
   footerExtra,
-  okText = '确定',
-  cancelText = '取消',
+  okText,
+  cancelText,
   showOk = true,
   showCancel = true,
   confirmLoading = false,
   okButtonProps,
   cancelButtonProps,
   closable,
-  closeLabel = '关闭',
+  closeLabel,
   mask = true,
-  maskClosable = true,
+  maskClosable,
   keyboard = true,
   getContainer,
   width,
   zIndex = 1000,
   showHelp,
-  helpLabel = '帮助',
+  helpLabel,
   onHelp,
   onOk,
   onCancel,
+  onClose,
+  afterClose,
   bodyStyle,
   className,
   rootClassName,
+  wrapClassName,
   style,
 }: ModalProps) => {
   const config = useYakitConfig();
+  const modalLocale = config.locale.Modal;
   const titleId = useId();
   const subTitleId = useId();
   const bodyId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
-  const open = openProp ?? uncontrolledOpen;
+  const wasOpenRef = useRef(false);
+  // Controlled: open wins over visible. Uncontrolled falls back to internal state.
+  const controlledOpen = openProp ?? visible;
+  const open = controlledOpen ?? uncontrolledOpen;
   const inline = getContainer === false;
   const resolvedClosable = closable ?? layout === 'dialog';
-  const resolvedShowHelp = showHelp ?? layout === 'alert';
+  // Default: show help only when onHelp is provided; showHelp overrides.
+  const resolvedShowHelp = showHelp ?? Boolean(onHelp);
+  // mask=false: do not close on outside click unless maskClosable is explicitly true.
+  const resolvedMaskClosable = maskClosable ?? Boolean(mask);
+  const resolvedOkText = okText ?? modalLocale?.ok ?? '确定';
+  const resolvedCancelText = cancelText ?? modalLocale?.cancel ?? '取消';
+  const resolvedCloseLabel = closeLabel ?? modalLocale?.close ?? '关闭';
+  const resolvedHelpLabel = helpLabel ?? modalLocale?.help ?? '帮助';
+  const resolvedAriaLabel = modalLocale?.ariaLabel ?? '对话框';
   const actionSize = layout === 'alert' ? 'huge' : size === 'medium' ? 'large' : 'medium';
   const closeSize = size === 'medium' ? 'large' : 'medium';
 
   const close = useCallback(() => {
     onCancel?.();
-    if (openProp === undefined) setUncontrolledOpen(false);
-  }, [onCancel, openProp]);
+    if (controlledOpen === undefined) setUncontrolledOpen(false);
+  }, [onCancel, controlledOpen]);
+
+  // Keep Escape stack identity stable across parent onCancel identity churn.
+  const closeRef = useRef(close);
+  closeRef.current = close;
+  const onEscape = useCallback(() => {
+    closeRef.current();
+  }, []);
+
+  const closeByX = useCallback(() => {
+    if (onClose) {
+      onClose();
+      if (controlledOpen === undefined) setUncontrolledOpen(false);
+      return;
+    }
+    close();
+  }, [close, controlledOpen, onClose]);
 
   const confirm = useCallback(() => {
+    // 非受控：调用后立刻关。异步提交请用受控 open + confirmLoading。
     onOk?.();
-    if (openProp === undefined) setUncontrolledOpen(false);
-  }, [onOk, openProp]);
+    if (controlledOpen === undefined) setUncontrolledOpen(false);
+  }, [onOk, controlledOpen]);
 
   useIsomorphicLayoutEffect(() => {
     if (!open || inline) return undefined;
-    const { overflow } = document.body.style;
-    document.body.style.overflow = 'hidden';
+    lockBodyScroll();
     return () => {
-      document.body.style.overflow = overflow;
+      unlockBodyScroll();
     };
   }, [inline, open]);
 
   useIsomorphicLayoutEffect(() => {
     if (!open || inline || !keyboard) return undefined;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
-      event.preventDefault();
-      close();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [close, inline, keyboard, open]);
+    return pushEscapeHandler(onEscape);
+  }, [inline, keyboard, open]);
 
   useIsomorphicLayoutEffect(() => {
     const panelNode = panelRef.current;
@@ -176,15 +255,35 @@ export const Modal = ({
     };
   }, [inline, open]);
 
+  // 遮罩关闭：mousedown 与 mouseup 都必须落在 wrap 上（antd 同款），避免面板内按下拖出误关。
   useIsomorphicLayoutEffect(() => {
     const wrapNode = wrapRef.current;
-    if (!open || inline || !maskClosable || !wrapNode) return undefined;
-    const onClick = (event: MouseEvent) => {
-      if (event.target === wrapNode) close();
+    if (!open || inline || !resolvedMaskClosable || !wrapNode) return undefined;
+    let mouseDownOnWrap = false;
+    const onMouseDown = (event: MouseEvent) => {
+      mouseDownOnWrap = event.target === wrapNode;
     };
-    wrapNode.addEventListener('click', onClick);
-    return () => wrapNode.removeEventListener('click', onClick);
-  }, [close, inline, maskClosable, open]);
+    const onMouseUp = (event: MouseEvent) => {
+      if (mouseDownOnWrap && event.target === wrapNode) {
+        close();
+      }
+      mouseDownOnWrap = false;
+    };
+    wrapNode.addEventListener('mousedown', onMouseDown);
+    wrapNode.addEventListener('mouseup', onMouseUp);
+    return () => {
+      wrapNode.removeEventListener('mousedown', onMouseDown);
+      wrapNode.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [close, inline, open, resolvedMaskClosable]);
+
+  // afterClose: no exit animation → fire when open flips true→false.
+  useEffect(() => {
+    if (wasOpenRef.current && !open) {
+      afterClose?.();
+    }
+    wasOpenRef.current = open;
+  }, [afterClose, open]);
 
   if (!open) return null;
 
@@ -201,47 +300,55 @@ export const Modal = ({
     ...style,
   };
   const resolvedIcon = icon ?? (status ? <StatusGlyph status={status} /> : null);
+
+  const OkBtn: FC = () => (
+    <Button
+      disabled={okButtonProps?.disabled}
+      htmlType="button"
+      loading={confirmLoading || okButtonProps?.loading}
+      onClick={confirm}
+      size={actionSize}
+      type="primary"
+    >
+      {resolvedOkText}
+    </Button>
+  );
+  const CancelBtn: FC = () => (
+    <Button
+      disabled={cancelButtonProps?.disabled}
+      htmlType="button"
+      loading={cancelButtonProps?.loading}
+      onClick={close}
+      size={actionSize}
+      type="outline2"
+    >
+      {resolvedCancelText}
+    </Button>
+  );
+
+  const footerCtx: ModalFooterContext = { OkBtn, CancelBtn };
+  const defaultActions = (
+    <>
+      {showCancel ? <CancelBtn /> : null}
+      {showOk ? <OkBtn /> : null}
+    </>
+  );
   const actions =
-    footer === undefined ? (
-      <>
-        {showCancel ? (
-          <Button
-            disabled={cancelButtonProps?.disabled}
-            htmlType="button"
-            loading={cancelButtonProps?.loading}
-            onClick={close}
-            size={actionSize}
-            type="outline2"
-          >
-            {cancelText}
-          </Button>
-        ) : null}
-        {showOk ? (
-          <Button
-            disabled={okButtonProps?.disabled}
-            htmlType="button"
-            loading={confirmLoading || okButtonProps?.loading}
-            onClick={confirm}
-            size={actionSize}
-            type="primary"
-          >
-            {okText}
-          </Button>
-        ) : null}
-      </>
-    ) : (
-      footer
-    );
+    footer === undefined
+      ? defaultActions
+      : typeof footer === 'function'
+        ? footer(footerCtx)
+        : footer;
   const showFooter =
     actions !== null && (footer !== undefined || showCancel || showOk || Boolean(footerExtra));
   const closeButton = resolvedClosable ? (
     <Button
       animation={false}
-      aria-label={closeLabel}
+      aria-label={resolvedCloseLabel}
       className={`${prefix}-close`}
       htmlType="button"
       icon={<XOutlined />}
-      onClick={close}
+      onClick={closeByX}
       size={closeSize}
       type="text2"
     />
@@ -253,10 +360,26 @@ export const Modal = ({
     </div>
   ) : null;
 
+  const titleNode = title ? (
+    <div className={`${prefix}-title`} id={titleId} title={textTitleAttr(title)}>
+      {title}
+    </div>
+  ) : null;
+  const subTitleNode = subTitle ? (
+    <div className={`${prefix}-subtitle`} id={subTitleId} title={textTitleAttr(subTitle)}>
+      {subTitle}
+    </div>
+  ) : null;
+  const bodyNode = children ? (
+    <div className={`${prefix}-body`} id={bodyId} style={bodyStyle}>
+      {children}
+    </div>
+  ) : null;
+
   const panel = (
     <div
       aria-describedby={describedBy || undefined}
-      aria-label={title ? undefined : '对话框'}
+      aria-label={title ? undefined : resolvedAriaLabel}
       aria-labelledby={title ? titleId : undefined}
       aria-modal={inline ? undefined : true}
       className={classNames(
@@ -276,62 +399,48 @@ export const Modal = ({
     >
       {layout === 'alert' ? (
         <>
-          {resolvedIcon ? <div className={`${prefix}-icon`}>{resolvedIcon}</div> : null}
-          {resolvedShowHelp ? (
-            <button
-              aria-label={helpLabel}
-              className={`${prefix}-help`}
-              onClick={onHelp}
-              type="button"
-            >
-              <QuestionMarkCircleOutlined color="currentColor" size={20} />
-            </button>
-          ) : null}
-          <div className={`${prefix}-alert-content`}>
-            <div className={`${prefix}-alert-head`}>
-              {title ? (
-                <div className={`${prefix}-title`} id={titleId}>
-                  {title}
-                </div>
+          {resolvedIcon || resolvedShowHelp ? (
+            <div className={`${prefix}-icon-col`}>
+              {resolvedIcon ? <div className={`${prefix}-icon`}>{resolvedIcon}</div> : <span />}
+              {resolvedShowHelp ? (
+                <button
+                  aria-label={resolvedHelpLabel}
+                  className={`${prefix}-help`}
+                  onClick={onHelp}
+                  type="button"
+                >
+                  <QuestionMarkCircleOutlined color="currentColor" size={20} />
+                </button>
               ) : null}
-              {closeButton}
             </div>
-            {subTitle ? (
-              <div className={`${prefix}-subtitle`} id={subTitleId}>
-                {subTitle}
+          ) : null}
+          <div className={`${prefix}-alert-main`}>
+            <div className={`${prefix}-alert-content`}>
+              <div className={`${prefix}-alert-head`}>
+                {titleNode}
+                {closeButton}
               </div>
-            ) : null}
-            {children ? (
-              <div className={`${prefix}-body`} id={bodyId} style={bodyStyle}>
-                {children}
-              </div>
-            ) : null}
+              {subTitleNode}
+              {bodyNode}
+            </div>
+            {footerNode}
           </div>
-          {footerNode}
         </>
       ) : (
         <>
-          <div className={`${prefix}-header`}>
-            <div className={`${prefix}-heading`}>
-              {title ? (
-                <div className={`${prefix}-title`} id={titleId}>
-                  {title}
-                </div>
-              ) : null}
-              {subTitle ? (
-                <div className={`${prefix}-subtitle`} id={subTitleId}>
-                  {subTitle}
-                </div>
-              ) : null}
+          {titleNode || subTitleNode || closeButton ? (
+            <div className={`${prefix}-header`}>
+              <div className={`${prefix}-heading`}>
+                {titleNode}
+                {subTitleNode}
+              </div>
+              {closeButton}
             </div>
-            {closeButton}
-          </div>
+          ) : null}
           {variant === 'banner' && statusBar ? (
             <div className={`${prefix}-status`}>{statusBar}</div>
           ) : null}
-          <div className={`${prefix}-body`} id={bodyId} style={bodyStyle}>
-            {children}
-          </div>
+          {bodyNode}
           {footerNode}
         </>
       )}
@@ -345,7 +454,7 @@ export const Modal = ({
 
   return createPortal(
     <div
-      className={classNames(`${prefix}-root`, rootClassName)}
+      className={classNames(`${prefix}-root`, rootClassName, wrapClassName)}
       data-theme={config.mode}
       style={tokenStyle}
     >

@@ -11,12 +11,14 @@ const locales: Record<'zh' | 'en', YakitLocale> = {
     Input: { clear: '清除', hidePassword: '隐藏密码', showPassword: '显示密码' },
     InputNumber: { decrement: '减少', increment: '增加' },
     Search: { scope: '搜索范围', search: '搜索' },
+    Modal: { ok: '确定', cancel: '取消', close: '关闭', help: '帮助', ariaLabel: '对话框' },
   },
   en: {
     locale: 'en-US',
     Input: { clear: 'Clear', hidePassword: 'Hide password', showPassword: 'Show password' },
     InputNumber: { decrement: 'Decrease', increment: 'Increase' },
     Search: { scope: 'Search scope', search: 'Search' },
+    Modal: { ok: 'OK', cancel: 'Cancel', close: 'Close', help: 'Help', ariaLabel: 'Dialog' },
   },
 };
 

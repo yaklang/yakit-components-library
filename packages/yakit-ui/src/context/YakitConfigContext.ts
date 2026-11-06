@@ -27,6 +27,13 @@ export const defaultYakitLocale: YakitLocale = {
     scope: '搜索范围',
     search: '搜索',
   },
+  Modal: {
+    ok: '确定',
+    cancel: '取消',
+    close: '关闭',
+    help: '帮助',
+    ariaLabel: '对话框',
+  },
 };
 
 export const defaultYakitConfig: YakitConfigContextValue = {
@@ -51,4 +58,5 @@ export const mergeYakitLocale = (parent: YakitLocale, locale?: YakitLocale): Yak
   Input: mergeDefined(parent.Input ?? {}, locale?.Input),
   InputNumber: mergeDefined(parent.InputNumber ?? {}, locale?.InputNumber),
   Search: mergeDefined(parent.Search ?? {}, locale?.Search),
+  Modal: mergeDefined(parent.Modal ?? {}, locale?.Modal),
 });

@@ -36,6 +36,13 @@ export interface YakitLocale {
     search?: string;
     scope?: string;
   };
+  Modal?: {
+    ok?: string;
+    cancel?: string;
+    close?: string;
+    help?: string;
+    ariaLabel?: string;
+  };
 }
 
 export type YakitComponentSize = 'small' | 'medium' | 'large' | 'huge';

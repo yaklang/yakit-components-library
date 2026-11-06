@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, FC, ReactNode } from 'react';
 
 import type { BaseProps } from '../../types/common';
 import type { ButtonProps } from '../Button/type';
@@ -18,11 +18,23 @@ export type ModalLayout = 'dialog' | 'alert';
 /** alert 布局的预设图标。传入 icon 时以 icon 为准。 */
 export type ModalStatus = 'info' | 'success' | 'warning' | 'error';
 
+/** footer 渲染函数上下文（对齐 yakit 旧 YakitModal 的 OkBtn / CancelBtn 用法）。 */
+export type ModalFooterContext = {
+  OkBtn: FC;
+  CancelBtn: FC;
+};
+
+export type ModalFooter = ReactNode | null | ((ctx: ModalFooterContext) => ReactNode);
+
 export interface ModalProps extends BaseProps {
   /**
    * 是否打开。传入后变为受控，关闭时需要在 onCancel / onOk 里自行更新。
    */
   open?: boolean;
+  /**
+   * \`open\` 的别名（antd / 旧 yakit 兼容）。两者同时传时以 \`open\` 为准。
+   */
+  visible?: boolean;
   /**
    * 非受控时的初始打开状态。
    * @default false
@@ -55,19 +67,18 @@ export interface ModalProps extends BaseProps {
   icon?: ReactNode;
   children?: ReactNode;
   /**
-   * 底部操作区。不传则渲染取消 / 确认按钮；传 null 隐藏整个 footer。
+   * 底部操作区。不传则渲染取消 / 确认按钮；传 null 隐藏整个 footer；
+   * 也可传函数，拿到 OkBtn / CancelBtn 自行拼装。
    */
-  footer?: ReactNode | null;
+  footer?: ModalFooter;
   /** footer 左侧插槽，例如 Switch 或 Checkbox。 */
   footerExtra?: ReactNode;
   /**
-   * 确认按钮文案。
-   * @default 确定
+   * Confirm button label. Defaults to ConfigProvider locale Modal.ok.
    */
   okText?: ReactNode;
   /**
-   * 取消按钮文案。
-   * @default 取消
+   * Cancel button label. Defaults to ConfigProvider locale Modal.cancel.
    */
   cancelText?: ReactNode;
   /**
@@ -89,8 +100,7 @@ export interface ModalProps extends BaseProps {
    */
   closable?: boolean;
   /**
-   * 关闭按钮的无障碍名称。
-   * @default 关闭
+   * Close button aria-label. Defaults to ConfigProvider locale Modal.close.
    */
   closeLabel?: string;
   /**
@@ -99,12 +109,13 @@ export interface ModalProps extends BaseProps {
    */
   mask?: boolean;
   /**
-   * 点击遮罩是否关闭。
-   * @default true
+   * Close when clicking outside the panel.
+   * Defaults to true when mask is shown; false when mask={false} unless explicitly set.
    */
   maskClosable?: boolean;
   /**
    * 是否允许 Esc 关闭。
+   * 库默认 true；接入 yakit 时请用 YakitModalCompat（默认 keyboard={false}）或显式传入 false。
    * @default true
    */
   keyboard?: boolean;
@@ -112,7 +123,7 @@ export interface ModalProps extends BaseProps {
    * 挂载节点。false 时就地渲染面板，不使用遮罩，方便画廊和测试。
    * @default document.body
    */
-  getContainer?: HTMLElement | (() => HTMLElement) | false;
+  getContainer?: string | HTMLElement | (() => HTMLElement) | false;
   /** 面板宽度。dialog 默认 560，alert 默认 448。 */
   width?: number | string;
   /**
@@ -121,19 +132,45 @@ export interface ModalProps extends BaseProps {
    */
   zIndex?: number;
   /**
-   * alert 左下角的帮助按钮。alert 默认显示。
+   * Alert help button. Defaults to Boolean(onHelp); pass true/false to override.
    */
   showHelp?: boolean;
   /**
-   * 帮助按钮的无障碍名称。
-   * @default 帮助
+   * Help button aria-label. Defaults to ConfigProvider locale Modal.help.
    */
   helpLabel?: string;
   onHelp?: () => void;
-  /** 点击确认时触发。非受控模式下会同时关闭。 */
+  /**
+   * 点击确认时触发。
+   * 非受控模式：调用后立刻关闭（不等待 Promise）。
+   * 异步提交请用受控 `open` + `confirmLoading`，在 onOk 里自行决定何时把 open 设为 false。
+   */
   onOk?: () => void;
   /** 点击取消、关闭、遮罩或 Esc 时触发。非受控模式下会同时关闭。 */
   onCancel?: () => void;
+  /**
+   * 仅右上角关闭按钮回调。不传时关闭按钮走 onCancel。
+   * 遮罩 / Esc / 取消按钮仍走 onCancel。
+   */
+  onClose?: () => void;
+  /**
+   * 关闭完成回调。当前无离场动画：在 open/visible 变为 false、节点从 DOM 移除后同步触发。
+   */
+  afterClose?: () => void;
+  /**
+   * 关闭时是否卸载子节点。
+   * 当前关闭态一律 return null（关闭即卸载，无保活）；传 false 也不会保留子树，仅保留 API 兼容。
+   * @default true
+   */
+  destroyOnClose?: boolean;
+  /**
+   * \`destroyOnClose\` 的别名（antd 5 destroyOnHidden）。同样不支持关闭保活。
+   */
+  destroyOnHidden?: boolean;
+  /**
+   * 挂到外层 root / wrapper 的 className（与 rootClassName 合并）。
+   */
+  wrapClassName?: string;
   /** 内容区样式。 */
   bodyStyle?: CSSProperties;
 }
