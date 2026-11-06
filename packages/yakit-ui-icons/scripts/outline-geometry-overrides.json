@@ -183,5 +183,21 @@
       "reason": "Reviewed centerline reconstruction: default stroke 1, per-part legacy geometry verified against frozen source; semantic fills preserved.",
       "evidence": "test/fixtures/icons/reference/visual-weight-v2/reviews.json"
     }
+  ],
+  "paintRevisions": [
+    {
+      "reviewId": "visual-weight-v2-45035-1908",
+      "exportedSourceNodeId": "45035:1908",
+      "file": "45035-1908.svg",
+      "figmaRawSvgSha256": "b0d3085e0b4248b7f1b5c055f98eeb6ca442d3bedd9383867d30a48102a07935",
+      "localRawSvgSha256": "3db7118bf61cfeaca250e26e11358395c2d07083ce9825e157c7dbd80c34d4b1",
+      "figmaNormalizedAstSha256": "15608894e5a37d4a0ad7ef3206f547a5ba181b6db577632a55a0d508336da419",
+      "localNormalizedAstSha256": "5bb02070aaa78fd7bd48040406c2fc2f59eb4276c11e3a1c99544326d1e8b657",
+      "figmaGeometrySha256": "c97a2a24f507bb66f6e3d5fc152cad8c119b475cc1ce8a651f3081129a143c3d",
+      "localGeometrySha256": "9caa485f3414cbee9c6cb245430842d003771423e5ecbef1843902da90c9ffbf",
+      "reason": "User-requested Figma paint revision 2026-11-06. Existing reviewed centerlines are byte-identical after reverting exactly four opacity attributes to the previous relative color. This extends paint only; it is not a new independent geometry review.",
+      "previousLocalRawSvgSha256": "ce911a3e74bfad66ea684c8cb3dc7d9b595773b8cce985a8d23082e1f47f1cf7",
+      "evidence": "test/icons/outline-sync-nov06.test.ts"
+    }
   ]
 }

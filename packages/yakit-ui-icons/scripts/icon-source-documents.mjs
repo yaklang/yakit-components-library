@@ -228,6 +228,22 @@ export function buildIconDocuments(root = packageRoot, options = {}) {
 
 // A #manifest/#raw/#placement selector requests a projection of one source file.
 // Ordinary paths remain supported for explicit, independent audit fixtures.
+/**
+ * @overload
+ * @param {string | URL} input
+ * @param {BufferEncoding | { encoding: BufferEncoding }} encoding
+ * @returns {string}
+ */
+/**
+ * @overload
+ * @param {string | URL} input
+ * @returns {Buffer}
+ */
+/**
+ * @param {string | URL} input
+ * @param {BufferEncoding | { encoding: BufferEncoding }} [encoding]
+ * @returns {string | Buffer}
+ */
 export function readIconInputSync(input, encoding) {
   const value = input instanceof URL ? fileURLToPath(input) + input.hash : String(input);
   const match =

@@ -48,8 +48,6 @@ const DEFINITION_CONTAINERS = new Set([
   'symbol',
 ]);
 const RAW_FRAGMENT_BASE = /^icon_[A-Za-z0-9_]+__[A-Za-z][A-Za-z0-9_]*_\d+$/;
-const DATA_COMPARE_RELATIVE_CURRENT_COLOR =
-  'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
 const PAINT_ATTRIBUTES = new Set(['color', 'fill', 'stroke']);
 const SEMANTIC_PAINT_CONTAINERS = new Set(['clippath', 'mask']);
 const SEMANTIC_ERASE_SOURCE_IDS = new Set(['14203:193724', '38678:28634']);
@@ -185,7 +183,6 @@ export function canonicalizeSvg(
     normalizeForegroundPaint = false,
     normalizeSemanticErase = false,
     normalizeStrokeWidth = false,
-    relativeCurrentColorValue,
     semanticEraseSourceId,
   } = {},
 ) {
@@ -288,14 +285,6 @@ export function canonicalizeSvg(
             name === 'mask' &&
             value.startsWith('url(#') &&
             semanticEraseMasks.has(value.slice(5, -1))
-          ),
-      )
-      .filter(
-        ([name, value]) =>
-          !(
-            (normalizeForegroundPaint || geometryOnly) &&
-            name === 'color' &&
-            value === relativeCurrentColorValue
           ),
       )
       .filter(([name]) => !geometryOnly || (name !== 'id' && !name.startsWith('aria-')))
@@ -508,18 +497,6 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
     manifest?.supplementalSources?.find(
       (entry) => entry.localFile === relativePath || entry.file === path.basename(relativePath),
     );
-  const relativeCurrentColorValue = manifest?.relativeCurrentColorExceptions?.some(
-    (entry) =>
-      entry.exportedSourceNodeId === record?.exportedSourceNodeId &&
-      entry.path === relativePath &&
-      entry.attribute === 'color' &&
-      entry.value === DATA_COMPARE_RELATIVE_CURRENT_COLOR &&
-      entry.strategy === 'relative-currentColor-secondary-role-v1' &&
-      typeof entry.reason === 'string' &&
-      entry.reason.trim(),
-  )
-    ? DATA_COMPARE_RELATIVE_CURRENT_COLOR
-    : undefined;
   visit(root, (node, insideDefinition) => {
     if (DRAWABLES.has(lowerName(node)) && !insideDefinition) drawables.push(node);
     const id = node.attributes.get('id');
@@ -534,8 +511,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
           value === 'currentColor' ||
           value === 'var(--Colors-Use-Neutral-Text-1-Title, #353639)' ||
           value === 'none' ||
-          value.startsWith('url(') ||
-          (attribute === 'color' && value === relativeCurrentColorValue)
+          value.startsWith('url(')
         )
           continue;
         if (!insideDefinition) errors.push('FOREGROUND_LITERAL');
@@ -589,7 +565,6 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
       normalizeForegroundPaint: true,
       normalizeSemanticErase: true,
       normalizeStrokeWidth: true,
-      relativeCurrentColorValue,
       semanticEraseSourceId,
     }),
   );
@@ -599,7 +574,6 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
       ignoreUnreferencedIds: variant === 'solid',
       normalizeSemanticErase: true,
       normalizeStrokeWidth: true,
-      relativeCurrentColorValue,
       semanticEraseSourceId,
     }),
   );
@@ -844,18 +818,6 @@ function validateManifest(manifest, files, policy) {
     JSON.stringify(semanticEraseSourceIds) !== JSON.stringify([...SEMANTIC_ERASE_SOURCE_IDS].sort())
   )
     errors.push('MANIFEST_INCOMPLETE');
-  const relativeCurrentColorExceptions = manifest.relativeCurrentColorExceptions ?? [];
-  if (
-    relativeCurrentColorExceptions.length !== 1 ||
-    relativeCurrentColorExceptions[0].exportedSourceNodeId !== '45035:1908' ||
-    relativeCurrentColorExceptions[0].path !== 'outline/45035-1908.svg' ||
-    relativeCurrentColorExceptions[0].attribute !== 'color' ||
-    relativeCurrentColorExceptions[0].value !== DATA_COMPARE_RELATIVE_CURRENT_COLOR ||
-    relativeCurrentColorExceptions[0].strategy !== 'relative-currentColor-secondary-role-v1' ||
-    typeof relativeCurrentColorExceptions[0].reason !== 'string' ||
-    !relativeCurrentColorExceptions[0].reason.trim()
-  )
-    errors.push('MANIFEST_INCOMPLETE');
   if ((manifest.legacySources ?? []).length !== 0) errors.push('LEGACY_STATUS_INVALID');
   return [...new Set(errors)];
 }
@@ -901,8 +863,6 @@ async function validateProvenanceEvidence({
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
         normalizeStrokeWidth: true,
-        relativeCurrentColorValue:
-          sourceNodeId === '45035:1908' ? DATA_COMPARE_RELATIVE_CURRENT_COLOR : undefined,
         semanticEraseSourceId: sourceNodeId,
       }),
     );
@@ -912,8 +872,6 @@ async function validateProvenanceEvidence({
         ignoreUnreferencedIds: policy.variant === 'solid',
         normalizeSemanticErase: true,
         normalizeStrokeWidth: true,
-        relativeCurrentColorValue:
-          sourceNodeId === '45035:1908' ? DATA_COMPARE_RELATIVE_CURRENT_COLOR : undefined,
         semanticEraseSourceId: sourceNodeId,
       }),
     );
@@ -1072,6 +1030,26 @@ async function validateIndex({ files, indexPath, manifest, root }) {
   return [...new Set(errors)];
 }
 
+/**
+ * @param {object} options
+ * @param {string} options.root
+ * @param {string} [options.basicManifestPath]
+ * @param {string} [options.iconNameCatalogPath]
+ * @param {string} [options.outlineNameIndexPath]
+ * @param {string} [options.outlineNameManifestPath]
+ * @param {string} [options.outlineNamePlacementProvenancePath]
+ * @param {string} [options.outlineNameRawProvenancePath]
+ * @param {string} [options.figmaRawProvenancePath]
+ * @param {string} [options.indexPath]
+ * @param {string} [options.manifestPath]
+ * @param {string} [options.placementProvenancePath]
+ * @param {string} [options.policyId]
+ * @param {ReturnType<typeof getIconAuditPolicy>} [options.policyOverride]
+ * @param {string} [options.solidNameIndexPath]
+ * @param {string} [options.solidNameManifestPath]
+ * @param {string} [options.solidNamePlacementProvenancePath]
+ * @param {string} [options.solidNameRawProvenancePath]
+ */
 export async function auditIcons({
   basicManifestPath,
   iconNameCatalogPath,

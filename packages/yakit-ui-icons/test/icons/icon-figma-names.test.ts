@@ -115,7 +115,7 @@ describe('Figma icon name catalog', () => {
     ).toMatchObject({ figmaName: 'Outline/Speech-to-text2', sourceStatus: 'current' });
     expect(
       figmaIconNameCatalog.find(({ exportName }) => exportName === 'CommandOutlined'),
-    ).toMatchObject({ figmaName: null, sourceStatus: 'unnamed-in-figma' });
+    ).toMatchObject({ figmaName: 'Outline/Command', sourceStatus: 'current' });
     expect(
       figmaIconNameCatalog.find(({ exportName }) => exportName === 'NotebookOutlined'),
     ).toMatchObject({ figmaName: 'Outline/Notebook', sourceStatus: 'current' });

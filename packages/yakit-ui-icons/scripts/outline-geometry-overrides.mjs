@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 
-const { reviews } = JSON.parse(
+const { reviews, paintRevisions = [] } = JSON.parse(
   readFileSync(new URL('./outline-geometry-overrides.json', import.meta.url), 'utf8'),
 );
 const identityFields = [
@@ -16,7 +16,7 @@ const identityFields = [
 
 /** Only this exact reviewed source pair may differ from immutable Figma geometry. */
 export function reviewedOutlineGeometry(record) {
-  return reviews.find((review) =>
+  return [...reviews, ...paintRevisions].find((review) =>
     identityFields.every((field) => review[field] && review[field] === record[field]),
   )?.reviewId;
 }

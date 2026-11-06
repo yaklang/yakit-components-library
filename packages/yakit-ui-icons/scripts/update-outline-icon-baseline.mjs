@@ -9,8 +9,6 @@ import { canonicalizeSvg, invalidStrokeWidths, parseSvg } from './audit-icons.mj
 import { getIconAuditPolicy } from './icon-audit-contracts.mjs';
 
 const sha256 = (source) => createHash('sha256').update(source).digest('hex');
-const DATA_COMPARE_RELATIVE_CURRENT_COLOR =
-  'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
 
 function parseArguments(argv) {
   const values = new Map();
@@ -233,16 +231,11 @@ async function main() {
       throw new Error(`stroke-width policy mismatch: ${file}`);
     const figmaRawSource = figmaComponents.get(symbol.exportedSourceNodeId)?.svg;
     if (!figmaRawSource) throw new Error(`Figma raw SVG missing: ${symbol.exportedSourceNodeId}`);
-    const relativeCurrentColorValue =
-      symbol.exportedSourceNodeId === '45035:1908'
-        ? DATA_COMPARE_RELATIVE_CURRENT_COLOR
-        : undefined;
     const figmaNormalizedAstSha256 = sha256(
       canonicalizeSvg(figmaRawSource, {
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
         normalizeStrokeWidth: true,
-        relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
     );
@@ -251,7 +244,6 @@ async function main() {
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
         normalizeStrokeWidth: true,
-        relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
     );
@@ -260,7 +252,6 @@ async function main() {
         geometryOnly: true,
         normalizeSemanticErase: true,
         normalizeStrokeWidth: true,
-        relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
     );
@@ -269,7 +260,6 @@ async function main() {
         geometryOnly: true,
         normalizeSemanticErase: true,
         normalizeStrokeWidth: true,
-        relativeCurrentColorValue,
         semanticEraseSourceId: symbol.exportedSourceNodeId,
       }),
     );
@@ -345,17 +335,6 @@ async function main() {
       updater: 'scripts/update-outline-icon-baseline.mjs',
     },
     placements,
-    relativeCurrentColorExceptions: [
-      {
-        exportedSourceNodeId: '45035:1908',
-        path: 'outline/45035-1908.svg',
-        attribute: 'color',
-        value: DATA_COMPARE_RELATIVE_CURRENT_COLOR,
-        strategy: 'relative-currentColor-secondary-role-v1',
-        reason:
-          'preserves the canonical #C0C6D1 secondary paint as a deterministic offset from currentColor',
-      },
-    ],
     semanticEraseNormalizations: ['14203:193724', '38678:28634'].map((exportedSourceNodeId) => ({
       exportedSourceNodeId,
       strategy: 'luminance-mask-overdraw-v1',

@@ -365,6 +365,12 @@ import ArrowUpFromDotOutlinedSvg from './47351-7055.svg?react';
 import ArrowsUpDownOutlinedSvg from './47385-1963.svg?react';
 import ArrowsTransferUpOutlinedSvg from './47385-1964.svg?react';
 import ArrowsTransferDownOutlinedSvg from './47385-1965.svg?react';
+import SwitchCameraOutlinedSvg from './47287-32011.svg?react';
+import CircleArrowUpOutlinedSvg from './47351-7045.svg?react';
+import HistoryOutlinedSvg from './47427-1947.svg?react';
+import AtOutlinedSvg from './47571-4197.svg?react';
+import HandDepositOutlinedSvg from './47659-1965.svg?react';
+import TimerOffOutlinedSvg from './47662-1975.svg?react';
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined');
 export const LocationMarkerOutlined = createIcon(
   LocationMarkerOutlinedSvg,
@@ -906,3 +912,9 @@ export const ArrowsTransferDownOutlined = createIcon(
   ArrowsTransferDownOutlinedSvg,
   'ArrowsTransferDownOutlined',
 );
+export const SwitchCameraOutlined = createIcon(SwitchCameraOutlinedSvg, 'SwitchCameraOutlined');
+export const CircleArrowUpOutlined = createIcon(CircleArrowUpOutlinedSvg, 'CircleArrowUpOutlined');
+export const HistoryOutlined = createIcon(HistoryOutlinedSvg, 'HistoryOutlined');
+export const AtOutlined = createIcon(AtOutlinedSvg, 'AtOutlined');
+export const HandDepositOutlined = createIcon(HandDepositOutlinedSvg, 'HandDepositOutlined');
+export const TimerOffOutlined = createIcon(TimerOffOutlinedSvg, 'TimerOffOutlined');

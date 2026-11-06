@@ -56,7 +56,8 @@ export const iconSourceFiles = [
 
 export const oldiconSourceCounts = {
   entries: oldiconSource.records.reduce((count, row) => count + row.sources.length, 0),
-  repaired: oldiconSource.records
-    .flatMap((row) => row.sources)
-    .filter((row) => row.repairs.length > 0).length,
+  repaired: oldiconSource.records.reduce(
+    (count, row) => count + row.sources.filter((source) => source.repairs.length > 0).length,
+    0,
+  ),
 };

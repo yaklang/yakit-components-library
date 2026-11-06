@@ -16,8 +16,6 @@ const RAW_PROVENANCE_PATHS = Object.freeze({
   outline: 'config/icon-sources/outline.json#raw',
   solid: 'config/icon-sources/solid.json#raw',
 });
-const DATA_COMPARE_RELATIVE_CURRENT_COLOR =
-  'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
 
 const sha256 = (source) => createHash('sha256').update(source).digest('hex');
 
@@ -56,8 +54,6 @@ function outlineCanonicalOptions(sourceNodeId, geometryOnly = false) {
     normalizeForegroundPaint: !geometryOnly,
     normalizeSemanticErase: true,
     normalizeStrokeWidth: true,
-    relativeCurrentColorValue:
-      sourceNodeId === '45035:1908' ? DATA_COMPARE_RELATIVE_CURRENT_COLOR : undefined,
     semanticEraseSourceId: sourceNodeId,
   };
 }

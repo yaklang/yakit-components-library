@@ -281,7 +281,7 @@ describe('Outline icon audit structural failures', () => {
     );
   });
 
-  const relativeColorManifest = (file = '45035-1908.svg') => ({
+  const legacyRelativeColorManifest = (file = '45035-1908.svg') => ({
     relativeCurrentColorExceptions: [
       {
         attribute: 'color',
@@ -295,21 +295,31 @@ describe('Outline icon audit structural failures', () => {
     symbols: [{ exportedSourceNodeId: '45035:1908', file }],
   });
 
-  it('allows the exact relative-currentColor formula only for the recorded DataCompare source', async () => {
-    const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`;
-    await withFixture({ 'outline/45035-1908.svg': source }, async (root) => {
-      const manifestPath = resolve(root, 'manifest.json');
-      writeFileSync(manifestPath, JSON.stringify(relativeColorManifest()));
-      const result = await auditIcons({ manifestPath, root });
-      expect(result.failures.map(({ token }) => token)).not.toContain('FOREGROUND_LITERAL');
-    });
-  });
+  it.each([false, true])(
+    'rejects the retired DataCompare formula with legacy exception = %s',
+    async (withLegacyException) => {
+      const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`;
+      await withFixture({ 'outline/45035-1908.svg': source }, async (root) => {
+        const manifestPath = resolve(root, 'manifest.json');
+        writeFileSync(
+          manifestPath,
+          JSON.stringify(
+            withLegacyException
+              ? legacyRelativeColorManifest()
+              : { symbols: [{ exportedSourceNodeId: '45035:1908', file: '45035-1908.svg' }] },
+          ),
+        );
+        const result = await auditIcons({ manifestPath, root });
+        expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL');
+      });
+    },
+  );
 
   it('rejects the same relative-currentColor syntax on another icon', async () => {
     const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`;
     await withFixture({ 'outline/example.svg': source }, async (root) => {
       const manifestPath = resolve(root, 'manifest.json');
-      writeFileSync(manifestPath, JSON.stringify(relativeColorManifest('example.svg')));
+      writeFileSync(manifestPath, JSON.stringify(legacyRelativeColorManifest('example.svg')));
       const result = await auditIcons({ manifestPath, root });
       expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL');
     });
@@ -320,12 +330,11 @@ describe('Outline icon audit structural failures', () => {
     const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${alteredFormula}"/></svg>`;
     const expectedSource = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`;
     await withFixture({ 'outline/45035-1908.svg': source }, async (root) => {
-      const value = relativeColorManifest();
+      const value = legacyRelativeColorManifest();
       Object.assign(value.symbols[0], {
         localNormalizedAstSha256: sha256(
           canonicalizeSvg(expectedSource, {
             normalizeForegroundPaint: true,
-            relativeCurrentColorValue: dataCompareFormula,
           }),
         ),
       });
@@ -407,7 +416,8 @@ describe('Outline index and manifest failures', () => {
     [
       'FIGMA_RAW_HASH_MISMATCH',
       (value: ManifestFixture) => {
-        value.symbols[0].figmaRawSvgSha256 = null;
+        // Deliberately corrupt the fixture to exercise runtime validation.
+        Object.assign(value.symbols[0], { figmaRawSvgSha256: null });
       },
     ],
     [
@@ -513,7 +523,7 @@ describe('Outline manifest updater provenance gate', () => {
       { cwd: packageRoot, encoding: 'utf8' },
     );
 
-  it('writes only a complete 364/364/367/3 independently matched manifest', () => {
+  it('writes only a complete independently matched manifest', () => {
     const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
     try {
       const output = resolve(root, 'manifest.json');
@@ -529,6 +539,7 @@ describe('Outline manifest updater provenance gate', () => {
         new Set(value.symbols.map((symbol: Record<string, string>) => symbol.exportName)).size,
       ).toBe(liveCounts.publicExports);
       expect(value.legacySources).toEqual([]);
+      expect(value).not.toHaveProperty('relativeCurrentColorExceptions');
       expect(
         value.placements.every(
           (placement: Record<string, string>) =>
@@ -578,6 +589,16 @@ describe('Outline manifest updater provenance gate', () => {
       const result = runUpdater(output, rawProvenance, reviewId, reviewedBy);
       expect(result).toMatchObject({ status: 0, stderr: '' });
       const generated = JSON.parse(readIconInputSync(output, 'utf8'));
+      // "added" records import history; reconstruction independently reports geometric matching.
+      for (const symbol of generated.symbols) {
+        const registered = committed.symbols.find(
+          (entry: { file: string; disposition: string }) => entry.file === symbol.file,
+        );
+        if (registered.disposition === 'added') {
+          expect(symbol.disposition).toBe('matching');
+          symbol.disposition = 'added';
+        }
+      }
       expect({ ...generated, updateProvenance: committed.updateProvenance }).toEqual(committed);
     } finally {
       rmSync(root, { force: true, recursive: true });

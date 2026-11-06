@@ -35,16 +35,6 @@
       "reviewedBy": "codex",
       "updater": "scripts/update-icon-stroke-manifests.mjs"
     },
-    "relativeCurrentColorExceptions": [
-      {
-        "exportedSourceNodeId": "45035:1908",
-        "path": "outline/45035-1908.svg",
-        "attribute": "color",
-        "value": "rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))",
-        "strategy": "relative-currentColor-secondary-role-v1",
-        "reason": "preserves the canonical #C0C6D1 secondary paint as a deterministic offset from currentColor"
-      }
-    ],
     "semanticEraseNormalizations": [
       {
         "exportedSourceNodeId": "14203:193724",
@@ -12646,7 +12636,11 @@
       },
       "raw": {
         "nodeType": "COMPONENT",
-        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M6.66667 17.4H13.7778M4 21H20M13.7778 21C15.428 21 17.0107 20.3363 18.1776 19.1548C19.3444 17.9733 20 16.3709 20 14.7C20 13.0291 19.3444 11.4267 18.1776 10.2452C17.0107 9.06375 15.428 8.4 13.7778 8.4H12.8889M9.33333 13.8H11.1111M12 6.6V3.9C12 3.66131 11.9063 3.43239 11.7397 3.2636C11.573 3.09482 11.3469 3 11.1111 3H9.33333C9.09759 3 8.87149 3.09482 8.70479 3.2636C8.5381 3.43239 8.44444 3.66131 8.44444 3.9V6.6M9.33333 12C8.86184 12 8.40965 11.8104 8.07625 11.4728C7.74286 11.1352 7.55556 10.6774 7.55556 10.2V6.6H12.8889V10.2C12.8889 10.6774 12.7016 11.1352 12.3682 11.4728C12.0348 11.8104 11.5826 12 11.1111 12H9.33333Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M6.66667 17.4H13.7778M4 21H20M13.7778 21C15.428 21 17.0107 20.3363 18.1776 19.1548C19.3444 17.9733 20 16.3709 20 14.7C20 13.0291 19.3444 11.4267 18.1776 10.2452C17.0107 9.06375 15.428 8.4 13.7778 8.4H12.8889M9.33333 13.8H11.1111M12 6.6V3.9C12 3.66131 11.9063 3.43239 11.7397 3.2636C11.573 3.09482 11.3469 3 11.1111 3H9.33333C9.09759 3 8.87149 3.09482 8.70479 3.2636C8.5381 3.43239 8.44444 3.66131 8.44444 3.9V6.6M9.33333 12C8.86184 12 8.40965 11.8104 8.07625 11.4728C7.74286 11.1352 7.55556 10.6774 7.55556 10.2V6.6H12.8889V10.2C12.8889 10.6774 12.7016 11.1352 12.3682 11.4728C12.0348 11.8104 11.5826 12 11.1111 12H9.33333Z\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=44870-141151"
+        }
       },
       "placement": {
         "width": 24,
@@ -12668,7 +12662,11 @@
           "overrideHashStatus": "pending-updater-canonical-sha256",
           "overridePayload": null
         }
-      ]
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n44870:141151:\n  id: 44870:141151\n  key: 6216a6938a846ee8bf20df0bcdf24a5a2522e2df\n  name: Outline/Microscope\n\nNODES:\n[COMPONENT] \"Outline/Microscope\" #44870:141151 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #44870:141152 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":4,\"y\":3},\"dimensions\":{\"width\":16,\"height\":18}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
     },
     {
       "nodeId": "44953:5888",
@@ -13132,7 +13130,7 @@
       },
       "raw": {
         "nodeType": "COMPONENT",
-        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M3 6C3 4.89543 3.89543 4 5 4H12V20H5C3.89543 20 3 19.1046 3 18V6Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M11 8H8\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M11 12H7\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M11 16H7\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M12 21C11.4477 21 11 20.5523 11 20V4C11 3.44772 11.4477 3 12 3V21ZM19 3C20.6569 3 22 4.34315 22 6V18C22 19.6569 20.6569 21 19 21H14V19H19C19.5523 19 20 18.5523 20 18V6C20 5.44772 19.5523 5 19 5H14V3H19Z\" fill=\"#C0C6D1\"/>\n<path d=\"M18 8H15\" stroke=\"#C0C6D1\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M16 12H15\" stroke=\"#C0C6D1\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M17 16H15\" stroke=\"#C0C6D1\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M12 2V22\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n</svg>\n"
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M12 4H5C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20H12V4Z\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n<path d=\"M11 8H8\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n<path d=\"M11 12H7\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n<path d=\"M11 16H7\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n<path opacity=\"0.5\" d=\"M12 21C11.4477 21 11 20.5523 11 20V4C11 3.44772 11.4477 3 12 3V21ZM19 3C20.6569 3 22 4.34315 22 6V18C22 19.6569 20.6569 21 19 21H14V19H19C19.5523 19 20 18.5523 20 18V6C20 5.44772 19.5523 5 19 5H14V3H19Z\" fill=\"#353639\"/>\n<path opacity=\"0.5\" d=\"M18 8H15\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n<path opacity=\"0.5\" d=\"M16 12H15\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n<path opacity=\"0.5\" d=\"M17 16H15\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n<path d=\"M12 2V22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke=\"#353639\"/>\n</svg>\n"
       },
       "placement": {
         "width": 24,
@@ -13154,7 +13152,10 @@
           "overrideHashStatus": "pending-updater-canonical-sha256",
           "overridePayload": null
         }
-      ]
+      ],
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\n\nGLOBAL_VARS:\nfill_ebde75f0:\n  - '#353639'\n\nCOMPONENTS:\n45035:1908:\n  id: 45035:1908\n  key: 7ca7daecbdda043995fccd97f1f3ea75b2b3102d\n  name: Outline/Data Comparison\n\nNODES:\n[COMPONENT] \"Outline/Data Comparison\" #45035:1908 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] #45025:5695 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":3,\"y\":4},\"dimensions\":{\"width\":9,\"height\":16}} strokes=fill_ebde75f0 strokeWeight=2px borderRadius=\"2px 2px 2px 2px\"\n  [IMAGE-SVG] \"Vector\" #45025:5700 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":8,\"y\":8},\"dimensions\":{\"width\":3,\"height\":0}} strokes=fill_ebde75f0 strokeWeight=2px\n  [IMAGE-SVG] \"Vector\" #45025:5702 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":7,\"y\":12},\"dimensions\":{\"width\":4,\"height\":0}} strokes=fill_ebde75f0 strokeWeight=2px\n  [IMAGE-SVG] \"Vector\" #45025:5704 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":7,\"y\":16},\"dimensions\":{\"width\":4,\"height\":0}} strokes=fill_ebde75f0 strokeWeight=2px\n  [IMAGE-SVG] \"Subtract\" #45025:5696 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":11,\"y\":3},\"dimensions\":{\"width\":11,\"height\":18}} fills=fill_ebde75f0 opacity=0.5\n  [IMAGE-SVG] \"Vector\" #45025:5707 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":15,\"y\":8},\"dimensions\":{\"width\":3,\"height\":0}} strokes=fill_ebde75f0 strokeWeight=2px opacity=0.5\n  [IMAGE-SVG] \"Vector\" #45025:5708 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":15,\"y\":12},\"dimensions\":{\"width\":1,\"height\":0}} strokes=fill_ebde75f0 strokeWeight=2px opacity=0.5\n  [IMAGE-SVG] \"Vector\" #45025:5709 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":15,\"y\":16},\"dimensions\":{\"width\":2,\"height\":0}} strokes=fill_ebde75f0 strokeWeight=2px opacity=0.5\n  [IMAGE-SVG] #45025:5699 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":12,\"y\":2},\"dimensions\":{\"width\":0,\"height\":20}} strokes=fill_ebde75f0 strokeWeight=2px"
+      }
     },
     {
       "nodeId": "45031:5719",
@@ -13354,7 +13355,7 @@
     },
     {
       "nodeId": "45460:1953",
-      "name": " ",
+      "name": "Outline/Command",
       "exportName": "CommandOutlined",
       "file": "45460-1953.svg",
       "scopeRole": "target",
@@ -13367,7 +13368,11 @@
       },
       "raw": {
         "nodeType": "COMPONENT",
-        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M15 6V18C15 18.5933 15.1759 19.1734 15.5056 19.6667C15.8352 20.1601 16.3038 20.5446 16.852 20.7716C17.4001 20.9987 18.0033 21.0581 18.5853 20.9424C19.1672 20.8266 19.7018 20.5409 20.1213 20.1213C20.5409 19.7018 20.8266 19.1672 20.9424 18.5853C21.0581 18.0033 20.9987 17.4001 20.7716 16.852C20.5446 16.3038 20.1601 15.8352 19.6667 15.5056C19.1734 15.1759 18.5933 15 18 15H6C5.40666 15 4.82664 15.1759 4.33329 15.5056C3.83994 15.8352 3.45543 16.3038 3.22836 16.852C3.0013 17.4001 2.94189 18.0033 3.05765 18.5853C3.1734 19.1672 3.45912 19.7018 3.87868 20.1213C4.29824 20.5409 4.83279 20.8266 5.41473 20.9424C5.99667 21.0581 6.59987 20.9987 7.14805 20.7716C7.69623 20.5446 8.16477 20.1601 8.49441 19.6667C8.82405 19.1734 9 18.5933 9 18V6C9 5.40666 8.82405 4.82664 8.49441 4.33329C8.16477 3.83994 7.69623 3.45543 7.14805 3.22836C6.59987 3.0013 5.99667 2.94189 5.41473 3.05765C4.83279 3.1734 4.29824 3.45912 3.87868 3.87868C3.45912 4.29824 3.1734 4.83279 3.05765 5.41473C2.94189 5.99667 3.0013 6.59987 3.22836 7.14805C3.45543 7.69623 3.83994 8.16477 4.33329 8.49441C4.82664 8.82405 5.40666 9 6 9H18C18.5933 9 19.1734 8.82405 19.6667 8.49441C20.1601 8.16477 20.5446 7.69623 20.7716 7.14805C20.9987 6.59987 21.0581 5.99667 20.9424 5.41473C20.8266 4.83279 20.5409 4.29824 20.1213 3.87868C19.7018 3.45912 19.1672 3.1734 18.5853 3.05765C18.0033 2.94189 17.4001 3.0013 16.852 3.22836C16.3038 3.45543 15.8352 3.83994 15.5056 4.33329C15.1759 4.82664 15 5.40666 15 6Z\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M15 6V18C15 18.5933 15.1759 19.1734 15.5056 19.6667C15.8352 20.1601 16.3038 20.5446 16.852 20.7716C17.4001 20.9987 18.0033 21.0581 18.5853 20.9424C19.1672 20.8266 19.7018 20.5409 20.1213 20.1213C20.5409 19.7018 20.8266 19.1672 20.9424 18.5853C21.0581 18.0033 20.9987 17.4001 20.7716 16.852C20.5446 16.3038 20.1601 15.8352 19.6667 15.5056C19.1734 15.1759 18.5933 15 18 15H6C5.40666 15 4.82664 15.1759 4.33329 15.5056C3.83994 15.8352 3.45543 16.3038 3.22836 16.852C3.0013 17.4001 2.94189 18.0033 3.05765 18.5853C3.1734 19.1672 3.45912 19.7018 3.87868 20.1213C4.29824 20.5409 4.83279 20.8266 5.41473 20.9424C5.99667 21.0581 6.59987 20.9987 7.14805 20.7716C7.69623 20.5446 8.16477 20.1601 8.49441 19.6667C8.82405 19.1734 9 18.5933 9 18V6C9 5.40666 8.82405 4.82664 8.49441 4.33329C8.16477 3.83994 7.69623 3.45543 7.14805 3.22836C6.59987 3.0013 5.99667 2.94189 5.41473 3.05765C4.83279 3.1734 4.29824 3.45912 3.87868 3.87868C3.45912 4.29824 3.1734 4.83279 3.05765 5.41473C2.94189 5.99667 3.0013 6.59987 3.22836 7.14805C3.45543 7.69623 3.83994 8.16477 4.33329 8.49441C4.82664 8.82405 5.40666 9 6 9H18C18.5933 9 19.1734 8.82405 19.6667 8.49441C20.1601 8.16477 20.5446 7.69623 20.7716 7.14805C20.9987 6.59987 21.0581 5.99667 20.9424 5.41473C20.8266 4.83279 20.5409 4.29824 20.1213 3.87868C19.7018 3.45912 19.1672 3.1734 18.5853 3.05765C18.0033 2.94189 17.4001 3.0013 16.852 3.22836C16.3038 3.45543 15.8352 3.83994 15.5056 4.33329C15.1759 4.82664 15 5.40666 15 6Z\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=45460-1953"
+        }
       },
       "placement": {
         "width": 24,
@@ -13389,7 +13394,11 @@
           "overrideHashStatus": "pending-updater-canonical-sha256",
           "overridePayload": null
         }
-      ]
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n45460:1953:\n  id: 45460:1953\n  key: 1e12097ad8e4d836543b5e58b23019d8d95c3fb8\n  name: Outline/Command\n\nNODES:\n[COMPONENT] \"Outline/Command\" #45460:1953 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #45460:1954 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":3,\"y\":3},\"dimensions\":{\"width\":18,\"height\":18}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
     },
     {
       "nodeId": "45515:1942",
@@ -13666,7 +13675,7 @@
     },
     {
       "nodeId": "46174:9893",
-      "name": "Icon/LandPlot",
+      "name": "Outline/LandPlot",
       "exportName": "LandPlotOutlined",
       "file": "46174-9893.svg",
       "scopeRole": "target",
@@ -13679,7 +13688,11 @@
       },
       "raw": {
         "nodeType": "COMPONENT",
-        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M12 8L18 5L12 2V12M8.00011 11.99L2.50011 15.13C2.34621 15.2172 2.21821 15.3437 2.12915 15.4965C2.04009 15.6494 1.99316 15.8231 1.99316 16C1.99316 16.1769 2.04009 16.3506 2.12915 16.5035C2.21821 16.6563 2.34621 16.7828 2.50011 16.87L11.0001 21.73C11.3042 21.9055 11.649 21.9979 12.0001 21.9979C12.3512 21.9979 12.6961 21.9055 13.0001 21.73L21.5001 16.87C21.654 16.7828 21.782 16.6563 21.8711 16.5035C21.9601 16.3506 22.0071 16.1769 22.0071 16C22.0071 15.8231 21.9601 15.6494 21.8711 15.4965C21.782 15.3437 21.654 15.2172 21.5001 15.13L16.0001 12M6.48999 12.8501L17.51 19.1501M17.51 12.8501L6.5 19.1501\" stroke=\"#353639\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n"
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M12 8L18 5L12 2V12M8.00011 11.99L2.50011 15.13C2.34621 15.2172 2.21821 15.3437 2.12915 15.4965C2.04009 15.6494 1.99316 15.8231 1.99316 16C1.99316 16.1769 2.04009 16.3506 2.12915 16.5035C2.21821 16.6563 2.34621 16.7828 2.50011 16.87L11.0001 21.73C11.3042 21.9055 11.649 21.9979 12.0001 21.9979C12.3512 21.9979 12.6961 21.9055 13.0001 21.73L21.5001 16.87C21.654 16.7828 21.782 16.6563 21.8711 16.5035C21.9601 16.3506 22.0071 16.1769 22.0071 16C22.0071 15.8231 21.9601 15.6494 21.8711 15.4965C21.782 15.3437 21.654 15.2172 21.5001 15.13L16.0001 12M6.48999 12.8501L17.51 19.1501M17.51 12.8501L6.5 19.1501\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=46174-9893"
+        }
       },
       "placement": {
         "width": 24,
@@ -13701,7 +13714,11 @@
           "overrideHashStatus": "pending-updater-canonical-sha256",
           "overridePayload": null
         }
-      ]
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n46174:9893:\n  id: 46174:9893\n  key: 26e930d5e102d645bd1b5c192bcc54779017f58c\n  name: Outline/LandPlot\n\nNODES:\n[COMPONENT] \"Outline/LandPlot\" #46174:9893 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #46174:9894 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":1.99,\"y\":2},\"dimensions\":{\"width\":20.01,\"height\":20}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
     },
     {
       "nodeId": "46275:1906",
@@ -14834,6 +14851,294 @@
           "overridePayload": null
         }
       ]
+    },
+    {
+      "nodeId": "47287:32011",
+      "name": "Outline/SwitchCamera",
+      "exportName": "SwitchCameraOutlined",
+      "file": "47287-32011.svg",
+      "scopeRole": "target",
+      "metadata": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component",
+        "disposition": "added",
+        "figmaRawSvgStatus": "captured-canonical-source"
+      },
+      "raw": {
+        "nodeType": "COMPONENT",
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M11 19H4C3.46957 19 2.96086 18.7893 2.58579 18.4142C2.21071 18.0391 2 17.5304 2 17V7C2 6.46957 2.21071 5.96086 2.58579 5.58579C2.96086 5.21071 3.46957 5 4 5H9M6 8L9 5L6 2M13 5H20C20.5304 5 21.0391 5.21071 21.4142 5.58579C21.7893 5.96086 22 6.46957 22 7V17C22 17.5304 21.7893 18.0391 21.4142 18.4142C21.0391 18.7893 20.5304 19 20 19H15M18 16L15 19L18 22M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=47287-32011"
+        }
+      },
+      "placement": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component"
+      },
+      "production": {
+        "strategy": "figma-svg-v1"
+      },
+      "placements": [
+        {
+          "placementNodeId": "47287:32011",
+          "nodeType": "component",
+          "width": 24,
+          "height": 24,
+          "mainComponentId": "47287:32011",
+          "mainComponentIdStatus": "canonical-source-self",
+          "sourceResolution": "component-self",
+          "overridePayload": null,
+          "overrideHash": null,
+          "overrideHashStatus": "pending-updater-canonical-sha256"
+        }
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47287:32011:\n  id: 47287:32011\n  key: e337f1f5c949e7f46f0908aaa11837c74f916f2f\n  name: Outline/SwitchCamera\n\nNODES:\n[COMPONENT] \"Outline/SwitchCamera\" #47287:32011 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #47287:32008 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":2,\"y\":2},\"dimensions\":{\"width\":20,\"height\":20}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
+    },
+    {
+      "nodeId": "47351:7045",
+      "name": "Outline/CircleArrowUp",
+      "exportName": "CircleArrowUpOutlined",
+      "file": "47351-7045.svg",
+      "scopeRole": "target",
+      "metadata": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component",
+        "disposition": "added",
+        "figmaRawSvgStatus": "captured-canonical-source"
+      },
+      "raw": {
+        "nodeType": "COMPONENT",
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M8 12L12 8L16 12M12 8V16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=47351-7045"
+        }
+      },
+      "placement": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component"
+      },
+      "production": {
+        "strategy": "figma-svg-v1"
+      },
+      "placements": [
+        {
+          "placementNodeId": "47351:7045",
+          "nodeType": "component",
+          "width": 24,
+          "height": 24,
+          "mainComponentId": "47351:7045",
+          "mainComponentIdStatus": "canonical-source-self",
+          "sourceResolution": "component-self",
+          "overridePayload": null,
+          "overrideHash": null,
+          "overrideHashStatus": "pending-updater-canonical-sha256"
+        }
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47351:7045:\n  id: 47351:7045\n  key: f349b3a9269fdc1e4f92289bea049bf4e1fa8b5f\n  name: Outline/CircleArrowUp\n\nNODES:\n[COMPONENT] \"Outline/CircleArrowUp\" #47351:7045 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #47351:7044 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":2,\"y\":2},\"dimensions\":{\"width\":20,\"height\":20}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
+    },
+    {
+      "nodeId": "47427:1947",
+      "name": "Outline/History",
+      "exportName": "HistoryOutlined",
+      "file": "47427-1947.svg",
+      "scopeRole": "target",
+      "metadata": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component",
+        "disposition": "added",
+        "figmaRawSvgStatus": "captured-canonical-source"
+      },
+      "raw": {
+        "nodeType": "COMPONENT",
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M3 12C3 13.78 3.52784 15.5201 4.51677 17.0001C5.50571 18.4802 6.91131 19.6337 8.55585 20.3149C10.2004 20.9961 12.01 21.1743 13.7558 20.8271C15.5016 20.4798 17.1053 19.6226 18.364 18.364C19.6226 17.1053 20.4798 15.5016 20.8271 13.7558C21.1743 12.01 20.9961 10.2004 20.3149 8.55585C19.6337 6.91131 18.4802 5.50571 17.0001 4.51677C15.5201 3.52784 13.78 3 12 3C9.48395 3.00947 7.06897 3.99122 5.26 5.74L3 8M8 8H3V3M12 7V12L16 14\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=47427-1947"
+        }
+      },
+      "placement": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component"
+      },
+      "production": {
+        "strategy": "figma-svg-v1"
+      },
+      "placements": [
+        {
+          "placementNodeId": "47427:1947",
+          "nodeType": "component",
+          "width": 24,
+          "height": 24,
+          "mainComponentId": "47427:1947",
+          "mainComponentIdStatus": "canonical-source-self",
+          "sourceResolution": "component-self",
+          "overridePayload": null,
+          "overrideHash": null,
+          "overrideHashStatus": "pending-updater-canonical-sha256"
+        }
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47427:1947:\n  id: 47427:1947\n  key: 3f36e33945c8e947013a42f0f9724de98813a227\n  name: Outline/History\n\nNODES:\n[COMPONENT] \"Outline/History\" #47427:1947 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #47427:1946 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":3,\"y\":3},\"dimensions\":{\"width\":18,\"height\":18}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
+    },
+    {
+      "nodeId": "47571:4197",
+      "name": "Outline/At",
+      "exportName": "AtOutlined",
+      "file": "47571-4197.svg",
+      "scopeRole": "target",
+      "metadata": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component",
+        "disposition": "added",
+        "figmaRawSvgStatus": "captured-canonical-source"
+      },
+      "raw": {
+        "nodeType": "COMPONENT",
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M15.75 12C15.75 14.0711 14.0711 15.75 12 15.75C9.92894 15.75 8.25 14.0711 8.25 12C8.25 9.92894 9.92894 8.25 12 8.25C14.0711 8.25 15.75 9.92894 15.75 12ZM15.75 12C15.75 14.0709 16.5 15.75 18.375 15.75C20.25 15.75 21 14.0709 21 12C21 10.22 20.4722 8.47991 19.4832 6.99987C18.4943 5.51983 17.0887 4.36628 15.4442 3.68509C13.7996 3.0039 11.99 2.82567 10.2442 3.17294C8.49836 3.5202 6.89472 4.37737 5.63604 5.63604C4.37737 6.89472 3.5202 8.49836 3.17294 10.2442C2.82567 11.99 3.0039 13.7996 3.68509 15.4442C4.36628 17.0887 5.51983 18.4943 6.99987 19.4832C8.47991 20.4722 10.22 21 12 21C13.8403 21 15.8241 20.4478 17.25 19.5M15.75 12V8.25\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=47571-4197"
+        }
+      },
+      "placement": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component"
+      },
+      "production": {
+        "strategy": "figma-svg-v1"
+      },
+      "placements": [
+        {
+          "placementNodeId": "47571:4197",
+          "nodeType": "component",
+          "width": 24,
+          "height": 24,
+          "mainComponentId": "47571:4197",
+          "mainComponentIdStatus": "canonical-source-self",
+          "sourceResolution": "component-self",
+          "overridePayload": null,
+          "overrideHash": null,
+          "overrideHashStatus": "pending-updater-canonical-sha256"
+        }
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47571:4197:\n  id: 47571:4197\n  key: 1e81e24d57d2189b42a3d17f230a16fae77a7f95\n  name: Outline/At\n\nNODES:\n[COMPONENT] \"Outline/At\" #47571:4197 layout={\"mode\":\"none\",\"sizing\":{}} fills=[]\n  [IMAGE-SVG] \"Vector\" #47571:4196 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":3,\"y\":3},\"dimensions\":{\"width\":18,\"height\":18}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
+    },
+    {
+      "nodeId": "47659:1965",
+      "name": "Outline/HandDeposit",
+      "exportName": "HandDepositOutlined",
+      "file": "47659-1965.svg",
+      "scopeRole": "target",
+      "metadata": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component",
+        "disposition": "added",
+        "figmaRawSvgStatus": "captured-canonical-source"
+      },
+      "raw": {
+        "nodeType": "COMPONENT",
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M11.25 12V1.5M14.25 4.5L11.25 1.5L8.25 4.5M17.25 12C18.3938 12.6862 19.3404 13.6569 19.9976 14.8177C20.6548 15.9784 21.0001 17.2896 21 18.6234V22.5M7.5 8.25H6C5.80109 8.25 5.61032 8.32902 5.46967 8.46967C5.32902 8.61032 5.25 8.80109 5.25 9V18.75M15.0881 22.5L13.0012 19.3125C12.7565 18.8821 12.692 18.3723 12.8217 17.8945C12.9514 17.4167 13.2649 17.0096 13.6937 16.762C14.1225 16.5144 14.6318 16.4465 15.1105 16.5731C15.5892 16.6996 15.9983 17.0104 16.2488 17.4375L17.25 18.9666V9C17.25 8.80109 17.171 8.61032 17.0303 8.46967C16.8897 8.32902 16.6989 8.25 16.5 8.25H15\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=47659-1965"
+        }
+      },
+      "placement": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component"
+      },
+      "production": {
+        "strategy": "figma-svg-v1"
+      },
+      "placements": [
+        {
+          "placementNodeId": "47659:1965",
+          "nodeType": "component",
+          "width": 24,
+          "height": 24,
+          "mainComponentId": "47659:1965",
+          "mainComponentIdStatus": "canonical-source-self",
+          "sourceResolution": "component-self",
+          "overridePayload": null,
+          "overrideHash": null,
+          "overrideHashStatus": "pending-updater-canonical-sha256"
+        }
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47659:1965:\n  id: 47659:1965\n  key: fd5fef56745dcbf5513315224488bda6f6fd7052\n  name: Outline/HandDeposit\n\nNODES:\n[COMPONENT] \"Outline/HandDeposit\" #47659:1965 layout={\"mode\":\"none\",\"sizing\":{}} fills=[]\n  [IMAGE-SVG] \"Vector\" #47659:1964 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":5.25,\"y\":1.5},\"dimensions\":{\"width\":15.75,\"height\":21}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
+    },
+    {
+      "nodeId": "47662:1975",
+      "name": "Outline/TimerOff",
+      "exportName": "TimerOffOutlined",
+      "file": "47662-1975.svg",
+      "scopeRole": "target",
+      "metadata": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component",
+        "disposition": "added",
+        "figmaRawSvgStatus": "captured-canonical-source"
+      },
+      "raw": {
+        "nodeType": "COMPONENT",
+        "svg": "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M10 2H14M4.59999 11C3.99419 12.4562 3.83235 14.059 4.13482 15.607C4.43729 17.1549 5.19058 18.5789 6.29999 19.7C7.42107 20.8094 8.84506 21.5627 10.393 21.8652C11.9409 22.1676 13.5438 22.0058 15 21.4M7.3999 7.40003C8.957 6.31969 10.8471 5.82722 12.7334 6.01035C14.6197 6.19349 16.3797 7.04034 17.6999 8.40003C19.0189 9.72671 19.8312 11.4737 19.9956 13.3372C20.16 15.2007 19.6662 17.0629 18.5999 18.6M2 2L22 22M12 12V10\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke=\"#353639\"/>\n</svg>\n",
+        "source": {
+          "tool": "figma-developer-mcp",
+          "url": "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=47662-1975"
+        }
+      },
+      "placement": {
+        "width": 24,
+        "height": 24,
+        "nodeType": "component"
+      },
+      "production": {
+        "strategy": "figma-svg-v1"
+      },
+      "placements": [
+        {
+          "placementNodeId": "47662:1975",
+          "nodeType": "component",
+          "width": 24,
+          "height": 24,
+          "mainComponentId": "47662:1975",
+          "mainComponentIdStatus": "canonical-source-self",
+          "sourceResolution": "component-self",
+          "overridePayload": null,
+          "overrideHash": null,
+          "overrideHashStatus": "pending-updater-canonical-sha256"
+        }
+      ],
+      "dimensionsSource": "svg-export",
+      "evidence": {
+        "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47662:1975:\n  id: 47662:1975\n  key: 72b91c706a562d9064d6537d652e5baa4f5f9999\n  name: Outline/TimerOff\n\nNODES:\n[COMPONENT] \"Outline/TimerOff\" #47662:1975 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #47662:1974 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":2,\"y\":2},\"dimensions\":{\"width\":20,\"height\":20.01}} strokes=[\"#353639\"] strokeWeight=2px"
+      }
     }
   ]
 }

@@ -5,8 +5,6 @@ import { chromium, type Browser } from 'playwright';
 import { createServer, type ViteDevServer } from 'vite';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import renderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
-
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 let browser: Browser;
 let server: ViteDevServer;
@@ -114,7 +112,7 @@ describe('Outline icon paint semantics in Chromium', () => {
     await page.close();
   });
 
-  it('keeps DataCompare relative-currentColor behavior with a monochrome fallback', async () => {
+  it('keeps DataCompare secondary strokes at half opacity for default, custom and inherited colors', async () => {
     const page = await browser.newPage();
     await page.goto(fixtureUrl);
     const results = await page.evaluate(() => {
@@ -132,11 +130,11 @@ describe('Outline icon paint semantics in Chromium', () => {
       };
       const inspect = (testId: string) => {
         const svg = document.querySelector<SVGSVGElement>(`[data-testid="${testId}"]`)!;
-        const relativePath = svg.querySelector<SVGPathElement>('path[color^="rgb(from"]')!;
+        const relativePath = svg.querySelector<SVGPathElement>('path[opacity="0.5"]')!;
         return {
           base: toHex(getComputedStyle(svg).color),
-          formula: relativePath.getAttribute('color'),
-          relative: toHex(getComputedStyle(relativePath).color),
+          opacity: getComputedStyle(relativePath).opacity,
+          secondary: toHex(getComputedStyle(relativePath).stroke),
         };
       };
       return {
@@ -147,14 +145,9 @@ describe('Outline icon paint semantics in Chromium', () => {
       };
     });
 
-    const formula = 'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
-    expect(browser.version()).toBe(renderContract.renderer.browserVersion);
-    expect(results.supported).toBe(true);
-    expect(results.default).toEqual({ base: '#353639', formula, relative: '#C0C6D1' });
-    expect(results.custom).toEqual({ base: '#123456', formula, relative: '#9DC4EE' });
-    expect(results.inherit).toEqual({ base: '#0A0A0A', formula, relative: '#959AA2' });
-    // Browsers without relative-color syntax ignore the element-level declaration, so
-    // currentColor remains a safe monochrome compatibility fallback outside this pinned gate.
+    expect(results.default).toEqual({ base: '#353639', opacity: '0.5', secondary: '#353639' });
+    expect(results.custom).toEqual({ base: '#123456', opacity: '0.5', secondary: '#123456' });
+    expect(results.inherit).toEqual({ base: '#0A0A0A', opacity: '0.5', secondary: '#0A0A0A' });
     await page.close();
   });
 });

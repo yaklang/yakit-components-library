@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.app.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "checkJs": false,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "../vite-env.d.ts",
+    "icons/audit-icons.test.ts",
+    "icons/helpers/icon-visual-weight-reviews.ts",
+    "icons/icon-figma-names.test.ts",
+    "icons/icon-paint-semantics.test.ts",
+    "icons/outline-sync-nov06.test.ts"
+  ]
+}
