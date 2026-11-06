@@ -72,7 +72,7 @@ const fixtureInventory = (leftSource: string, rightSource: string) => {
 };
 
 describe('Oldicon stroke-width migration plan', () => {
-  it('allows normalized asset sharing without changing source or export identity', () => {
+  it('preserves distinct widths and content-addressed assets without changing source or export identity', () => {
     const leftSource = '<svg><path stroke="currentColor" stroke-width="1.5" d="M0 0h1"/></svg>\n';
     const rightSource = '<svg><path stroke="currentColor" stroke-width="2" d="M0 0h1"/></svg>\n';
     const inventory = fixtureInventory(leftSource, rightSource);
@@ -86,8 +86,8 @@ describe('Oldicon stroke-width migration plan', () => {
     );
 
     expect(inventory).toEqual(original);
-    expect(result.assets.size).toBe(1);
-    expect(new Set(result.replacements.values()).size).toBe(1);
+    expect(result.assets.size).toBe(2);
+    expect(new Set(result.replacements.values()).size).toBe(2);
     expect(result.inventory.entries.map(({ exportName }) => exportName)).toEqual([
       'LeftIcon',
       'RightIcon',
@@ -107,17 +107,16 @@ describe('Oldicon stroke-width migration plan', () => {
     ]);
     expect(result.inventory.sources).toEqual(original.sources);
     expect(result.inventory.totals).toMatchObject({
-      artworks: 1,
+      artworks: 2,
       exports: 2,
       repairedSourcePaths: 1,
     });
     expect(result.inventory.generationPolicy.strokeWidth).toEqual({
-      strategy: 'local-uniform-stroke-v1',
-      value: '1.5',
+      strategy: 'preserve-source-stroke-v1',
     });
     for (const [newAssetFile, source] of result.assets) {
       expect(newAssetFile).toBe(assetFile(source));
-      expect(source).toContain('stroke-width="1.5"');
+      expect([leftSource, rightSource]).toContain(source);
     }
   });
 

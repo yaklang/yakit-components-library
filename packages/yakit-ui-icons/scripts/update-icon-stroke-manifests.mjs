@@ -33,9 +33,9 @@ function sourceFrom(sourcesMap, packageRoot, relativePath) {
   const svg =
     source ??
     readFileSync(path.join(packageRoot, 'src', normalized.replace(/^icons\//, '')), 'utf8');
-  return normalized.replace(/^icons\//, '').startsWith('solid/')
-    ? svg
-    : normalizeSvgStrokeWidth(svg);
+  return normalized.replace(/^icons\//, '').startsWith('outline/')
+    ? normalizeSvgStrokeWidth(svg)
+    : svg;
 }
 
 function formattedJson(value) {
@@ -188,7 +188,7 @@ function planColorfulManifest(packageRoot, sourcesMap, documents) {
   return {
     schemaVersion,
     policyId,
-    strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
+    strokeWidthPolicy: { strategy: 'preserve-source-stroke-v1' },
     evidenceVersion,
     ...rest,
     rows,

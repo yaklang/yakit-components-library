@@ -1,4 +1,3 @@
-import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs';
 import { readIconSources } from './icon-source-data.mjs';
 const colorfulSource = readIconSources().colorful;
 import { createHash } from 'node:crypto';
@@ -27,6 +26,7 @@ export const COLORFUL_ICON_CATEGORIES = Object.freeze([
   'yakit-logo',
   'penetration-logo',
   'ai-model',
+  'colorful-icon',
   'avatar',
   'plugin-source',
   'risk-level',
@@ -335,7 +335,7 @@ export async function classifyColorfulDuplicates(rows, readSource) {
       continue;
     }
     const localFile = colorfulLocalFile(row);
-    const svg = normalizeSvgStrokeWidth(await readSource(localFile));
+    const svg = await readSource(localFile);
     const key = `${row.width}x${row.height}:${row.paintMode}:${structuralSvgDigest(svg)}`;
     const owner = owners.get(key);
     if (!owner) {

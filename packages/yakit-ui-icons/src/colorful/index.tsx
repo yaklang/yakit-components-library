@@ -4,6 +4,13 @@ import { createIcon } from '../createIcon.js';
 
 export type { IconComponent, IconProps, IconRef, IconSvgProps } from '../types.js';
 
+import PowerPointFileType2ColorfulSvg from './47588-12525.svg?react';
+import WordFileType2ColorfulSvg from './47588-12540.svg?react';
+import PdfFileType2ColorfulSvg from './47588-12572.svg?react';
+import ExcelFileType2ColorfulSvg from './47588-12604.svg?react';
+import UnknownFileType2ColorfulSvg from './47588-12636.svg?react';
+import AddFileTypeColorfulSvg from './47588-12657.svg?react';
+import AIColorfulSvg from './47752-13925.svg?react';
 import AddFolderFileTypeColorfulSvg from './AddFolderFileTypeColorful.svg?react';
 import AiCodeAuditPrimaryMenuColorfulSvg from './AiCodeAuditPrimaryMenuColorful.svg?react';
 import AiPrimaryMenuColorfulSvg from './AiPrimaryMenuColorful.svg?react';
@@ -1218,3 +1225,19 @@ export const DisabledCursorColorful = createIcon(
   'DisabledCursorColorful',
 );
 export const HandCursorColorful = createIcon(HandCursorColorfulSvg, 'HandCursorColorful');
+export const AIColorful = createIcon(AIColorfulSvg, 'AIColorful');
+export const AddFileTypeColorful = createIcon(AddFileTypeColorfulSvg, 'AddFileTypeColorful');
+export const UnknownFileType2Colorful = createIcon(
+  UnknownFileType2ColorfulSvg,
+  'UnknownFileType2Colorful',
+);
+export const PowerPointFileType2Colorful = createIcon(
+  PowerPointFileType2ColorfulSvg,
+  'PowerPointFileType2Colorful',
+);
+export const ExcelFileType2Colorful = createIcon(
+  ExcelFileType2ColorfulSvg,
+  'ExcelFileType2Colorful',
+);
+export const PdfFileType2Colorful = createIcon(PdfFileType2ColorfulSvg, 'PdfFileType2Colorful');
+export const WordFileType2Colorful = createIcon(WordFileType2ColorfulSvg, 'WordFileType2Colorful');

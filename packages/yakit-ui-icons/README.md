@@ -63,7 +63,7 @@ export const HomeEntry = () => (
 
 `className`、`style`、事件、ARIA 属性和 `ref<HTMLSpanElement>` 属于外层 `span`；`size` 设置内层 SVG 的宽高。确需修改 SVG 表现属性时使用 `svgProps`，该入口不会接受内层事件、ARIA、焦点、ref 或内容注入。`color="currentColor"` 不产生内联颜色，可继续继承现有 Yakit/Ant 样式。
 
-所有内置图标描边默认采用 `stroke-width="1.5"`（SVG 用户单位），包括 Oldicon 和 Loading。宽度随图标尺寸与 `viewBox` 缩放，纯填充图形不增加描边。可调 Outline 和 Loading 的覆盖方式见下文。
+仅 Outline 在生成和审计时统一采用 `stroke-width="1.5"`（SVG 用户单位）。Solid、Colorful、Oldicon 保留素材线宽；Loading 的默认值由组件自身定义。宽度随图标尺寸与 `viewBox` 缩放，纯填充图形不增加描边。可调 Outline 和 Loading 的覆盖方式见下文。
 
 ### 调整描边宽度
 
@@ -129,7 +129,7 @@ import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon/PopoverArro
 `TaskWaitIcon` 是产品侧 DOM 动画而不是 SVG，不属于此兼容图标集合。
 
 `oldicon` 保留旧实现的路径几何、颜色、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
-描边宽度是有意调整的兼容例外：统一为 1.5 SVG 用户单位，原有公开导出名称和来源映射不变。
+Oldicon 保留现有 SVG 线宽和内容哈希路径，不再统一改写描边宽度；原有公开导出名称和来源映射不变。
 它不是第四个正式图标家族，不会进入根入口或 `iconRegistry`；新功能应优先选择
 `/outline`、`/solid` 或 `/colorful`。同名但图形不同的旧实现会使用来源限定的导出名，
 迁移时应按生成清单中的源文件映射选择，不能仅凭名称互换。

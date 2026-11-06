@@ -1,6 +1,7 @@
 /** Public discovery categories for fixed-, mixed-, and theme-painted colorful icons. */
 export type ColorfulIconCategory =
   | 'ai-model'
+  | 'colorful-icon'
   | 'avatar'
   | 'basic'
   | 'browser'

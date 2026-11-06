@@ -471,7 +471,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
   } catch {
     return ['XML_INVALID'];
   }
-  if (variant !== 'solid' && invalidStrokeWidths(root).length > 0)
+  if (variant === 'outline' && invalidStrokeWidths(root).length > 0)
     errors.push('STROKE_WIDTH_INVALID');
   const expectedSize = variant === 'outline' ? '24' : '20';
   const expectedViewBox = `0 0 ${expectedSize} ${expectedSize}`;

@@ -35,7 +35,17 @@ const assertWidths = (element: Element, name: string) => {
         (sourceOwner as SVGElement | undefined)?.style?.strokeWidth ||
         sourceOwner?.getAttribute('stroke-width') ||
         '1';
-      const expectedWidth = solid ? `${sourceWidth}px` : declaredWidth ? '1.5px' : '1px';
+      const declared =
+        (declaredWidth as SVGElement | null)?.style?.strokeWidth ||
+        declaredWidth?.getAttribute('stroke-width') ||
+        '1';
+      const expectedWidth = solid
+        ? `${sourceWidth}px`
+        : iconExports.outline.includes(name)
+          ? declaredWidth
+            ? '1.5px'
+            : '1px'
+          : `${Number.parseFloat(declared)}px`;
       expect(style.strokeWidth, `${name}: ${drawable.outerHTML}`).toBe(expectedWidth);
     }
   }

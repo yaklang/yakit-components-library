@@ -41,3 +41,5 @@ pnpm icons:update --check
 Outline 的生产尺寸为 24×24，Solid 为 20×20；不符合时停止，不能自行缩放来凑尺寸。Colorful 保留节点尺寸并统一 preserveAspectRatio。实际 Figma 变量证据可放在 `evidence.themePaintBindings`（token、fallbackHex、figmaVariableId、sourceNodeIds）。明确指定的 paintReplacements 单独作为项目颜色配置保存，不伪装成 Figma 变量证据；生成器仍检查变量名是否属于项目颜色包。
 
 Solid 保留原始 stroke-width（包括遮罩配合的外侧描边），不套用 Outline 的 1.5 规则。检查与渲染对比也必须保留该宽度，不能先统一线宽再声称与远端一致。
+
+统一线宽生成、检查和审计仅适用于 Outline（1.5）。Solid、Colorful、Oldicon 保留素材已有 stroke-width，不进行归一化；Colorful 去重保留线宽差异。已有历史素材和视觉基线不批量重写，只有显式导入的图标按原稿生成。Loading 由组件自己定义默认线宽，不参加统一线宽检查。

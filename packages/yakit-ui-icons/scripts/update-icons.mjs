@@ -125,13 +125,15 @@ export function renderImportedSvg(record, family) {
     svg = svg.replace(new RegExp(`(\\b(?:fill|stroke)=)["']${from}["']`, 'gi'), `$1"${to}"`);
   }
   if (family === 'colorful') {
+    // Figma clip exports may use named white; retain its paint in the supported hex form.
+    svg = svg.replace(/(\b(?:fill|stroke)=)["']white["']/gi, '$1"#FFFFFF"');
     svg = svg.replace(
       /<svg\b([^>]*)>/,
       (tag, attributes) =>
         `<svg${attributes.replace(/\s+preserveAspectRatio=["'][^"']*["']/g, '')} preserveAspectRatio="xMidYMid meet">`,
     );
   }
-  if (family !== 'solid') svg = normalizeSvgStrokeWidth(svg);
+  if (family === 'outline') svg = normalizeSvgStrokeWidth(svg);
   return normalizeColorfulFragments(svg, record.nodeId).svg;
 }
 
@@ -170,7 +172,7 @@ export async function planIconUpdate(
       if (svg === null) fail(`ICON_SOURCE_MISSING: ${file}`);
       if (file.endsWith('.svg')) {
         parseSvg(svg);
-        if (kind !== 'solid' && normalizeSvgStrokeWidth(svg) !== svg)
+        if (kind === 'outline' && normalizeSvgStrokeWidth(svg) !== svg)
           fail(`ICON_STROKE_WIDTH_STALE: ${file}`);
         assets.set(file, svg);
         if (record?.production && selected.includes(kind)) output.set(`src/${file}`, svg);

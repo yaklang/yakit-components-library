@@ -1,7 +1,5 @@
 import { createHash } from 'node:crypto';
 
-import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs';
-
 const ASSET_FILE_PATTERN = /^assets\/([a-f0-9]{64})\.svg$/;
 
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
@@ -26,9 +24,9 @@ const updateAssetReference = (record, replacements) => {
 };
 
 /**
- * Plans the offline Oldicon stroke-width migration without changing its inputs.
+ * Validates Oldicon asset identities while preserving source stroke widths.
  * Source evidence, canonical artwork identity, export names, and source keys remain
- * stable; only emitted asset bytes and their content-addressed references change.
+ * stable, as do the emitted asset bytes and their content-addressed references.
  */
 export function planOldiconStrokeWidth(inventory, assetsMap) {
   if (!inventory || !Array.isArray(inventory.entries) || !Array.isArray(inventory.exports))
@@ -40,7 +38,7 @@ export function planOldiconStrokeWidth(inventory, assetsMap) {
   for (const [assetFile, source] of assetsMap) {
     if (typeof source !== 'string') throw new Error(`OLDICON_ASSET_SOURCE_INVALID: ${assetFile}`);
     assertAssetFile(assetFile, source);
-    const normalizedSource = normalizeSvgStrokeWidth(source);
+    const normalizedSource = source;
     const normalizedHash = sha256(normalizedSource);
     const normalizedAssetFile = `assets/${normalizedHash}.svg`;
     const existingSource = assets.get(normalizedAssetFile);
@@ -56,14 +54,13 @@ export function planOldiconStrokeWidth(inventory, assetsMap) {
   nextInventory.generationPolicy = {
     ...nextInventory.generationPolicy,
     strokeWidth: {
-      strategy: 'local-uniform-stroke-v1',
-      value: '1.5',
+      strategy: 'preserve-source-stroke-v1',
     },
   };
   nextInventory.hashSemantics = {
     ...nextInventory.hashSemantics,
     artworkSha256: 'alias of assetSha256',
-    assetSha256: 'SHA-256 of exact emitted stroke-width-normalized SVG file bytes',
+    assetSha256: 'SHA-256 of exact emitted SVG file bytes',
     canonicalArtworkSha256:
       'SHA-256 after orphan cleanup and canonical fragment normalization, before emitted stroke-width normalization',
   };

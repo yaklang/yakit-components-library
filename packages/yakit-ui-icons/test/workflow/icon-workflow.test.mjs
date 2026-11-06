@@ -399,3 +399,25 @@ test("unified update repairs the name catalog while check mode leaves it untouch
     assert.equal(await readFile(catalog, "utf8"), expected);
     assert.equal(await runIconUpdate([], root), "ICONS_UPDATED 0 file(s)\n");
   }));
+
+test('Colorful exports normalize named white without changing source gradients', () => {
+  const rawSvg =
+    '<svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="paint"><stop stop-color="#1B8E9D"/><stop offset="1" stop-color="#FFCE1E"/></linearGradient><clipPath id="clip"><rect width="24" height="24" fill="white"/></clipPath></defs><path d="M2 2H20" stroke="url(#paint)" stroke-width="2" clip-path="url(#clip)"/></svg>';
+  const record = { nodeId: '47752:13925', rawSvg };
+  const output = renderImportedSvg(record, 'colorful');
+  assert.match(output, /fill="#FFFFFF"/);
+  assert.match(output, /stop-color="#1B8E9D"/);
+  assert.match(output, /stop-color="#FFCE1E"/);
+  assert.match(output, /stroke-width="2"/);
+  assert.match(output, /stroke="url\(#/);
+  assert.equal(record.rawSvg, rawSvg);
+});
+
+
+test('uniform stroke generation applies only to Outline', () => {
+  const rawSvg = '<svg width="24" height="24"><path d="M1 1H20" stroke="#353639" stroke-width="3"/></svg>';
+  for (const family of ['solid', 'colorful', 'oldicon']) {
+    assert.match(renderImportedSvg({nodeId:'1:2',rawSvg}, family), /stroke-width="3"/);
+  }
+  assert.match(renderImportedSvg({nodeId:'1:2',rawSvg}, 'outline'), /stroke-width="1.5"/);
+});

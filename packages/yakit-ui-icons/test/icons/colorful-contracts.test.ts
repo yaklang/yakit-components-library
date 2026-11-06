@@ -113,7 +113,7 @@ describe('colorful inventory contracts', () => {
       ],
       [
         'colorful/second.svg',
-        '<svg>\n<path stroke="black" stroke-width="1"/><defs><clipPath id="icon_12__clip_0" /></defs>\n</svg>',
+        '<svg>\n<path stroke="black" stroke-width="2"/><defs><clipPath id="icon_12__clip_0" /></defs>\n</svg>',
       ],
     ]);
     const rows = await classifyColorfulDuplicates(
@@ -129,6 +129,15 @@ describe('colorful inventory contracts', () => {
     });
     expect(rows[1]).not.toHaveProperty('localFile');
     expect(rows[1]).not.toHaveProperty('paintMode');
+    sources.set(
+      'colorful/second.svg',
+      sources.get('colorful/second.svg')!.replace('stroke-width="2"', 'stroke-width="3"'),
+    );
+    const differentWidths = await classifyColorfulDuplicates(
+      [first, second],
+      async (file) => sources.get(file) ?? '',
+    );
+    expect(differentWidths.map((row) => row.publicExposure)).toEqual(['canonical', 'canonical']);
   });
 
   it('preserves the Figma blue backgrounds and foreground geometry for PenetraX', () => {

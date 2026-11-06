@@ -6,6 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
+import colorfulSource from '../../../yakit-ui-icons/config/icon-sources/colorful.json';
 import solidSource from '../../../yakit-ui-icons/config/icon-sources/solid.json';
 import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
 import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
@@ -45,6 +46,24 @@ const expectDefaultWidthMarkup = (name: string, Component: ComponentType) => {
       (match) => match[1],
     );
     expect(widths, name).toEqual(expected);
+    return;
+  }
+  const exportName = name.split(':').at(-1)!;
+  if (!iconExports.outline.includes(exportName) && exportName !== 'Loading') {
+    const colorful = colorfulSource.records.find((r) => r.exportName === exportName);
+    const old = oldiconInventory.exports.find(
+      (r: { exportName: string }) => r.exportName === exportName,
+    );
+    const file = colorful?.localFile ?? (old ? `oldicon/${old.assetFile}` : undefined);
+    expect(file, name).toBeDefined();
+    const source = readIconInputSync(
+      resolve(repositoryRoot, 'packages/yakit-ui-icons/src', file!),
+      'utf8',
+    );
+    expect(widths, name).toEqual([
+      ...[...source.matchAll(/\bstroke-width="([^"]+)"/g)].map((match) => match[1]),
+      ...[...source.matchAll(/\bstyle="[^"]*stroke-width:\s*([^;"\s]+)/g)].map((match) => match[1]),
+    ]);
     return;
   }
   expect(

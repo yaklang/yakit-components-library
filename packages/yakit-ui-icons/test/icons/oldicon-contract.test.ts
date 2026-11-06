@@ -62,8 +62,7 @@ describe('oldicon migration inventory', () => {
   it('covers exactly 408 unique Yakit source paths', () => {
     expect(inventory.schemaVersion).toBe(1);
     expect(inventory.generationPolicy.strokeWidth).toEqual({
-      strategy: 'local-uniform-stroke-v1',
-      value: '1.5',
+      strategy: 'preserve-source-stroke-v1',
     });
     expect(inventory.hashSemantics).toMatchObject({
       artworkSha256: 'alias of assetSha256',

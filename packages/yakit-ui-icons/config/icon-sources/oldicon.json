@@ -9,8 +9,7 @@
       "nameCollision": "lexicographic-primary-with-source-qualified-secondary",
       "orphanReferences": "remove-without-guess-pairing",
       "strokeWidth": {
-        "strategy": "local-uniform-stroke-v1",
-        "value": "1.5"
+        "strategy": "preserve-source-stroke-v1"
       }
     },
     "hashSemantics": {

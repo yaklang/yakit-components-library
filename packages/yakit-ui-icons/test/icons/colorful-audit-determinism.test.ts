@@ -98,7 +98,7 @@ describe('colorful offline audit', () => {
     ).toThrow(/SVG_STRUCTURE_INVALID/);
   });
 
-  it('rejects attribute and inline-style stroke widths outside the shared policy', () => {
+  it('preserves attribute and inline-style stroke widths without a uniform policy', () => {
     const svg = (attribute: string) =>
       `<svg width="24" height="24" preserveAspectRatio="xMidYMid meet"><path d="M0 0L1 1" stroke="#000000" ${attribute}/></svg>`;
     const audit = (sourceSvg: string) =>
@@ -108,12 +108,8 @@ describe('colorful offline audit', () => {
       );
 
     for (const width of ['1', '2']) {
-      expect(() => audit(svg(`stroke-width="${width}"`))).toThrow(
-        /STROKE_WIDTH_INVALID.*attribute/,
-      );
-      expect(() => audit(svg(`style="stroke-width: ${width}"`))).toThrow(
-        /STROKE_WIDTH_INVALID.*style/,
-      );
+      expect(() => audit(svg(`stroke-width="${width}"`))).not.toThrow();
+      expect(() => audit(svg(`style="stroke-width: ${width}"`))).not.toThrow();
     }
     expect(() => audit(svg(`stroke-width="${ICON_STROKE_WIDTH}"`))).not.toThrow();
     expect(() => audit(svg(`style="stroke-width: ${ICON_STROKE_WIDTH}"`))).not.toThrow();

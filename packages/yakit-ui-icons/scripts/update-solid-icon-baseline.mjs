@@ -7,7 +7,6 @@ import { fileURLToPath } from 'node:url';
 import {
   canonicalizeSvg,
   collectPaintSemantics,
-  invalidStrokeWidths,
   paintSemanticsSha256,
   parseIconIndex,
   parseSvg,
@@ -163,8 +162,6 @@ async function main() {
     const file = `${nodeId.replace(':', '-')}.svg`;
     const localFile = `solid/${file}`;
     const localSource = await readIconInput(path.join(packageRoot, 'src', localFile), 'utf8');
-    if (invalidStrokeWidths(localSource).length > 0)
-      throw new Error(`stroke-width policy mismatch: ${localFile}`);
     const figma = rawComponents.get(nodeId);
     if (!figma?.svg) throw new Error(`Figma raw SVG missing: ${nodeId}`);
     const normalizedOptions = {

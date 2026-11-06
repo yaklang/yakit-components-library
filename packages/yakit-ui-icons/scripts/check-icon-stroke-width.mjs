@@ -4,14 +4,12 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readIconSources, sourceFiles } from './icon-source-data.mjs';
 import {
-  loadingStrokeWidthDefault,
   normalizeSvgStrokeWidth,
   svgStrokeWidths,
 } from './icon-stroke-width.mjs';
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sourceDirectory = 'config/icon-sources';
-const loadingPath = 'src/loading/index.tsx';
 
 export async function svgFiles(directory, prefix = '') {
   const result = [];
@@ -43,8 +41,8 @@ export async function checkIconStrokeWidths(root = packageRoot) {
     errors.push(`${sourceDirectory}: ${error.message}`);
   }
   for (const file of files) {
-    // Solid artwork follows its source geometry, including masked outside borders.
-    if (file.startsWith('solid/')) continue;
+    // Only Outline uses the uniform width policy.
+    if (!file.startsWith('outline/')) continue;
     try {
       const source = await readFile(path.join(root, 'src', file), 'utf8');
       normalizeSvgStrokeWidth(source);
@@ -54,11 +52,8 @@ export async function checkIconStrokeWidths(root = packageRoot) {
       errors.push(`${file}: ${error.message}`);
     }
   }
-  const loading = await readFile(path.join(root, loadingPath), 'utf8');
-  if (loadingStrokeWidthDefault(loading) !== '1.5')
-    errors.push(`${loadingPath}: expected strokeWidth={1.5}`);
   if (errors.length) throw new Error(`ICON_STROKE_WIDTH_INVALID\n${errors.join('\n')}`);
-  return { svgFiles: files.length, loading: 1, violations: 0 };
+  return { svgFiles: files.length, loading: 0, violations: 0 };
 }
 
 export async function runIconStrokeCheck(args = [], root = packageRoot) {

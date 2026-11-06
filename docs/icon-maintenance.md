@@ -91,3 +91,5 @@ pnpm --filter @yakit-libs/yakit-ui-icons run build
 ## Solid 描边规则
 
 Outline 继续使用统一的 1.5 描边规则；Solid 保留 Figma 原稿的描边，不统一改写或限制为 1.5。Solid 审计仍严格比较原稿与生产 SVG 的路径、描边和颜色语义，修改生产描边而不更新来源会失败。例如 ImportSolid 使用 3px 描边配合遮罩实现 1.5px 外侧白边，必须完整保留。此规则不追溯批量替换其他 Solid 原稿；按指定节点同步。
+
+统一线宽生成、检查和审计仅适用于 Outline（1.5）。Solid、Colorful、Oldicon 保留素材已有 stroke-width，不进行归一化；Colorful 去重保留线宽差异。已有历史素材和视觉基线不批量重写，只有显式导入的图标按原稿生成。Loading 由组件自己定义默认线宽，不参加统一线宽检查。
