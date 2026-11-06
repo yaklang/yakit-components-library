@@ -12,6 +12,8 @@ export const ICON_STROKE_WIDTH_POLICY = Object.freeze({
   value: ICON_STROKE_WIDTH,
 });
 
+export const SOLID_STROKE_WIDTH_POLICY = Object.freeze({ strategy: 'preserve-source-stroke-v1' });
+
 export function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
   if (value && typeof value === 'object')
@@ -53,7 +55,7 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     idHygieneAlgorithmVersion: ID_HYGIENE_ALGORITHM_VERSION,
     paintSemanticsAlgorithmVersion: PAINT_SEMANTICS_ALGORITHM_VERSION,
     paintComparisonNormalizationVersion: PAINT_COMPARISON_NORMALIZATION_VERSION,
-    strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
+    strokeWidthPolicy: SOLID_STROKE_WIDTH_POLICY,
     prechangeBaselinePath: 'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json',
     expectedCounts: Object.freeze(sourceCounts(sources.solid)),
     targetMembershipSha256: policyDigest([...solidIds].sort()),

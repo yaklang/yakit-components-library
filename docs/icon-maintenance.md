@@ -87,3 +87,7 @@ pnpm --filter @yakit-libs/yakit-ui-icons run build
 - 两份没有直接代码引用但包含独有证据的旧记录已原样移至 [图标历史记录](../packages/yakit-ui-icons/docs/icon-history/README.md)。该目录记录原路径与内容哈希，既不参与日常生成，也不随当前图标修改。
 - 已删除来源文件的旧路径、Bug 审查节点和历史哈希的查询方法见 [来源追溯说明](../packages/yakit-ui-icons/docs/source-layout.md#已移除的来源文件怎么查)。当前来源与当前 manifest 一致，不等于历史文件字节未变；历史字节通过冻结的提交号及哈希单独核验。
 - `capture-icon-adjustable-baseline.mjs` 的后续维护版已原样归档为历史目录中的 `.mjs.txt`；真正用于历史基线采集的原版仍保留在 `adjustable-stroke/historical-capture.mjs.txt`。两个版本不可互换，也不参与日常命令，详见 [版本区别](../packages/yakit-ui-icons/docs/source-layout.md#两个采集脚本版本的区别)。
+
+## Solid 描边规则
+
+Outline 继续使用统一的 1.5 描边规则；Solid 保留 Figma 原稿的描边，不统一改写或限制为 1.5。Solid 审计仍严格比较原稿与生产 SVG 的路径、描边和颜色语义，修改生产描边而不更新来源会失败。例如 ImportSolid 使用 3px 描边配合遮罩实现 1.5px 外侧白边，必须完整保留。此规则不追溯批量替换其他 Solid 原稿；按指定节点同步。

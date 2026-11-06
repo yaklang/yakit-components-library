@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { canonicalizeSvg } from '../../scripts/audit-icons.mjs';
 import {
   checkIconStrokeWidths,
   runIconStrokeCheck,
@@ -144,7 +145,15 @@ describe('current icon compatibility and historical evidence', () => {
       const designUpdate = designUpdates.updates.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
-      if (layoutUpdate) {
+      if (record.afterPath === 'icons/solid/16035-380989.svg') {
+        // Current Import follows the new masked Figma export; keep the frozen migration
+        // bytes above as historical evidence rather than forcing them onto today's icon.
+        const current = readIconInputSync(resolve(packageRoot, 'src', currentPath), 'utf8');
+        const figma = solidRaw.components.find((item) => item.nodeId === '16035:380989')!.svg;
+        const options = { ignoreUnreferencedIds: true, normalizeForegroundPaint: true };
+        expect(canonicalizeSvg(current, options)).toBe(canonicalizeSvg(figma, options));
+        expect(current).toContain('stroke-width="3"');
+      } else if (layoutUpdate) {
         expect(actual).toBe(layoutUpdate.svg.replaceAll('#353639', 'currentColor'));
       } else if (designUpdate) {
         expect(designUpdate.previousLocalSvg).toBe(expected);

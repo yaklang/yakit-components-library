@@ -39,3 +39,5 @@ pnpm icons:update --check
 导入仅更新来源 JSON，原始 SVG 位于记录的 `raw.svg`（Outline/Solid）或 `rawSvg`（Colorful）。生产文件由生成步骤写入原目录。`metadata` 与 `rawMetadata` 中旧的工具和审核信息属于历史采集，不代表本次 Agent 审核。
 
 Outline 的生产尺寸为 24×24，Solid 为 20×20；不符合时停止，不能自行缩放来凑尺寸。Colorful 保留节点尺寸并统一 preserveAspectRatio。实际 Figma 变量证据可放在 `evidence.themePaintBindings`（token、fallbackHex、figmaVariableId、sourceNodeIds）。明确指定的 paintReplacements 单独作为项目颜色配置保存，不伪装成 Figma 变量证据；生成器仍检查变量名是否属于项目颜色包。
+
+Solid 保留原始 stroke-width（包括遮罩配合的外侧描边），不套用 Outline 的 1.5 规则。检查与渲染对比也必须保留该宽度，不能先统一线宽再声称与远端一致。

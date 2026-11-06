@@ -40,7 +40,9 @@ describe('Solid raw fragment normalization', () => {
       expect(new Set(refs), file).toEqual(new Set(ids));
       for (const id of ids) {
         expect(id, `${file}:${id}`).toMatch(
-          new RegExp(`^icon_${fileBase}__[A-Za-z][A-Za-z0-9_]*_\\d+$`),
+          new RegExp(
+            `^icon_(?:${fileBase}|${fileBase.replaceAll('_', '')})__[A-Za-z][A-Za-z0-9_]*_\\d+$`,
+          ),
         );
         expect(owners.has(id), `${file}:${id}`).toBe(false);
         owners.set(id, file);
@@ -51,9 +53,14 @@ describe('Solid raw fragment normalization', () => {
       }
     }
 
-    expect(fragmentFiles).toEqual(['1-2967.svg', '22425-254718.svg', '37831-7379.svg']);
-    expect(retainedIdCount).toBe(4);
-    expect(owners.size).toBe(4);
+    expect(fragmentFiles).toEqual([
+      '1-2967.svg',
+      '16035-380989.svg',
+      '22425-254718.svg',
+      '37831-7379.svg',
+    ]);
+    expect(retainedIdCount).toBe(6);
+    expect(owners.size).toBe(6);
   });
 
   it('has no orphan reference in any of the 256 raw sources', () => {

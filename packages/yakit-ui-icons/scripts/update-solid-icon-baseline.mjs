@@ -170,14 +170,14 @@ async function main() {
     const normalizedOptions = {
       ignoreUnreferencedIds: true,
       normalizeForegroundPaint: true,
-      normalizeStrokeWidth: true,
+      normalizeStrokeWidth: false,
     };
     const figmaNormalizedAstSha256 = sha256(canonicalizeSvg(figma.svg, normalizedOptions));
     const localNormalizedAstSha256 = sha256(canonicalizeSvg(localSource, normalizedOptions));
     const geometryOptions = {
       geometryOnly: true,
       ignoreUnreferencedIds: true,
-      normalizeStrokeWidth: true,
+      normalizeStrokeWidth: false,
     };
     const figmaGeometrySha256 = sha256(canonicalizeSvg(figma.svg, geometryOptions));
     const localGeometrySha256 = sha256(canonicalizeSvg(localSource, geometryOptions));
@@ -185,7 +185,7 @@ async function main() {
       throw new Error(`normalized AST mismatch: ${localFile}`);
     if (figmaGeometrySha256 !== localGeometrySha256)
       throw new Error(`geometry mismatch: ${localFile}`);
-    const paintOptions = { normalizeFigmaPrimary: true, normalizeStrokeWidth: true };
+    const paintOptions = { normalizeFigmaPrimary: true, normalizeStrokeWidth: false };
     const paintRows = collectPaintSemantics(localSource, paintOptions);
     const figmaPaintSemanticsSha256 = paintSemanticsSha256(figma.svg, paintOptions);
     const localPaintSemanticsSha256 = paintSemanticsSha256(localSource, paintOptions);

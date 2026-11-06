@@ -6,9 +6,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
+import solidSource from '../../../yakit-ui-icons/config/icon-sources/solid.json';
 import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
 import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
-
 import { iconCounts, iconExports } from '../../../yakit-ui-icons/test/icons/icon-inventory';
 
 const oldiconInventory = JSON.parse(
@@ -39,6 +39,14 @@ const expectDefaultWidthMarkup = (name: string, Component: ComponentType) => {
     ...[...markup.matchAll(/\bstroke-width="([^"]+)"/g)].map((match) => match[1]),
     ...[...markup.matchAll(/\bstyle="[^"]*stroke-width:\s*([^;"\s]+)/g)].map((match) => match[1]),
   ];
+  const solid = solidSource.records.find((record) => record.exportName === name.split(':').at(-1));
+  if (solid) {
+    const expected = [...solid.raw.svg.matchAll(/\bstroke-width="([^"]+)"/g)].map(
+      (match) => match[1],
+    );
+    expect(widths, name).toEqual(expected);
+    return;
+  }
   expect(
     widths.filter((width) => width !== '1.5'),
     name,

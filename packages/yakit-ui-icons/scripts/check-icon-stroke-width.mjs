@@ -43,6 +43,8 @@ export async function checkIconStrokeWidths(root = packageRoot) {
     errors.push(`${sourceDirectory}: ${error.message}`);
   }
   for (const file of files) {
+    // Solid artwork follows its source geometry, including masked outside borders.
+    if (file.startsWith('solid/')) continue;
     try {
       const source = await readFile(path.join(root, 'src', file), 'utf8');
       normalizeSvgStrokeWidth(source);

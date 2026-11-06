@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import {
+  ImportSolid,
   FloatingSolid,
   ParkAboveSolid,
   ParkBelowSolid,
@@ -17,6 +18,7 @@ const fragmentIcons = [
   PaperAirplaneSolid,
   PaintbrushSolid,
   PillSolid,
+  ImportSolid,
   FloatingSolid,
   ParkLeftSolid,
   ParkRightSolid,
@@ -38,7 +40,9 @@ const renderFixture = (identifierPrefix?: string) => {
     identifierPrefix ? { identifierPrefix } : undefined,
   );
   const serverIds = [...markup.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
-  const references = [...markup.matchAll(/url\(#([^)]+)\)/g)].map((match) => match[1]);
+  const references = [...markup.matchAll(/url\(#([^)]+)\)|(?:href|xlink:href)="#([^"]+)"/g)].map(
+    (match) => match[1] ?? match[2],
+  );
   return { identifierPrefix, markup, references, serverIds };
 };
 
@@ -51,9 +55,9 @@ describe('Solid icon server rendering', () => {
     ['default identifiers', fixtures.default],
     ['matching custom identifierPrefix', fixtures.custom],
   ])('renders %s with unique owner-local fragment IDs', (_label, fixture) => {
-    expect(fixture.serverIds).toHaveLength(8);
+    expect(fixture.serverIds).toHaveLength(12);
     expect(new Set(fixture.serverIds).size).toBe(fixture.serverIds.length);
-    expect(fixture.references).toHaveLength(8);
+    expect(fixture.references).toHaveLength(14);
     expect(fixture.references.every((reference) => fixture.serverIds.includes(reference))).toBe(
       true,
     );

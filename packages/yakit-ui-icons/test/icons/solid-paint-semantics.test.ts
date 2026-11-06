@@ -64,8 +64,8 @@ const auditSourceMutation = async (file: string, mutate: (source: string) => str
 };
 
 describe('Solid paint semantics', () => {
-  it('uses the exact 1.5 stroke-width policy across Outline and Solid sources', () => {
-    const roots = [outlineRoot, solidRoot];
+  it('keeps the uniform width policy limited to Outline sources', () => {
+    const roots = [outlineRoot];
     const values = roots.flatMap((root) =>
       readdirSync(root)
         .filter((file) => file.endsWith('.svg'))
@@ -133,6 +133,7 @@ describe('Solid paint semantics', () => {
         .map(({ file, value }) => ({ file, value })),
     ).toEqual([
       { file: '1-2967.svg', value: 'white' },
+      { file: '16035-380989.svg', value: 'white' },
       { file: '22425-254718.svg', value: 'white' },
       { file: '37831-7379.svg', value: 'white' },
       { file: '37831-7379.svg', value: 'white' },
@@ -141,7 +142,7 @@ describe('Solid paint semantics', () => {
 
   it('preserves the exact special-structure paint contracts', () => {
     expect(source('16035-380989.svg')).toMatch(
-      /fill="currentColor" stroke="white" stroke-width="1.5"/,
+      /stroke-width="3"[^>]*stroke="white"[^>]*mask="url\(#/,
     );
     expect(source('37831-7379.svg')).toContain('fill="#9CA3B1"');
     expect(source('37831-7379.svg')).toContain('fill="white"');
@@ -153,7 +154,7 @@ describe('Solid paint semantics', () => {
 
   it('freezes independently recomputed Figma and local paint semantics', () => {
     for (const record of [...manifest.symbols, ...manifest.supplementalSources]) {
-      const options = { normalizeFigmaPrimary: true, normalizeStrokeWidth: true };
+      const options = { normalizeFigmaPrimary: true, normalizeStrokeWidth: false };
       expect(record.figmaPaintSemanticsSha256, record.nodeId).toBe(
         paintSemanticsSha256(rawByNodeId.get(record.nodeId)!, options),
       );
@@ -182,12 +183,12 @@ describe('Solid paint semantics', () => {
     expect(await auditSourceMutation(file, mutate)).toContain('PAINT_SEMANTICS_MISMATCH');
   });
 
-  it('rejects a stroke-width regression with a stable policy token', async () => {
+  it('rejects stroke drift from Figma geometry without imposing a fixed Solid width', async () => {
     expect(
       await auditSourceMutation('16035-380989.svg', (svg) =>
-        svg.replace('stroke-width="1.5"', 'stroke-width="2"'),
+        svg.replace('stroke-width="3"', 'stroke-width="2"'),
       ),
-    ).toContain('STROKE_WIDTH_INVALID');
+    ).toContain('GEOMETRY_DIGEST_MISMATCH');
   });
 
   it.each([

@@ -23,7 +23,6 @@ const focusNodeIds = [
   '4936:115788',
   '46709:8109',
 ] as const;
-const strokePolicyNodeIds = new Set(contract.strokeWidthPolicy.nodeIds);
 const colors = [contract.raster.defaultColor, '#123456'] as const;
 const rawByNodeId = new Map(solidSource.records.map((record) => [record.nodeId, record.raw.svg]));
 const definitionByNodeId = new Map(
@@ -91,14 +90,8 @@ const rasterize = async (source: string, size = contract.raster.cropWidth) => {
   return context.getImageData(0, 0, width, height).data;
 };
 
-const figmaSourceForColor = (source: string, color: string, nodeId: string) => {
-  const colored = source.replace(/(fill|stroke)="#353639"/gi, `$1="${color}"`);
-  if (!strokePolicyNodeIds.has(nodeId)) return colored;
-  return colored.replace(
-    /\bstroke-width=(['"])(?:\d+(?:\.\d*)?|\.\d+)\1/g,
-    (_attribute, quote: string) => `stroke-width=${quote}1.5${quote}`,
-  );
-};
+const figmaSourceForColor = (source: string, color: string) =>
+  source.replace(/(fill|stroke)="#353639"/gi, `$1="${color}"`);
 
 const localSourceForColor = (nodeId: string, color: string, size = 20) => {
   const definition = definitionByNodeId.get(nodeId);
@@ -208,12 +201,7 @@ describe('Solid stroke-width-1 Figma pixel parity', () => {
     async (nodeId, color) => {
       const figmaSource = rawByNodeId.get(nodeId);
       expect(figmaSource, nodeId).toBeDefined();
-      const expectedSource = figmaSourceForColor(figmaSource!, color, nodeId);
-      if (strokePolicyNodeIds.has(nodeId)) {
-        expect(figmaSource, nodeId).toContain('stroke-width="1.5"');
-        expect(expectedSource, nodeId).toContain('stroke-width="1.5"');
-        expect(expectedSource, nodeId).not.toContain('stroke-width="4"');
-      }
+      const expectedSource = figmaSourceForColor(figmaSource!, color);
       const metric = compare(
         await rasterize(expectedSource),
         await rasterize(localSourceForColor(nodeId, color)),
@@ -234,8 +222,10 @@ describe('Solid stroke-width-1 Figma pixel parity', () => {
 
 describe('layout icon Figma parity at consumer sizes', () => {
   it.each(
-    layoutUpdates.updates.flatMap(({ nodeId, svg }) =>
-      [16, 20, 32].flatMap((size) => colors.map((color) => ({ nodeId, svg, size, color }))),
+    layoutUpdates.updates.flatMap(({ nodeId }) =>
+      [16, 20, 32].flatMap((size) =>
+        colors.map((color) => ({ nodeId, svg: rawByNodeId.get(nodeId)!, size, color })),
+      ),
     ),
   )(
     'preserves inset panels and opacity for $nodeId at $size px / $color',

@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { canonicalizeSvg, paintSemanticsSha256 } from './audit-icons.mjs';
-import { ICON_STROKE_WIDTH_POLICY } from './icon-audit-contracts.mjs';
+import { ICON_STROKE_WIDTH_POLICY, SOLID_STROKE_WIDTH_POLICY } from './icon-audit-contracts.mjs';
 import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs';
 
 const MANIFEST_PATHS = Object.freeze({
@@ -30,10 +30,12 @@ function sourceFrom(sourcesMap, packageRoot, relativePath) {
     sourcesMap.get(normalized) ??
     sourcesMap.get(`src/${normalized}`) ??
     sourcesMap.get(relativePath);
-  return normalizeSvgStrokeWidth(
+  const svg =
     source ??
-      readFileSync(path.join(packageRoot, 'src', normalized.replace(/^icons\//, '')), 'utf8'),
-  );
+    readFileSync(path.join(packageRoot, 'src', normalized.replace(/^icons\//, '')), 'utf8');
+  return normalized.replace(/^icons\//, '').startsWith('solid/')
+    ? svg
+    : normalizeSvgStrokeWidth(svg);
 }
 
 function formattedJson(value) {
@@ -128,14 +130,14 @@ function planSolidManifest(packageRoot, sourcesMap, documents) {
     const normalizedOptions = {
       ignoreUnreferencedIds: true,
       normalizeForegroundPaint: true,
-      normalizeStrokeWidth: true,
+      normalizeStrokeWidth: false,
     };
     const geometryOptions = {
       geometryOnly: true,
       ignoreUnreferencedIds: true,
-      normalizeStrokeWidth: true,
+      normalizeStrokeWidth: false,
     };
-    const paintOptions = { normalizeFigmaPrimary: true, normalizeStrokeWidth: true };
+    const paintOptions = { normalizeFigmaPrimary: true, normalizeStrokeWidth: false };
     const figmaNormalizedAstSha256 = sha256(canonicalizeSvg(figmaSource, normalizedOptions));
     const localNormalizedAstSha256 = sha256(canonicalizeSvg(localSource, normalizedOptions));
     const figmaGeometrySha256 = sha256(canonicalizeSvg(figmaSource, geometryOptions));
@@ -166,7 +168,7 @@ function planSolidManifest(packageRoot, sourcesMap, documents) {
   const supplementalSources = manifest.supplementalSources.map(updateRecord);
   return {
     ...manifest,
-    strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
+    strokeWidthPolicy: SOLID_STROKE_WIDTH_POLICY,
     // Preserve actual historical review metadata; generation is not a review.
     symbols,
     supplementalSources,

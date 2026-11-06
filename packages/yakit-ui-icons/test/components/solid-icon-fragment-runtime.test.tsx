@@ -5,6 +5,7 @@ import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  ImportSolid,
   FloatingSolid,
   ParkAboveSolid,
   ParkBelowSolid,
@@ -29,6 +30,7 @@ const fragmentIcons = [
   PaperAirplaneSolid,
   PaintbrushSolid,
   PillSolid,
+  ImportSolid,
   FloatingSolid,
   ParkLeftSolid,
   ParkRightSolid,
@@ -105,7 +107,7 @@ afterEach(() => {
 
 describe('Solid fragment runtime ownership', () => {
   it('assigns unique IDs to repeated and adversarial mixed fragment icons', () => {
-    expectOwnedFragments(render(repeatedFragments), 8);
+    expectOwnedFragments(render(repeatedFragments), 12);
   });
 
   it('keeps all 256 registry sources owner-local when the whole family is mounted twice', () => {
@@ -119,7 +121,7 @@ describe('Solid fragment runtime ownership', () => {
       </StrictMode>,
     );
     expect(container.querySelectorAll('svg')).toHaveLength(512);
-    expectOwnedFragments(container, 8);
+    expectOwnedFragments(container, 12);
   });
 
   it.each(['default', 'custom'] as const)(
@@ -135,7 +137,7 @@ describe('Solid fragment runtime ownership', () => {
       expect([...container.querySelectorAll<SVGElement>('svg [id]')].map(({ id }) => id)).toEqual(
         serverIds,
       );
-      expectOwnedFragments(container, 8);
+      expectOwnedFragments(container, 12);
       consoleError.mockRestore();
       consoleWarn.mockRestore();
     },
@@ -148,7 +150,7 @@ describe('Solid fragment runtime ownership', () => {
       document.body.append(container);
       const root = createRoot(container);
       flushSync(() => root.render(<StrictMode>{repeatedFragments}</StrictMode>));
-      expectOwnedFragments(container, 8);
+      expectOwnedFragments(container, 12);
       flushSync(() => root.unmount());
       container.remove();
     }

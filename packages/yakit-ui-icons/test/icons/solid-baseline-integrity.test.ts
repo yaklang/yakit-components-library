@@ -9,7 +9,6 @@ import { describe, expect, it } from 'vitest';
 
 import { auditIcons, canonicalizeSvg, parseIconIndex } from '../../scripts/audit-icons.mjs';
 import {
-  ICON_STROKE_WIDTH,
   canonicalJson,
   getIconAuditPolicy,
   policyDigest,
@@ -41,9 +40,8 @@ const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const solidRoot = resolve(packageRoot, 'src/solid');
 const policy = getIconAuditPolicy('solid-v1');
 const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
-const geometrySha256 = (source: string) => sha256(canonicalizeSvg(source, { geometryOnly: true }));
-const policyGeometrySha256 = (source: string) =>
-  sha256(canonicalizeSvg(source, { geometryOnly: true, normalizeStrokeWidth: true }));
+const geometrySha256 = (source: string) =>
+  sha256(canonicalizeSvg(source, { geometryOnly: true, ignoreUnreferencedIds: true }));
 const files = readdirSync(solidRoot)
   .filter((file) => file.endsWith('.svg'))
   .sort();
@@ -145,29 +143,19 @@ describe('Solid icon baseline integrity', () => {
     expect(policyDigest(sortedPublicMapping(actual))).toBe(policy.publicMappingSha256);
   });
 
-  it('allows only the reviewed geometry and local stroke-width policy changes', () => {
-    const strokePolicyIds = ['16035:380989'];
+  it('preserves historical evidence and limits changes to the known design updates', () => {
+    const refreshedIds = ['16035:380989'];
     const layoutIds = ['4936:115787', '4936:115788', '4936:115789', '4936:115790'];
     const changed = prechange.records
       .filter(({ geometrySha256: frozen, localFile }) => currentGeometry(localFile) !== frozen)
       .map(({ nodeId }) => nodeId)
       .sort();
-    expect(changed).toEqual(['2281:144183', ...layoutIds].sort());
+    expect(changed).toEqual(['2281:144183', ...layoutIds, ...refreshedIds].sort());
 
-    for (const row of prechange.records.filter(
-      ({ nodeId }) => nodeId !== '2281:144183' && !strokePolicyIds.includes(nodeId),
-    )) {
+    for (const row of prechange.records.filter(({ nodeId }) => nodeId !== '2281:144183')) {
       const figma = rawByNodeId.get(row.nodeId);
       expect(figma, row.nodeId).toBeDefined();
       expect(currentGeometry(row.localFile), row.localFile).toBe(geometrySha256(figma!.svg));
-    }
-
-    for (const nodeId of strokePolicyIds) {
-      const file = `${nodeId.replace(':', '-')}.svg`;
-      const figma = rawByNodeId.get(nodeId)!;
-      expect(figma.svg, nodeId).toContain('stroke-width="1.5"');
-      expect(currentSource(file), file).toContain(`stroke-width="${ICON_STROKE_WIDTH}"`);
-      expect(policyGeometrySha256(currentSource(file)), file).toBe(policyGeometrySha256(figma.svg));
     }
 
     const drag = currentSource('2281-144183.svg');

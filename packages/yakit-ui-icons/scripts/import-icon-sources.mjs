@@ -42,6 +42,7 @@ function required(value, message) {
 function drawables(svg) {
   let count = 0;
   const visit = (node) => {
+    if (['defs', 'mask', 'clipPath', 'pattern', 'marker', 'symbol'].includes(node.name)) return;
     if (
       ['path', 'rect', 'circle', 'ellipse', 'line', 'polygon', 'polyline', 'use'].includes(
         node.name,
@@ -306,7 +307,7 @@ export async function planSourceImport(input, root = packageRoot) {
         ...new Set(
           collectPaintSemantics(normalized, {
             normalizeFigmaPrimary: true,
-            normalizeStrokeWidth: true,
+            normalizeStrokeWidth: false,
           }).map((p) => p.role),
         ),
       ].sort();

@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import solidSource from '../../config/icon-sources/solid.json';
 import * as Icons from '../../src';
 import * as OldIcons from '../../src/oldicon';
 import { iconCounts, iconExports } from '../icons/icon-inventory';
@@ -19,14 +20,22 @@ const render = (node: React.ReactNode) => {
   return container;
 };
 const assertWidths = (element: Element, name: string) => {
-  for (const drawable of element.querySelectorAll(
-    'path,circle,ellipse,line,polyline,polygon,rect,use,text',
-  )) {
+  const selector = 'path,circle,ellipse,line,polyline,polygon,rect,use,text';
+  const solid = solidSource.records.find((record) => record.exportName === name);
+  const raw = solid
+    ? new DOMParser().parseFromString(solid.raw.svg, 'image/svg+xml').querySelectorAll(selector)
+    : undefined;
+  for (const [index, drawable] of [...element.querySelectorAll(selector)].entries()) {
     const style = getComputedStyle(drawable);
     if (style.stroke !== 'none') {
       // SVGs without a width declaration retain the browser's inherited default.
       const declaredWidth = drawable.closest('[stroke-width], [style*="stroke-width"]');
-      const expectedWidth = declaredWidth ? '1.5px' : '1px';
+      const sourceOwner = raw?.[index]?.closest('[stroke-width], [style*="stroke-width"]');
+      const sourceWidth =
+        (sourceOwner as SVGElement | undefined)?.style?.strokeWidth ||
+        sourceOwner?.getAttribute('stroke-width') ||
+        '1';
+      const expectedWidth = solid ? `${sourceWidth}px` : declaredWidth ? '1.5px' : '1px';
       expect(style.strokeWidth, `${name}: ${drawable.outerHTML}`).toBe(expectedWidth);
     }
   }
@@ -38,7 +47,7 @@ afterEach(() => {
 });
 
 describe('default width across every rendered icon', () => {
-  it('renders all inventoried family icons, Oldicons and Loading with declared 1.5-width strokes', () => {
+  it('renders every icon with its family stroke-width policy', () => {
     const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
     expect(icons).toHaveLength(iconCounts.all);
     expect(icons.map(([name]) => name).sort()).toEqual([...iconExports.all].sort());

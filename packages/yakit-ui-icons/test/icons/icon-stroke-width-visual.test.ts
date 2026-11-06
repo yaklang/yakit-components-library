@@ -35,10 +35,8 @@ describe('current 1.5-width independent pixel oracle', () => {
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
       const colorfulCorrection = colorfulCorrections.find((item) => item.file === record.afterPath);
-      const layoutUpdate = solidRaw.supplementalComponents.find(
-        (item) =>
-          ['4936:115787', '4936:115788', '4936:115789', '4936:115790'].includes(item.nodeId) &&
-          record.afterPath === `icons/solid/${item.nodeId.replace(':', '-')}.svg`,
+      const solidUpdate = [...solidRaw.components, ...solidRaw.supplementalComponents].find(
+        (item) => record.afterPath === `icons/solid/${item.nodeId.replace(':', '-')}.svg`,
       );
       if (colorfulCorrection) {
         expect(colorfulCorrection.originalSha256).toBe(record.afterSha256);
@@ -60,11 +58,11 @@ describe('current 1.5-width independent pixel oracle', () => {
       }
       return {
         name: record.sourcePath,
-        expected: widthOnlyOracle(
-          layoutUpdate?.svg.replaceAll('#353639', 'currentColor') ??
-            colorfulCorrection?.svg ??
-            (review ? review.serializedSvg : record.beforeSvg),
-        ),
+        expected: solidUpdate
+          ? solidUpdate.svg.replaceAll('#353639', 'currentColor')
+          : widthOnlyOracle(
+              colorfulCorrection?.svg ?? (review ? review.serializedSvg : record.beforeSvg),
+            ),
         actual,
         original: record.beforeSvg,
       };

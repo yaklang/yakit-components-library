@@ -131,7 +131,7 @@ export function renderImportedSvg(record, family) {
         `<svg${attributes.replace(/\s+preserveAspectRatio=["'][^"']*["']/g, '')} preserveAspectRatio="xMidYMid meet">`,
     );
   }
-  svg = normalizeSvgStrokeWidth(svg);
+  if (family !== 'solid') svg = normalizeSvgStrokeWidth(svg);
   return normalizeColorfulFragments(svg, record.nodeId).svg;
 }
 
@@ -170,7 +170,8 @@ export async function planIconUpdate(
       if (svg === null) fail(`ICON_SOURCE_MISSING: ${file}`);
       if (file.endsWith('.svg')) {
         parseSvg(svg);
-        if (normalizeSvgStrokeWidth(svg) !== svg) fail(`ICON_STROKE_WIDTH_STALE: ${file}`);
+        if (kind !== 'solid' && normalizeSvgStrokeWidth(svg) !== svg)
+          fail(`ICON_STROKE_WIDTH_STALE: ${file}`);
         assets.set(file, svg);
         if (record?.production && selected.includes(kind)) output.set(`src/${file}`, svg);
       }

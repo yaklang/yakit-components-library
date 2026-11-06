@@ -471,7 +471,8 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
   } catch {
     return ['XML_INVALID'];
   }
-  if (invalidStrokeWidths(root).length > 0) errors.push('STROKE_WIDTH_INVALID');
+  if (variant !== 'solid' && invalidStrokeWidths(root).length > 0)
+    errors.push('STROKE_WIDTH_INVALID');
   const expectedSize = variant === 'outline' ? '24' : '20';
   const expectedViewBox = `0 0 ${expectedSize} ${expectedSize}`;
   if (
@@ -564,7 +565,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
       ignoreUnreferencedIds: variant === 'solid',
       normalizeForegroundPaint: true,
       normalizeSemanticErase: true,
-      normalizeStrokeWidth: true,
+      normalizeStrokeWidth: variant !== 'solid',
       semanticEraseSourceId,
     }),
   );
@@ -573,7 +574,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
       geometryOnly: true,
       ignoreUnreferencedIds: variant === 'solid',
       normalizeSemanticErase: true,
-      normalizeStrokeWidth: true,
+      normalizeStrokeWidth: variant !== 'solid',
       semanticEraseSourceId,
     }),
   );
@@ -591,7 +592,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
     record.localPaintSemanticsSha256 !==
       paintSemanticsSha256(source, {
         normalizeFigmaPrimary: true,
-        normalizeStrokeWidth: true,
+        normalizeStrokeWidth: variant !== 'solid',
       })
   )
     errors.push('PAINT_SEMANTICS_MISMATCH');
@@ -862,7 +863,7 @@ async function validateProvenanceEvidence({
         ignoreUnreferencedIds: policy.variant === 'solid',
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
-        normalizeStrokeWidth: true,
+        normalizeStrokeWidth: policy.variant !== 'solid',
         semanticEraseSourceId: sourceNodeId,
       }),
     );
@@ -871,7 +872,7 @@ async function validateProvenanceEvidence({
         geometryOnly: true,
         ignoreUnreferencedIds: policy.variant === 'solid',
         normalizeSemanticErase: true,
-        normalizeStrokeWidth: true,
+        normalizeStrokeWidth: policy.variant !== 'solid',
         semanticEraseSourceId: sourceNodeId,
       }),
     );
@@ -888,7 +889,7 @@ async function validateProvenanceEvidence({
       errors.push('GEOMETRY_DIGEST_MISMATCH');
     const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaSource, {
       normalizeFigmaPrimary: policy.variant === 'solid',
-      normalizeStrokeWidth: true,
+      normalizeStrokeWidth: policy.variant !== 'solid',
     });
     if (
       policy.variant === 'solid' &&
