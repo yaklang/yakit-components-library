@@ -1,10 +1,35 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import '../../../yakit-ui-icons/icon.css';
+import '@yakit-libs/yakit-ui-icons/icon.css';
 
-import * as OldIcons from '../../src/icons/oldicon';
-import type { IconComponent } from '../../src/icons/oldicon';
-import oldIconInventory from '../../src/icons/oldicon/inventory.json';
+import oldiconSource from '../../../yakit-ui-icons/config/icon-sources/oldicon.json';
+import * as OldIcons from '@yakit-libs/yakit-ui-icons/oldicon';
+import type { IconComponent } from '@yakit-libs/yakit-ui-icons/oldicon';
+
+type OldIconSourceRow = {
+  exportName: string;
+  sourceFile: string;
+  sourceName: string;
+};
+
+const sourceRows = oldiconSource.records.flatMap<OldIconSourceRow>(({ sources }) => sources);
+const exportNames = [...new Set(sourceRows.map(({ exportName }) => exportName))].sort((a, b) =>
+  a.localeCompare(b),
+);
+const oldIconInventory = {
+  exports: exportNames.map((exportName) => ({
+    exportName,
+    sourceKeys: sourceRows
+      .filter((row) => row.exportName === exportName)
+      .map((row) => `${row.sourceFile}::${row.sourceName}`)
+      .sort(),
+  })),
+  totals: {
+    exports: exportNames.length,
+    artworks: oldiconSource.records.length,
+    sourcePaths: sourceRows.length,
+  },
+};
 
 const oldIconModule = OldIcons as Record<string, IconComponent>;
 const oldIconEntries = oldIconInventory.exports.map((entry) => {

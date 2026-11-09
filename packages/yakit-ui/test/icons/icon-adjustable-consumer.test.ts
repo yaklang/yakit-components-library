@@ -5,10 +5,17 @@ import { chromium } from 'playwright';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import renderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
-import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
+import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
+import outlineSource from '../../../yakit-ui-icons/config/icon-sources/outline.json';
 
-const repairedNames = visualWeightReviews.reviews.map((review) => review.exportName);
+// Historical reviews keep the name used at review time. Resolve the maintained
+// export by source identity, including icons renamed before this relocation.
+const repairedNames = visualWeightReviews.reviews.map(({ file }) => {
+  const record = outlineSource.records.find((entry) => entry.file === file);
+  if (!record) throw new Error(`Reviewed Outline source is missing: ${file}`);
+  return record.exportName;
+});
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const repositoryRoot = resolve(packageRoot, '../..');
@@ -83,7 +90,7 @@ describe('adjustable icon built consumer contract', () => {
     }));
     const html = `<!doctype html><div id="root"></div>
       <script>window.__adjustableEntries = ${JSON.stringify(modulePaths)}</script>
-      <script type="module" src="/test/fixtures/icons/icon-adjustable-consumer-entry.ts"></script>`;
+      <script type="module" src="/@fs${resolve(repositoryRoot, 'packages/yakit-ui-icons/test/fixtures/icons/icon-adjustable-consumer-entry.ts')}"></script>`;
     const server = await createServer({
       configFile: false,
       logLevel: 'silent',

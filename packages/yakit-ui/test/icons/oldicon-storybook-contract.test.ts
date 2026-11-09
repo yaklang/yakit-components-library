@@ -4,7 +4,16 @@ import { describe, expect, it } from 'vitest';
 
 import iconMeta from '../../.storybook/stories/Icon.stories';
 import oldIconMeta, * as oldIconStories from '../../.storybook/stories/OldIcon.stories';
-import oldIconInventory from '../../src/icons/oldicon/inventory.json';
+import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+
+import { iconCounts } from '../../../yakit-ui-icons/test/icons/icon-inventory';
+
+const oldIconInventory = JSON.parse(
+  readIconInputSync(
+    new URL('../../../yakit-ui-icons/config/icon-sources/oldicon.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const expectedExports = oldIconInventory.exports.map(({ exportName }) => exportName);
 const oldIconImportPath = '@yakit-libs/yakit-ui-icons/oldicon';
@@ -31,15 +40,15 @@ describe('oldIcon Storybook contract', () => {
   });
 
   it('renders all 380 canonical oldicon exports exactly once without family metadata', () => {
-    expect(expectedExports).toHaveLength(380);
-    expect(new Set(expectedExports).size).toBe(380);
+    expect(expectedExports).toHaveLength(iconCounts.oldicon);
+    expect(new Set(expectedExports).size).toBe(iconCounts.oldicon);
 
     const markup = renderStory(oldIconStories.AllIcons);
     const renderedExports = attributeValues(markup, 'data-oldicon-export');
 
     expect(renderedExports).toEqual(expectedExports);
-    expect(new Set(renderedExports).size).toBe(380);
-    expect(markup).toContain('data-oldicon-total="380"');
+    expect(new Set(renderedExports).size).toBe(iconCounts.oldicon);
+    expect(markup).toContain(`data-oldicon-total="${iconCounts.oldicon}"`);
     expect(markup).not.toContain('data-oldicon-family');
     expect(markup).not.toContain('data-canary-');
   });
@@ -48,7 +57,7 @@ describe('oldIcon Storybook contract', () => {
     const markup = renderStory(oldIconStories.AllIcons);
     const importPaths = attributeValues(markup, 'data-oldicon-import');
 
-    expect(importPaths).toHaveLength(380);
+    expect(importPaths).toHaveLength(iconCounts.oldicon);
     expect(new Set(importPaths)).toEqual(new Set([oldIconImportPath]));
     expect(
       [...markup.matchAll(/import \{ ([A-Za-z0-9]+) \} from &#x27;[^&]+&#x27;;/g)].map(
@@ -62,9 +71,9 @@ describe('oldIcon Storybook contract', () => {
 
     expect(attributeValues(markup, 'data-oldicon-export')).toHaveLength(0);
     expect(markup).toContain('data-oldicon-summary="true"');
-    expect(markup).toContain('380');
-    expect(markup).toContain('377');
-    expect(markup).toContain('408');
+    expect(markup).toContain(String(iconCounts.oldicon));
+    expect(markup).toContain(String(oldIconInventory.totals.artworks));
+    expect(markup).toContain(String(oldIconInventory.totals.sourcePaths));
     expect(markup).toContain(oldIconImportPath);
     expect(markup).toContain('没有可靠的 Outline、Solid 或 Colorful family 元数据');
   });

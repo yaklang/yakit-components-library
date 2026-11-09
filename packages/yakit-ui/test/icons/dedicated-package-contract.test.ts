@@ -7,6 +7,8 @@ import ts from 'typescript';
 import { build } from 'vite';
 import { describe, expect, it } from 'vitest';
 
+import { iconCounts, iconExports } from '../../../yakit-ui-icons/test/icons/icon-inventory';
+
 const coreRoot = process.cwd();
 const iconsRoot = resolve(coreRoot, '../yakit-ui-icons');
 const requireFromIcons = createRequire(resolve(iconsRoot, 'package.json'));
@@ -178,7 +180,8 @@ describe('Dedicated yakit-ui-icons package', () => {
     const solid = await import(exportTarget(iconsRoot, iconsManifest, './solid', 'import'));
     const exportNames = Object.keys(solid);
 
-    expect(exportNames).toHaveLength(256);
+    expect(exportNames).toHaveLength(iconCounts.solid);
+    expect([...exportNames].sort()).toEqual([...iconExports.solid].sort());
     expect(exportNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
     expect(exportNames).toContain('HomeSolid');
     expect(exportNames).not.toContain('HomeFilled');

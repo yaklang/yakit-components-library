@@ -1,14 +1,7 @@
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 
-import { createSvgReactPlugin } from './config/svgReactTransform';
-
-const packageRoot = path.dirname(fileURLToPath(import.meta.url));
-const iconCss = readFileSync(path.resolve(packageRoot, '../yakit-ui-icons/icon.css'), 'utf8');
+const iconCss = '@import "@yakit-libs/yakit-ui-icons/icon.css";\n';
 
 function iconBrowserFacades(): Plugin {
   const facades = {
@@ -23,10 +16,10 @@ function iconBrowserFacades(): Plugin {
     name: 'yakit-icon-browser-facades',
     generateBundle() {
       this.emitFile({ fileName: 'icon.css', source: iconCss, type: 'asset' });
-      for (const [fileName, [cssPath, runtimePath]] of Object.entries(facades)) {
+      for (const [fileName, [_cssPath, runtimePath]] of Object.entries(facades)) {
         this.emitFile({
           fileName,
-          source: `import ${JSON.stringify(cssPath)};\nexport * from ${JSON.stringify(runtimePath)};\n`,
+          source: `import "@yakit-libs/yakit-ui-icons/icon.css";\nexport * from ${JSON.stringify(runtimePath)};\n`,
           type: 'asset',
         });
       }
@@ -35,7 +28,7 @@ function iconBrowserFacades(): Plugin {
 }
 
 export default defineConfig(({ mode }) => {
-  const plugins = [react(), createSvgReactPlugin()];
+  const plugins = [react()];
 
   if (mode === 'lib') {
     return {
@@ -56,9 +49,14 @@ export default defineConfig(({ mode }) => {
         },
         rollupOptions: {
           external: (id) =>
-            ['@yakit-libs/color', 'antd', 'classnames', 'react', 'react-dom'].some(
-              (dependency) => id === dependency || id.startsWith(`${dependency}/`),
-            ),
+            [
+              '@yakit-libs/yakit-ui-icons',
+              '@yakit-libs/color',
+              'antd',
+              'classnames',
+              'react',
+              'react-dom',
+            ].some((dependency) => id === dependency || id.startsWith(`${dependency}/`)),
         },
       },
       plugins: [...plugins, iconBrowserFacades()],

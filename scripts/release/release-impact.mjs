@@ -16,6 +16,7 @@ import path from "node:path";
 import process from "node:process";
 
 import {
+  assertDeferredReleaseScope,
   buildDeferredImpact,
   validateDeferredImpact,
 } from "./release-deferrals.mjs";
@@ -277,6 +278,32 @@ export async function snapshotHash({ root = ROOT, revision, paths }) {
   return hash.digest("hex");
 }
 
+// Historical releases built icons from UI. New revisions own their source in icons.
+// Select paths for each revision separately so frozen baseline hashes remain valid.
+export async function iconSourcePaths({ root = ROOT, revision }) {
+  let independent;
+  if (revision === WORKTREE) {
+    independent =
+      (await worktreeFiles(root, "packages/yakit-ui-icons/src/index.tsx"))
+        .length > 0;
+  } else {
+    independent =
+      runGit(
+        [
+          "ls-tree",
+          "--name-only",
+          revision,
+          "--",
+          "packages/yakit-ui-icons/src/index.tsx",
+        ],
+        root,
+      ).trim().length > 0;
+  }
+  return independent
+    ? ["packages/yakit-ui-icons"]
+    : ["packages/yakit-ui-icons", "packages/yakit-ui/src/icons"];
+}
+
 async function readChangesetDocuments({ root, revision }) {
   if (revision === WORKTREE) {
     const files = await worktreeFiles(root, ".changeset");
@@ -436,12 +463,12 @@ async function createIsolatedSnapshot({ root, revision }) {
     });
     execFileSync(
       "pnpm",
-      ["--filter", "@yakit-libs/yakit-ui", "run", "build:package"],
+      ["--filter", "@yakit-libs/yakit-ui-icons", "run", "build"],
       { cwd: checkout, stdio: "inherit" },
     );
     execFileSync(
       "pnpm",
-      ["--filter", "@yakit-libs/yakit-ui-icons", "run", "build"],
+      ["--filter", "@yakit-libs/yakit-ui", "run", "build:package"],
       { cwd: checkout, stdio: "inherit" },
     );
     await mkdir(snapshotDirectory, { recursive: true });
@@ -710,10 +737,14 @@ export async function computeReleaseImpact({
       ["rev-parse", `${resolvedBaseRevisions[packageName]}^{commit}`],
       root,
     ).trim();
-    const sourcePaths =
+    const baseSourcePaths =
       packageName === "@yakit-libs/yakit-ui"
         ? ["packages/yakit-ui"]
-        : ["packages/yakit-ui-icons", "packages/yakit-ui/src/icons"];
+        : await iconSourcePaths({ root, revision: packageBaseRevision });
+    const headSourcePaths =
+      packageName === "@yakit-libs/yakit-ui"
+        ? ["packages/yakit-ui"]
+        : await iconSourcePaths({ root, revision: headRevision });
     const [
       baseSourceHash,
       headSourceHash,
@@ -724,8 +755,12 @@ export async function computeReleaseImpact({
       baseConfigHash,
       headConfigHash,
     ] = await Promise.all([
-      snapshotHash({ root, revision: packageBaseRevision, paths: sourcePaths }),
-      snapshotHash({ root, revision: headRevision, paths: sourcePaths }),
+      snapshotHash({
+        root,
+        revision: packageBaseRevision,
+        paths: baseSourcePaths,
+      }),
+      snapshotHash({ root, revision: headRevision, paths: headSourcePaths }),
       snapshotHash({
         root,
         revision: packageBaseRevision,
@@ -789,10 +824,16 @@ export async function computeReleaseImpact({
       ),
     });
   }
-  if (status === "BLOCK") {
-    try {
-      const policy = await readDeferralPolicy(root, headRevision);
-      if (policy) {
+  try {
+    const policy = await readDeferralPolicy(root, headRevision);
+    if (policy) {
+      // An active deferral also constrains an otherwise matching release set:
+      // publishing both changed packages must not silently bypass the policy.
+      assertDeferredReleaseScope(
+        policy,
+        declaredSet.map((name) => ({ name, version: expectedVersions[name] })),
+      );
+      if (status === "BLOCK") {
         const deferredSet = observedSet.filter(
           (name) => !declaredSet.includes(name),
         );
@@ -830,10 +871,11 @@ export async function computeReleaseImpact({
         }
         status = "PASS";
       }
-    } catch (error) {
-      deferredImpact = undefined;
-      deferralReason = `release deferral rejected: ${error.message}`;
     }
+  } catch (error) {
+    status = "BLOCK";
+    deferredImpact = undefined;
+    deferralReason = `release deferral rejected: ${error.message}`;
   }
   return {
     schemaId: "yakit-ui-release-impact/v1",

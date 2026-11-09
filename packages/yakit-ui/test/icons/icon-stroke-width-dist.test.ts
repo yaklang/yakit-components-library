@@ -6,8 +6,18 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import oldiconInventory from '../../src/icons/oldicon/inventory.json';
-import renderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
+import colorfulSource from '../../../yakit-ui-icons/config/icon-sources/colorful.json';
+import solidSource from '../../../yakit-ui-icons/config/icon-sources/solid.json';
+import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
+import { iconCounts, iconExports } from '../../../yakit-ui-icons/test/icons/icon-inventory';
+
+const oldiconInventory = JSON.parse(
+  readIconInputSync(
+    new URL('../../../yakit-ui-icons/config/icon-sources/oldicon.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const repositoryRoot = resolve(packageRoot, '../..');
@@ -30,6 +40,32 @@ const expectDefaultWidthMarkup = (name: string, Component: ComponentType) => {
     ...[...markup.matchAll(/\bstroke-width="([^"]+)"/g)].map((match) => match[1]),
     ...[...markup.matchAll(/\bstyle="[^"]*stroke-width:\s*([^;"\s]+)/g)].map((match) => match[1]),
   ];
+  const solid = solidSource.records.find((record) => record.exportName === name.split(':').at(-1));
+  if (solid) {
+    const expected = [...solid.raw.svg.matchAll(/\bstroke-width="([^"]+)"/g)].map(
+      (match) => match[1],
+    );
+    expect(widths, name).toEqual(expected);
+    return;
+  }
+  const exportName = name.split(':').at(-1)!;
+  if (!iconExports.outline.includes(exportName) && exportName !== 'Loading') {
+    const colorful = colorfulSource.records.find((r) => r.exportName === exportName);
+    const old = oldiconInventory.exports.find(
+      (r: { exportName: string }) => r.exportName === exportName,
+    );
+    const file = colorful?.localFile ?? (old ? `oldicon/${old.assetFile}` : undefined);
+    expect(file, name).toBeDefined();
+    const source = readIconInputSync(
+      resolve(repositoryRoot, 'packages/yakit-ui-icons/src', file!),
+      'utf8',
+    );
+    expect(widths, name).toEqual([
+      ...[...source.matchAll(/\bstroke-width="([^"]+)"/g)].map((match) => match[1]),
+      ...[...source.matchAll(/\bstyle="[^"]*stroke-width:\s*([^;"\s]+)/g)].map((match) => match[1]),
+    ]);
+    return;
+  }
   expect(
     widths.filter((width) => width !== '1.5'),
     name,
@@ -42,20 +78,22 @@ describe('Built icon stroke-width contract', () => {
     const coreIcons = await importBuilt(builtPath(coreDist, 'icons/index.js'));
     const dedicatedRoot = await importBuilt(builtPath(dedicatedDist, 'index.js'));
     const families = [
-      ['outline', 359],
-      ['solid', 256],
-      ['colorful', 296],
+      ['outline', iconCounts.outline],
+      ['solid', iconCounts.solid],
+      ['colorful', iconCounts.colorful],
     ] as const;
 
-    expect(Object.keys(coreIcons)).toHaveLength(912);
+    expect(Object.keys(coreIcons)).toHaveLength(iconCounts.root);
+    expect(Object.keys(coreIcons).sort()).toEqual([...iconExports.root].sort());
     expect(Object.keys(dedicatedRoot)).toEqual(Object.keys(coreIcons));
-    expect(componentEntries(coreIcons)).toHaveLength(912);
-    expect(componentEntries(dedicatedRoot)).toHaveLength(912);
+    expect(componentEntries(coreIcons)).toHaveLength(iconCounts.root);
+    expect(componentEntries(dedicatedRoot)).toHaveLength(iconCounts.root);
     expectDefaultWidthMarkup('core-root:AcademicCapOutlined', coreRoot.AcademicCapOutlined);
     for (const [family, count] of families) {
       const core = await importBuilt(builtPath(coreDist, `icons/${family}/index.js`));
       const dedicated = await importBuilt(builtPath(dedicatedDist, `${family}/index.js`));
       expect(Object.keys(core), `core:${family}`).toHaveLength(count);
+      expect(Object.keys(core).sort(), `core:${family}`).toEqual([...iconExports[family]].sort());
       expect(Object.keys(dedicated), `dedicated:${family}`).toEqual(Object.keys(core));
     }
     for (const [name, Component] of componentEntries(coreIcons)) {

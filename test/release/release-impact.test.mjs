@@ -13,10 +13,52 @@ import {
   releaseVersionsFromPublishPlan,
   resolveReleaseImpactBaselines,
   snapshotHash,
+  iconSourcePaths,
 } from "../../scripts/release/release-impact.mjs";
 
 const UI = "@yakit-libs/yakit-ui";
 const ICONS = "@yakit-libs/yakit-ui-icons";
+
+test("icon source ownership is selected separately for historical and migrated revisions", async () => {
+  const state = fixture();
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: state.base }),
+    ["packages/yakit-ui-icons", "packages/yakit-ui/src/icons"],
+  );
+  write(state.root, "packages/yakit-ui-icons/src/index.tsx", "export {};\n");
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: "WORKTREE" }),
+    ["packages/yakit-ui-icons"],
+  );
+  const before = await snapshotHash({
+    root: state.root,
+    revision: "WORKTREE",
+    paths: await iconSourcePaths({ root: state.root, revision: "WORKTREE" }),
+  });
+  write(
+    state.root,
+    "packages/yakit-ui/src/icons/index.tsx",
+    'export * from "@yakit-libs/yakit-ui-icons";\n',
+  );
+  assert.equal(
+    await snapshotHash({
+      root: state.root,
+      revision: "WORKTREE",
+      paths: await iconSourcePaths({ root: state.root, revision: "WORKTREE" }),
+    }),
+    before,
+  );
+  git(state.root, "add", ".");
+  git(state.root, "commit", "-qm", "migrate icon ownership");
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: "HEAD" }),
+    ["packages/yakit-ui-icons"],
+  );
+  assert.deepEqual(
+    await iconSourcePaths({ root: state.root, revision: state.base }),
+    ["packages/yakit-ui-icons", "packages/yakit-ui/src/icons"],
+  );
+});
 
 function write(root, file, content) {
   mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
@@ -595,4 +637,17 @@ test("deferral resolves release-tag baselines to their immutable commit", async 
   });
   assert.equal(result.status, "PASS", result.reason);
   assert.equal(result.deferredImpact.probes[0].baseRevision, state.base);
+});
+
+test("an active deferral rejects publishing UI even when all observed packages are declared", async () => {
+  const { options } = await deferredFixture();
+  const result = await computeReleaseImpact({
+    ...options,
+    declaredSetOverride: [UI, ICONS],
+    expectedVersions: { [UI]: "1.0.0", [ICONS]: "1.0.1" },
+  });
+  assert.deepEqual(result.observedSet, [UI, ICONS]);
+  assert.deepEqual(result.declaredSet, [UI, ICONS]);
+  assert.equal(result.status, "BLOCK");
+  assert.match(result.reason, /release context does not exactly match deferral policy/);
 });

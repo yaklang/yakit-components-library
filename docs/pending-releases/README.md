@@ -11,14 +11,64 @@ Version `0.2.9` unifies icon strokes to 1.5 and corrects legacy Outline/view-gri
 same icon improvements, but its rebuilt output is an impact probe and is not
 a release artifact.
 
-The two deferred Changeset documents in this directory preserve the original UI Changeset bump
-levels and descriptions. They are outside `.changeset` so the icons-only release
-does not create a UI Version Packages change. Before the next UI release, move
-both documents back to `.changeset` and review the resulting version and package
-changes. Do not discard them or treat the UI changes as already published.
+The deferred Changeset documents in this directory preserve the original UI Changeset bump
+levels and descriptions. They remain outside `.changeset`, and UI is temporarily
+listed in `.changeset/config.json` `ignore` to also prevent dependency-driven UI
+version bumps. Before the next UI release, remove UI from `ignore`, retire or
+replace the deferral policy, move the deferred Changeset documents back to
+`.changeset`, and review the resulting version and package changes. Do not discard
+them or treat the UI changes as already published.
 
 The checked-in `scripts/release/release-deferral-policy.json` permits only the
 recorded icons release identity and exact UI source, lock, toolchain and config
 hashes against the recorded UI release baseline. Further changes require a new
 reviewed policy or a normal release of all observed packages. Consumer verification
 uses the frozen registry UI counterpart rather than the deferred UI build.
+
+## Planned icons 0.3.1 release
+
+Only `@yakit-libs/yakit-ui-icons` is scheduled for version `0.3.1`: React 19
+compatibility, four new Outline arrow icons, and Figma-bound theme colors for
+six menu icons. This also includes independent ownership of the public icon source,
+maintenance tools, tests and historical assets. `@yakit-libs/yakit-ui` remains at
+its published version `0.2.3`.
+
+版本目标已确认（2026-11-05）：npm 已存在 icons `0.3.0`，虽然 `latest`
+仍指向 `0.2.9`。本次选择未占用的 `0.3.1`，将 icons `package.json` 的版本基准
+对齐到已发布的 `0.3.0`，两条 icons Changeset 按 `patch` 生成 `0.3.1`，保留
+完整功能说明。基准调整不代表本分支的新功能已经发布；UI 的延期 Changeset
+仍保留原升级级别。
+
+正式发布成功后，对应 Git tag 为 `@yakit-libs/yakit-ui-icons@0.3.1`，npm 发布标签
+仍为 `latest`。准备分支不创建或移动远端 tag，也不修改 npm 的现有标签。
+
+The UI portion of the React 19 / antd 6 Changeset is preserved in
+[react19-antd6-deps.md](./react19-antd6-deps.md), with its original minor bump
+and description. Restore it alongside the other deferred Changesets before
+the next UI release. The shared-source icon additions and menu theme changes
+also need to be included in that future UI release's notes.
+
+## 公共图标源码迁移后的发布边界
+
+本次已确认将公共图标独立迁移带来的 UI 改动一起延期，npm UI 保持 `0.2.3`。
+审查范围包括：新增 icons 的 `workspace:^` 运行时依赖、Button 等组件改用包入口、
+旧图标入口及类型和 CSS 的兼容转发、构建时将 icons 外置，以及对应的 Storybook、
+测试和开发命令调整。InputNumber、SearchInput 等组件的私有 SVG 不在替换范围内。
+这些内容保存在 [independent-icon-package.md](./independent-icon-package.md)，
+与已有的 React 19 / antd 6、图标名称和描边改动一起等待 UI 发版。
+
+`.changeset/config.json` 的 `ignore` 控制版本生成；
+`scripts/release/release-deferral-policy.json` 约束本次只发布 icons `0.3.1`，
+并绑定审查过的 UI 源码、锁文件、工具链和配置哈希。两者需要同时维护。
+UI 继续构建和测试，其本地产物仅用于检查；发布兼容性验证使用冻结的 npm UI
+`0.2.3` 与本次 icons 候选包，不能用仓库里的新 UI 代替旧版基线。
+
+运行 `pnpm release:deferral-check` 可检查实际 Changesets 版本计划。
+UI 在 JSON 中可能以 `type: "none"` 出现，这表示不升级版本。
+Version Packages 消耗 Changeset 后，检查仍要求 icons 为 `0.3.1`、UI 为 `0.2.3`。
+PR CI 和发布模式选择都会运行此检查；打包前还会核对 Changesets 的实际发布计划。
+即使实际改动和发布名单都包含 UI，发布影响检查也不能跳过有效的延期策略。
+
+后续 UI 源码或发布配置继续变化时，需要重新审查并更新对应绑定，不能仅重算哈希。
+恢复 UI 发布时，移除 `ignore` 中的 UI 和本次延期策略，恢复这里的 UI Changeset，
+再检查实际升级级别、icons 的安装版本及所有累计更新说明。

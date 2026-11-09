@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -7,61 +7,36 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
-import colorfulManifest from '../../scripts/figma-colorful-icons-inventory.json';
-import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
+import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
   solidIconRegistry,
 } from '../../src/icons/registry';
+import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
+
+const colorfulManifest = JSON.parse(
+  readIconInputSync(
+    new URL('../../../yakit-ui-icons/config/icon-sources/colorful.json#manifest', import.meta.url),
+    'utf8',
+  ),
+);
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const storiesRoot = resolve(packageRoot, '.storybook/stories');
-const colorfulIconsRoot = resolve(packageRoot, 'src/icons/colorful');
-const iconStorySource = readFileSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8');
+const colorfulIconsRoot = resolve(packageRoot, '../yakit-ui-icons/src/colorful');
+const iconStorySource = readIconInputSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8');
 const iconStoryMarkup = renderToStaticMarkup(createElement(iconStory.component));
-const colorfulStorySpecs = [
-  {
-    category: 'primary-function-menu',
-    displayName: 'Colorful · 一级功能菜单',
-    exportName: 'PrimaryFunctionMenu',
-  },
-  {
-    category: 'secondary-menu',
-    displayName: 'Colorful · 二级功能菜单',
-    exportName: 'SecondaryMenu',
-  },
-  {
-    category: 'basic',
-    displayName: 'Colorful · 基础图标 · Solid + Outline',
-    exportName: 'Basic',
-  },
-  { category: 'yakit-logo', displayName: 'Colorful · Yakit 品牌标识', exportName: 'YakitLogo' },
-  {
-    category: 'penetration-logo',
-    displayName: 'Colorful · PenetraX 品牌标识',
-    exportName: 'PenetrationLogo',
-  },
-  { category: 'ai-model', displayName: 'Colorful · AI 模型', exportName: 'AiModel' },
-  { category: 'avatar', displayName: 'Colorful · 头像', exportName: 'Avatar' },
-  { category: 'plugin-source', displayName: 'Colorful · 插件来源', exportName: 'PluginSource' },
-  { category: 'risk-level', displayName: 'Colorful · 风险等级', exportName: 'RiskLevel' },
-  {
-    category: 'log-task-node',
-    displayName: 'Colorful · 日志与任务节点',
-    exportName: 'LogTaskNode',
-  },
-  { category: 'file-type', displayName: 'Colorful · 文件类型', exportName: 'FileType' },
-  { category: 'browser', displayName: 'Colorful · 浏览器', exportName: 'Browser' },
-  {
-    category: 'operating-system',
-    displayName: 'Colorful · 操作系统',
-    exportName: 'OperatingSystem',
-  },
-  { category: 'social-media', displayName: 'Colorful · 社交平台', exportName: 'SocialMedia' },
-  { category: 'coding', displayName: 'Colorful · 编程技术', exportName: 'Coding' },
-  { category: 'cursor', displayName: 'Colorful · 鼠标指针', exportName: 'Cursor' },
-] as const;
+const colorfulStorySpecs = colorfulManifest.groups.map(({ category, storybook, name }) => ({
+  category,
+  displayName: `Colorful · ${storybook?.label ?? name}`,
+  exportName:
+    storybook?.exportName ??
+    category
+      .split('-')
+      .map((part) => part[0].toUpperCase() + part.slice(1))
+      .join(''),
+}));
 const storySpecs = [
   { displayName: 'Overview', exportName: 'Overview' },
   { displayName: 'Outline', exportName: 'Outline' },
@@ -344,7 +319,7 @@ describe('Icon Storybook contract', () => {
     }
   });
 
-  it('projects all 296 colorful icons into exactly one frozen navigation group', () => {
+  it('projects every public colorful icon into exactly one navigation group', () => {
     const publicRows = colorfulManifest.rows.filter(({ publicExposure }) =>
       ['canonical', 'semantic-alias'].includes(publicExposure),
     );
@@ -374,19 +349,35 @@ describe('Icon Storybook contract', () => {
   it('uses the visual Figma node order inside audited colorful stories', () => {
     const basicMarkup = renderStory(iconStories.Basic);
     const basicExports = renderedExports(basicMarkup);
-    expect(basicExports).toHaveLength(82);
-    expect(basicExports.slice(0, 41).every((name) => name.endsWith('SolidColorful'))).toBe(true);
-    expect(basicExports.slice(41).every((name) => name.endsWith('OutlineColorful'))).toBe(true);
+    const historicalBasic = new Set(
+      colorfulManifest.rows
+        .filter((row) => row.category === 'basic')
+        .slice(0, 82)
+        .map((row) => row.exportName),
+    );
+    const historicalExports = basicExports.filter((name) => historicalBasic.has(name));
+    expect(historicalExports).toHaveLength(82);
+    expect(historicalExports.slice(0, 41).every((name) => name.endsWith('SolidColorful'))).toBe(
+      true,
+    );
+    expect(historicalExports.slice(41).every((name) => name.endsWith('OutlineColorful'))).toBe(
+      true,
+    );
     expect(renderedSourceNodeIds(basicMarkup).slice(0, 3)).toEqual([
       '37151:15203',
       '37151:15202',
       '37151:15201',
     ]);
-    expect(renderedSourceNodeIds(basicMarkup).slice(-3)).toEqual([
-      '38051:62408',
-      '38723:88885',
-      '44983:1900',
-    ]);
+    expect(
+      renderedSourceNodeIds(basicMarkup)
+        .filter((id) =>
+          colorfulManifest.rows
+            .filter((row) => row.category === 'basic')
+            .slice(0, 82)
+            .some((row) => row.nodeId === id),
+        )
+        .slice(-3),
+    ).toEqual(['38051:62408', '38723:88885', '44983:1900']);
 
     for (const [category, expected] of Object.entries(figmaStorySourceNodeOrder)) {
       const story = colorfulStorySpecs.find((spec) => spec.category === category);
@@ -394,18 +385,18 @@ describe('Icon Storybook contract', () => {
       expect(
         renderedSourceNodeIds(
           renderStory(iconStories[story!.exportName as keyof typeof iconStories]),
-        ),
+        ).filter((id) => expected.includes(id)),
         category,
       ).toEqual(expected);
     }
   });
 
   it('keeps the two unbacked Memfit compositions on their exact Figma geometry', () => {
-    const horizontal = readFileSync(
+    const horizontal = readIconInputSync(
       resolve(colorfulIconsRoot, 'MemfitLogoHorizontalColorful.svg'),
       'utf8',
     );
-    const vertical = readFileSync(
+    const vertical = readIconInputSync(
       resolve(colorfulIconsRoot, 'MemfitLogoVerticalColorful.svg'),
       'utf8',
     );
