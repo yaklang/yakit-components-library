@@ -27,48 +27,16 @@ const storiesRoot = resolve(packageRoot, '.storybook/stories');
 const colorfulIconsRoot = resolve(packageRoot, '../yakit-ui-icons/src/colorful');
 const iconStorySource = readIconInputSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8');
 const iconStoryMarkup = renderToStaticMarkup(createElement(iconStory.component));
-const colorfulStorySpecs = [
-  {
-    category: 'primary-function-menu',
-    displayName: 'Colorful · 一级功能菜单',
-    exportName: 'PrimaryFunctionMenu',
-  },
-  {
-    category: 'secondary-menu',
-    displayName: 'Colorful · 二级功能菜单',
-    exportName: 'SecondaryMenu',
-  },
-  {
-    category: 'basic',
-    displayName: 'Colorful · 基础图标 · Solid + Outline',
-    exportName: 'Basic',
-  },
-  { category: 'yakit-logo', displayName: 'Colorful · Yakit 品牌标识', exportName: 'YakitLogo' },
-  {
-    category: 'penetration-logo',
-    displayName: 'Colorful · PenetraX 品牌标识',
-    exportName: 'PenetrationLogo',
-  },
-  { category: 'ai-model', displayName: 'Colorful · AI 模型', exportName: 'AiModel' },
-  { category: 'avatar', displayName: 'Colorful · 头像', exportName: 'Avatar' },
-  { category: 'plugin-source', displayName: 'Colorful · 插件来源', exportName: 'PluginSource' },
-  { category: 'risk-level', displayName: 'Colorful · 风险等级', exportName: 'RiskLevel' },
-  {
-    category: 'log-task-node',
-    displayName: 'Colorful · 日志与任务节点',
-    exportName: 'LogTaskNode',
-  },
-  { category: 'file-type', displayName: 'Colorful · 文件类型', exportName: 'FileType' },
-  { category: 'browser', displayName: 'Colorful · 浏览器', exportName: 'Browser' },
-  {
-    category: 'operating-system',
-    displayName: 'Colorful · 操作系统',
-    exportName: 'OperatingSystem',
-  },
-  { category: 'social-media', displayName: 'Colorful · 社交平台', exportName: 'SocialMedia' },
-  { category: 'coding', displayName: 'Colorful · 编程技术', exportName: 'Coding' },
-  { category: 'cursor', displayName: 'Colorful · 鼠标指针', exportName: 'Cursor' },
-] as const;
+const colorfulStorySpecs = colorfulManifest.groups.map(({ category, storybook, name }) => ({
+  category,
+  displayName: `Colorful · ${storybook?.label ?? name}`,
+  exportName:
+    storybook?.exportName ??
+    category
+      .split('-')
+      .map((part) => part[0].toUpperCase() + part.slice(1))
+      .join(''),
+}));
 const storySpecs = [
   { displayName: 'Overview', exportName: 'Overview' },
   { displayName: 'Outline', exportName: 'Outline' },
@@ -351,7 +319,7 @@ describe('Icon Storybook contract', () => {
     }
   });
 
-  it('projects all 296 colorful icons into exactly one frozen navigation group', () => {
+  it('projects every public colorful icon into exactly one navigation group', () => {
     const publicRows = colorfulManifest.rows.filter(({ publicExposure }) =>
       ['canonical', 'semantic-alias'].includes(publicExposure),
     );

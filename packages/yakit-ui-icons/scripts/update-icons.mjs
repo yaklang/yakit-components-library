@@ -368,7 +368,7 @@ export async function applyChanges(root, changes, { write = writeFile } = {}) {
     throw error;
   }
 }
-export async function runIconUpdate(args = process.argv.slice(2), root = packageRoot) {
+export function parseIconUpdateArgs(args) {
   let family;
   let check = false;
   for (let i = 0; i < args.length; i++) {
@@ -376,6 +376,11 @@ export async function runIconUpdate(args = process.argv.slice(2), root = package
     else if (args[i] === '--family' && args[i + 1]) family = args[++i];
     else if (args[i] !== '--') fail(`Unknown icon argument: ${args[i]}`);
   }
+  return { family, check };
+}
+
+export async function runIconUpdate(args = process.argv.slice(2), root = packageRoot) {
+  const { family, check } = parseIconUpdateArgs(args);
   const changes = await planIconUpdate(root, { family });
   if (check && changes.size)
     fail(

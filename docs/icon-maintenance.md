@@ -2,7 +2,7 @@
 
 公共图标源码、来源和专属测试由 `packages/yakit-ui-icons` 独立维护。UI 通过 `@yakit-libs/yakit-ui-icons` 的公开入口使用图标；仓库内依赖为 `workspace:^`，打包时转换成正常版本范围。不要跨目录导入图标包的 `src` 或原始 SVG。
 
-UI 组件私有 SVG 和 `packages/yakit-ui/config/icon-sources/private.json` 仍归 UI。根目录的 `icons:update` 先检查私有资源登记，再更新公共图标；图标包自己的 `icons:update` 不依赖 UI。`pnpm icons:verify-isolation` 会在没有 UI 源码的临时目录验证公共图标生成、审计、工作流、类型、构建和产物。
+UI 组件私有 SVG 和 `packages/yakit-ui/config/icon-sources/private.json` 仍归 UI。根目录的 `icons:update` 先检查私有资源登记，再统一更新公共图标和 Storybook 生成内容；图标包自己的 `icons:update` 不依赖 UI。`pnpm icons:verify-isolation` 会在没有 UI 源码的临时目录验证公共图标生成、审计、工作流、类型、构建和产物。
 
 Storybook 继续由 UI 统一展示。UI 的 `storybook`、`start:dev`、`dev` 命令先构建图标包，再启动图标构建监听；直接运行集成测试前先构建图标包。历史资料的位置与内容校验见 [源码归属与历史资料](../packages/yakit-ui-icons/docs/source-layout.md)。
 
@@ -28,6 +28,16 @@ Agent 先检查这些节点在项目里是否已经存在，再按用户意图�
 例如节点 `47351:7055` 对应 `47351-7055.svg`，代码导出 `ArrowUpFromDotOutlined`。已有图标保留导出名，即使 Figma 中改了名称也不自动改业务 API。新增导出名来自节点英文名称，按分类加 `Outlined`、`Solid` 或 `Colorful`；分类或英文含义不明确时 Agent 会询问。
 
 现有 Colorful 文件名和 Oldicon 深层导入路径保持兼容。新 Figma SVG 使用 nodeId 文件名。重复文件名或导出名会报错，不覆盖其他图标。
+
+## Storybook 自动同步
+
+在仓库根目录运行 `pnpm icons:update`，或 `pnpm icons:update --family colorful`，会同时更新图标产物、Storybook 的 Colorful 分组数据和静态导航入口。`--check` 会检查这些文件是否遗漏或过期，只报错、不写入；CI 已通过根目录命令执行此检查。
+
+分组信息统一来自 `packages/yakit-ui-icons/config/icon-sources/colorful.json` 的 `groups`。可选 `storybook.label` 设置展示名称，`storybook.exportName` 保留导航导出名；不填时分别使用分组名称和 category 的 PascalCase。`storybook.preferredNodeOrder` 只保留已有的展示顺序，新图标按来源记录顺序自动追加，不能把追加顺序当成新获取的 Figma 画布顺序。确需重新排列时在该字段维护，不再手写 Storybook 节点清单。
+
+`packages/yakit-ui/.storybook/stories/icon-colorful.generated.ts` 和 `Icon.stories.tsx` 中标记的 Colorful 导出区域由命令生成。Outline、Solid 和 Oldicon 继续通过公开 registry 展示全部图标。历史视觉基线不参与生成。
+
+图标包内部的 `icons:update` 仍只负责图标包，保持独立运行；日常新增图标应使用仓库根目录命令。验证展示时先构建图标包，再运行 `pnpm --filter @yakit-libs/yakit-ui test:icon-integration`。
 
 ## 平时用的命令
 

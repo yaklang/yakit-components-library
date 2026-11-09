@@ -1,9 +1,12 @@
 import type { Preview } from '@storybook/react';
-import { useEffect } from 'react';
+import { applyThemeColors, generateColors } from '@yakit-libs/color';
+import { useEffect, useMemo } from 'react';
 
 import { ConfigProvider } from '../src/components';
 import type { YakitLocale } from '../src/components';
 import '../src/styles/index.css';
+
+import { brandThemes, type BrandTheme } from './brand-themes';
 
 const locales: Record<'zh' | 'en', YakitLocale> = {
   zh: {
@@ -34,6 +37,17 @@ export const globalTypes = {
       showName: true,
     },
   },
+  brand: {
+    name: '主题色',
+    description: '切换主题色',
+    toolbar: {
+      icon: 'paintbrush',
+      title: '主题色',
+      items: Object.entries(brandThemes).map(([value, { name }]) => ({ value, title: name })),
+      showName: true,
+      dynamicTitle: true,
+    },
+  },
   theme: {
     name: '主题',
     description: '切换主题',
@@ -50,22 +64,45 @@ export const globalTypes = {
 };
 
 const preview: Preview = {
+  initialGlobals: { locale: 'zh', theme: 'light', brand: 'yakit' },
   decorators: [
     (Story, context) => {
-      // 获取当前主题
-      const currentTheme = context.globals.theme as 'light' | 'dark';
+      const currentTheme = context.globals.theme === 'dark' ? 'dark' : 'light';
+      const brand: BrandTheme = Object.hasOwn(brandThemes, context.globals.brand)
+        ? (context.globals.brand as BrandTheme)
+        : 'yakit';
+      const palettes = useMemo(
+        () => ({
+          light: generateColors('light', brandThemes[brand].light),
+          dark: generateColors('dark', brandThemes[brand].dark),
+        }),
+        [brand],
+      );
+      // Components also set data-theme themselves; override their static palettes too.
+      const themeCss = useMemo(
+        () =>
+          Object.entries(palettes)
+            .map(
+              ([mode, colors]) =>
+                `html [data-theme="${mode}"] {${Object.entries(colors)
+                  .map(([key, value]) => `${key}:${value};`)
+                  .join('')}}`,
+            )
+            .join('\n'),
+        [palettes],
+      );
 
-      // 设置 HTML 的 data-theme 属性
       useEffect(() => {
-        document.documentElement.setAttribute('data-theme', currentTheme);
-      }, [currentTheme]);
+        applyThemeColors(currentTheme, palettes[currentTheme]);
+      }, [palettes, currentTheme]);
 
       // 显式指定 locale 类型
       const locale = context.globals.locale as 'zh' | 'en';
 
       return (
         <ConfigProvider theme={{ mode: currentTheme }} locale={locales[locale]}>
-          <div data-theme={currentTheme}>
+          <div>
+            <style>{themeCss}</style>
             <Story />
           </div>
         </ConfigProvider>

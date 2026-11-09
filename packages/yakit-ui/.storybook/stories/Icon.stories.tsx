@@ -11,118 +11,26 @@ import {
   type IconDefinition,
 } from '@yakit-libs/yakit-ui-icons/registry';
 
-interface ColorfulCategoryPresentation {
-  category: ColorfulIconCategory;
-  label: string;
-}
+import { colorfulStoryGroups } from './icon-colorful.generated';
 
-const colorfulCategoryPresentation = [
-  { category: 'primary-function-menu', label: '一级功能菜单' },
-  { category: 'secondary-menu', label: '二级功能菜单' },
-  { category: 'basic', label: '基础图标 · Solid + Outline' },
-  { category: 'yakit-logo', label: 'Yakit 品牌标识' },
-  { category: 'penetration-logo', label: 'PenetraX 品牌标识' },
-  { category: 'ai-model', label: 'AI 模型' },
-  { category: 'avatar', label: '头像' },
-  { category: 'plugin-source', label: '插件来源' },
-  { category: 'risk-level', label: '风险等级' },
-  { category: 'log-task-node', label: '日志与任务节点' },
-  { category: 'file-type', label: '文件类型' },
-  { category: 'browser', label: '浏览器' },
-  { category: 'operating-system', label: '操作系统' },
-  { category: 'social-media', label: '社交平台' },
-  { category: 'coding', label: '编程技术' },
-  { category: 'cursor', label: '鼠标指针' },
-] as const satisfies readonly ColorfulCategoryPresentation[];
-
-const sourceNodeIds = (value: string) => value.trim().split(/\s+/);
-
-const colorfulFigmaNodeOrder: Partial<Record<ColorfulIconCategory, string[]>> = {
-  basic: sourceNodeIds(`
-    37151:15203 37151:15202 37151:15201 37151:15200 37151:15199 37151:15198 37151:15197 37151:15196
-    37151:15188 37151:15195 37151:15194 37151:15193 37151:15192 37151:15191 37151:15190 37151:15189
-    37151:15187 37151:15186 37151:15185 37151:15184 37151:15183 37151:15182 37151:15181 37151:15180
-    37151:15169 37151:15179 37151:15176 37151:15174 37151:15173 37151:15172 37151:15171 37151:15170
-    37151:15168 37151:15167 37151:15166 37560:24987 37560:24988 37560:24989 38051:63673 38723:89101
-    44984:1932
-    45:955 46:887 46:914 46:929 46:943 66:1969 70:2017 74:2045
-    77:1722 78:1750 78:1778 78:1791 86:1736 86:1761 88:1820 89:1870
-    89:1898 92:1713 92:1761 2581:76280 2970:81535 2970:81496 2970:81207 2960:81120
-    2960:81053 2956:81015 2956:80990 2956:80711 2956:80557 37151:13886 2743:86612 14476:204436
-    14476:204482 14476:204653 15311:236843 37560:24990 37560:24991 37560:24992 38051:62408 38723:88885
-    44983:1900
-  `),
-  'yakit-logo': sourceNodeIds(`
-    15444:242046 37221:35186 37221:35146 15454:242111 37221:35164 37221:35129
-    37154:12492 37221:35443 37221:35427 37154:12490 37221:35332 37221:35328
-    44518:10212 44520:3491 44520:1884 44520:3547 44520:3560 44520:3632
-    44520:5040 44521:5060 44521:5122 44521:5198 44521:5204 44522:5642
-  `),
-  'ai-model': sourceNodeIds(`
-    38864:130867 38803:60735 38808:60821 38808:60837 38808:60849 38808:67833 38808:67860
-    38808:67883 38808:67896 39233:7592 39233:7605 39233:7631 45038:1909 45594:5407
-    38864:130874 38808:67916 38808:67857 38808:67851 38808:67848 38808:67843 38808:67874
-    38808:67893 38808:67907 39233:7601 39233:7642 39233:7669 45038:1923 45594:5420
-  `),
-  avatar: sourceNodeIds(`
-    37202:11853 37202:11830 37202:11824 37221:35748 37221:35732 37221:35740 37221:35736
-    37221:35744 37221:35731
-  `),
-  'plugin-source': sourceNodeIds(`3409:103588 3409:103589 3409:103590 37153:16224 3054:91957`),
-  'log-task-node': sourceNodeIds(`
-    14012:175288 14586:211780 14586:211782 14586:211797 31042:85219 14586:211801 15752:248591
-    14586:211810 13807:174539 13807:174540 13807:174541 13807:174542 13807:174543 13807:174544
-    13807:174545 37153:13731 37153:13733 37153:13735 37153:13737 37153:13739
-    45425:2032 45425:2030 45425:2003 45425:2011 45425:2005
-    45428:2113 45428:2123 45428:2083 45428:2093 45428:2103
-  `),
-  'file-type': sourceNodeIds(`
-    32338:71077 45132:119394 32338:71076 32338:71075 32338:71074 32338:71073 32338:71072
-    32338:71082
-  `),
-  coding: sourceNodeIds(`
-    37155:20116 37155:20119 37155:20123 37155:20127 37155:20130 37155:20132 37155:20137
-    37155:20140 37155:20145 37155:20148 37155:20152 37155:20156 37155:20158 37155:20161
-    37155:20168 37155:20188 37155:20193 37155:20197 37155:20200 37155:20206 37155:20209
-    22799:2274 22801:2402 22801:2406 22801:2404
-  `),
-  cursor: sourceNodeIds(`256:9484 266:9426 13394:167118 37153:13454 14666:220525`),
-};
-
-const orderColorfulIcons = (
-  category: ColorfulIconCategory,
-  icons: IconDefinition<'colorful'>[],
-) => {
-  const sourceOrder = colorfulFigmaNodeOrder[category];
-  if (!sourceOrder) return icons;
-
-  const positionByNodeId = new Map(sourceOrder.map((nodeId, index) => [nodeId, index]));
-  const missingNodeIds = icons
-    .filter(({ sourceNodeId }) => !positionByNodeId.has(sourceNodeId))
-    .map(({ sourceNodeId }) => sourceNodeId);
+const colorfulIconGroups = colorfulStoryGroups.map(({ nodeIds, ...presentation }) => {
+  const icons = colorfulIconRegistry.filter(({ category }) => category === presentation.category);
+  const positions = new Map(nodeIds.map((id, index) => [id, index]));
   if (
-    positionByNodeId.size !== sourceOrder.length ||
-    sourceOrder.length !== icons.length ||
-    missingNodeIds.length > 0
+    positions.size !== icons.length ||
+    icons.some(({ sourceNodeId }) => !positions.has(sourceNodeId))
   ) {
     throw new Error(
-      `Invalid Figma icon order for ${category}: expected ${sourceOrder.length}, received ${icons.length}, missing ${missingNodeIds.join(', ') || 'none'}`,
+      `Storybook icon data is stale for ${presentation.category}; run pnpm icons:update and rebuild the icon package`,
     );
   }
-
-  return [...icons].sort(
-    (left, right) =>
-      positionByNodeId.get(left.sourceNodeId)! - positionByNodeId.get(right.sourceNodeId)!,
-  );
-};
-
-const colorfulIconGroups = colorfulCategoryPresentation.map((presentation) => ({
-  ...presentation,
-  icons: orderColorfulIcons(
-    presentation.category,
-    colorfulIconRegistry.filter(({ category }) => category === presentation.category),
-  ),
-}));
+  return {
+    ...presentation,
+    icons: [...icons].sort(
+      (left, right) => positions.get(left.sourceNodeId)! - positions.get(right.sourceNodeId)!,
+    ),
+  };
+});
 
 const IconSection = ({
   icons,
@@ -366,6 +274,7 @@ export const Solid: Story = {
   ),
 };
 
+// BEGIN GENERATED COLORFUL STORIES
 export const PrimaryFunctionMenu: Story = {
   name: 'Colorful · 一级功能菜单',
   render: () => <ColorfulCategoryGallery category="primary-function-menu" />,
@@ -394,6 +303,11 @@ export const PenetrationLogo: Story = {
 export const AiModel: Story = {
   name: 'Colorful · AI 模型',
   render: () => <ColorfulCategoryGallery category="ai-model" />,
+};
+
+export const ColorfulIcon: Story = {
+  name: 'Colorful · 彩色图标',
+  render: () => <ColorfulCategoryGallery category="colorful-icon" />,
 };
 
 export const Avatar: Story = {
@@ -445,6 +359,7 @@ export const Cursor: Story = {
   name: 'Colorful · 鼠标指针',
   render: () => <ColorfulCategoryGallery category="cursor" />,
 };
+// END GENERATED COLORFUL STORIES
 
 const StrokeWidthGallery = ({ strokeWidth }: { strokeWidth: number }) => (
   <section style={{ display: 'grid', gap: 16 }}>
