@@ -1,0 +1,433 @@
+/* Tree — Figma Yakit Design System Tree（Action + Basic 拼接态） */
+
+.yakit-tree {
+  --yakit-tree-item-height: 24px;
+  --yakit-tree-switcher-width: 20px;
+  --yakit-tree-font-size: 12px;
+  --yakit-tree-line-height: 16px;
+  --yakit-tree-radius: 4px;
+  --yakit-tree-gap: 4px;
+  --yakit-tree-icon-size: 16px;
+  --yakit-tree-switcher-icon-size: 12px;
+
+  --yakit-tree-color: var(--Colors-Use-Neutral-Text-1-Title, #353639);
+  --yakit-tree-bg: var(--Colors-Use-Basic-Background, #ffffff);
+  --yakit-tree-hover-action-bg: var(--Colors-Use-Neutral-Bg-Hover, #eef0f3);
+  --yakit-tree-hover-basic-bg: var(--Colors-Use-Neutral-Bg, #f8f9fa);
+  --yakit-tree-selected-action-bg: var(--Colors-Use-Main-Pressed, #db752e);
+  --yakit-tree-selected-basic-bg: var(--Colors-Use-Main-Primary, #f28c45);
+  --yakit-tree-selected-hover-action-bg: var(--Colors-Use-Main-Primary, #f28c45);
+  --yakit-tree-selected-hover-basic-bg: var(--Colors-Use-Main-Hover, #f59f64);
+  --yakit-tree-selected-color: var(--Colors-Use-Basic-White, #ffffff);
+  --yakit-tree-switcher-color: var(--Colors-Use-Neutral-Text-3-Secondary, #85898e);
+  --yakit-tree-folder-color: var(--Colors-Use-Orange-Primary, #ffb660);
+  --yakit-tree-leaf-color: var(--Colors-Use-Neutral-Text-3-Secondary, #85898e);
+  --yakit-tree-edit-bg: var(--Colors-Use-Main-Bg, #fef5ee);
+  --yakit-tree-edit-border: var(--Colors-Use-Main-Primary, #f28c45);
+  --yakit-tree-disabled: var(--Colors-Use-Neutral-Disable, #c0c6d1);
+
+  background: var(--yakit-tree-bg);
+  box-sizing: border-box;
+  color: var(--yakit-tree-color);
+  font-family: 'PingFang SC', sans-serif;
+  font-size: var(--yakit-tree-font-size);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-tree-line-height);
+}
+
+.yakit-tree *,
+.yakit-tree *::before,
+.yakit-tree *::after {
+  box-sizing: border-box;
+}
+
+.yakit-tree-empty {
+  color: var(--yakit-tree-disabled);
+  font-size: var(--yakit-tree-font-size);
+  line-height: var(--yakit-tree-line-height);
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.yakit-tree-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.yakit-tree-treenode {
+  align-items: center;
+  display: flex;
+  min-height: var(--yakit-tree-item-height);
+  padding: 0;
+  width: 100%;
+}
+
+.yakit-tree-switcher {
+  align-items: center;
+  background: transparent;
+  border-radius: var(--yakit-tree-radius) 0 0 var(--yakit-tree-radius);
+  color: var(--yakit-tree-switcher-color);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  height: var(--yakit-tree-item-height);
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  padding: 6px 4px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  width: var(--yakit-tree-switcher-width);
+}
+
+.yakit-tree-switcher-noop {
+  cursor: default;
+}
+
+.yakit-tree-switcher-icon {
+  display: inline-flex;
+  height: var(--yakit-tree-switcher-icon-size);
+  width: var(--yakit-tree-switcher-icon-size);
+}
+
+.yakit-tree-switcher-icon svg {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.yakit-tree-node-content-wrapper {
+  align-items: center;
+  background: transparent;
+  border-radius: 0 var(--yakit-tree-radius) var(--yakit-tree-radius) 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  gap: var(--yakit-tree-gap);
+  line-height: var(--yakit-tree-line-height);
+  margin: 0;
+  min-height: var(--yakit-tree-item-height);
+  min-width: 0;
+  overflow: hidden;
+  padding: 4px 8px 4px 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.yakit-tree-iconEle {
+  align-items: center;
+  color: var(--yakit-tree-folder-color);
+  display: inline-flex;
+  flex: none;
+  height: var(--yakit-tree-icon-size);
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  width: var(--yakit-tree-icon-size);
+}
+
+.yakit-tree-icon-leaf {
+  color: var(--yakit-tree-leaf-color);
+}
+
+.yakit-tree-iconEle svg,
+.yakit-tree-node-icon svg {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.yakit-tree-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Hover：Action / Basic 分色（编辑态整行浅橙，不走 hover 分色） */
+.yakit-tree-treenode:not(.yakit-tree-treenode-selected):not(.yakit-tree-node-editing):hover .yakit-tree-switcher {
+  background: var(--yakit-tree-hover-action-bg);
+}
+
+.yakit-tree-treenode:not(.yakit-tree-treenode-selected):not(.yakit-tree-node-editing):hover .yakit-tree-node-content-wrapper {
+  background: var(--yakit-tree-hover-basic-bg);
+}
+
+/* Selected */
+.yakit-tree-treenode-selected .yakit-tree-switcher {
+  background: var(--yakit-tree-selected-action-bg);
+  color: var(--yakit-tree-selected-color);
+}
+
+.yakit-tree-treenode-selected .yakit-tree-node-content-wrapper {
+  background: var(--yakit-tree-selected-basic-bg);
+  color: var(--yakit-tree-selected-color);
+}
+
+.yakit-tree-treenode-selected .yakit-tree-iconEle,
+.yakit-tree-treenode-selected .yakit-tree-icon-leaf,
+.yakit-tree-treenode-selected .yakit-tree-node-icon {
+  color: var(--yakit-tree-selected-color);
+}
+
+/* Selected-hover */
+.yakit-tree-treenode-selected:hover .yakit-tree-switcher {
+  background: var(--yakit-tree-selected-hover-action-bg);
+}
+
+.yakit-tree-treenode-selected:hover .yakit-tree-node-content-wrapper {
+  background: var(--yakit-tree-selected-hover-basic-bg);
+}
+
+/* Disabled */
+.yakit-tree-treenode-disabled .yakit-tree-node-content-wrapper,
+.yakit-tree-treenode-disabled .yakit-tree-switcher,
+.yakit-tree-treenode-disabled .yakit-tree-title,
+.yakit-tree-treenode-disabled .yakit-tree-iconEle {
+  color: var(--yakit-tree-disabled);
+  cursor: not-allowed;
+}
+
+.yakit-tree-treenode-disabled:hover .yakit-tree-switcher,
+.yakit-tree-treenode-disabled:hover .yakit-tree-node-content-wrapper {
+  background: transparent;
+}
+
+.yakit-tree-checkbox {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  height: 16px;
+  margin-inline-end: 4px;
+  position: relative;
+  width: 16px;
+}
+
+.yakit-tree-checkbox input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--Colors-Use-Basic-Background, #ffffff);
+  border: 1px solid var(--Colors-Use-Neutral-Border, #c0c6d1);
+  border-radius: 4px;
+  cursor: pointer;
+  flex: none;
+  height: 16px;
+  margin: 0;
+  outline: none;
+  position: relative;
+  width: 16px;
+}
+
+.yakit-tree-checkbox input:hover {
+  border-color: var(--Colors-Use-Main-Primary, #f28c45);
+}
+
+.yakit-tree-checkbox input:active {
+  border-color: var(--Colors-Use-Main-Primary, #f28c45);
+  box-shadow: 0 0 2px 2px var(--Colors-Use-Main-Focus, rgba(242, 140, 69, 0.2));
+}
+
+.yakit-tree-checkbox input:checked {
+  background-color: var(--Colors-Use-Main-Primary, #f28c45);
+  border-color: var(--Colors-Use-Main-Primary, #f28c45);
+}
+
+.yakit-tree-checkbox input:checked:hover {
+  background-color: var(--Colors-Use-Main-Hover, #f59f64);
+  border-color: var(--Colors-Use-Main-Hover, #f59f64);
+}
+
+.yakit-tree-checkbox input:checked::after {
+  border: 2px solid var(--Colors-Use-Basic-White, #ffffff);
+  border-left: 0;
+  border-top: 0;
+  content: '';
+  height: 8px;
+  left: 4.5px;
+  position: absolute;
+  top: 1.5px;
+  transform: rotate(45deg);
+  width: 4.5px;
+}
+
+.yakit-tree-checkbox input:indeterminate {
+  background-color: var(--Colors-Use-Neutral-Bg, #f8f9fa);
+  border: 2px solid var(--Colors-Use-Main-Primary, #f28c45);
+}
+
+.yakit-tree-checkbox input:indeterminate::after {
+  background-color: var(--Colors-Use-Main-Primary, #f28c45);
+  border: 0;
+  border-radius: 2px;
+  content: '';
+  height: 10px;
+  left: 1px;
+  position: absolute;
+  top: 1px;
+  transform: none;
+  width: 10px;
+}
+
+.yakit-tree-checkbox input:disabled {
+  background-color: var(--Colors-Use-Neutral-Bg, #f8f9fa);
+  border-color: var(--Colors-Use-Neutral-Disable, #c0c6d1);
+  cursor: not-allowed;
+}
+
+.yakit-tree-checkbox input:disabled:checked {
+  background-color: var(--Colors-Use-Neutral-Disable, #c0c6d1);
+  border-color: var(--Colors-Use-Neutral-Disable, #c0c6d1);
+}
+
+.yakit-tree-checkbox input:disabled:indeterminate {
+  background-color: var(--Colors-Use-Neutral-Bg, #f8f9fa);
+  border-color: var(--Colors-Use-Neutral-Disable, #c0c6d1);
+}
+
+.yakit-tree-checkbox input:disabled:indeterminate::after {
+  background-color: var(--Colors-Use-Neutral-Disable, #c0c6d1);
+}
+
+/* Editing：Figma 37377:69506 — 整行 22px 浅橙底；角标与普通行同 12/20；folder 16；输入白底橙边 */
+.yakit-tree-treenode.yakit-tree-node-editing {
+  --yakit-tree-item-height: 22px;
+  --yakit-tree-switcher-icon-size: 12px;
+  --yakit-tree-gap: 2px;
+  align-items: center;
+  background: var(--yakit-tree-edit-bg);
+  border: 0;
+  border-radius: var(--yakit-tree-radius);
+  box-sizing: border-box;
+  gap: 0;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+}
+
+.yakit-tree-node-editing .yakit-tree-switcher,
+.yakit-tree-node-editing .yakit-tree-node-content-wrapper {
+  background: transparent;
+  height: 22px;
+  min-height: 22px;
+}
+
+.yakit-tree-node-editing .yakit-tree-switcher {
+  align-items: center;
+  border-radius: var(--yakit-tree-radius) 0 0 var(--yakit-tree-radius);
+  color: var(--yakit-tree-switcher-color);
+  justify-content: center;
+  padding: 0;
+  width: var(--yakit-tree-switcher-width);
+}
+
+.yakit-tree-node-editing .yakit-tree-switcher-icon {
+  height: 12px;
+  width: 12px;
+}
+
+.yakit-tree-node-editing .yakit-tree-node-content-wrapper {
+  align-items: center;
+  border-radius: 0;
+  gap: 2px;
+  overflow: visible;
+  padding: 0 8px 0 6px;
+}
+
+.yakit-tree-node-editing .yakit-tree-iconEle,
+.yakit-tree-node-editing .yakit-tree-icon-folder {
+  color: var(--yakit-tree-folder-color);
+  height: 16px;
+  width: 16px;
+}
+
+.yakit-tree-node-editing .yakit-tree-title {
+  align-items: center;
+  align-self: stretch;
+  display: flex;
+  flex: 1 1 auto;
+  height: 22px;
+  min-width: 0;
+  overflow: visible;
+}
+
+.yakit-tree-edit-input {
+  appearance: none;
+  background: var(--Colors-Use-Basic-Background, #ffffff);
+  border: 1px solid var(--yakit-tree-edit-border);
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--yakit-tree-color);
+  flex: 1 1 auto;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  height: 22px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  margin: 0;
+  min-width: 0;
+  outline: none;
+  padding: 3px 4px;
+  width: 100%;
+}
+
+.yakit-tree-edit-input::placeholder {
+  color: var(--yakit-tree-disabled);
+  font-weight: 500;
+  line-height: 16px;
+  opacity: 1;
+}
+
+/* showLine：每级左侧 guide-line（对齐 antd showLine 视觉语义）
+   连线画在 switcher 中心：level 缩进（JS 注入 --yakit-tree-level-indent）+ switcher 半宽 */
+.yakit-tree-show-line .yakit-tree-list-holder-inner {
+  --yakit-tree-line-color: var(--Colors-Use-Neutral-Border, #c0c6d1);
+}
+
+.yakit-tree-show-line .yakit-tree-treenode {
+  position: relative;
+}
+
+.yakit-tree-show-line .yakit-tree-treenode::before {
+  background-color: var(--yakit-tree-line-color);
+  content: '';
+  height: 100%;
+  left: calc(var(--yakit-tree-level-indent, 0px) + var(--yakit-tree-switcher-width) / 2);
+  position: absolute;
+  top: 0;
+  width: 1px;
+}
+
+/* 顶级行（无缩进）不画连线 */
+.yakit-tree-show-line .yakit-tree-treenode[data-tree-level='0']::before {
+  display: none;
+}
+
+/* showLine + showLeafIcon:false 时叶节点不渲染图标（保留占位宽度） */
+.yakit-tree-show-line-hide-leaf-icon .yakit-tree-treenode-leaf .yakit-tree-switcher-icon,
+.yakit-tree-show-line-hide-leaf-icon .yakit-tree-treenode-leaf .yakit-tree-node-icon {
+  display: none;
+}
+
+/* blockNode: title area stretches full remaining width */
+.yakit-tree-block-node .yakit-tree-node-content-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+
+/* 拖拽 / 虚拟列表 */
+
+.yakit-tree-treenode-dragging {
+  opacity: 0.45;
+}
+
+.yakit-tree-treenode-drag-over > .yakit-tree-node-content-wrapper {
+  background: var(--yakit-tree-hover-basic-bg);
+  box-shadow: inset 0 0 0 1px var(--Colors-Use-Main-Primary, #f28c45);
+}
+
+.yakit-tree-list-holder-inner {
+  width: 100%;
+}

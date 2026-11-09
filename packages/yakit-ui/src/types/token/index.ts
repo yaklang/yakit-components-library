@@ -4,11 +4,13 @@ import type { YakitTheme } from '../theme';
 
 import type { YakitButtonToken } from './YakitButton';
 import type { YakitTagToken } from './YakitTag';
+import type { YakitTreeToken } from './YakitTree';
 
 // 扩展的组件 tokens
 export interface YakitThemeComponents {
   YakitButton?: Partial<YakitButtonToken>;
   YakitTag?: Partial<YakitTagToken>;
+  YakitTree?: Partial<YakitTreeToken>;
 }
 
 export type YakitThemeMode = 'light' | 'dark';

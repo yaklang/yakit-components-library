@@ -23,6 +23,7 @@ export const YakitConfigContextProvider: FC<
         ...mergeDefined(parent.token, theme?.token),
         YakitButton: mergeDefined(parent.token.YakitButton ?? {}, theme?.components?.YakitButton),
         YakitTag: mergeDefined(parent.token.YakitTag ?? {}, theme?.components?.YakitTag),
+        YakitTree: mergeDefined(parent.token.YakitTree ?? {}, theme?.components?.YakitTree),
       },
     }),
     [componentDisabled, componentSize, direction, locale, parent, theme],

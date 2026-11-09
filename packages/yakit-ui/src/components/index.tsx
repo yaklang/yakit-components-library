@@ -43,3 +43,25 @@ export type {
   YakitLocale,
   YakitThemeMode,
 } from './ConfigProvider';
+
+export { default as Tree, DirectoryTree, YakitTreeCompat } from './Tree';
+export type {
+  DirectoryTreeProps,
+  TreeRef,
+  TreeScrollToOptions,
+  TreeCheckInfo,
+  TreeDataNode,
+  TreeDragInfo,
+  TreeDropInfo,
+  TreeExpandAction,
+  TreeExpandInfo,
+  TreeFieldNames,
+  TreeIcon,
+  TreeKey,
+  TreeNodeIconProps,
+  TreeNodeSwitcherProps,
+  TreeProps,
+  TreeSelectInfo,
+  TreeSwitcherIcon,
+  YakitTreeCompatProps,
+} from './Tree';
