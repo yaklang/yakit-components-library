@@ -304,6 +304,33 @@ export async function iconSourcePaths({ root = ROOT, revision }) {
     : ["packages/yakit-ui-icons", "packages/yakit-ui/src/icons"];
 }
 
+// Share the exact source/lock/toolchain/config inputs with the early CI gate.
+export async function releaseInputHashes({
+  root = ROOT,
+  revision,
+  packageName,
+}) {
+  if (!PUBLIC_PACKAGES.includes(packageName))
+    throw new Error(`unsupported release input package: ${packageName}`);
+  const inputs = {
+    sourceHash:
+      packageName === "@yakit-libs/yakit-ui"
+        ? SNAPSHOTS.ui
+        : await iconSourcePaths({ root, revision }),
+    lockHash: SNAPSHOTS.lock,
+    toolchainHash: SNAPSHOTS.toolchain,
+    configHash: SNAPSHOTS.config,
+  };
+  return Object.fromEntries(
+    await Promise.all(
+      Object.entries(inputs).map(async ([field, paths]) => [
+        field,
+        await snapshotHash({ root, revision, paths }),
+      ]),
+    ),
+  );
+}
+
 async function readChangesetDocuments({ root, revision }) {
   if (revision === WORKTREE) {
     const files = await worktreeFiles(root, ".changeset");
@@ -737,53 +764,22 @@ export async function computeReleaseImpact({
       ["rev-parse", `${resolvedBaseRevisions[packageName]}^{commit}`],
       root,
     ).trim();
-    const baseSourcePaths =
-      packageName === "@yakit-libs/yakit-ui"
-        ? ["packages/yakit-ui"]
-        : await iconSourcePaths({ root, revision: packageBaseRevision });
-    const headSourcePaths =
-      packageName === "@yakit-libs/yakit-ui"
-        ? ["packages/yakit-ui"]
-        : await iconSourcePaths({ root, revision: headRevision });
-    const [
-      baseSourceHash,
-      headSourceHash,
-      baseLockHash,
-      headLockHash,
-      baseToolchainHash,
-      headToolchainHash,
-      baseConfigHash,
-      headConfigHash,
-    ] = await Promise.all([
-      snapshotHash({
-        root,
-        revision: packageBaseRevision,
-        paths: baseSourcePaths,
-      }),
-      snapshotHash({ root, revision: headRevision, paths: headSourcePaths }),
-      snapshotHash({
-        root,
-        revision: packageBaseRevision,
-        paths: SNAPSHOTS.lock,
-      }),
-      snapshotHash({ root, revision: headRevision, paths: SNAPSHOTS.lock }),
-      snapshotHash({
-        root,
-        revision: packageBaseRevision,
-        paths: SNAPSHOTS.toolchain,
-      }),
-      snapshotHash({
-        root,
-        revision: headRevision,
-        paths: SNAPSHOTS.toolchain,
-      }),
-      snapshotHash({
-        root,
-        revision: packageBaseRevision,
-        paths: SNAPSHOTS.config,
-      }),
-      snapshotHash({ root, revision: headRevision, paths: SNAPSHOTS.config }),
+    const [baseInputs, headInputs] = await Promise.all([
+      releaseInputHashes({ root, revision: packageBaseRevision, packageName }),
+      releaseInputHashes({ root, revision: headRevision, packageName }),
     ]);
+    const {
+      sourceHash: baseSourceHash,
+      lockHash: baseLockHash,
+      toolchainHash: baseToolchainHash,
+      configHash: baseConfigHash,
+    } = baseInputs;
+    const {
+      sourceHash: headSourceHash,
+      lockHash: headLockHash,
+      toolchainHash: headToolchainHash,
+      configHash: headConfigHash,
+    } = headInputs;
     const sourcePair = { base: baseSourceHash, head: headSourceHash };
     impactProbeSet.push({
       package: packageName,

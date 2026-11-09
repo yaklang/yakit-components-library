@@ -11,6 +11,8 @@ import {
   validateDeferralPolicy,
 } from "./release-deferrals.mjs";
 
+import { releaseInputHashes } from "./release-impact.mjs";
+
 const root = path.resolve(import.meta.dirname, "../..");
 const require = createRequire(import.meta.url);
 const readJson = async (file) => JSON.parse(await readFile(file, "utf8"));
@@ -124,13 +126,36 @@ export async function checkReleaseDeferral({
       await rm(temporary, { recursive: true, force: true });
     }
   }
-  return verifyDeferralPlan({
+  const result = verifyDeferralPlan({
     policy,
     config,
     packages,
     versionPlan,
     publishPlan,
   });
+  // Check the committed checkout, including PR merge commits. Build outputs and
+  // untracked local files must not change the identity used by publish mode.
+  const sourceRevision = execFileSync("git", ["rev-parse", "HEAD^{commit}"], {
+    cwd: directory,
+    encoding: "utf8",
+  }).trim();
+  for (const deferred of policy.deferred) {
+    const hashes = await releaseInputHashes({
+      root: directory,
+      revision: sourceRevision,
+      packageName: deferred.package,
+    });
+    for (const [field, actual] of Object.entries(hashes)) {
+      const binding = `head${field[0].toUpperCase()}${field.slice(1)}`;
+      if (deferred[binding] !== actual)
+        throw new Error(
+          `${deferred.package} ${binding} mismatch at ${sourceRevision}: ` +
+            `expected ${deferred[binding]}, actual ${actual}. ` +
+            "Review the changed inputs and update release-deferral-policy.json before release.",
+        );
+    }
+  }
+  return { ...result, sourceRevision };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {

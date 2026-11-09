@@ -11,6 +11,8 @@ import {
   verifyDeferralPlan,
 } from "../../scripts/release/check-release-deferral.mjs";
 
+import { releaseInputHashes } from "../../scripts/release/release-impact.mjs";
+
 const require = createRequire(import.meta.url);
 const UI = "@yakit-libs/yakit-ui";
 const ICONS = "@yakit-libs/yakit-ui-icons";
@@ -67,6 +69,23 @@ function state() {
   };
 }
 
+function commitFixture(directory) {
+  const git = (...args) =>
+    execFileSync("git", args, { cwd: directory, stdio: "pipe" });
+  git("add", ".");
+  git(
+    "-c",
+    "user.name=Fixture",
+    "-c",
+    "user.email=fixture@example.invalid",
+    "-c",
+    "commit.gpgsign=false",
+    "commit",
+    "-qm",
+    "fixture",
+  );
+}
+
 async function fixture(t) {
   const directory = await mkdtemp(path.join(tmpdir(), "yakit-deferral-test-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
@@ -77,6 +96,12 @@ async function fixture(t) {
     "packages/yakit-ui-icons/package.json": input.packages[ICONS],
     ".changeset/config.json": input.config,
     "scripts/release/release-deferral-policy.json": input.policy,
+    "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
+    "turbo.json": { tasks: {} },
+    "packages/yakit-ui/.storybook/preview.tsx": "export default {};\n",
+    "packages/yakit-ui/test/icon.test.ts": "// reviewed test\n",
+    "packages/yakit-ui/tsconfig.json": { compilerOptions: {} },
+    "packages/yakit-ui-icons/tsconfig.json": { compilerOptions: {} },
     "pnpm-workspace.yaml": "packages:\n  - packages/*\n",
     ".changeset/new-icons.md": `---\n"${ICONS}": patch\n---\n\nNew icons.\n`,
     "docs/pending-releases/README.md": "UI remains pending.\n",
@@ -92,18 +117,20 @@ async function fixture(t) {
   const git = (...args) =>
     execFileSync("git", args, { cwd: directory, stdio: "pipe" });
   git("init", "-q", "--initial-branch=main");
-  git("add", ".");
-  git(
-    "-c",
-    "user.name=Fixture",
-    "-c",
-    "user.email=fixture@example.invalid",
-    "-c",
-    "commit.gpgsign=false",
-    "commit",
-    "-qm",
-    "fixture",
+  commitFixture(directory);
+  const hashes = await releaseInputHashes({
+    root: directory,
+    revision: "HEAD",
+    packageName: UI,
+  });
+  for (const [field, value] of Object.entries(hashes))
+    input.policy.deferred[0][`head${field[0].toUpperCase()}${field.slice(1)}`] =
+      value;
+  await writeFile(
+    path.join(directory, "scripts/release/release-deferral-policy.json"),
+    JSON.stringify(input.policy),
   );
+  commitFixture(directory);
   return directory;
 }
 
@@ -141,6 +168,7 @@ test("actual Changesets preserves workspace UI through versioning and the subseq
     { cwd: directory, stdio: "pipe" },
   );
   assert.equal(await readFile(uiPath, "utf8"), before);
+  commitFixture(directory);
   assert.equal((await checkReleaseDeferral({ directory })).phase, "versioned");
   const publishPlan = {
     version: 1,
@@ -252,4 +280,80 @@ test("removing the completed deferral policy restores the normal release workflo
   assert.deepEqual(await checkReleaseDeferral({ directory }), {
     phase: "no-deferral",
   });
+});
+
+for (const [file, content, field] of [
+  [
+    "packages/yakit-ui/.storybook/preview.tsx",
+    "export default { theme: 'dark' };\n",
+    "headSourceHash",
+  ],
+  [
+    "packages/yakit-ui/test/icon.test.ts",
+    "// changed test\n",
+    "headSourceHash",
+  ],
+  [
+    "packages/yakit-ui/src/new.ts",
+    "export const changed = true;\n",
+    "headSourceHash",
+  ],
+  ["pnpm-lock.yaml", "lockfileVersion: '9.0'\n# changed\n", "headLockHash"],
+  [
+    "package.json",
+    JSON.stringify({
+      name: "release-fixture",
+      private: true,
+      engines: { node: ">=24" },
+    }),
+    "headToolchainHash",
+  ],
+  [
+    "packages/yakit-ui-icons/tsconfig.json",
+    JSON.stringify({ compilerOptions: { strict: true } }),
+    "headConfigHash",
+  ],
+]) {
+  test(`early deferral check rejects committed drift in ${file}`, async (t) => {
+    const directory = await fixture(t);
+    const target = path.join(directory, file);
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, content);
+    commitFixture(directory);
+    await assert.rejects(
+      checkReleaseDeferral({ directory }),
+      new RegExp(`${field} mismatch.*expected.*actual`),
+    );
+  });
+}
+
+test("early deferral check ignores untracked build outputs and detects committed deletion", async (t) => {
+  const directory = await fixture(t);
+  for (const file of ["dist/index.js", "storybook-static/index.html"]) {
+    const target = path.join(directory, "packages/yakit-ui", file);
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, "generated output");
+  }
+  assert.equal((await checkReleaseDeferral({ directory })).phase, "version");
+  await rm(path.join(directory, "packages/yakit-ui/test/icon.test.ts"));
+  execFileSync("git", ["add", "-u"], { cwd: directory, stdio: "pipe" });
+  execFileSync(
+    "git",
+    [
+      "-c",
+      "user.name=Fixture",
+      "-c",
+      "user.email=fixture@example.invalid",
+      "-c",
+      "commit.gpgsign=false",
+      "commit",
+      "-qm",
+      "delete test",
+    ],
+    { cwd: directory, stdio: "pipe" },
+  );
+  await assert.rejects(
+    checkReleaseDeferral({ directory }),
+    /headSourceHash mismatch/,
+  );
 });

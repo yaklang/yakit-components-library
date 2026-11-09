@@ -14,11 +14,11 @@
       "integrity": "sha512-Cf/Wopo2BxZzO1hF5/Siwhoj+P6BZZJsEW2BToOP9mWjnKQa6O4AUMqk/4dvMEsGNMLjpHshwZ/D1+Vc21KGFg==",
       "sha256": "d7963628d04ea1ad1475a8220f42f80326dc03f78116f4cfd91b3f5daa81b03a",
       "baseRevision": "2ae1c3c9a41746ec57b820d226a7f91153d90a9d",
-      "headSourceHash": "e83d3e7b5a7f7497a9035a7a71f44cb8086914d4c112da13291e33a4458ddeb9",
+      "headSourceHash": "3c7c9dd738fa75e90a06c9f692f11a1f309c510c51cb7687940f860744d9f630",
       "headLockHash": "cce5b51c43af1e680b7a6b962d8c2809565d37599caafc3c3669f8808e36451a",
       "headToolchainHash": "12d6762bbbb87b3d5d91f93caceb406d053a2ae124c9ea55ab00c4b83525599b",
       "headConfigHash": "65b1e49bf1791a593a6ea4cb77ef97274b60ed5cd9398a63c29f35b100955549",
-      "reason": "Release icons 0.3.1 independently with React 19 support, four Outline arrow additions, six menu theme-color updates and independent public icon source ownership. The explicitly selected 0.3.1 target uses a patch bump from the already published 0.3.0 baseline. Defer the UI React 19 / antd 6 changes and Phase 1 migration: icons runtime dependency, component imports, compatibility exports/types/CSS, externalized builds and Storybook integration. Keep npm UI at the frozen 0.2.3 baseline; private component SVG replacements remain out of scope.",
+      "reason": "Release icons 0.3.1 independently with React 19 support, four Outline arrow additions, six menu theme-color updates and independent public icon source ownership. The explicitly selected 0.3.1 target uses a patch bump from the already published 0.3.0 baseline. Defer the UI React 19 / antd 6 changes and Phase 1 migration: icons runtime dependency, component imports, compatibility exports/types/CSS, externalized builds and Storybook integration. Keep npm UI at the frozen 0.2.3 baseline; private component SVG replacements remain out of scope. Re-reviewed UI inputs at 20eec08d2a1f9d7d172ee7381e57b6a3cf725f17 include Storybook brand themes, generated Colorful groups and source-based icon stroke tests; these remain deferred with UI. See the 2026-11-09 hash review in the follow-up record.",
       "followUpPath": "docs/pending-releases/README.md"
     }
   ]
