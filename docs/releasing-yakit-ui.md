@@ -91,7 +91,7 @@ Review the candidate metrics and manifest diff before replacing `.release/yakit-
 ## Stable flow
 
 1. Add a Changeset on a feature branch with `pnpm changeset`.
-2. Merge through the required CI checks.
+2. Merge through the required CI checks. The early `release:deferral-check` gate also verifies the deferred package source, lockfile, toolchain and config hashes against committed `HEAD`, using the same inputs as publish impact verification. Review drift before updating the policy; local uncommitted source changes are checked only after commit.
 3. A push to `main` runs `changesets/action/select-mode`.
 4. When versioning is needed, the workflow opens or updates the Version Packages pull request.
 5. After that pull request lands, the workflow creates a Changesets pack artifact for `{ui}`, `{icons}`, or `{ui, icons}`. Schema v3 rejects an empty set, unknown/duplicate packages, unordered entries, missing hashes, or a release entry that does not exactly match `releaseSet`. When both packages release, their versions may differ.

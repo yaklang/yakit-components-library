@@ -72,3 +72,33 @@ PR CI 和发布模式选择都会运行此检查；打包前还会核对 Changes
 后续 UI 源码或发布配置继续变化时，需要重新审查并更新对应绑定，不能仅重算哈希。
 恢复 UI 发布时，移除 `ignore` 中的 UI 和本次延期策略，恢复这里的 UI Changeset，
 再检查实际升级级别、icons 的安装版本及所有累计更新说明。
+
+## 2026-11-09 UI 延期源码哈希复核
+
+发布工作流 `42591951442` 在影响面校验阶段被阻断：策略仍绑定 `1358235`
+时的 UI 源码，而后续 Storybook 和测试改动没有纳入该绑定。此次以
+`20eec08d2a1f9d7d172ee7381e57b6a3cf725f17`（Version Packages 合并提交）复核，
+相对 `1358235` 的 UI 目录变化仅涉及以下六个文件：
+
+- `.storybook/brand-themes.ts`：配置 Yakit、irify、memfit 品牌主色。
+- `.storybook/preview.tsx`：加入品牌切换、浅深主题派生和主题色注入。
+- `.storybook/stories/Icon.stories.tsx`：使用生成的分组和顺序，加入 Colorful 图标分组。
+- `.storybook/stories/icon-colorful.generated.ts`：保存来自图标来源清单的分组及节点顺序。
+- `test/icons/icon-storybook-contract.test.ts`：按来源清单检查完整分组覆盖。
+- `test/icons/icon-stroke-width-dist.test.ts`：非 Outline 图标按各自原始 SVG 检查描边。
+
+这些改动继续随 UI 延期；没有新增 UI 运行时代码、依赖或公开 API 变化。
+将 `headSourceHash` 从
+`e83d3e7b5a7f7497a9035a7a71f44cb8086914d4c112da13291e33a4458ddeb9`
+更新为
+`3c7c9dd738fa75e90a06c9f692f11a1f309c510c51cb7687940f860744d9f630`。
+锁文件、工具链、配置及 npm UI 0.2.3 基线绑定保持不变。
+
+`pnpm release:deferral-check` 现在同时校验发布范围和四项输入哈希。
+它读取当前工作区的策略、版本计划，并对 Git `HEAD` 的已提交文件计算哈希；
+PR CI 中对应 GitHub 检出的合并提交。它与发布影响检查共享哈希算法和路径集合，
+UI 的 Storybook、测试也在源码绑定范围内。未跟踪的构建输出不参与校验；
+本地尚未提交的源码改动需在提交后再次检查。哈希失配时应先复核差异，再更新策略。
+
+本次修复不添加 Changeset、不再次升级版本。icons 已由 #48 升至 0.3.1，
+修复 PR 合入 main 后由 push 自动重新进入发布流程；完整发布校验通过后才发布。
