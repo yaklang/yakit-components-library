@@ -1,17 +1,17 @@
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
 
 import { describe, expect, it } from 'vitest';
 
 import reviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 import { applyReviewedPaint, restoreReviewedPaint } from './helpers/icon-reviewed-paint';
+import { readReviewCandidate } from './helpers/review-candidate-source';
 
 const file = '45035-1908.svg';
-const source = readFileSync(new URL(`../../src/outline/${file}`, import.meta.url), 'utf8');
+const source = readReviewCandidate(file).toString('utf8');
 const review = reviews.reviews.find((entry) => entry.file === file)!;
 
-describe('DataComparison reviewed paint projection', () => {
+describe('historical DataComparison reviewed paint projection', () => {
   it('restores the exact frozen geometry and derives current paint from the frozen runtime SVG', () => {
     const restored = restoreReviewedPaint(file, source);
     expect(

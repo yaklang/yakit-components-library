@@ -10,6 +10,7 @@ import reviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import { measureVisualWeight } from '../fixtures/icons/visual-weight-metrics.mjs';
 
 import { restoreReviewedPaint } from './helpers/icon-reviewed-paint';
+import { readReviewCandidate } from './helpers/review-candidate-source';
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const fixtureRoot = resolve(packageRoot, 'test/fixtures/icons/reference/visual-weight-v2');
@@ -49,7 +50,7 @@ describe('reconstructed Outline geometry', () => {
           // Measure geometry using the reviewed paint; current half-opacity is checked separately.
           source: restoreReviewedPaint(
             review.file,
-            readFileSync(resolve(packageRoot, 'src/outline', review.file), 'utf8'),
+            readReviewCandidate(review.file).toString('utf8'),
           ),
           original: readFileSync(resolve(fixtureRoot, review.oldEvidence.path), 'utf8'),
           spec: review,
@@ -82,10 +83,9 @@ describe('reconstructed Outline geometry', () => {
           expect(
             createHash('sha256')
               .update(
-                readFileSync(resolve(packageRoot, 'src/outline', review.file), 'utf8').replaceAll(
-                  'stroke-width="1.5"',
-                  'stroke-width="1"',
-                ),
+                readReviewCandidate(review.file)
+                  .toString('utf8')
+                  .replaceAll('stroke-width="1.5"', 'stroke-width="1"'),
               )
               .digest('hex'),
           ).toBe(topologyObservation.candidateSourceSha256);
@@ -103,17 +103,20 @@ describe('reconstructed Outline geometry', () => {
         expect(measured.rebuiltTopology, `${review.file}: rebuilt topology`).toEqual(
           review.topologyAtOldWidth,
         );
-        expect(
-          measured.widths['1'].topology,
-          `${review.file}: reviewed width-one topology`,
-        ).toEqual(review.topologyAtDefault);
+        const widths = measured.widths as Record<
+          number,
+          { count: number; topology: typeof review.topologyAtDefault }
+        >;
+        expect(widths[1].topology, `${review.file}: reviewed width-one topology`).toEqual(
+          review.topologyAtDefault,
+        );
         for (const sample of measured.thickness) {
           expect(
             Math.abs(sample.actual - sample.expected),
             `${review.file}: local thickness`,
           ).toBeLessThanOrEqual(review.thresholds.thicknessTolerance);
         }
-        const inkCounts = [0, 1, 1.5, 2, 3].map((width) => measured.widths[width].count);
+        const inkCounts = [0, 1, 1.5, 2, 3].map((width) => widths[width].count);
         for (let index = 1; index < inkCounts.length; index++) {
           expect(inkCounts[index], `${review.file}: width response`).toBeGreaterThan(
             inkCounts[index - 1],

@@ -19,6 +19,10 @@ import designUpdates from '../fixtures/icons/reference/outline-design-updates-se
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import before from '../fixtures/icons/stroke-width-1/before.json';
 
+import {
+  expectCurrentFigmaSource,
+  importedMonochromeSources,
+} from './helpers/current-figma-source';
 import { restoreReviewedPaint } from './helpers/icon-reviewed-paint';
 import { iconSourceFiles } from './icon-inventory';
 
@@ -34,7 +38,8 @@ const solidManifest = JSON.parse(
     'utf8',
   ),
 );
-const solidRaw = JSON.parse(
+type RawComponent = { nodeId: string; svg: string };
+const solidRaw: { components: RawComponent[]; supplementalComponents: RawComponent[] } = JSON.parse(
   readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
 );
 
@@ -120,7 +125,7 @@ describe('source stroke-width policy', () => {
 });
 
 describe('current icon compatibility and historical evidence', () => {
-  it('preserves all non-width bytes against independent frozen inputs', () => {
+  it('preserves frozen evidence and checks imported artwork against current sources', () => {
     expect(before.assets).toHaveLength(543);
     for (const record of before.assets) {
       expect(digest(record.beforeSvg), record.sourcePath).toBe(record.beforeSha256);
@@ -146,7 +151,16 @@ describe('current icon compatibility and historical evidence', () => {
       const designUpdate = designUpdates.updates.find(
         (item) => record.afterPath === `icons/outline/${item.file}`,
       );
-      if (record.afterPath === 'icons/solid/16035-380989.svg') {
+      const imported = importedMonochromeSources.find(
+        (r) => record.afterPath === `icons/${r.family}/${r.file}`,
+      );
+      if (imported) {
+        expect(digest(expected), record.afterPath).toBe(record.afterSha256);
+        expectCurrentFigmaSource(
+          imported,
+          readIconInputSync(resolve(packageRoot, 'src', currentPath), 'utf8'),
+        );
+      } else if (record.afterPath === 'icons/solid/16035-380989.svg') {
         // Current Import follows the new masked Figma export; keep the frozen migration
         // bytes above as historical evidence rather than forcing them onto today's icon.
         const current = readIconInputSync(resolve(packageRoot, 'src', currentPath), 'utf8');

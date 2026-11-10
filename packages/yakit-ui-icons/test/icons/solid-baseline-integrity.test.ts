@@ -26,13 +26,21 @@ const manifest = JSON.parse(
     'utf8',
   ),
 );
-const placement = JSON.parse(
-  readIconInputSync(
-    new URL('../../config/icon-sources/solid.json#placement', import.meta.url),
-    'utf8',
-  ),
-);
-const raw = JSON.parse(
+type SourcePlacement = {
+  nodeId: string;
+  localFile: string;
+  exportName: string;
+  scopeRole: string;
+};
+const placement: { targetSymbols: SourcePlacement[]; supplementalSources: SourcePlacement[] } =
+  JSON.parse(
+    readIconInputSync(
+      new URL('../../config/icon-sources/solid.json#placement', import.meta.url),
+      'utf8',
+    ),
+  );
+type RawComponent = { nodeId: string; svg: string };
+const raw: { components: RawComponent[]; supplementalComponents: RawComponent[] } = JSON.parse(
   readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
 );
 
@@ -144,7 +152,7 @@ describe('Solid icon baseline integrity', () => {
   });
 
   it('preserves historical evidence and limits changes to the known design updates', () => {
-    const refreshedIds = ['16035:380989'];
+    const refreshedIds = ['16035:380989', '2248:69141', '1:2651'];
     const layoutIds = ['4936:115787', '4936:115788', '4936:115789', '4936:115790'];
     const changed = prechange.records
       .filter(({ geometrySha256: frozen, localFile }) => currentGeometry(localFile) !== frozen)

@@ -13,6 +13,20 @@
     "icons/helpers/icon-visual-weight-reviews.ts",
     "icons/icon-figma-names.test.ts",
     "icons/icon-paint-semantics.test.ts",
-    "icons/outline-sync-nov06.test.ts"
+    "icons/outline-sync-nov06.test.ts",
+    "components/icon-adjustable-runtime.test.tsx",
+    "components/icon-fragment-runtime.test.tsx",
+    "icons/baseline-integrity.test.ts",
+    "icons/icon-adjustable-audit.test.ts",
+    "icons/icon-adjustable-ssr.test.ts",
+    "icons/icon-reviewed-paint.test.ts",
+    "icons/icon-stroke-width.test.ts",
+    "icons/icon-transform.test.ts",
+    "icons/icon-visual-weight-geometry.test.ts",
+    "icons/icon-visual-weight.test.ts",
+    "icons/solid-baseline-integrity.test.ts",
+    "icons/helpers/current-figma-source.ts",
+    "icons/helpers/review-candidate-source.ts",
+    "icons/icon-source-structure.test.ts"
   ]
 }

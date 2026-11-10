@@ -77,7 +77,9 @@ export const HomeEntry = () => (
 
 优先级是 `svgProps.style.strokeWidth` → `svgProps.strokeWidth` → 图标原始默认值。`0` 会隐藏描边，混合图标中的填充细节仍然保留。支持合法 SVG 长度/百分比字符串；同元素 CSS 规则遵循正常层叠顺序。外层 `style` 仍属于 `span`，不提供顶层 `strokeWidth` 属性。
 
-原先展开为填充的二维码、标签、剪贴板、信号、火箭及语音图标已恢复为真实描边，默认线宽为 `1.5`。`TagOutlined` 的实心圆、火箭舷窗和其他独立填充细节保持实心，不随 `strokeWidth` 改变。`svgProps.strokeWidth={0}` 只隐藏线条。几何迁移的范围与兼容性说明见[仓库中的线宽能力说明](https://github.com/yaklang/yakit-components-library/blob/main/packages/yakit-ui/docs/icon-stroke-capabilities.md)。
+按最新 Figma 原稿同步后，`CurrencyDollarOutlined`、`TagOutlined`、`QrcodeOutlined`、`ClipboardCheckOutlined`、`SupportOutlined`、`PresentationChartLineOutlined`、`StatusOfflineOutlined`、`RocketOffOutlined`、`SpeechToTextOutlined`、`SpeechToText2Outlined` 使用固定填充轮廓，`strokeWidth` 不改变其粗细，也不会为它们补造描边。其他图标中，`svgProps.strokeWidth={0}` 只隐藏实际描边，填充部分仍然可见。范围与兼容性说明见[仓库中的线宽能力说明](https://github.com/yaklang/yakit-components-library/blob/main/packages/yakit-ui/docs/icon-stroke-capabilities.md)。
+
+`StarOffOutlined`、`RocketLaunchOffOutlined` 保留远端原稿的白色覆盖线，其在透明或深色背景上的效果与透明擦除蒙版不同。
 
 Solid、Colorful、Oldicon 的 `svgProps.strokeWidth` 保持根 SVG 的原生属性透传，不会统一覆盖内部形状已声明的固定线宽。`BugOutlined` 已从填充轮廓重建为真实描边，默认视觉改为与其他描边 Outline 一致的宽度 `1.5`。
 

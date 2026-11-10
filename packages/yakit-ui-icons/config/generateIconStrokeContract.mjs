@@ -12,7 +12,20 @@ const packageRoot = resolve(configRoot, '..');
 const outlineRoot = resolve(packageRoot, 'src/outline');
 const outputPath = resolve(configRoot, 'iconStrokeContract.generated.ts');
 
-const fixedFillDispositions = new Map();
+export function sourceFixedFillDispositions(records) {
+  return new Map(
+    records
+      .filter(
+        (record) =>
+          record.production?.geometry === 'source' &&
+          record.production?.strokeMode === 'fixed-fill',
+      )
+      .map((record) => [
+        record.file,
+        'Explicit Figma source sync: filled contours have no adjustable stroke.',
+      ]),
+  );
+}
 
 const coupledCutoutFiles = new Set(['14203-193724.svg', '38678-28634.svg']);
 const definitionElements = new Set([
@@ -115,11 +128,19 @@ function collectTargets(root, file, coupledCutouts) {
 
 export function generateIconStrokeContract(
   root = outlineRoot,
-  { coupledCutouts = coupledCutoutFiles, fixedFill = fixedFillDispositions, sources } = {},
+  { coupledCutouts = coupledCutoutFiles, fixedFill, sources } = {},
 ) {
   const files = (sources ? [...sources.keys()] : readdirSync(root))
     .filter((file) => file.endsWith('.svg'))
     .sort();
+  if (!fixedFill) {
+    const source = JSON.parse(
+      readFileSync(resolve(root, '../../config/icon-sources/outline.json'), 'utf8'),
+    );
+    fixedFill = sourceFixedFillDispositions(
+      source.records.filter((record) => files.includes(record.file)),
+    );
+  }
   const entries = {};
   for (const file of files) {
     const source = sources ? sources.get(file) : readFileSync(resolve(root, file), 'utf8');

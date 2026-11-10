@@ -14,6 +14,10 @@ import rendererProvenance from '../fixtures/icons/reference/outline-renderer-pro
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 import currentRenderContract from '../fixtures/icons/stroke-width-1/render-contract.json';
 
+import {
+  expectCurrentFigmaSource,
+  importedMonochromeSources,
+} from './helpers/current-figma-source';
 import { restoreReviewedPaint } from './helpers/icon-reviewed-paint';
 
 const outlineManifest = JSON.parse(
@@ -153,8 +157,15 @@ describe('Outline pre-change baseline', () => {
     expect(baseline.legacyNotebook.exportName).toBe('NotebookOutlined');
   });
 
-  it('keeps every control geometry equal to its pre-repair projection', () => {
+  it('keeps legacy controls frozen and checks imported controls against current Figma', () => {
     const changed = baseline.controls.filter(({ file, geometryProjectionSha256 }) => {
+      const imported = importedMonochromeSources.find(
+        (r) => r.family === 'outline' && r.file === file,
+      );
+      if (imported) {
+        expectCurrentFigmaSource(imported, readIconInputSync(resolve(outlineRoot, file), 'utf8'));
+        return false;
+      }
       const update = designUpdates.updates.find((entry) => entry.file === file);
       const source =
         update?.previousLocalSvg ?? readIconInputSync(resolve(outlineRoot, file), 'utf8');
@@ -191,7 +202,8 @@ describe('Outline pre-change baseline', () => {
       baseline.legacyNotebook.geometryProjectionSha256,
     );
     const currentNotebook = outlineManifest.symbols.find(
-      ({ exportedSourceNodeId }) => exportedSourceNodeId === '45386:154724',
+      ({ exportedSourceNodeId }: { exportedSourceNodeId: string }) =>
+        exportedSourceNodeId === '45386:154724',
     );
     expect(currentNotebook).toMatchObject({
       exportName: 'NotebookOutlined',

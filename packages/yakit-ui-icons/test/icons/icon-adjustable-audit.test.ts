@@ -2,13 +2,23 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import outlineSource from '../../config/icon-sources/outline.json';
 import { auditIcons } from '../../scripts/audit-icons.mjs';
 import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
 import reviews from '../../scripts/outline-geometry-overrides.json';
 import { reviewedOutlineGeometry } from '../../scripts/outline-geometry-overrides.mjs';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
-const manifest = JSON.parse(
+type AuditedSymbol = {
+  file: string;
+  exportName: string;
+  geometryReviewId?: string;
+  figmaGeometrySha256: string;
+  localGeometrySha256: string;
+  geometrySha256: string;
+};
+
+const manifest: { symbols: AuditedSymbol[] } = JSON.parse(
   readIconInputSync(
     new URL('../../config/icon-sources/outline.json#manifest', import.meta.url),
     'utf8',
@@ -25,7 +35,19 @@ describe('reviewed adjustable geometry audit', () => {
     );
     for (const review of reviews.reviews) {
       const source = manifest.symbols.find((symbol) => symbol.file === review.file)!;
-      expect(reviewedOutlineGeometry(source), review.file).toBe(review.reviewId);
+      const native = outlineSource.records.some(
+        (record) =>
+          record.file === review.file &&
+          'production' in record &&
+          record.production !== undefined &&
+          'geometry' in record.production &&
+          record.production.geometry === 'source',
+      );
+      if (native) {
+        expect(reviewedOutlineGeometry(source), review.file).toBeUndefined();
+        expect(source.geometryReviewId, review.file).toBeUndefined();
+        expect(source.figmaGeometrySha256, review.file).toBe(source.localGeometrySha256);
+      } else expect(reviewedOutlineGeometry(source), review.file).toBe(review.reviewId);
       expect(
         reviewedOutlineGeometry({ ...source, localRawSvgSha256: 'unreviewed' }),
       ).toBeUndefined();

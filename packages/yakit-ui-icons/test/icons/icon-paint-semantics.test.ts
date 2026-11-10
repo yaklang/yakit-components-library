@@ -57,35 +57,22 @@ describe('Outline icon paint semantics in Chromium', () => {
     await page.close();
   });
 
-  it('uses owned luminance masks and currentColor slashes on dark and transparent backgrounds', async () => {
+  it('preserves the native white overdraw on dark and transparent backgrounds', async () => {
     const page = await browser.newPage();
     await page.goto(fixtureUrl);
     const results = await page.evaluate(() => {
       const inspect = (testId: string) => {
         const host = document.querySelector<HTMLElement>(`[data-testid="${testId}"]`)!;
         const svg = host.querySelector('svg')!;
-        const mask = svg.querySelector('mask')!;
-        const maskedGroup = svg.querySelector<SVGGElement>('g[mask]')!;
-        const reference = maskedGroup.getAttribute('mask')?.match(/^url\(#(.+)\)$/)?.[1];
-        const foregroundWhite = [...svg.querySelectorAll<SVGElement>('[color], [fill], [stroke]')]
-          .filter((element) => !element.closest('defs'))
-          .some((element) =>
-            ['color', 'fill', 'stroke'].some(
-              (attribute) => element.getAttribute(attribute)?.toLowerCase() === 'white',
-            ),
-          );
-        const slash = [...svg.querySelectorAll<SVGPathElement>('path')].find(
-          (path) => !path.closest('defs') && !path.closest('g[mask]'),
-        );
+        const white = svg.querySelector<SVGPathElement>('path[stroke="white"]')!;
+        const strokes = [...svg.querySelectorAll<SVGPathElement>('path[stroke="currentColor"]')];
         return {
           background: getComputedStyle(host).backgroundColor,
-          foregroundWhite,
-          maskId: mask.id,
-          maskPaint: mask.querySelector('path')?.getAttribute('stroke'),
-          maskType: mask.getAttribute('mask-type'),
-          ownedReference: reference === mask.id,
-          slashPaint: slash?.getAttribute('stroke'),
-          slashStroke: slash ? getComputedStyle(slash).stroke : null,
+          masks: svg.querySelectorAll('mask').length,
+          whiteStroke: getComputedStyle(white).stroke,
+          whiteWidth: getComputedStyle(white).strokeWidth,
+          foreground: strokes.map((path) => getComputedStyle(path).stroke),
+          foregroundWidths: strokes.map((path) => getComputedStyle(path).strokeWidth),
         };
       };
       return {
@@ -95,20 +82,17 @@ describe('Outline icon paint semantics in Chromium', () => {
         starTransparent: inspect('star-transparent'),
       };
     });
-
     for (const result of Object.values(results)) {
-      expect(result.foregroundWhite).toBe(false);
-      expect(result.maskPaint).toBe('black');
-      expect(result.maskType).toBe('luminance');
-      expect(result.ownedReference).toBe(true);
-      expect(result.slashPaint).toBe('currentColor');
-      expect(result.slashStroke).toBe('rgb(243, 244, 246)');
+      expect(result.masks).toBe(0);
+      expect(result.whiteStroke).toBe('rgb(255, 255, 255)');
+      expect(result.whiteWidth).toBe('1.5px');
+      expect(new Set(result.foreground)).toEqual(new Set(['rgb(243, 244, 246)']));
+      expect(new Set(result.foregroundWidths)).toEqual(new Set(['1.5px']));
     }
     expect(results.starDark.background).toBe('rgb(17, 24, 39)');
     expect(results.rocketDark.background).toBe('rgb(17, 24, 39)');
     expect(results.starTransparent.background).toBe('rgba(0, 0, 0, 0)');
     expect(results.rocketTransparent.background).toBe('rgba(0, 0, 0, 0)');
-    expect(new Set(Object.values(results).map(({ maskId }) => maskId)).size).toBe(4);
     await page.close();
   });
 
@@ -130,7 +114,7 @@ describe('Outline icon paint semantics in Chromium', () => {
       };
       const inspect = (testId: string) => {
         const svg = document.querySelector<SVGSVGElement>(`[data-testid="${testId}"]`)!;
-        const relativePath = svg.querySelector<SVGPathElement>('path[opacity="0.5"]')!;
+        const relativePath = svg.querySelector<SVGPathElement>('path[opacity="0.5"][stroke]')!;
         return {
           base: toHex(getComputedStyle(svg).color),
           opacity: getComputedStyle(relativePath).opacity,

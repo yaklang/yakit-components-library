@@ -71,6 +71,8 @@ Loading 等手写组件的动画和 props 仍需要编写代码；在 `loading.j
 
 ## 校验与提交
 
+Outline / Solid 元素类型和嵌套的核对结果、独立绘制修正例外及防回归方式见 [SVG 结构核对](icon-svg-structure.md)。同步已有原稿时可以使用导入输入的 `syncProduction: true`，让未登记生成策略的旧生产文件也进入生成流程；须先检查已有几何和蒙版修正。
+
 先运行 `pnpm icons:update --check` 和相关测试，再构建需要验证的包：
 
 ```sh

@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import { outlineStrokeContract } from '../../config/iconStrokeContract.generated';
 import {
   BugOutlined,
   ColorSwatchOutlined,
@@ -96,12 +97,12 @@ describe('adjustable icon runtime stroke contract', () => {
   });
 
   it.each([undefined, 0, 1, 1.5, 2, 3])(
-    'couples both reviewed erase masks at width %s',
+    'scales native white overdraw and foreground strokes together at width %s',
     (strokeWidth) => {
       for (const Icon of [StarOffOutlined, RocketLaunchOffOutlined]) {
         const { container } = render(<Icon svgProps={{ strokeWidth }} />);
         const visible = computedWidths(container);
-        const definition = [...container.querySelectorAll<SVGElement>('mask [stroke]')].map(
+        const definition = [...container.querySelectorAll<SVGElement>('path[stroke="white"]')].map(
           (element) => getComputedStyle(element).strokeWidth,
         );
         expect(definition.length).toBeGreaterThan(0);
@@ -125,8 +126,13 @@ describe('adjustable icon runtime stroke contract', () => {
   it.each([undefined, 0, 1, 1.5, 2, 3])(
     'applies width %s to every adjustable Outline and Loading',
     (strokeWidth) => {
-      const adjustable = outlineIconRegistry;
-      expect(adjustable).toHaveLength(iconCounts.outline);
+      const adjustable = outlineIconRegistry.filter(
+        ({ sourceNodeId }) =>
+          outlineStrokeContract[
+            `${sourceNodeId.replace(':', '-')}.svg` as keyof typeof outlineStrokeContract
+          ].classification === 'adjustable',
+      );
+      expect(adjustable).toHaveLength(iconCounts.outline - 10);
       const { container } = render(
         <>
           {adjustable.map(({ Component, exportName }) => (

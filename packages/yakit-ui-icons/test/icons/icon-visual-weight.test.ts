@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { parseSvg } from '../../scripts/audit-icons.mjs';
 
 import { type JsonRecord, validateVisualWeightReviews } from './helpers/icon-visual-weight-reviews';
+import { readReviewCandidate } from './helpers/review-candidate-source';
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const fixtureRoot = resolve(packageRoot, 'test/fixtures/icons/reference/visual-weight-v2');
@@ -294,14 +295,14 @@ describe('visual weight review admission', () => {
   });
 });
 
-describe('promoted visual weight sources', () => {
+describe('retained visual weight review candidates', () => {
   const loadReviews = () =>
     validateVisualWeightReviews(
       JSON.parse(readFileSync(resolve(fixtureRoot, 'reviews.json'), 'utf8')),
       {
         expectedFiles,
         readArtifact: (path) => readFileSync(resolve(fixtureRoot, path)),
-        readCandidate: (file) => readFileSync(resolve(packageRoot, 'src/outline', file)),
+        readCandidate: (file) => readReviewCandidate(file),
       },
     );
 
@@ -329,7 +330,7 @@ describe('promoted visual weight sources', () => {
   it.each(expectedFiles)('%s keeps every primary line at the default width', (file) => {
     const reviews = loadReviews();
     const review = reviews.find((entry) => entry.file === file)!;
-    const root = parseSvg(readFileSync(resolve(packageRoot, 'src/outline', file), 'utf8'));
+    const root = parseSvg(readReviewCandidate(file).toString('utf8'));
     const primaryRoles = (review.nodeRoles as JsonRecord[]).filter(
       ({ role }) => role === 'primary-line',
     );
@@ -338,7 +339,11 @@ describe('promoted visual weight sources', () => {
       let node = root;
       for (const index of locator as number[]) node = node.children[index];
       const inherited = (attribute: string) => {
-        for (let current = node; current; current = current.parent) {
+        for (
+          let current: ReturnType<typeof parseSvg> | null = node;
+          current;
+          current = current.parent
+        ) {
           const value = current.attributes.get(attribute);
           if (value !== undefined) return value;
         }
@@ -351,7 +356,7 @@ describe('promoted visual weight sources', () => {
   it.each(expectedFiles)('%s preserves each declared coupled cutout', (file) => {
     const reviews = loadReviews();
     const review = reviews.find((entry) => entry.file === file)!;
-    const root = parseSvg(readFileSync(resolve(packageRoot, 'src/outline', file), 'utf8'));
+    const root = parseSvg(readReviewCandidate(file).toString('utf8'));
     const cutoutRoles = (review.nodeRoles as JsonRecord[]).filter(
       ({ role }) => role === 'coupled-cutout',
     );
@@ -361,7 +366,11 @@ describe('promoted visual weight sources', () => {
       let stroke: string | undefined;
       let strokeWidth: string | undefined;
       let insideDefinition = false;
-      for (let current = node; current; current = current.parent) {
+      for (
+        let current: ReturnType<typeof parseSvg> | null = node;
+        current;
+        current = current.parent
+      ) {
         stroke ??= current.attributes.get('stroke');
         strokeWidth ??= current.attributes.get('stroke-width');
         insideDefinition ||= ['clipPath', 'mask'].includes(current.name);
@@ -377,7 +386,7 @@ describe('promoted visual weight sources', () => {
   it.each(expectedFiles)('%s preserves each declared semantic fill', (file) => {
     const reviews = loadReviews();
     const review = reviews.find((entry) => entry.file === file)!;
-    const root = parseSvg(readFileSync(resolve(packageRoot, 'src/outline', file), 'utf8'));
+    const root = parseSvg(readReviewCandidate(file).toString('utf8'));
     const fillRoles = (review.nodeRoles as JsonRecord[]).filter(
       ({ role }) => role === 'semantic-fill',
     );

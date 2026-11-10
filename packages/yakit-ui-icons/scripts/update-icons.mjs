@@ -25,6 +25,7 @@ import { auditColorfulInputs } from './colorful-audit.mjs';
 import { loadPinnedTokenCatalog } from './colorful-color-resolver.mjs';
 import {
   generateIconStrokeContract,
+  sourceFixedFillDispositions,
   serializeIconStrokeContract,
 } from '../config/generateIconStrokeContract.mjs';
 
@@ -115,10 +116,21 @@ export function renderImportedSvg(record, family) {
   if (/<(?:script|foreignObject)\b|\bon\w+\s*=|(?:href|xlink:href)\s*=\s*["'](?!#)/i.test(raw))
     fail(`ICON_EXTERNAL_CONTENT_UNSUPPORTED: ${record.nodeId}`);
   let svg = raw;
-  if (family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg))
+  if (
+    family === 'outline' &&
+    record.production?.geometry !== 'source' &&
+    !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg)
+  )
     fail(`ICON_OUTLINE_STROKE_MISSING: ${record.nodeId}`);
   if (family !== 'colorful')
     svg = svg.replace(/(\b(?:fill|stroke)=)["']#353639["']/gi, '$1"currentColor"');
+  // A registered default color is supplied by createIcon; the SVG must still
+  // inherit color overrides (for example Ear's #0A0A0A foreground).
+  if (family !== 'colorful' && /^#[a-fA-F0-9]{6}$/.test(record.defaultColor ?? ''))
+    svg = svg.replace(
+      new RegExp(`(\\b(?:fill|stroke)=)["']${record.defaultColor}["']`, 'gi'),
+      '$1"currentColor"',
+    );
   for (const [from, to] of Object.entries(record.production?.paintReplacements ?? {})) {
     if (!/^#[a-fA-F0-9]{6}$/.test(from) || !/^var\(--[\w-]+,\s*#[a-fA-F0-9]{6}\)$/.test(to))
       fail(`ICON_PAINT_MAPPING_INVALID: ${record.nodeId}`);
@@ -254,6 +266,7 @@ export async function planIconUpdate(
       'config/iconStrokeContract.generated.ts',
       await serializeIconStrokeContract(
         generateIconStrokeContract(undefined, {
+          fixedFill: sourceFixedFillDispositions(sources.outline.records),
           sources: new Map(
             [...assets]
               .filter(([f]) => f.startsWith('outline/'))

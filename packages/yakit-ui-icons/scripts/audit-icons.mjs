@@ -103,7 +103,21 @@ function findTagEnd(source, start) {
   return -1;
 }
 
+/**
+ * @typedef {object} SvgNode
+ * @property {Map<string, string>} attributes
+ * @property {SvgNode[]} children
+ * @property {string} name
+ * @property {SvgNode | null} parent
+ * @property {string} text
+ */
+
+/**
+ * @param {string} source
+ * @returns {SvgNode}
+ */
 export function parseSvg(source) {
+  /** @type {SvgNode} */
   const document = {
     attributes: new Map(),
     children: [],
@@ -158,6 +172,7 @@ export function parseSvg(source) {
     if (!nameMatch) throw new Error('missing element name');
     const name = nameMatch[0];
     const parent = stack.at(-1);
+    /** @type {SvgNode} */
     const node = {
       attributes: parseAttributes(body.slice(name.length)),
       children: [],
@@ -515,8 +530,17 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
           value.startsWith('url(')
         )
           continue;
-        if (!insideDefinition) errors.push('FOREGROUND_LITERAL');
-        else if (!exceptionMatches(exceptions, relativePath, node, attribute, value))
+        if (!insideDefinition) {
+          const sourcePaint = record?.sourceForegroundPaints?.some(
+            (paint) =>
+              paint.tag === node.name &&
+              paint.d === node.attributes.get('d') &&
+              paint.attribute === attribute &&
+              paint.value === value &&
+              ['white', '#fff', '#ffffff'].includes(value.toLowerCase()),
+          );
+          if (!sourcePaint) errors.push('FOREGROUND_LITERAL');
+        } else if (!exceptionMatches(exceptions, relativePath, node, attribute, value))
           errors.push('MASK_EXCEPTION_INVALID');
       }
     } else if (variant === 'solid') {

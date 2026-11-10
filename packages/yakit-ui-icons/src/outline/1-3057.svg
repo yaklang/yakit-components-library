@@ -1,17 +1,13 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g>
-<mask id="icon_1_3057__mask_0" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<mask id="icon_13057__mask_0" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
 <rect width="24" height="24" fill="#D9D9D9"/>
 </mask>
-<g mask="url(#icon_1_3057__mask_0)">
-<g>
-<path d="M16.9502 12.7071L19.7786 9.87871C21.3407 8.31662 21.3407 5.78396 19.7786 4.22186C18.2165 2.65976 15.6839 2.65976 14.1218 4.22186L11.2933 7.05029" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M5.63623 8.46448L3.70438 7.94684" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M8.11133 5.98962L7.59369 4.05777" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M15.5356 18.3639L16.0533 20.2957" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M18.0107 15.889L19.9426 16.4067" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-<path d="M7.05029 11.2929L4.22187 14.1213C2.65977 15.6834 2.65977 18.216 4.22187 19.7781C5.78396 21.3402 8.31662 21.3402 9.87872 19.7781L12.7071 16.9497" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-</g>
-</g>
+<g mask="url(#icon_13057__mask_0)">
+<path d="M16.9502 12.7071L19.7786 9.87871C21.3407 8.31662 21.3407 5.78396 19.7786 4.22186C18.2165 2.65976 15.6839 2.65976 14.1218 4.22186L11.2933 7.05029" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"/>
+<path d="M5.63623 8.46448L3.70438 7.94684" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"/>
+<path d="M8.11133 5.98962L7.59369 4.05777" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"/>
+<path d="M15.5356 18.3639L16.0533 20.2957" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"/>
+<path d="M18.0107 15.889L19.9426 16.4067" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"/>
+<path d="M7.05029 11.2929L4.22187 14.1213C2.65977 15.6834 2.65977 18.216 4.22187 19.7781C5.78396 21.3402 8.31662 21.3402 9.87872 19.7781L12.7071 16.9497" stroke-width="1.5" stroke-linecap="round" stroke="currentColor"/>
 </g>
 </svg>

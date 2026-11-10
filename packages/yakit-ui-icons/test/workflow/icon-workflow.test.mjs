@@ -421,3 +421,104 @@ test('uniform stroke generation applies only to Outline', () => {
   }
   assert.match(renderImportedSvg({nodeId:'1:2',rawSvg}, 'outline'), /stroke-width="1.5"/);
 });
+
+test('explicit synchronization repairs stale legacy groups even when raw SVG is unchanged', () =>
+  fixture(async (root) => {
+    const sourcePath = path.join(root, 'config/icon-sources/outline.json');
+    const source = JSON.parse(await readFile(sourcePath, 'utf8'));
+    const record = source.records.find((r) => r.exportName === 'BookOpenTextOutlined');
+    delete record.production;
+    await writeFile(sourcePath, jsonText(source));
+    const svgPath = path.join(root, 'book-remote.svg');
+    await writeFile(svgPath, record.raw.svg);
+    const file = path.join(root, 'src/outline', record.file);
+    const expected = await readFile(file, 'utf8');
+    const stale = expected.replace('<path', '<g><g><path').replace('</svg>', '</g></g></svg>');
+    await writeFile(file, stale);
+    const icon = { url: url(record.nodeId), name: record.name, family: 'outline', nodeType: 'COMPONENT', width: 24, height: 24, svgPath };
+    assert.equal((await planSourceImport({schemaVersion: 1, icons: [icon]}, root)).report[0].status, 'unchanged');
+    const request = {schemaVersion: 1, icons: [{...icon, syncProduction: true}]};
+    const imported = await planSourceImport(request, root);
+    assert.equal(imported.report[0].status, 'updated');
+    await applyChanges(root, imported.changes);
+    await assert.rejects(runIconUpdate(['--check'], root), /ICON_GENERATED_DRIFT/);
+    assert.equal(await readFile(file, 'utf8'), stale);
+    await runIconUpdate([], root);
+    assert.equal(await readFile(file, 'utf8'), expected);
+    assert.equal((await planSourceImport(request, root)).changes.size, 0);
+    await writeFile(file, expected.replace(/<path\b[^>]*\/>/, ''));
+    await assert.rejects(runIconUpdate(['--check'], root), /ICON_GENERATED_DRIFT/);
+    await runIconUpdate([], root);
+    assert.equal(await readFile(file, 'utf8'), expected);
+  }));
+
+test('registered default foreground colors remain overridable after import', () => {
+  const output = renderImportedSvg({nodeId: '1:2', defaultColor: '#0A0A0A', raw: {svg: outlineSvg.replace('#353639', '#0A0A0A')}}, 'outline');
+  assert.match(output, /stroke="currentColor"/);
+  assert.doesNotMatch(output, /#0A0A0A/);
+});
+
+test('import keeps legacy mask paint exceptions attached to the normalized definition', () =>
+  fixture(async (root) => {
+    const sourcePath = path.join(root, 'config/icon-sources/outline.json');
+    const source = JSON.parse(await readFile(sourcePath, 'utf8'));
+    const record = source.records.find((r) => r.nodeId === '1:3058');
+    delete record.production;
+    for (const exception of source.metadata.paintExceptions)
+      if (exception.path === 'outline/1-3058.svg')
+        exception.definitionId = exception.definitionId.replace('icon_13058__', 'icon_1_3058__');
+    await writeFile(sourcePath, jsonText(source));
+    const svgPath = path.join(root, 'mask-remote.svg');
+    await writeFile(svgPath, record.raw.svg);
+    const imported = await planSourceImport({schemaVersion: 1, icons: [{url: url(record.nodeId), name: record.name, family: 'outline', nodeType: 'COMPONENT', width: 24, height: 24, svgPath, syncProduction: true}]}, root);
+    const next = JSON.parse(imported.changes.get('config/icon-sources/outline.json').after);
+    const exception = next.metadata.paintExceptions.find((e) => e.path === 'outline/1-3058.svg');
+    assert.equal(exception.definitionId, 'icon_13058__mask_0');
+    assert.equal(exception.value, '#D9D9D9');
+    await applyChanges(root, imported.changes);
+    await runIconUpdate([], root);
+    assert.equal(await runIconUpdate(['--check'], root), 'ICONS_CHECK_OK 0 file(s)\n');
+  }));
+
+test('source-native geometry is explicit, supports fixed fills, and remains idempotent', () =>
+  fixture(async (root) => {
+    const request = await input(root, 'outline');
+    const icon = request.icons[0];
+    await writeFile(icon.svgPath, '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2L20 20L2 20Z" fill="#353639"/></svg>\n');
+    await assert.rejects(planSourceImport(request, root), /ICON_OUTLINE_STROKE_MISSING/);
+    icon.preserveSourceGeometry = true;
+    const imported = await planSourceImport(request, root);
+    const source = JSON.parse(imported.changes.get('config/icon-sources/outline.json').after);
+    const record = source.records.find((r) => r.nodeId === '999999:1');
+    assert.equal(record.production.strokeMode, 'fixed-fill');
+    assert.equal(record.metadata.geometryReviewId, undefined);
+    await applyChanges(root, imported.changes);
+    await runIconUpdate([], root);
+    const svg = await readFile(path.join(root, 'src/outline/999999-1.svg'), 'utf8');
+    assert.match(svg, /fill="currentColor"/);
+    assert.doesNotMatch(svg, /\bstroke(?:-width)?=/);
+    const contract = await readFile(path.join(root, 'config/iconStrokeContract.generated.ts'), 'utf8');
+    assert.match(contract, /'999999-1.svg':\s*\{\s*classification: 'fixed-fill'/);
+    assert.equal((await planSourceImport(request, root)).changes.size, 0);
+    assert.equal(await runIconUpdate(['--check'], root), 'ICONS_CHECK_OK 0 file(s)\n');
+  }));
+
+test('source-native cutout authorization is restricted to the exported path and paint', () =>
+  fixture(async (root) => {
+    const request = await input(root, 'outline');
+    request.icons[0].preserveSourceGeometry = true;
+    await writeFile(request.icons[0].svgPath, outlineSvg.replace('</svg>', '<path d="M4 4L18 18" stroke="white" stroke-width="2"/></svg>'));
+    const imported = await planSourceImport(request, root);
+    const source = JSON.parse(imported.changes.get('config/icon-sources/outline.json').after);
+    const record = source.records.find((r) => r.nodeId === '999999:1');
+    assert.deepEqual(record.metadata.sourceForegroundPaints, [{tag: 'path', d: 'M4 4L18 18', attribute: 'stroke', value: 'white'}]);
+    const {inspectSvg} = await import('../../scripts/audit-icons.mjs');
+    const normalized = renderImportedSvg(record, 'outline');
+    const manifest = {symbols: [{file: record.file, ...record.metadata}]};
+    const inspect = (svg) => inspectSvg({manifest, source: svg, variant: 'outline', relativePath: `outline/${record.file}`});
+    assert.deepEqual(inspect(normalized), []);
+    assert.ok(inspect(normalized.replace('M4 4L18 18', 'M4 4L19 19')).includes('FOREGROUND_LITERAL'));
+    assert.ok(inspect(normalized.replace('stroke="white"', 'stroke="red"')).includes('FOREGROUND_LITERAL'));
+    await applyChanges(root, imported.changes);
+    await runIconUpdate([], root);
+  }));

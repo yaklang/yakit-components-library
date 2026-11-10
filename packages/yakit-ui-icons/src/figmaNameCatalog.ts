@@ -2606,6 +2606,20 @@ export const figmaIconNameCatalog = [
     sourceStatus: 'current',
   },
   {
+    exportName: 'MenuCollapseOutlined',
+    figmaName: 'Outline/Menu-Collapse',
+    family: 'outline',
+    sourceNodeId: '47822:21814',
+    sourceStatus: 'current',
+  },
+  {
+    exportName: 'MenuExpandOutlined',
+    figmaName: 'Outline/Menu-Expand',
+    family: 'outline',
+    sourceNodeId: '47822:21815',
+    sourceStatus: 'current',
+  },
+  {
     exportName: 'MailSolid',
     figmaName: 'Solid/Mail',
     family: 'solid',
@@ -3006,7 +3020,7 @@ export const figmaIconNameCatalog = [
   },
   {
     exportName: 'ClockSolid',
-    figmaName: 'Solid/Clock',
+    figmaName: 'Solid/clock',
     family: 'solid',
     sourceNodeId: '1:2651',
     sourceStatus: 'current',
