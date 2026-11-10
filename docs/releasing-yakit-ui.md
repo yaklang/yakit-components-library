@@ -150,4 +150,12 @@ Trusted Publishing flow; it does not authorize publishing local candidate packs.
 
 此独立任务仅持有 Actions/Contents 读取权限，不使用 npm 环境、npm 凭据或 OIDC。它验证原 push 工作流、仓库、分支、提交、14 天保留窗口、下载 ZIP 的 SHA-256、完整 manifest/outbox 和历史回执；每个发布包的版本、dist-tag、SHA-1、SRI 及实际 tarball 字节必须与验证产物一致。任一包缺失、身份冲突或状态未知均终止，不会重试发布。核对成功才上传新的不可变恢复 intent，并在再次核对后追加成功 receipt；不会修改旧证据。后续 cutover 仅关闭相同 source run、outbox 与完整发布集合的旧状态，其他不确定发布仍阻塞。
 
-只读核对完成后，重新触发正常发布流程；此入口不发布新版本，也不更新 GitHub release/tag。
+此入口不发布新版本，也不更新 GitHub release/tag。若需要补齐原发布的 GitHub 元数据，在核对成功后再次手动运行同一工作流，选择 `recovery=true`、`reconciliation_only=false`，继续使用原 `source_run_id` 和 `verification_artifact_id`，保留 `authorize_retry=false`，其余参数留空。当所有原产物均已发布且匹配时，`recovery-publish` 跳过，`recovery-metadata` 补齐 tag/release；此路径不会补跑 `post-publish` smoke。后续新版本仍由正常 push 流程发布。
+
+### 发布后的 npm 可见性等待
+
+`npm publish` 成功返回后，npm 仍可能需要几分钟才能让 registry 查询到新版本。发布脚本使用独立的 `PUBLICATION_REGISTRY_CONFIRMATION_TIMEOUT_MS`（默认及工作流配置均为 `300000`，即每包 5 分钟）确认版本、dist-tag 和产物哈希；先立即查询，再以 1、2、4、8 秒递增等待，后续间隔最多 15 秒。查询耗时计入等待预算，每轮输出状态和已用时间。普通发布和恢复发布共用此机制。
+
+`PUBLICATION_REGISTRY_PROPAGATION_WINDOW_MS` 仍仅用于重试授权前的缺失证据校验，与发布后确认窗口分开。确认期间只查询，不重复调用 `npm publish`；超时仍未确认时保留 ambiguous 回执，需按上面的只读核对流程处理。哈希、dist-tag 冲突或查询错误仍直接失败。
+
+2026-11-09 的 icons `0.3.1` 发布对应 `source_run_id=42596607962`、`verification_artifact_id=13663469507`。修复合入 `main` 后，进入 GitHub Actions → **Publish Yakit UI packages** → **Run workflow**，选择 `main`，先按上述只读核对参数执行。成功标准是 `reconcile-published` 通过并上传新的 recovery intent/receipt；旧失败运行保留作为历史记录，无需点击其 **Re-run jobs**。原产物受 14 天恢复窗口限制。
