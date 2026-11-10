@@ -5,6 +5,7 @@ import path from "node:path";
 import test from "node:test";
 
 import { payloadHash } from "../../scripts/release/durable-release-state.mjs";
+import { waitForPublication } from "../../scripts/release/wait-for-publication.mjs";
 import {
   BOUND_PRIVATE_PROVENANCE_REJECTION_SCHEMA,
   PRIVATE_PROVENANCE_REJECTION_SCHEMA,
@@ -672,6 +673,58 @@ test("definitely not attempted receipt needs fresh exact registry evidence", asy
     "@yakit-libs/yakit-ui",
   );
 });
+
+for (const becomesVisible of [true, false]) {
+  test(`delayed registry confirmation ${becomesVisible ? "succeeds" : "stays ambiguous"} with only one publish request`, async () => {
+    const intent = await directory("yakit-delayed-intent-");
+    const receipt = await directory("yakit-delayed-receipt-");
+    const outbox = createPublicationOutbox(manifest);
+    const common = { manifest, outbox, outboxSha256: "d".repeat(64), now };
+    await preparePublicationAttempt({
+      ...common,
+      stateDirectory: intent,
+      priorArtifactInventory: inventory(),
+      attemptId: "42:1",
+      observe: async () => "NOT_APPLIED",
+    });
+    let elapsed = 0;
+    let publishes = 0;
+    const dispatch = dispatchPreparedPublication({
+      ...common,
+      intentDirectory: intent,
+      receiptDirectory: receipt,
+      intentArtifactIdentity: { id: "1", digest: `sha256:${"a".repeat(64)}` },
+      observe: async () => "NOT_APPLIED",
+      observeAfterPublish: (release) =>
+        waitForPublication({
+          release,
+          observe: async () =>
+            becomesVisible && elapsed >= 180_000 ? "APPLIED" : "NOT_APPLIED",
+          now: () => elapsed,
+          wait: async (delay) => {
+            elapsed += delay;
+          },
+          log: () => {},
+        }),
+      publish: async () => {
+        publishes++;
+      },
+    });
+    if (becomesVisible) {
+      assert.deepEqual((await dispatch).published, [manifest.releases[0].name]);
+    } else {
+      await assert.rejects(dispatch, /publication outcome is ambiguous/);
+      assert.equal(elapsed, 300_000);
+    }
+    assert.equal(publishes, 1);
+    const inbox = JSON.parse(
+      await readFile(path.join(receipt, "consumer-inbox.json"), "utf8"),
+    );
+    const record = Object.values(inbox.records)[0];
+    assert.equal(record.status, becomesVisible ? "SUCCEEDED" : "AMBIGUOUS");
+    assert.equal(record.reconciled, becomesVisible);
+  });
+}
 
 test("read-only APPLIED reconciliation closes an ambiguous receipt without a publication side effect", async () => {
   const root = await directory("yakit-applied-reconciliation-");

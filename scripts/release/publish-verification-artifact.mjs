@@ -6,6 +6,10 @@ import path from "node:path";
 import process from "node:process";
 
 import {
+  publicationConfirmationTimeout,
+  waitForPublication,
+} from "./wait-for-publication.mjs";
+import {
   dispatchPreparedPublication,
   validatePublicationOutbox,
 } from "./publication-consumer.mjs";
@@ -60,6 +64,7 @@ async function writeOutputs(outputs) {
 const evidenceDirectory = path.resolve(process.argv[2] ?? "");
 const intentDirectory = path.resolve(process.argv[3] ?? "");
 const receiptDirectory = path.resolve(process.argv[4] ?? "");
+const confirmationTimeoutMs = publicationConfirmationTimeout();
 if (!process.argv[2] || !process.argv[3] || !process.argv[4])
   throw new Error(
     "Usage: publish-verification-artifact.mjs <evidence-directory> <durable-intent-directory> <receipt-state-directory>",
@@ -213,16 +218,11 @@ async function observe(release) {
 }
 
 async function observeAfterPublish(release) {
-  const delays = [0, 1_000, 2_000, 4_000, 8_000, 8_000];
-  for (const delay of delays) {
-    if (delay > 0)
-      await new Promise((resolve) => {
-        setTimeout(resolve, delay);
-      });
-    const observed = await observe(release);
-    if (observed === "APPLIED") return observed;
-  }
-  return "NOT_APPLIED";
+  return waitForPublication({
+    release,
+    observe,
+    timeoutMs: confirmationTimeoutMs,
+  });
 }
 
 async function publish(release) {
