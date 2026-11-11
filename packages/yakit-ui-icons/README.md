@@ -67,21 +67,21 @@ export const HomeEntry = () => (
 
 ### 调整描边宽度
 
-当前包含的 364 个 Outline 图标（包括 `BugOutlined`、`QrcodeOutlined`）和 `Loading` 支持通过 `svgProps` 调整实际线宽，默认值为 `1.5`：
+具有实际描边的 Outline 图标（例如 `HomeOutlined`）和 `Loading` 支持通过 `svgProps` 调整线宽，默认值为 `1.5`：
 
 ```tsx
-<BugOutlined svgProps={{ strokeWidth: 2 }} />
+<HomeOutlined svgProps={{ strokeWidth: 2 }} />
 <HomeOutlined svgProps={{ style: { strokeWidth: 1.5 } }} />
 <Loading svgProps={{ strokeWidth: 0 }} />
 ```
 
 优先级是 `svgProps.style.strokeWidth` → `svgProps.strokeWidth` → 图标原始默认值。`0` 会隐藏描边，混合图标中的填充细节仍然保留。支持合法 SVG 长度/百分比字符串；同元素 CSS 规则遵循正常层叠顺序。外层 `style` 仍属于 `span`，不提供顶层 `strokeWidth` 属性。
 
-按最新 Figma 原稿同步后，`CurrencyDollarOutlined`、`TagOutlined`、`QrcodeOutlined`、`ClipboardCheckOutlined`、`SupportOutlined`、`PresentationChartLineOutlined`、`StatusOfflineOutlined`、`RocketOffOutlined`、`SpeechToTextOutlined`、`SpeechToText2Outlined` 使用固定填充轮廓，`strokeWidth` 不改变其粗细，也不会为它们补造描边。其他图标中，`svgProps.strokeWidth={0}` 只隐藏实际描边，填充部分仍然可见。范围与兼容性说明见[仓库中的线宽能力说明](https://github.com/yaklang/yakit-components-library/blob/main/packages/yakit-ui/docs/icon-stroke-capabilities.md)。
+按最新 Figma 原稿同步后，`BugOutlined`、`AddPayloadOutlined`、`CurrencyDollarOutlined`、`TagOutlined`、`QrcodeOutlined`、`ClipboardCheckOutlined`、`SupportOutlined`、`PresentationChartLineOutlined`、`StatusOfflineOutlined`、`RocketOffOutlined`、`SpeechToTextOutlined`、`SpeechToText2Outlined` 使用固定填充轮廓，`strokeWidth` 不改变其粗细，也不会为它们补造描边。其他图标中，`svgProps.strokeWidth={0}` 只隐藏实际描边，填充部分仍然可见。范围与兼容性说明见[仓库中的线宽能力说明](https://github.com/yaklang/yakit-components-library/blob/main/packages/yakit-ui-icons/docs/icon-stroke-capabilities.md)。
 
 `StarOffOutlined`、`RocketLaunchOffOutlined` 保留远端原稿的白色覆盖线，其在透明或深色背景上的效果与透明擦除蒙版不同。
 
-Solid、Colorful、Oldicon 的 `svgProps.strokeWidth` 保持根 SVG 的原生属性透传，不会统一覆盖内部形状已声明的固定线宽。`BugOutlined` 已从填充轮廓重建为真实描边，默认视觉改为与其他描边 Outline 一致的宽度 `1.5`。
+Solid、Colorful、Oldicon 的 `svgProps.strokeWidth` 保持根 SVG 的原生属性透传，不会统一覆盖内部形状已声明的固定线宽。`BugOutlined` 与 `AddPayloadOutlined` 按最新原稿保留固定填充。
 
 浏览器条件入口会自动关联静态 `icon.css`，根入口和 `/outline`、`/solid`、`/colorful` 多次导入时由打包器合并为一份样式；Node SSR 使用无 CSS 的通用入口，不会访问 DOM 或尝试加载 CSS 模块。无法识别 package `browser` condition 的自定义构建环境可显式导入 `@yakit-libs/yakit-ui-icons/icon.css`。
 

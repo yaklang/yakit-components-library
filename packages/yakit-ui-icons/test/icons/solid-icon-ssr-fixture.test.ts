@@ -55,9 +55,9 @@ describe('Solid icon server rendering', () => {
     ['default identifiers', fixtures.default],
     ['matching custom identifierPrefix', fixtures.custom],
   ])('renders %s with unique owner-local fragment IDs', (_label, fixture) => {
-    expect(fixture.serverIds).toHaveLength(12);
+    expect(fixture.serverIds).toHaveLength(4);
     expect(new Set(fixture.serverIds).size).toBe(fixture.serverIds.length);
-    expect(fixture.references).toHaveLength(14);
+    expect(fixture.references).toHaveLength(4);
     expect(fixture.references.every((reference) => fixture.serverIds.includes(reference))).toBe(
       true,
     );

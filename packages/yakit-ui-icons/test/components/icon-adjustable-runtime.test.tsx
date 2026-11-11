@@ -5,7 +5,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { outlineStrokeContract } from '../../config/iconStrokeContract.generated';
 import {
-  BugOutlined,
   ColorSwatchOutlined,
   HomeOutlined,
   Loading,
@@ -41,17 +40,16 @@ afterEach(() => {
 
 describe('adjustable icon runtime stroke contract', () => {
   it.each([0, 1, 1.5, 2, 3])(
-    'applies svgProps.strokeWidth=%s to Bug, Home, and Loading visible strokes',
+    'applies svgProps.strokeWidth=%s to Home and Loading visible strokes',
     (strokeWidth) => {
       const { container } = render(
         <>
-          <BugOutlined data-icon-name="BugOutlined" svgProps={{ strokeWidth }} />
           <HomeOutlined data-icon-name="HomeOutlined" svgProps={{ strokeWidth }} />
           <Loading data-icon-name="Loading" svgProps={{ strokeWidth }} />
         </>,
       );
 
-      for (const name of ['BugOutlined', 'HomeOutlined', 'Loading']) {
+      for (const name of ['HomeOutlined', 'Loading']) {
         const icon = container.querySelector(`[data-icon-name="${name}"]`)!;
         const widths = computedWidths(icon);
         expect(widths.length, name).toBeGreaterThan(0);
@@ -116,7 +114,7 @@ describe('adjustable icon runtime stroke contract', () => {
     const { container } = render(
       <>
         <style>{'.stroke-css-proof path { stroke-width: 2.5px; }'}</style>
-        <BugOutlined className="stroke-css-proof" svgProps={{ strokeWidth: 1 }} />
+        <HomeOutlined className="stroke-css-proof" svgProps={{ strokeWidth: 1 }} />
       </>,
     );
     expect(container.querySelector('path')?.getAttribute('stroke-width')).toBe('1');
@@ -132,7 +130,7 @@ describe('adjustable icon runtime stroke contract', () => {
             `${sourceNodeId.replace(':', '-')}.svg` as keyof typeof outlineStrokeContract
           ].classification === 'adjustable',
       );
-      expect(adjustable).toHaveLength(iconCounts.outline - 10);
+      expect(adjustable).toHaveLength(iconCounts.outline - 12);
       const { container } = render(
         <>
           {adjustable.map(({ Component, exportName }) => (
@@ -151,7 +149,7 @@ describe('adjustable icon runtime stroke contract', () => {
   );
 
   it.each(['1px', '5%'])('preserves browser-supported width units %s', (strokeWidth) => {
-    const { container } = render(<BugOutlined svgProps={{ strokeWidth }} />);
+    const { container } = render(<HomeOutlined svgProps={{ strokeWidth }} />);
     expect(new Set(computedWidths(container))).toEqual(new Set([strokeWidth]));
   });
 });

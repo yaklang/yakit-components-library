@@ -3491,19 +3491,11 @@ export const outlineStrokeContract = {
     ],
   },
   '1-3136.svg': {
-    classification: 'adjustable',
+    classification: 'fixed-fill',
     file: '1-3136.svg',
-    sha256: '7b037e4c48daa856349030310a5dcc8d104772db4eb836ad027f13059130926a',
-    targets: [
-      {
-        element: 'path',
-        expectedMatches: 1,
-        locator: [0],
-        role: 'adjustable-primary',
-        sourceDefault: '1.5',
-        surface: 'attribute',
-      },
-    ],
+    reason: 'Explicit Figma source sync: filled contours have no adjustable stroke.',
+    sha256: 'f4512e36dd170546443f33beda29625aba1b3e20da47f399375e98f0ea72e8f0',
+    targets: [],
   },
   '11100-165929.svg': {
     classification: 'adjustable',
@@ -3652,35 +3644,11 @@ export const outlineStrokeContract = {
     ],
   },
   '17117-250680.svg': {
-    classification: 'adjustable',
+    classification: 'fixed-fill',
     file: '17117-250680.svg',
-    sha256: 'd14cfddb2449a5df5e1df162e6fc46c430b3a1f7b2d0f97de432448dd6f1d228',
-    targets: [
-      {
-        element: 'path',
-        expectedMatches: 1,
-        locator: [0],
-        role: 'adjustable-primary',
-        sourceDefault: '1.5',
-        surface: 'attribute',
-      },
-      {
-        element: 'path',
-        expectedMatches: 1,
-        locator: [1],
-        role: 'adjustable-primary',
-        sourceDefault: '1.5',
-        surface: 'attribute',
-      },
-      {
-        element: 'path',
-        expectedMatches: 1,
-        locator: [2],
-        role: 'adjustable-primary',
-        sourceDefault: '1.5',
-        surface: 'attribute',
-      },
-    ],
+    reason: 'Explicit Figma source sync: filled contours have no adjustable stroke.',
+    sha256: '8b165d6abc93934b5f2ecc534537f958c20e980f68fa1e57ff94d3f2a1788d94',
+    targets: [],
   },
   '18256-183879.svg': {
     classification: 'adjustable',

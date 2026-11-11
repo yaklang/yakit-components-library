@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
 import '@yakit-libs/yakit-ui-icons/icon.css';
-
-import oldiconSource from '../../../yakit-ui-icons/config/icon-sources/oldicon.json';
 import * as OldIcons from '@yakit-libs/yakit-ui-icons/oldicon';
 import type { IconComponent } from '@yakit-libs/yakit-ui-icons/oldicon';
+
+import oldiconSource from '../../../yakit-ui-icons/config/icon-sources/oldicon.json';
 
 type OldIconSourceRow = {
   exportName: string;
@@ -55,7 +54,7 @@ const OldIconCard = ({ entry }: { entry: OldIconEntry }) => {
       data-oldicon-export={exportName}
       data-oldicon-import={oldIconImportPath}
       style={{
-        border: '1px solid #e7e8eb',
+        border: '1px solid var(--Colors-Use-Neutral-Border)',
         borderRadius: 6,
         containIntrinsicSize: '156px',
         contentVisibility: 'auto',
@@ -68,7 +67,7 @@ const OldIconCard = ({ entry }: { entry: OldIconEntry }) => {
       <div
         style={{
           alignItems: 'center',
-          background: '#f7f8fa',
+          background: 'var(--Colors-Use-Neutral-Bg)',
           borderRadius: 4,
           display: 'flex',
           height: 48,
@@ -83,18 +82,42 @@ const OldIconCard = ({ entry }: { entry: OldIconEntry }) => {
         />
       </div>
       <div style={{ minWidth: 0 }}>
-        <strong style={{ color: '#353639', display: 'block', fontSize: 13 }}>{exportName}</strong>
+        <strong
+          style={{
+            color: 'var(--Colors-Use-Neutral-Text-1-Title)',
+            display: 'block',
+            fontSize: 13,
+          }}
+        >
+          {exportName}
+        </strong>
         <code
-          style={{ color: '#686c73', display: 'block', fontSize: 11, overflowWrap: 'anywhere' }}
+          style={{
+            color: 'var(--Colors-Use-Neutral-Text-2-Primary)',
+            display: 'block',
+            fontSize: 11,
+            overflowWrap: 'anywhere',
+          }}
         >
           {importSnippet}
         </code>
-        <code style={{ color: '#686c73', display: 'block', fontSize: 11 }}>
+        <code
+          style={{
+            color: 'var(--Colors-Use-Neutral-Text-2-Primary)',
+            display: 'block',
+            fontSize: 11,
+          }}
+        >
           {`<${exportName} />`}
         </code>
         <small
           title={sourceKeys.join('\n')}
-          style={{ color: '#8c8f95', display: 'block', marginTop: 8, overflowWrap: 'anywhere' }}
+          style={{
+            color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
+            display: 'block',
+            marginTop: 8,
+            overflowWrap: 'anywhere',
+          }}
         >
           {sourceKeys.length} source {sourceKeys.length === 1 ? 'mapping' : 'mappings'} ·{' '}
           {sourceKeys[0]}
@@ -108,8 +131,10 @@ const OldIconCard = ({ entry }: { entry: OldIconEntry }) => {
 const OldIconOverview = () => (
   <div style={{ display: 'grid', gap: 24, maxWidth: 900 }}>
     <header>
-      <h1 style={{ color: '#353639', marginBottom: 8 }}>oldIcon 兼容图标</h1>
-      <p style={{ color: '#686c73', lineHeight: 1.6, margin: 0 }}>
+      <h1 style={{ color: 'var(--Colors-Use-Neutral-Text-1-Title)', marginBottom: 8 }}>
+        oldIcon 兼容图标
+      </h1>
+      <p style={{ color: 'var(--Colors-Use-Neutral-Text-2-Primary)', lineHeight: 1.6, margin: 0 }}>
         这里收录 Yakit 迁移期间仍需保留的旧 SVG。它们通过 <code>{oldIconImportPath}</code>{' '}
         独立导入，不进入正式图标 registry。内置描边已统一为 1 SVG
         用户单位，原有图形、颜色和导出名称保留。
@@ -118,8 +143,8 @@ const OldIconOverview = () => (
     <div
       data-oldicon-summary
       style={{
-        background: '#f7f8fa',
-        border: '1px solid #e7e8eb',
+        background: 'var(--Colors-Use-Neutral-Bg)',
+        border: '1px solid var(--Colors-Use-Neutral-Border)',
         borderRadius: 6,
         display: 'flex',
         flexWrap: 'wrap',
@@ -137,16 +162,16 @@ const OldIconOverview = () => (
         <strong>{oldIconInventory.totals.sourcePaths}</strong> source paths
       </span>
     </div>
-    <p style={{ color: '#686c73', lineHeight: 1.6, margin: 0 }}>
+    <p style={{ color: 'var(--Colors-Use-Neutral-Text-2-Primary)', lineHeight: 1.6, margin: 0 }}>
       该兼容集合没有可靠的 Outline、Solid 或 Colorful family 元数据，因此不会按正式 family
       分类。请在 <strong>All Icons</strong>{' '}
       页面查看全部导出；列表按导出名排序，可使用浏览器页面查找快速定位。
     </p>
     <pre
       style={{
-        background: '#1f2328',
+        background: 'var(--Colors-Use-Neutral-Bg)',
         borderRadius: 6,
-        color: '#f0f3f6',
+        color: 'var(--Colors-Use-Neutral-Text-1-Title)',
         margin: 0,
         overflowX: 'auto',
         padding: 16,
@@ -160,8 +185,13 @@ const OldIconOverview = () => (
 const OldIconGallery = () => (
   <div style={{ display: 'grid', gap: 24 }}>
     <header>
-      <h1 style={{ color: '#353639', marginBottom: 8 }}>oldIcon 全部导出</h1>
-      <p data-oldicon-total={oldIconEntries.length} style={{ color: '#686c73', margin: 0 }}>
+      <h1 style={{ color: 'var(--Colors-Use-Neutral-Text-1-Title)', marginBottom: 8 }}>
+        oldIcon 全部导出
+      </h1>
+      <p
+        data-oldicon-total={oldIconEntries.length}
+        style={{ color: 'var(--Colors-Use-Neutral-Text-2-Primary)', margin: 0 }}
+      >
         {oldIconEntries.length} public exports · {oldIconInventory.totals.artworks} unique artworks
         · {oldIconInventory.totals.sourcePaths} source paths
       </p>

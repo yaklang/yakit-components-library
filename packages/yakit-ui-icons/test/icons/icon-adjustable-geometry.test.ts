@@ -8,13 +8,16 @@ import { launchGeometryBrowser } from '../fixtures/icons/geometry-browser';
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const fixtureRoot = resolve(packageRoot, 'test/fixtures/icons/adjustable-stroke');
-const sourcePath = resolve(packageRoot, 'src/outline/1-3136.svg');
+const sourcePath = resolve(
+  packageRoot,
+  'test/fixtures/icons/reference/visual-weight-v2/source-before-native-sync/1-3136.svg',
+);
 const review = JSON.parse(readFileSync(resolve(fixtureRoot, 'bug-geometry-review.json'), 'utf8'));
 
 const sha256 = (contents: string) => createHash('sha256').update(contents).digest('hex');
 const read = (path: string) => readFileSync(path, 'utf8');
 
-describe('BugOutlined adjustable geometry', () => {
+describe('historical BugOutlined adjustable geometry', () => {
   it('keeps the reviewed geometry artifacts immutable', () => {
     expect(sha256(read(resolve(fixtureRoot, 'bug-original-expanded.svg')))).toBe(
       review.artifacts.originalExpandedSvgSha256,
@@ -75,7 +78,7 @@ describe('BugOutlined adjustable geometry', () => {
     });
   });
 
-  it('recomputes the reviewed geometry gates from the production SVG in the configured renderer', async () => {
+  it('recomputes the reviewed geometry gates from the frozen candidate SVG in the configured renderer', async () => {
     const original = read(resolve(fixtureRoot, 'bug-original-expanded.svg'));
     const production = read(sourcePath);
     const widths = [0, 1, 1.5, 2, 3];

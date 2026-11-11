@@ -27,6 +27,12 @@
     "icons/solid-baseline-integrity.test.ts",
     "icons/helpers/current-figma-source.ts",
     "icons/helpers/review-candidate-source.ts",
-    "icons/icon-source-structure.test.ts"
+    "icons/icon-source-structure.test.ts",
+    "components/solid-icon-fragment-runtime.test.tsx",
+    "icons/icon-adjustable-geometry.test.ts",
+    "icons/solid-fragment-normalization.test.ts",
+    "icons/solid-icon-ssr-fixture.test.ts",
+    "icons/solid-paint-semantics.test.ts",
+    "icons/solid-source-sync.test.ts"
   ]
 }

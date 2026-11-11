@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { outlineStrokeContract } from '../../config/iconStrokeContract.generated';
-import { BugOutlined, HomeOutlined, Loading } from '../../src';
+import { HomeOutlined, Loading } from '../../src';
 import { outlineIconRegistry } from '../../src/registry';
 import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
@@ -19,7 +19,6 @@ const render = (
 
 describe('adjustable icon CSS-free SSR contract', () => {
   it.each([
-    ['BugOutlined', BugOutlined],
     ['HomeOutlined', HomeOutlined],
     ['Loading', Loading],
     ...outlineIconRegistry
@@ -60,7 +59,7 @@ describe('adjustable icon CSS-free SSR contract', () => {
         .filter((entry) => entry.classification === 'fixed-fill')
         .map((entry) => entry.file),
     );
-    expect(files.size).toBe(10);
+    expect(files.size).toBe(12);
     for (const { Component, exportName, sourceNodeId } of outlineIconRegistry) {
       if (!files.has(`${sourceNodeId.replace(':', '-')}.svg`)) continue;
       for (const strokeWidth of [0, 1.5, 3]) {

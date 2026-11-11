@@ -7,6 +7,7 @@ import type { YakitLocale } from '../src/components';
 import '../src/styles/index.css';
 
 import { brandThemes, type BrandTheme } from './brand-themes';
+import './preview.css';
 
 const locales: Record<'zh' | 'en', YakitLocale> = {
   zh: {
@@ -68,7 +69,10 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const currentTheme = context.globals.theme === 'dark' ? 'dark' : 'light';
-      const brand: BrandTheme = Object.hasOwn(brandThemes, context.globals.brand)
+      const brand: BrandTheme = Object.prototype.hasOwnProperty.call(
+        brandThemes,
+        context.globals.brand,
+      )
         ? (context.globals.brand as BrandTheme)
         : 'yakit';
       const palettes = useMemo(
@@ -110,6 +114,8 @@ const preview: Preview = {
     },
   ],
   parameters: {
+    // The theme toolbar owns the canvas background.
+    backgrounds: { disable: true },
     controls: {
       matchers: {
         color: /(background|color)$/i,

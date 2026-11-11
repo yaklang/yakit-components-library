@@ -53,14 +53,9 @@ describe('Solid raw fragment normalization', () => {
       }
     }
 
-    expect(fragmentFiles).toEqual([
-      '1-2967.svg',
-      '16035-380989.svg',
-      '22425-254718.svg',
-      '37831-7379.svg',
-    ]);
-    expect(retainedIdCount).toBe(6);
-    expect(owners.size).toBe(6);
+    expect(fragmentFiles).toEqual(['1-2967.svg', '22425-254718.svg']);
+    expect(retainedIdCount).toBe(2);
+    expect(owners.size).toBe(2);
   });
 
   it('has no orphan reference in any of the 256 raw sources', () => {

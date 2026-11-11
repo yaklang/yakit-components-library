@@ -5,16 +5,19 @@ import { chromium } from 'playwright';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
-import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 import outlineSource from '../../../yakit-ui-icons/config/icon-sources/outline.json';
+import type {} from '../../../yakit-ui-icons/test/fixtures/icons/icon-adjustable-consumer-entry';
+import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
+import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
 
 // Historical reviews keep the name used at review time. Resolve the maintained
 // export by source identity, including icons renamed before this relocation.
-const repairedNames = visualWeightReviews.reviews.map(({ file }) => {
+const repairedNames = visualWeightReviews.reviews.flatMap(({ file }) => {
   const record = outlineSource.records.find((entry) => entry.file === file);
   if (!record) throw new Error(`Reviewed Outline source is missing: ${file}`);
-  return record.exportName;
+  return 'production' in record && record.production?.strokeMode === 'fixed-fill'
+    ? []
+    : [record.exportName];
 });
 
 const packageRoot = resolve(import.meta.dirname, '../..');
@@ -25,7 +28,7 @@ const inspectBuiltEntry = (url: string) => {
     import React from 'react';
     import { renderToStaticMarkup } from 'react-dom/server';
     const module = await import(${JSON.stringify(url)});
-    const names = ['BugOutlined', 'HomeOutlined', ...${JSON.stringify(repairedNames)}, ...(module.Loading ? ['Loading'] : [])];
+    const names = ['HomeOutlined', ...${JSON.stringify(repairedNames)}, ...(module.Loading ? ['Loading'] : [])];
     const result = Object.fromEntries(names.map((name) => {
       const markup = renderToStaticMarkup(
         React.createElement(module[name], { svgProps: { strokeWidth: 3 } }),
@@ -66,22 +69,22 @@ describe('adjustable icon built consumer contract', () => {
       [
         resolve(packageRoot, 'dist'),
         'browser/icons/index.js',
-        ['BugOutlined', 'HomeOutlined', 'Loading', ...repairedNames],
+        ['HomeOutlined', 'Loading', ...repairedNames],
       ],
       [
         resolve(packageRoot, 'dist'),
         'browser/icons/outline/index.js',
-        ['BugOutlined', 'HomeOutlined', ...repairedNames],
+        ['HomeOutlined', ...repairedNames],
       ],
       [
         resolve(repositoryRoot, 'packages/yakit-ui-icons/dist'),
         'browser/index.js',
-        ['BugOutlined', 'HomeOutlined', 'Loading', ...repairedNames],
+        ['HomeOutlined', 'Loading', ...repairedNames],
       ],
       [
         resolve(repositoryRoot, 'packages/yakit-ui-icons/dist'),
         'browser/outline/index.js',
-        ['BugOutlined', 'HomeOutlined', ...repairedNames],
+        ['HomeOutlined', ...repairedNames],
       ],
     ].map(([root, path, names]) => ({
       names,
@@ -151,7 +154,10 @@ describe('adjustable icon built consumer contract', () => {
             `${String(error)}; page errors: ${pageErrors.join(' | ')}; console errors: ${consoleErrors.join(' | ')}; requests: ${requestErrors.join(' | ')}; body: ${await page.locator('body').innerHTML()}`,
           );
         });
-      expect(results).toHaveLength(186);
+      if (!results) throw new Error('Built browser fixture did not return adjustable icon results');
+      expect(results).toHaveLength(
+        modulePaths.reduce((total, entry) => total + entry.names.length * 3, 0),
+      );
       for (const result of results) {
         const expected =
           result.caseId === 'zero' ? '0px' : result.caseId === 'three' ? '3px' : '2px';

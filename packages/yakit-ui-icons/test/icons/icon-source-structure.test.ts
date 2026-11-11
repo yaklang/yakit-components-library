@@ -13,23 +13,17 @@ import {
 } from './helpers/current-figma-source';
 
 describe('imported Figma SVG structure', () => {
-  it.each([outline, solid])(
-    '$family checks every registered icon except documented geometry repairs',
-    (source) => {
-      // Only the two explicitly excluded Outline icons retain reconstructed geometry.
-      const repairs = new Set(['1:3136', '17117:250680']);
-      for (const record of source.records) {
-        if (source.family === 'outline' && repairs.has(record.nodeId)) continue;
-        const local = readFileSync(
-          new URL(`../../src/${source.family}/${record.file}`, import.meta.url),
-          'utf8',
-        );
-        expect(svgStructure(parseSvg(local)), record.exportName).toEqual(
-          svgStructure(parseSvg(record.raw.svg)),
-        );
-      }
-    },
-  );
+  it.each([outline, solid])('$family checks every registered icon', (source) => {
+    for (const record of source.records) {
+      const local = readFileSync(
+        new URL(`../../src/${source.family}/${record.file}`, import.meta.url),
+        'utf8',
+      );
+      expect(svgStructure(parseSvg(local)), record.exportName).toEqual(
+        svgStructure(parseSvg(record.raw.svg)),
+      );
+    }
+  });
   it.each(importedMonochromeSources)('$name preserves source tags and nesting', (source) => {
     const svg = readFileSync(
       new URL(`../../src/${source.family}/${source.file}`, import.meta.url),

@@ -1,10 +1,16 @@
 # Outline / Solid SVG 结构核对
 
-## 最新同步结果
+## 2026-11-11 指定六图标刷新
+
+重新获取 Bug、Add Payload、Paper Airplane、Import、Paintbrush、Pill 六个节点。Bug、Add Payload、Import、Pill 的原稿有变化并已同步；Paper Airplane、Paintbrush 与已登记原稿逐字节一致。Bug 和 Add Payload 现在均为固定填充轮廓；Import 移除蒙版，Pill 用同一主色和 0.5 透明度表示两部分。主色继续映射为 currentColor，实际描边仍遵守各分类规则。
+
+此前排除的 Bug、Add Payload、Pill 已纳入当前原稿核验，结构测试不再跳过两个 Outline。Bug、Add Payload 同步前的源码另存为历史审核候选，保留原有审核哈希与图像；当前来源的几何审核标记已解除。以下内容保留为此前同步记录。
+
+## 2026-11-10 同步结果
 
 在此前结构核对后，用户明确要求以最新远端代码替换本地修正，继续遵守本地主题颜色和线宽规则。本轮重新导出远端全部目标，更新剩余 33 个图标（Outline 32、Solid 1）。先前保留的结构差异中，仅明确排除的 BugOutlined、AddPayloadOutlined 继续保留；PillSolid 也按要求排除。下文初次核对的 13 项保留清单是历史记录，已被本节结果取代。
 
-10 个纯填充 Outline 登记为固定填充，不能通过 strokeWidth 改变粗细；StarOff、RocketLaunchOff 恢复原稿白色覆盖线，深色／透明背景的效果随原稿变化。详情见 [线宽能力说明](../packages/yakit-ui/docs/icon-stroke-capabilities.md)。
+10 个纯填充 Outline 登记为固定填充，不能通过 strokeWidth 改变粗细；StarOff、RocketLaunchOff 恢复原稿白色覆盖线，深色／透明背景的效果随原稿变化。详情见 [线宽能力说明](../packages/yakit-ui-icons/docs/icon-stroke-capabilities.md)。
 
 本轮不修改历史图片或审核基线；12 份被替代的审核候选源码保留原始字节，用原有 SHA 校验。当前图标以实际新原稿核验，历史审核不再冒充当前审核。
 

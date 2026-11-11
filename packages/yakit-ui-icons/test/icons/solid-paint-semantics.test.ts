@@ -105,47 +105,25 @@ describe('Solid paint semantics', () => {
         .map(({ paintAttribute, role, value }) => ({ file, paintAttribute, role, value })),
     );
 
-    expect(exceptional.filter(({ role }) => role === 'secondary-literal')).toEqual([
-      {
-        file: '37831-7379.svg',
-        paintAttribute: 'fill',
-        role: 'secondary-literal',
-        value: '#9CA3B1',
-      },
-    ]);
-    expect(exceptional.filter(({ role }) => role === 'foreground-cutout-literal')).toEqual([
-      {
-        file: '16035-380989.svg',
-        paintAttribute: 'stroke',
-        role: 'foreground-cutout-literal',
-        value: 'white',
-      },
-      {
-        file: '37831-7379.svg',
-        paintAttribute: 'fill',
-        role: 'foreground-cutout-literal',
-        value: 'white',
-      },
-    ]);
+    expect(exceptional.filter(({ role }) => role === 'secondary-literal')).toEqual([]);
+    expect(exceptional.filter(({ role }) => role === 'foreground-cutout-literal')).toEqual([]);
     expect(
       exceptional
         .filter(({ role }) => role === 'definition-semantic-literal')
         .map(({ file, value }) => ({ file, value })),
     ).toEqual([
       { file: '1-2967.svg', value: 'white' },
-      { file: '16035-380989.svg', value: 'white' },
       { file: '22425-254718.svg', value: 'white' },
-      { file: '37831-7379.svg', value: 'white' },
-      { file: '37831-7379.svg', value: 'white' },
     ]);
   });
 
   it('preserves the exact special-structure paint contracts', () => {
-    expect(source('16035-380989.svg')).toMatch(
-      /stroke-width="3"[^>]*stroke="white"[^>]*mask="url\(#/,
-    );
-    expect(source('37831-7379.svg')).toContain('fill="#9CA3B1"');
-    expect(source('37831-7379.svg')).toContain('fill="white"');
+    for (const file of ['16035-380989.svg', '37831-7379.svg']) {
+      expect(source(file)).not.toMatch(/<(?:mask|clipPath|defs)\b/);
+      expect(source(file).match(/fill="currentColor"/g)).toHaveLength(2);
+    }
+    expect(source('37831-7379.svg')).toContain('opacity="0.5"');
+    expect(source('37831-7379.svg')).not.toMatch(/#9CA3B1|fill="white"/);
     for (const file of ['1-2967.svg', '22425-254718.svg']) {
       expect(source(file), file).toMatch(/<(?:clipPath|mask)\b/);
       expect(source(file), file).toMatch(/(?:fill|stroke)="currentColor"/);
@@ -168,11 +146,15 @@ describe('Solid paint semantics', () => {
   });
 
   it.each([
-    ['secondary paint', '37831-7379.svg', (svg: string) => svg.replace('#9CA3B1', '#9CA3B2')],
     [
-      'foreground cutout',
+      'primary paint',
+      '37831-7379.svg',
+      (svg: string) => svg.replace('fill="currentColor"', 'fill="#9CA3B1"'),
+    ],
+    [
+      'foreground paint',
       '16035-380989.svg',
-      (svg: string) => svg.replace('stroke="white"', 'stroke="black"'),
+      (svg: string) => svg.replace('fill="currentColor"', 'fill="white"'),
     ],
     [
       'definition paint',
@@ -183,10 +165,10 @@ describe('Solid paint semantics', () => {
     expect(await auditSourceMutation(file, mutate)).toContain('PAINT_SEMANTICS_MISMATCH');
   });
 
-  it('rejects stroke drift from Figma geometry without imposing a fixed Solid width', async () => {
+  it('rejects opacity drift from the updated Pill source', async () => {
     expect(
-      await auditSourceMutation('16035-380989.svg', (svg) =>
-        svg.replace('stroke-width="3"', 'stroke-width="2"'),
+      await auditSourceMutation('37831-7379.svg', (svg) =>
+        svg.replace('opacity="0.5"', 'opacity="0.6"'),
       ),
     ).toContain('GEOMETRY_DIGEST_MISMATCH');
   });

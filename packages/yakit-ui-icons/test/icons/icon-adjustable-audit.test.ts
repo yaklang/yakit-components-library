@@ -52,8 +52,8 @@ describe('reviewed adjustable geometry audit', () => {
         reviewedOutlineGeometry({ ...source, localRawSvgSha256: 'unreviewed' }),
       ).toBeUndefined();
     }
-    expect(reviewedOutlineGeometry(bug)).toBe('bug-adjustable-stroke-v1');
-    expect(bug.figmaGeometrySha256).not.toBe(bug.localGeometrySha256);
+    expect(reviewedOutlineGeometry(bug)).toBeUndefined();
+    expect(bug.figmaGeometrySha256).toBe(bug.localGeometrySha256);
     expect(bug.geometrySha256).toBe(bug.localGeometrySha256);
     for (const field of [
       'file',

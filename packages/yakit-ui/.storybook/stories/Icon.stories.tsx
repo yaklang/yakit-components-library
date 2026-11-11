@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
+import { generateColors } from '@yakit-libs/color';
 import '@yakit-libs/yakit-ui-icons/icon.css';
 import { BugOutlined, HomeOutlined, Loading, StarOffOutlined } from '@yakit-libs/yakit-ui-icons';
-import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
@@ -10,6 +9,8 @@ import {
   type ColorfulIconCategory,
   type IconDefinition,
 } from '@yakit-libs/yakit-ui-icons/registry';
+
+import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 import { colorfulStoryGroups } from './icon-colorful.generated';
 
@@ -57,7 +58,7 @@ const IconSection = ({
       <div style={{ alignItems: 'baseline', display: 'flex', gap: 12, marginBottom: 16 }}>
         <Heading
           style={{
-            color: '#353639',
+            color: 'var(--Colors-Use-Neutral-Text-1-Title)',
             fontSize: headingLevel === 'h2' ? 28 : 20,
             lineHeight: 1.2,
             margin: 0,
@@ -65,8 +66,12 @@ const IconSection = ({
         >
           {title}
         </Heading>
-        <span style={{ color: '#8c8f95', fontSize: 14 }}>{subtitle}</span>
-        <span style={{ color: '#8c8f95', fontSize: 12 }}>({icons.length})</span>
+        <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 14 }}>
+          {subtitle}
+        </span>
+        <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 12 }}>
+          ({icons.length})
+        </span>
       </div>
       <div
         style={{
@@ -83,7 +88,7 @@ const IconSection = ({
             key={exportName}
             style={{
               alignItems: 'center',
-              border: '1px solid #e7e8eb',
+              border: '1px solid var(--Colors-Use-Neutral-Border)',
               borderRadius: 4,
               display: 'grid',
               gap: 12,
@@ -95,8 +100,8 @@ const IconSection = ({
               <div
                 style={{
                   alignItems: 'center',
-                  background: '#f7f8fa',
-                  border: '1px solid #e7e8eb',
+                  background: 'var(--Colors-Use-Neutral-Bg)',
+                  border: '1px solid var(--Colors-Use-Neutral-Border)',
                   borderRadius: 4,
                   display: 'flex',
                   height: 56,
@@ -120,7 +125,7 @@ const IconSection = ({
             <div style={{ minWidth: 0 }}>
               <div
                 style={{
-                  color: '#353639',
+                  color: 'var(--Colors-Use-Neutral-Text-1-Title)',
                   fontSize: 12,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -128,13 +133,19 @@ const IconSection = ({
               >
                 {name}
               </div>
-              <small style={{ color: '#8c8f95', display: 'block', fontSize: 10 }}>
+              <small
+                style={{
+                  color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
+                  display: 'block',
+                  fontSize: 10,
+                }}
+              >
                 {sourceStatus}
                 {figmaName === null ? ' · Figma name unavailable' : ''}
               </small>
               <code
                 style={{
-                  color: '#8c8f95',
+                  color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
                   display: intrinsicPreview ? 'block' : undefined,
                   fontSize: 11,
                   overflowWrap: intrinsicPreview ? 'anywhere' : undefined,
@@ -142,7 +153,7 @@ const IconSection = ({
               >{`import { ${exportName} } from '@yakit-libs/yakit-ui';`}</code>
               <code
                 style={{
-                  color: '#8c8f95',
+                  color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
                   display: 'block',
                   fontSize: 11,
                   overflowWrap: intrinsicPreview ? 'anywhere' : undefined,
@@ -159,11 +170,22 @@ const IconSection = ({
 const ColorfulIconGallery = () => (
   <section>
     <div style={{ alignItems: 'baseline', display: 'flex', gap: 12, marginBottom: 16 }}>
-      <h2 style={{ color: '#353639', fontSize: 28, lineHeight: 1.2, margin: 0 }}>Colorful</h2>
-      <span style={{ color: '#8c8f95', fontSize: 14 }}>
+      <h2
+        style={{
+          color: 'var(--Colors-Use-Neutral-Text-1-Title)',
+          fontSize: 28,
+          lineHeight: 1.2,
+          margin: 0,
+        }}
+      >
+        Colorful
+      </h2>
+      <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 14 }}>
         Fixed multicolor artwork · intrinsic Figma size
       </span>
-      <span style={{ color: '#8c8f95', fontSize: 12 }}>({colorfulIconRegistry.length})</span>
+      <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 12 }}>
+        ({colorfulIconRegistry.length})
+      </span>
     </div>
     <nav
       aria-label="Colorful icon categories"
@@ -174,10 +196,10 @@ const ColorfulIconGallery = () => (
           href={`#colorful-${category}`}
           key={category}
           style={{
-            background: '#f7f8fa',
-            border: '1px solid #e7e8eb',
+            background: 'var(--Colors-Use-Neutral-Bg)',
+            border: '1px solid var(--Colors-Use-Neutral-Border)',
             borderRadius: 4,
-            color: '#353639',
+            color: 'var(--Colors-Use-Neutral-Text-1-Title)',
             fontSize: 12,
             padding: '6px 8px',
             textDecoration: 'none',
@@ -372,7 +394,7 @@ const StrokeWidthGallery = ({ strokeWidth }: { strokeWidth: number }) => (
         </div>
       ))}
     </div>
-    <p>二维码等轮廓已恢复为可调描边；实心圆点、舷窗等填充细节保留原样。</p>
+    <p>Bug、Add Payload、二维码等图标使用固定填充，线宽参数仅影响实际描边。</p>
   </section>
 );
 
@@ -398,6 +420,15 @@ const revisedWeightIcons = visualWeightReviews.reviews.map(({ exportName, file }
   return { ...icon, original };
 });
 
+// SVG images do not inherit CSS variables from the page; resolve their title color.
+const comparisonColors = Object.fromEntries(
+  (['light', 'dark'] as const).map((mode) => {
+    const colors = generateColors(mode);
+    const title = colors['--Colors-Use-Neutral-Text-1-Title'];
+    return [mode, title.startsWith('var(') ? colors[title.slice(4, -1)] : title];
+  }),
+);
+
 const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
   <section style={{ display: 'grid', gap: 24 }}>
     <p>
@@ -407,9 +438,10 @@ const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
     {['light', 'dark'].map((theme) => (
       <section
         key={theme}
+        data-theme={theme}
         style={{
-          background: theme === 'light' ? '#f8f9fa' : '#202225',
-          color: theme === 'light' ? '#353639' : '#f0f2f5',
+          background: 'var(--Colors-Use-Neutral-Bg)',
+          color: 'var(--Colors-Use-Neutral-Text-1-Title)',
           padding: 20,
           display: 'grid',
           gap: 16,
@@ -418,7 +450,6 @@ const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
           <span>默认线重参照</span>
           <HomeOutlined color="inherit" size={24} />
-          <BugOutlined color="inherit" size={24} />
         </div>
         {revisedWeightIcons.map(({ Component, exportName, original }) => (
           <div
@@ -435,7 +466,7 @@ const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
                     alt={`${exportName} 修复前 ${size}px`}
                     width={size}
                     height={size}
-                    src={`data:image/svg+xml,${encodeURIComponent(original.replace('<svg ', `<svg style="color:${theme === 'light' ? '#353639' : '#f0f2f5'}" `))}`}
+                    src={`data:image/svg+xml,${encodeURIComponent(original.replace('<svg ', `<svg style="color:${comparisonColors[theme]}" `))}`}
                   />
                 ))}
               </div>

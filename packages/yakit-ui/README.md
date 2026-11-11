@@ -66,7 +66,7 @@ package cannot enforce candidate ordering or install editor-private configuratio
 
 优先级是 `svgProps.style.strokeWidth` → `svgProps.strokeWidth` → 图标原始默认值。`0` 会隐藏描边，混合图标中的填充细节仍然保留。支持合法 SVG 长度/百分比字符串；同元素 CSS 规则遵循正常层叠顺序。外层 `style` 仍属于 `span`，不提供顶层 `strokeWidth` 属性。
 
-原先展开为填充的二维码、标签、剪贴板、信号、火箭及语音图标已恢复为真实描边，默认线宽为 `1`。`TagOutlined` 的实心圆、火箭舷窗和其他独立填充细节保持实心，不随 `strokeWidth` 改变。`svgProps.strokeWidth={0}` 只隐藏线条。几何迁移的范围与兼容性说明见[线宽能力说明](./docs/icon-stroke-capabilities.md)。
+原先展开为填充的二维码、标签、剪贴板、信号、火箭及语音图标已恢复为真实描边，默认线宽为 `1`。`TagOutlined` 的实心圆、火箭舷窗和其他独立填充细节保持实心，不随 `strokeWidth` 改变。`svgProps.strokeWidth={0}` 只隐藏线条。几何迁移的范围与兼容性说明见[线宽能力说明](https://github.com/yaklang/yakit-components-library/blob/main/packages/yakit-ui-icons/docs/icon-stroke-capabilities.md)。
 
 Solid、Colorful、Oldicon 保持根 SVG 的原生属性透传；没有统一覆盖其内部固定宽度。`BugOutlined` 已从填充轮廓重建为真实描边，默认视觉改为与其他描边 Outline 一致的宽度 `1`。
 
