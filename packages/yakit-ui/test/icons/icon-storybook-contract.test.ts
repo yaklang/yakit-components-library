@@ -6,16 +6,28 @@ import { createElement, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
 import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
+import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
   solidIconRegistry,
 } from '../../src/icons/registry';
-import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 
-const colorfulManifest = JSON.parse(
+const colorfulManifest: {
+  groups: {
+    category: string;
+    name: string;
+    storybook?: { label?: string; exportName?: string };
+  }[];
+  rows: {
+    nodeId: string;
+    category: string;
+    exportName: string;
+    publicExposure: string;
+  }[];
+} = JSON.parse(
   readIconInputSync(
     new URL('../../../yakit-ui-icons/config/icon-sources/colorful.json#manifest', import.meta.url),
     'utf8',
@@ -66,7 +78,7 @@ const colorfulByExport = new Map(
 const renderedSourceNodeIds = (markup: string) =>
   renderedExports(markup).map((exportName) => colorfulByExport.get(exportName)?.sourceNodeId);
 
-const figmaStorySourceNodeOrder = {
+const figmaStorySourceNodeOrder: Record<string, readonly string[]> = {
   'ai-model': [
     '38864:130867',
     '38803:60735',
@@ -385,21 +397,15 @@ describe('Icon Storybook contract', () => {
       expect(
         renderedSourceNodeIds(
           renderStory(iconStories[story!.exportName as keyof typeof iconStories]),
-        ).filter((id) => expected.includes(id)),
+        ).filter((id) => id !== undefined && expected.includes(id)),
         category,
       ).toEqual(expected);
     }
   });
 
   it('keeps the two unbacked Memfit compositions on their exact Figma geometry', () => {
-    const horizontal = readIconInputSync(
-      resolve(colorfulIconsRoot, 'MemfitLogoHorizontalColorful.svg'),
-      'utf8',
-    );
-    const vertical = readIconInputSync(
-      resolve(colorfulIconsRoot, 'MemfitLogoVerticalColorful.svg'),
-      'utf8',
-    );
+    const horizontal = readIconInputSync(resolve(colorfulIconsRoot, '44520-3632.svg'), 'utf8');
+    const vertical = readIconInputSync(resolve(colorfulIconsRoot, '44520-3560.svg'), 'utf8');
 
     expect(horizontal).toContain('M8.49335 14.0987H6V26.7533H8.49335V14.0987Z');
     expect(horizontal).not.toContain('scale(0.2284173884793107');

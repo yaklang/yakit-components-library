@@ -1,0 +1,23 @@
+<svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet">
+<g filter="url(#icon_13394167118__filter_0)">
+<use xlink:href="#icon_13394167118__semantic_0" fill="#171717"/>
+<mask id="icon_13394167118__mask_0" maskUnits="userSpaceOnUse" x="2.46991" y="1.95722" width="14.7942" height="16.6244" fill="#000000">
+<rect fill="#FFFFFF" x="2.46991" y="1.95722" width="14.7942" height="16.6244"/>
+<use xlink:href="#icon_13394167118__semantic_0"/>
+</mask>
+<path d="M10.9794 10.397L13.9091 10.308C14.1001 10.3022 14.175 10.0575 14.0199 9.94582L7.44413 5.20805C7.30424 5.10726 7.11089 5.21888 7.12823 5.39043L7.94337 13.4541C7.96258 13.6442 8.21193 13.7017 8.31244 13.5392L9.85437 11.0465L12.2044 15.1168C12.2872 15.2603 12.4707 15.3095 12.6142 15.2266L13.2196 14.8771C13.363 14.7943 13.4122 14.6108 13.3294 14.4673L10.9794 10.397Z" stroke="#FFFFFF" mask="url(#icon_13394167118__mask_0)"/>
+</g>
+<defs>
+<filter id="icon_13394167118__filter_0" x="-4" y="-2" width="28" height="28" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.0901961 0 0 0 0 0.0901961 0 0 0 0 0.0901961 0 0 0 0.08 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_13394_167118"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_13394_167118" result="shape"/>
+</filter>
+<path id="icon_13394167118__semantic_0" d="M8.31244 13.5392C8.21193 13.7017 7.96258 13.6442 7.94337 13.4541L7.12823 5.39043C7.11089 5.21888 7.30424 5.10726 7.44413 5.20805L14.0199 9.94582C14.175 10.0575 14.1001 10.3022 13.9091 10.308L10.9794 10.397L13.3294 14.4673C13.4122 14.6108 13.363 14.7943 13.2196 14.8771L12.6142 15.2266C12.4707 15.3095 12.2872 15.2603 12.2044 15.1168L9.85437 11.0465L8.31244 13.5392Z" fill-rule="evenodd" clip-rule="evenodd"/>
+</defs>
+</svg>

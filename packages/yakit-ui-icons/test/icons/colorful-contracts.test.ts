@@ -19,35 +19,43 @@ const sample = JSON.parse(
 
 const penetraXBackgroundPath =
   'M0 16C0 7.16344 7.16344 0 16 0V0C24.8366 0 32 7.16344 32 16V16C32 24.8366 24.8366 32 16 32V32C7.16344 32 0 24.8366 0 16V16Z';
+const verticalBackgroundPath =
+  'M10 17C10 10.3726 15.3726 5 22 5V5C28.6274 5 34 10.3726 34 17V17C34 23.6274 28.6274 29 22 29V29C15.3726 29 10 23.6274 10 17V17Z';
 const yakitBackgroundPath =
-  'M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z';
+  'M19 32C27.8366 32 35 24.8366 35 16C35 7.16344 27.8366 0 19 0C10.1634 0 3 7.16344 3 16C3 24.8366 10.1634 32 19 32Z';
 const yakitVerticalBackgroundPath =
-  'M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z';
+  'M22 28C28.6274 28 34 22.6274 34 16C34 9.37258 28.6274 4 22 4C15.3726 4 10 9.37258 10 16C10 22.6274 15.3726 28 22 28Z';
 
 const logNodeBackgroundColors = {
-  BugLogColorful: '#F15757',
-  ChartLogColorful: '#8862F8',
-  CommentLogColorful: '#EEF0F3',
-  CreatedLogColorful: '#EEF0F3',
-  DeletedLogColorful: '#EEF0F3',
-  ErrorLogColorful: '#F15757',
-  FileFailedLogColorful: '#F15757',
-  FileLogColorful: '#EEF0F3',
-  FolderFailedLogColorful: '#F15757',
-  FolderLogColorful: '#EEF0F3',
-  InfoLogColorful: '#EEF0F3',
-  MarkdownLogColorful: '#4493FF',
-  ModifiedLogColorful: '#EEF0F3',
-  RestoredLogColorful: '#EEF0F3',
-  ReviewApprovedLogColorful: '#28C08E',
-  ReviewRejectedLogColorful: '#F15757',
-  SuccessLogColorful: '#28C08E',
-  TextOutputLogColorful: '#353639',
-  WarningLogColorful: '#F6A823',
+  BugLogColorful: 'var(--Colors-Use-Error-Primary, #F15757)',
+  ChartLogColorful: 'var(--Colors-Use-Purple-Primary, #8862F8)',
+  CommentLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  CreatedLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  DeletedLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  ErrorLogColorful: 'var(--Colors-Use-Error-Primary, #F15757)',
+  FileFailedLogColorful: 'var(--Colors-Use-Error-Primary, #F15757)',
+  FileLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  FolderFailedLogColorful: 'var(--Colors-Use-Error-Primary, #F15757)',
+  FolderLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  InfoLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  MarkdownLogColorful: 'var(--Colors-Use-Blue-Primary, #4493FF)',
+  ModifiedLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  RestoredLogColorful: 'var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)',
+  ReviewApprovedLogColorful: 'var(--Colors-Use-Status-Safe, #28C08E)',
+  ReviewRejectedLogColorful: 'var(--Colors-Use-Error-Primary, #F15757)',
+  SuccessLogColorful: 'var(--Colors-Use-Success-Primary, #28C08E)',
+  TextOutputLogColorful: 'var(--Colors-Use-Neutral-Text-1-Title, #353639)',
+  WarningLogColorful: 'var(--Colors-Use-Warning-Primary, #F6A823)',
 } as const;
 
-const readColorfulIcon = (name: string) =>
-  readFileSync(resolve(import.meta.dirname, `../../src/colorful/${name}.svg`), 'utf8');
+const colorfulSource: { records: { exportName: string; localFile: string }[] } = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, '../../config/icon-sources/colorful.json'), 'utf8'),
+);
+const readColorfulIcon = (name: string) => {
+  const record = colorfulSource.records.find((row) => row.exportName === name);
+  if (!record?.localFile) throw new Error(`Missing Colorful source for ${name}`);
+  return readFileSync(resolve(import.meta.dirname, '../../src', record.localFile), 'utf8');
+};
 
 describe('colorful inventory contracts', () => {
   it('validates the independent disposition and exposure axes', () => {
@@ -118,7 +126,7 @@ describe('colorful inventory contracts', () => {
     ]);
     const rows = await classifyColorfulDuplicates(
       [first, second],
-      async (localFile) => sources.get(localFile) ?? '',
+      async (localFile: string) => sources.get(localFile) ?? '',
     );
 
     expect(rows[0]).toMatchObject({ publicExposure: 'canonical' });
@@ -135,7 +143,7 @@ describe('colorful inventory contracts', () => {
     );
     const differentWidths = await classifyColorfulDuplicates(
       [first, second],
-      async (file) => sources.get(file) ?? '',
+      async (file: string) => sources.get(file) ?? '',
     );
     expect(differentWidths.map((row) => row.publicExposure)).toEqual(['canonical', 'canonical']);
   });
@@ -145,10 +153,10 @@ describe('colorful inventory contracts', () => {
     const vertical = readColorfulIcon('PenetraXLogoVerticalWithBackgroundColorful');
 
     expect(justIcon).toContain(`<path d="${penetraXBackgroundPath}" fill="#084DB2"/>`);
+    expect(vertical).toContain(`<path d="${verticalBackgroundPath}" fill="#084DB2"/>`);
     expect(vertical).toContain(
-      `<g transform="translate(10 5) scale(0.75)">\n<path d="${penetraXBackgroundPath}" fill="#084DB2"/>`,
+      'M22.4576 17.1223L21.9879 17.2175L22.4589 15.0475L22.1017 14.7008L21.0924 15.442L21.076 17.4025L20.4142 17.5368L19.4913 25.1679L22.4576 17.1223Z',
     );
-    expect(vertical).toContain('<g transform="translate(15.24985 8.75)">');
     expect(vertical).not.toContain('scale(0.5453555609875337 0.5454999999999998)');
   });
 
@@ -174,16 +182,16 @@ describe('colorful inventory contracts', () => {
     expect(yakitVertical).not.toContain('scale(1.375 1.375)');
     expect(yakitVertical).not.toContain('scale(1.03125 1.030975018333333)');
 
-    expect(memfitJustIcon).toContain('<circle cx="16" cy="16" r="16" fill="#4373BB"/>');
-    expect(memfitVertical).toContain('<circle cx="22" cy="17" r="12" fill="#4373BB"/>');
-    expect(memfitVertical).toContain('<g transform="translate(15.24985 8.75)">');
+    expect(memfitJustIcon).toContain(`<path d="${penetraXBackgroundPath}" fill="#4373BB"/>`);
+    expect(memfitVertical).toContain(`<path d="${verticalBackgroundPath}" fill="#4373BB"/>`);
+    expect(memfitVertical).toContain('M16.6565 15.1732H15.2539V22.3382H16.6565V15.1732Z');
     expect(memfitVertical).not.toContain('scale(0.49578641290410536 0.42137627599930644)');
   });
 
   it('preserves every 24px log-node parent background from Figma', () => {
     for (const [exportName, color] of Object.entries(logNodeBackgroundColors)) {
       expect(readColorfulIcon(exportName), exportName).toContain(
-        `<circle cx="12" cy="12" r="12" fill="${color}"/>`,
+        `<rect width="24" height="24" rx="12" fill="${color}"/>`,
       );
     }
   });

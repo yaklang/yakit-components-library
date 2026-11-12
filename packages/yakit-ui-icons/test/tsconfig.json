@@ -33,6 +33,9 @@
     "icons/solid-fragment-normalization.test.ts",
     "icons/solid-icon-ssr-fixture.test.ts",
     "icons/solid-paint-semantics.test.ts",
-    "icons/solid-source-sync.test.ts"
+    "icons/solid-source-sync.test.ts",
+    "icons/avatar-badge-weight.test.ts",
+    "icons/colorful-contracts.test.ts",
+    "icons/colorful-outline-weight.test.ts"
   ]
 }

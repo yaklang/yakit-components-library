@@ -1,3 +1,7 @@
+import { forwardRef } from 'react';
+
+import { type IconComponent, type IconProps } from '../../src';
+import * as ColorfulIcons from '../../src/colorful';
 import {
   colorfulIconRegistry,
   iconRegistry,
@@ -5,10 +9,6 @@ import {
   type ColorfulIconPaintMode,
   type IconDefinition,
 } from '../../src/registry';
-import { forwardRef } from 'react';
-
-import { type IconComponent, type IconProps } from '../../src';
-import * as ColorfulIcons from '../../src/colorful';
 
 const publicComponents = ColorfulIcons satisfies Record<string, IconComponent>;
 const colorfulDefinitions = colorfulIconRegistry satisfies IconDefinition<'colorful'>[];

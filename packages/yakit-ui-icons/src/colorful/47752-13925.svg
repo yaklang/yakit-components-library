@@ -6,22 +6,22 @@
 </g>
 <defs>
 <linearGradient id="icon_4775213925__linearGradient_0" x1="4" y1="4.73633" x2="18.497" y2="5.2239" gradientUnits="userSpaceOnUse">
-<stop stop-color="#1B8E9D"/>
-<stop offset="0.25" stop-color="#2E7CE7"/>
-<stop offset="0.85" stop-color="#DC5CDF"/>
-<stop offset="1" stop-color="#FFCE1E"/>
+<stop stop-color="var(--yakit-colors-Lake-blue-80, #1B8E9D)"/>
+<stop offset="0.25" stop-color="var(--yakit-colors-Blue-70, #2E7CE7)"/>
+<stop offset="0.85" stop-color="var(--yakit-colors-Magenta-60, #DC5CDF)"/>
+<stop offset="1" stop-color="var(--yakit-colors-Yellow-60, #FFCE1E)"/>
 </linearGradient>
 <linearGradient id="icon_4775213925__linearGradient_1" x1="14" y1="0" x2="24.3552" y2="0.345187" gradientUnits="userSpaceOnUse">
-<stop stop-color="#1B8E9D"/>
-<stop offset="0.25" stop-color="#2E7CE7"/>
-<stop offset="0.85" stop-color="#DC5CDF"/>
-<stop offset="1" stop-color="#FFCE1E"/>
+<stop stop-color="var(--yakit-colors-Lake-blue-80, #1B8E9D)"/>
+<stop offset="0.25" stop-color="var(--yakit-colors-Blue-70, #2E7CE7)"/>
+<stop offset="0.85" stop-color="var(--yakit-colors-Magenta-60, #DC5CDF)"/>
+<stop offset="1" stop-color="var(--yakit-colors-Yellow-60, #FFCE1E)"/>
 </linearGradient>
 <linearGradient id="icon_4775213925__linearGradient_2" x1="14" y1="0" x2="24.3552" y2="0.345187" gradientUnits="userSpaceOnUse">
-<stop stop-color="#1B8E9D"/>
-<stop offset="0.25" stop-color="#2E7CE7"/>
-<stop offset="0.85" stop-color="#DC5CDF"/>
-<stop offset="1" stop-color="#FFCE1E"/>
+<stop stop-color="var(--yakit-colors-Lake-blue-80, #1B8E9D)"/>
+<stop offset="0.25" stop-color="var(--yakit-colors-Blue-70, #2E7CE7)"/>
+<stop offset="0.85" stop-color="var(--yakit-colors-Magenta-60, #DC5CDF)"/>
+<stop offset="1" stop-color="var(--yakit-colors-Yellow-60, #FFCE1E)"/>
 </linearGradient>
 <clipPath id="icon_4775213925__clip_0">
 <rect width="24" height="24" fill="#FFFFFF"/>

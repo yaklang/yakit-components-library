@@ -2,13 +2,15 @@ import { type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
+import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+import { iconCounts } from '../../../yakit-ui-icons/test/icons/icon-inventory';
 import iconMeta from '../../.storybook/stories/Icon.stories';
 import oldIconMeta, * as oldIconStories from '../../.storybook/stories/OldIcon.stories';
-import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
 
-import { iconCounts } from '../../../yakit-ui-icons/test/icons/icon-inventory';
-
-const oldIconInventory = JSON.parse(
+const oldIconInventory: {
+  exports: { exportName: string }[];
+  totals: { artworks: number; sourcePaths: number };
+} = JSON.parse(
   readIconInputSync(
     new URL('../../../yakit-ui-icons/config/icon-sources/oldicon.json#manifest', import.meta.url),
     'utf8',

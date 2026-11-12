@@ -1,5 +1,4 @@
 import { createHash } from 'node:crypto';
-import { readIconInputSync as readFileSync } from '../../scripts/icon-source-documents.mjs';
 import { resolve } from 'node:path';
 
 import { chromium } from 'playwright';
@@ -7,10 +6,16 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
+import { readIconInputSync as readFileSync } from '../../scripts/icon-source-documents.mjs';
 import * as Icons from '../../src/colorful';
 import corrections from '../fixtures/icons/reference/avatar-badge-weight.json';
 
 const digest = (source: string) => createHash('sha256').update(source).digest('hex');
+const source: {
+  records: { groupNodeId: string; exportName: string; rawSvg?: string; production?: object }[];
+} = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, '../../config/icon-sources/colorful.json'), 'utf8'),
+);
 const splitBadge = (svg: string) => {
   const start = svg.lastIndexOf('<g transform="translate(1');
   const end = svg.lastIndexOf('</g>') + 4;
@@ -18,28 +23,19 @@ const splitBadge = (svg: string) => {
 };
 
 describe('avatar corner badge weights', () => {
-  it('preserves base avatars and pins the six corrections and unchanged reference', () => {
+  it('preserves the frozen historical corrections and their original base avatars', () => {
     expect(corrections.map(({ name }) => name).sort()).toEqual(
       ['Official', 'Mitm', 'PortScan', 'YakNative', 'Lua', 'NucleiYaml', 'Codec'].sort(),
     );
     for (const correction of corrections) {
-      const source = readFileSync(
-        resolve(import.meta.dirname, '../../src', correction.file),
-        'utf8',
-      );
-      expect(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"')).toBe(correction.svg);
-      expect(digest(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"'))).toBe(
-        correction.sha256,
-      );
+      expect(digest(correction.svg)).toBe(correction.sha256);
       expect(digest(correction.originalSvg)).toBe(correction.originalSha256);
       const original = splitBadge(correction.originalSvg);
-      const current = splitBadge(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"'));
+      const current = splitBadge(correction.svg);
       expect(current.before).toBe(original.before);
       expect(current.after).toBe(original.after);
       if (correction.name === 'PortScan') {
-        expect(source.replaceAll('stroke-width="1.5"', 'stroke-width="1"')).toBe(
-          correction.originalSvg,
-        );
+        expect(correction.svg).toBe(correction.originalSvg);
       } else {
         expect(current.badge).toContain('scale(0.5)');
         for (const [, width] of current.badge.matchAll(/stroke-width="([^"]+)"/g)) {
@@ -49,7 +45,7 @@ describe('avatar corner badge weights', () => {
     }
   });
 
-  it('matches the frozen corrected badge geometry at width 1.5 at 28px and 56px', async () => {
+  it('renders all current avatars like their latest Figma exports at 28px and 56px', async () => {
     const browser = await chromium.launch({ headless: true });
     try {
       const page = await browser.newPage();
@@ -70,35 +66,32 @@ describe('avatar corner badge weights', () => {
             for (const size of [28, 56]) {
               const actual = await raster(record.actual, size);
               const expected = await raster(record.expected, size);
-              const original = await raster(record.original, size);
               let maxDifference = 0;
-              let originalDifference = 0;
               for (let i = 0; i < actual.length; i++) {
                 maxDifference = Math.max(maxDifference, Math.abs(actual[i] - expected[i]));
-                originalDifference += Math.abs(actual[i] - original[i]);
               }
-              results.push({ name: record.name, size, maxDifference, originalDifference });
+              results.push({ name: record.name, size, maxDifference });
             }
           }
           return results;
         },
-        corrections.map(({ name, svg: reviewedSvg, originalSvg }) => {
-          const markup = renderToStaticMarkup(
-            createElement(Icons[`${name}AvatarColorful` as keyof typeof Icons]),
-          );
-          return {
-            name,
-            actual: markup.slice(markup.indexOf('<svg'), markup.indexOf('</svg>') + 6),
-            // Preserve the exact reviewed coordinates; the unscaled oracle rounds paths.
-            expected: reviewedSvg.replaceAll('stroke-width="1"', 'stroke-width="1.5"'),
-            original: originalSvg.replaceAll('stroke-width="1"', 'stroke-width="1.5"'),
-          };
-        }),
+        source.records
+          .filter(({ groupNodeId }) => groupNodeId === '37202:11692')
+          .map(({ exportName, rawSvg, production }) => {
+            if (!rawSvg || !production) throw new Error(`Missing current source: ${exportName}`);
+            const markup = renderToStaticMarkup(
+              createElement(Icons[exportName as keyof typeof Icons]),
+            );
+            return {
+              name: exportName,
+              actual: markup.slice(markup.indexOf('<svg'), markup.indexOf('</svg>') + 6),
+              expected: rawSvg,
+            };
+          }),
       );
+      expect(results).toHaveLength(18);
       for (const result of results) {
         expect(result.maxDifference, `${result.name} at ${result.size}px`).toBeLessThanOrEqual(1);
-        if (result.name === 'PortScan') expect(result.originalDifference).toBe(0);
-        else expect(result.originalDifference).toBeGreaterThan(0);
       }
     } finally {
       await browser.close();

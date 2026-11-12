@@ -156,6 +156,18 @@ export async function planSourceImport(input, root = packageRoot) {
       );
     // An identical fetch must not add timestamps or replace a legacy normalization recipe.
     const oldSvg = existing?.raw?.svg ?? existing?.rawSvg;
+    let evidence = icon.evidence ?? existing?.evidence;
+    let themePaintBindings;
+    if (family === 'colorful') {
+      themePaintBindings =
+        icon.evidence?.themePaintBindings ??
+        existing?.themePaintBindings ??
+        existing?.evidence?.themePaintBindings;
+      if (evidence && Object.hasOwn(evidence, 'themePaintBindings')) {
+        const { themePaintBindings: _bindings, ...otherEvidence } = evidence;
+        evidence = Object.keys(otherEvidence).length ? otherEvidence : undefined;
+      }
+    }
     if (
       existing &&
       (!icon.syncProduction || existing.production) &&
@@ -164,7 +176,9 @@ export async function planSourceImport(input, root = packageRoot) {
       (existing.name ?? existing.figmaName) === icon.name &&
       JSON.stringify(icon.paintReplacements ?? existing.production?.paintReplacements) ===
         JSON.stringify(existing.production?.paintReplacements) &&
-      JSON.stringify(icon.evidence ?? existing.evidence) === JSON.stringify(existing.evidence) &&
+      JSON.stringify(evidence) === JSON.stringify(existing.evidence) &&
+      (family !== 'colorful' ||
+        JSON.stringify(themePaintBindings) === JSON.stringify(existing.themePaintBindings)) &&
       (!Number.isFinite(icon.x) ||
         (family === 'colorful'
           ? existing.x === icon.x
@@ -317,9 +331,10 @@ export async function planSourceImport(input, root = packageRoot) {
       delete record.componentWidth;
       delete record.componentHeight;
     }
-    if (icon.evidence !== undefined) record.evidence = icon.evidence;
-    if (family === 'colorful' && icon.evidence?.themePaintBindings)
-      record.themePaintBindings = icon.evidence.themePaintBindings;
+    if (evidence !== undefined) record.evidence = evidence;
+    else delete record.evidence;
+    if (family === 'colorful' && themePaintBindings !== undefined)
+      record.themePaintBindings = themePaintBindings;
     const normalized = renderImportedSvg(record, family);
     if (family === 'outline' && production.geometry === 'source') {
       // The current source is no longer the historical reconstructed geometry.

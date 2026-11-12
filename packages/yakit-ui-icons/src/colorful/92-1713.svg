@@ -1,0 +1,4 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+<path d="M7 21L10.5858 17.4142C11.3668 16.6332 12.6332 16.6332 13.4142 17.4142L17 21M8 13L8 10M12 13V8M16 13V6" stroke-width="1.5" stroke-linecap="round" stroke="var(--Colors-Use-Main-Primary, #F28C45)"/>
+<path d="M2 3H22M4 3H20V14C20 15.1046 19.1046 16 18 16H6C4.89543 16 4 15.1046 4 14V3Z" stroke-width="1.5" stroke-linecap="round" stroke="var(--Colors-Use-Neutral-Text-1-Title, #353639)"/>
+</svg>

@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+
 import { describe, expect, it } from 'vitest';
 
 import { parseIconIndexMapping } from '../../scripts/icon-name-catalog-core.mjs';
