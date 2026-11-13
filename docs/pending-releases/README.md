@@ -61,14 +61,14 @@ also need to be included in that future UI release's notes.
 与已有的 React 19 / antd 6、图标名称和描边改动一起等待 UI 发版。
 
 `.changeset/config.json` 的 `ignore` 控制版本生成；
-`scripts/release/release-deferral-policy.json` 约束本次只发布 icons `0.3.1`，
-并绑定审查过的 UI 源码、锁文件、工具链和配置哈希。两者需要同时维护。
+`scripts/release/release-deferral-policy.json` 当前约束只发布 icons `0.3.2`，
+UI 保持 `0.2.3`。两者共同声明发布范围，不要求手动维护当前源码、锁文件、工具链或配置哈希。
 UI 继续构建和测试，其本地产物仅用于检查；发布兼容性验证使用冻结的 npm UI
 `0.2.3` 与本次 icons 候选包，不能用仓库里的新 UI 代替旧版基线。
 
 运行 `pnpm release:deferral-check` 可检查实际 Changesets 版本计划。
 UI 在 JSON 中可能以 `type: "none"` 出现，这表示不升级版本。
-Version Packages 消耗 Changeset 后，检查仍要求 icons 为 `0.3.1`、UI 为 `0.2.3`。
+Version Packages 消耗 Changeset 后，检查仍要求 icons 为 `0.3.2`、UI 为 `0.2.3`。
 PR CI 和发布模式选择都会运行此检查；打包前还会核对 Changesets 的实际发布计划。
 即使实际改动和发布名单都包含 UI，发布影响检查也不能跳过有效的延期策略。
 
