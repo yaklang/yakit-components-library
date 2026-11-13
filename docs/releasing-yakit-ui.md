@@ -71,33 +71,32 @@ pnpm install --frozen-lockfile
 pnpm release:dry-run
 ```
 
-The dry-run verifies the two-public-package boundary, independent release policy tests, launcher security tests, package builds, the core Storybook build, emitted package contracts, clean-consumer checks, tracked size ceilings, and npm pack manifests. CI may build both surfaces as impact probes, but only Changesets' non-empty `releaseSet` becomes a formal pack/publish artifact. The clean-consumer gate creates isolated temporary tarballs, installs them with an empty npm user configuration, and deletes them after verification; the command leaves no tarball in the repository and cannot publish.
+The dry-run verifies the two-public-package boundary, independent release policy tests, launcher security tests, package builds, the core Storybook build, emitted package contracts, clean-consumer checks, and npm pack manifests. CI may build both surfaces as impact probes, but only Changesets' non-empty `releaseSet` becomes a formal pack/publish artifact. The clean-consumer gate creates isolated temporary tarballs, installs them with an empty npm user configuration, and deletes them after verification; the command leaves no tarball in the repository and cannot publish.
 
-CI uses Playwright's dependency-pinned Chromium for portable component coverage. The frozen solid-icon pixel-parity suite is intentionally separate because its provenance contract requires the exact local Google Chrome/macOS build recorded in the fixture. Run the full suite on that recorded renderer with:
-
-```bash
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' \
-  pnpm --filter @yakit-libs/yakit-ui test
-```
-
-When the package surface intentionally changes, commit the release inputs first. From that clean source commit, create the size-policy candidate:
+图标检查使用 Playwright Chromium，不再要求历史 macOS、Chrome 版本或截图基线。安装测试浏览器后，运行统一检查；需要验证发布产物时再单独构建：
 
 ```bash
-pnpm release:policy:init --source-sha "$(git rev-parse HEAD)"
+pnpm --filter @yakit-libs/yakit-ui-icons exec playwright install chromium
+pnpm icons:check
+pnpm --filter @yakit-libs/yakit-ui-icons run build
 ```
 
-Review the candidate metrics and manifest diff before replacing `.release/yakit-ui-package-policy.json` in a follow-up commit. The policy's `sourceCommit` must identify the preceding commit that actually contains the measured package inputs; never copy an older SHA onto newly generated metrics.
+`icons:check` 默认离线检查当前全量图标，不访问 Figma、不写回来源或生成文件。它覆盖生成结果、当前来源与规则、功能测试和类型检查；完整发布检查仍使用上面的 `release:dry-run`。
+
+The UI package includes the Storybook site. Its total packed size, unpacked size and file count have no hard ceilings; normal growth of the component library and documentation does not block CI or publication. Package-content, export, type and consumer checks remain required. The independent icon package retains its own size limits. Use `pnpm --filter @yakit-libs/yakit-ui run pack:dry-run` to inspect the current UI package contents and sizes.
 
 ## Stable flow
 
 1. Add a Changeset on a feature branch with `pnpm changeset`.
-2. Merge through the required CI checks. The early `release:deferral-check` gate also verifies the deferred package source, lockfile, toolchain and config hashes against committed `HEAD`, using the same inputs as publish impact verification. Review drift before updating the policy; local uncommitted source changes are checked only after commit.
-3. A push to `main` runs `changesets/action/select-mode`.
+2. Merge through the required CI checks. The early `release:deferral-check` gate checks the intended package names, versions, Changesets ignore list and actual release plan. Developers do not maintain source, lockfile, toolchain or configuration hashes. Publish impact verification generates those fingerprints automatically for the release evidence.
+3. A push to `main` starts the publish workflow and runs `changesets/action/select-mode`. Ordinary quality CI runs on pull requests and `pre/**` pushes, so merging to `main` does not repeat that workflow. Publish verification remains a separate gate.
 4. When versioning is needed, the workflow opens or updates the Version Packages pull request.
 5. After that pull request lands, the workflow creates a Changesets pack artifact for `{ui}`, `{icons}`, or `{ui, icons}`. Schema v3 rejects an empty set, unknown/duplicate packages, unordered entries, missing hashes, or a release entry that does not exactly match `releaseSet`. When both packages release, their versions may differ.
 6. Before pack verification, the workflow downloads the immutable Changesets publish plan and compares isolated base/head package snapshots. Expected Version Packages version and generated CHANGELOG noise is normalized without ignoring other semantic changes. Each package uses its own latest reviewed release tag as the baseline; the initial icons migration fallback binds its exact version, commit, and source snapshot in `release-impact-baselines.json`. The observed package set, publish-plan set, impact probes, and packed `releaseSet` must match exactly.
 7. After branch protection, required `CI / quality`, and an `npm-release` required reviewer are enforced, set `NPM_TRUSTED_PUBLISHING_ENABLED=true`. The publish-only job can then enter the branch-restricted Environment, request npm OIDC, and publish the exact verified pack artifact after approval. The job cannot rebuild or write GitHub tags/releases. If any platform gate is unavailable, keep the variable `false` and use the local interactive-2FA procedure from the bootstrap sequence.
 8. Registry smoke verification and GitHub tag/release reconciliation run as independent children of publish.
+
+正常流程仍是先合并功能 PR，再合并 Version Packages PR，之后校验并发布待发布版本。工作流实际依据 Changesets 的模式和发布计划判断，不依赖 PR 标题；普通 PR 合并也会触发发布工作流的模式判断，是否进入发布阶段取决于当时的计划。
 
 ## Prerelease flow
 
@@ -126,10 +125,16 @@ A package may remain at its published version while another package releases
 shared-source changes only through a checked-in
 `scripts/release/release-deferral-policy.json`. The default impact rule remains
 an exact match between observed and declared releases. A deferral policy records
-the exact released and deferred versions, the deferred baseline commit, reviewed
-source/lock/toolchain/config hashes, rationale and pending-release document.
-Source drift, a changed deferred version, an unobserved release or a different
-release identity blocks the exception.
+the exact released and deferred versions, the deferred baseline commit, rationale
+and pending-release document. The current v2 policy contains no head input hashes;
+UI source, tests, Storybook and tooling may evolve while UI remains deferred.
+A changed deferred version, an unobserved release or a different release identity
+blocks the exception. Input hashes are computed automatically during impact
+verification and stored in the evidence, rather than copied into the policy.
+Retained v1 evidence still uses its original source bindings for recovery.
+The existing registry baseline integrity and SHA-256 identify the already
+published compatibility package; they are not fingerprints of current source.
+Verification of tested versus uploaded tarball bytes remains automatic.
 
 Impact output retains every observed probe. The v3 verification manifest keeps
 `impactProbeSet` equal to `releaseSet` and additionally seals `deferredImpact`

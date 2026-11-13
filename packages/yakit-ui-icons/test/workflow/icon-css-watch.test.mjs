@@ -33,7 +33,11 @@ test('icon watch rebuilds CSS changes and retains them through source rebuilds',
   try {
     await cp(path.join(packageRoot, 'config'), path.join(root, 'config'), { recursive: true });
     await cp(path.join(packageRoot, 'vite.config.ts'), path.join(root, 'vite.config.ts'));
-    await symlink(path.join(packageRoot, 'node_modules'), path.join(root, 'node_modules'), 'dir');
+    await symlink(
+      path.join(packageRoot, 'node_modules'),
+      path.join(root, 'node_modules'),
+      process.platform === 'win32' ? 'junction' : 'dir',
+    );
     await writeFile(
       path.join(root, 'package.json'),
       '{"name":"icon-watch-fixture","type":"module"}',

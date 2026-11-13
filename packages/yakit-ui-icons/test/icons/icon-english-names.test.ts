@@ -1,38 +1,26 @@
 import { readFileSync } from 'node:fs';
+
 import { describe, expect, it } from 'vitest';
 
+import outline from '../../config/icon-sources/outline.json';
+import solid from '../../config/icon-sources/solid.json';
 import { parseIconIndexMapping } from '../../scripts/icon-name-catalog-core.mjs';
 import { figmaIconNameCatalog } from '../../src/figmaNameCatalog';
-import migration from '../fixtures/icons/english-name-migration.json';
 
-describe('English Figma icon names', () => {
-  it('uses the verified English names for all 32 formerly Chinese icons', () => {
-    expect(migration.rows).toHaveLength(32);
-    for (const row of migration.rows) {
+describe('current English Figma icon names', () => {
+  it.each([outline, solid])('$family maps every source to its public export', (source) => {
+    const mapping = parseIconIndexMapping(
+      readFileSync(new URL(`../../src/${source.family}/index.tsx`, import.meta.url), 'utf8'),
+    );
+    for (const row of source.records) {
+      expect(mapping.get(row.exportName)?.sourceNodeId).toBe(row.nodeId);
       expect(
-        figmaIconNameCatalog.find(({ sourceNodeId }) => sourceNodeId === row.sourceNodeId),
-      ).toMatchObject({
-        exportName: row.exportName,
-        figmaName: row.figmaName,
-        family: row.family,
-      });
+        figmaIconNameCatalog.find(
+          ({ sourceNodeId, family }) => sourceNodeId === row.nodeId && family === source.family,
+        ),
+      ).toMatchObject({ exportName: row.exportName, figmaName: row.name.trim() });
+      expect(row.exportName).toMatch(/^[A-Za-z][A-Za-z0-9]*(Outlined|Solid)$/);
     }
-    expect(
-      figmaIconNameCatalog.every(({ figmaName }) => !/\p{Script=Han}/u.test(figmaName ?? '')),
-    ).toBe(true);
-    expect(
-      figmaIconNameCatalog.every(
-        ({ exportName }) => !/FigmaIcon\d+|MinusFigma\d+/.test(exportName),
-      ),
-    ).toBe(true);
-  });
-
-  it.each(['outline', 'solid'])('preserves the SVG source of each renamed %s export', (family) => {
-    const source = readFileSync(new URL(`../../src/${family}/index.tsx`, import.meta.url), 'utf8');
-    const mapping = parseIconIndexMapping(source);
-    for (const row of migration.rows.filter((entry) => entry.family === family)) {
-      expect(mapping.get(row.exportName)?.sourceNodeId).toBe(row.sourceNodeId);
-      expect(mapping.has(row.previousExportName)).toBe(false);
-    }
+    expect(mapping.size).toBe(source.records.length);
   });
 });

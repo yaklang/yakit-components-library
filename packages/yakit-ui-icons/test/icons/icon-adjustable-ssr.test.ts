@@ -2,9 +2,9 @@ import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { BugOutlined, HomeOutlined, Loading } from '../../src';
+import { outlineStrokeContract } from '../../config/iconStrokeContract.generated';
+import { HomeOutlined, Loading } from '../../src';
 import { outlineIconRegistry } from '../../src/registry';
-import visualWeightReviews from '../fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 const widths = (markup: string) => {
   const shapesOnly = markup.replace(/^<span[^>]*><svg[^>]*>/, '');
@@ -18,12 +18,14 @@ const render = (
 
 describe('adjustable icon CSS-free SSR contract', () => {
   it.each([
-    ['BugOutlined', BugOutlined],
     ['HomeOutlined', HomeOutlined],
     ['Loading', Loading],
     ...outlineIconRegistry
-      .filter(({ exportName }) =>
-        visualWeightReviews.reviews.some((review) => review.exportName === exportName),
+      .filter(
+        ({ sourceNodeId }) =>
+          outlineStrokeContract[
+            `${sourceNodeId.replace(':', '-')}.svg` as keyof typeof outlineStrokeContract
+          ]?.classification === 'adjustable',
       )
       .map(({ exportName, Component }) => [exportName, Component] as const),
   ] as const)('renders %s overrides on actual stroke nodes', (name, Component) => {
@@ -46,5 +48,23 @@ describe('adjustable icon CSS-free SSR contract', () => {
     ).toEqual(new Set(['0']));
     expect(new Set(widths(render(HomeOutlined)))).toEqual(new Set(['1.5']));
     expect(new Set(widths(render(Loading)))).toEqual(new Set(['1.5']));
+  });
+
+  it('keeps source-native filled contours fixed when strokeWidth is supplied', () => {
+    const files = new Set<string>(
+      Object.values(outlineStrokeContract)
+        .filter((entry) => entry.classification === 'fixed-fill')
+        .map((entry) => entry.file),
+    );
+    expect(files.size).toBeGreaterThan(0);
+    for (const { Component, exportName, sourceNodeId } of outlineIconRegistry) {
+      if (!files.has(`${sourceNodeId.replace(':', '-')}.svg`)) continue;
+      for (const strokeWidth of [0, 1.5, 3]) {
+        const markup = render(Component, { strokeWidth });
+        expect(widths(markup), exportName).toEqual([]);
+        expect(markup, exportName).toContain('fill="currentColor"');
+        expect(markup, exportName).not.toMatch(/<path[^>]*\sstroke=/);
+      }
+    }
   });
 });

@@ -92,7 +92,7 @@ afterEach(() => {
 });
 
 describe('Outline icon fragment runtime', () => {
-  it('keeps the reconstructed clips local to each instance', () => {
+  it('omits retired reconstructed clips from source-native instances', () => {
     const container = render(
       <>
         <DataComparisonOutlined svgProps={{ strokeWidth: 1 }} />
@@ -101,8 +101,11 @@ describe('Outline icon fragment runtime', () => {
         <RocketOffOutlined svgProps={{ strokeWidth: 3 }} />
       </>,
     );
-    expect(container.querySelectorAll('clipPath')).toHaveLength(4);
-    expectOwnedFragments(container);
+    expect(container.querySelectorAll('clipPath')).toHaveLength(0);
+    expect(container.querySelectorAll('[clip-path]')).toHaveLength(0);
+    expect(container.querySelectorAll('path').length).toBeGreaterThan(0);
+    for (const svg of container.querySelectorAll<SVGSVGElement>('svg'))
+      expect(fragmentReferences(svg)).toEqual([]);
   });
   it('assigns unique definition IDs to repeated instances', () => {
     const container = render(

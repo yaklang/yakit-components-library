@@ -9,9 +9,7 @@ import {
 } from "../../packages/yakit-ui-icons/scripts/update-icons.mjs";
 import { planStorybookUpdate } from "./storybook.mjs";
 
-const repositoryRoot = fileURLToPath(
-  new URL("../../", import.meta.url),
-).replace(/\/$/, "");
+const repositoryRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 
 export async function runWorkspaceIconUpdate(
   args = process.argv.slice(2),

@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", ".storybook/stories"]
+  "include": ["src", ".storybook/stories", ".storybook/preview.tsx"]
 }

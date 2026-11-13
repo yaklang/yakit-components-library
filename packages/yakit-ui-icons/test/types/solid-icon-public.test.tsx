@@ -1,4 +1,3 @@
-import { solidIconRegistry } from '../../src/registry';
 import type { ComponentType } from 'react';
 
 import {
@@ -15,6 +14,7 @@ import {
   PillSolid,
   type IconProps,
 } from '../../src';
+import { solidIconRegistry } from '../../src/registry';
 import * as SolidIcons from '../../src/solid';
 
 const publicComponents = SolidIcons satisfies Record<string, ComponentType<IconProps>>;

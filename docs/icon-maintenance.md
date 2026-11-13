@@ -1,105 +1,58 @@
 # 图标怎么添加和更新
 
-公共图标源码、来源和专属测试由 `packages/yakit-ui-icons` 独立维护。UI 通过 `@yakit-libs/yakit-ui-icons` 的公开入口使用图标；仓库内依赖为 `workspace:^`，打包时转换成正常版本范围。不要跨目录导入图标包的 `src` 或原始 SVG。
+公共图标由 `packages/yakit-ui-icons` 维护。UI 通过图标包的公开入口使用，组件内部的私有 SVG 仍归 UI。
 
-UI 组件私有 SVG 和 `packages/yakit-ui/config/icon-sources/private.json` 仍归 UI。根目录的 `icons:update` 先检查私有资源登记，再统一更新公共图标和 Storybook 生成内容；图标包自己的 `icons:update` 不依赖 UI。`pnpm icons:verify-isolation` 会在没有 UI 源码的临时目录验证公共图标生成、审计、工作流、类型、构建和产物。
+## 日常流程
 
-Storybook 继续由 UI 统一展示。UI 的 `storybook`、`start:dev`、`dev` 命令先构建图标包，再启动图标构建监听；直接运行集成测试前先构建图标包。历史资料的位置与内容校验见 [源码归属与历史资料](../packages/yakit-ui-icons/docs/source-layout.md)。
+1. 设计师修改 Figma，或业务反馈图标有问题。
+2. 把需要更新的 Figma 节点链接或 nodeId 发给 Agent，说明要更新来源还是同步到图标库。
+3. Agent 获取指定节点的信息与 SVG，把原稿保存到 `config/icon-sources/`。
+4. 运行 `pnpm icons:update`，生成本地 SVG、组件导出、名称目录和 Storybook 展示数据。
+5. 运行 `pnpm icons:check`，验证当前来源、生成结果、规则、功能和类型。
+6. 需要检查发布产物时单独构建，再提交 PR。
 
-可以把 **Figma 图标节点链接或 nodeId** 发给 Agent，支持一次提供多个，也可以混合提供。nodeId 支持 `47351:7055` 和 `47351-7055` 两种写法。
+Figma 后续又有变化，需要通过下一次更新 PR 进入仓库。检查不访问远端，也不声称已经与此刻的远端一致。
 
-> 使用 `.agents/skills/sync-icon-sources/SKILL.md`，把节点 `47351:7055` 同步到图标库。
+## 命令有什么区别
 
-Agent 先检查这些节点在项目里是否已经存在，再按用户意图使用 figma-developer-mcp 获取信息和 SVG，运行项目脚本。只说“更新来源记录”时，仅保存来源；说“同步到图标库”时才生成 SVG、导出、清单和相关配置。
+| 命令                                                 | 做什么                                       | 是否写来源或生成文件 |
+| ---------------------------------------------------- | -------------------------------------------- | -------------------- |
+| `pnpm icons:import --input <文件绝对路径>`           | 导入 Agent 获取的原稿和节点信息              | 是                   |
+| `pnpm icons:update`                                  | 生成 SVG、导出和相关配置                     | 是                   |
+| `pnpm icons:update --family outline`                 | 更新指定分类                                 | 是                   |
+| `pnpm icons:update --check`                          | 检查是否漏生成、生成结果是否过期             | 否                   |
+| `pnpm icons:check`                                   | 生成检查、来源与规则审计、功能测试、类型检查 | 否                   |
+| `pnpm --filter @yakit-libs/yakit-ui-icons run build` | 生成可以发布的组件代码和类型                 | 只写构建产物         |
 
-## 先查是否已有，再决定做什么
+`icons:check` 已包含生成检查，不需要再单独运行 `icons:update --check`。测试会生成临时文件和测试结果，但不会重写原稿或生产 SVG。图标包内也有独立的 `icons:check`，不依赖 UI 源码；根目录入口额外检查私有资源登记和展示集成。
 
-以下是 Agent 接收链接或 nodeId 时的处理要求：
+生成前先验证完整结果，失败不写入；写入中失败会撤回本次写入。重复执行应没有差异。删来源记录不会自动删公开导出，改名、删除要作为明确的兼容性变更处理。
 
-1. **确定 Figma 文件和节点。** 链接中直接提取 fileKey 和 nodeId；只给 nodeId 时，先从项目来源记录或当前对话中确定所属 Figma 文件。nodeId 只在同一个 Figma 文件内唯一，不能单凭数字认定是同一个图标。无法唯一确定文件时，弹框请用户补充文件链接或 fileKey。调用导入脚本前，由 Agent 将 fileKey 和 nodeId 组合成完整链接；脚本的 `url` 输入格式保持不变。
-2. **检查所有分类。** 在 `packages/yakit-ui-icons/config/icon-sources/` 的所有分类中查找，并检查 `packages/yakit-ui/config/icon-sources/private.json` 的内部图标记录，结合已有 SVG、导出和历史来源确认对应关系，不能只检查 Outline 或只按 SVG 文件名判断。列出命中的分类、公开导出名（如有）和本地文件路径；只命中历史记录或来源与文件不一致时，明确说明，不能直接当作全新图标新增。
-3. **已存在但用户没说要做什么时，先弹框询问。** 例如用户只发了链接或 nodeId，没有提出具体问题，也没有说明更新范围，Agent 应在弹框中说明“项目里已有这个图标”，让用户选择“查看现有图标与来源”“只更新来源记录”或“同步更新图标库”。用户回答前，只做只读检查，不覆盖来源、SVG 或导出。多个节点可以合并询问，并分别标明哪些已存在、哪些未找到。
-4. **用户已经说清楚，就按要求处理。** 用户只问“这个图标存在吗”，就回答检查结果；用户已明确要求更新来源或同步图标库，就在该范围内继续，不因节点已存在而重复询问。没有找到的节点按新增流程处理，但用户只发节点、没有表达新增或同步意图时，也先确认要做什么。
+## 哪些文件需要维护
 
-以上询问发生在写入前，由 Agent 发起；`pnpm icons:update` 是生成命令，本身不会弹框判断用户意图。已有图标更新时仍保留公开导出名、分类和兼容路径。
+- `packages/yakit-ui-icons/config/icon-sources/` 是公共来源入口，保存当前原稿、节点身份和生成规则。
+- `src/` 中的 SVG 是实际使用的素材；通过导入登记生成策略的素材由脚本生成。
+- 分类入口、名称目录、描边能力表和 Storybook 分组由脚本生成，不手填数量或哈希。
+- `test/fixtures/icons/` 只保存转换、颜色、引用和渲染功能样本，不保存业务图标的历史外观标准。
+- 旧截图、旧版 SVG 对照和审核资料通过 Git 历史查阅，不再限制当前图标变化。
 
-## 文件名和代码里的名字
+本次 Figma 原稿不是历史基线。它用于确认本次转换没有丢失图形；主题颜色、Outline 线宽和内部 ID 等约定转换可以不同。
 
-例如节点 `47351:7055` 对应 `47351-7055.svg`，代码导出 `ArrowUpFromDotOutlined`。已有图标保留导出名，即使 Figma 中改了名称也不自动改业务 API。新增导出名来自节点英文名称，按分类加 `Outlined`、`Solid` 或 `Colorful`；分类或英文含义不明确时 Agent 会询问。
+## 获取、命名和分类
 
-现有 Colorful 文件名和 Oldicon 深层导入路径保持兼容。新 Figma SVG 使用 nodeId 文件名。重复文件名或导出名会报错，不覆盖其他图标。
+Agent 使用 `.agents/skills/sync-icon-sources/SKILL.md`。先通过 fileKey + nodeId 查所有分类及 UI 私有来源，已有图标保留公开名称、分类和兼容路径。只给 nodeId 且无法确认文件时才补充询问；已经明确要求同步时不重复确认。
 
-## Storybook 自动同步
+新增 Figma SVG 用 nodeId 文件名，例如 `47351-7055.svg`。英文组件名使用 PascalCase，并加 `Outlined`、`Solid` 或 `Colorful`。名称含义不清楚、分类不明确或重名时再询问。
 
-在仓库根目录运行 `pnpm icons:update`，或 `pnpm icons:update --family colorful`，会同时更新图标产物、Storybook 的 Colorful 分组数据和静态导航入口。`--check` 会检查这些文件是否遗漏或过期，只报错、不写入；CI 已通过根目录命令执行此检查。
+- Outline 的真实描边统一为 1.5。纯填充原稿允许保留，标记为固定填充，不猜测中心线，也不承诺能通过 `strokeWidth` 改粗细。
+- Solid 保留原稿描边，Colorful 保留多色。只有明确的变量绑定或指定映射才转换主题颜色。
+- 蒙版、渐变和内部引用要完整；无法可靠转换时报告具体节点，不通过修改测试答案掩盖问题。
+- Oldicon 保留内容哈希命名和深层路径。Loading 的动画及参数逻辑继续手写。
 
-分组信息统一来自 `packages/yakit-ui-icons/config/icon-sources/colorful.json` 的 `groups`。可选 `storybook.label` 设置展示名称，`storybook.exportName` 保留导航导出名；不填时分别使用分组名称和 category 的 PascalCase。`storybook.preferredNodeOrder` 只保留已有的展示顺序，新图标按来源记录顺序自动追加，不能把追加顺序当成新获取的 Figma 画布顺序。确需重新排列时在该字段维护，不再手写 Storybook 节点清单。
+## CI 和平台
 
-`packages/yakit-ui/.storybook/stories/icon-colorful.generated.ts` 和 `Icon.stories.tsx` 中标记的 Colorful 导出区域由命令生成。Outline、Solid 和 Oldicon 继续通过公开 registry 展示全部图标。历史视觉基线不参与生成。
+PR 按改动模块检查；图标模块检查当前全量图标。合并到 main 不再启动普通质量 CI，发布工作流仍独立判断版本准备和发布。pre/\*\* 推送保留现有触发。
 
-图标包内部的 `icons:update` 仍只负责图标包，保持独立运行；日常新增图标应使用仓库根目录命令。验证展示时先构建图标包，再运行 `pnpm --filter @yakit-libs/yakit-ui test:icon-integration`。
+脚本、依赖或构建配置变化时，验证 Windows、Linux、macOS；普通 SVG 更新不重复跑三个平台。脚本通过 Node.js 处理文件和启动工具，不依赖 macOS 路径或 Unix shell。浏览器使用当前可用的 Playwright 环境，不比较历史系统或浏览器哈希。
 
-## 平时用的命令
-
-```sh
-pnpm icons:update                  # 更新所有分类和公共生成文件
-pnpm icons:update --family outline # 单个分类：outline/solid/colorful/oldicon/loading
-pnpm icons:update --check           # 离线只读检查，CI 使用
-pnpm icons:test                     # 在临时目录验证导入、生成、失败回滚等行为
-```
-
-脚本先验证来源、准备全部结果，再写入；写入失败会撤回本次已经写入的文件。检查模式不访问 Figma，也不重写文件。重复运行没有差异。删除来源记录不会自动删除公开导出，而是报错，要求另做明确的兼容性迁移。
-
-普通新增不用再手填图标总数、哈希或另建带日期的新增记录。生成文件仍可能有多个，这是构建、校验各自需要的结果；只维护来源，交给脚本更新这些结果。
-
-## 哪些是来源，哪些是结果
-
-- `packages/yakit-ui-icons/config/icon-sources/`：唯一日常维护入口，按五个分类保存。Outline/Solid 每个节点一条记录，合并原始 SVG、摆放证据、导出对应关系；Colorful 保留分组和多色规则；Oldicon 按共享素材合并来源与别名；Loading 保存手写组件入口。UI 包的 `config/icon-sources/private.json` 登记组件内部 SVG，只校验完整性，不导出。
-- Outline、Solid、Colorful 三份旧清单、Outline/Solid 四份 raw/placement 文件，以及 Oldicon inventory 已移除。需要这些数据的脚本和测试，通过 `icon-source-documents.mjs` 从唯一来源即时计算，不再保存另一份 JSON。
-- 各分类导出、名称目录和线宽配置仍是构建需要的生成文件，用 `icons:update` 更新。
-- 历史图片、prechange baseline、figma-basic 旧清单、已有带日期的设计更新、人工审查记录：独立对照证据，普通更新不会重写。原始 Figma SVG 不等于主题化后的生产 SVG。
-
-来源中的 `metadata` 保存原有分类与规则，`raw` 保存设计原稿；哈希和数量由生成器计算。历史记录中的 `reviewedBy` 等保留历史含义，生成器不会替 Agent 填审核人。
-
-已有复杂蒙版或几何修正保留现状；从 MCP 重新获取后如不能通过原始设计与生产 SVG 的对照，生成会报出节点/文件，需要有依据的人工处理，不能通过改基线消除错误。
-
-## Oldicon、Loading 和内部图标
-
-Oldicon 的素材按内容哈希命名，这是已发布兼容路径，不能统一改成 Figma nodeId。添加真实素材时，将归一化的 SVG 放入 assets（文件名为实际内容 SHA-256），在 `oldicon.json` 对应 artwork 中加入真实来源和导出名；共享素材可增加别名。脚本在内存中计算 inventory，只写入入口和每个深层组件，不需要外部 Yakit checkout。
-
-Loading 等手写组件的动画和 props 仍需要编写代码；在 `loading.json` 登记文件、导出名和类型名后运行生成器。脚本不会把有逻辑的组件变成静态 SVG。组件内部 SVG 登记到 `private.json` 后只检查文件覆盖。
-
-## 校验与提交
-
-先运行 `pnpm icons:update --check` 和相关测试，再构建需要验证的包：
-
-```sh
-pnpm --filter @yakit-libs/yakit-ui-icons run build
-pnpm --filter @yakit-libs/yakit-ui run test:ci
-pnpm --filter @yakit-libs/yakit-ui run build:package
-pnpm --filter @yakit-libs/yakit-ui-icons run build
-```
-
-最后可以要求 Agent 使用 `.agents/skills/commit-msg/SKILL.md` 生成信息或提交。图标同步不自动提交、推送或发布；changeset、版本号和 UI 延期发布源码哈希仍在准备发布时单独处理。
-
-来源迁移已完成，一次性的 `migrate-icon-sources.mjs` 和从外部 Yakit 仓库导入素材的 `scripts/icon-migration/generate-oldicon.mjs` 已移除。已有来源记录、原始设计证据、图标素材和公开导出保留，日常统一使用 `icons:import` 与 `icons:update`。
-
-审计脚本中的 `config/icon-sources/outline.json#manifest`、`#raw`、`#placement` 表示从同一来源计算的不同数据视图，不是磁盘上的新文件。显式传入独立 JSON 审查样本的用法仍受支持。
-
-历史快照、图片和审查记录继续保留；历史快照里的旧路径保持原样，测试将其中四份当前 Figma 来源映射到新来源视图，其他历史文件仍逐个校验原始哈希。baseline 更新脚本仅在显式指定 `--output` 时导出审查结果，不再默认写回旧清单。名称目录和各分类导出统一由根目录的 `pnpm icons:update` 更新；按分类更新使用 `--family` 参数。旧的名称目录更新脚本和 Colorful 临时清单合并脚本已删除；仍需保留的 Colorful 去重函数已迁入 `colorful-icon-contracts.mjs`，不负责写入或删除文件。
-
-
-## 日常命令与历史工具的边界
-
-- 日常更新入口统一在仓库根目录：`pnpm icons:update` 更新全部分类，`pnpm icons:update --family solid` 更新 Solid，`pnpm icons:update --family colorful` 更新 Colorful。旧的 `update:icons:solid`、`update:icons:names`、`update:icons:colorful`、`update:icons:colorful-entries` 已删除，不再保留重复别名。
-- `audit:icons:stroke` 使用 `scripts/check-icon-stroke-width.mjs --check`，只读检查来源登记和描边，拒绝 `--write`、`--capture`。旧的 `normalize-icon-stroke-width.mjs` 已原样归档到 `packages/yakit-ui-icons/docs/icon-history/normalize-icon-stroke-width-maintained.mjs.txt`，不再提供可执行入口。迁移专属测试已移除，当前描边、兼容性及历史证据校验继续保留。
-- `colorful-entry-generator.mjs` 保留共享渲染函数和只读检查，不再接受 `--write`；日常写入统一走 `icons:update`。
-- 两份没有直接代码引用但包含独有证据的旧记录已原样移至 [图标历史记录](../packages/yakit-ui-icons/docs/icon-history/README.md)。该目录记录原路径与内容哈希，既不参与日常生成，也不随当前图标修改。
-- 已删除来源文件的旧路径、Bug 审查节点和历史哈希的查询方法见 [来源追溯说明](../packages/yakit-ui-icons/docs/source-layout.md#已移除的来源文件怎么查)。当前来源与当前 manifest 一致，不等于历史文件字节未变；历史字节通过冻结的提交号及哈希单独核验。
-- `capture-icon-adjustable-baseline.mjs` 的后续维护版已原样归档为历史目录中的 `.mjs.txt`；真正用于历史基线采集的原版仍保留在 `adjustable-stroke/historical-capture.mjs.txt`。两个版本不可互换，也不参与日常命令，详见 [版本区别](../packages/yakit-ui-icons/docs/source-layout.md#两个采集脚本版本的区别)。
-
-## Solid 描边规则
-
-Outline 继续使用统一的 1.5 描边规则；Solid 保留 Figma 原稿的描边，不统一改写或限制为 1.5。Solid 审计仍严格比较原稿与生产 SVG 的路径、描边和颜色语义，修改生产描边而不更新来源会失败。例如 ImportSolid 使用 3px 描边配合遮罩实现 1.5px 外侧白边，必须完整保留。此规则不追溯批量替换其他 Solid 原稿；按指定节点同步。
-
-统一线宽生成、检查和审计仅适用于 Outline（1.5）。Solid、Colorful、Oldicon 保留素材已有 stroke-width，不进行归一化；Colorful 去重保留线宽差异。已有历史素材和视觉基线不批量重写，只有显式导入的图标按原稿生成。Loading 由组件自己定义默认线宽，不参加统一线宽检查。
+本次整理不改公开组件 API。维护和校验不会自动提交、推送或发布。

@@ -56,7 +56,6 @@ export const ICON_AUDIT_POLICIES = Object.freeze({
     paintSemanticsAlgorithmVersion: PAINT_SEMANTICS_ALGORITHM_VERSION,
     paintComparisonNormalizationVersion: PAINT_COMPARISON_NORMALIZATION_VERSION,
     strokeWidthPolicy: SOLID_STROKE_WIDTH_POLICY,
-    prechangeBaselinePath: 'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json',
     expectedCounts: Object.freeze(sourceCounts(sources.solid)),
     targetMembershipSha256: policyDigest([...solidIds].sort()),
     targetOrderSha256: policyDigest(solidIds),

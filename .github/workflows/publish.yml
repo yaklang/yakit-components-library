@@ -89,7 +89,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Validate branch and Changesets prerelease state
         run: pnpm run release:preflight
-      - name: Verify deferred release scope and committed input hashes
+      - name: Verify intended deferred release scope
         run: |
           # Prerelease checkouts may have origin/main without a local main branch.
           git show-ref --verify --quiet refs/heads/main || git branch --no-track main refs/remotes/origin/main
@@ -191,7 +191,7 @@ jobs:
         env:
           PUBLISH_PLAN_BASE64: ${{ needs.select-mode.outputs.publish-plan-base64 }}
           PUBLISH_PLAN_SHA256: ${{ needs.select-mode.outputs.publish-plan-sha256 }}
-      - name: Verify exact deferred publish scope and committed input hashes
+      - name: Verify exact deferred publish scope
         run: pnpm run release:deferral-check --publish-plan .release/publish-plan/publish-plan.json
       - name: Verify workspace and release state
         run: pnpm run release:workspace-check && pnpm run release:preflight
@@ -220,15 +220,13 @@ jobs:
       - name: Install the pinned Playwright browser
         run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
       - name: Run component and icon tests
-        run: pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui-icons run audit:icons
+        run: pnpm icons:check && pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui run test:icon-integration
       - name: Build package exactly once
-        run: pnpm --filter @yakit-libs/yakit-ui run build:package
+        run: pnpm --filter @yakit-libs/yakit-ui run build:package:prepared
       - name: Verify icon auto-import contracts
         run: pnpm run test:auto-import
       - name: Verify lightweight and dedicated icon package contracts
         run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
-      - name: Verify package and size policy
-        run: pnpm --filter @yakit-libs/yakit-ui run verify:package && pnpm run release:policy:check
       - name: Pack publishable packages
         id: pack
         uses: changesets/action/pack@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21

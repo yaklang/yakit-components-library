@@ -25,6 +25,7 @@ import { auditColorfulInputs } from './colorful-audit.mjs';
 import { loadPinnedTokenCatalog } from './colorful-color-resolver.mjs';
 import {
   generateIconStrokeContract,
+  sourceFixedFillDispositions,
   serializeIconStrokeContract,
 } from '../config/generateIconStrokeContract.mjs';
 
@@ -111,22 +112,49 @@ export function validateSources(sources) {
 export function renderImportedSvg(record, family) {
   const raw = record.raw?.svg ?? record.rawSvg;
   if (!raw) fail(`ICON_RAW_SVG_MISSING: ${record.nodeId}`);
-  parseSvg(raw);
-  if (/<(?:script|foreignObject)\b|\bon\w+\s*=|(?:href|xlink:href)\s*=\s*["'](?!#)/i.test(raw))
+  const parsed = parseSvg(raw);
+  if (/<(?:script|foreignObject)\b|\bon\w+\s*=/i.test(raw))
     fail(`ICON_EXTERNAL_CONTENT_UNSUPPORTED: ${record.nodeId}`);
+  const checkReferences = (node) => {
+    for (const name of ['href', 'xlink:href']) {
+      const value = node.attributes.get(name);
+      if (value === undefined || value.startsWith('#')) continue;
+      const embeddedRaster =
+        family === 'colorful' &&
+        node.name === 'image' &&
+        /^data:image\/(?:jpeg|png);base64,[A-Za-z0-9+/]+={0,2}$/.test(value);
+      if (!embeddedRaster) fail(`ICON_EXTERNAL_CONTENT_UNSUPPORTED: ${record.nodeId}`);
+    }
+    node.children.forEach(checkReferences);
+  };
+  checkReferences(parsed);
   let svg = raw;
-  if (family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg))
-    fail(`ICON_OUTLINE_STROKE_MISSING: ${record.nodeId}`);
   if (family !== 'colorful')
     svg = svg.replace(/(\b(?:fill|stroke)=)["']#353639["']/gi, '$1"currentColor"');
+  // A registered default color is supplied by createIcon; the SVG must still
+  // inherit color overrides (for example Ear's #0A0A0A foreground).
+  if (family !== 'colorful' && /^#[a-fA-F0-9]{6}$/.test(record.defaultColor ?? ''))
+    svg = svg.replace(
+      new RegExp(`(\\b(?:fill|stroke)=)["']${record.defaultColor}["']`, 'gi'),
+      '$1"currentColor"',
+    );
+  // Normalize named paints without changing their value, including mask auxiliaries.
+  // Explicit bindings can then also cover Figma's named white exports.
+  if (family === 'colorful')
+    svg = svg.replace(
+      /(\b(?:fill|stroke|stop-color)=)["'](white|black)["']/gi,
+      (_, attribute, color) =>
+        `${attribute}"${color.toLowerCase() === 'white' ? '#FFFFFF' : '#000000'}"`,
+    );
   for (const [from, to] of Object.entries(record.production?.paintReplacements ?? {})) {
     if (!/^#[a-fA-F0-9]{6}$/.test(from) || !/^var\(--[\w-]+,\s*#[a-fA-F0-9]{6}\)$/.test(to))
       fail(`ICON_PAINT_MAPPING_INVALID: ${record.nodeId}`);
-    svg = svg.replace(new RegExp(`(\\b(?:fill|stroke)=)["']${from}["']`, 'gi'), `$1"${to}"`);
+    svg = svg.replace(
+      new RegExp(`(\\b(?:fill|stroke|stop-color)=)["']${from}["']`, 'gi'),
+      `$1"${to}"`,
+    );
   }
   if (family === 'colorful') {
-    // Figma clip exports may use named white; retain its paint in the supported hex form.
-    svg = svg.replace(/(\b(?:fill|stroke)=)["']white["']/gi, '$1"#FFFFFF"');
     svg = svg.replace(
       /<svg\b([^>]*)>/,
       (tag, attributes) =>
@@ -254,6 +282,7 @@ export async function planIconUpdate(
       'config/iconStrokeContract.generated.ts',
       await serializeIconStrokeContract(
         generateIconStrokeContract(undefined, {
+          fixedFill: sourceFixedFillDispositions(sources.outline.records),
           sources: new Map(
             [...assets]
               .filter(([f]) => f.startsWith('outline/'))

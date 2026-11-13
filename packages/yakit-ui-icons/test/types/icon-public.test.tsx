@@ -1,4 +1,3 @@
-import { outlineIconRegistry } from '../../src/registry';
 import type { ComponentType } from 'react';
 
 import {
@@ -364,6 +363,7 @@ import {
   ArrowUpToLineOutlined,
   type IconProps,
 } from '../../src';
+import { outlineIconRegistry } from '../../src/registry';
 
 const publicOutlineComponents: readonly ComponentType<IconProps>[] = [
   IntentionOutlined,

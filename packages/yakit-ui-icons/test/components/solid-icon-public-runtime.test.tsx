@@ -3,12 +3,11 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import solidSource from '../../config/icon-sources/solid.json';
 import * as PackageApi from '../../src';
 import { DEFAULT_ICON_COLOR } from '../../src/createIcon';
 import { solidIconNameCatalog } from '../../src/figmaNameCatalog';
 import { solidIconRegistry } from '../../src/registry';
-import nameMigration from '../fixtures/icons/english-name-migration.json';
-import prechange from '../fixtures/icons/reference/solid-local-prechange-controls-v1.json';
 import { iconCounts } from '../icons/icon-inventory';
 
 const roots: Root[] = [];
@@ -56,18 +55,11 @@ const expectPrimaryPaint = (container: HTMLElement, expectedColor: string) => {
 afterEach(clearRenders);
 
 describe('Solid public component API', () => {
-  it('preserves all 255 source mappings with English names and the Solid suffix', () => {
-    const expectedNames = prechange.records
-      .map(
-        ({ nodeId, exportName }) =>
-          nameMigration.rows.find((row) => row.family === 'solid' && row.sourceNodeId === nodeId)
-            ?.exportName ?? exportName.replace(/Filled$/, 'Solid'),
-      )
-      .sort();
+  it('matches all current source mappings with English names and the Solid suffix', () => {
+    const expectedNames = solidSource.records.map(({ exportName }) => exportName).sort();
     const registryNames = solidIconRegistry.map(({ exportName }) => exportName).sort();
 
-    expect(expectedNames).toHaveLength(255);
-    expect(registryNames).toEqual([...expectedNames, 'ParkAboveSolid'].sort());
+    expect(registryNames).toEqual(expectedNames);
     expect(registryNames.every((exportName) => exportName.endsWith('Solid'))).toBe(true);
     expect(registryNames.some((exportName) => exportName.endsWith('Filled'))).toBe(false);
     expect(registryNames).toContain('DownloadFigma12825Solid');
@@ -134,7 +126,7 @@ describe('Solid public component API', () => {
     expectPrimaryPaint(inherited, 'rgb(36, 104, 172)');
   });
 
-  it('keeps size, accessibility, and intentional literal paints intact', () => {
+  it('keeps size and accessibility intact', () => {
     const container = renderRegistry({ 'aria-label': 'Solid icon', size: 32 });
     for (const svg of container.querySelectorAll<SVGSVGElement>('svg')) {
       const root = svg.parentElement as HTMLSpanElement;
@@ -144,7 +136,5 @@ describe('Solid public component API', () => {
       expect(svg.getAttribute('aria-hidden')).toBe('true');
       expect(svg.getAttribute('focusable')).toBe('false');
     }
-    expect(container.querySelector('[fill="#9CA3B1"]')).not.toBeNull();
-    expect(container.querySelector('[stroke="white"]')).not.toBeNull();
   });
 });

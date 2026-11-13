@@ -1,4 +1,3 @@
-import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -83,22 +82,12 @@ function planOutlineManifest(packageRoot, sourcesMap, documents) {
     const localGeometrySha256 = sha256(
       canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
     );
-    const geometryReviewId = reviewedOutlineGeometry({
-      ...record,
-      figmaRawSvgSha256: sha256(figmaSource),
-      localRawSvgSha256: sha256(localSource),
-      figmaNormalizedAstSha256,
-      localNormalizedAstSha256,
-      figmaGeometrySha256,
-      localGeometrySha256,
-    });
-    if (!geometryReviewId && figmaNormalizedAstSha256 !== localNormalizedAstSha256)
+    if (figmaNormalizedAstSha256 !== localNormalizedAstSha256)
       throw new Error(`NORMALIZED_AST_MISMATCH: outline/${record.file}`);
-    if (!geometryReviewId && figmaGeometrySha256 !== localGeometrySha256)
+    if (figmaGeometrySha256 !== localGeometrySha256)
       throw new Error(`GEOMETRY_MISMATCH: outline/${record.file}`);
     return {
       ...record,
-      ...(geometryReviewId ? { geometryReviewId } : {}),
       figmaRawSvgSha256: sha256(figmaSource),
       localRawSvgSha256: sha256(localSource),
       figmaNormalizedAstSha256,
@@ -112,7 +101,6 @@ function planOutlineManifest(packageRoot, sourcesMap, documents) {
   return {
     ...manifest,
     strokeWidthPolicy: ICON_STROKE_WIDTH_POLICY,
-    // Preserve actual historical review metadata; generation is not a review.
     symbols,
   };
 }
@@ -169,7 +157,6 @@ function planSolidManifest(packageRoot, sourcesMap, documents) {
   return {
     ...manifest,
     strokeWidthPolicy: SOLID_STROKE_WIDTH_POLICY,
-    // Preserve actual historical review metadata; generation is not a review.
     symbols,
     supplementalSources,
   };

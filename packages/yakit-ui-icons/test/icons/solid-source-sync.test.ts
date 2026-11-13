@@ -41,14 +41,19 @@ describe('Solid source synchronization', () => {
       const solid = renderImportedSvg(record, 'solid');
       expect(solid).toContain(`stroke-width="${width}"`);
       expect(
-        inspectSvg({ source: solid, relativePath: 'solid/999-1.svg', variant: 'solid' }),
+        inspectSvg({
+          manifest: {},
+          source: solid,
+          relativePath: 'solid/999-1.svg',
+          variant: 'solid',
+        }),
       ).toEqual([]);
       if (width !== '0')
         expect(renderImportedSvg(record, 'outline')).toContain('stroke-width="1.5"');
     },
   );
 
-  it('counts only painted drawables when importing the masked Import icon', async () => {
+  it('imports the updated Import icon as two filled paths', async () => {
     const root = mkdtempSync(resolve(tmpdir(), 'solid-import-'));
     try {
       const record = updated.find((r) => r.exportName === 'ImportSolid')!;
@@ -72,8 +77,8 @@ describe('Solid source synchronization', () => {
       const imported = next.records.find(
         (r: { exportName: string }) => r.exportName === 'ImportSolid',
       );
-      expect(imported.metadata.minimumDrawableCount).toBe(3);
-      expect(renderImportedSvg(imported, 'solid')).toContain('stroke-width="3"');
+      expect(imported.metadata.minimumDrawableCount).toBe(2);
+      expect(renderImportedSvg(imported, 'solid')).not.toMatch(/<(?:mask|defs)\b|stroke-width=/);
     } finally {
       rmSync(root, { recursive: true, force: true });
     }

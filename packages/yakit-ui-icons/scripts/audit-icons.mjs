@@ -1,4 +1,3 @@
-import { reviewedOutlineGeometry } from './outline-geometry-overrides.mjs';
 import { createHash } from 'node:crypto';
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -53,7 +52,6 @@ const SEMANTIC_PAINT_CONTAINERS = new Set(['clippath', 'mask']);
 const SEMANTIC_ERASE_SOURCE_IDS = new Set(['14203:193724', '38678:28634']);
 const sha256 = (source) => createHash('sha256').update(source).digest('hex');
 const lowerName = (node) => node.name.toLowerCase();
-const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function decodeXml(value) {
   return value.replace(
@@ -103,7 +101,21 @@ function findTagEnd(source, start) {
   return -1;
 }
 
+/**
+ * @typedef {object} SvgNode
+ * @property {Map<string, string>} attributes
+ * @property {SvgNode[]} children
+ * @property {string} name
+ * @property {SvgNode | null} parent
+ * @property {string} text
+ */
+
+/**
+ * @param {string} source
+ * @returns {SvgNode}
+ */
 export function parseSvg(source) {
+  /** @type {SvgNode} */
   const document = {
     attributes: new Map(),
     children: [],
@@ -158,6 +170,7 @@ export function parseSvg(source) {
     if (!nameMatch) throw new Error('missing element name');
     const name = nameMatch[0];
     const parent = stack.at(-1);
+    /** @type {SvgNode} */
     const node = {
       attributes: parseAttributes(body.slice(name.length)),
       children: [],
@@ -515,8 +528,17 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
           value.startsWith('url(')
         )
           continue;
-        if (!insideDefinition) errors.push('FOREGROUND_LITERAL');
-        else if (!exceptionMatches(exceptions, relativePath, node, attribute, value))
+        if (!insideDefinition) {
+          const sourcePaint = record?.sourceForegroundPaints?.some(
+            (paint) =>
+              paint.tag === node.name &&
+              paint.d === node.attributes.get('d') &&
+              paint.attribute === attribute &&
+              paint.value === value &&
+              ['white', '#fff', '#ffffff'].includes(value.toLowerCase()),
+          );
+          if (!sourcePaint) errors.push('FOREGROUND_LITERAL');
+        } else if (!exceptionMatches(exceptions, relativePath, node, attribute, value))
           errors.push('MASK_EXCEPTION_INVALID');
       }
     } else if (variant === 'solid') {
@@ -710,30 +732,9 @@ function validateSolidManifest(manifest, files, policy) {
     if (record.figmaPaintSemanticsSha256 !== record.localPaintSemanticsSha256)
       errors.push('PAINT_SEMANTICS_MISMATCH');
   }
-  for (const field of [
-    'figmaRawProvenanceSha256',
-    'placementProvenanceSha256',
-    'prechangeBaselineSha256',
-  ])
+  for (const field of ['figmaRawProvenanceSha256', 'placementProvenanceSha256'])
     if (!manifest.sourceEvidence?.[field]) errors.push('MANIFEST_INCOMPLETE');
-  if (manifest.sourceEvidence?.prechangeBaselinePath !== policy.prechangeBaselinePath)
-    errors.push('MANIFEST_INCOMPLETE');
   return [...new Set(errors)];
-}
-
-async function validateSolidPrechangeEvidence({ manifest, policy }) {
-  if (!manifest || policy.variant !== 'solid') return [];
-  if (manifest.sourceEvidence?.prechangeBaselinePath !== policy.prechangeBaselinePath)
-    return ['PRECHANGE_BASELINE_MISMATCH'];
-  try {
-    const source = await readIconInput(path.join(PACKAGE_ROOT, policy.prechangeBaselinePath));
-    return sha256(source) === manifest.sourceEvidence.prechangeBaselineSha256
-      ? []
-      : ['PRECHANGE_BASELINE_MISMATCH'];
-  } catch (error) {
-    if (error.code === 'ENOENT') return ['PRECHANGE_BASELINE_MISMATCH'];
-    throw error;
-  }
 }
 
 function validateManifest(manifest, files, policy) {
@@ -744,12 +745,7 @@ function validateManifest(manifest, files, policy) {
     errors.push('POLICY_CONTRACT_MISMATCH');
   if (manifest.complete !== true || manifest.provenanceComplete !== true)
     errors.push('MANIFEST_INCOMPLETE');
-  for (const field of [
-    'basicManifestSha256',
-    'figmaRawProvenanceSha256',
-    'placementProvenanceSha256',
-    'prechangeBaselineSha256',
-  ])
+  for (const field of ['figmaRawProvenanceSha256', 'placementProvenanceSha256'])
     if (!manifest.sourceEvidence?.[field]) errors.push('MANIFEST_INCOMPLETE');
   const symbols = manifest.symbols ?? manifest.currentSymbols ?? [];
   const placements = manifest.placements ?? [];
@@ -776,15 +772,13 @@ function validateManifest(manifest, files, policy) {
     if (!symbol.localRawSvgSha256) errors.push('LOCAL_RAW_HASH_MISMATCH');
     if (!symbol.normalizedAstSha256) errors.push('AST_DIGEST_MISMATCH');
     if (!symbol.geometrySha256) errors.push('GEOMETRY_DIGEST_MISMATCH');
-    const reviewedGeometry = reviewedOutlineGeometry(symbol);
-    if (symbol.geometryReviewId !== reviewedGeometry) errors.push('GEOMETRY_REVIEW_MISMATCH');
     if (
-      (!reviewedGeometry && symbol.figmaNormalizedAstSha256 !== symbol.normalizedAstSha256) ||
+      symbol.figmaNormalizedAstSha256 !== symbol.normalizedAstSha256 ||
       symbol.localNormalizedAstSha256 !== symbol.normalizedAstSha256
     )
       errors.push('AST_DIGEST_MISMATCH');
     if (
-      (!reviewedGeometry && symbol.figmaGeometrySha256 !== symbol.geometrySha256) ||
+      symbol.figmaGeometrySha256 !== symbol.geometrySha256 ||
       symbol.localGeometrySha256 !== symbol.geometrySha256
     )
       errors.push('GEOMETRY_DIGEST_MISMATCH');
@@ -876,16 +870,12 @@ async function validateProvenanceEvidence({
         semanticEraseSourceId: sourceNodeId,
       }),
     );
-    const reviewedGeometry = policy.variant === 'outline' && reviewedOutlineGeometry(symbol);
     if (
       symbol.figmaNormalizedAstSha256 !== normalizedAstSha256 ||
-      (!reviewedGeometry && symbol.normalizedAstSha256 !== normalizedAstSha256)
+      symbol.normalizedAstSha256 !== normalizedAstSha256
     )
       errors.push('AST_DIGEST_MISMATCH');
-    if (
-      symbol.figmaGeometrySha256 !== geometrySha256 ||
-      (!reviewedGeometry && symbol.geometrySha256 !== geometrySha256)
-    )
+    if (symbol.figmaGeometrySha256 !== geometrySha256 || symbol.geometrySha256 !== geometrySha256)
       errors.push('GEOMETRY_DIGEST_MISMATCH');
     const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaSource, {
       normalizeFigmaPrimary: policy.variant === 'solid',
@@ -1034,7 +1024,6 @@ async function validateIndex({ files, indexPath, manifest, root }) {
 /**
  * @param {object} options
  * @param {string} options.root
- * @param {string} [options.basicManifestPath]
  * @param {string} [options.iconNameCatalogPath]
  * @param {string} [options.outlineNameIndexPath]
  * @param {string} [options.outlineNameManifestPath]
@@ -1052,7 +1041,6 @@ async function validateIndex({ files, indexPath, manifest, root }) {
  * @param {string} [options.solidNameRawProvenancePath]
  */
 export async function auditIcons({
-  basicManifestPath,
   iconNameCatalogPath,
   outlineNameIndexPath,
   outlineNameManifestPath,
@@ -1107,21 +1095,6 @@ export async function auditIcons({
   validateManifest(manifest, files, policy).forEach((token) =>
     failures.push({ path: manifestPath, token }),
   );
-  const prechangeFailures = await validateSolidPrechangeEvidence({ manifest, policy });
-  prechangeFailures.forEach((token) =>
-    failures.push({ path: manifest?.sourceEvidence?.prechangeBaselinePath ?? manifestPath, token }),
-  );
-  if (basicManifestPath && manifest?.sourceEvidence?.basicManifestSha256) {
-    try {
-      const basicSource = await readIconInput(basicManifestPath);
-      if (sha256(basicSource) !== manifest.sourceEvidence.basicManifestSha256)
-        failures.push({ path: basicManifestPath, token: 'BASIC_MANIFEST_CHANGED' });
-    } catch (error) {
-      if (error.code === 'ENOENT')
-        failures.push({ path: basicManifestPath, token: 'BASIC_MANIFEST_CHANGED' });
-      else throw error;
-    }
-  }
   // validateIndex is deliberately async because import targets are resolved from disk.
   const indexFailures = await validateIndex({ files, indexPath, manifest, root });
   indexFailures.forEach((token) => failures.push({ path: indexPath, token }));
@@ -1200,7 +1173,6 @@ export async function auditIcons({
 
 function parseArguments(argv) {
   const options = {
-    basicManifestPath: undefined,
     iconNameCatalogPath: undefined,
     outlineNameIndexPath: undefined,
     outlineNameManifestPath: undefined,
@@ -1237,7 +1209,6 @@ function parseArguments(argv) {
       options.solidNamePlacementProvenancePath = argv[++index];
     else if (argument === '--solid-name-raw-provenance')
       options.solidNameRawProvenancePath = argv[++index];
-    else if (argument === '--basic-manifest') options.basicManifestPath = argv[++index];
     else if (argument === '--figma-raw-provenance') options.figmaRawProvenancePath = argv[++index];
     else if (argument === '--placement-provenance') options.placementProvenancePath = argv[++index];
     else if (argument === '--root') options.root = argv[++index];
@@ -1258,9 +1229,6 @@ async function main() {
   const indexPath = options.indexPath
     ? path.resolve(process.cwd(), options.indexPath)
     : path.join(root, policy.variant, 'index.tsx');
-  const basicManifestPath = options.basicManifestPath
-    ? path.resolve(process.cwd(), options.basicManifestPath)
-    : path.join(packageRoot, 'scripts/figma-basic-icons-inventory.json');
   const iconNameCatalogPath = options.iconNameCatalogPath
     ? path.resolve(process.cwd(), options.iconNameCatalogPath)
     : undefined;
@@ -1274,7 +1242,6 @@ async function main() {
       path.join(packageRoot, `config/icon-sources/${policy.variant}.json#placement`),
   );
   const result = await auditIcons({
-    basicManifestPath,
     iconNameCatalogPath,
     outlineNameIndexPath: resolveOptional(options.outlineNameIndexPath),
     outlineNameManifestPath: resolveOptional(options.outlineNameManifestPath),

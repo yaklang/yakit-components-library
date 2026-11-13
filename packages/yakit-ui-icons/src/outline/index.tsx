@@ -371,6 +371,8 @@ import HistoryOutlinedSvg from './47427-1947.svg?react';
 import AtOutlinedSvg from './47571-4197.svg?react';
 import HandDepositOutlinedSvg from './47659-1965.svg?react';
 import TimerOffOutlinedSvg from './47662-1975.svg?react';
+import MenuCollapseOutlinedSvg from './47822-21814.svg?react';
+import MenuExpandOutlinedSvg from './47822-21815.svg?react';
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined');
 export const LocationMarkerOutlined = createIcon(
   LocationMarkerOutlinedSvg,
@@ -918,3 +920,5 @@ export const HistoryOutlined = createIcon(HistoryOutlinedSvg, 'HistoryOutlined')
 export const AtOutlined = createIcon(AtOutlinedSvg, 'AtOutlined');
 export const HandDepositOutlined = createIcon(HandDepositOutlinedSvg, 'HandDepositOutlined');
 export const TimerOffOutlined = createIcon(TimerOffOutlinedSvg, 'TimerOffOutlined');
+export const MenuCollapseOutlined = createIcon(MenuCollapseOutlinedSvg, 'MenuCollapseOutlined');
+export const MenuExpandOutlined = createIcon(MenuExpandOutlinedSvg, 'MenuExpandOutlined');

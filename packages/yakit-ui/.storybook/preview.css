@@ -1,0 +1,16 @@
+/* Canvas and embedded story previews share the component palette. */
+html body,
+html .docs-story {
+  background-color: var(--Colors-Use-Basic-Background);
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+}
+
+html[data-theme='light'],
+[data-theme='light'] {
+  color-scheme: light;
+}
+
+html[data-theme='dark'],
+[data-theme='dark'] {
+  color-scheme: dark;
+}

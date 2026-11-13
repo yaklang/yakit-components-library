@@ -6,16 +6,27 @@ import { createElement, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
 import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
   solidIconRegistry,
 } from '../../src/icons/registry';
-import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 
-const colorfulManifest = JSON.parse(
+const colorfulManifest: {
+  groups: {
+    category: string;
+    name: string;
+    storybook?: { label?: string; exportName?: string };
+  }[];
+  rows: {
+    nodeId: string;
+    category: string;
+    exportName: string;
+    publicExposure: string;
+  }[];
+} = JSON.parse(
   readIconInputSync(
     new URL('../../../yakit-ui-icons/config/icon-sources/colorful.json#manifest', import.meta.url),
     'utf8',
@@ -66,7 +77,7 @@ const colorfulByExport = new Map(
 const renderedSourceNodeIds = (markup: string) =>
   renderedExports(markup).map((exportName) => colorfulByExport.get(exportName)?.sourceNodeId);
 
-const figmaStorySourceNodeOrder = {
+const figmaStorySourceNodeOrder: Record<string, readonly string[]> = {
   'ai-model': [
     '38864:130867',
     '38803:60735',
@@ -215,15 +226,12 @@ describe('Icon Storybook contract', () => {
     expect(storyExports()).toEqual([
       ...storySpecs.map(({ exportName }) => exportName),
       'StrokeWidth',
-      'VisualWeight',
     ]);
     expect(
       Object.keys(iconStories)
         .filter((name) => name !== 'default')
         .sort(),
-    ).toEqual(
-      [...storySpecs.map(({ exportName }) => exportName), 'StrokeWidth', 'VisualWeight'].sort(),
-    );
+    ).toEqual([...storySpecs.map(({ exportName }) => exportName), 'StrokeWidth'].sort());
     for (const { displayName, exportName } of storySpecs) {
       expect(iconStories[exportName as keyof typeof iconStories]).toMatchObject({
         name: displayName,
@@ -247,40 +255,6 @@ describe('Icon Storybook contract', () => {
     expect(markup).toContain('stroke-width="0"');
     for (const name of ['BugOutlined', 'HomeOutlined', 'StarOffOutlined', 'Loading'])
       expect(markup).toContain(name);
-  });
-
-  it('shows all repaired icons beside frozen originals at three sizes on both backgrounds', () => {
-    expect(iconStories.VisualWeight).toMatchObject({
-      name: '线条粗细对照',
-      args: { strokeWidth: 1.5 },
-      argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
-    });
-    const markup = renderToStaticMarkup(
-      iconStories.VisualWeight.render!({ strokeWidth: 1.5 }, {} as never),
-    );
-    expect(markup.match(/<img\b/g)).toHaveLength(78);
-    const comparisonGroups = [...markup.matchAll(/<figure\b[^>]*>([\s\S]*?)<\/figure>/g)];
-    expect(comparisonGroups).toHaveLength(52);
-    for (let index = 0; index < comparisonGroups.length; index += 2) {
-      const original = comparisonGroups[index][1];
-      const current = comparisonGroups[index + 1][1];
-      expect(original).toContain('<figcaption>修复前（历史快照）</figcaption>');
-      expect(original.match(/<img\b/g)).toHaveLength(3);
-      expect(current).toContain('<figcaption>当前组件</figcaption>');
-      expect(current.match(/<svg\b/g)).toHaveLength(3);
-      expect(current).toContain('stroke-width="1.5"');
-    }
-    expect(markup.match(/color:inherit/g)).toHaveLength(markup.match(/<svg\b/g)!.length);
-    for (const { file } of visualWeightReviews.reviews) {
-      const sourceNodeId = file.replace(/\.svg$/, '').replace('-', ':');
-      const { exportName } = outlineIconRegistry.find(
-        (icon) => icon.sourceNodeId === sourceNodeId,
-      )!;
-      for (const size of [16, 24, 32]) expect(markup).toContain(`${exportName} 修复前 ${size}px`);
-    }
-    expect(markup).toContain('stroke-width="1.5"');
-    expect(markup).toContain('默认线重参照');
-    expect(iconStorySource).not.toContain('二维码等固定填充轮廓不支持线宽调整');
   });
 
   it('renders every colorful category once in frozen Figma group order', () => {
@@ -385,21 +359,15 @@ describe('Icon Storybook contract', () => {
       expect(
         renderedSourceNodeIds(
           renderStory(iconStories[story!.exportName as keyof typeof iconStories]),
-        ).filter((id) => expected.includes(id)),
+        ).filter((id) => id !== undefined && expected.includes(id)),
         category,
       ).toEqual(expected);
     }
   });
 
   it('keeps the two unbacked Memfit compositions on their exact Figma geometry', () => {
-    const horizontal = readIconInputSync(
-      resolve(colorfulIconsRoot, 'MemfitLogoHorizontalColorful.svg'),
-      'utf8',
-    );
-    const vertical = readIconInputSync(
-      resolve(colorfulIconsRoot, 'MemfitLogoVerticalColorful.svg'),
-      'utf8',
-    );
+    const horizontal = readIconInputSync(resolve(colorfulIconsRoot, '44520-3632.svg'), 'utf8');
+    const vertical = readIconInputSync(resolve(colorfulIconsRoot, '44520-3560.svg'), 'utf8');
 
     expect(horizontal).toContain('M8.49335 14.0987H6V26.7533H8.49335V14.0987Z');
     expect(horizontal).not.toContain('scale(0.2284173884793107');

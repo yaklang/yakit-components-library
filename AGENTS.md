@@ -7,4 +7,5 @@
 
 图标维护入口及数据约定见 `docs/icon-maintenance.md`。来源记录位于
 `packages/yakit-ui-icons/config/icon-sources/`。生成文件用 `pnpm icons:update` 更新，
-`pnpm icons:update --check` 离线检查。UI 私有来源仍在 `packages/yakit-ui/config/icon-sources/private.json`。保留既有公开导出、Oldicon 深层路径和历史视觉基线。
+`pnpm icons:check` 统一离线检查；`pnpm icons:update --check` 仅检查生成结果。UI 私有来源仍在 `packages/yakit-ui/config/icon-sources/private.json`。保留既有公开导出和 Oldicon 深层路径。检查当前来源和规则，不使用历史外观基线。
+图标包及根目录图标入口脚本兼容 Windows、Linux、macOS；不绑定历史系统或浏览器版本。

@@ -10,7 +10,11 @@ import {
   validateSources,
 } from './update-icons.mjs';
 import { parseSvg, collectPaintSemantics } from './audit-icons.mjs';
-import { generateIconStrokeContract } from '../config/generateIconStrokeContract.mjs';
+import {
+  generateIconStrokeContract,
+  sourceFixedFillDispositions,
+} from '../config/generateIconStrokeContract.mjs';
+import { inspectFragmentGraph } from './colorful-fragments.mjs';
 
 export function parseFigmaUrl(value) {
   const url = new URL(value);
@@ -64,6 +68,14 @@ export async function planSourceImport(input, root = packageRoot) {
   const seen = new Set();
   const report = [];
   for (const icon of input.icons) {
+    required(
+      icon.preserveSourceGeometry === undefined || typeof icon.preserveSourceGeometry === 'boolean',
+      'ICON_SOURCE_GEOMETRY_INVALID',
+    );
+    required(
+      icon.syncProduction === undefined || typeof icon.syncProduction === 'boolean',
+      'ICON_SYNC_PRODUCTION_INVALID',
+    );
     const { fileKey, nodeId } = parseFigmaUrl(icon.url);
     required(
       icon.dimensionsSource === undefined || ['node', 'svg-export'].includes(icon.dimensionsSource),
@@ -144,13 +156,29 @@ export async function planSourceImport(input, root = packageRoot) {
       );
     // An identical fetch must not add timestamps or replace a legacy normalization recipe.
     const oldSvg = existing?.raw?.svg ?? existing?.rawSvg;
+    let evidence = icon.evidence ?? existing?.evidence;
+    let themePaintBindings;
+    if (family === 'colorful') {
+      themePaintBindings =
+        icon.evidence?.themePaintBindings ??
+        existing?.themePaintBindings ??
+        existing?.evidence?.themePaintBindings;
+      if (evidence && Object.hasOwn(evidence, 'themePaintBindings')) {
+        const { themePaintBindings: _bindings, ...otherEvidence } = evidence;
+        evidence = Object.keys(otherEvidence).length ? otherEvidence : undefined;
+      }
+    }
     if (
       existing &&
+      (!icon.syncProduction || existing.production) &&
+      (!icon.preserveSourceGeometry || existing.production?.geometry === 'source') &&
       oldSvg === svg &&
       (existing.name ?? existing.figmaName) === icon.name &&
       JSON.stringify(icon.paintReplacements ?? existing.production?.paintReplacements) ===
         JSON.stringify(existing.production?.paintReplacements) &&
-      JSON.stringify(icon.evidence ?? existing.evidence) === JSON.stringify(existing.evidence) &&
+      JSON.stringify(evidence) === JSON.stringify(existing.evidence) &&
+      (family !== 'colorful' ||
+        JSON.stringify(themePaintBindings) === JSON.stringify(existing.themePaintBindings)) &&
       (!Number.isFinite(icon.x) ||
         (family === 'colorful'
           ? existing.x === icon.x
@@ -165,6 +193,16 @@ export async function planSourceImport(input, root = packageRoot) {
     }
     const production = {
       strategy: 'figma-svg-v1',
+      ...(icon.preserveSourceGeometry ||
+      existing?.production?.geometry === 'source' ||
+      (family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg))
+        ? {
+            geometry: 'source',
+            ...(family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg)
+              ? { strokeMode: 'fixed-fill' }
+              : {}),
+          }
+        : {}),
       ...(icon.paintReplacements
         ? { paintReplacements: icon.paintReplacements }
         : existing?.production?.paintReplacements
@@ -295,12 +333,66 @@ export async function planSourceImport(input, root = packageRoot) {
       delete record.componentWidth;
       delete record.componentHeight;
     }
-    if (icon.evidence !== undefined) record.evidence = icon.evidence;
-    if (family === 'colorful' && icon.evidence?.themePaintBindings)
-      record.themePaintBindings = icon.evidence.themePaintBindings;
+    if (evidence !== undefined) record.evidence = evidence;
+    else delete record.evidence;
+    if (family === 'colorful' && themePaintBindings !== undefined)
+      record.themePaintBindings = themePaintBindings;
     const normalized = renderImportedSvg(record, family);
+    if (family === 'outline' && production.geometry === 'source') {
+      // The current source is no longer the historical reconstructed geometry.
+      // Frozen reviews remain in their independent evidence files.
+      delete record.metadata.geometryReviewId;
+      const foregroundPaints = [];
+      const visit = (node, insideDefinition = false) => {
+        const inDefinition =
+          insideDefinition ||
+          ['defs', 'mask', 'clipPath', 'pattern', 'marker', 'symbol'].includes(node.name);
+        if (!inDefinition && node.name === 'path')
+          for (const attribute of ['fill', 'stroke']) {
+            const value = node.attributes.get(attribute);
+            if (['white', '#fff', '#ffffff'].includes(value?.toLowerCase()))
+              foregroundPaints.push({
+                tag: node.name,
+                d: node.attributes.get('d'),
+                attribute,
+                value,
+              });
+          }
+        node.children.forEach((child) => visit(child, inDefinition));
+      };
+      visit(parseSvg(normalized));
+      if (foregroundPaints.length) record.metadata.sourceForegroundPaints = foregroundPaints;
+      else delete record.metadata.sourceForegroundPaints;
+    }
+    // Legacy Outline definitions used an underscore between the node ID parts.
+    // Keep their existing paint exceptions attached when the import normalizes IDs.
+    // Only move an existing exception to a definition that actually exists; this
+    // does not authorize any new paint values or discard unmatched exceptions.
+    if (family === 'outline') {
+      const definitionIds = new Set(inspectFragmentGraph(normalized).owners.map(({ id }) => id));
+      const legacyPrefix = `icon_${nodeId.replace(':', '_')}__`;
+      const importedPrefix = `icon_${nodeId.replace(':', '')}__`;
+      source.metadata.paintExceptions = (source.metadata.paintExceptions ?? []).map((exception) => {
+        if (
+          exception.path !== `outline/${record.file}` ||
+          !exception.definitionId.startsWith(legacyPrefix)
+        )
+          return exception;
+        const definitionId = exception.definitionId.replace(legacyPrefix, importedPrefix);
+        return definitionIds.has(definitionId)
+          ? {
+              ...exception,
+              definitionId,
+              reason: exception.reason?.replaceAll(exception.definitionId, definitionId),
+            }
+          : exception;
+      });
+    }
     if (family === 'outline')
-      generateIconStrokeContract(undefined, { sources: new Map([[record.file, normalized]]) });
+      generateIconStrokeContract(undefined, {
+        fixedFill: sourceFixedFillDispositions([record]),
+        sources: new Map([[record.file, normalized]]),
+      });
     if (family === 'solid') {
       record.metadata.minimumDrawableCount = drawables(svg);
       record.metadata.paintRoles = [

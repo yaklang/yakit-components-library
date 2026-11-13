@@ -12,7 +12,6 @@ const reserved = new Set([
   "Outline",
   "Solid",
   "StrokeWidth",
-  "VisualWeight",
   "default",
 ]);
 

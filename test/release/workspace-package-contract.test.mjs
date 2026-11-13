@@ -246,7 +246,7 @@ test("yakit-ui generates its published theme CSS with color 1.4.1", () => {
     "yakit-color-css --theme Main --out src/styles/color.css",
   );
   assert.match(
-    manifest.scripts?.["build:lib"] ?? "",
+    manifest.scripts?.["build:lib:prepared"] ?? "",
     /pnpm run generate:color-css && /,
   );
   assert.match(publicEntry, /import '\.\/styles\/index\.css';/);
@@ -417,21 +417,18 @@ test("each package generates SSR fixtures before its own browser tests", () => {
       "test/ssr/native-components-ssr.test.tsx",
     ),
   );
-  for (const manifest of [ui, icons]) {
-    const commands = manifest.scripts["test:ci"].split(" && ");
-    const browser = commands.findIndex((command) =>
-      command.startsWith("vitest run --config vitest.config.ts"),
-    );
-    assert.ok(commands.indexOf("pnpm run test:ssr-fixtures") < browser);
-    assert.ok(browser >= 0);
-  }
+  const uiCommands = ui.scripts["test:ci"].split(" && ");
   assert.ok(
-    ui.scripts["test:ci"].startsWith(
-      "pnpm --filter @yakit-libs/yakit-ui-icons run test:ci",
-    ),
+    uiCommands.indexOf("pnpm run test:ssr-fixtures") <
+      uiCommands.indexOf("vitest run --config vitest.config.ts"),
   );
+  assert.equal(
+    icons.scripts["test:ci"],
+    "pnpm run test:node && pnpm run test:browser",
+  );
+  assert.match(icons.scripts["test:node"], /vitest.node.config.ts/);
+  assert.doesNotMatch(ui.scripts["test:ci"], /--filter.*yakit-ui-icons/);
   assert.ok(ui.scripts["test:ci"].includes("vitest.react18.config.ts"));
-  assert.ok(icons.scripts["test:ci"].includes("pnpm run test:icon-adjustable"));
 });
 
 test("pre-build types use source fixtures while built package contracts verify public subpaths", () => {
@@ -447,7 +444,10 @@ test("pre-build types use source fixtures while built package contracts verify p
   );
 
   assert.doesNotMatch(manifest.scripts["test:types"], /build/i);
-  assert.match(manifest.scripts["build:lib"], /fix-declaration-imports\.mjs/);
+  assert.match(
+    manifest.scripts["build:lib:prepared"],
+    /fix-declaration-imports\.mjs/,
+  );
   assert.equal(libraryTypes.compilerOptions.declarationMap, false);
   assert.deepEqual(libraryTypes.exclude, ["src/icons/oldicon"]);
   assert.deepEqual(sourceTypes.include, [

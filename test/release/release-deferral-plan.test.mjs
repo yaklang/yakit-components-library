@@ -11,8 +11,6 @@ import {
   verifyDeferralPlan,
 } from "../../scripts/release/check-release-deferral.mjs";
 
-import { releaseInputHashes } from "../../scripts/release/release-impact.mjs";
-
 const require = createRequire(import.meta.url);
 const UI = "@yakit-libs/yakit-ui";
 const ICONS = "@yakit-libs/yakit-ui-icons";
@@ -27,7 +25,7 @@ const icons = { name: ICONS, version: "0.3.0" };
 function state() {
   return {
     policy: {
-      schemaId: "yakit-ui-release-deferral/v1",
+      schemaId: "yakit-ui-release-deferral/v2",
       releases: [{ name: ICONS, version: TARGET_VERSION }],
       deferred: [
         {
@@ -37,10 +35,6 @@ function state() {
           integrity: "sha512-Zml4dHVyZQ==",
           sha256: "a".repeat(64),
           baseRevision: "a".repeat(40),
-          headSourceHash: "b".repeat(64),
-          headLockHash: "c".repeat(64),
-          headToolchainHash: "d".repeat(64),
-          headConfigHash: "e".repeat(64),
           reason: "UI migration is deferred.",
           followUpPath: "docs/pending-releases/README.md",
         },
@@ -117,19 +111,6 @@ async function fixture(t) {
   const git = (...args) =>
     execFileSync("git", args, { cwd: directory, stdio: "pipe" });
   git("init", "-q", "--initial-branch=main");
-  commitFixture(directory);
-  const hashes = await releaseInputHashes({
-    root: directory,
-    revision: "HEAD",
-    packageName: UI,
-  });
-  for (const [field, value] of Object.entries(hashes))
-    input.policy.deferred[0][`head${field[0].toUpperCase()}${field.slice(1)}`] =
-      value;
-  await writeFile(
-    path.join(directory, "scripts/release/release-deferral-policy.json"),
-    JSON.stringify(input.policy),
-  );
   commitFixture(directory);
   return directory;
 }
@@ -282,23 +263,14 @@ test("removing the completed deferral policy restores the normal release workflo
   });
 });
 
-for (const [file, content, field] of [
+for (const [file, content] of [
   [
     "packages/yakit-ui/.storybook/preview.tsx",
     "export default { theme: 'dark' };\n",
-    "headSourceHash",
   ],
-  [
-    "packages/yakit-ui/test/icon.test.ts",
-    "// changed test\n",
-    "headSourceHash",
-  ],
-  [
-    "packages/yakit-ui/src/new.ts",
-    "export const changed = true;\n",
-    "headSourceHash",
-  ],
-  ["pnpm-lock.yaml", "lockfileVersion: '9.0'\n# changed\n", "headLockHash"],
+  ["packages/yakit-ui/test/icon.test.ts", "// changed test\n"],
+  ["packages/yakit-ui/src/new.ts", "export const changed = true;\n"],
+  ["pnpm-lock.yaml", "lockfileVersion: '9.0'\n# changed\n"],
   [
     "package.json",
     JSON.stringify({
@@ -306,28 +278,23 @@ for (const [file, content, field] of [
       private: true,
       engines: { node: ">=24" },
     }),
-    "headToolchainHash",
   ],
   [
     "packages/yakit-ui-icons/tsconfig.json",
     JSON.stringify({ compilerOptions: { strict: true } }),
-    "headConfigHash",
   ],
 ]) {
-  test(`early deferral check rejects committed drift in ${file}`, async (t) => {
+  test(`release scope stays valid after committed changes in ${file}`, async (t) => {
     const directory = await fixture(t);
     const target = path.join(directory, file);
     await mkdir(path.dirname(target), { recursive: true });
     await writeFile(target, content);
     commitFixture(directory);
-    await assert.rejects(
-      checkReleaseDeferral({ directory }),
-      new RegExp(`${field} mismatch.*expected.*actual`),
-    );
+    assert.equal((await checkReleaseDeferral({ directory })).phase, "version");
   });
 }
 
-test("early deferral check ignores untracked build outputs and detects committed deletion", async (t) => {
+test("release scope ignores build outputs and deletion of a test", async (t) => {
   const directory = await fixture(t);
   for (const file of ["dist/index.js", "storybook-static/index.html"]) {
     const target = path.join(directory, "packages/yakit-ui", file);
@@ -352,8 +319,5 @@ test("early deferral check ignores untracked build outputs and detects committed
     ],
     { cwd: directory, stdio: "pipe" },
   );
-  await assert.rejects(
-    checkReleaseDeferral({ directory }),
-    /headSourceHash mismatch/,
-  );
+  assert.equal((await checkReleaseDeferral({ directory })).phase, "version");
 });

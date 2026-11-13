@@ -1,0 +1,9 @@
+# 功能测试样本
+
+这里的样本验证加工程序与组件行为，不规定业务图标必须保持历史外观。
+
+- `transform/`：SVG 转 React 后的内部引用与多实例隔离。
+- `colorful/`：多色、蒙版、渐变与主题映射。
+- `icon-adjustable-consumer-entry.ts`：构建后的描边参数消费方式。
+
+当前图标的参考来自 `config/icon-sources/` 中本次导入的原稿。旧截图和审核材料通过 Git 历史查阅。

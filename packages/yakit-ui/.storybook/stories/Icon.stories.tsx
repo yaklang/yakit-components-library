@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
 import '@yakit-libs/yakit-ui-icons/icon.css';
 import { BugOutlined, HomeOutlined, Loading, StarOffOutlined } from '@yakit-libs/yakit-ui-icons';
-import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 import {
   colorfulIconRegistry,
   outlineIconRegistry,
@@ -57,7 +55,7 @@ const IconSection = ({
       <div style={{ alignItems: 'baseline', display: 'flex', gap: 12, marginBottom: 16 }}>
         <Heading
           style={{
-            color: '#353639',
+            color: 'var(--Colors-Use-Neutral-Text-1-Title)',
             fontSize: headingLevel === 'h2' ? 28 : 20,
             lineHeight: 1.2,
             margin: 0,
@@ -65,8 +63,12 @@ const IconSection = ({
         >
           {title}
         </Heading>
-        <span style={{ color: '#8c8f95', fontSize: 14 }}>{subtitle}</span>
-        <span style={{ color: '#8c8f95', fontSize: 12 }}>({icons.length})</span>
+        <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 14 }}>
+          {subtitle}
+        </span>
+        <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 12 }}>
+          ({icons.length})
+        </span>
       </div>
       <div
         style={{
@@ -83,7 +85,7 @@ const IconSection = ({
             key={exportName}
             style={{
               alignItems: 'center',
-              border: '1px solid #e7e8eb',
+              border: '1px solid var(--Colors-Use-Neutral-Border)',
               borderRadius: 4,
               display: 'grid',
               gap: 12,
@@ -95,8 +97,8 @@ const IconSection = ({
               <div
                 style={{
                   alignItems: 'center',
-                  background: '#f7f8fa',
-                  border: '1px solid #e7e8eb',
+                  background: 'var(--Colors-Use-Neutral-Bg)',
+                  border: '1px solid var(--Colors-Use-Neutral-Border)',
                   borderRadius: 4,
                   display: 'flex',
                   height: 56,
@@ -120,7 +122,7 @@ const IconSection = ({
             <div style={{ minWidth: 0 }}>
               <div
                 style={{
-                  color: '#353639',
+                  color: 'var(--Colors-Use-Neutral-Text-1-Title)',
                   fontSize: 12,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -128,13 +130,19 @@ const IconSection = ({
               >
                 {name}
               </div>
-              <small style={{ color: '#8c8f95', display: 'block', fontSize: 10 }}>
+              <small
+                style={{
+                  color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
+                  display: 'block',
+                  fontSize: 10,
+                }}
+              >
                 {sourceStatus}
                 {figmaName === null ? ' · Figma name unavailable' : ''}
               </small>
               <code
                 style={{
-                  color: '#8c8f95',
+                  color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
                   display: intrinsicPreview ? 'block' : undefined,
                   fontSize: 11,
                   overflowWrap: intrinsicPreview ? 'anywhere' : undefined,
@@ -142,7 +150,7 @@ const IconSection = ({
               >{`import { ${exportName} } from '@yakit-libs/yakit-ui';`}</code>
               <code
                 style={{
-                  color: '#8c8f95',
+                  color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
                   display: 'block',
                   fontSize: 11,
                   overflowWrap: intrinsicPreview ? 'anywhere' : undefined,
@@ -159,11 +167,22 @@ const IconSection = ({
 const ColorfulIconGallery = () => (
   <section>
     <div style={{ alignItems: 'baseline', display: 'flex', gap: 12, marginBottom: 16 }}>
-      <h2 style={{ color: '#353639', fontSize: 28, lineHeight: 1.2, margin: 0 }}>Colorful</h2>
-      <span style={{ color: '#8c8f95', fontSize: 14 }}>
+      <h2
+        style={{
+          color: 'var(--Colors-Use-Neutral-Text-1-Title)',
+          fontSize: 28,
+          lineHeight: 1.2,
+          margin: 0,
+        }}
+      >
+        Colorful
+      </h2>
+      <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 14 }}>
         Fixed multicolor artwork · intrinsic Figma size
       </span>
-      <span style={{ color: '#8c8f95', fontSize: 12 }}>({colorfulIconRegistry.length})</span>
+      <span style={{ color: 'var(--Colors-Use-Neutral-Text-3-Secondary)', fontSize: 12 }}>
+        ({colorfulIconRegistry.length})
+      </span>
     </div>
     <nav
       aria-label="Colorful icon categories"
@@ -174,10 +193,10 @@ const ColorfulIconGallery = () => (
           href={`#colorful-${category}`}
           key={category}
           style={{
-            background: '#f7f8fa',
-            border: '1px solid #e7e8eb',
+            background: 'var(--Colors-Use-Neutral-Bg)',
+            border: '1px solid var(--Colors-Use-Neutral-Border)',
             borderRadius: 4,
-            color: '#353639',
+            color: 'var(--Colors-Use-Neutral-Text-1-Title)',
             fontSize: 12,
             padding: '6px 8px',
             textDecoration: 'none',
@@ -372,7 +391,7 @@ const StrokeWidthGallery = ({ strokeWidth }: { strokeWidth: number }) => (
         </div>
       ))}
     </div>
-    <p>二维码等轮廓已恢复为可调描边；实心圆点、舷窗等填充细节保留原样。</p>
+    <p>Bug、Add Payload、二维码等图标使用固定填充，线宽参数仅影响实际描边。</p>
   </section>
 );
 
@@ -381,104 +400,4 @@ export const StrokeWidth: StoryObj<typeof StrokeWidthGallery> = {
   args: { strokeWidth: 1.5 },
   argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
   render: (args) => <StrokeWidthGallery {...args} />,
-};
-
-const originalWeightSources = import.meta.glob<string>(
-  '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/original/*.svg',
-  { eager: true, import: 'default', query: '?raw' },
-);
-const revisedWeightIcons = visualWeightReviews.reviews.map(({ exportName, file }) => {
-  const sourceNodeId = file.replace(/\.svg$/, '').replace('-', ':');
-  const icon = outlineIconRegistry.find((entry) => entry.sourceNodeId === sourceNodeId);
-  const original =
-    originalWeightSources[
-      `../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/original/${file}`
-    ];
-  if (!icon || !original) throw new Error(`Missing visual-weight comparison: ${exportName}`);
-  return { ...icon, original };
-});
-
-const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
-  <section style={{ display: 'grid', gap: 24 }}>
-    <p>
-      左侧历史快照保留修复前的问题，供对照；右侧为当前组件，响应下方线宽控制。 每组依次展示
-      16、24、32px。当前线宽：{strokeWidth}。
-    </p>
-    {['light', 'dark'].map((theme) => (
-      <section
-        key={theme}
-        style={{
-          background: theme === 'light' ? '#f8f9fa' : '#202225',
-          color: theme === 'light' ? '#353639' : '#f0f2f5',
-          padding: 20,
-          display: 'grid',
-          gap: 16,
-        }}
-      >
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <span>默认线重参照</span>
-          <HomeOutlined color="inherit" size={24} />
-          <BugOutlined color="inherit" size={24} />
-        </div>
-        {revisedWeightIcons.map(({ Component, exportName, original }) => (
-          <div
-            key={exportName}
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'center' }}
-          >
-            <span style={{ width: 250 }}>{exportName}</span>
-            <figure style={{ margin: 0, display: 'grid', gap: 8 }}>
-              <figcaption>修复前（历史快照）</figcaption>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-                {[16, 24, 32].map((size) => (
-                  <img
-                    key={size}
-                    alt={`${exportName} 修复前 ${size}px`}
-                    width={size}
-                    height={size}
-                    src={`data:image/svg+xml,${encodeURIComponent(original.replace('<svg ', `<svg style="color:${theme === 'light' ? '#353639' : '#f0f2f5'}" `))}`}
-                  />
-                ))}
-              </div>
-            </figure>
-            <span aria-hidden="true">→</span>
-            <figure style={{ margin: 0, display: 'grid', gap: 8 }}>
-              <figcaption>当前组件</figcaption>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-                {[16, 24, 32].map((size) => (
-                  <Component key={size} color="inherit" size={size} svgProps={{ strokeWidth }} />
-                ))}
-              </div>
-            </figure>
-          </div>
-        ))}
-        <p>实心细节与遮挡参照</p>
-        <div style={{ display: 'flex', gap: 24 }}>
-          {outlineIconRegistry
-            .filter(({ exportName }) =>
-              [
-                'ChatOutlined',
-                'QuestionMarkCircleOutlined',
-                'RocketOutlined',
-                'MCPOutlined',
-                'AIOutlined',
-                'StarOffOutlined',
-              ].includes(exportName),
-            )
-            .map(({ Component, exportName }) => (
-              <div key={exportName} style={{ display: 'grid', gap: 8, justifyItems: 'center' }}>
-                <Component color="inherit" size={24} svgProps={{ strokeWidth }} />
-                <small>{exportName}</small>
-              </div>
-            ))}
-        </div>
-      </section>
-    ))}
-  </section>
-);
-
-export const VisualWeight: StoryObj<typeof VisualWeightGallery> = {
-  name: '线条粗细对照',
-  args: { strokeWidth: 1.5 },
-  argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
-  render: (args) => <VisualWeightGallery {...args} />,
 };

@@ -2,12 +2,12 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { build, type Plugin, type Rollup } from 'vite';
+import { build, type Plugin, type PluginOption, type Rollup } from 'vite';
 import { describe, expect, it } from 'vitest';
 
+import outlineSource from '../../config/icon-sources/outline.json';
 import viteConfig from '../../vite.config';
 import vitestConfig from '../../vitest.config';
-import baseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/outline');
@@ -18,12 +18,15 @@ const referencedIds = (source: string) =>
 
 describe('Outline raw fragment contract', () => {
   it('uses deterministic source-specific bases for every referenced fragment', () => {
-    const files = [...baseline.exports.map(({ file }) => file), '46174-9893.svg'];
+    const files = outlineSource.records.map(({ file }) => file);
     const invalid: string[] = [];
 
     for (const file of files) {
       const source = readFileSync(resolve(outlineRoot, file), 'utf8');
-      const fileBase = file.slice(0, -4).replace('-', '_');
+      const imported = outlineSource.records.some(
+        (record) => record.file === file && 'production' in record,
+      );
+      const fileBase = file.slice(0, -4).replace('-', imported ? '' : '_');
       for (const id of referencedIds(source)) {
         if (!new RegExp(`^icon_${fileBase}__[A-Za-z][A-Za-z0-9_-]*_\\d+$`).test(id)) {
           invalid.push(`${file}:${id}`);
@@ -35,7 +38,7 @@ describe('Outline raw fragment contract', () => {
   });
 
   it('keeps each referenced fragment owned by its source SVG', () => {
-    const files = [...baseline.exports.map(({ file }) => file), '46174-9893.svg'];
+    const files = outlineSource.records.map(({ file }) => file);
     const owners = new Map<string, string>();
     const violations: string[] = [];
 
@@ -57,16 +60,19 @@ describe('Shared SVG React transform wiring', () => {
   const fixtureEntry = resolve(packageRoot, 'test/fixtures/icons/transform/entry.ts');
   const pluginName = 'vite-plugin-svgr';
 
-  const configuredPlugins = async () => {
-    const library =
-      typeof viteConfig === 'function'
-        ? await viteConfig({ command: 'build', isPreview: false, isSsrBuild: false, mode: 'test' })
-        : viteConfig;
-    return {
-      Vite: library.plugins ?? [],
-      Vitest: vitestConfig.plugins ?? [],
-    };
+  const collectPlugins = async (options: PluginOption[]): Promise<Plugin[]> => {
+    const plugins: Plugin[] = [];
+    for await (const option of options) {
+      if (Array.isArray(option)) plugins.push(...(await collectPlugins(option)));
+      else if (option) plugins.push(option);
+    }
+    return plugins;
   };
+
+  const configuredPlugins = async () => ({
+    Vite: await collectPlugins(viteConfig.plugins ?? []),
+    Vitest: await collectPlugins(vitestConfig.plugins ?? []),
+  });
 
   const compile = async (plugins: Plugin[]) => {
     const result = (await build({
