@@ -4,7 +4,8 @@
 
 ### Patch Changes
 
-- 03d4e88: - 同步 Outline、Solid 和 Colorful 图标的 Figma 原稿，修正图形、填充、透明度和内部引用，保留原稿中的渐变与内嵌图片。
+- 03d4e88: - 同步 Outline、Solid 和 Colorful 图标的 Figma 原稿，修正图形、填充、透明度和内部引用，保留原稿中的渐变。
+  - 按最新设计移除 `UserAvatarColorful` 和 `OfficialAvatarColorful` 的内嵌头像图片；普通用户头像改为浅色圆底，官方头像保留身份徽章。组件名称、尺寸和导入方式不变。
   - 新增 `MenuExpandOutlined` 和 `MenuCollapseOutlined`，分别用于菜单展开和折叠。已有组件导出名、公开导入路径和 Oldicon 深层路径保持不变。
   - 部分 Outline 恢复为原稿的固定填充轮廓，包括 `BugOutlined`、`AddPayloadOutlined`、`CurrencyDollarOutlined`、`TagOutlined`、`QrcodeOutlined`、`ClipboardCheckOutlined`、`SupportOutlined`、`PresentationChartLineOutlined`、`StatusOfflineOutlined`、`RocketOffOutlined`、`SpeechToTextOutlined` 和 `SpeechToText2Outlined`。这些图标不再通过重建描边实现线宽调整。
   - 更新 Solid 图形：`ImportSolid` 按原稿移除黑白蒙版，`PillSolid` 使用主色填充和 50% 透明度。完善 Colorful 主题颜色映射，Memfit 和 IRify 标志中的文字可随对应主题变量变化，并保留原始颜色作为回退值。
