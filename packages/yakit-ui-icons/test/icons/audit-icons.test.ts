@@ -1,14 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readdirSync,
-  rmSync,
-  statSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,19 +13,11 @@ import {
   ICON_STROKE_WIDTH_POLICY,
 } from '../../scripts/icon-audit-contracts.mjs';
 import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
-import { reviewedOutlineGeometry } from '../../scripts/outline-geometry-overrides.mjs';
 import { planIconStrokeManifests } from '../../scripts/update-icon-stroke-manifests.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const auditScript = resolve(packageRoot, 'scripts/audit-icons.mjs');
-const updaterScript = resolve(packageRoot, 'scripts/update-outline-icon-baseline.mjs');
 const manifest = resolve(packageRoot, 'config/icon-sources/outline.json#manifest');
-const placementProvenance = resolve(packageRoot, 'config/icon-sources/outline.json#placement');
-const rawProvenance = resolve(packageRoot, 'config/icon-sources/outline.json#raw');
-const prechangeBaseline = resolve(
-  packageRoot,
-  'test/fixtures/icons/reference/outline-prechange-baseline-v1.json',
-);
 const networkGuard = resolve(packageRoot, 'test/icons/helpers/deny-network.cjs');
 const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
 const validOutline =
@@ -46,7 +30,6 @@ const auditIcons = (options: Parameters<typeof auditWithPolicy>[0]) =>
     ...options,
     policyOverride: { ...getIconAuditPolicy('outline-v1'), expectedCounts: fixtureCounts },
   });
-const liveCounts = getIconAuditPolicy('outline-v1').expectedCounts;
 
 const completeManifest = (source = validOutline) => {
   const normalizedAstSha256 = sha256(
@@ -140,7 +123,8 @@ const runAudit = () => {
     encoding: 'utf8',
     env: {
       ...process.env,
-      NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --require=${networkGuard}`.trim(),
+      NODE_OPTIONS:
+        `${process.env.NODE_OPTIONS ?? ''} --require=${JSON.stringify(networkGuard)}`.trim(),
     },
   });
   return { status: result.status, stderr: result.stderr, stdout: result.stdout };
@@ -475,171 +459,6 @@ describe('Outline index and manifest failures', () => {
       const result = await auditIcons({ manifestPath, root });
       expect(result.failures.map(({ token }) => token)).toContain('FIGMA_RAW_HASH_MISMATCH');
     });
-  });
-
-  it('protects the unrelated Basic manifest by a frozen digest', async () => {
-    await withFixture(
-      { 'basic.json': '{"changed":true}', 'outline/example.svg': validOutline },
-      async (root) => {
-        const value = completeManifest();
-        value.sourceEvidence = { basicManifestSha256: sha256('{"original":true}') };
-        const manifestPath = resolve(root, 'manifest.json');
-        writeFileSync(manifestPath, JSON.stringify(value));
-        const result = await auditIcons({
-          basicManifestPath: resolve(root, 'basic.json'),
-          manifestPath,
-          root,
-        });
-        expect(result.failures.map(({ token }) => token)).toContain('BASIC_MANIFEST_CHANGED');
-      },
-    );
-  });
-});
-
-describe('Outline manifest updater provenance gate', () => {
-  const runUpdater = (
-    output: string,
-    {
-      figmaRawProvenance = rawProvenance,
-      reviewId = 'audit-test',
-      reviewedBy = 'vitest',
-      ci,
-      replaceExisting = false,
-    }: {
-      figmaRawProvenance?: string;
-      reviewId?: string;
-      reviewedBy?: string;
-      ci?: string;
-      replaceExisting?: boolean;
-    } = {},
-  ) => {
-    // Successful update cases write only to their temporary directories. Simulate
-    // local execution in the child without changing the test runner's CI setting.
-    const env = { ...process.env };
-    delete env.CI;
-    if (ci !== undefined) env.CI = ci;
-    return spawnSync(
-      process.execPath,
-      [
-        updaterScript,
-        '--source-inventory',
-        placementProvenance,
-        '--prechange-baseline',
-        prechangeBaseline,
-        '--figma-raw-provenance',
-        figmaRawProvenance,
-        '--review-id',
-        reviewId,
-        '--reviewed-by',
-        reviewedBy,
-        '--output',
-        output,
-        ...(replaceExisting ? ['--replace-existing'] : []),
-      ],
-      { cwd: packageRoot, encoding: 'utf8', env },
-    );
-  };
-
-  it.each([false, true])('prohibits CI writes even with an existing output: %s', (existing) => {
-    const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
-    const parentCI = process.env.CI;
-    try {
-      const output = resolve(root, 'manifest.json');
-      if (existing) writeFileSync(output, '{"preserve":"existing baseline"}\n');
-      const before = snapshot([root]);
-      const result = runUpdater(output, { ci: 'true', replaceExisting: existing });
-      expect(result.status).toBe(2);
-      expect(result.stderr).toContain('baseline updates are prohibited in CI');
-      expect(result.stdout).not.toContain('OUTLINE_BASELINE_UPDATED');
-      expect(snapshot([root])).toEqual(before);
-      expect(process.env.CI).toBe(parentCI);
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
-  });
-
-  it('writes only a complete independently matched manifest', () => {
-    const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
-    const parentCI = process.env.CI;
-    try {
-      const output = resolve(root, 'manifest.json');
-      const result = runUpdater(output);
-      expect(result).toMatchObject({ status: 0, stderr: '' });
-      expect(process.env.CI).toBe(parentCI);
-      const value = JSON.parse(readIconInputSync(output, 'utf8'));
-      expect(value).toMatchObject({ complete: true, provenanceComplete: true });
-      expect(value.strokeWidthPolicy).toEqual(ICON_STROKE_WIDTH_POLICY);
-      expect(value.symbols).toHaveLength(liveCounts.currentSymbols);
-      expect(value.placements).toHaveLength(liveCounts.placements);
-      expect(value.instanceVerification).toHaveLength(3);
-      expect(
-        new Set(value.symbols.map((symbol: Record<string, string>) => symbol.exportName)).size,
-      ).toBe(liveCounts.publicExports);
-      expect(value.legacySources).toEqual([]);
-      expect(value).not.toHaveProperty('relativeCurrentColorExceptions');
-      expect(
-        value.placements.every(
-          (placement: Record<string, string>) =>
-            placement.mainComponentId && placement.overrideHash,
-        ),
-      ).toBe(true);
-      expect(
-        value.symbols.every((record: Record<string, string>) => {
-          const reviewed = reviewedOutlineGeometry(record);
-          return (
-            (Boolean(reviewed) || record.figmaNormalizedAstSha256 === record.normalizedAstSha256) &&
-            record.localNormalizedAstSha256 === record.normalizedAstSha256 &&
-            (Boolean(reviewed) || record.figmaGeometrySha256 === record.geometrySha256) &&
-            record.localGeometrySha256 === record.geometrySha256 &&
-            record.geometryReviewId === reviewed
-          );
-        }),
-      ).toBe(true);
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
-  });
-
-  it('fails before writing when independent Figma/local geometry differs', () => {
-    const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
-    try {
-      const altered = JSON.parse(readIconInputSync(rawProvenance, 'utf8'));
-      altered.components[0].svg = altered.components[0].svg.replace('M3 8', 'M4 8');
-      const alteredPath = resolve(root, 'altered.json');
-      const output = resolve(root, 'manifest.json');
-      writeFileSync(alteredPath, JSON.stringify(altered));
-      const result = runUpdater(output, { figmaRawProvenance: alteredPath });
-      expect(result.status).toBe(2);
-      expect(result.stderr).toContain('normalized AST mismatch');
-      expect(existsSync(output)).toBe(false);
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
-  });
-
-  it('reproduces the committed derived manifest data from committed provenance', () => {
-    const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-updater-'));
-    try {
-      const output = resolve(root, 'manifest.json');
-      const committed = JSON.parse(readIconInputSync(manifest, 'utf8'));
-      const { reviewId, reviewedBy } = committed.updateProvenance;
-      const result = runUpdater(output, { reviewId, reviewedBy });
-      expect(result).toMatchObject({ status: 0, stderr: '' });
-      const generated = JSON.parse(readIconInputSync(output, 'utf8'));
-      // "added" records import history; reconstruction independently reports geometric matching.
-      for (const symbol of generated.symbols) {
-        const registered = committed.symbols.find(
-          (entry: { file: string; disposition: string }) => entry.file === symbol.file,
-        );
-        if (registered.disposition === 'added') {
-          expect(symbol.disposition).toBe('matching');
-          symbol.disposition = 'added';
-        }
-      }
-      expect({ ...generated, updateProvenance: committed.updateProvenance }).toEqual(committed);
-    } finally {
-      rmSync(root, { force: true, recursive: true });
-    }
   });
 });
 

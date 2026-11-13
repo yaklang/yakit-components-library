@@ -10,32 +10,21 @@
   "include": [
     "../vite-env.d.ts",
     "icons/audit-icons.test.ts",
-    "icons/helpers/icon-visual-weight-reviews.ts",
     "icons/icon-figma-names.test.ts",
     "icons/icon-paint-semantics.test.ts",
-    "icons/outline-sync-nov06.test.ts",
     "components/icon-adjustable-runtime.test.tsx",
     "components/icon-fragment-runtime.test.tsx",
-    "icons/baseline-integrity.test.ts",
     "icons/icon-adjustable-audit.test.ts",
     "icons/icon-adjustable-ssr.test.ts",
-    "icons/icon-reviewed-paint.test.ts",
     "icons/icon-stroke-width.test.ts",
     "icons/icon-transform.test.ts",
-    "icons/icon-visual-weight-geometry.test.ts",
-    "icons/icon-visual-weight.test.ts",
-    "icons/solid-baseline-integrity.test.ts",
     "icons/helpers/current-figma-source.ts",
-    "icons/helpers/review-candidate-source.ts",
     "icons/icon-source-structure.test.ts",
     "components/solid-icon-fragment-runtime.test.tsx",
-    "icons/icon-adjustable-geometry.test.ts",
     "icons/solid-fragment-normalization.test.ts",
     "icons/solid-icon-ssr-fixture.test.ts",
     "icons/solid-paint-semantics.test.ts",
     "icons/solid-source-sync.test.ts",
-    "icons/avatar-badge-weight.test.ts",
-    "icons/colorful-contracts.test.ts",
-    "icons/colorful-outline-weight.test.ts"
+    "icons/colorful-contracts.test.ts"
   ]
 }

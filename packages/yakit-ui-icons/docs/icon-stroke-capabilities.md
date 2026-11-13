@@ -12,20 +12,20 @@ Outline 中实际存在的描边默认使用 1.5 SVG 单位，支持 `svgProps.s
 
 用户要求以远端代码为准后，以下 12 个 Outline 保留原稿的填充轮廓，登记为 `fixed-fill`。它们没有实际描边，`strokeWidth` 无法改变其粗细，传入 0 也不会隐藏填充。
 
-| 固定填充图标 |
-| --- |
-| BugOutlined |
-| AddPayloadOutlined |
-| CurrencyDollarOutlined |
-| TagOutlined |
-| QrcodeOutlined |
-| ClipboardCheckOutlined |
-| SupportOutlined |
+| 固定填充图标                  |
+| ----------------------------- |
+| BugOutlined                   |
+| AddPayloadOutlined            |
+| CurrencyDollarOutlined        |
+| TagOutlined                   |
+| QrcodeOutlined                |
+| ClipboardCheckOutlined        |
+| SupportOutlined               |
 | PresentationChartLineOutlined |
-| StatusOfflineOutlined |
-| RocketOffOutlined |
-| SpeechToTextOutlined |
-| SpeechToText2Outlined |
+| StatusOfflineOutlined         |
+| RocketOffOutlined             |
+| SpeechToTextOutlined          |
+| SpeechToText2Outlined         |
 
 `RocketLaunchOffOutlined`、`DataComparisonOutlined` 包含填充与描边，只有描边部分受线宽参数影响。`StarOffOutlined`、`RocketLaunchOffOutlined` 使用远端的白色覆盖线，在深色或透明背景上会保留该白色，不再替换为本地透明擦除蒙版。
 
@@ -38,5 +38,3 @@ Outline 中实际存在的描边默认使用 1.5 SVG 单位，支持 `svgProps.s
 ## 校验和历史证据
 
 当前图标对照当前 Figma 原始 SVG 检查标签、路径、颜色语义和线宽契约。旧描边重建的审核、图片和度量仍是历史证据，不能作为新原稿的当前审核结论。
-
-被同步替代的 14 个历史审核候选源码保存在图标包 `test/fixtures/icons/reference/visual-weight-v2/source-before-native-sync/`；这些是同步前的原始字节，并已按原有审核哈希核验，没有重新生成或重拍历史基线。历史几何测试使用这些候选，当前图标由原稿一致性、固定填充及运行时测试覆盖。

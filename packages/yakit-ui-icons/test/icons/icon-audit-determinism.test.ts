@@ -20,7 +20,6 @@ const trackedRoots = [
   resolve(packageRoot, 'src/solid/index.tsx'),
   resolve(packageRoot, 'config/icon-sources/solid.json'),
   resolve(packageRoot, 'config/icon-sources/solid.json'),
-  resolve(packageRoot, 'test/fixtures/icons/reference/solid-local-prechange-controls-v1.json'),
 ];
 const snapshot = () => {
   const result: Record<string, string> = {};
@@ -56,9 +55,8 @@ const runAudit = () => {
       encoding: 'utf8',
       env: {
         ...process.env,
-        NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --require=${resolve(
-          packageRoot,
-          'test/icons/helpers/deny-network.cjs',
+        NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --require=${JSON.stringify(
+          resolve(packageRoot, 'test/icons/helpers/deny-network.cjs'),
         )}`.trim(),
       },
     },

@@ -19,13 +19,16 @@ replace the deferral policy, move the deferred Changeset documents back to
 `.changeset`, and review the resulting version and package changes. Do not discard
 them or treat the UI changes as already published.
 
-The checked-in `scripts/release/release-deferral-policy.json` permits only the
-recorded icons release identity and exact UI source, lock, toolchain and config
-hashes against the recorded UI release baseline. Further changes require a new
-reviewed policy or a normal release of all observed packages. Consumer verification
-uses the frozen registry UI counterpart rather than the deferred UI build.
+The checked-in `scripts/release/release-deferral-policy.json` declares the selected
+icons release and the UI version that remains deferred. Its v2 schema does not
+freeze current source, lockfile, toolchain or configuration hashes. Developers
+maintain release intent and pending Changesets; impact verification computes
+input fingerprints automatically. Consumer verification still uses the recorded
+published UI counterpart, and verifies its package bytes.
 
-## Planned icons 0.3.1 release
+## 历史计划：icons 0.3.1 发布
+
+以下为先前的发布计划。当前版本以文末的新计划和延期策略为准。
 
 Only `@yakit-libs/yakit-ui-icons` is scheduled for version `0.3.1`: React 19
 compatibility, four new Outline arrow icons, and Figma-bound theme colors for
@@ -69,11 +72,13 @@ Version Packages 消耗 Changeset 后，检查仍要求 icons 为 `0.3.1`、UI �
 PR CI 和发布模式选择都会运行此检查；打包前还会核对 Changesets 的实际发布计划。
 即使实际改动和发布名单都包含 UI，发布影响检查也不能跳过有效的延期策略。
 
-后续 UI 源码或发布配置继续变化时，需要重新审查并更新对应绑定，不能仅重算哈希。
+后续 UI 源码、测试或工具配置变化无需更新源码哈希；如果改变发布包名单或目标版本，需要明确更新发布意图。
 恢复 UI 发布时，移除 `ignore` 中的 UI 和本次延期策略，恢复这里的 UI Changeset，
 再检查实际升级级别、icons 的安装版本及所有累计更新说明。
 
-## 2026-11-09 UI 延期源码哈希复核
+## 历史记录：2026-11-09 UI 延期源码哈希复核
+
+以下描述旧版 v1 的处理过程。当前 v2 已取消这些手动源码哈希绑定，不再按下述方式维护。
 
 发布工作流 `42591951442` 在影响面校验阶段被阻断：策略仍绑定 `1358235`
 时的 UI 源码，而后续 Storybook 和测试改动没有纳入该绑定。此次以
@@ -102,3 +107,13 @@ UI 的 Storybook、测试也在源码绑定范围内。未跟踪的构建输出�
 
 本次修复不添加 Changeset、不再次升级版本。icons 已由 #48 升至 0.3.1，
 修复 PR 合入 main 后由 push 自动重新进入发布流程；完整发布校验通过后才发布。
+
+## 2026-11-13 发布范围检查简化
+
+开发者只维护这次发布哪个包、哪个版本，以及延期包的变更说明。
+`pnpm release:deferral-check` 核对 Changeset 版本计划、包版本和忽略名单；
+UI 继续开发、测试或展示页面调整，不要求手动刷新哈希。
+发布阶段自动计算本次输入和产物的哈希，保证验证结果对应本次提交，上传的包对应已验证产物。
+实际发布名单意外包含 UI、版本不一致、产物被替换等情况仍会失败。
+
+当前已有 icons patch Changeset，目标版本为 `0.3.2`；延期策略已同步为只发布 icons `0.3.2`，UI 保持 `0.2.3`。包版本仍交由 Changesets 的版本流程更新。

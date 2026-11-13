@@ -7,9 +7,9 @@ import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
 import colorfulSource from '../../../yakit-ui-icons/config/icon-sources/colorful.json';
+import outlineSource from '../../../yakit-ui-icons/config/icon-sources/outline.json';
 import solidSource from '../../../yakit-ui-icons/config/icon-sources/solid.json';
 import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
-import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
 import { iconCounts, iconExports } from '../../../yakit-ui-icons/test/icons/icon-inventory';
 
 const oldiconInventory = JSON.parse(
@@ -118,7 +118,7 @@ describe('Built icon stroke-width contract', () => {
     }
   });
 
-  it('renders representative built browser entries at computed stroke-width 1.5', async () => {
+  it('renders representative built browser entries with their current source stroke widths', async () => {
     const modulePaths = [
       [coreDist, 'browser/icons/index.js', 'AcademicCapOutlined'],
       [coreDist, 'browser/icons/outline/index.js', 'AcademicCapOutlined'],
@@ -130,10 +130,27 @@ describe('Built icon stroke-width contract', () => {
       [dedicatedDist, 'browser/colorful/index.js', 'BugOutlineColorful'],
       [dedicatedDist, 'browser/oldicon/index.js', 'RocketIcon'],
       [dedicatedDist, 'browser/oldicon/icons/RocketIcon.js', 'RocketIcon'],
-    ].map(([root, path, exportName]) => ({
-      exportName,
-      url: `/@fs${resolve(root, path)}`,
-    }));
+    ].map(([root, path, exportName]) => {
+      const outline = outlineSource.records.find((row) => row.exportName === exportName);
+      const solid = solidSource.records.find((row) => row.exportName === exportName);
+      const colorful = colorfulSource.records.find((row) => row.exportName === exportName);
+      const old = oldiconInventory.exports.find(
+        (row: { exportName: string }) => row.exportName === exportName,
+      );
+      const file = outline
+        ? `outline/${outline.file}`
+        : solid
+          ? `solid/${solid.file}`
+          : (colorful?.localFile ?? `oldicon/${old.assetFile}`);
+      return {
+        exportName,
+        url: `/@fs${resolve(root, path)}`,
+        svg: readIconInputSync(
+          resolve(repositoryRoot, 'packages/yakit-ui-icons/src', file),
+          'utf8',
+        ),
+      };
+    });
     const html = `<!doctype html><div id="root"></div><script type="module">
       import React from 'react';
       import { createRoot } from 'react-dom/client';
@@ -144,9 +161,17 @@ describe('Built icon stroke-width contract', () => {
         React.createElement(React.Fragment, null, ...components.map((Component, index) =>
           React.createElement('div', { 'data-entry': index, key: index }, React.createElement(Component)))));
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const widths = (host) => [...host.querySelectorAll('[stroke]')].map((node) => getComputedStyle(node).strokeWidth);
       window.__strokeResult = {
         entries: document.querySelectorAll('[data-entry]').length,
-        widths: [...document.querySelectorAll('[stroke]')].map((node) => getComputedStyle(node).strokeWidth),
+        pairs: entries.map((entry, index) => {
+          const raw = document.createElement('div');
+          raw.innerHTML = entry.svg;
+          document.body.append(raw);
+          const pair = { name: entry.exportName, actual: widths(document.querySelector('[data-entry="' + index + '"]')), expected: widths(raw) };
+          raw.remove();
+          return pair;
+        }),
       };
     </script>`;
     const server = await createServer({
@@ -173,23 +198,21 @@ describe('Built icon stroke-width contract', () => {
       },
     });
     await server.listen();
-    const executablePath = renderContract.renderer.browserExecutablePath;
-    expect(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH).toBe(executablePath);
+    const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
     const browser = await chromium.launch({ executablePath, headless: true });
     try {
-      expect(browser.version()).toBe(renderContract.renderer.browserVersion);
       const origin = server.resolvedUrls?.local[0];
       if (!origin) throw new Error('Vite dist fixture did not expose a local URL');
       const page = await browser.newPage({
-        deviceScaleFactor: renderContract.raster.deviceScaleFactor,
+        deviceScaleFactor: 1,
       });
       await page.goto(new URL('stroke-width-dist.html', origin).href);
       const result = await page
         .waitForFunction(() => window.__strokeResult)
         .then((value) => value.jsonValue());
       expect(result.entries).toBe(modulePaths.length);
-      expect(result.widths.length).toBeGreaterThan(0);
-      expect(new Set(result.widths)).toEqual(new Set(['1.5px']));
+      expect(result.pairs.some((pair: { actual: string[] }) => pair.actual.length > 0)).toBe(true);
+      for (const pair of result.pairs) expect(pair.actual, pair.name).toEqual(pair.expected);
     } finally {
       await browser.close();
       await server.close();

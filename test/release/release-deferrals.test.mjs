@@ -417,3 +417,56 @@ test("non-matching release identities do not apply or fetch historical policy", 
   assert.deepEqual(result, []);
   assert.equal(called, false);
 });
+
+function intentPolicy() {
+  const value = policy();
+  value.schemaId = "yakit-ui-release-deferral/v2";
+  for (const field of [
+    "headSourceHash",
+    "headLockHash",
+    "headToolchainHash",
+    "headConfigHash",
+  ])
+    delete value.deferred[0][field];
+  return value;
+}
+
+test("v2 records generated fingerprints without requiring policy updates", () => {
+  const intent = intentPolicy();
+  const changed = probe();
+  changed.headSourceHash = hash("e");
+  const value = buildDeferredImpact(intent, [changed]);
+  assert.equal(
+    validateDeferredImpact(value, {
+      releases: intent.releases,
+      headRevision: changed.headRevision,
+    }),
+    value,
+  );
+  assert.throws(
+    () =>
+      validateDeferredImpact(value, {
+        releases: [{ name: UI, version: "0.2.3" }],
+      }),
+    /release context/,
+  );
+  assert.throws(
+    () => validateDeferredImpact({ ...value, policySha256: hash("f") }),
+    /policy hash mismatch/,
+  );
+  assert.throws(
+    () =>
+      buildDeferredImpact(intent, [{ ...changed, headSourceHash: "short" }]),
+    /incomplete/,
+  );
+  assert.throws(
+    () => buildDeferredImpact(intent, [{ ...changed, tarball: "ui.tgz" }]),
+    /publishable artifact fields/,
+  );
+  const stale = intentPolicy();
+  stale.deferred[0].headSourceHash = hash("e");
+  assert.throws(
+    () => buildDeferredImpact(stale, [changed]),
+    /unsupported or missing fields/,
+  );
+});

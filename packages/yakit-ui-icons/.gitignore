@@ -2,3 +2,5 @@ node_modules/
 dist/
 .turbo/
 test-results/
+# Browser failure diagnostics are local output, not visual baselines.
+test/components/__screenshots__/

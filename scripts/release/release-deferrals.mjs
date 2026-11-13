@@ -6,7 +6,14 @@ import {
   PUBLIC_PACKAGES,
 } from "./impact-probes.mjs";
 
-const SCHEMA_ID = "yakit-ui-release-deferral/v1";
+const SCHEMA_ID = "yakit-ui-release-deferral/v2";
+const LEGACY_SCHEMA_ID = "yakit-ui-release-deferral/v1";
+const INPUT_HASH_FIELDS = [
+  "headSourceHash",
+  "headLockHash",
+  "headToolchainHash",
+  "headConfigHash",
+];
 const HASH_PATTERN = /^[0-9a-f]{64}$/i;
 const REVISION_PATTERN = /^[0-9a-f]{40}$/i;
 const VERSION_PATTERN =
@@ -54,7 +61,7 @@ function validateFollowUpPath(value) {
 
 export function validateDeferralPolicy(policy) {
   exactKeys(policy, ["schemaId", "releases", "deferred"], "deferral policy");
-  if (policy.schemaId !== SCHEMA_ID)
+  if (![SCHEMA_ID, LEGACY_SCHEMA_ID].includes(policy.schemaId))
     throw new Error("unsupported release deferral policy");
   if (!Array.isArray(policy.releases) || policy.releases.length !== 1)
     throw new Error("deferral policy must contain exactly one release");
@@ -71,10 +78,7 @@ export function validateDeferralPolicy(policy) {
       "package",
       "version",
       "baseRevision",
-      "headSourceHash",
-      "headLockHash",
-      "headToolchainHash",
-      "headConfigHash",
+      ...(policy.schemaId === LEGACY_SCHEMA_ID ? INPUT_HASH_FIELDS : []),
       "reason",
       "followUpPath",
       "distTag",
@@ -89,14 +93,11 @@ export function validateDeferralPolicy(policy) {
     throw new Error("deferred package version is invalid");
   if (!REVISION_PATTERN.test(deferred.baseRevision ?? ""))
     throw new Error("deferred package baseRevision is invalid");
-  for (const field of [
-    "headSourceHash",
-    "headLockHash",
-    "headToolchainHash",
-    "headConfigHash",
-  ])
-    if (!HASH_PATTERN.test(deferred[field] ?? ""))
-      throw new Error(`deferred package ${field} is invalid`);
+  // Retained v1 release evidence keeps its original verification rules.
+  if (policy.schemaId === LEGACY_SCHEMA_ID)
+    for (const field of INPUT_HASH_FIELDS)
+      if (!HASH_PATTERN.test(deferred[field] ?? ""))
+        throw new Error(`deferred package ${field} is invalid`);
   if (typeof deferred.reason !== "string" || deferred.reason.trim() === "")
     throw new Error("deferred package reason is required");
   validateFollowUpPath(deferred.followUpPath);
@@ -118,7 +119,7 @@ export function validateDeferralPolicy(policy) {
   return policy;
 }
 
-function validateProbe(probe, deferred, headRevision) {
+function validateProbe(probe, deferred, headRevision, schemaId) {
   assertImpactOutputPublishSafe({ impactProbeSet: [probe] });
   if (
     Object.keys(probe).some(
@@ -136,14 +137,14 @@ function validateProbe(probe, deferred, headRevision) {
     throw new Error("deferred impact probe baseRevision is invalid");
   if (probe.baseRevision !== deferred.baseRevision)
     throw new Error("deferred impact probe baseRevision mismatch");
-  for (const field of [
-    "headSourceHash",
-    "headLockHash",
-    "headToolchainHash",
-    "headConfigHash",
-  ])
-    if (probe[field] !== deferred[field])
-      throw new Error(`deferred impact probe ${field} mismatch`);
+  for (const field of INPUT_HASH_FIELDS) {
+    if (schemaId === LEGACY_SCHEMA_ID) {
+      if (probe[field] !== deferred[field])
+        throw new Error(`deferred impact probe ${field} mismatch`);
+    } else if (!HASH_PATTERN.test(probe[field] ?? "")) {
+      throw new Error(`deferred impact probe ${field} is incomplete`);
+    }
+  }
   for (const field of ["sourceHash", "lockHash", "toolchainHash", "configHash"])
     if (!HASH_PATTERN.test(probe[field] ?? ""))
       throw new Error(`deferred impact probe ${field} is incomplete`);
@@ -170,7 +171,9 @@ export function assertDeferredReleaseScope(policy, releases) {
       })),
     ) !== JSON.stringify(policy.releases)
   )
-    throw new Error("release context does not exactly match deferral policy");
+    throw new Error(
+      `release context does not exactly match deferral policy: expected ${JSON.stringify(policy.releases)}, actual ${JSON.stringify(releases)}. Check the Changesets, package versions and intended release list.`,
+    );
 }
 
 export function validateDeferredImpact(
@@ -189,7 +192,12 @@ export function validateDeferredImpact(
     throw new Error("deferral policy hash mismatch");
   if (!Array.isArray(evidence.probes) || evidence.probes.length !== 1)
     throw new Error("deferral evidence must contain exactly one impact probe");
-  validateProbe(evidence.probes[0], policy.deferred[0], headRevision);
+  validateProbe(
+    evidence.probes[0],
+    policy.deferred[0],
+    headRevision,
+    policy.schemaId,
+  );
 
   if (releases !== undefined) assertDeferredReleaseScope(policy, releases);
   if (compatibilityBaselineSet !== undefined) {

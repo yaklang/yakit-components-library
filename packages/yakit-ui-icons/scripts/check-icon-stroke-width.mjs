@@ -1,12 +1,9 @@
-// Daily, read-only stroke validation. Retired migration code is archived in docs/icon-history/.
+// Daily, read-only validation of the current Outline stroke policy.
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readIconSources, sourceFiles } from './icon-source-data.mjs';
-import {
-  normalizeSvgStrokeWidth,
-  svgStrokeWidths,
-} from './icon-stroke-width.mjs';
+import { normalizeSvgStrokeWidth, svgStrokeWidths } from './icon-stroke-width.mjs';
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sourceDirectory = 'config/icon-sources';

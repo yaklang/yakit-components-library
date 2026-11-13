@@ -193,7 +193,9 @@ export async function planSourceImport(input, root = packageRoot) {
     }
     const production = {
       strategy: 'figma-svg-v1',
-      ...(icon.preserveSourceGeometry || existing?.production?.geometry === 'source'
+      ...(icon.preserveSourceGeometry ||
+      existing?.production?.geometry === 'source' ||
+      (family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg))
         ? {
             geometry: 'source',
             ...(family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg)

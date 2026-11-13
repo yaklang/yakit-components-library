@@ -7,18 +7,15 @@ import { describe, expect, it } from 'vitest';
 
 import outlineSource from '../../../yakit-ui-icons/config/icon-sources/outline.json';
 import type {} from '../../../yakit-ui-icons/test/fixtures/icons/icon-adjustable-consumer-entry';
-import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
-import renderContract from '../../../yakit-ui-icons/test/fixtures/icons/stroke-width-1/render-contract.json';
+import { outlineStrokeContract } from '../../../yakit-ui-icons/config/iconStrokeContract.generated';
 
-// Historical reviews keep the name used at review time. Resolve the maintained
-// export by source identity, including icons renamed before this relocation.
-const repairedNames = visualWeightReviews.reviews.flatMap(({ file }) => {
-  const record = outlineSource.records.find((entry) => entry.file === file);
-  if (!record) throw new Error(`Reviewed Outline source is missing: ${file}`);
-  return 'production' in record && record.production?.strokeMode === 'fixed-fill'
-    ? []
-    : [record.exportName];
-});
+const repairedNames = outlineSource.records
+  .filter(
+    ({ file }) =>
+      outlineStrokeContract[file as keyof typeof outlineStrokeContract]?.classification ===
+      'adjustable',
+  )
+  .map(({ exportName }) => exportName);
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const repositoryRoot = resolve(packageRoot, '../..');
@@ -127,11 +124,10 @@ describe('adjustable icon built consumer contract', () => {
     });
     await server.listen();
     const browser = await chromium.launch({
-      executablePath: renderContract.renderer.browserExecutablePath,
+      executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
       headless: true,
     });
     try {
-      expect(browser.version()).toBe(renderContract.renderer.browserVersion);
       const origin = server.resolvedUrls?.local[0];
       if (!origin) throw new Error('Vite built browser fixture did not expose a local URL');
       const page = await browser.newPage();

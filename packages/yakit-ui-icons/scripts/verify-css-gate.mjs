@@ -52,7 +52,10 @@ async function installPackedView({ fixtureRoot, packageName, packageRoot }) {
   const require = createRequire(path.join(packageRoot, 'package.json'));
   const manifest = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'));
   if (manifest.dependencies?.['@yakit-libs/yakit-ui-icons']) {
-    const iconsRoot = path.resolve(path.dirname(require.resolve('@yakit-libs/yakit-ui-icons/icon.css')), '..');
+    const iconsRoot = path.resolve(
+      path.dirname(require.resolve('@yakit-libs/yakit-ui-icons/icon.css')),
+      '..',
+    );
     const iconsView = path.join(fixtureRoot, 'node_modules/@yakit-libs/yakit-ui-icons');
     await mkdir(iconsView, { recursive: true });
     await cp(path.join(iconsRoot, 'dist'), path.join(iconsView, 'dist'), { recursive: true });
@@ -60,7 +63,7 @@ async function installPackedView({ fixtureRoot, packageName, packageRoot }) {
   }
   const reactRoot = path.dirname(require.resolve('react/package.json'));
   const reactLink = path.join(fixtureRoot, 'node_modules', 'react');
-  await symlink(reactRoot, reactLink, 'dir');
+  await symlink(reactRoot, reactLink, process.platform === 'win32' ? 'junction' : 'dir');
 }
 
 async function runNodeSsr({ packageName, packageRoot, specifier, exportName }) {
@@ -306,7 +309,10 @@ export async function verifyIconCssGate({ entries, packageName, packageRoot }) {
       continue;
     }
     const browserSource = await readFile(path.join(packageRoot, contract.browser), 'utf8');
-    if ((!forwarding && !browserSource.includes('icon.css')) || !browserSource.includes('export * from')) {
+    if (
+      (!forwarding && !browserSource.includes('icon.css')) ||
+      !browserSource.includes('export * from')
+    ) {
       failures.push(`${subpath} browser facade must import icon.css and re-export runtime JS`);
     }
     const runtimeSource = await readFile(path.join(packageRoot, contract.import), 'utf8');

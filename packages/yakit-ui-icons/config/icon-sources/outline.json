@@ -25,15 +25,8 @@
       "provenanceComplete": true,
       "timestampFree": true,
       "sourceInventorySha256": "deb85a6b603a58e59dfaa8f9bb4af84bdc581f2ae267c2266937b310547287dd",
-      "prechangeBaselineSha256": "362a76e87d66a2977aa8cee810a52136409594ac7015c556108a1ebb75586842",
-      "basicManifestSha256": "da79aa54d7c8c0f5eb6167709cc3fb7fc2cd8ee472fc0c24a228788172333f53",
       "figmaRawProvenanceSha256": "8cff0c0345e469231f16d641bcd977cc8fe65c6c14b6356b987cdde3fa78e32d",
       "placementProvenanceSha256": "deb85a6b603a58e59dfaa8f9bb4af84bdc581f2ae267c2266937b310547287dd"
-    },
-    "updateProvenance": {
-      "reviewId": "icon-stroke-width-1",
-      "reviewedBy": "codex",
-      "updater": "scripts/update-icon-stroke-manifests.mjs"
     },
     "semanticEraseNormalizations": [
       {

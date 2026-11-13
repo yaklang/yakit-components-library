@@ -1,91 +1,36 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const packageJson = JSON.parse(readFileSync(resolve(packageRoot, 'package.json'), 'utf8')) as {
+const root = fileURLToPath(new URL('../../', import.meta.url));
+const { scripts } = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as {
   scripts: Record<string, string>;
 };
-const scripts = packageJson.scripts;
 
-const plannedNodeTests = readdirSync(resolve(packageRoot, 'test/icons'))
-  .filter((file) => file.startsWith('solid-') && file.endsWith('.test.ts'))
-  .sort();
-const plannedBrowserTests = readdirSync(resolve(packageRoot, 'test/components'))
-  .filter((file) => file.startsWith('solid-icon-') && file.endsWith('.test.tsx'))
-  .sort();
-
-describe('icon package script coverage', () => {
-  it('wires both family audits through explicit immutable policies', () => {
-    expect(scripts['audit:icons:outline']).toContain('--policy outline-v1');
-    expect(scripts['audit:icons:outline']).toContain('config/icon-sources/outline.json#manifest');
-    expect(scripts['audit:icons:solid']).toContain('--policy solid-v1');
-    expect(scripts['audit:icons:solid']).toContain('config/icon-sources/solid.json#manifest');
-    expect(scripts['audit:icons:solid']).toContain('config/icon-sources/solid.json#raw');
-    expect(scripts['audit:icons:solid']).toContain('config/icon-sources/solid.json#placement');
-    expect(scripts['audit:icons:colorful']).toBe(
-      'node scripts/colorful-audit.mjs && node scripts/colorful-entry-generator.mjs',
+describe('icon command coverage', () => {
+  it('runs node tests before browser tests, so SSR fixtures are ready without repeating suites', () => {
+    expect(scripts['test:ci']).toBe('pnpm run test:node && pnpm run test:browser');
+    expect(readFileSync(resolve(root, 'vitest.node.config.ts'), 'utf8')).toContain(
+      'test/icons/**/*.test.ts',
     );
-    expect(scripts['audit:icons']).toBe(
-      'pnpm run audit:icons:stroke && pnpm run audit:icons:adjustable && pnpm run audit:icons:outline && pnpm run audit:icons:solid && pnpm run audit:icons:colorful',
+    expect(readFileSync(resolve(root, 'vitest.config.ts'), 'utf8')).toContain(
+      'test/components/**/*.test.tsx',
     );
   });
-
-  it('checks all production stroke widths and executes compatibility and runtime regressions', () => {
-    expect(scripts['audit:icons:stroke']).toBe('node scripts/check-icon-stroke-width.mjs --check');
-    expect(scripts['test:ci']).toContain('pnpm run audit:icons:stroke');
-    expect(scripts['test:ci']).toContain('pnpm run test:icon-stroke-width');
-    for (const file of [
-      'icon-stroke-width.test.ts',
-      'oldicon-stroke-width.test.ts',
-      'icon-stroke-width-ssr.test.ts',
-    ])
-      expect(scripts['test:icon-stroke-width']).toContain(`test/icons/${file}`);
-    expect(scripts['test:icon-visual']).toContain('test/icons/icon-stroke-width-visual.test.ts');
+  it('has no command pointing at a deleted test or script', () => {
+    for (const command of Object.values(scripts))
+      for (const token of command.split(/\s+/))
+        if (/^(scripts|test|config)\/.+\.(mjs|ts|tsx)$/.test(token))
+          expect(existsSync(resolve(root, token)), token).toBe(true);
   });
-
-  it('wires adjustable stroke contracts, browser, geometry, visual, and consumer gates', () => {
-    expect(scripts['audit:icons:adjustable']).toBe(
-      'node config/generateIconStrokeContract.mjs --check',
-    );
-    expect(scripts['test:ci']).toContain('pnpm run test:icon-adjustable');
-    for (const file of ['transform', 'audit', 'geometry', 'ssr'])
-      expect(scripts['test:icon-adjustable']).toContain(
-        `test/icons/icon-adjustable-${file}.test.ts`,
-      );
-    expect(scripts['test:icon-adjustable']).toContain(
-      'test/components/icon-adjustable-runtime.test.tsx',
-    );
-    expect(scripts['test:icon-visual']).toContain('test/icons/icon-adjustable-visual.test.ts');
-  });
-
-  it('executes every Solid node and browser test from an explicit package aggregate', () => {
-    expect(plannedNodeTests.length).toBeGreaterThan(0);
-    expect(plannedBrowserTests.length).toBeGreaterThan(0);
-    const solidTestArguments = scripts['test:icons:solid'].split(/\s+/);
-    for (const file of [...plannedNodeTests, ...plannedBrowserTests]) {
-      expect(solidTestArguments, file).toContain(
-        `test/${file.endsWith('.tsx') ? 'components' : 'icons'}/${file}`,
-      );
-    }
-    expect(scripts['test:icons:solid']).toContain('pnpm run test:types');
-    expect(scripts['test:icons:audit-determinism']).toContain(
-      'test/icons/icon-audit-determinism.test.ts',
-    );
-  });
-
-  it('lints complete source, script, Storybook, test, and type directories', () => {
-    for (const command of [scripts.lint, scripts['lint:fix']]) {
-      for (const target of ['src', 'config', 'scripts', 'test']) {
-        expect(command, target).toContain(target);
-      }
-    }
-  });
-
-  it('includes the Solid type contract in its standalone type checks', () => {
-    const typeConfig = readFileSync(resolve(packageRoot, 'test/types/tsconfig.json'), 'utf8');
-    expect(typeConfig).toMatch(/\*\.test\.tsx|solid-icon-public\.test\.tsx/);
+  it('keeps checks separate from builds and has no historical gate', () => {
+    expect(scripts['icons:check']).toBe('node scripts/check.mjs');
+    expect(scripts['verify:history']).toBeUndefined();
+    const check = readFileSync(resolve(root, 'scripts/check.mjs'), 'utf8');
+    for (const step of ['audit:icons', 'test:workflow', 'test:ci', 'test:types'])
+      expect(check).toContain(step);
+    expect(check).not.toMatch(/runPnpm\(\['run', 'build'/);
   });
 });

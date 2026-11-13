@@ -44,25 +44,31 @@ test("CI and release selection check deferrals, and packing checks the exact pub
   assert.ok(check < build.indexOf("uses: changesets/action/pack"));
 });
 
-test("CI and publish verification gate the icon auto-import contract", () => {
-  const command = "run: pnpm run test:auto-import";
-  const builds = [
-    "run: pnpm --filter @yakit-libs/yakit-ui run build:package",
+test("CI consumers reuse icon builds and publish verification gates auto-import", () => {
+  const jobs = extractWorkflowJobs(workflow("ci.yml"));
+  const icons = jobs.get("icons") ?? "";
+  const ui = jobs.get("ui") ?? "";
+  assert.match(
+    icons,
+    /run: pnpm --filter @yakit-libs\/yakit-ui-icons run build/,
+  );
+  assert.match(ui, /needs: \[scope, icons\]/);
+  assert.match(ui, /name: icons-dist/);
+  assert.match(ui, /run: pnpm run test:auto-import/);
+  assert.match(
+    ui,
+    /run: pnpm --filter @yakit-libs\/yakit-ui run build:package:prepared/,
+  );
+  const publish =
+    extractWorkflowJobs(workflow("publish.yml")).get("build-and-pack") ?? "";
+  const autoImport = publish.indexOf("run: pnpm run test:auto-import");
+  for (const command of [
     "run: pnpm --filter @yakit-libs/yakit-ui-icons run build",
-  ];
-  const sources = [
-    workflow("ci.yml"),
-    extractWorkflowJobs(workflow("publish.yml")).get("build-and-pack") ?? "",
-  ];
-  for (const source of sources) {
-    const autoImportIndex = source.indexOf(command);
-    assert.ok(autoImportIndex >= 0, "auto-import contract must run");
-    for (const build of builds)
-      assert.ok(
-        source.indexOf(build) >= 0 && source.indexOf(build) < autoImportIndex,
-        `${build} must complete before the auto-import contract`,
-      );
-  }
+    "run: pnpm --filter @yakit-libs/yakit-ui run build:package:prepared",
+  ])
+    assert.ok(
+      publish.indexOf(command) >= 0 && publish.indexOf(command) < autoImport,
+    );
 });
 
 test("all third-party workflow actions are pinned to full commit SHAs", () => {
@@ -261,7 +267,7 @@ test("CI validates both build surfaces while the publish artifact selects a non-
       /--filter @yakit-libs\/yakit-ui run test:icon-package-contract/,
     );
   }
-  assert.match(ci, /--filter @yakit-libs\/yakit-ui-icons pack --dry-run/);
+  assert.match(ci, /--filter @yakit-libs\/yakit-ui-icons run verify:package/);
   assert.match(publishBuild, /changesets\/action\/pack/);
   assert.match(workflow("publish.yml"), /release-matrix/);
 });

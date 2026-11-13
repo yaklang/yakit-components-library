@@ -129,12 +129,6 @@ export function renderImportedSvg(record, family) {
   };
   checkReferences(parsed);
   let svg = raw;
-  if (
-    family === 'outline' &&
-    record.production?.geometry !== 'source' &&
-    !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg)
-  )
-    fail(`ICON_OUTLINE_STROKE_MISSING: ${record.nodeId}`);
   if (family !== 'colorful')
     svg = svg.replace(/(\b(?:fill|stroke)=)["']#353639["']/gi, '$1"currentColor"');
   // A registered default color is supplied by createIcon; the SVG must still

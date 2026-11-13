@@ -1,12 +1,16 @@
 import { spawn } from 'node:child_process';
+import { pnpmInvocation } from './process.mjs';
 
 const children = [
-  spawn('pnpm', ['exec', 'vite', 'build', '--watch', '--emptyOutDir', 'false'], {
+  spawn(...pnpmInvocation(['exec', 'vite', 'build', '--watch', '--emptyOutDir', 'false']), {
     stdio: 'inherit',
   }),
-  spawn('pnpm', ['exec', 'tsc', '-p', 'tsconfig.json', '--watch', '--preserveWatchOutput'], {
-    stdio: 'inherit',
-  }),
+  spawn(
+    ...pnpmInvocation(['exec', 'tsc', '-p', 'tsconfig.json', '--watch', '--preserveWatchOutput']),
+    {
+      stdio: 'inherit',
+    },
+  ),
 ];
 let stopping = false;
 function stop(code = 0) {

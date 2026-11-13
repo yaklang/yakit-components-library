@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { runPnpm } from "../../packages/yakit-ui-icons/scripts/process.mjs";
 import {
   cp,
   mkdir,
@@ -18,18 +18,6 @@ const source = fileURLToPath(
   new URL("../../packages/yakit-ui-icons/", import.meta.url),
 );
 const root = await mkdtemp(path.join(tmpdir(), "yakit-icons-isolation-"));
-async function run(script, args = []) {
-  await new Promise((resolve, reject) => {
-    const child = spawn("pnpm", ["run", script, ...args], {
-      cwd: root,
-      stdio: "inherit",
-    });
-    child.once("error", reject);
-    child.once("exit", (code) =>
-      code === 0 ? resolve() : reject(new Error(`${script} exited ${code}`)),
-    );
-  });
-}
 try {
   await cp(source, root, {
     recursive: true,
@@ -64,28 +52,24 @@ try {
         await symlink(
           await realpath(path.join(source, "node_modules", entry.name, name)),
           path.join(root, "node_modules", entry.name, name),
-          "dir",
+          process.platform === "win32" ? "junction" : "dir",
         );
     } else {
       await symlink(
         await realpath(path.join(source, "node_modules", entry.name)),
         path.join(root, "node_modules", entry.name),
-        "dir",
+        process.platform === "win32" ? "junction" : "dir",
       );
     }
   }
   for (const [script, args] of [
     ["icons:update", ["--check"]],
-    ["verify:history", []],
-    ["audit:icons", []],
-    ["test:workflow", []],
-    ["test:types", []],
     ["build", []],
     ["verify:package", []],
   ])
-    await run(script, args);
+    await runPnpm(["run", script, ...args], { cwd: root });
   console.log(
-    "ICON_ISOLATION_VERIFIED: generation, history, audits, tests, build and package gates passed without UI source",
+    "ICON_ISOLATION_VERIFIED: generation, build and package usage passed without UI source",
   );
 } finally {
   await rm(root, { recursive: true, force: true });

@@ -526,9 +526,8 @@ async function deferredFixture() {
   };
   const blocked = await computeReleaseImpact(options);
   assert.equal(blocked.status, "BLOCK");
-  const probe = blocked.impactProbeSet.find((item) => item.package === UI);
   const policy = {
-    schemaId: "yakit-ui-release-deferral/v1",
+    schemaId: "yakit-ui-release-deferral/v2",
     releases: [{ name: ICONS, version: "1.0.1" }],
     deferred: [
       {
@@ -538,14 +537,6 @@ async function deferredFixture() {
         integrity: "sha512-" + Buffer.alloc(64).toString("base64"),
         sha256: "f".repeat(64),
         baseRevision: state.base,
-        ...Object.fromEntries(
-          [
-            "headSourceHash",
-            "headLockHash",
-            "headToolchainHash",
-            "headConfigHash",
-          ].map((key) => [key, probe[key]]),
-        ),
         reason: "Defer UI while independently publishing icons",
         followUpPath: "docs/deferred-ui.md",
       },
@@ -589,12 +580,6 @@ test("explicit deferral preserves observed impact and only releases the selected
 });
 
 for (const [name, mutate] of [
-  [
-    "source drift",
-    ({ state }) =>
-      write(state.root, "packages/yakit-ui/README.md", "unreviewed change"),
-  ],
-  ["lock drift", ({ state }) => write(state.root, "pnpm-lock.yaml", "changed")],
   [
     "wrong release version",
     ({ options }) => {
@@ -649,5 +634,39 @@ test("an active deferral rejects publishing UI even when all observed packages a
   assert.deepEqual(result.observedSet, [UI, ICONS]);
   assert.deepEqual(result.declaredSet, [UI, ICONS]);
   assert.equal(result.status, "BLOCK");
-  assert.match(result.reason, /release context does not exactly match deferral policy/);
+  assert.match(
+    result.reason,
+    /release context does not exactly match deferral policy/,
+  );
 });
+
+for (const [file, content] of [
+  ["packages/yakit-ui/README.md", "updated documentation"],
+  ["packages/yakit-ui/src/continued.ts", "export const next = true;"],
+  ["pnpm-lock.yaml", "changed"],
+]) {
+  test(`v2 deferral records new input hashes automatically for ${file}`, async () => {
+    const { state, options, policy } = await deferredFixture();
+    const before = await computeReleaseImpact(options);
+    write(state.root, file, content);
+    const after = await computeReleaseImpact(options);
+    assert.equal(after.status, "PASS", after.reason);
+    assert.deepEqual(after.declaredSet, [ICONS]);
+    assert.deepEqual(after.deferredImpact.policy, policy);
+    const field = file === "pnpm-lock.yaml" ? "headLockHash" : "headSourceHash";
+    assert.notEqual(
+      after.deferredImpact.probes[0][field],
+      before.deferredImpact.probes[0][field],
+    );
+    assert.deepEqual(
+      impactProbesForRelease(after, [ICONS]).map((p) => p.package),
+      [ICONS],
+    );
+    const tampered = JSON.parse(JSON.stringify(after));
+    tampered.deferredImpact.probes[0][field] = "0".repeat(64);
+    assert.throws(
+      () => impactProbesForRelease(tampered, [ICONS]),
+      /deferred impact probes/,
+    );
+  });
+}

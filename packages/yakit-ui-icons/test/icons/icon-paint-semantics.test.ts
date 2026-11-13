@@ -32,10 +32,11 @@ afterAll(async () => {
   await server?.close();
 });
 
-describe('Outline icon paint semantics in Chromium', () => {
+describe('Outline icon paint semantics in Chromium', { timeout: 15000 }, () => {
   it('preserves default, color prop, style precedence, and explicit inheritance', async () => {
     const page = await browser.newPage();
     await page.goto(fixtureUrl);
+    await page.getByTestId('sun-default').waitFor();
     const colors = await page.evaluate(() => {
       const color = (testId: string) =>
         getComputedStyle(document.querySelector<SVGSVGElement>(`[data-testid="${testId}"]`)!).color;
@@ -60,6 +61,7 @@ describe('Outline icon paint semantics in Chromium', () => {
   it('preserves the native white overdraw on dark and transparent backgrounds', async () => {
     const page = await browser.newPage();
     await page.goto(fixtureUrl);
+    await page.getByTestId('sun-default').waitFor();
     const results = await page.evaluate(() => {
       const inspect = (testId: string) => {
         const host = document.querySelector<HTMLElement>(`[data-testid="${testId}"]`)!;
@@ -99,6 +101,7 @@ describe('Outline icon paint semantics in Chromium', () => {
   it('keeps DataCompare secondary strokes at half opacity for default, custom and inherited colors', async () => {
     const page = await browser.newPage();
     await page.goto(fixtureUrl);
+    await page.getByTestId('sun-default').waitFor();
     const results = await page.evaluate(() => {
       const toHex = (color: string) => {
         const canvas = document.createElement('canvas');

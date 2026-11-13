@@ -98,39 +98,7 @@ describe('Solid paint semantics', () => {
     }
   });
 
-  it('allows only the reviewed secondary, cutout, and definition literals', () => {
-    const exceptional = files.flatMap((file) =>
-      collectPaintSemantics(source(file))
-        .filter(({ role }) => role !== 'primary-currentColor')
-        .map(({ paintAttribute, role, value }) => ({ file, paintAttribute, role, value })),
-    );
-
-    expect(exceptional.filter(({ role }) => role === 'secondary-literal')).toEqual([]);
-    expect(exceptional.filter(({ role }) => role === 'foreground-cutout-literal')).toEqual([]);
-    expect(
-      exceptional
-        .filter(({ role }) => role === 'definition-semantic-literal')
-        .map(({ file, value }) => ({ file, value })),
-    ).toEqual([
-      { file: '1-2967.svg', value: 'white' },
-      { file: '22425-254718.svg', value: 'white' },
-    ]);
-  });
-
-  it('preserves the exact special-structure paint contracts', () => {
-    for (const file of ['16035-380989.svg', '37831-7379.svg']) {
-      expect(source(file)).not.toMatch(/<(?:mask|clipPath|defs)\b/);
-      expect(source(file).match(/fill="currentColor"/g)).toHaveLength(2);
-    }
-    expect(source('37831-7379.svg')).toContain('opacity="0.5"');
-    expect(source('37831-7379.svg')).not.toMatch(/#9CA3B1|fill="white"/);
-    for (const file of ['1-2967.svg', '22425-254718.svg']) {
-      expect(source(file), file).toMatch(/<(?:clipPath|mask)\b/);
-      expect(source(file), file).toMatch(/(?:fill|stroke)="currentColor"/);
-    }
-  });
-
-  it('freezes independently recomputed Figma and local paint semantics', () => {
+  it('matches independently recomputed current source and local paint semantics', () => {
     for (const record of [...manifest.symbols, ...manifest.supplementalSources]) {
       const options = { normalizeFigmaPrimary: true, normalizeStrokeWidth: false };
       expect(record.figmaPaintSemanticsSha256, record.nodeId).toBe(

@@ -56,7 +56,11 @@ async function scrubStorybookNodePath() {
 await rm(path.join(packageRoot, 'dist'), { force: true, recursive: true });
 await rm(path.join(packageRoot, 'storybook-static'), { force: true, recursive: true });
 
-await run(pnpmCommand, ['run', 'build:lib'], 'build:lib');
+await run(
+  pnpmCommand,
+  ['run', process.argv.includes('--icons-built') ? 'build:lib:prepared' : 'build:lib'],
+  'build:lib',
+);
 await run(storybookCommand, ['build'], 'build-storybook');
 await scrubStorybookNodePath();
 

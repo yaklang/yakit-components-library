@@ -8,7 +8,6 @@ import { describe, expect, it } from 'vitest';
 import outlineSource from '../../config/icon-sources/outline.json';
 import viteConfig from '../../vite.config';
 import vitestConfig from '../../vitest.config';
-import baseline from '../fixtures/icons/reference/outline-prechange-baseline-v1.json';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/outline');
@@ -19,7 +18,7 @@ const referencedIds = (source: string) =>
 
 describe('Outline raw fragment contract', () => {
   it('uses deterministic source-specific bases for every referenced fragment', () => {
-    const files = [...baseline.exports.map(({ file }) => file), '46174-9893.svg'];
+    const files = outlineSource.records.map(({ file }) => file);
     const invalid: string[] = [];
 
     for (const file of files) {
@@ -39,7 +38,7 @@ describe('Outline raw fragment contract', () => {
   });
 
   it('keeps each referenced fragment owned by its source SVG', () => {
-    const files = [...baseline.exports.map(({ file }) => file), '46174-9893.svg'];
+    const files = outlineSource.records.map(({ file }) => file);
     const owners = new Map<string, string>();
     const violations: string[] = [];
 

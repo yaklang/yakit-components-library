@@ -29,7 +29,7 @@ pnpm icons:update --check
 - `family`：现有记录优先；新增时根据节点所属分类确定，不明确就询问。
 - `exportName`：可选。已有记录固定保留；新增英文名称可以自动转 PascalCase 加后缀。中文或含糊名称由 Agent 翻译建议、用户确认后明确传入。
 - `syncProduction`：可选布尔值。用户明确要求同步图标库时可设为 `true`，让尚未登记生成策略的旧图标使用本次真实获取的 SVG 生成生产文件，即使原始 SVG 字节未变。默认仍保留旧图标的归一化策略；有独立几何或蒙版修正的图标须先检查，不能批量覆盖。
-- `preserveSourceGeometry`：仅在用户明确要求以远端代码替换本地几何修正时使用。生产文件保留原稿的填充轮廓、标签结构及白色覆盖线；主题主色和实际存在的描边仍遵守本地规则。纯填充 Outline 登记为 `fixed-fill`，`strokeWidth` 不改变其粗细，不猜测或补造描边。原有几何审核转为历史证据，不再标记为当前原稿的审核。
+- `preserveSourceGeometry`：仅在用户明确要求以远端代码替换本地几何修正时使用。生产文件保留原稿的填充轮廓、标签结构及白色覆盖线；主题主色和实际存在的描边仍遵守本地规则。纯填充 Outline 登记为 `fixed-fill`，`strokeWidth` 不改变其粗细，不猜测或补造描边。不继承旧几何审核结论。纯填充 Outline 无需此参数即可导入。
 - `x`、`y`：可选，MCP 实际返回的节点坐标；未返回时不猜测。
 - `evidence`：可选对象，保存实际返回的变量绑定、组件信息等补充证据。Colorful 的 `themePaintBindings` 单独保存到记录顶层，其余证据保留在 `evidence` 中。不能填入假想的空数组或审核结论。
 - `paintReplacements`：可选，例如 `{ "#F28C45": "var(--Colors-Use-Neutral-Text-2-Primary, #F28C45)" }`。只在实际取得变量映射或用户指定时使用。处理明确的 fill/stroke/stop-color 属性颜色，包括渐变色标；需要样式或分层角色判断时不要猜测。
@@ -44,4 +44,4 @@ Outline 的生产尺寸为 24×24，Solid 为 20×20；不符合时停止，不�
 
 Solid 保留原始 stroke-width（包括遮罩配合的外侧描边），不套用 Outline 的 1.5 规则。检查与渲染对比也必须保留该宽度，不能先统一线宽再声称与远端一致。
 
-统一线宽生成、检查和审计仅适用于 Outline（1.5）。Solid、Colorful、Oldicon 保留素材已有 stroke-width，不进行归一化；Colorful 去重保留线宽差异。已有历史素材和视觉基线不批量重写，只有显式导入的图标按原稿生成。Loading 由组件自己定义默认线宽，不参加统一线宽检查。
+统一线宽生成、检查和审计仅适用于 Outline（1.5）。Solid、Colorful、Oldicon 保留素材已有 stroke-width，不进行归一化；Colorful 去重保留线宽差异。只有显式导入的图标按本次原稿生成；不维护历史视觉基线。Loading 由组件自己定义默认线宽，不参加统一线宽检查。

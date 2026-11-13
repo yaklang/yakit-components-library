@@ -4,104 +4,238 @@ on:
   pull_request:
   push:
     branches:
-      - main
       - "pre/**"
 
 permissions: {}
-
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  quality:
+  scope:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
     permissions:
       contents: read
+    outputs:
+      icons: ${{ steps.scope.outputs.icons }}
+      icon_build: ${{ steps.scope.outputs.icon_build }}
+      ui: ${{ steps.scope.outputs.ui }}
+      integration: ${{ steps.scope.outputs.integration }}
+      storybook: ${{ steps.scope.outputs.storybook }}
+      release_tools: ${{ steps.scope.outputs.release_tools }}
+      isolation: ${{ steps.scope.outputs.isolation }}
+      platforms: ${{ steps.scope.outputs.platforms }}
     steps:
-      - name: Reserve disk space for browser tests and package builds
-        run: |
-          df -h /
-          # This Node/React CI does not use the hosted runner's Android SDK.
-          sudo rm -rf /usr/local/lib/android
-          df -h /
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
           persist-credentials: false
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0, reviewed 2026-08-21
-        with:
-          version: 10.34.5
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0, reviewed 2026-08-21
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24.12.0
           package-manager-cache: false
+      - run: node --test test/ci/*.test.mjs
+      - id: scope
+        run: node scripts/ci/scope.mjs
+        env:
+          CI_EVENT: ${{ github.event_name }}
+          CI_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          CI_HEAD: ${{ github.sha }}
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Verify deferred release scope and committed input hashes
+  repository:
+    needs: scope
+    if: needs.scope.outputs.icon_build == 'true' || needs.scope.outputs.release_tools == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - name: Check release scope and package boundaries
         run: |
-          # PR checkouts may have origin/main without a local main branch.
           git show-ref --verify --quiet refs/heads/main || git branch --no-track main refs/remotes/origin/main
           pnpm run release:deferral-check
+          pnpm run release:workspace-check
 
-      - name: Build React-only icon package
-        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
-
-      - name: Verify generated icon files offline
-        run: pnpm icons:update --check && pnpm icons:test
-
-      - name: Verify workspace publication boundary
-        run: pnpm run release:workspace-check
-
-      - name: Verify release configuration policies
-        run: pnpm run release:test
-
-      - name: Verify icon package independence
-        run: pnpm icons:verify-isolation
-
-      - name: Verify immutable icon history
-        run: pnpm --filter @yakit-libs/yakit-ui-icons run verify:history
-
-      - name: Lint icons
+  icons:
+    needs: scope
+    if: needs.scope.outputs.icon_build == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - if: needs.scope.outputs.icons == 'true'
+        run: pnpm --filter @yakit-libs/yakit-ui-icons exec playwright install --with-deps chromium
+      - if: needs.scope.outputs.icons == 'true'
         run: pnpm --filter @yakit-libs/yakit-ui-icons run lint
+      - if: needs.scope.outputs.icons == 'true'
+        run: pnpm icons:check
+      - name: Build icons once for downstream consumers
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run build
+      - run: pnpm --filter @yakit-libs/yakit-ui-icons run verify:package
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        with:
+          name: icons-dist
+          path: packages/yakit-ui-icons/dist
+          if-no-files-found: error
+          retention-days: 1
 
-      - name: Lint yakit-ui
+  ui:
+    needs: [scope, icons]
+    if: needs.scope.outputs.integration == 'true' || needs.scope.outputs.ui == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
+        with:
+          name: icons-dist
+          path: packages/yakit-ui-icons/dist
+      - if: needs.scope.outputs.ui == 'true'
         run: pnpm --filter @yakit-libs/yakit-ui run lint
+      - if: needs.scope.outputs.icons != 'true'
+        run: pnpm icons:update --check && node --test test/icons/*.test.mjs
+      - run: pnpm --filter @yakit-libs/yakit-ui run test:types
+      - run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
+      - if: needs.scope.outputs.ui == 'true'
+        run: pnpm --filter @yakit-libs/yakit-ui run test:ci
+      - run: pnpm --filter @yakit-libs/yakit-ui run test:icon-integration
+      - if: needs.scope.outputs.storybook == 'true'
+        run: pnpm --filter @yakit-libs/yakit-ui run build:package:prepared
+      - if: needs.scope.outputs.storybook != 'true'
+        run: pnpm --filter @yakit-libs/yakit-ui run build:lib:prepared
+      - run: pnpm run test:auto-import
+      - run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
+      - run: pnpm --filter @yakit-libs/yakit-ui exec vitest run --config vitest.node.config.ts test/icons/dist-consumer.test.ts test/icons/icon-stroke-width-dist.test.ts test/icons/icon-adjustable-consumer.test.ts
+      - if: needs.scope.outputs.storybook == 'true'
+        run: pnpm --filter @yakit-libs/yakit-ui run pack:dry-run
 
-      - name: Type-check public API
-        run: pnpm --filter @yakit-libs/yakit-ui run test:types
+  release-tools:
+    needs: scope
+    if: needs.scope.outputs.release_tools == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run release:test
 
-      - name: Install the pinned Playwright browser
-        run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
+  icon-platforms:
+    needs: scope
+    if: needs.scope.outputs.platforms == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @yakit-libs/yakit-ui-icons exec playwright install chromium
+      - name: Import, generate, check and render on this platform
+        run: pnpm icons:check
+      - run: pnpm --filter @yakit-libs/yakit-ui-icons run build
+      - run: pnpm --filter @yakit-libs/yakit-ui-icons run verify:package
 
-      - name: Run component tests
-        run: pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui run test:icon-integration
+  icon-isolation:
+    needs: scope
+    if: needs.scope.outputs.isolation == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.34.5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm icons:verify-isolation
 
-      - name: Audit icons
-        run: pnpm --filter @yakit-libs/yakit-ui-icons run audit:icons
-
-      - name: Build package and Storybook
-        run: pnpm --filter @yakit-libs/yakit-ui run build:package
-
-      - name: Verify icon auto-import contracts
-        run: pnpm run test:auto-import
-
-      - name: Verify lightweight and dedicated icon package contracts
-        run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
-
-      - name: Verify package and installed consumer
-        run: pnpm --filter @yakit-libs/yakit-ui run verify:package
-
-      - name: Enforce package size policy
-        run: pnpm run release:policy:check
-
-      - name: Dry-run npm pack
-        run: pnpm --filter @yakit-libs/yakit-ui run pack:dry-run && pnpm --filter @yakit-libs/yakit-ui-icons pack --dry-run
+  quality:
+    if: always()
+    needs:
+      [
+        scope,
+        repository,
+        icons,
+        ui,
+        release-tools,
+        icon-platforms,
+        icon-isolation,
+      ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require success for selected jobs
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          node -e 'const jobs = JSON.parse(process.env.RESULTS); if (jobs.scope.result !== "success" || Object.values(jobs).some(job => !["success", "skipped"].includes(job.result))) process.exit(1)'

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { generateColors } from '@yakit-libs/color';
 import '@yakit-libs/yakit-ui-icons/icon.css';
 import { BugOutlined, HomeOutlined, Loading, StarOffOutlined } from '@yakit-libs/yakit-ui-icons';
 import {
@@ -9,8 +8,6 @@ import {
   type ColorfulIconCategory,
   type IconDefinition,
 } from '@yakit-libs/yakit-ui-icons/registry';
-
-import visualWeightReviews from '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/reviews.json';
 
 import { colorfulStoryGroups } from './icon-colorful.generated';
 
@@ -403,113 +400,4 @@ export const StrokeWidth: StoryObj<typeof StrokeWidthGallery> = {
   args: { strokeWidth: 1.5 },
   argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
   render: (args) => <StrokeWidthGallery {...args} />,
-};
-
-const originalWeightSources = import.meta.glob<string>(
-  '../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/original/*.svg',
-  { eager: true, import: 'default', query: '?raw' },
-);
-const revisedWeightIcons = visualWeightReviews.reviews.map(({ exportName, file }) => {
-  const sourceNodeId = file.replace(/\.svg$/, '').replace('-', ':');
-  const icon = outlineIconRegistry.find((entry) => entry.sourceNodeId === sourceNodeId);
-  const original =
-    originalWeightSources[
-      `../../../yakit-ui-icons/test/fixtures/icons/reference/visual-weight-v2/original/${file}`
-    ];
-  if (!icon || !original) throw new Error(`Missing visual-weight comparison: ${exportName}`);
-  return { ...icon, original };
-});
-
-// SVG images do not inherit CSS variables from the page; resolve their title color.
-const comparisonColors = Object.fromEntries(
-  (['light', 'dark'] as const).map((mode) => {
-    const colors = generateColors(mode);
-    const title = colors['--Colors-Use-Neutral-Text-1-Title'];
-    return [mode, title.startsWith('var(') ? colors[title.slice(4, -1)] : title];
-  }),
-);
-
-const VisualWeightGallery = ({ strokeWidth }: { strokeWidth: number }) => (
-  <section style={{ display: 'grid', gap: 24 }}>
-    <p>
-      左侧历史快照保留修复前的问题，供对照；右侧为当前组件，响应下方线宽控制。 每组依次展示
-      16、24、32px。当前线宽：{strokeWidth}。
-    </p>
-    {['light', 'dark'].map((theme) => (
-      <section
-        key={theme}
-        data-theme={theme}
-        style={{
-          background: 'var(--Colors-Use-Neutral-Bg)',
-          color: 'var(--Colors-Use-Neutral-Text-1-Title)',
-          padding: 20,
-          display: 'grid',
-          gap: 16,
-        }}
-      >
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <span>默认线重参照</span>
-          <HomeOutlined color="inherit" size={24} />
-        </div>
-        {revisedWeightIcons.map(({ Component, exportName, original }) => (
-          <div
-            key={exportName}
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'center' }}
-          >
-            <span style={{ width: 250 }}>{exportName}</span>
-            <figure style={{ margin: 0, display: 'grid', gap: 8 }}>
-              <figcaption>修复前（历史快照）</figcaption>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-                {[16, 24, 32].map((size) => (
-                  <img
-                    key={size}
-                    alt={`${exportName} 修复前 ${size}px`}
-                    width={size}
-                    height={size}
-                    src={`data:image/svg+xml,${encodeURIComponent(original.replace('<svg ', `<svg style="color:${comparisonColors[theme]}" `))}`}
-                  />
-                ))}
-              </div>
-            </figure>
-            <span aria-hidden="true">→</span>
-            <figure style={{ margin: 0, display: 'grid', gap: 8 }}>
-              <figcaption>当前组件</figcaption>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-                {[16, 24, 32].map((size) => (
-                  <Component key={size} color="inherit" size={size} svgProps={{ strokeWidth }} />
-                ))}
-              </div>
-            </figure>
-          </div>
-        ))}
-        <p>实心细节与遮挡参照</p>
-        <div style={{ display: 'flex', gap: 24 }}>
-          {outlineIconRegistry
-            .filter(({ exportName }) =>
-              [
-                'ChatOutlined',
-                'QuestionMarkCircleOutlined',
-                'RocketOutlined',
-                'MCPOutlined',
-                'AIOutlined',
-                'StarOffOutlined',
-              ].includes(exportName),
-            )
-            .map(({ Component, exportName }) => (
-              <div key={exportName} style={{ display: 'grid', gap: 8, justifyItems: 'center' }}>
-                <Component color="inherit" size={24} svgProps={{ strokeWidth }} />
-                <small>{exportName}</small>
-              </div>
-            ))}
-        </div>
-      </section>
-    ))}
-  </section>
-);
-
-export const VisualWeight: StoryObj<typeof VisualWeightGallery> = {
-  name: '线条粗细对照',
-  args: { strokeWidth: 1.5 },
-  argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
-  render: (args) => <VisualWeightGallery {...args} />,
 };

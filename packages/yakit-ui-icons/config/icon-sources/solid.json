@@ -20,14 +20,7 @@
     "sourceEvidence": {
       "timestampFree": true,
       "figmaRawProvenanceSha256": "67bcd3715e3718eaae49782b25546d14828669de4d9d4042a2c2e9127d2a4f85",
-      "placementProvenanceSha256": "6b3ab8f9d09caa741e6d6d7da6415ae299897d926c38282469bb3eef6bc6ea37",
-      "prechangeBaselineSha256": "dfdf07132c04dcc3d15aca4b9d4656d7db85cca512b8a34c4fe5a7bc92e82e89",
-      "prechangeBaselinePath": "test/fixtures/icons/reference/solid-local-prechange-controls-v1.json"
-    },
-    "updateProvenance": {
-      "reviewId": "icon-stroke-width-1",
-      "reviewedBy": "codex",
-      "updater": "scripts/update-icon-stroke-manifests.mjs"
+      "placementProvenanceSha256": "6b3ab8f9d09caa741e6d6d7da6415ae299897d926c38282469bb3eef6bc6ea37"
     },
     "orphanSources": [],
     "knownNamingDebt": [
