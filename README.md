@@ -1,135 +1,47 @@
-# Turborepo starter
+# yakit-components-library
 
-This Turborepo starter is maintained by the Turborepo core team.
+Yakit 业务组件库 monorepo（pnpm workspace + Turborepo），对外发布两个独立遵循 SemVer 的 npm 包：
 
-## Using this example
+- **`@yakit-libs/yakit-ui`** — Yakit 的 React 组件库。npm 包附带与组件版本一致的静态 Storybook，可本地离线浏览。`@yakit-libs/yakit-ui/icons` 等路径是组件包里的兼容入口。
+- **`@yakit-libs/yakit-ui-icons`** — 图标的规范包，源码在 `packages/yakit-ui-icons`。适合只需要图标、不想引入组件 peer dependencies 的场景。
 
-Run the following command:
+图标源码在 `@yakit-libs/yakit-ui-icons`。`packages/yakit-ui/src/icons` 从该包再导出。两个包独立发版，版本号不要求一致。使用说明见 [packages/yakit-ui/README.md](packages/yakit-ui/README.md)。
 
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 仓库结构
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+├── apps/
+│   └── console/          # Electron 应用（私有，不发布）
+├── packages/
+│   ├── yakit-ui/         # 组件库 + 图标兼容入口 + Storybook（发布）
+│   └── yakit-ui-icons/   # 图标源码（发布）
+├── scripts/release/      # 发布流水线脚本
+├── test/                 # 根级契约测试（发布状态机、自动导入契约）
+└── docs/                 # 发布流程文档
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 环境要求
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+- Node.js `^22.11.0 || ^24.0.0 || >=26.0.0`
+- pnpm `>=10.0.0 <11.0.0`（仓库通过 `packageManager` 锁定 `pnpm@10.34.5`，可用 `corepack pnpm ...` 调用）
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+## 常用命令
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+pnpm install                                        # 安装依赖
+pnpm --filter @yakit-libs/yakit-ui storybook        # 本地启动组件文档站（端口 6006）
+pnpm build                                          # turbo 构建全部包
+pnpm lint                                           # turbo lint
+pnpm check-types                                    # turbo 类型检查
+pnpm --filter @yakit-libs/yakit-ui test             # 组件库测试（Vitest）
+pnpm release:test                                   # 发布契约测试（node:test）
+pnpm release:dry-run                                # 发布全链路演练（构建、校验、消费者试装、pack 预检）
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 发布
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+版本管理基于 Changesets，npm 发布走 Trusted Publishing（不在仓库保存任何 npm token），完整流程见 [docs/releasing-yakit-ui.md](docs/releasing-yakit-ui.md)。
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+## License
 
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+MIT
