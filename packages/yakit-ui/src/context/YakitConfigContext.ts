@@ -31,6 +31,9 @@ export const defaultYakitLocale: YakitLocale = {
     close: '关闭',
     copy: '复制',
   },
+  Checkbox: {
+    indeterminate: '部分选中',
+  },
 };
 
 export const defaultYakitConfig: YakitConfigContextValue = {
@@ -56,4 +59,5 @@ export const mergeYakitLocale = (parent: YakitLocale, locale?: YakitLocale): Yak
   InputNumber: mergeDefined(parent.InputNumber ?? {}, locale?.InputNumber),
   Search: mergeDefined(parent.Search ?? {}, locale?.Search),
   Tag: mergeDefined(parent.Tag ?? {}, locale?.Tag),
+  Checkbox: mergeDefined(parent.Checkbox ?? {}, locale?.Checkbox),
 });

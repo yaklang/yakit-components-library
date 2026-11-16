@@ -12,6 +12,10 @@ export default defineConfig({
   define: {
     __EXPECTED_REACT_MAJOR__: JSON.stringify('19'),
   },
+  resolve: {
+    // antd CJS 预打包会内嵌独立 React 副本，须强制归一到同实例（否则双 React 实例 useContext 崩）
+    dedupe: ['react', 'react-dom'],
+  },
   optimizeDeps: {
     include: [
       'react',
@@ -20,6 +24,7 @@ export default defineConfig({
       'react-dom/server',
       'react/jsx-dev-runtime',
       'react/jsx-runtime',
+      'antd',
     ],
   },
   test: {
