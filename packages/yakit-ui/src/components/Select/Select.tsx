@@ -274,7 +274,7 @@ const SelectInner = <ValueType, OptionType extends DefaultOptionType = DefaultOp
     >
       <Tag
         closable={tag.closable}
-        closeIcon={removeIcon}
+        closeIcon={removeIcon as unknown as ReactNode | ((props?: object) => ReactNode)}
         disabled={disabled || tag.disabled}
         ellipsis
         onClose={(event) => {
@@ -282,7 +282,7 @@ const SelectInner = <ValueType, OptionType extends DefaultOptionType = DefaultOp
         }}
         size={visualSize}
       >
-        {tag.label}
+        {tag.label as ReactNode}
       </Tag>
     </span>
   );
