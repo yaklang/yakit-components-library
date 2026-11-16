@@ -101,7 +101,7 @@ const COMPONENT_DOCS = [
   '| copy | 是否显示复制；true 复制纯文本 children，或 { text } 指定文本（可与 closable 并排） | `boolean` \\| `{ text?: string }` | `false` |',
   '| onCopy | 复制结束回调（接入通知等）；info.ok 表示是否成功 | `(e, info) => void` | - |',
   '| closable | 是否可关闭 | `boolean` | `false` |',
-  '| closeIcon | 自定义关闭图标；`true` / 未传时用默认 × | `ReactNode` \\| `boolean` | - |',
+  '| closeIcon | 自定义关闭图标；`true` / 未传时用默认 ×。函数会先调用，再用返回的节点 | `ReactNode` \\| `boolean` \\| `((props: any) => ReactNode)` | - |',
   '| onClose | 关闭回调；`e.preventDefault()` 可阻止关闭 | `(e) => void` | - |',
   '| onClick | 点击回调；`checkable` 时在切换选中后触发 | `(e) => void` | - |',
   '| checkable | 可选择模式 | `boolean` | `false` |',

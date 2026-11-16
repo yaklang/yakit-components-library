@@ -123,9 +123,11 @@ export interface TagProps extends BaseProps {
    */
   closable?: boolean;
   /**
-   * 自定义关闭图标；`true` / 未传时使用默认 ×。
+   * 自定义关闭图标。
+   * `true` / 未传时使用默认 ×。
+   * 传入函数时先调用，再用返回的节点（对齐 antd Select `removeIcon` 的 `RenderNode`）。
    */
-  closeIcon?: ReactNode | boolean;
+  closeIcon?: ReactNode | boolean | ((props: any) => ReactNode);
   /**
    * 点击关闭时的回调。调用 `e.preventDefault()` 可保持标签可见。
    */

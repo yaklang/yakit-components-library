@@ -1,0 +1,380 @@
+.yakit-select.yakit-select.ant-select {
+  --ant-select-border-radius: 4px;
+  --ant-select-color: var(--Colors-Use-Neutral-Text-1-Title);
+  --ant-select-font-height: 16px;
+  --ant-select-font-size: 12px;
+  --ant-select-height: 28px;
+  --ant-select-line-height: 16px;
+  --ant-select-padding-horizontal: 12px;
+  --yakit-select-padding-inline: 12px;
+  --yakit-select-tracking: 0.1px;
+  font-family: 'PingFang SC', sans-serif;
+  letter-spacing: var(--yakit-select-tracking);
+  width: 100%;
+}
+
+.yakit-select.yakit-select.yakit-select-small.ant-select,
+.yakit-select.yakit-select.yakit-select-medium.ant-select {
+  --yakit-select-tracking: 0.5px;
+}
+
+.yakit-select.yakit-select.yakit-select-small.ant-select {
+  --ant-select-height: 24px;
+  --ant-select-padding-horizontal: 8px;
+  --yakit-select-padding-inline: 8px;
+}
+
+.yakit-select.yakit-select.yakit-select-large.ant-select {
+  --ant-select-font-height: 20px;
+  --ant-select-font-size: 14px;
+  --ant-select-height: 32px;
+  --ant-select-line-height: 20px;
+}
+
+.yakit-select.ant-select-outlined:not(:hover):not(.ant-select-focused):not(.ant-select-disabled):not(
+    .yakit-select-status-error
+  ):not(.yakit-select-status-warning) {
+  --ant-select-border-color: var(--Colors-Use-Neutral-Border);
+}
+
+.yakit-select .ant-select-placeholder,
+.yakit-select .ant-select-content,
+.yakit-select .ant-select-content-value,
+.yakit-select .ant-select-input,
+.yakit-select .ant-select-input input {
+  letter-spacing: var(--yakit-select-tracking);
+}
+
+/* antd 6 的 hash 在 :where() 里，不增加优先级。边框色写在 --ant-select-border-color 上，
+   这里多挂一层组件自己的 class，盖过 .ant-select.ant-select-outlined.ant-select-status-*。 */
+.yakit-select.yakit-select-status-error.ant-select.ant-select-status-error {
+  --ant-select-border-color: var(--Colors-Use-Error-Border);
+}
+
+.yakit-select.yakit-select-status-error.ant-select.ant-select-status-error:not(.ant-select-disabled):hover,
+.yakit-select.yakit-select-status-error.ant-select.ant-select-status-error.ant-select-focused:not(
+    .ant-select-disabled
+  ) {
+  --ant-select-border-color: var(--Colors-Use-Error-Primary);
+}
+
+.yakit-select.yakit-select-status-error.ant-select.ant-select-status-error.ant-select-focused:not(
+    .ant-select-disabled
+  ) {
+  box-shadow: 0 0 0 2px var(--Colors-Use-Error-Focus);
+}
+
+.yakit-select.yakit-select-status-warning.ant-select.ant-select-status-warning {
+  --ant-select-border-color: var(--Colors-Use-Warning-Border);
+}
+
+.yakit-select.yakit-select-status-warning.ant-select.ant-select-status-warning:not(
+    .ant-select-disabled
+  ):hover,
+.yakit-select.yakit-select-status-warning.ant-select.ant-select-status-warning.ant-select-focused:not(
+    .ant-select-disabled
+  ) {
+  --ant-select-border-color: var(--Colors-Use-Warning-Primary);
+}
+
+.yakit-select.yakit-select-status-warning.ant-select.ant-select-status-warning.ant-select-focused:not(
+    .ant-select-disabled
+  ) {
+  box-shadow: 0 0 0 2px var(--Colors-Use-Warning-Focus);
+}
+
+/* 禁用态 antd 直接写了 background，不走变量，所以这里改属性。选择器比 .ant-select-disabled 多两层。 */
+.yakit-select.ant-select.ant-select-disabled {
+  --ant-select-background-color: var(--Colors-Use-Neutral-Bg-Hover);
+  --ant-select-border-color: var(--Colors-Use-Neutral-Border);
+  --ant-select-color: var(--Colors-Use-Neutral-Disable);
+  background: var(--Colors-Use-Neutral-Bg-Hover);
+  border-color: var(--Colors-Use-Neutral-Border);
+  color: var(--Colors-Use-Neutral-Disable);
+  cursor: not-allowed;
+}
+
+.yakit-select.ant-select.ant-select-disabled .ant-select-suffix {
+  color: var(--Colors-Use-Neutral-Disable);
+}
+
+.yakit-select .ant-select-content {
+  align-items: center;
+}
+
+.yakit-select.yakit-select.ant-select .ant-select-placeholder,
+.yakit-select.ant-select-disabled .ant-select-content-value,
+.yakit-select.ant-select-disabled .ant-select-selection-item,
+.yakit-select.yakit-select.ant-select-disabled .ant-select-placeholder {
+  color: var(--Colors-Use-Neutral-Disable);
+}
+
+.yakit-select .ant-select-content-value {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  font-weight: 400;
+}
+
+.yakit-select.ant-select .ant-select-suffix {
+  align-items: center;
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  display: inline-flex;
+  flex: none;
+  font-size: 12px;
+  height: 12px;
+  justify-content: center;
+  line-height: 12px;
+  width: 12px;
+}
+
+.yakit-select.ant-select .ant-select-suffix svg {
+  display: block;
+  height: 12px;
+  width: 12px;
+}
+
+.yakit-select .ant-select-suffix,
+.yakit-select .ant-select-clear {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  display: inline-flex;
+  flex: none;
+  padding: 0;
+}
+
+.yakit-select.ant-select > .ant-select-clear {
+  align-items: center;
+  color: var(--Colors-Use-Neutral-Disable);
+  display: inline-flex;
+  height: 14px;
+  inset-inline-end: var(--yakit-select-padding-inline);
+  justify-content: center;
+  line-height: 0;
+  margin-top: -7px;
+  top: 50%;
+  width: 14px;
+}
+
+.yakit-select .ant-select-clear .yakit-icon {
+  display: flex;
+  height: 14px;
+  line-height: 0;
+  vertical-align: 0;
+  width: 14px;
+}
+
+.yakit-select.yakit-select-filled.ant-select.ant-select-filled:not(.ant-select-disabled) {
+  --ant-select-background-color: var(--Colors-Use-Neutral-Bg);
+}
+
+.yakit-select.yakit-select-filled.ant-select.ant-select-filled:not(.ant-select-disabled):not(
+    .yakit-select-status-error
+  ):not(.yakit-select-status-warning) {
+  --ant-select-border-color: transparent;
+}
+
+.yakit-select.yakit-select-borderless.ant-select.ant-select-borderless {
+  --ant-select-background-color: transparent;
+  --ant-select-border-color: transparent;
+  background: transparent;
+  border-color: transparent;
+}
+
+/* underlined 只留底边。antd 用 border-top-color / border-inline-color 拆开写，
+   这里直接写三边 border-color，优先级高于那两条长属性和禁用态。 */
+.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined {
+  --ant-select-background-color: transparent;
+  background: transparent;
+}
+
+.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined:not(:hover):not(
+    .ant-select-focused
+  ):not(.yakit-select-status-error):not(.yakit-select-status-warning) {
+  --ant-select-border-color: var(--Colors-Use-Neutral-Border);
+  border-color: transparent transparent var(--Colors-Use-Neutral-Border);
+}
+
+.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined:not(.ant-select-disabled):not(
+    .yakit-select-status-error
+  ):not(.yakit-select-status-warning):hover {
+  --ant-select-border-color: var(--ant-select-hover-border-color);
+  border-color: transparent transparent var(--ant-select-hover-border-color);
+}
+
+.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined.ant-select-focused:not(
+    .ant-select-disabled
+  ):not(.yakit-select-status-error):not(.yakit-select-status-warning) {
+  --ant-select-border-color: var(--ant-select-active-border-color);
+  border-color: transparent transparent var(--ant-select-active-border-color);
+}
+
+.yakit-select.yakit-select-underlined.yakit-select-status-error.ant-select.ant-select-underlined.ant-select-status-error {
+  --ant-select-border-color: var(--Colors-Use-Error-Border);
+  border-color: transparent transparent var(--Colors-Use-Error-Border);
+}
+
+.yakit-select.yakit-select-underlined.yakit-select-status-error.ant-select.ant-select-underlined.ant-select-status-error:not(
+    .ant-select-disabled
+  ):hover,
+.yakit-select.yakit-select-underlined.yakit-select-status-error.ant-select.ant-select-underlined.ant-select-status-error.ant-select-focused:not(
+    .ant-select-disabled
+  ) {
+  --ant-select-border-color: var(--Colors-Use-Error-Primary);
+  border-color: transparent transparent var(--Colors-Use-Error-Primary);
+}
+
+.yakit-select.yakit-select-underlined.yakit-select-status-warning.ant-select.ant-select-underlined.ant-select-status-warning {
+  --ant-select-border-color: var(--Colors-Use-Warning-Border);
+  border-color: transparent transparent var(--Colors-Use-Warning-Border);
+}
+
+.yakit-select.yakit-select-underlined.yakit-select-status-warning.ant-select.ant-select-underlined.ant-select-status-warning:not(
+    .ant-select-disabled
+  ):hover,
+.yakit-select.yakit-select-underlined.yakit-select-status-warning.ant-select.ant-select-underlined.ant-select-status-warning.ant-select-focused:not(
+    .ant-select-disabled
+  ) {
+  --ant-select-border-color: var(--Colors-Use-Warning-Primary);
+  border-color: transparent transparent var(--Colors-Use-Warning-Primary);
+}
+
+.yakit-select-dropdown.ant-select-dropdown {
+  --yakit-select-option-tracking: 0.5px;
+  background: var(--Colors-Use-Basic-Background);
+  border: 1px solid var(--Colors-Use-Neutral-Bg-Hover);
+  border-radius: 4px;
+  box-shadow: 0 8px 16px var(--Colors-Use-Basic-Shadow);
+  font-family: 'PingFang SC', sans-serif;
+  padding: 8px 4px;
+}
+
+.yakit-select-dropdown.yakit-select-dropdown-large {
+  --yakit-select-option-tracking: 0.1px;
+}
+
+.yakit-select-dropdown.ant-select-dropdown-placement-bottomLeft,
+.yakit-select-dropdown.ant-select-dropdown-placement-bottomRight {
+  margin-top: -2px;
+}
+
+.yakit-select-dropdown.ant-select-dropdown-placement-topLeft,
+.yakit-select-dropdown.ant-select-dropdown-placement-topRight {
+  margin-bottom: -2px;
+}
+
+.yakit-select-dropdown.yakit-select-dropdown.ant-select-dropdown .ant-select-item {
+  border-radius: 4px;
+  letter-spacing: var(--yakit-select-option-tracking);
+}
+
+.yakit-select-dropdown.yakit-select-dropdown.ant-select-dropdown
+  .ant-select-item:not(.ant-select-item-option-disabled):not(.ant-select-item-option-selected):not(
+    .ant-select-item-group
+  ):not(.ant-select-item-empty) {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+}
+
+.yakit-select-dropdown.ant-select-dropdown
+  .ant-select-item-option-selected.ant-select-item-option-active:not(
+    .ant-select-item-option-disabled
+  ) {
+  background: var(--yakit-select-option-selected-bg, var(--Colors-Use-Main-Bg));
+}
+
+.yakit-select-dropdown.yakit-select-dropdown-checkbox.ant-select-dropdown
+  .ant-select-item-option-selected.ant-select-item-option-active:not(
+    .ant-select-item-option-disabled
+  ) {
+  background: var(--yakit-select-option-selected-bg, var(--Colors-Use-Neutral-Bg-Hover));
+}
+
+.yakit-select-dropdown.ant-select-dropdown .ant-select-item-option {
+  align-items: center;
+}
+
+.yakit-select-dropdown.yakit-select-dropdown.ant-select-dropdown .ant-select-item-option-disabled {
+  background: transparent;
+  color: var(--Colors-Use-Neutral-Disable);
+}
+
+.yakit-select-dropdown.yakit-select-dropdown.ant-select-dropdown .ant-select-item-group {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  font-size: 12px;
+  line-height: 16px;
+  min-height: 28px;
+  padding: 6px 8px;
+}
+
+.yakit-select-dropdown.yakit-select-dropdown.ant-select-dropdown .ant-select-item-empty {
+  color: var(--Colors-Use-Neutral-Disable);
+}
+
+.yakit-select-option {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.yakit-select-option-check,
+.yakit-select-option-check * {
+  pointer-events: none;
+}
+
+.yakit-select-option-check {
+  display: inline-flex;
+  flex: none;
+  line-height: 0;
+}
+
+/* 勾选框本身不接收点击。悬停整行时，未选中的 Checkbox 仍走组件的悬停色。 */
+.yakit-select-dropdown .ant-select-item-option:hover:not(.ant-select-item-option-disabled)
+  .yakit-select-option-check
+  .yakit-checkbox:not(.yakit-checkbox-disabled):not(.yakit-checkbox-checked):not(
+    .yakit-checkbox-indeterminate
+  )
+  .yakit-checkbox-inner {
+  background: var(--Colors-Use-Main-Bg-Hover, #fdf0e6);
+  border-color: var(--Colors-Use-Main-Hover, #f59f64);
+}
+
+.yakit-select-tag {
+  display: inline-flex;
+  margin-block: 2px;
+  margin-inline-end: 4px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.yakit-select-tag .yakit-tag {
+  max-width: 100%;
+}
+
+.yakit-select-option-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yakit-select-option-delete {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--Colors-Use-Error-Primary);
+  cursor: pointer;
+  display: none;
+  flex: none;
+  height: 12px;
+  justify-content: center;
+  margin-inline-start: auto;
+  padding: 0;
+  width: 12px;
+}
+
+.ant-select-item-option:hover:not(.ant-select-item-option-selected) .yakit-select-option-delete,
+.ant-select-item-option-active:not(.ant-select-item-option-selected) .yakit-select-option-delete,
+.ant-select-item-option:focus-within:not(.ant-select-item-option-selected) .yakit-select-option-delete {
+  display: inline-flex;
+}

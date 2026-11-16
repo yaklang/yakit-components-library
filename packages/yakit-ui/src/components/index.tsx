@@ -70,6 +70,9 @@ export type {
   CheckboxValueType,
 } from './Checkbox';
 
+export { default as Select } from './Select';
+export type { SelectProps, SelectRef, SelectSize } from './Select';
+
 export { default as ConfigProvider } from './ConfigProvider';
 export type {
   CustomThemeConfig,
