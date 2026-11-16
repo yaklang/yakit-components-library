@@ -36,6 +36,11 @@ export interface YakitLocale {
     search?: string;
     scope?: string;
   };
+  Tag?: {
+    close?: string;
+    /** 复制按钮无障碍名称 */
+    copy?: string;
+  };
 }
 
 export type YakitComponentSize = 'small' | 'medium' | 'large' | 'huge';

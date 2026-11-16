@@ -1,5 +1,31 @@
-import { Tag, type TagProps } from './Tag';
+import { CheckableTag, CheckableTagGroup, TagCopy, Tag } from './Tag';
+import type {
+  CheckableTagGroupProps,
+  CheckableTagOption,
+  CheckableTagProps,
+  CheckableTagValue,
+  CheckableTagVariant,
+  TagCopyProps,
+  TagColor,
+  TagProps,
+  TagShape,
+  TagSize,
+  TagVariant,
+} from './type';
 
-export type { TagProps };
+export type {
+  CheckableTagGroupProps,
+  CheckableTagOption,
+  CheckableTagProps,
+  CheckableTagValue,
+  CheckableTagVariant,
+  TagCopyProps,
+  TagColor,
+  TagProps,
+  TagShape,
+  TagSize,
+  TagVariant,
+};
 
+export { CheckableTag, CheckableTagGroup, TagCopy };
 export default Tag;

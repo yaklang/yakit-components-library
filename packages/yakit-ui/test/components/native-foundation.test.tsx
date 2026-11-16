@@ -6,8 +6,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import Wave from '../../src/components/Animation/Wave';
 import Button from '../../src/components/Button';
 import ConfigProvider from '../../src/components/ConfigProvider';
-import Tag from '../../src/components/Tag';
+import Tag, { CheckableTag, CheckableTagGroup, TagCopy } from '../../src/components/Tag';
 import useYakitConfig from '../../src/hooks/useYakitConfig';
+import { getYakitTokenVariables } from '../../src/styles/tokenVariables';
 import { NativeComponentsFixture } from '../fixtures/native-components';
 import { cleanup, render } from '../helpers/render';
 
@@ -251,7 +252,7 @@ describe('native Wave behavior', () => {
 });
 
 describe('native Tag characterization', () => {
-  it('preserves size, color and bordered classes', () => {
+  it('preserves size, color, variant and bordered classes', () => {
     const { container } = render(
       <>
         <Tag color="yellow" size="large">
@@ -260,28 +261,214 @@ describe('native Tag characterization', () => {
         <Tag bordered={false} color="success" size="small">
           Borderless
         </Tag>
+        <Tag color="primary" size="medium" variant="solid">
+          Solid medium
+        </Tag>
       </>,
     );
-    const [bordered, borderless] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+    const [bordered, borderless, solid] = [
+      ...container.querySelectorAll<HTMLElement>('.yakit-tag'),
+    ];
 
-    expect(bordered).toHaveClass('yakit-tag-large', 'yakit-tag-yellow');
-    expect(bordered).not.toHaveClass('yakit-tag-bordered');
-    expect(borderless).toHaveClass('yakit-tag-bordered', 'yakit-tag-small', 'yakit-tag-success');
+    expect(bordered).toHaveClass(
+      'yakit-tag-large',
+      'yakit-tag-color-yellow',
+      'yakit-tag-soft',
+      'yakit-tag-bordered',
+    );
+    expect(borderless).toHaveClass(
+      'yakit-tag-small',
+      'yakit-tag-color-success',
+      'yakit-tag-borderless',
+    );
+    expect(borderless).not.toHaveClass('yakit-tag-bordered');
+    expect(solid).toHaveClass('yakit-tag-medium', 'yakit-tag-color-primary', 'yakit-tag-solid');
   });
 
-  it('keeps closeIcon and onClose as characterized no-ops', () => {
-    const onClose = vi.fn();
-    const { container } = render(
-      <Tag closeIcon={<button type="button">Close</button>} onClose={onClose}>
+  it('renders close control and honors onClose / preventDefault', () => {
+    const onClose = vi.fn((e: { preventDefault: () => void }) => e.preventDefault());
+    const { container, root } = render(
+      <Tag closable onClose={onClose}>
         Stable
       </Tag>,
     );
-    const tag = container.querySelector('.yakit-tag');
+    const close = container.querySelector('.yakit-tag-close');
+    expect(close).not.toBeNull();
+    close?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('.yakit-tag')).not.toBeNull();
 
-    tag?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    expect(tag).toHaveTextContent('Stable');
-    expect(tag?.querySelector('button')).toBeNull();
+    const onCloseHide = vi.fn();
+    flushSync(() =>
+      root.render(
+        <Tag closable onClose={onCloseHide}>
+          Hide me
+        </Tag>,
+      ),
+    );
+    const closeHide = container.querySelector('.yakit-tag-close');
+    flushSync(() => {
+      closeHide?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    });
+    expect(onCloseHide).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('.yakit-tag')).toBeNull();
+  });
+  it('forwards onClick and applies named colors', () => {
+    const onClick = vi.fn();
+    const { container } = render(
+      <>
+        <Tag color="success">Success</Tag>
+        <Tag color="error">Error</Tag>
+        <Tag color="serious" onClick={onClick}>
+          Click
+        </Tag>
+      </>,
+    );
+    const [success, error, clickable] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+    expect(success).toHaveClass('yakit-tag-color-success');
+    expect(error).toHaveClass('yakit-tag-color-error');
+    expect(clickable).toHaveClass('yakit-tag-color-serious', 'yakit-tag-clickable');
+    clickable.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('exposes CheckableTag / Tag.CheckableTag as antd-style alias', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <>
+        <CheckableTag checked={false} onChange={onChange}>
+          A
+        </CheckableTag>
+        <Tag.CheckableTag checked onChange={onChange}>
+          B
+        </Tag.CheckableTag>
+      </>,
+    );
+    const [a, b] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+    expect(a).toHaveClass('yakit-tag-checkable');
+    expect(a).not.toHaveClass('yakit-tag-checked');
+    expect(b).toHaveClass('yakit-tag-checkable', 'yakit-tag-checked');
+    a.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).toHaveBeenCalledWith(true);
+  });
+
+  it('gates extra split on renderable content: false stays single, 0 splits', () => {
+    const { container } = render(
+      <>
+        <Tag extra={false}>cond-off</Tag>
+        <Tag extra={0}>zero</Tag>
+        <Tag extra={[]}>empty-children</Tag>
+      </>,
+    );
+    const [condOff, zero, emptyArray] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+    // 条件渲染哨兵 / 空数组不渲染内容 → 单段
+    expect(condOff).not.toHaveClass('yakit-tag-split');
+    expect(condOff.querySelector('.yakit-tag-divider')).toBeNull();
+    expect(emptyArray).not.toHaveClass('yakit-tag-split');
+    // 0 渲染为文本 → 分栏
+    expect(zero).toHaveClass('yakit-tag-split');
+    expect(zero.querySelector('.yakit-tag-extra-content')?.textContent).toBe('0');
+  });
+
+  it('skips the content span for non-renderable children', () => {
+    const { container } = render(
+      <>
+        <Tag>{true}</Tag>
+        <Tag>{''}</Tag>
+        <Tag>{0}</Tag>
+      </>,
+    );
+    const [boolTag, emptyTag, zeroTag] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+    // boolean / 空字符串：无内容 span（不挂 contentRef 参与 ellipsis 观察）
+    expect(boolTag.querySelector('.yakit-tag-content')).toBeNull();
+    expect(emptyTag.querySelector('.yakit-tag-content')).toBeNull();
+    // 0 渲染文本，仍渲染 content span
+    expect(zeroTag.querySelector('.yakit-tag-content')?.textContent).toBe('0');
+  });
+
+  it('falls back checkable solid to borderless and keeps a split tag soft', () => {
+    const { container } = render(
+      <>
+        <Tag checkable checked variant="solid">
+          Chosen
+        </Tag>
+        <Tag extra="9.8" variant="solid">
+          Score
+        </Tag>
+      </>,
+    );
+    const [checkable, split] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+
+    expect(checkable).toHaveClass(
+      'yakit-tag-checkable',
+      'yakit-tag-checked',
+      'yakit-tag-borderless',
+    );
+    expect(checkable).not.toHaveClass('yakit-tag-solid');
+    expect(split).toHaveClass('yakit-tag-split', 'yakit-tag-soft');
+    expect(split).not.toHaveClass('yakit-tag-solid');
+  });
+
+  it('exposes checkbox and button roles with checked state only on checkable tags', () => {
+    const { container } = render(
+      <>
+        <Tag checkable checked>
+          Chosen
+        </Tag>
+        <Tag checkable checked={false}>
+          Open
+        </Tag>
+        <Tag onClick={() => undefined}>Press</Tag>
+        <Tag>Plain</Tag>
+      </>,
+    );
+    const [chosen, open, press, plain] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+
+    expect(chosen.getAttribute('role')).toBe('checkbox');
+    expect(chosen.getAttribute('aria-checked')).toBe('true');
+    expect(open.getAttribute('role')).toBe('checkbox');
+    expect(open.getAttribute('aria-checked')).toBe('false');
+    expect(press.getAttribute('role')).toBe('button');
+    expect(press.hasAttribute('aria-checked')).toBe(false);
+    expect(plain.hasAttribute('role')).toBe(false);
+    expect(plain.hasAttribute('aria-checked')).toBe(false);
+  });
+
+  it('ignores close and check toggles while disabled', () => {
+    const onClose = vi.fn();
+    const onChange = vi.fn();
+    const { container } = render(
+      <>
+        <Tag closable disabled onClose={onClose}>
+          Keep
+        </Tag>
+        <Tag checkable checked={false} disabled onChange={onChange}>
+          Locked
+        </Tag>
+      </>,
+    );
+    const [closable, checkable] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+
+    closable
+      .querySelector('.yakit-tag-close')
+      ?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    checkable.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
     expect(onClose).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
+    expect(closable.isConnected).toBe(true);
+    expect(checkable).not.toHaveClass('yakit-tag-checked');
+    expect(checkable.getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('maps a provider huge size onto the large tag', () => {
+    const { container } = render(
+      <ConfigProvider componentSize="huge">
+        <Tag>Sized</Tag>
+      </ConfigProvider>,
+    );
+
+    expect(container.querySelector('.yakit-tag')).toHaveClass('yakit-tag-large');
   });
 });
 
@@ -317,5 +504,260 @@ describe('native component hydration', () => {
 
     consoleError.mockRestore();
     consoleWarn.mockRestore();
+  });
+});
+
+describe('Tag checkable group', () => {
+  it('keeps role=group and multi-select add/remove without duplicate values', () => {
+    const onChange = vi.fn();
+    const { container, root } = render(
+      <CheckableTagGroup
+        multiple
+        value={['a']}
+        onChange={onChange}
+        options={[
+          { value: 'a', label: 'A' },
+          { value: 'b', label: 'B' },
+        ]}
+      />,
+    );
+    expect(container.querySelector('.yakit-tag-checkable-group')?.getAttribute('role')).toBe(
+      'group',
+    );
+
+    const tags = () => [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+    tags()[1].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).toHaveBeenLastCalledWith(['a', 'b']);
+
+    // re-select path with value already containing b: includes guard returns same list
+    onChange.mockClear();
+    flushSync(() =>
+      root.render(
+        <CheckableTagGroup
+          multiple
+          value={['a', 'b']}
+          onChange={onChange}
+          options={[
+            { value: 'a', label: 'A' },
+            { value: 'b', label: 'B' },
+          ]}
+        />,
+      ),
+    );
+    // b is checked; clicking toggles off (remove), not the includes(true) path
+    tags()[1].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).toHaveBeenLastCalledWith(['a']);
+
+    onChange.mockClear();
+    flushSync(() =>
+      root.render(
+        <CheckableTagGroup
+          multiple
+          value={['a']}
+          onChange={onChange}
+          options={[
+            { value: 'a', label: 'A' },
+            { value: 'b', label: 'B' },
+          ]}
+        />,
+      ),
+    );
+    tags()[0].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).toHaveBeenLastCalledWith([]);
+  });
+
+  it('fires onClick for checkable keyboard activation', () => {
+    const onClick = vi.fn();
+    const onChange = vi.fn();
+    const { container } = render(
+      <Tag checkable checked={false} onChange={onChange} onClick={onClick}>
+        K
+      </Tag>,
+    );
+    const el = container.querySelector<HTMLElement>('.yakit-tag');
+    el?.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }),
+    );
+    expect(onChange).toHaveBeenCalledWith(true);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('cancels a single selection back to null', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <CheckableTagGroup
+        value="a"
+        onChange={onChange}
+        options={[
+          { value: 'a', label: 'A' },
+          { value: 'b', label: 'B' },
+        ]}
+      />,
+    );
+    const tags = () => [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+
+    tags()[0].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).toHaveBeenLastCalledWith(null);
+
+    onChange.mockClear();
+    tags()[1].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).toHaveBeenLastCalledWith('b');
+  });
+
+  it('ignores clicks on a disabled option', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <CheckableTagGroup
+        onChange={onChange}
+        options={[
+          { value: 'a', label: 'A', disabled: true },
+          { value: 'b', label: 'B' },
+        ]}
+      />,
+    );
+    const [disabledTag, openTag] = [...container.querySelectorAll<HTMLElement>('.yakit-tag')];
+
+    expect(disabledTag.getAttribute('aria-disabled')).toBe('true');
+    disabledTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).not.toHaveBeenCalled();
+
+    openTag.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(onChange).toHaveBeenLastCalledWith('b');
+  });
+});
+
+describe('Tag copy', () => {
+  it('shows copy control with copy={true} and defaults text from children', () => {
+    const { container } = render(
+      <Tag copy color="primary">
+        hello-copy
+      </Tag>,
+    );
+    expect(container.querySelector('.yakit-tag-copy')).not.toBeNull();
+    expect(container.querySelector('.yakit-tag-content')?.textContent).toBe('hello-copy');
+  });
+
+  it('coexists with closable', () => {
+    const { container } = render(
+      <Tag copy={{ text: 'x' }} closable>
+        both
+      </Tag>,
+    );
+    expect(container.querySelector('.yakit-tag-copy')).not.toBeNull();
+    expect(container.querySelector('.yakit-tag-close')).not.toBeNull();
+  });
+
+  it('uses copy.text as content when children absent', () => {
+    const { container } = render(<Tag copy={{ text: 'only-text' }} color="blue" />);
+    expect(container.querySelector('.yakit-tag-content')?.textContent).toBe('only-text');
+  });
+
+  it('reports a successful clipboard write through onCopy', async () => {
+    const writeText = vi.fn(async () => undefined);
+    const clipboard = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+
+    try {
+      const onCopy = vi.fn();
+      const { container } = render(
+        <Tag copy onCopy={onCopy}>
+          payload
+        </Tag>,
+      );
+
+      container
+        .querySelector('.yakit-tag-copy')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      await vi.waitFor(() => {
+        expect(writeText).toHaveBeenCalledWith('payload');
+        expect(onCopy).toHaveBeenCalledWith(expect.anything(), { text: 'payload', ok: true });
+      });
+    } finally {
+      if (clipboard) Object.defineProperty(navigator, 'clipboard', clipboard);
+      else Reflect.deleteProperty(navigator, 'clipboard');
+    }
+  });
+});
+
+describe('TagCopy race', () => {
+  it('ignores double-click while locking and survives unmount mid-copy', async () => {
+    let resolveWrite: ((value: void) => void) | undefined;
+    const writeText = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveWrite = resolve;
+        }),
+    );
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+
+    const onCopy = vi.fn();
+    const { container, root } = render(<TagCopy copyText="payload" onCopy={onCopy} />);
+    const btn = container.querySelector<HTMLButtonElement>('.yakit-tag-copy');
+    expect(btn).not.toBeNull();
+
+    btn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    btn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(writeText).toHaveBeenCalledTimes(1);
+
+    flushSync(() => root.unmount());
+    resolveWrite?.();
+    await Promise.resolve();
+    expect(onCopy).not.toHaveBeenCalled();
+  });
+});
+
+describe('Tag ellipsis title', () => {
+  it('sets native title when content is truncated', async () => {
+    const proto = HTMLElement.prototype;
+    const sw = Object.getOwnPropertyDescriptor(proto, 'scrollWidth');
+    const cw = Object.getOwnPropertyDescriptor(proto, 'clientWidth');
+    Object.defineProperty(proto, 'scrollWidth', {
+      configurable: true,
+      get() {
+        return 120;
+      },
+    });
+    Object.defineProperty(proto, 'clientWidth', {
+      configurable: true,
+      get() {
+        return 40;
+      },
+    });
+
+    try {
+      const { container } = render(
+        <Tag ellipsis style={{ maxWidth: 40 }}>
+          long-ellipsis-text
+        </Tag>,
+      );
+      // useLayoutEffect schedules update via rAF
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+      const content = container.querySelector<HTMLElement>('.yakit-tag-content');
+      expect(content?.getAttribute('title')).toBe('long-ellipsis-text');
+    } finally {
+      if (sw) Object.defineProperty(proto, 'scrollWidth', sw);
+      else delete (proto as { scrollWidth?: unknown }).scrollWidth;
+      if (cw) Object.defineProperty(proto, 'clientWidth', cw);
+      else delete (proto as { clientWidth?: unknown }).clientWidth;
+    }
+  });
+});
+
+describe('getYakitTokenVariables cache', () => {
+  it('returns the same object for the same token reference', () => {
+    const token = { colorPrimary: '#1677ff' } as Parameters<typeof getYakitTokenVariables>[0];
+    const a = getYakitTokenVariables(token);
+    const b = getYakitTokenVariables(token);
+    expect(a).toBe(b);
+    expect(a['--yakit-color-primary']).toBe('#1677ff');
   });
 });

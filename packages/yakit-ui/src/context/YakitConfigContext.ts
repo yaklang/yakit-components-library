@@ -27,6 +27,10 @@ export const defaultYakitLocale: YakitLocale = {
     scope: '搜索范围',
     search: '搜索',
   },
+  Tag: {
+    close: '关闭',
+    copy: '复制',
+  },
 };
 
 export const defaultYakitConfig: YakitConfigContextValue = {
@@ -51,4 +55,5 @@ export const mergeYakitLocale = (parent: YakitLocale, locale?: YakitLocale): Yak
   Input: mergeDefined(parent.Input ?? {}, locale?.Input),
   InputNumber: mergeDefined(parent.InputNumber ?? {}, locale?.InputNumber),
   Search: mergeDefined(parent.Search ?? {}, locale?.Search),
+  Tag: mergeDefined(parent.Tag ?? {}, locale?.Tag),
 });
