@@ -1,24 +1,801 @@
 .yakit-tag {
+  --yakit-tag-color-base: var(--yakit-color-text-secondary);
+  --yakit-tag-color-bg: var(--yakit-color-border);
+  --yakit-tag-color-bg-hover: var(
+    --Colors-Use-Grey-Border,
+    var(--Colors-Use-Neutral-Disable, var(--yakit-tag-color-bg))
+  );
+  --yakit-tag-color-border: var(--yakit-color-neutral-border);
+  --yakit-tag-color-text: var(--yakit-tag-color-base);
+  --yakit-tag-color-on-solid: var(--yakit-color-text-base);
+  --yakit-tag-color-solid-bg: var(
+    --yakit-color-neutral-disable,
+    var(--Colors-Use-Grey-Primary, #b3bbc8)
+  );
+  --yakit-tag-color-dot: var(--yakit-tag-color-base);
   align-items: center;
+  background: var(--yakit-tag-color-bg);
   border: 1px solid transparent;
   box-sizing: border-box;
+  color: var(--yakit-tag-color-text);
   display: inline-flex;
+  font-family: 'PingFang SC', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  gap: var(--yakit-tag-icon-gap, 4px);
+  justify-content: center;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  max-width: 100%;
+  position: relative;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+  vertical-align: middle;
+  white-space: normal;
+}
+
+/* ---------- 尺寸（Figma sm-18 / md-20 / lg-22 → h 16 / 20 / 24） ---------- */
+.yakit-tag-small {
+  border-radius: var(--yakit-tag-border-radius-sm, 2px);
+  font-size: var(--yakit-tag-font-size-sm, 11px);
+  height: 16px;
+  line-height: 14px;
+  padding: var(--yakit-tag-padding-sm, 2px 6px);
+}
+.yakit-tag-medium {
+  border-radius: var(--yakit-tag-border-radius-md, 4px);
+  font-size: var(--yakit-tag-font-size-md, 12px);
+  height: 20px;
+  line-height: 16px;
+  padding: var(--yakit-tag-padding-md, 2px 8px);
+}
+.yakit-tag-large {
+  border-radius: var(--yakit-tag-border-radius-lg, 4px);
+  font-size: var(--yakit-tag-font-size-lg, 12px);
+  height: 24px;
+  line-height: 16px;
+  padding: var(--yakit-tag-padding-lg, 4px 8px);
+}
+
+.yakit-tag-round {
+  border-radius: 9999px;
+}
+
+.yakit-tag-icon-only {
+  padding-left: 0;
+  padding-right: 0;
+  width: auto;
+  aspect-ratio: 1;
   justify-content: center;
 }
-.yakit-tag-bordered { border-color: transparent !important; }
-.yakit-tag-small { border-radius: var(--yakit-tag-border-radius-sm, 2px); font-size: 11px; height: 16px; padding: var(--yakit-tag-padding-sm, 2px 6px); }
-.yakit-tag-middle { border-radius: var(--yakit-tag-border-radius-md, 4px); font-size: 12px; height: 20px; padding: var(--yakit-tag-padding-md, 2px 8px); }
-.yakit-tag-large { border-radius: var(--yakit-tag-border-radius-lg, 4px); font-size: 12px; height: 24px; padding: var(--yakit-tag-padding-lg, 4px 8px); }
-.yakit-tag-default { background: var(--yakit-color-border); border-color: var(--yakit-color-neutral-border); color: var(--yakit-color-text-secondary); }
-.yakit-tag-primary { background: var(--yakit-color-primary-focus); border-color: var(--yakit-color-primary-border); color: var(--yakit-color-primary); }
-.yakit-tag-success { background: var(--yakit-color-success-focus); border-color: var(--yakit-color-success-border); color: var(--yakit-color-success); }
-.yakit-tag-warning { background: var(--yakit-color-warning-focus); border-color: var(--yakit-color-warning-border); color: var(--yakit-color-warning); }
-.yakit-tag-error { background: var(--yakit-color-error-focus); border-color: var(--yakit-color-error-border); color: var(--yakit-color-error); }
-.yakit-tag-purple { background: var(--yakit-color-purple-bg); border-color: var(--yakit-color-purple-border); color: var(--yakit-color-purple); }
-.yakit-tag-magenta { background: var(--yakit-color-magenta-bg); border-color: var(--yakit-color-magenta-border); color: var(--yakit-color-magenta); }
-.yakit-tag-blue { background: var(--yakit-color-blue-bg); border-color: var(--yakit-color-blue-border); color: var(--yakit-color-blue); }
-.yakit-tag-lake-blue { background: var(--yakit-color-lake-blue-bg); border-color: var(--yakit-color-lake-blue-border); color: var(--yakit-color-lake-blue); }
-.yakit-tag-cyan { background: var(--yakit-color-cyan-bg); border-color: var(--yakit-color-cyan-border); color: var(--yakit-color-cyan); }
-.yakit-tag-orange { background: var(--yakit-color-orange-bg); border-color: var(--yakit-color-orange-border); color: var(--yakit-color-orange); }
-.yakit-tag-neutral { background: var(--yakit-color-neutral-border); border-color: var(--yakit-color-neutral-border); color: var(--yakit-color-text); }
-.yakit-tag-yellow { background: var(--yakit-color-yellow-bg); border-color: var(--yakit-color-yellow-border); color: var(--yakit-color-yellow); }
+.yakit-tag-small.yakit-tag-icon-only {
+  min-width: 16px;
+  padding: 2px;
+}
+.yakit-tag-medium.yakit-tag-icon-only {
+  min-width: 20px;
+  padding: 2px;
+}
+.yakit-tag-large.yakit-tag-icon-only {
+  min-width: 24px;
+  padding: 2px;
+}
+
+/* ---------- 变体 ---------- */
+.yakit-tag-soft {
+  background: var(--yakit-tag-color-bg);
+  color: var(--yakit-tag-color-text);
+}
+.yakit-tag-soft.yakit-tag-bordered {
+  border-color: var(--yakit-tag-color-border);
+}
+
+.yakit-tag-borderless {
+  background: var(--yakit-tag-color-bg);
+  border-color: transparent;
+  color: var(--yakit-tag-color-text);
+}
+
+.yakit-tag-solid {
+  background: var(--yakit-tag-color-solid-bg);
+  border-color: transparent;
+  color: var(--yakit-tag-color-on-solid);
+  --yakit-tag-color-dot: var(--yakit-tag-color-on-solid);
+}
+
+/* ---------- 插槽 ---------- */
+.yakit-tag-dot {
+  background: var(--yakit-tag-color-dot);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  height: 6px;
+  width: 6px;
+}
+.yakit-tag-large .yakit-tag-dot {
+  height: 8px;
+  width: 8px;
+}
+
+.yakit-tag-avatar {
+  align-items: center;
+  border-radius: 50%;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  overflow: hidden;
+}
+.yakit-tag-small .yakit-tag-avatar {
+  height: 12px;
+  width: 12px;
+}
+.yakit-tag-medium .yakit-tag-avatar {
+  height: 14px;
+  width: 14px;
+}
+.yakit-tag-large .yakit-tag-avatar {
+  height: 16px;
+  width: 16px;
+}
+.yakit-tag-avatar > img,
+.yakit-tag-avatar > svg {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.yakit-tag-icon {
+  align-items: center;
+  color: inherit;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  line-height: 0;
+}
+/* Outline 图标默认经 createIcon/IconBase + icon.css 把 --yakit-icon-default-color
+   设为 Neutral Title（灰）。此处强制 Tag 图标槽跟随标签文字色
+   （与 .yakit-tag-dot 使用 --yakit-tag-color-dot 意图一致）。 */
+.yakit-tag-icon .anticon.yakit-icon,
+.yakit-tag-icon .yakit-icon {
+  --yakit-icon-default-color: currentColor !important;
+  color: inherit;
+}
+.yakit-tag-icon svg {
+  color: inherit;
+}
+.yakit-tag-small .yakit-tag-icon svg {
+  height: 12px;
+  width: 12px;
+}
+.yakit-tag-medium .yakit-tag-icon svg {
+  height: 14px;
+  width: 14px;
+}
+.yakit-tag-large .yakit-tag-icon svg {
+  height: 16px;
+  width: 16px;
+}
+
+.yakit-tag-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* ---------- 长文案：默认换行 vs 省略 ---------- */
+/* height:auto 时按 border-box 收紧垂直 padding，单行仍对齐 16/20/24；多行靠 min-height 撑开。
+   不含 .yakit-tag-split：分栏根节点 padding 必须为 0，内边距在分段上。 */
+.yakit-tag:not(.yakit-tag-ellipsis):not(.yakit-tag-split).yakit-tag-small,
+.yakit-tag:not(.yakit-tag-ellipsis):not(.yakit-tag-split).yakit-tag-medium,
+.yakit-tag:not(.yakit-tag-ellipsis):not(.yakit-tag-split).yakit-tag-large {
+  height: auto;
+}
+.yakit-tag:not(.yakit-tag-ellipsis):not(.yakit-tag-split).yakit-tag-small {
+  min-height: 16px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.yakit-tag:not(.yakit-tag-ellipsis):not(.yakit-tag-split).yakit-tag-medium {
+  min-height: 20px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+.yakit-tag:not(.yakit-tag-ellipsis):not(.yakit-tag-split).yakit-tag-large {
+  min-height: 24px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.yakit-tag-ellipsis {
+  white-space: nowrap;
+}
+.yakit-tag-ellipsis .yakit-tag-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yakit-tag-close {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  /* Figma Outline/x：Neutral Text 4 Help，不跟 Tag 主色 */
+  color: var(--Colors-Use-Neutral-Text-4-Help-text);
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font: inherit;
+  justify-content: center;
+  line-height: 0;
+  margin-inline-start: 0;
+  opacity: 1;
+  padding: 0;
+}
+.yakit-tag-close:hover:not(:disabled) {
+  color: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title));
+  opacity: 1;
+}
+.yakit-tag-close:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.yakit-tag-small .yakit-tag-close svg {
+  height: 10px;
+  width: 10px;
+}
+.yakit-tag-medium .yakit-tag-close svg,
+.yakit-tag-large .yakit-tag-close svg {
+  height: 12px;
+  width: 12px;
+}
+
+/* ---------- 复制 ---------- */
+.yakit-tag-copy {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  /* 跟随 Tag 文字色，与内容/图标一致 */
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font: inherit;
+  justify-content: center;
+  line-height: 0;
+  margin-inline-start: 0;
+  padding: 0;
+  position: relative;
+}
+.yakit-tag-copy:hover:not(:disabled) {
+  opacity: 0.85;
+}
+.yakit-tag-copy:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+/* 独立使用：默认主色或外部 CSS 色（inline style）；Tag 内嵌传 currentColor 不带此 class */
+.yakit-tag-copy.yakit-tag-copy-colored {
+  color: var(--yakit-tag-color-base, var(--yakit-color-primary));
+}
+/* Outline 图标默认灰：强制跟随按钮 color（与 .yakit-tag-icon 一致） */
+.yakit-tag-copy .anticon.yakit-icon,
+.yakit-tag-copy .yakit-icon {
+  --yakit-icon-default-color: currentColor !important;
+  color: inherit;
+}
+.yakit-tag-copy svg {
+  color: inherit;
+}
+
+.yakit-tag-small .yakit-tag-copy svg,
+.yakit-tag-copy.yakit-tag-copy-sm svg {
+  height: 10px;
+  width: 10px;
+}
+.yakit-tag-medium .yakit-tag-copy svg,
+.yakit-tag-copy.yakit-tag-copy-md svg {
+  height: 12px;
+  width: 12px;
+}
+.yakit-tag-large .yakit-tag-copy svg,
+.yakit-tag-copy.yakit-tag-copy-lg svg {
+  height: 14px;
+  width: 14px;
+}
+/* 独立按钮默认中等图标尺寸 */
+.yakit-tag-copy:not(.yakit-tag-copy-sm):not(.yakit-tag-copy-md):not(.yakit-tag-copy-lg) svg {
+  height: 12px;
+  width: 12px;
+}
+.yakit-tag-split .yakit-tag-copy {
+  /* 分栏右侧：与 close 并排；颜色仍 inherit Tag 文字色 */
+  flex-shrink: 0;
+}
+
+/* ---------- 分栏布局（extra） ---------- */
+.yakit-tag-split {
+  align-items: stretch;
+  background: transparent;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.yakit-tag-split.yakit-tag-soft,
+.yakit-tag-split.yakit-tag-borderless,
+.yakit-tag-split.yakit-tag-solid {
+  background: transparent;
+}
+
+/* 分栏根节点固定尺寸高度（与普通 Tag 一致）；内边距放在分段上。 */
+.yakit-tag-split.yakit-tag-small {
+  height: 16px;
+  padding: 0;
+}
+.yakit-tag-split.yakit-tag-medium {
+  height: 20px;
+  padding: 0;
+}
+.yakit-tag-split.yakit-tag-large {
+  height: 24px;
+  padding: 0;
+}
+
+/* 分段：border-box，使 min-height/height 含 padding，总高与根节点一致 */
+.yakit-tag-main,
+.yakit-tag-extra {
+  align-items: center;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: var(--yakit-tag-icon-gap, 4px);
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.yakit-tag-main {
+  background: var(--yakit-tag-color-bg);
+  color: var(--yakit-tag-color-text);
+}
+
+.yakit-tag-solid .yakit-tag-main {
+  background: var(--yakit-tag-color-solid-bg);
+  color: var(--yakit-tag-color-on-solid);
+  --yakit-tag-color-dot: var(--yakit-tag-color-on-solid);
+}
+
+.yakit-tag-divider {
+  align-self: stretch;
+  background: var(--yakit-tag-color-border);
+  flex-shrink: 0;
+  width: 1px;
+}
+
+.yakit-tag-split.yakit-tag-borderless .yakit-tag-divider,
+.yakit-tag-split.yakit-tag-solid .yakit-tag-divider {
+  background: var(--yakit-tag-color-border);
+}
+
+.yakit-tag-extra {
+  background: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #fff));
+  color: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title, #353639));
+}
+
+.yakit-tag-extra-content {
+  min-width: 0;
+}
+
+/* 分段 padding + height 100%；border-box 保证视觉高度等于根节点 */
+.yakit-tag-split.yakit-tag-small .yakit-tag-main,
+.yakit-tag-split.yakit-tag-small .yakit-tag-extra {
+  height: 100%;
+  padding: var(--yakit-tag-padding-sm, 2px 6px);
+}
+.yakit-tag-split.yakit-tag-medium .yakit-tag-main,
+.yakit-tag-split.yakit-tag-medium .yakit-tag-extra {
+  height: 100%;
+  padding: var(--yakit-tag-padding-md, 2px 8px);
+}
+.yakit-tag-split.yakit-tag-large .yakit-tag-main,
+.yakit-tag-split.yakit-tag-large .yakit-tag-extra {
+  height: 100%;
+  padding: var(--yakit-tag-padding-lg, 4px 8px);
+}
+
+/* 分栏默认内容：宽度足够时单行展示 */
+.yakit-tag-split .yakit-tag-content,
+.yakit-tag-split .yakit-tag-extra-content {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* 仅图标时左侧分段保持方形；整标签仍为自适应宽度 */
+.yakit-tag-split.yakit-tag-icon-only {
+  aspect-ratio: auto;
+  min-width: 0;
+  padding: 0;
+  width: auto;
+}
+.yakit-tag-split.yakit-tag-icon-only .yakit-tag-main {
+  aspect-ratio: 1;
+  justify-content: center;
+}
+.yakit-tag-split.yakit-tag-small.yakit-tag-icon-only .yakit-tag-main {
+  min-width: 16px;
+  padding: 2px;
+}
+.yakit-tag-split.yakit-tag-medium.yakit-tag-icon-only .yakit-tag-main {
+  min-width: 20px;
+  padding: 2px;
+}
+.yakit-tag-split.yakit-tag-large.yakit-tag-icon-only .yakit-tag-main {
+  min-width: 24px;
+  padding: 4px;
+}
+
+.yakit-tag-split .yakit-tag-close {
+  color: var(--Colors-Use-Neutral-Text-4-Help-text);
+  opacity: 1;
+}
+.yakit-tag-split .yakit-tag-close:hover:not(:disabled) {
+  color: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title));
+  opacity: 1;
+}
+
+/* 分栏 + 省略：固定尺寸高度，左右单行省略，左对齐 */
+.yakit-tag-split.yakit-tag-ellipsis {
+  align-items: stretch;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.yakit-tag-split.yakit-tag-ellipsis.yakit-tag-small {
+  height: 16px;
+}
+.yakit-tag-split.yakit-tag-ellipsis.yakit-tag-medium {
+  height: 20px;
+}
+.yakit-tag-split.yakit-tag-ellipsis.yakit-tag-large {
+  height: 24px;
+}
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-main,
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-extra {
+  align-items: center;
+  height: 100%;
+  justify-content: flex-start;
+  min-width: 0;
+  overflow: hidden;
+}
+/* 两侧均不 grow；限宽时一起 shrink，使 children 与 extra 都能以省略可见。 */
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-main,
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-extra {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-divider {
+  align-self: stretch;
+  flex-shrink: 0;
+}
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-main .yakit-tag-dot,
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-main .yakit-tag-icon,
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-main .yakit-tag-avatar,
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-extra .yakit-tag-close,
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-extra .yakit-tag-copy {
+  flex-shrink: 0;
+}
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-content,
+.yakit-tag-split.yakit-tag-ellipsis .yakit-tag-extra-content {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 分栏且未开 ellipsis：
+   - 未限宽 → 固有单行；border-box min-height ≈ 尺寸（16/20/24）
+   - 限宽（max-width）→ 换行增高；CJK 使用 keep-all */
+.yakit-tag-split:not(.yakit-tag-ellipsis) {
+  max-width: 100%;
+  width: max-content;
+}
+.yakit-tag-split:not(.yakit-tag-ellipsis).yakit-tag-small {
+  height: auto;
+  min-height: 16px;
+  padding: 0;
+}
+.yakit-tag-split:not(.yakit-tag-ellipsis).yakit-tag-medium {
+  height: auto;
+  min-height: 20px;
+  padding: 0;
+}
+.yakit-tag-split:not(.yakit-tag-ellipsis).yakit-tag-large {
+  height: auto;
+  min-height: 24px;
+  padding: 0;
+}
+.yakit-tag-split:not(.yakit-tag-ellipsis) .yakit-tag-main,
+.yakit-tag-split:not(.yakit-tag-ellipsis) .yakit-tag-extra {
+  align-items: center;
+  flex: 0 1 auto;
+  height: auto;
+  min-height: inherit;
+}
+.yakit-tag-split:not(.yakit-tag-ellipsis) .yakit-tag-content,
+.yakit-tag-split:not(.yakit-tag-ellipsis) .yakit-tag-extra-content {
+  overflow-wrap: anywhere;
+  white-space: normal;
+  word-break: keep-all;
+}
+/* ---------- 可点击（onClick） ---------- */
+.yakit-tag-clickable {
+  cursor: pointer;
+}
+/* hover 用各色的 Bg-Hover token，与 checkable hover 一致 */
+.yakit-tag-clickable:not(.yakit-tag-disabled):hover {
+  background: var(--yakit-tag-color-bg-hover);
+}
+
+/* ---------- 可选择 ---------- */
+.yakit-tag-checkable {
+  cursor: pointer;
+  user-select: none;
+}
+/*
+ * 未选中：固定 soft/default 外观（不依赖 color 类）。
+ * Group / 推荐用法始终挂选中色 class（如 primary），以便 hover 能预览「选中后 hover」。
+ */
+.yakit-tag-checkable:not(.yakit-tag-checked) {
+  background: var(--yakit-color-border);
+  border-color: transparent;
+  color: var(--yakit-color-text-secondary);
+}
+/* 未选中 hover = 选中 hover（Figma：Bg-Hover + Border） */
+.yakit-tag-checkable:not(.yakit-tag-checked):not(.yakit-tag-disabled):hover {
+  background: var(--yakit-tag-color-bg-hover);
+  border-color: var(--yakit-tag-color-border);
+  color: var(--yakit-tag-color-text);
+}
+.yakit-tag-checkable.yakit-tag-checked {
+  background: var(--yakit-tag-color-bg);
+  border-color: var(--yakit-tag-color-border);
+  color: var(--yakit-tag-color-text);
+}
+/* 选中 hover：Figma Colors-Use/{color}/Bg-Hover */
+.yakit-tag-checkable.yakit-tag-checked:not(.yakit-tag-disabled):hover {
+  background: var(--yakit-tag-color-bg-hover);
+  border-color: var(--yakit-tag-color-border);
+  color: var(--yakit-tag-color-text);
+}
+
+/* ---------- checkable group（对齐 antd CheckableTagGroup） ---------- */
+.yakit-tag-checkable-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.yakit-tag-checkable-group-disabled {
+  cursor: not-allowed;
+}
+
+.yakit-tag-disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ---------- 颜色：soft token ---------- */
+.yakit-tag-color-default {
+  --yakit-tag-color-base: var(--yakit-color-text-secondary);
+  --yakit-tag-color-bg: var(--yakit-color-border);
+  --yakit-tag-color-bg-hover: var(
+    --Colors-Use-Grey-Border,
+    var(--Colors-Use-Neutral-Disable, var(--yakit-tag-color-bg))
+  );
+  --yakit-tag-color-border: var(--yakit-color-neutral-border);
+  --yakit-tag-color-solid-bg: var(--Colors-Use-Grey-Primary, #b3bbc8);
+  --yakit-tag-color-on-solid: var(--Colors-Use-Grey-On-Primary, #f8f9fa);
+}
+
+.yakit-tag-color-black {
+  --yakit-tag-color-base: var(--yakit-color-text-title);
+  --yakit-tag-color-bg: var(--yakit-color-neutral-border);
+  --yakit-tag-color-bg-hover: var(
+    --Colors-Use-Grey-Border,
+    var(--Colors-Use-Neutral-Disable, var(--yakit-tag-color-bg))
+  );
+  --yakit-tag-color-border: var(--yakit-color-neutral-disable);
+  --yakit-tag-color-solid-bg: var(--yakit-color-text-title);
+  --yakit-tag-color-on-solid: var(--yakit-color-basic-background);
+}
+
+.yakit-tag-color-primary {
+  /* Figma soft Tag Color=Main：背景 Focus，hover 用 Bg-Hover */
+  --yakit-tag-color-base: var(--yakit-color-primary);
+  --yakit-tag-color-bg: var(
+    --yakit-color-primary-focus,
+    var(--Colors-Use-Main-Focus, var(--yakit-colors-Main-30))
+  );
+  --yakit-tag-color-bg-hover: var(
+    --yakit-color-primary-bg-hover,
+    var(--Colors-Use-Main-Bg-Hover, var(--yakit-colors-Main-20))
+  );
+  --yakit-tag-color-border: var(
+    --yakit-color-primary-border,
+    var(--Colors-Use-Main-Border, var(--yakit-colors-Main-40))
+  );
+  --yakit-tag-color-solid-bg: var(--yakit-color-primary);
+  --yakit-tag-color-on-solid: var(--yakit-color-primary-text);
+}
+
+.yakit-tag-color-success {
+  --yakit-tag-color-base: var(--yakit-color-success);
+  --yakit-tag-color-bg: var(
+    --yakit-color-success-focus,
+    var(--Colors-Use-Success-Focus, var(--yakit-color-success-bg))
+  );
+  --yakit-tag-color-bg-hover: var(
+    --yakit-color-success-bg-hover,
+    var(--Colors-Use-Success-Bg-Hover, var(--yakit-tag-color-bg))
+  );
+  --yakit-tag-color-border: var(--yakit-color-success-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-success);
+  --yakit-tag-color-on-solid: var(--yakit-color-success-text);
+}
+
+.yakit-tag-color-warning {
+  --yakit-tag-color-base: var(--yakit-color-warning);
+  --yakit-tag-color-bg: var(
+    --yakit-color-warning-focus,
+    var(--Colors-Use-Warning-Focus, var(--yakit-color-warning-bg))
+  );
+  --yakit-tag-color-bg-hover: var(
+    --yakit-color-warning-bg-hover,
+    var(--Colors-Use-Warning-Bg-Hover, var(--yakit-tag-color-bg))
+  );
+  --yakit-tag-color-border: var(--yakit-color-warning-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-warning);
+  --yakit-tag-color-on-solid: var(--yakit-color-warning-text);
+}
+
+.yakit-tag-color-error {
+  --yakit-tag-color-base: var(--yakit-color-error);
+  --yakit-tag-color-bg: var(
+    --yakit-color-error-focus,
+    var(--Colors-Use-Error-Focus, var(--yakit-color-error-bg))
+  );
+  --yakit-tag-color-bg-hover: var(
+    --yakit-color-error-bg-hover,
+    var(--Colors-Use-Error-Bg-Hover, var(--yakit-tag-color-bg))
+  );
+  --yakit-tag-color-border: var(--yakit-color-error-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-error);
+  --yakit-tag-color-on-solid: var(--yakit-color-error-text);
+}
+
+.yakit-tag-color-purple {
+  --yakit-tag-color-base: var(--yakit-color-purple);
+  --yakit-tag-color-bg: var(--yakit-color-purple-bg);
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Purple-Bg-Hover, var(--yakit-tag-color-bg));
+  --yakit-tag-color-border: var(--yakit-color-purple-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-purple);
+  --yakit-tag-color-on-solid: var(--yakit-color-purple-text);
+}
+
+.yakit-tag-color-magenta {
+  --yakit-tag-color-base: var(--yakit-color-magenta);
+  --yakit-tag-color-bg: var(--yakit-color-magenta-bg);
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Magenta-Bg-Hover, var(--yakit-tag-color-bg));
+  --yakit-tag-color-border: var(--yakit-color-magenta-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-magenta);
+  --yakit-tag-color-on-solid: var(--yakit-color-magenta-text);
+}
+
+.yakit-tag-color-blue {
+  --yakit-tag-color-base: var(--yakit-color-blue);
+  --yakit-tag-color-bg: var(--yakit-color-blue-bg);
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Blue-Bg-Hover, var(--yakit-tag-color-bg));
+  --yakit-tag-color-border: var(--yakit-color-blue-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-blue);
+  --yakit-tag-color-on-solid: var(--yakit-color-blue-text);
+}
+
+.yakit-tag-color-lake-blue {
+  --yakit-tag-color-base: var(--yakit-color-lake-blue);
+  --yakit-tag-color-bg: var(--yakit-color-lake-blue-bg);
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Lake-blue-Bg-Hover, var(--yakit-tag-color-bg));
+  --yakit-tag-color-border: var(--yakit-color-lake-blue-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-lake-blue);
+  --yakit-tag-color-on-solid: var(--yakit-color-lake-blue-text);
+}
+
+.yakit-tag-color-cyan {
+  --yakit-tag-color-base: var(--yakit-color-cyan);
+  --yakit-tag-color-bg: var(--yakit-color-cyan-bg);
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Cyan-Bg-Hover, var(--yakit-tag-color-bg));
+  --yakit-tag-color-border: var(--yakit-color-cyan-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-cyan);
+  --yakit-tag-color-on-solid: var(--yakit-color-cyan-text);
+}
+
+.yakit-tag-color-orange {
+  --yakit-tag-color-base: var(--yakit-color-orange);
+  --yakit-tag-color-bg: var(--yakit-color-orange-bg);
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Orange-Bg-Hover, var(--yakit-tag-color-bg));
+  --yakit-tag-color-border: var(--yakit-color-orange-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-orange);
+  --yakit-tag-color-on-solid: var(--yakit-color-orange-text);
+}
+
+.yakit-tag-color-yellow {
+  --yakit-tag-color-base: var(--yakit-color-yellow);
+  --yakit-tag-color-bg: var(--yakit-color-yellow-bg);
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Yellow-Bg-Hover, var(--yakit-tag-color-bg));
+  --yakit-tag-color-border: var(--yakit-color-yellow-border);
+  --yakit-tag-color-solid-bg: var(--yakit-color-yellow);
+  --yakit-tag-color-on-solid: var(--yakit-color-yellow-text);
+}
+
+/* 风险等级 — Colors-Use-Status-* 与对应色阶背景 */
+.yakit-tag-color-serious {
+  --yakit-tag-color-base: var(--Colors-Use-Status-Serious, var(--yakit-colors-Error-80));
+  --yakit-tag-color-bg: var(--Colors-Use-Error-Bg, var(--yakit-colors-Error-10));
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Error-Bg-Hover, var(--yakit-colors-Error-20));
+  --yakit-tag-color-border: var(--Colors-Use-Error-Border, var(--yakit-colors-Error-40));
+  --yakit-tag-color-solid-bg: var(--Colors-Use-Status-Serious, var(--yakit-colors-Error-80));
+  --yakit-tag-color-on-solid: var(--Colors-Use-Error-On-Primary, #fff);
+}
+
+.yakit-tag-color-high {
+  --yakit-tag-color-base: var(--Colors-Use-Status-High, var(--yakit-colors-Error-60));
+  --yakit-tag-color-bg: var(--Colors-Use-Error-Bg-Hover, var(--yakit-colors-Error-20));
+  --yakit-tag-color-bg-hover: var(
+    --Colors-Use-Error-Focus,
+    var(--yakit-colors-Error-30, var(--yakit-tag-color-bg))
+  );
+  --yakit-tag-color-border: var(--Colors-Use-Error-Border, var(--yakit-colors-Error-40));
+  --yakit-tag-color-solid-bg: var(--Colors-Use-Status-High, var(--yakit-colors-Error-60));
+  --yakit-tag-color-on-solid: var(--Colors-Use-Error-On-Primary, #fff);
+}
+
+.yakit-tag-color-medium {
+  --yakit-tag-color-base: var(--Colors-Use-Status-Medium, var(--yakit-colors-Warning-60));
+  --yakit-tag-color-bg: var(--Colors-Use-Warning-Bg, var(--yakit-colors-Warning-10));
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Warning-Bg-Hover, var(--yakit-colors-Warning-20));
+  --yakit-tag-color-border: var(--Colors-Use-Warning-Border, var(--yakit-colors-Warning-40));
+  --yakit-tag-color-solid-bg: var(--Colors-Use-Status-Medium, var(--yakit-colors-Warning-60));
+  --yakit-tag-color-on-solid: var(--Colors-Use-Warning-On-Primary, #fff);
+}
+
+.yakit-tag-color-low {
+  --yakit-tag-color-base: var(--Colors-Use-Status-Low, var(--yakit-colors-Yellow-60));
+  --yakit-tag-color-bg: var(--Colors-Use-Yellow-Bg, var(--yakit-colors-Yellow-20));
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Yellow-Bg-Hover, var(--yakit-colors-Yellow-30));
+  --yakit-tag-color-border: var(--Colors-Use-Yellow-Border, var(--yakit-colors-Yellow-40));
+  --yakit-tag-color-solid-bg: var(--Colors-Use-Status-Low, var(--yakit-colors-Yellow-60));
+  --yakit-tag-color-on-solid: var(--Colors-Use-Yellow-On-Primary, #fff);
+}
+
+.yakit-tag-color-safe {
+  --yakit-tag-color-base: var(--Colors-Use-Status-Safe, var(--yakit-colors-Success-60));
+  --yakit-tag-color-bg: var(--Colors-Use-Success-Bg, var(--yakit-colors-Success-10));
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Success-Bg-Hover, var(--yakit-colors-Success-20));
+  --yakit-tag-color-border: var(--Colors-Use-Success-Border, var(--yakit-colors-Success-40));
+  --yakit-tag-color-solid-bg: var(--Colors-Use-Status-Safe, var(--yakit-colors-Success-60));
+  --yakit-tag-color-on-solid: var(--Colors-Use-Success-On-Primary, #fff);
+}
+
+.yakit-tag-color-unknown {
+  --yakit-tag-color-base: var(--Colors-Use-Status-Unknown, var(--yakit-colors-Neutral-70));
+  --yakit-tag-color-bg: var(--Colors-Use-Neutral-Bg, var(--yakit-colors-Neutral-10));
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Neutral-Bg-Hover, var(--yakit-colors-Neutral-20));
+  --yakit-tag-color-border: var(--Colors-Use-Neutral-Border, var(--yakit-colors-Neutral-30));
+  --yakit-tag-color-solid-bg: var(--Colors-Use-Status-Unknown, var(--yakit-colors-Neutral-70));
+  --yakit-tag-color-on-solid: var(--Colors-Use-Basic-White, #fff);
+}

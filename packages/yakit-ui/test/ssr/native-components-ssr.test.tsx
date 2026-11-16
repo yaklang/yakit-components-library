@@ -21,6 +21,7 @@ describe('native component SSR', () => {
     expect(markup).toContain('yakit-input');
     expect(markup).toContain('yakit-input-number');
     expect(markup).toContain('yakit-btn');
+    expect(markup).toContain('yakit-tag');
     expect(markup).not.toContain('<button type="button"><span><button');
     expect(markup).not.toMatch(/ant-(?:input|btn|otp)/);
   });

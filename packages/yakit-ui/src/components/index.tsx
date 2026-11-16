@@ -44,6 +44,21 @@ export type {
   InputNumberValue,
 } from './InputNumber';
 
+export { default as Tag, CheckableTag, CheckableTagGroup, TagCopy } from './Tag';
+export type {
+  CheckableTagGroupProps,
+  CheckableTagOption,
+  CheckableTagProps,
+  CheckableTagValue,
+  CheckableTagVariant,
+  TagCopyProps,
+  TagColor,
+  TagProps,
+  TagShape,
+  TagSize,
+  TagVariant,
+} from './Tag';
+
 export { default as ConfigProvider } from './ConfigProvider';
 export type {
   CustomThemeConfig,

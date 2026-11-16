@@ -15,12 +15,14 @@ const locales: Record<'zh' | 'en', YakitLocale> = {
     Input: { clear: '清除', hidePassword: '隐藏密码', showPassword: '显示密码' },
     InputNumber: { decrement: '减少', increment: '增加' },
     Search: { scope: '搜索范围', search: '搜索' },
+    Tag: { close: '关闭', copy: '复制' },
   },
   en: {
     locale: 'en-US',
     Input: { clear: 'Clear', hidePassword: 'Hide password', showPassword: 'Show password' },
     InputNumber: { decrement: 'Decrease', increment: 'Increase' },
     Search: { scope: 'Search scope', search: 'Search' },
+    Tag: { close: 'Close', copy: 'Copy' },
   },
 };
 
