@@ -1,3 +1,4 @@
+import { Loading } from '@yakit-libs/yakit-ui-icons';
 import classNames from 'classnames';
 import {
   forwardRef,
@@ -10,7 +11,6 @@ import {
 } from 'react';
 
 import useYakitConfig from '../../hooks/useYakitConfig';
-import { Loading } from '@yakit-libs/yakit-ui-icons';
 import { getYakitTokenVariables, type YakitCSSProperties } from '../../styles/tokenVariables';
 import Wave from '../Animation/Wave';
 
