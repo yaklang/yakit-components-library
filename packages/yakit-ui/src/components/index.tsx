@@ -59,6 +59,17 @@ export type {
   TagVariant,
 } from './Tag';
 
+export { default as Checkbox, CheckboxGroup } from './Checkbox';
+export type {
+  CheckboxChangeEvent,
+  CheckboxGroupProps,
+  CheckboxOptionType,
+  CheckboxProps,
+  CheckboxRef,
+  CheckboxSize,
+  CheckboxValueType,
+} from './Checkbox';
+
 export { default as ConfigProvider } from './ConfigProvider';
 export type {
   CustomThemeConfig,

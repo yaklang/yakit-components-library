@@ -2,6 +2,7 @@ import React from 'react';
 
 import Wave from '../../src/components/Animation/Wave';
 import Button from '../../src/components/Button';
+import Checkbox from '../../src/components/Checkbox';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import Input from '../../src/components/Input';
 import InputNumber from '../../src/components/InputNumber';
@@ -15,6 +16,11 @@ export const NativeComponentsFixture = () => (
     theme={{ mode: 'dark', token: { colorPrimary: '#123456' } }}
   >
     <Button>Button</Button>
+    <Checkbox defaultChecked>Checkbox</Checkbox>
+    <Checkbox.Group defaultValue={['a']}>
+      <Checkbox value="a">A</Checkbox>
+      <Checkbox value="b">B</Checkbox>
+    </Checkbox.Group>
     <Input allowClear defaultValue="input" />
     <Input.TextArea defaultValue="textarea" />
     <Input.Password defaultValue="password" />

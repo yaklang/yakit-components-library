@@ -3,11 +3,13 @@ import type { ReactNode } from 'react';
 import type { YakitTheme } from '../theme';
 
 import type { YakitButtonToken } from './YakitButton';
+import type { YakitCheckboxToken } from './YakitCheckbox';
 import type { YakitTagToken } from './YakitTag';
 
 // 扩展的组件 tokens
 export interface YakitThemeComponents {
   YakitButton?: Partial<YakitButtonToken>;
+  YakitCheckbox?: Partial<YakitCheckboxToken>;
   YakitTag?: Partial<YakitTagToken>;
 }
 
@@ -40,6 +42,10 @@ export interface YakitLocale {
     close?: string;
     /** 复制按钮无障碍名称 */
     copy?: string;
+  };
+  Checkbox?: {
+    /** 无障碍：半选状态说明 */
+    indeterminate?: string;
   };
 }
 

@@ -1,0 +1,180 @@
+.yakit-checkbox {
+  align-items: flex-start;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  gap: var(--yakit-checkbox-gap, 8px);
+  margin: 0;
+  max-width: 100%;
+  min-width: 0;
+  position: relative;
+  user-select: none;
+  vertical-align: middle;
+}
+
+
+.yakit-checkbox-box {
+  display: inline-flex;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.yakit-checkbox-input {
+  cursor: inherit;
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.yakit-checkbox-inner {
+  align-items: center;
+  background: var(--Colors-Use-Basic-Background, #fff);
+  border: 1px solid var(--Colors-Use-Neutral-Disable, #c0c6d1);
+  border-radius: var(--yakit-checkbox-border-radius, 4px);
+  box-sizing: border-box;
+  color: var(--Colors-Use-Basic-Background, #fff);
+  display: inline-flex;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.yakit-checkbox-medium .yakit-checkbox-box,
+.yakit-checkbox-medium .yakit-checkbox-inner {
+  height: var(--yakit-checkbox-size-md, 16px);
+  width: var(--yakit-checkbox-size-md, 16px);
+}
+
+.yakit-checkbox-large .yakit-checkbox-box,
+.yakit-checkbox-large .yakit-checkbox-inner {
+  height: var(--yakit-checkbox-size-lg, 20px);
+  width: var(--yakit-checkbox-size-lg, 20px);
+}
+
+.yakit-checkbox-icon {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.yakit-checkbox-icon.anticon,
+.yakit-checkbox-icon.yakit-icon {
+  color: inherit;
+}
+
+/* Figma Select All：内缩约 12.5% 的白色圆角描边方框 */
+.yakit-checkbox-indeterminate-mark {
+  background: transparent;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  box-sizing: border-box;
+  display: block;
+  height: 75%;
+  width: 75%;
+}
+
+.yakit-checkbox:hover:not(.yakit-checkbox-disabled):not(.yakit-checkbox-checked):not(
+    .yakit-checkbox-indeterminate
+  )
+  .yakit-checkbox-inner {
+  background: var(--Colors-Use-Main-Bg-Hover, #fdf0e6);
+  border-color: var(--Colors-Use-Main-Hover, #f59f64);
+}
+
+.yakit-checkbox-checked .yakit-checkbox-inner {
+  background: var(--Colors-Use-Main-Primary, #f28c45);
+  border-color: var(--Colors-Use-Main-Primary, #f28c45);
+}
+
+.yakit-checkbox-checked:hover:not(.yakit-checkbox-disabled) .yakit-checkbox-inner {
+  background: var(--Colors-Use-Main-Hover, #f59f64);
+  border-color: var(--Colors-Use-Main-Hover, #f59f64);
+}
+
+.yakit-checkbox-indeterminate .yakit-checkbox-inner {
+  background: var(--Colors-Use-Main-Primary, #f28c45);
+  border-color: var(--Colors-Use-Main-Primary, #f28c45);
+}
+
+.yakit-checkbox-indeterminate:hover:not(.yakit-checkbox-disabled) .yakit-checkbox-inner {
+  background: var(--Colors-Use-Main-Hover, #f59f64);
+  border-color: var(--Colors-Use-Main-Hover, #f59f64);
+}
+
+.yakit-checkbox-disabled {
+  cursor: not-allowed;
+}
+
+.yakit-checkbox-disabled .yakit-checkbox-inner {
+  background: var(--Colors-Use-Neutral-Bg-Hover, #eef0f3);
+  border-color: var(--Colors-Use-Neutral-Border, #e6e8ed);
+  color: var(--Colors-Use-Basic-Background, #fff);
+}
+
+.yakit-checkbox-disabled.yakit-checkbox-checked .yakit-checkbox-inner,
+.yakit-checkbox-disabled.yakit-checkbox-indeterminate .yakit-checkbox-inner {
+  background: var(--Colors-Use-Main-Focus, #fce5d6);
+  border-color: var(--Colors-Use-Main-Focus, #fce5d6);
+  color: var(--Colors-Use-Basic-Background, #fff);
+}
+
+.yakit-checkbox-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 窄宽场景：主/副文案默认单行省略（替代接入方对 ant-checkbox-wrapper 的穿透写法） */
+.yakit-checkbox-label,
+.yakit-checkbox-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yakit-checkbox-medium .yakit-checkbox-label {
+  color: var(--Colors-Use-Neutral-Text-1-Title, #353639);
+  font-size: var(--yakit-checkbox-font-size-md, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-checkbox-line-height-md, 16px);
+}
+
+.yakit-checkbox-large .yakit-checkbox-label {
+  color: var(--Colors-Use-Neutral-Text-1-Title, #353639);
+  font-size: var(--yakit-checkbox-font-size-lg, 14px);
+  letter-spacing: 0.1px;
+  line-height: var(--yakit-checkbox-line-height-lg, 20px);
+}
+
+.yakit-checkbox-description {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary, #858997);
+  font-size: var(--yakit-checkbox-description-font-size, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-checkbox-description-line-height, 16px);
+}
+
+.yakit-checkbox-disabled .yakit-checkbox-label,
+.yakit-checkbox-disabled .yakit-checkbox-description {
+  color: var(--Colors-Use-Neutral-Disable, #c0c6d1);
+}
+
+.yakit-checkbox:focus-within:not(.yakit-checkbox-disabled) .yakit-checkbox-inner {
+  box-shadow: 0 0 0 2px var(--Colors-Use-Main-Focus, #fce5d6);
+}
+.yakit-checkbox-group {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}

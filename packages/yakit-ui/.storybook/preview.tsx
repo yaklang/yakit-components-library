@@ -16,6 +16,7 @@ const locales: Record<'zh' | 'en', YakitLocale> = {
     InputNumber: { decrement: '减少', increment: '增加' },
     Search: { scope: '搜索范围', search: '搜索' },
     Tag: { close: '关闭', copy: '复制' },
+    Checkbox: { indeterminate: '部分选中' },
   },
   en: {
     locale: 'en-US',
@@ -23,6 +24,7 @@ const locales: Record<'zh' | 'en', YakitLocale> = {
     InputNumber: { decrement: 'Decrease', increment: 'Increase' },
     Search: { scope: 'Search scope', search: 'Search' },
     Tag: { close: 'Close', copy: 'Copy' },
+    Checkbox: { indeterminate: 'Partially selected' },
   },
 };
 
