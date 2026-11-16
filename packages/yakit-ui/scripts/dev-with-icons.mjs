@@ -1,14 +1,21 @@
 import { spawn, spawnSync } from 'node:child_process';
+import { pnpmInvocation } from '../../yakit-ui-icons/scripts/process.mjs';
 
-const build = spawnSync('pnpm', ['--filter', '@yakit-libs/yakit-ui-icons', 'run', 'build'], {
+const build = spawnSync(...pnpmInvocation(['--filter', '@yakit-libs/yakit-ui-icons', 'run', 'build']), {
   stdio: 'inherit',
 });
+if (build.error) {
+  console.error(build.error);
+  process.exit(1);
+}
 if (build.status !== 0) process.exit(build.status ?? 1);
 const [command, ...args] = process.argv.slice(2);
 if (!command) throw new Error('Expected a development server command');
 const children = [
-  spawn('pnpm', ['--filter', '@yakit-libs/yakit-ui-icons', 'run', 'watch'], { stdio: 'inherit' }),
-  spawn('pnpm', ['exec', command, ...args], { stdio: 'inherit' }),
+  spawn(...pnpmInvocation(['--filter', '@yakit-libs/yakit-ui-icons', 'run', 'watch']), {
+    stdio: 'inherit',
+  }),
+  spawn(...pnpmInvocation(['exec', command, ...args]), { stdio: 'inherit' }),
 ];
 let stopping = false;
 function stop(code = 0) {
