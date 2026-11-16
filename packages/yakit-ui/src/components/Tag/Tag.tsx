@@ -260,9 +260,10 @@ const TagInternal = memo(function TagInternal({
     [checkable, clickable, disabled, activateCheckable, onClick],
   );
 
+  const renderedCloseIcon = typeof closeIcon === 'function' ? closeIcon(undefined) : closeIcon;
   const closeIconNode = showClose ? (
-    closeIcon && closeIcon !== true ? (
-      closeIcon
+    renderedCloseIcon && renderedCloseIcon !== true ? (
+      renderedCloseIcon
     ) : (
       <XOutlined color="currentColor" />
     )

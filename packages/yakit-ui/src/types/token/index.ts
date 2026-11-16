@@ -4,6 +4,7 @@ import type { YakitTheme } from '../theme';
 
 import type { YakitButtonToken } from './YakitButton';
 import type { YakitCheckboxToken } from './YakitCheckbox';
+import type { YakitSelectToken } from './YakitSelect';
 import type { YakitTagToken } from './YakitTag';
 
 // 扩展的组件 tokens
@@ -11,8 +12,8 @@ export interface YakitThemeComponents {
   YakitButton?: Partial<YakitButtonToken>;
   YakitCheckbox?: Partial<YakitCheckboxToken>;
   YakitTag?: Partial<YakitTagToken>;
+  YakitSelect?: Partial<YakitSelectToken>;
 }
-
 export type YakitThemeMode = 'light' | 'dark';
 
 export interface CustomThemeConfig {
@@ -46,6 +47,10 @@ export interface YakitLocale {
   Checkbox?: {
     /** 无障碍：半选状态说明 */
     indeterminate?: string;
+  };
+  Select?: {
+    /** 下拉项删除按钮的无障碍名称 */
+    removeOption?: string;
   };
 }
 

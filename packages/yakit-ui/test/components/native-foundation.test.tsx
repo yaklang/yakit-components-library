@@ -313,6 +313,22 @@ describe('native Tag characterization', () => {
     expect(onCloseHide).toHaveBeenCalledTimes(1);
     expect(container.querySelector('.yakit-tag')).toBeNull();
   });
+
+  it('renders a function close icon', () => {
+    const { container } = render(
+      <Tag closeIcon={() => <i className="custom-close">x</i>}>Custom</Tag>,
+    );
+
+    expect(container.querySelector('.yakit-tag-close .custom-close')?.textContent).toBe('x');
+    expect(container.querySelector('.yakit-icon')).toBeNull();
+  });
+
+  it('uses the default close icon when the function returns nothing', () => {
+    const { container } = render(<Tag closeIcon={() => null}>Custom</Tag>);
+
+    expect(container.querySelector('.yakit-tag-close .yakit-icon')).not.toBeNull();
+  });
+
   it('forwards onClick and applies named colors', () => {
     const onClick = vi.fn();
     const { container } = render(

@@ -18,6 +18,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [
+      'antd',
       'react',
       'react-dom',
       'react-dom/client',

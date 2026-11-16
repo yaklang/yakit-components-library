@@ -26,6 +26,7 @@ export const YakitConfigContextProvider: FC<
           parent.token.YakitCheckbox ?? {},
           theme?.components?.YakitCheckbox,
         ),
+        YakitSelect: mergeDefined(parent.token.YakitSelect ?? {}, theme?.components?.YakitSelect),
         YakitTag: mergeDefined(parent.token.YakitTag ?? {}, theme?.components?.YakitTag),
       },
     }),
