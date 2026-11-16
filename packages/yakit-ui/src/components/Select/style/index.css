@@ -358,23 +358,14 @@
   white-space: nowrap;
 }
 
-.yakit-select-option-delete {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  color: var(--Colors-Use-Error-Primary);
-  cursor: pointer;
+.yakit-select-dropdown .yakit-select-option-delete.yakit-btn {
   display: none;
   flex: none;
-  height: 12px;
-  justify-content: center;
   margin-inline-start: auto;
-  padding: 0;
-  width: 12px;
 }
 
-.ant-select-item-option:hover:not(.ant-select-item-option-selected) .yakit-select-option-delete,
-.ant-select-item-option-active:not(.ant-select-item-option-selected) .yakit-select-option-delete,
-.ant-select-item-option:focus-within:not(.ant-select-item-option-selected) .yakit-select-option-delete {
+.yakit-select-dropdown .ant-select-item-option:hover:not(.ant-select-item-option-selected) .yakit-select-option-delete.yakit-btn,
+.yakit-select-dropdown .ant-select-item-option-active:not(.ant-select-item-option-selected) .yakit-select-option-delete.yakit-btn,
+.yakit-select-dropdown .ant-select-item-option:focus-within:not(.ant-select-item-option-selected) .yakit-select-option-delete.yakit-btn {
   display: inline-flex;
 }

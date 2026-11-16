@@ -34,6 +34,9 @@ export const defaultYakitLocale: YakitLocale = {
   Checkbox: {
     indeterminate: '部分选中',
   },
+  Select: {
+    removeOption: '删除选项',
+  },
 };
 
 export const defaultYakitConfig: YakitConfigContextValue = {
@@ -60,4 +63,5 @@ export const mergeYakitLocale = (parent: YakitLocale, locale?: YakitLocale): Yak
   Search: mergeDefined(parent.Search ?? {}, locale?.Search),
   Tag: mergeDefined(parent.Tag ?? {}, locale?.Tag),
   Checkbox: mergeDefined(parent.Checkbox ?? {}, locale?.Checkbox),
+  Select: mergeDefined(parent.Select ?? {}, locale?.Select),
 });

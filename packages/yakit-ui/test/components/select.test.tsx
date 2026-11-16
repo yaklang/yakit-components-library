@@ -285,9 +285,9 @@ describe('Select', () => {
     expect(projectCheck(dropdowns[0]) && getComputedStyle(projectCheck(dropdowns[0])!).color).toBe(
       'rgb(242, 140, 69)',
     );
-    expect(dropdowns[1].querySelectorAll('.yakit-select-option-check .yakit-checkbox')).toHaveLength(
-      2,
-    );
+    expect(
+      dropdowns[1].querySelectorAll('.yakit-select-option-check .yakit-checkbox'),
+    ).toHaveLength(2);
     expect(
       dropdowns[1].querySelector('.ant-select-item-option-selected .yakit-checkbox-checked'),
     ).not.toBeNull();
@@ -306,8 +306,8 @@ describe('Select', () => {
 
   it('checks the project checkbox and shows a tag when an option is chosen', async () => {
     render(<Select open checkbox mode="multiple" options={options} />);
-    const pear = [...document.querySelectorAll<HTMLElement>('.ant-select-item-option')].find((item) =>
-      item.textContent?.includes('梨'),
+    const pear = [...document.querySelectorAll<HTMLElement>('.ant-select-item-option')].find(
+      (item) => item.textContent?.includes('梨'),
     );
     if (!pear) throw new Error('expected pear');
 
@@ -346,7 +346,9 @@ describe('Select', () => {
     expect(getComputedStyle(disabledBox).borderTopColor).toBe('rgb(230, 232, 237)');
 
     await userEvent.hover(enabled);
-    await expect.poll(() => getComputedStyle(enabledBox).backgroundColor).toBe('rgb(253, 240, 230)');
+    await expect
+      .poll(() => getComputedStyle(enabledBox).backgroundColor)
+      .toBe('rgb(253, 240, 230)');
     await expect.poll(() => getComputedStyle(enabledBox).borderTopColor).toBe('rgb(245, 159, 100)');
   });
 
@@ -449,7 +451,10 @@ describe('Select', () => {
     expect(tags[0]?.textContent).toContain('苹果');
     expect(tags[1]).toHaveClass('yakit-tag-large');
     expect(single.querySelector('.yakit-tag')).toBeNull();
-    expect(disabled.querySelector('.yakit-tag')).toHaveClass('yakit-tag-disabled', 'yakit-tag-medium');
+    expect(disabled.querySelector('.yakit-tag')).toHaveClass(
+      'yakit-tag-disabled',
+      'yakit-tag-medium',
+    );
   });
 
   it('passes a remove icon node or function through to the project tag', () => {

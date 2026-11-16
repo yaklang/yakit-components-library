@@ -1,6 +1,3 @@
-import { ConfigProvider, Select as AntSelect } from 'antd';
-import type { ThemeConfig } from 'antd';
-import type { DefaultOptionType, SelectProps as AntSelectProps } from 'antd/es/select';
 import {
   CheckOutlined,
   ChevronDownOutlined,
@@ -8,9 +5,13 @@ import {
   TrashOutlined,
   XCircleSolid,
 } from '@yakit-libs/yakit-ui-icons';
+import { ConfigProvider, Select as AntSelect } from 'antd';
+import type { ThemeConfig } from 'antd';
+import type { DefaultOptionType, SelectProps as AntSelectProps } from 'antd/es/select';
 import classNames from 'classnames';
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useId,
   useImperativeHandle,
@@ -28,6 +29,7 @@ import {
 } from 'react';
 
 import useYakitConfig from '../../hooks/useYakitConfig';
+import Button from '../Button';
 import Checkbox from '../Checkbox';
 import Tag from '../Tag';
 
@@ -189,10 +191,13 @@ const SelectInner = <ValueType, OptionType extends DefaultOptionType = DefaultOp
     selectRef.current?.nativeElement?.setAttribute('data-theme', config.mode);
   }, [config.mode]);
 
-  const findPopup = () =>
-    [...document.querySelectorAll('.yakit-select-dropdown')].find((item) =>
-      item.classList.contains(popupMark),
-    );
+  const findPopup = useCallback(
+    () =>
+      [...document.querySelectorAll('.yakit-select-dropdown')].find((item) =>
+        item.classList.contains(popupMark),
+      ),
+    [popupMark],
+  );
 
   // rc-select 会把第一次打开推迟到挂载之后，弹层节点还可能再晚一次才进文档。
   // 这两次提交都不会让外层重渲染，所以打开后补查。
@@ -214,7 +219,7 @@ const SelectInner = <ValueType, OptionType extends DefaultOptionType = DefaultOp
       return;
     }
     if (popupPass > 0 && popupPass < 4) setPopupPass((pass) => pass + 1);
-  }, [config.mode, mergedOpen, popupPass]);
+  }, [config.mode, findPopup, mergedOpen, popupPass]);
 
   const rootClass = classNames(
     prefixCls,
@@ -303,18 +308,20 @@ const SelectInner = <ValueType, OptionType extends DefaultOptionType = DefaultOp
             ) : null}
             <span className={`${prefixCls}-option-label`}>{option.label as ReactNode}</span>
             {onOptionDelete && !selected && !option.data.disabled ? (
-              <button
-                type="button"
-                aria-label="删除选项"
+              <Button
+                type="link1"
+                colors="danger"
+                size="small"
+                disabled={false}
+                aria-label={config.locale.Select?.removeOption ?? '删除选项'}
                 className={`${prefixCls}-option-delete`}
+                icon={<TrashOutlined size={12} />}
                 onMouseDown={stop}
                 onClick={(event) => {
                   stop(event);
                   onOptionDelete(option.data);
                 }}
-              >
-                <TrashOutlined size={12} />
-              </button>
+              />
             ) : null}
           </div>
         );

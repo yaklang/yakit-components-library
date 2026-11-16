@@ -48,6 +48,10 @@ export interface YakitLocale {
     /** 无障碍：半选状态说明 */
     indeterminate?: string;
   };
+  Select?: {
+    /** 下拉项删除按钮的无障碍名称 */
+    removeOption?: string;
+  };
 }
 
 export type YakitComponentSize = 'small' | 'medium' | 'large' | 'huge';

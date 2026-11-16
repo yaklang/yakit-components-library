@@ -27,7 +27,7 @@ export interface SelectProps<
   /**
    * 传入后，未选中且未禁用的下拉项在悬浮或键盘高亮时出现垃圾桶。
    * 点击，或在该项高亮且搜索框为空时按 Delete，只回调这一项，不改选中值，也不改 `options`。
-   * 当前是原生 button，后续换成组件库的 Button。
+   * 删除控件使用组件库的 Button，只放图标，选项文案仍在旁边。
    */
   onOptionDelete?: (option: OptionType) => void;
 }

@@ -58,7 +58,7 @@ const COMPONENT_DOCS = [
   '| --- | --- | --- | --- |',
   '| size | 框高与字号 | `small` \\| `medium` \\| `large` | `medium` |',
   '| checkbox | 下拉项改用左侧勾选框，并去掉右侧对勾。只在 `multiple` 或 `tags` 时生效，不传 `mode` 时忽略。不传时用右侧对勾。勾选框使用组件库的 Checkbox | `boolean` | `false` |',
-  '| onOptionDelete | 传入后，悬浮或键盘高亮未选中且未禁用的项才出现垃圾桶。点击，或在该项高亮且搜索框为空时按 Delete，只回调该项，不改选中值和 `options`。当前是原生 button，后续换成组件库的 Button | `(option) => void` | - |',
+  '| onOptionDelete | 传入后，悬浮或键盘高亮未选中且未禁用的项才出现垃圾桶。点击，或在该项高亮且搜索框为空时按 Delete，只回调该项，不改选中值和 `options`。垃圾桶是组件库的 Button，只放图标 | `(option) => void` | - |',
   '',
   '多选和 tags 的已选值默认用组件库的 Tag。单选有展开箭头，多选和 tags 默认没有。`suffixIcon`、`optionRender`、`tagRender`、`notFoundContent` 有传入时用调用处的。',
   '',
@@ -110,7 +110,7 @@ const meta: Meta<typeof Select> = {
     onChange: { action: 'changed', description: '选中变化' },
     onOptionDelete: {
       description:
-        '删除下拉项。不传时下拉项没有垃圾桶。悬浮或键盘高亮时出现，高亮且搜索框为空时按 Delete 同样回调。当前是原生 button，后续换成组件库的 Button',
+        '删除下拉项。不传时下拉项没有垃圾桶。悬浮或键盘高亮时出现，高亮且搜索框为空时按 Delete 同样回调。垃圾桶是组件库的 Button，只放图标',
     },
   },
 } satisfies Meta<typeof Select>;
@@ -240,8 +240,7 @@ export const 标签: Story = {
     controls: quiet.controls,
     docs: {
       description: {
-        story:
-          'tags 可以输入选项里没有的值。下拉选中项用右侧对勾。已选值用组件库的 Tag。',
+        story: 'tags 可以输入选项里没有的值。下拉选中项用右侧对勾。已选值用组件库的 Tag。',
       },
     },
   },
@@ -276,7 +275,7 @@ export const 选项删除: Story = {
     docs: {
       description: {
         story:
-          '左边不传 onOptionDelete，下拉项没有垃圾桶。右边传入后，悬浮或键盘高亮未选中且未禁用的项才出现垃圾桶。高亮且搜索框为空时按 Delete 同样回调。已选中的项不显示。回调里由调用处自己改 options。当前垃圾桶是原生 button，后续换成组件库的 Button。',
+          '左边不传 onOptionDelete，下拉项没有垃圾桶。右边传入后，悬浮或键盘高亮未选中且未禁用的项才出现垃圾桶。高亮且搜索框为空时按 Delete 同样回调。已选中的项不显示。回调里由调用处自己改 options。垃圾桶是组件库的 Button，只放图标。',
       },
     },
   },

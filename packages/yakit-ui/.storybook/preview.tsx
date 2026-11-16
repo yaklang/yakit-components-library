@@ -17,6 +17,7 @@ const locales: Record<'zh' | 'en', YakitLocale> = {
     Search: { scope: '搜索范围', search: '搜索' },
     Tag: { close: '关闭', copy: '复制' },
     Checkbox: { indeterminate: '部分选中' },
+    Select: { removeOption: '删除选项' },
   },
   en: {
     locale: 'en-US',
@@ -25,6 +26,7 @@ const locales: Record<'zh' | 'en', YakitLocale> = {
     Search: { scope: 'Search scope', search: 'Search' },
     Tag: { close: 'Close', copy: 'Copy' },
     Checkbox: { indeterminate: 'Partially selected' },
+    Select: { removeOption: 'Delete option' },
   },
 };
 
