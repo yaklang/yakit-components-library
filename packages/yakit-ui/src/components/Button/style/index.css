@@ -7,74 +7,585 @@
   --yakit-btn-color-bg: var(--yakit-color-primary-bg);
   --yakit-btn-color-bg-hover: var(--yakit-color-primary-bg-hover);
   --yakit-btn-color-border: var(--yakit-color-primary-border);
-  --yakit-btn-disabled-color: var(--yakit-color-basic-background);
-  --yakit-btn-disabled-bg: var(--yakit-btn-color-bg);
+  --yakit-btn-neutral-text: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title));
+  --yakit-btn-neutral-text-secondary: var(
+    --yakit-color-text-secondary,
+    var(--Colors-Use-Neutral-Text-3-Secondary)
+  );
+  --yakit-btn-neutral-bg-hover: var(
+    --yakit-color-neutral-bg-hover,
+    var(--Colors-Use-Neutral-Bg-Hover)
+  );
+  --yakit-btn-neutral-border: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border));
+  --yakit-btn-neutral-disable: var(
+    --yakit-color-neutral-disable,
+    var(--Colors-Use-Neutral-Disable)
+  );
+  --yakit-btn-surface: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background));
   --wave-color: var(--yakit-btn-color-focus);
   align-items: center;
+  appearance: none;
+  background: transparent;
   border: 1px solid transparent;
   border-radius: var(--yakit-btn-border-radius, 4px);
   box-sizing: border-box;
+  color: var(--yakit-btn-neutral-text);
   cursor: pointer;
-  display: flex;
-  font-family: 'PingFang SC', sans-serif;
+  display: inline-flex;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-style: normal;
+  font-weight: 500;
   gap: var(--yakit-btn-icon-gap, 4px);
   justify-content: center;
+  margin: 0;
   position: relative;
-  transition: all 0.3s ease;
+  text-decoration: none;
+  transition:
+    background-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
-.yakit-btn:not(:disabled):focus-visible {
+.yakit-btn:focus {
+  outline: none;
+}
+
+.yakit-btn:focus-visible {
   outline: 2px solid var(--yakit-btn-color-focus);
-  outline-offset: 1px;
+  outline-offset: 0;
+}
+
+.yakit-btn:disabled,
+.yakit-btn[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+.yakit-btn-small {
+  --yakit-btn-height: 20px;
+  font-size: var(--yakit-btn-font-size-sm, 11px);
+  height: var(--yakit-btn-height);
+  letter-spacing: 0.5px;
+  line-height: 14px;
+  padding: var(--yakit-btn-padding-sm, 3px 6px);
+}
+
+.yakit-btn-medium {
+  --yakit-btn-height: 24px;
+  font-size: var(--yakit-btn-font-size-md, 12px);
+  height: var(--yakit-btn-height);
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  padding: var(--yakit-btn-padding-md, 4px 8px);
+}
+
+.yakit-btn-large {
+  --yakit-btn-height: 28px;
+  font-size: var(--yakit-btn-font-size-lg, 14px);
+  height: var(--yakit-btn-height);
+  letter-spacing: 0.1px;
+  line-height: 20px;
+  padding: var(--yakit-btn-padding-lg, 4px 12px);
+}
+
+.yakit-btn-huge {
+  --yakit-btn-height: 32px;
+  font-size: var(--yakit-btn-font-size-xl, 14px);
+  height: var(--yakit-btn-height);
+  letter-spacing: 0.1px;
+  line-height: 20px;
+  padding: var(--yakit-btn-padding-xl, 6px 12px);
+}
+
+.yakit-btn-icon {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  justify-content: center;
+  line-height: 0;
+}
+
+.yakit-btn-small .yakit-btn-icon {
+  height: 12px;
+  width: 12px;
+}
+
+.yakit-btn-medium .yakit-btn-icon {
+  height: 16px;
+  width: 16px;
+}
+
+.yakit-btn-large .yakit-btn-icon {
+  height: 18px;
+  width: 18px;
+}
+
+.yakit-btn-huge .yakit-btn-icon {
+  height: 20px;
+  width: 20px;
+}
+
+.yakit-btn-icon svg {
+  height: 100%;
+  width: 100%;
+}
+
+.yakit-btn > span {
+  white-space: nowrap;
+}
+
+.yakit-btn-icon-only {
+  gap: 0;
+  padding: 0;
+  width: var(--yakit-btn-height);
+}
+
+.yakit-btn-round {
+  border-radius: 999px;
+}
+
+.yakit-btn-block {
+  width: 100%;
+}
+
+.yakit-btn-color-success {
+  --yakit-btn-color-base: var(--yakit-color-success);
+  --yakit-btn-color-bg: var(--yakit-color-success-bg);
+  --yakit-btn-color-bg-hover: var(--yakit-color-success-bg-hover);
+  --yakit-btn-color-border: var(--yakit-color-success-border);
+  --yakit-btn-color-focus: var(--yakit-color-success-focus);
+  --yakit-btn-color-hover: var(--yakit-color-success-hover);
+  --yakit-btn-color-pressed: var(--yakit-color-success-pressed);
+  --yakit-btn-color-text: var(--yakit-color-success-text);
+}
+
+.yakit-btn-color-danger {
+  --yakit-btn-color-base: var(--yakit-color-error);
+  --yakit-btn-color-bg: var(--yakit-color-error-bg);
+  --yakit-btn-color-bg-hover: var(--yakit-color-error-bg-hover);
+  --yakit-btn-color-border: var(--yakit-color-error-border);
+  --yakit-btn-color-focus: var(--yakit-color-error-focus);
+  --yakit-btn-color-hover: var(--yakit-color-error-hover);
+  --yakit-btn-color-pressed: var(--yakit-color-error-pressed);
+  /* 设计稿（Figma 37109:13940 等 Primary Error 变体）danger 文字用的是 Main 色
+     系的 On-Primary 淡色（#fef5ee），不是 Error-On-Primary（#fef0f0）。 */
+  --yakit-btn-color-text: var(--yakit-color-primary-text);
+}
+
+.yakit-btn-color-infoBlue {
+  --yakit-btn-color-base: var(--yakit-color-blue, var(--Colors-Use-Blue-Primary));
+  --yakit-btn-color-bg: var(--yakit-color-blue-bg, var(--Colors-Use-Blue-Bg));
+  --yakit-btn-color-bg-hover: var(--yakit-color-blue-bg-hover, var(--Colors-Use-Blue-Bg-Hover));
+  --yakit-btn-color-border: var(--yakit-color-blue-border, var(--Colors-Use-Blue-Border));
+  --yakit-btn-color-focus: var(--Colors-Use-Blue-Focus);
+  --yakit-btn-color-hover: var(--Colors-Use-Blue-Hover);
+  --yakit-btn-color-pressed: var(--Colors-Use-Blue-Pressed);
+  --yakit-btn-color-text: var(--yakit-color-blue-text, var(--Colors-Use-Blue-On-Primary));
 }
 
 .yakit-btn-primary {
-  --yakit-btn-disabled-bg: var(--yakit-btn-color-border);
   background: var(--yakit-btn-color-base);
   color: var(--yakit-btn-color-text);
 }
-.yakit-btn-primary-pressed { background: var(--yakit-btn-color-pressed); }
-.yakit-btn-primary:hover:not(:disabled):not(.yakit-btn-loading):not(.yakit-btn-primary-pressed) {
+
+.yakit-btn-primary:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-hover);
-  color: var(--yakit-color-basic-background);
+  color: var(--yakit-btn-color-text);
 }
 
-.yakit-btn-secondary1 { background: var(--yakit-btn-color-bg); color: var(--yakit-btn-color-base); }
-.yakit-btn-secondary1-pressed,
-.yakit-btn-secondary1:hover:not(:disabled):not(.yakit-btn-loading) {
+.yakit-btn-primary:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-color-pressed);
+  color: var(--yakit-btn-color-text);
+}
+
+.yakit-btn-primary:disabled,
+.yakit-btn-primary[aria-disabled='true'] {
+  background: var(--yakit-btn-color-border);
+  color: var(--yakit-btn-surface);
+}
+
+.yakit-btn-secondary1 {
+  background: var(--yakit-btn-color-bg);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-secondary1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-color-bg-hover);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-secondary1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-pressed);
 }
-.yakit-btn-secondary2 { background: var(--yakit-color-neutral-bg-hover); color: var(--yakit-color-text-title); }
-.yakit-btn-outline1 { background: var(--yakit-color-basic-background); border-color: var(--yakit-btn-color-border); color: var(--yakit-btn-color-base); }
-.yakit-btn-outline2 { background: var(--yakit-color-basic-background); border-color: var(--yakit-color-neutral-border); color: var(--yakit-color-text); }
-.yakit-btn-text1,
+
+.yakit-btn-secondary1:disabled,
+.yakit-btn-secondary1[aria-disabled='true'] {
+  background: var(--yakit-btn-color-bg);
+  color: var(--yakit-btn-color-border);
+}
+
+.yakit-btn-secondary2 {
+  background: var(--yakit-btn-neutral-bg-hover);
+  color: var(--yakit-btn-neutral-text);
+}
+
+.yakit-btn-secondary2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-color-bg);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-secondary2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-color-bg-hover);
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-secondary2:disabled,
+.yakit-btn-secondary2[aria-disabled='true'] {
+  background: var(--yakit-btn-neutral-bg-hover);
+  color: var(--yakit-btn-neutral-disable);
+}
+
+.yakit-btn-secondary2.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(
+    .yakit-btn-active
+  ):not(:disabled):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-color-bg-hover);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-outline1 {
+  background: var(--yakit-btn-surface);
+  border-color: var(--yakit-btn-color-border);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-outline1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-color-bg);
+  border-color: var(--yakit-btn-color-base);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-outline1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-color-bg);
+  border-color: var(--yakit-btn-color-pressed);
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-outline1:disabled,
+.yakit-btn-outline1[aria-disabled='true'] {
+  background: var(--yakit-btn-surface);
+  border-color: var(--yakit-btn-color-border);
+  color: var(--yakit-btn-color-border);
+}
+
+.yakit-btn-outline2 {
+  background: var(--yakit-btn-surface);
+  border-color: var(--yakit-btn-neutral-border);
+  color: var(--yakit-btn-neutral-text);
+}
+
+.yakit-btn-outline2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-surface);
+  border-color: var(--yakit-btn-color-base);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-outline2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-surface);
+  border-color: var(--yakit-btn-color-pressed);
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-outline2:disabled,
+.yakit-btn-outline2[aria-disabled='true'] {
+  background: var(--yakit-btn-neutral-bg-hover);
+  border-color: var(--yakit-btn-neutral-border);
+  color: var(--yakit-btn-neutral-disable);
+}
+
+.yakit-btn-outline2:is(
+    .yakit-btn-color-danger,
+    .yakit-btn-color-success,
+    .yakit-btn-color-infoBlue
+  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-color-bg);
+  border-color: var(--yakit-btn-color-base);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-outline2:is(
+    .yakit-btn-color-danger,
+    .yakit-btn-color-success,
+    .yakit-btn-color-infoBlue
+  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-color-bg);
+  border-color: var(--yakit-btn-color-pressed);
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-text,
 .yakit-btn-text2,
 .yakit-btn-link1,
-.yakit-btn-link2 { background: transparent; border-color: transparent; }
-.yakit-btn-text1,
-.yakit-btn-link1 { color: var(--yakit-btn-color-base); }
-.yakit-btn-text2 { color: var(--yakit-color-text-title); }
-.yakit-btn-link2 { color: var(--yakit-color-text-secondary); }
+.yakit-btn-link2 {
+  background: transparent;
+  border-color: transparent;
+}
 
-.yakit-btn-small { font-size: var(--yakit-btn-font-size-sm, 11px); height: 20px; line-height: 14px; padding: var(--yakit-btn-padding-sm, 3px 6px); }
-.yakit-btn-medium { font-size: var(--yakit-btn-font-size-md, 12px); height: 24px; line-height: 16px; padding: var(--yakit-btn-padding-md, 4px 8px); }
-.yakit-btn-large { font-size: var(--yakit-btn-font-size-lg, 14px); height: 28px; line-height: 20px; padding: var(--yakit-btn-padding-lg, 4px 12px); }
-.yakit-btn-huge { font-size: var(--yakit-btn-font-size-xl, 14px); height: 32px; line-height: 20px; padding: var(--yakit-btn-padding-xl, 6px 12px); }
-.yakit-btn-small svg { height: 12px; width: 12px; }
-.yakit-btn-medium svg { height: 16px; width: 16px; }
-.yakit-btn-large svg,
-.yakit-btn-huge svg { height: 20px; width: 20px; }
-.yakit-btn-icon-only { padding: 4px; }
-.yakit-btn-huge.yakit-btn-icon-only { padding: 6px; }
-.yakit-btn-circle { border-radius: 50%; }
-.yakit-btn-round { border-radius: 9999px; gap: 2px; }
-.yakit-btn-disabled,
-.yakit-btn-loading { background: var(--yakit-btn-disabled-bg); color: var(--yakit-btn-disabled-color); cursor: not-allowed; }
-.yakit-btn-color-success { --yakit-btn-color-base: var(--yakit-color-success); --yakit-btn-color-text: var(--yakit-color-success-text); --yakit-btn-color-pressed: var(--yakit-color-success-pressed); --yakit-btn-color-hover: var(--yakit-color-success-hover); --yakit-btn-color-focus: var(--yakit-color-success-focus); --yakit-btn-color-bg: var(--yakit-color-success-bg); --yakit-btn-color-bg-hover: var(--yakit-color-success-bg-hover); --yakit-btn-color-border: var(--yakit-color-success-border); }
-.yakit-btn-color-warning { --yakit-btn-color-base: var(--yakit-color-warning); --yakit-btn-color-text: var(--yakit-color-warning-text); --yakit-btn-color-pressed: var(--yakit-color-warning-pressed); --yakit-btn-color-hover: var(--yakit-color-warning-hover); --yakit-btn-color-focus: var(--yakit-color-warning-focus); --yakit-btn-color-bg: var(--yakit-color-warning-bg); --yakit-btn-color-bg-hover: var(--yakit-color-warning-bg-hover); --yakit-btn-color-border: var(--yakit-color-warning-border); }
-.yakit-btn-color-error { --yakit-btn-color-base: var(--yakit-color-error); --yakit-btn-color-text: var(--yakit-color-error-text); --yakit-btn-color-pressed: var(--yakit-color-error-pressed); --yakit-btn-color-hover: var(--yakit-color-error-hover); --yakit-btn-color-focus: var(--yakit-color-error-focus); --yakit-btn-color-bg: var(--yakit-color-error-bg); --yakit-btn-color-bg-hover: var(--yakit-color-error-bg-hover); --yakit-btn-color-border: var(--yakit-color-error-border); }
-.yakit-btn > span { white-space: nowrap; }
-.yakit-btn-icon { height: 100%; width: 100%; }
-.yakit-btn-icon-end { flex-direction: row-reverse; }
+.yakit-btn-text,
+.yakit-btn-link1 {
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-text2 {
+  color: var(--yakit-btn-neutral-text);
+}
+
+.yakit-btn-link1,
+.yakit-btn-link2 {
+  padding-inline: 0;
+}
+
+.yakit-btn-link2 {
+  color: var(--yakit-btn-neutral-text-secondary);
+}
+
+.yakit-btn-text:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-color-bg);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-text:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-color-bg-hover);
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-text2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group),
+.yakit-btn-text2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-neutral-bg-hover);
+  color: var(--yakit-btn-neutral-text);
+}
+
+.yakit-btn-text2:is(
+    .yakit-btn-color-danger,
+    .yakit-btn-color-success,
+    .yakit-btn-color-infoBlue
+  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  background: var(--yakit-btn-color-bg);
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-text2:is(
+    .yakit-btn-color-danger,
+    .yakit-btn-color-success,
+    .yakit-btn-color-infoBlue
+  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  background: var(--yakit-btn-color-bg-hover);
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-link1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  color: var(--yakit-btn-color-hover);
+}
+
+.yakit-btn-link1.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(
+    :disabled
+  ):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-link1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-link2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  color: var(--yakit-color-primary);
+}
+
+.yakit-btn-link2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  color: var(--yakit-color-primary-pressed);
+}
+
+.yakit-btn-link2:is(
+    .yakit-btn-color-danger,
+    .yakit-btn-color-success,
+    .yakit-btn-color-infoBlue
+  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
+  color: var(--yakit-btn-color-base);
+}
+
+.yakit-btn-link2:is(
+    .yakit-btn-color-danger,
+    .yakit-btn-color-success,
+    .yakit-btn-color-infoBlue
+  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    .yakit-btn-in-group
+  ) {
+  color: var(--yakit-btn-color-pressed);
+}
+
+.yakit-btn-text:disabled,
+.yakit-btn-text[aria-disabled='true'] {
+  background: transparent;
+  color: var(--yakit-btn-color-border);
+}
+
+.yakit-btn-text2:disabled,
+.yakit-btn-text2[aria-disabled='true'],
+.yakit-btn-link1:disabled,
+.yakit-btn-link1[aria-disabled='true'],
+.yakit-btn-link2:disabled,
+.yakit-btn-link2[aria-disabled='true'] {
+  background: transparent;
+  color: var(--yakit-btn-neutral-disable);
+}
+
+/* 按钮组轨道。与 InputNumber 相同的 token 优先顺序：先 ConfigProvider 注入的
+   --yakit-color-*，再回退到 color.css 的 --Colors-Use-*。 */
+.yakit-btn-group {
+  align-items: stretch;
+  background: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #fff));
+  border: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px
+    var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
+  box-sizing: border-box;
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.yakit-btn-group-round {
+  border-radius: 999px;
+}
+
+.yakit-btn-group > .yakit-btn {
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  border-width: 0;
+  color: var(--yakit-btn-neutral-text);
+}
+
+.yakit-btn-group > .yakit-btn .yakit-btn-icon {
+  color: var(--yakit-btn-neutral-text-secondary);
+}
+
+.yakit-btn-group > .yakit-btn + .yakit-btn {
+  border-inline-start-color: var(--yakit-btn-neutral-border);
+  border-inline-start-style: solid;
+  border-inline-start-width: 1px;
+}
+
+/* 组内 large/huge 的内边距和字号按设计稿的按钮组规格硬编码，
+   不走 --yakit-btn-padding-* token（组内间距比常规按钮更紧凑）。 */
+.yakit-btn-group > .yakit-btn-large {
+  padding: 6px 10px;
+}
+
+.yakit-btn-group > .yakit-btn-huge {
+  font-size: 16px;
+  letter-spacing: 0.15px;
+  line-height: 24px;
+  padding: 6px 10px;
+}
+
+.yakit-btn-group > .yakit-btn-huge:not(.yakit-btn-icon-only) {
+  gap: 0;
+}
+
+.yakit-btn-group > .yakit-btn-huge:not(.yakit-btn-icon-only) > span:not(.yakit-btn-icon) {
+  padding-inline: 6px;
+}
+
+.yakit-btn-group > .yakit-btn-icon-only {
+  padding: 0;
+  width: var(--yakit-btn-height);
+}
+
+.yakit-btn-group > .yakit-btn-huge.yakit-btn-icon-only {
+  padding: 6px 7px;
+  width: auto;
+}
+
+/* 组轨道 overflow: hidden 会裁掉向外画的焦点环（outline-offset: 0 时环
+   一半在边框外），组内改为向内画，保证完整可见。 */
+.yakit-btn-group > .yakit-btn:focus-visible {
+  outline-offset: -2px;
+}
+
+.yakit-btn-group
+  > .yakit-btn:is(:hover, .yakit-btn-hover):not(:disabled):not([aria-disabled='true']) {
+  background: var(--yakit-btn-neutral-bg-hover);
+  color: var(--yakit-btn-neutral-text);
+}
+
+.yakit-btn-group
+  > .yakit-btn:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+  background: var(--yakit-btn-neutral-bg-hover);
+  color: var(--yakit-btn-neutral-text);
+}
+
+.yakit-btn-group
+  > .yakit-btn:is(:hover, .yakit-btn-hover, :active, .yakit-btn-active)
+  .yakit-btn-icon {
+  color: var(--yakit-btn-neutral-text-secondary);
+}
+
+.yakit-btn-group > .yakit-btn:disabled,
+.yakit-btn-group > .yakit-btn[aria-disabled='true'] {
+  background: transparent;
+  color: var(--yakit-btn-neutral-disable);
+}
+
+.yakit-btn-group > .yakit-btn:disabled .yakit-btn-icon,
+.yakit-btn-group > .yakit-btn[aria-disabled='true'] .yakit-btn-icon {
+  color: var(--yakit-btn-neutral-disable);
+}
