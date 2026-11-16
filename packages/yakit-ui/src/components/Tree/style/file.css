@@ -1,0 +1,411 @@
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode {
+  align-items: center;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding-inline-start: 8px;
+}
+
+/* 拖拽槽和 16px 箭头一样宽，顺序对齐 antd：缩进、拖拽、箭头、勾选。 */
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-draggable-icon {
+  align-items: center;
+  align-self: center;
+  display: inline-flex;
+  flex: 0 0 16px;
+  height: 16px;
+  justify-content: center;
+  margin-inline-end: 0;
+  width: 16px;
+}
+
+.yakit-tree-file .ant-tree-indent-unit {
+  width: 16px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-switcher:not(.ant-tree-switcher-noop) {
+  align-items: center;
+  align-self: center;
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  display: inline-flex;
+  flex: 0 0 16px;
+  height: 16px;
+  justify-content: center;
+  margin: 0;
+  width: 16px;
+}
+
+/* antd 给箭头铺悬停块，并把收起图标旋转 -90 度
+   （ChevronRight 会朝上）。文件树自己换图标。 */
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-switcher::before,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-switcher:hover::before,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::before {
+  background: transparent;
+  background-color: transparent;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-switcher .ant-tree-switcher-icon svg,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-switcher_close .ant-tree-switcher-icon svg {
+  transform: none;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-switcher.ant-tree-switcher-noop {
+  display: none;
+  flex: 0 0 0;
+  width: 0;
+}
+
+/* antd 目录树会留着叶子箭头位。有拖拽或勾选时，
+   这 16px 空位让手柄和勾选框随层级一起缩进。 */
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-draggable > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode:has(> .ant-tree-checkbox) > .ant-tree-switcher.ant-tree-switcher-noop {
+  align-self: center;
+  display: inline-flex;
+  flex: 0 0 16px;
+  height: 16px;
+  margin: 0;
+  width: 16px;
+}
+
+/* 没开连接线但有拖拽或勾选时，仍用开了线时的 24px 间距，
+   这样开关 showLine 不会把手柄、箭头和勾选框挤到一起。 */
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable,
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode:has(> .ant-tree-checkbox) {
+  padding-inline-start: 0;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable .ant-tree-indent-unit,
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode:has(> .ant-tree-checkbox) .ant-tree-indent-unit {
+  width: 24px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable > .ant-tree-draggable-icon,
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode:has(> .ant-tree-checkbox) > .ant-tree-draggable-icon {
+  flex: 0 0 24px;
+  width: 24px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode:has(> .ant-tree-checkbox) > .ant-tree-switcher:not(.ant-tree-switcher-noop) {
+  flex: 0 0 24px;
+  margin-inline-end: 4px;
+  width: 24px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode:has(> .ant-tree-checkbox) > .ant-tree-switcher.ant-tree-switcher-noop {
+  flex: 0 0 24px;
+  width: 24px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable > .ant-tree-checkbox,
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode:has(> .ant-tree-checkbox) > .ant-tree-checkbox {
+  margin-inline-end: 4px;
+}
+
+/* draggable={{ icon: false }} 仍把行标成可拖，但没有手柄。
+   没有连接线、也没有勾选时，16px 箭头贴着图标。 */
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable:not(:has(> .ant-tree-draggable-icon)):not(:has(> .ant-tree-checkbox)) {
+  padding-inline-start: 8px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable:not(:has(> .ant-tree-draggable-icon)):not(:has(> .ant-tree-checkbox)) .ant-tree-indent-unit {
+  width: 16px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable:not(:has(> .ant-tree-draggable-icon)):not(:has(> .ant-tree-checkbox)) > .ant-tree-switcher:not(.ant-tree-switcher-noop) {
+  flex: 0 0 16px;
+  margin-inline-end: 0;
+  width: 16px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree:not(.ant-tree-show-line) .ant-tree-treenode-draggable:not(:has(> .ant-tree-draggable-icon)):not(:has(> .ant-tree-checkbox)) > .ant-tree-switcher.ant-tree-switcher-noop {
+  display: none;
+  flex: 0 0 0;
+  width: 0;
+}
+
+/* showLine 用 antd 的 24px 间距：缩进、箭头和拖拽一样宽，
+   竖线在缩进右缘往里 12px（switcherSize / 2）。 */
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-treenode {
+  padding-inline-start: 0;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-indent-unit {
+  width: 24px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-switcher,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-draggable-icon {
+  align-self: stretch;
+  flex: 0 0 24px;
+  height: auto;
+  width: 24px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-switcher:not(.ant-tree-switcher-noop) {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  margin-block: 0;
+  margin-inline-end: 4px;
+  margin-inline-start: 0;
+}
+
+/* 上面的 16px 拖拽或勾选槽会被这条盖住：叶子图标要和文件夹箭头一样占 24px，
+   否则连接线在图标前面就断了。 */
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-treenode-draggable > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-treenode:has(> .ant-tree-checkbox) > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-show-line .ant-tree-switcher.ant-tree-switcher-noop {
+  align-items: center;
+  align-self: stretch;
+  display: inline-flex;
+  flex: 0 0 24px;
+  height: auto;
+  justify-content: center;
+  margin: 0;
+  width: 24px;
+}
+
+.yakit-tree-file .ant-tree-show-line .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree-file .ant-tree-show-line .ant-tree-switcher .yakit-tree-leaf-icon svg {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  height: 14px;
+  width: 14px;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled .ant-tree-switcher .yakit-tree-leaf-icon svg,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-switcher .yakit-tree-leaf-icon svg {
+  color: var(--Colors-Use-Neutral-Disable);
+}
+
+.yakit-tree-file .ant-tree-show-line .ant-tree-indent-unit::before,
+.yakit-tree-file .ant-tree-switcher-leaf-line::before,
+.yakit-tree-file .ant-tree-switcher-leaf-line::after {
+  border-color: var(--Colors-Use-Neutral-Border);
+}
+
+.yakit-tree-file .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree-file .ant-tree-switcher svg {
+  fill: none;
+  height: 16px;
+  transform: none;
+  width: 16px;
+}
+
+/* 图标由 FileTreeNode 画。就算 showIcon 漏进来，也不显示 antd 的 iconEle。 */
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-iconEle {
+  display: none;
+  width: 0;
+  margin: 0;
+}
+
+/* 文件树可选的勾选和拖拽：拖拽颜色用上面共用的 .yakit-tree 规则。 */
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-checkbox {
+  align-self: center;
+  margin-block: 0;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-node-content-wrapper,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-node-content-wrapper:hover,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected:hover {
+  background: transparent;
+  border-color: transparent;
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  overflow: visible;
+  padding: 0;
+}
+
+/* 文件和文件夹的悬停底一样。选中描边只留在文件上。 */
+.yakit-tree-file .ant-tree-treenode:not(.ant-tree-treenode-selected):hover {
+  background: var(--Colors-Use-Neutral-Bg);
+}
+
+.yakit-tree-file .ant-tree-treenode-selected,
+.yakit-tree-file .ant-tree-treenode-selected:hover {
+  background: var(--Colors-Use-Main-Bg);
+  box-shadow: inset 0 0 0 1px var(--Colors-Use-Main-Primary);
+}
+
+.yakit-tree-file .ant-tree-treenode-selected .yakit-tree-file-title,
+.yakit-tree-file .ant-tree-treenode-selected .yakit-tree-file-icon {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+}
+
+.yakit-tree-file .ant-tree-treenode:has(.yakit-tree-file-editing),
+.yakit-tree-file .ant-tree-treenode:has(.yakit-tree-file-editing):hover,
+.yakit-tree-file .ant-tree-treenode-selected:has(.yakit-tree-file-editing),
+.yakit-tree-file .ant-tree-treenode-selected:has(.yakit-tree-file-editing):hover {
+  background: var(--Colors-Use-Main-Bg);
+  box-shadow: none;
+}
+
+.yakit-tree-file-row {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  height: 22px;
+  padding-bottom: 3px;
+  padding-right: 12px;
+  padding-top: 3px;
+}
+
+.yakit-tree-file-editing {
+  height: 24px;
+  padding-bottom: 0;
+  padding-right: 0;
+  padding-top: 0;
+}
+
+.yakit-tree-file-cluster {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.yakit-tree-file-main,
+.yakit-tree-file-icon,
+.yakit-tree-file-title,
+.yakit-tree-file-suffix {
+  align-items: center;
+  display: inline-flex;
+}
+
+.yakit-tree-file-main {
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+
+.yakit-tree-file-title {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  min-width: 0;
+}
+
+.yakit-tree-file-icon {
+  flex: 0 0 16px;
+}
+
+.yakit-tree-file-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.yakit-tree-file .yakit-tree-file-input.yakit-input:focus,
+.yakit-tree-file .yakit-tree-file-input.yakit-input.yakit-input-focused {
+  box-shadow: none;
+}
+
+.yakit-tree-file .ant-tree-treenode:has(.yakit-tree-file-focused) {
+  background: var(--Colors-Use-Main-Focus);
+  box-shadow: inset 0 0 0 1px var(--Colors-Use-Main-Border);
+}
+
+.yakit-tree-file .ant-tree-treenode-selected:has(.yakit-tree-file-focused),
+.yakit-tree-file .ant-tree-treenode-selected:has(.yakit-tree-file-focused):hover {
+  background: var(--Colors-Use-Main-Bg);
+  box-shadow: inset 0 0 0 1px var(--Colors-Use-Main-Primary);
+}
+
+/* 点文件夹只展开：没有选中底，也没有焦点底。悬停用文件的颜色。 */
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode:has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)),
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode:has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):has(.yakit-tree-file-focused) {
+  background: transparent;
+  box-shadow: none;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode:not(.ant-tree-treenode-selected):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):hover {
+  background: var(--Colors-Use-Neutral-Bg);
+  box-shadow: none;
+}
+
+/* selectDirectory：选中的文件夹和文件用同一套选中描边。 */
+.yakit-tree.yakit-tree-file.yakit-tree-file-select-directory .ant-tree:not(.ant-tree-disabled) .ant-tree-treenode-selected:not(.ant-tree-treenode-disabled):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)),
+.yakit-tree.yakit-tree-file.yakit-tree-file-select-directory .ant-tree:not(.ant-tree-disabled) .ant-tree-treenode-selected:not(.ant-tree-treenode-disabled):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):hover,
+.yakit-tree.yakit-tree-file.yakit-tree-file-select-directory .ant-tree:not(.ant-tree-disabled) .ant-tree-treenode-selected:not(.ant-tree-treenode-disabled):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):has(.yakit-tree-file-focused) {
+  background: var(--Colors-Use-Main-Bg);
+  box-shadow: inset 0 0 0 1px var(--Colors-Use-Main-Primary);
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode:has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):has(.yakit-tree-file-editing),
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode:has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):has(.yakit-tree-file-editing):hover {
+  background: var(--Colors-Use-Main-Bg);
+  box-shadow: none;
+}
+
+/* 文件树禁用对齐 antd 目录树，颜色用 Yakit 变量。单节点或整树：
+   标题和文件图标用 Neutral-Disable，箭头保持次要色，没有悬停底。
+   选中行用 Neutral-Bg-Hover，不再用文件的选中底。 */
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode {
+  opacity: 1;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled > .ant-tree-node-content-wrapper,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled > .ant-tree-node-content-wrapper:hover,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-node-content-wrapper,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-node-content-wrapper:hover {
+  background: transparent;
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected),
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected):hover,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)),
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):hover,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected),
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected):hover,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)),
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected):has(> .ant-tree-switcher:not(.ant-tree-switcher-noop)):hover {
+  background: transparent;
+  box-shadow: none;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) .yakit-tree-file-title,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) .yakit-tree-file-icon,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) .yakit-tree-file-title,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) .yakit-tree-file-icon {
+  color: var(--Colors-Use-Neutral-Disable);
+  cursor: not-allowed;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled:hover > .ant-tree-switcher,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-switcher,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode:hover > .ant-tree-switcher {
+  background: transparent;
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  cursor: pointer;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode > .ant-tree-switcher.ant-tree-switcher-noop {
+  cursor: not-allowed;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:has(.yakit-tree-file-focused),
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode-selected,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:has(.yakit-tree-file-focused) {
+  background: var(--Colors-Use-Neutral-Bg-Hover);
+  box-shadow: none;
+}
+
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected .yakit-tree-file-title,
+.yakit-tree.yakit-tree-file .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected .yakit-tree-file-icon,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode-selected .yakit-tree-file-title,
+.yakit-tree.yakit-tree-file .ant-tree.ant-tree-disabled .ant-tree-treenode-selected .yakit-tree-file-icon {
+  color: var(--Colors-Use-Neutral-Disable);
+  cursor: not-allowed;
+}

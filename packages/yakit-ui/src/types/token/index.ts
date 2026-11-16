@@ -6,6 +6,7 @@ import type { YakitButtonToken } from './YakitButton';
 import type { YakitCheckboxToken } from './YakitCheckbox';
 import type { YakitSelectToken } from './YakitSelect';
 import type { YakitTagToken } from './YakitTag';
+import type { YakitTreeToken } from './YakitTree';
 
 // 扩展的组件 tokens
 export interface YakitThemeComponents {
@@ -13,6 +14,7 @@ export interface YakitThemeComponents {
   YakitCheckbox?: Partial<YakitCheckboxToken>;
   YakitTag?: Partial<YakitTagToken>;
   YakitSelect?: Partial<YakitSelectToken>;
+  YakitTree?: YakitTreeToken;
 }
 export type YakitThemeMode = 'light' | 'dark';
 

@@ -1,0 +1,74 @@
+/* ===== 默认树：对齐 YakitTree 后仍要补的颜色 ===== */
+.yakit-tree.yakit-tree-default .ant-tree-list {
+  background-color: var(--Colors-Use-Basic-Background);
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+}
+
+.yakit-tree.yakit-tree-default .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-default .ant-tree-switcher {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+}
+
+.yakit-tree.yakit-tree-default .ant-tree-switcher .yakit-icon,
+.yakit-tree.yakit-tree-default .ant-tree-switcher svg {
+  height: 12px;
+  width: 12px;
+}
+
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-list-scrollbar-thumb {
+  background: var(--Colors-Use-Neutral-Disable);
+  transition: top 0.35s ease;
+  width: 6px;
+}
+
+/* 默认树选中：和网站树 Basic 一样，主色 / 选中再悬停 Main-Hover，字是白色。
+   要点过 antd 的 nodeHoverBg（中性色）。点击或勾选后指针还在这一行时，悬停色会盖过 token 里的 nodeSelectedBg。 */
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.yakit-tree.yakit-tree-default .ant-tree-treenode-selected > .ant-tree-node-content-wrapper {
+  background-color: var(--ant-tree-node-selected-bg, var(--Colors-Use-Main-Primary));
+  color: var(--ant-tree-node-selected-color, var(--Colors-Use-Basic-White));
+}
+
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected:hover,
+.yakit-tree.yakit-tree-default .ant-tree-treenode-selected:hover > .ant-tree-node-content-wrapper,
+.yakit-tree.yakit-tree-default .ant-tree-treenode-selected > .ant-tree-node-content-wrapper:hover {
+  background-color: var(--Colors-Use-Main-Hover);
+  color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected .ant-tree-title {
+  color: var(--ant-tree-node-selected-color, var(--Colors-Use-Basic-White));
+}
+
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected:hover .ant-tree-title {
+  color: var(--Colors-Use-Basic-White);
+}
+
+/* 默认树 showIcon：只对齐自定义图标槽，尺寸和颜色由调用方决定。 */
+.yakit-tree.yakit-tree-default .ant-tree-iconEle {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  justify-content: center;
+  line-height: 0;
+  margin-inline-end: 4px;
+}
+
+.yakit-tree.yakit-tree-default .ant-tree-iconEle .yakit-icon,
+.yakit-tree.yakit-tree-default .ant-tree-iconEle svg {
+  display: block;
+}
+
+.yakit-tree.yakit-tree-default .ant-tree-treenode {
+  align-items: center;
+}
+
+.yakit-tree.yakit-tree-default .ant-tree-checkbox {
+  align-self: center;
+  margin-block: 0;
+}
+
+.yakit-tree.yakit-tree-default .ant-tree-node-content-wrapper {
+  align-items: center;
+  display: inline-flex;
+}

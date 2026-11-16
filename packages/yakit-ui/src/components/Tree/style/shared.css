@@ -1,0 +1,79 @@
+/* 拖拽：手柄颜色、主色落点线和拖拽描边。不用 !important。
+   antd 的 css-in-js 把落点线嵌在 .ant-tree-node-content-wrapper 里，选择器要跟上这个优先级。 */
+.yakit-tree .ant-tree-draggable-icon {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+}
+
+.yakit-tree .ant-tree-drop-indicator,
+.yakit-tree .ant-tree .ant-tree-node-content-wrapper .ant-tree-drop-indicator,
+.yakit-tree .ant-tree.ant-tree-block-node .ant-tree-list-holder-inner .ant-tree-node-content-wrapper .ant-tree-drop-indicator {
+  background: var(--Colors-Use-Main-Primary);
+  background-color: var(--Colors-Use-Main-Primary);
+}
+
+.yakit-tree .ant-tree-drop-indicator::after,
+.yakit-tree .ant-tree .ant-tree-node-content-wrapper .ant-tree-drop-indicator::after,
+.yakit-tree .ant-tree.ant-tree-block-node .ant-tree-list-holder-inner .ant-tree-node-content-wrapper .ant-tree-drop-indicator::after {
+  background-color: transparent;
+  border: 2px solid var(--Colors-Use-Main-Primary);
+  border-color: var(--Colors-Use-Main-Primary);
+}
+
+/* 拖拽描边用 Main-Primary。填充透明，连接线还能从描边里透出来。
+   短选择器盖非虚拟列表；长选择器压过 antd block-node 的 css-in-js 颜色。
+   ::after 盖在缩进上面，主色描边才连得上（把缩进抬高会在边框上开一个洞）。 */
+.yakit-tree .ant-tree-treenode.dragging::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--Colors-Use-Main-Primary);
+  border-radius: 4px;
+  background: transparent;
+  background-color: transparent;
+  content: "";
+  pointer-events: none;
+  opacity: 1;
+  z-index: 3;
+}
+
+.yakit-tree .ant-tree.ant-tree-block-node .ant-tree-list-holder-inner .ant-tree-treenode.dragging::after {
+  border: 1px solid var(--Colors-Use-Main-Primary);
+  border-color: var(--Colors-Use-Main-Primary);
+  background: transparent;
+  background-color: transparent;
+  opacity: 1;
+  z-index: 3;
+}
+
+/* antd 给行和箭头加了 transition: all。选中时底色和文字一起变，
+   颜色会先掠过深色（白图标会比底色更早出现）。两边都改成立刻变。
+   多写一层 `.ant-tree`，样式哈希是真实 class 时才能压过 css-in-js。 */
+.yakit-tree .ant-tree .ant-tree-node-content-wrapper,
+.yakit-tree .ant-tree .ant-tree-node-content-wrapper .ant-tree-title,
+.yakit-tree .ant-tree .ant-tree-switcher,
+.yakit-tree .ant-tree .ant-tree-switcher::before,
+.yakit-tree .ant-tree .ant-tree-switcher::after,
+.yakit-tree .ant-tree .ant-tree-iconEle,
+.yakit-tree .ant-tree .ant-tree-iconEle .yakit-icon,
+.yakit-tree .ant-tree .ant-tree-node-content-wrapper .yakit-icon {
+  transition: none;
+}
+
+/* 三种树加载子节点时，箭头位的转圈用主色。 */
+.yakit-tree .ant-tree-switcher-loading-icon {
+  color: var(--Colors-Use-Main-Primary);
+}
+
+/* 默认树和网站树的箭头是描边 Chevron（下 = 展开，右 = 收起）。
+   不要给箭头 SVG 加 fill：fill:currentColor 会把张开的 V 涂成实心三角，
+   禁用或选中的展开节点就会看起来像 antd 的 CaretDownFilled，旁边却是真箭头。
+   同时去掉 antd 对 .ant-tree-switcher-icon svg 的旋转
+   （showLine 用 switcher-line-icon，本来就不旋转）。图标在 JS 里替换，
+   残留旋转只会让一部分节点变形。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .yakit-tree-switcher-icon svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .ant-tree-switcher-icon svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .ant-tree-switcher-line-icon svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .yakit-tree-leaf-icon svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher_close .ant-tree-switcher-icon svg {
+  fill: none;
+  transform: none;
+}

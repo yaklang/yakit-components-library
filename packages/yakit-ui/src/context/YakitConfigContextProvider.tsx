@@ -28,6 +28,7 @@ export const YakitConfigContextProvider: FC<
         ),
         YakitSelect: mergeDefined(parent.token.YakitSelect ?? {}, theme?.components?.YakitSelect),
         YakitTag: mergeDefined(parent.token.YakitTag ?? {}, theme?.components?.YakitTag),
+        YakitTree: mergeDefined(parent.token.YakitTree ?? {}, theme?.components?.YakitTree),
       },
     }),
     [componentDisabled, componentSize, direction, locale, parent, theme],

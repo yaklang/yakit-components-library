@@ -1,0 +1,144 @@
+/* 勾选框 md-16（Figma）：16×16、圆角 4。默认树、网站树、打开勾选的文件树共用。 */
+.yakit-tree .ant-tree-checkbox,
+.yakit-tree .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Basic-Background);
+  border-color: var(--Colors-Use-Neutral-Disable);
+  border-radius: 4px;
+}
+
+.yakit-tree .ant-tree-checkbox-inner {
+  height: 16px;
+  width: 16px;
+}
+
+.yakit-tree .ant-tree-checkbox:not(.ant-tree-checkbox-disabled):hover,
+.yakit-tree .ant-tree-checkbox:not(.ant-tree-checkbox-disabled):hover .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree-checkbox-input:focus + .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Main-Bg-Hover);
+  border-color: var(--Colors-Use-Main-Hover);
+}
+
+.yakit-tree .ant-tree .ant-tree-checkbox-checked,
+.yakit-tree .ant-tree .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-checkbox-indeterminate,
+.yakit-tree .ant-tree .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Main-Primary);
+  border-color: var(--Colors-Use-Main-Primary);
+}
+
+.yakit-tree .ant-tree-checkbox-checked .ant-tree-checkbox-inner::after,
+.yakit-tree .ant-tree-checkbox-checked::after {
+  border-color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree .ant-tree .ant-tree-checkbox-checked:not(.ant-tree-checkbox-disabled):hover,
+.yakit-tree .ant-tree .ant-tree-checkbox-checked:not(.ant-tree-checkbox-disabled):hover .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-checkbox-indeterminate:not(.ant-tree-checkbox-disabled):hover,
+.yakit-tree .ant-tree .ant-tree-checkbox-indeterminate:not(.ant-tree-checkbox-disabled):hover .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Main-Hover);
+  border-color: var(--Colors-Use-Main-Hover);
+}
+
+/* 半选（Figma md-16 全选）：主色实心底，内缩 2px 的白描边。
+   antd 6 把这个标记画在 .ant-tree-checkbox::after 上，不在 inner 上。 */
+.yakit-tree .ant-tree .ant-tree-checkbox-indeterminate::after,
+.yakit-tree .ant-tree .ant-tree-checkbox-indeterminate:hover::after {
+  background: transparent;
+  background-color: transparent;
+  border: 1px solid var(--Colors-Use-Basic-White);
+  border-radius: 2px;
+  box-sizing: border-box;
+  content: '';
+  display: block;
+  height: 12px;
+  inset-inline-start: 50%;
+  margin: 0;
+  opacity: 1;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 12px;
+}
+
+.yakit-tree .ant-tree .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner::after {
+  content: none;
+  display: none;
+}
+
+/* 禁用空框：Neutral-Bg-Hover 底 + Neutral-Border 边（Figma md-16 Disable）。 */
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled,
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Neutral-Bg-Hover);
+  border-color: var(--Colors-Use-Neutral-Border);
+  opacity: 1;
+}
+
+/* 禁用已勾或半选：Neutral-Disable。
+   节点禁用或整树禁用时，antd 有时不给 checkbox-disabled，但仍保留已勾和主色，这里一并盖住。 */
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-checked,
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-indeterminate,
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-checked,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-indeterminate,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-checked,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-indeterminate,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Neutral-Disable);
+  border-color: var(--Colors-Use-Neutral-Disable);
+}
+
+.yakit-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-checked .ant-tree-checkbox-inner::after,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-checked .ant-tree-checkbox-inner::after,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-checked .ant-tree-checkbox-inner::after {
+  border-color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-indeterminate::after,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-indeterminate::after,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-indeterminate::after {
+  background: transparent;
+  background-color: transparent;
+  border: 1px solid var(--Colors-Use-Basic-White);
+  border-radius: 2px;
+  box-sizing: border-box;
+  content: '';
+  display: block;
+  height: 12px;
+  inset-inline-start: 50%;
+  opacity: 1;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 12px;
+}
+
+/* 禁用勾选悬停不能再吃到 Main-Hover 或主色。 */
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled:hover,
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled:hover .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox:hover,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox:hover .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox:hover,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox:hover .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Neutral-Bg-Hover);
+  border-color: var(--Colors-Use-Neutral-Border);
+}
+
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-checked:hover,
+.yakit-tree .ant-tree .ant-tree-checkbox-disabled.ant-tree-checkbox-checked:hover .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-checked:hover,
+.yakit-tree .ant-tree .ant-tree-treenode-disabled > .ant-tree-checkbox-checked:hover .ant-tree-checkbox-inner,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-checked:hover,
+.yakit-tree .ant-tree.ant-tree-disabled .ant-tree-checkbox-checked:hover .ant-tree-checkbox-inner {
+  background: var(--Colors-Use-Neutral-Disable);
+  border-color: var(--Colors-Use-Neutral-Disable);
+}
+
+.yakit-tree .ant-tree-checkbox-checked::after {
+  animation: none;
+}

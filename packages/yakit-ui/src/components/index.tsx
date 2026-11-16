@@ -81,3 +81,15 @@ export type {
   YakitLocale,
   YakitThemeMode,
 } from './ConfigProvider';
+
+export { default as Tree } from './Tree';
+export type {
+  DirectoryTreeProps,
+  TreeEditingSelection,
+  TreeRef,
+  TreeScrollTarget,
+  WebsiteResourceType,
+  WebsiteTreeDataNode,
+  WebsiteTreeProps,
+  YakitTreeProps,
+} from './Tree';
