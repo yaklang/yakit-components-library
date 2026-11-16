@@ -1,0 +1,411 @@
+/* 禁用时去掉 antd 和组件自己的过渡，展开、悬停、选中立刻生效。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher::before,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher::after,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher .yakit-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-node-content-wrapper,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled .ant-tree-iconEle .yakit-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-switcher,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-switcher::before,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-switcher::after,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-switcher .yakit-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-switcher svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-node-content-wrapper,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-iconEle .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled .ant-tree-node-content-wrapper .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-node-content-wrapper .yakit-icon {
+  transition: none;
+  animation: none;
+}
+
+/* 去掉 antd 给整行的禁用淡化（opacity）。颜色用 Neutral-Disable，大约 #c0c6d1。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode {
+  opacity: 1;
+}
+
+/* 禁用节点的文字和图标用 Neutral-Disable。不能选、不能勾（not-allowed）。展开仍然允许。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-node-content-wrapper,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-node-content-wrapper .ant-tree-title,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-node-content-wrapper:hover,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled .ant-tree-iconEle,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled .ant-tree-iconEle .yakit-icon {
+  color: var(--Colors-Use-Neutral-Disable);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* 禁用箭头：灰色，没有悬停底；光标仍是 pointer，展开可以点（antd 禁选不禁展）。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled:hover > .ant-tree-switcher,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher:hover,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:hover {
+  background: transparent;
+  background-color: transparent;
+  color: var(--Colors-Use-Neutral-Disable);
+  cursor: pointer;
+  opacity: 1;
+}
+
+/* 禁用的叶子不能展开，箭头位和标题一样用 not-allowed。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher.ant-tree-switcher-noop:hover,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-disabled > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-disabled:hover > .ant-tree-switcher.ant-tree-switcher-noop {
+  cursor: not-allowed;
+}
+
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher .yakit-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher .ant-tree-switcher-line-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled:hover > .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled:hover > .ant-tree-switcher .yakit-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled:hover > .ant-tree-switcher svg {
+  color: var(--Colors-Use-Neutral-Disable);
+  fill: none;
+  stroke: currentColor;
+  opacity: 1;
+}
+
+/* 默认树在禁选、禁勾时箭头仍是次要色，和其他箭头一样。
+   网站树的禁用色（以及禁用选中条上的白色）写在下面。 */
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher,
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-treenode-disabled:hover > .ant-tree-switcher,
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher,
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher .yakit-icon,
+.yakit-tree.yakit-tree-default .ant-tree .ant-tree-treenode-disabled > .ant-tree-switcher svg,
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-switcher,
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher,
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-switcher .yakit-icon,
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-switcher svg {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+}
+
+/* 网站树禁用且未选中：箭头保持次要色。叶子图标的 Neutral-Disable 写在下面。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) > .ant-tree-switcher,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected):hover > .ant-tree-switcher,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) > .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) > .ant-tree-switcher .yakit-tree-switcher-icon svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) > .ant-tree-switcher:not(.ant-tree-switcher-noop) svg {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  stroke: currentColor;
+}
+
+/* 未选中的禁用叶子图标：单节点或整树都算。
+   这里不要用 switcher-line-icon，showLine 也会把这个 class 加到文件夹箭头上。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) > .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) > .ant-tree-switcher .yakit-tree-leaf-icon svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) > .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) > .ant-tree-switcher .yakit-tree-leaf-icon svg,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) .ant-tree-iconEle .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) .ant-tree-iconEle .yakit-icon {
+  color: var(--Colors-Use-Neutral-Disable);
+  stroke: currentColor;
+}
+
+/* 网站树禁用且未选中时的悬停：去掉箭头上的 Action ::after 和 Neutral-Bg-Hover。
+   禁用且选中的真箭头仍保留 Neutral-Disable 的 ::after（见下面）。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected):hover > .ant-tree-switcher::after,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected) > .ant-tree-switcher:hover::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled:not(.ant-tree-treenode-selected):hover > .ant-tree-switcher::after {
+  background-color: transparent;
+  content: none;
+}
+
+/* 整树禁用且选中：Neutral-Disable 条，标题和图标 Basic-White。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-node-content-wrapper,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-node-content-wrapper:hover,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-node-content-wrapper,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-node-content-wrapper:hover,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-node-content-wrapper.ant-tree-node-selected:hover {
+  background: var(--Colors-Use-Neutral-Disable);
+  background-color: var(--Colors-Use-Neutral-Disable);
+  color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-node-content-wrapper .ant-tree-title,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-node-content-wrapper .ant-tree-title,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-node-content-wrapper.ant-tree-node-selected .ant-tree-title {
+  color: var(--Colors-Use-Basic-White);
+}
+
+/* 选中的叶子或文件图标槽：Neutral-Disable 条上用 Basic-White。
+   只改 color。实心图标自己是 fill="currentColor"，描边图标自己是 fill="none"。
+   这里再写 fill: currentColor 会把描边图标的内部涂实。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected .ant-tree-iconEle,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected .ant-tree-iconEle .yakit-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected .ant-tree-iconEle svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-selected .ant-tree-iconEle,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-selected .ant-tree-iconEle .yakit-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode-selected .ant-tree-iconEle svg {
+  color: var(--Colors-Use-Basic-White);
+}
+
+/* 禁用且选中：一整条 Neutral-Disable。内容延伸到被清空的叶子箭头位下面。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-node-content-wrapper,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-node-content-wrapper,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-node-content-wrapper,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-node-content-wrapper {
+  background: var(--Colors-Use-Neutral-Disable);
+  background-color: var(--Colors-Use-Neutral-Disable);
+  /* 内容要伸到 20px 箭头下面，左边也得圆角。
+     原来的 0 4px 4px 0 会在 Action 格里露出一个方角。 */
+  border-radius: 4px;
+  /* 箭头宽 20px，内容坐到被清空的箭头下面。 */
+  margin-inline-start: -20px;
+  padding-inline-start: 26px; /* 原来的 6px 再加上 20px 箭头 */
+}
+
+/* 箭头图标要盖在延伸出去的内容底色上面。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher {
+  position: relative;
+  z-index: 1;
+}
+
+/* 禁用且选中的真箭头（可展开）：静止时是 Neutral-Disable，和禁用已勾的勾选框同一套。
+   展开仍然有效，不要涂成 Action 的 Main-Pressed 或主色。
+   悬停是 Neutral-Bg-Hover（见 ::after 后面那一段）。叶子空位保持清空。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop),
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop) {
+  background: var(--Colors-Use-Neutral-Disable);
+  background-color: var(--Colors-Use-Neutral-Disable);
+  color: var(--Colors-Use-Basic-White);
+  overflow: hidden;
+  position: relative;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop)::after {
+  background-color: var(--Colors-Use-Neutral-Disable);
+  border-radius: 4px 0 0 4px;
+  content: '';
+  display: block;
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+/* 禁用且选中的文件夹箭头：只有指针在展开格上才用 Neutral-Bg-Hover。
+   悬停标题条时，这一格仍停在 Neutral-Disable。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover {
+  background: var(--Colors-Use-Neutral-Bg-Hover);
+  background-color: var(--Colors-Use-Neutral-Bg-Hover);
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover::after {
+  background-color: var(--Colors-Use-Neutral-Bg-Hover);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) > *,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 叶子空位：清掉背景和 ::after，Neutral-Disable 内容从下面延伸过来，连成一条。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop {
+  background: transparent;
+  background-color: transparent;
+  color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after {
+  background-color: transparent;
+  display: none;
+  content: none;
+}
+
+/* 叶子空位：再清掉 antd show-line 在禁用且选中时留下的 ::before。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::before,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::before,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::before,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::before,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::before,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::before {
+  background: transparent;
+  background-color: transparent;
+  border: 0;
+  content: none;
+}
+
+/* 缩进和连接线：禁用且选中时不要铺色条，竖线要看得见。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-indent,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-indent,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-indent,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-indent {
+  background: transparent;
+  background-color: transparent;
+}
+
+/* 禁用且选中的真箭头图标：Neutral-Disable 底上用 Basic-White。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) svg,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop) svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop) svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop) .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher:not(.ant-tree-switcher-noop) svg {
+  color: var(--Colors-Use-Basic-White);
+  fill: none;
+  stroke: currentColor;
+  opacity: 1;
+}
+
+/* 只悬停展开格：浅底，箭头不能继续保持白色。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover svg,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover svg,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:not(.ant-tree-switcher-noop):hover svg {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  stroke: currentColor;
+}
+
+/* 禁用且选中的叶子空位和叶子图标：Neutral-Disable 条上用 Basic-White。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop svg,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher .ant-tree-switcher-line-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher .ant-tree-switcher-line-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-disabled .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop svg {
+  color: var(--Colors-Use-Basic-White);
+  fill: none;
+  stroke: currentColor;
+  opacity: 1;
+}
+
+/* 打开叶子图标且禁用选中：清掉空位背景（不是 Basic，也不是主色），内容从下面延伸过来。 */
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-treenode-disabled.ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website.yakit-tree-show-leaf-icon .ant-tree.ant-tree-disabled.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop {
+  background: transparent;
+  background-color: transparent;
+  color: var(--Colors-Use-Basic-White);
+}
+/* 只禁勾选、节点仍可选：选中行保持 Yakit 主色和白字。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode:not(.ant-tree-treenode-disabled) > .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: var(--Colors-Use-Main-Primary);
+  color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected:hover,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-treenode:not(.ant-tree-treenode-disabled) > .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected:hover {
+  background-color: var(--Colors-Use-Main-Hover);
+  color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected .ant-tree-title,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected .ant-tree-iconEle,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected .ant-tree-iconEle .yakit-icon {
+  color: var(--Colors-Use-Basic-White);
+}
+
+/* 悬停箭头，或悬停选中行的任何位置，内容都用 Main-Hover。
+   只写内容的 :hover 盖不到叶子图标那一格。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:not(.ant-tree-treenode-disabled):hover > .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:not(.ant-tree-treenode-disabled):hover > .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover > .ant-tree-checkbox-disabled + .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: var(--Colors-Use-Main-Hover);
+  color: var(--Colors-Use-Basic-White);
+}
+
+/* 整树禁用：未选中行用 Neutral-Disable；选中行走上面的 Neutral-Disable 条和 Basic-White。
+   默认树箭头不在这组里，仍是次要色，和未禁用时一样。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) > .ant-tree-node-content-wrapper,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) .ant-tree-title,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree.ant-tree-disabled .ant-tree-treenode:not(.ant-tree-treenode-selected) .ant-tree-iconEle {
+  color: var(--Colors-Use-Neutral-Disable);
+  opacity: 1;
+}
+
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-switcher,
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-switcher .yakit-icon,
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-switcher svg,
+.yakit-tree.yakit-tree-default .ant-tree.ant-tree-disabled .ant-tree-switcher svg path {
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  stroke: currentColor;
+}

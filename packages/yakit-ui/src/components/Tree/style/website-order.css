@@ -1,0 +1,39 @@
+.yakit-tree-website .ant-tree-treenode {
+  /* 产品顺序：拖拽柄 → 勾选列（各层对齐）→ 缩进和连接线 → 箭头或叶子 → 图标和标题。
+     用 display:flex，order 才能压过 antd 的 DOM 顺序。 */
+  align-items: center;
+  display: flex;
+}
+
+.yakit-tree-website .ant-tree-draggable-icon {
+  flex: 0 0 auto;
+  margin-inline: 0 4px;
+  order: 0;
+}
+
+/* 勾选列跟在拖拽柄后面，不随层级缩进。 */
+.yakit-tree-website .ant-tree-checkbox {
+  align-self: center;
+  flex: 0 0 auto;
+  margin-block: 0;
+  margin-inline-end: 4px;
+  margin-inline-start: 0;
+  order: 1;
+}
+
+.yakit-tree-website .ant-tree-indent {
+  order: 2;
+}
+
+.yakit-tree-website .ant-tree-switcher {
+  order: 3;
+}
+
+.yakit-tree-website .ant-tree-node-content-wrapper {
+  order: 4;
+}
+
+/* DOM 仍是箭头然后勾选框。不要让共用规则把勾选框从左边推开。 */
+.yakit-tree-website .ant-tree-switcher + .ant-tree-checkbox {
+  margin-inline-start: 0;
+}

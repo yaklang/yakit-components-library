@@ -1,0 +1,7 @@
+/* 打开叶子图标后，不透明的叶子箭头位会挡住缩进上的连接线，这一格不再画 L 形折线。 */
+.yakit-tree.yakit-tree-show-leaf-icon .ant-tree.ant-tree-show-line .ant-tree-switcher.ant-tree-switcher-noop {
+  background: var(--Colors-Use-Basic-Background);
+  background-color: var(--Colors-Use-Basic-Background);
+  position: relative;
+  z-index: 1;
+}

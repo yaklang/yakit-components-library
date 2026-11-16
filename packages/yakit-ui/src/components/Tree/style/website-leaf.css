@@ -1,0 +1,15 @@
+/* 网站树选中的叶子图标跟箭头一起变白（后面是 Action 的 ::after）。
+   默认树选中仍用次要色，箭头位没有 Action 底。 */
+.yakit-tree-website .ant-tree-treenode-selected > .ant-tree-switcher .ant-tree-switcher-line-icon,
+.yakit-tree-website .ant-tree-treenode-selected > .ant-tree-switcher .ant-tree-switcher-line-icon .anticon,
+.yakit-tree-website .ant-tree-treenode-selected > .ant-tree-switcher .ant-tree-switcher-line-custom-icon,
+.yakit-tree-website .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .ant-tree-switcher-line-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-leaf-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .ant-tree-switcher-line-icon svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-leaf-icon svg {
+  color: var(--Colors-Use-Basic-White);
+  fill: none;
+  stroke: currentColor;
+  opacity: 1;
+}

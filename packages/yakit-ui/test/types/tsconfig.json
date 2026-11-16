@@ -6,6 +6,7 @@
   },
   "include": [
     "../../src/vite-env.d.ts",
-    "input-public.test.tsx"
+    "input-public.test.tsx",
+    "tree-public.test.tsx"
   ]
 }

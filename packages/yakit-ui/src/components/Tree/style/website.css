@@ -1,0 +1,199 @@
+/* Figma Action 37377:67149：20×24，箭头 12×12，只圆左边 4。不是 20×20 的方块。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-switcher {
+  align-items: center;
+  align-self: center;
+  border-radius: 4px 0 0 4px;
+  box-sizing: border-box;
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  display: inline-flex;
+  flex: 0 0 20px;
+  height: 24px;
+  justify-content: center;
+  margin-inline: 0;
+  min-height: 24px;
+  width: 20px;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree-switcher::before {
+  height: 100%;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree-node-content-wrapper {
+  align-items: center;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  font-size: 12px;
+  gap: 4px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  margin-inline: 0;
+  min-height: 24px;
+  padding: 4px 8px 4px 6px;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree-iconEle {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 16px;
+  height: 16px;
+  justify-content: center;
+  line-height: 0;
+  margin: 0;
+  width: 16px;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree-title {
+  line-height: 16px;
+}
+
+/* Figma 网站树：Action 和 Basic 分开上色。主色、悬停、选中、选中再悬停各不相同。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected .ant-tree-title {
+  color: var(--ant-tree-node-selected-color, var(--Colors-Use-Basic-White));
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected:hover,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected:hover .ant-tree-title {
+  color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: var(--ant-tree-node-selected-bg, var(--Colors-Use-Main-Primary));
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected:hover {
+  background-color: var(--Colors-Use-Main-Hover);
+}
+
+/* 悬停箭头和内容时跳过禁用行。展开仍然允许，灰色箭头上不铺悬停底。 */
+.yakit-tree-website .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover > .ant-tree-switcher {
+  background-color: var(--Colors-Use-Neutral-Bg-Hover);
+}
+
+.yakit-tree-website .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree-website .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover > .ant-tree-node-content-wrapper:not(.ant-tree-node-selected) {
+  background-color: var(--ant-tree-node-hover-bg, var(--Colors-Use-Neutral-Bg));
+}
+
+/* 网站树箭头 SVG 和默认树一样是 12px，不要比默认树更大或更小。 */
+.yakit-tree.yakit-tree-website .ant-tree-switcher .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree-switcher svg {
+  height: 12px;
+  width: 12px;
+}
+
+/*
+ * 选中时的 Action 再用 ::after 涂一层。antd show-line 的 css-in-js 把
+ * background 设成 transparent，在 Storybook 里会盖过我们的 background-color；
+ * 那条规则清不掉 ::after。这里的图标用 currentColor，所以是白色。
+ */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher {
+  background: var(--Colors-Use-Main-Pressed);
+  background-color: var(--Colors-Use-Main-Pressed);
+  color: var(--Colors-Use-Basic-White);
+  overflow: hidden;
+  position: relative;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher::after {
+  background-color: var(--Colors-Use-Main-Pressed);
+  border-radius: 4px 0 0 4px;
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher > *,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher > * {
+  position: relative;
+  z-index: 1;
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher svg,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .yakit-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher svg {
+  color: var(--Colors-Use-Basic-White);
+  fill: none;
+  stroke: currentColor;
+  opacity: 1;
+}
+
+/* 选中再悬停：Action 用 Main-Primary。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:hover > .ant-tree-switcher,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher:hover,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:hover {
+  background: var(--Colors-Use-Main-Primary);
+  background-color: var(--Colors-Use-Main-Primary);
+  color: var(--Colors-Use-Basic-White);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:hover > .ant-tree-switcher::after,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher:hover::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:hover::after {
+  background-color: var(--Colors-Use-Main-Primary);
+}
+
+/* 叶子箭头位在选中、选中再悬停时跟 Basic（内容区）一个颜色。 */
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop {
+  background: var(--Colors-Use-Main-Primary);
+  background-color: var(--Colors-Use-Main-Primary);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after {
+  background-color: var(--Colors-Use-Main-Primary);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover {
+  background: var(--Colors-Use-Main-Hover);
+  background-color: var(--Colors-Use-Main-Hover);
+}
+
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover::after {
+  background-color: var(--Colors-Use-Main-Hover);
+}
+
+.yakit-tree-website .ant-tree-indent {
+  align-self: stretch;
+  position: relative;
+  z-index: 2;
+}
+
+/* 连接线比行多伸出 4px（antd 的 treeNodePadding），上下两段才能接上。
+   叶子箭头位是不透明的，z-index 为 1，以前会挡住这 4px 的接头。 */
+.yakit-tree-website .ant-tree-show-line .ant-tree-indent-unit {
+  position: relative;
+  z-index: 2;
+}
+
+.yakit-tree-website .ant-tree-show-line .ant-tree-indent-unit::before {
+  inset-inline-end: 0;
+  border-inline-end: 1px solid var(--Colors-Use-Neutral-Border);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.yakit-tree-website .ant-tree-show-line .ant-tree-indent-unit-end::before {
+  display: block;
+}
+
+.yakit-tree-website .ant-tree-switcher-leaf-line {
+  display: none;
+}

@@ -1,0 +1,34 @@
+/* 打开叶子图标后，这一层不再画 L 形折线。 */
+.yakit-tree.yakit-tree-show-leaf-icon .ant-tree-switcher-leaf-line,
+.yakit-tree.yakit-tree-show-leaf-icon .ant-tree-switcher.ant-tree-switcher-noop .ant-tree-switcher-leaf-line {
+  display: none;
+}
+
+/* showLeafIcon 的图标在箭头槽里（antd）：和父节点箭头同一列，不是勾选框或标题旁的 iconEle。
+   保持 12px 次要色，在箭头格里居中。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .ant-tree-switcher-line-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .ant-tree-switcher-line-custom-icon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .yakit-tree-leaf-icon {
+  align-items: center;
+  color: var(--Colors-Use-Neutral-Text-3-Secondary);
+  display: inline-flex;
+  font-size: 12px;
+  height: 12px;
+  justify-content: center;
+  line-height: 0;
+  width: 12px;
+}
+
+/* 箭头（或叶子图标）和勾选框之间留一点空隙，避免叶子和勾选框挤在一起。 */
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher + .ant-tree-checkbox {
+  margin-inline-start: 4px;
+}
+
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .ant-tree-switcher-line-icon .anticon,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .ant-tree-switcher-line-icon svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .ant-tree-switcher-line-custom-icon svg,
+.yakit-tree:is(.yakit-tree-default, .yakit-tree-website) .ant-tree-switcher .yakit-tree-leaf-icon svg {
+  display: block;
+  height: 12px;
+  width: 12px;
+}
