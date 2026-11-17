@@ -27,6 +27,8 @@ describe('native component SSR', () => {
     expect(markup).toContain('yakit-checkbox-icon');
     expect(markup).toContain('yakit-checkbox-group');
     expect(markup).toContain('yakit-spin');
+    expect(markup).toContain('yakit-copy-text');
+    expect(markup).toContain('yakit-collapse-text');
     expect(markup).not.toContain('<button type="button"><span><button');
     expect(markup).not.toMatch(/ant-(?:input|btn|otp|spin)/);
   });

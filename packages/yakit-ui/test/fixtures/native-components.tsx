@@ -3,7 +3,9 @@ import React from 'react';
 import Wave from '../../src/components/Animation/Wave';
 import Button from '../../src/components/Button';
 import Checkbox from '../../src/components/Checkbox';
+import CollapseText from '../../src/components/CollapseText';
 import ConfigProvider from '../../src/components/ConfigProvider';
+import CopyText from '../../src/components/CopyText';
 import Input from '../../src/components/Input';
 import InputNumber from '../../src/components/InputNumber';
 import Spin from '../../src/components/Spin';
@@ -34,6 +36,8 @@ export const NativeComponentsFixture = () => (
     <Input.Select>https://</Input.Select>
     <InputNumber defaultValue={1} />
     <Spin tip="Loading">content</Spin>
+    <CopyText showText="copy" />
+    <CollapseText content="collapse" />
     <Tag>Tag</Tag>
     <Wave animation="wave">
       <button type="button">Wave</button>

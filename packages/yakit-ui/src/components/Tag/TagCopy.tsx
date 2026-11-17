@@ -1,4 +1,8 @@
-import { CheckOutlined, DocumentDuplicateOutlined, Loading } from '@yakit-libs/yakit-ui-icons';
+import {
+  CheckOutlined,
+  DocumentDuplicateOutlined,
+  LoadingOutlined,
+} from '@yakit-libs/yakit-ui-icons/outline';
 import classNames from 'classnames';
 import {
   memo,
@@ -153,7 +157,7 @@ export const TagCopy = memo(function TagCopy({
 
   let icon: ReactNode;
   if (phase === 'loading') {
-    icon = <Loading spin size={iconPx} color={toneColor} aria-hidden />;
+    icon = <LoadingOutlined spin size={iconPx} color={toneColor} aria-hidden />;
   } else if (phase === 'done') {
     icon = (
       <CheckOutlined

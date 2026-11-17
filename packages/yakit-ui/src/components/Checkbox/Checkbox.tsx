@@ -1,4 +1,4 @@
-﻿import { CheckOutlined } from '@yakit-libs/yakit-ui-icons';
+﻿import { CheckOutlined } from '@yakit-libs/yakit-ui-icons/outline';
 import classNames from 'classnames';
 import {
   forwardRef,

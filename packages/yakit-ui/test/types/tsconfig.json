@@ -9,6 +9,8 @@
     "input-public.test.tsx",
     "tree-public.test.tsx",
     "spin-public.test.tsx",
-    "radio-public.test.tsx"
+    "radio-public.test.tsx",
+    "copy-text-public.test.tsx",
+    "collapse-text-public.test.tsx"
   ]
 }

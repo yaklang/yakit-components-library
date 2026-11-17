@@ -115,3 +115,9 @@ export type {
   RadioValue,
   YakitRadioButtonsProps,
 } from './Radio';
+
+export { default as CopyText } from './CopyText';
+export type { CopyTextProps, CopyTextRef, CopyTextSize } from './CopyText';
+
+export { default as CollapseText } from './CollapseText';
+export type { CollapseTextProps, CollapseTextRef } from './CollapseText';
