@@ -93,3 +93,6 @@ export type {
   WebsiteTreeProps,
   YakitTreeProps,
 } from './Tree';
+
+export { default as Spin } from './Spin';
+export type { SpinGetContainer, SpinIndicator, SpinProps, SpinRef, SpinSize } from './Spin';

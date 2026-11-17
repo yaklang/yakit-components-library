@@ -5,12 +5,12 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
-  useLayoutEffect,
   useRef,
   useState,
   type ChangeEvent,
 } from 'react';
 
+import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect';
 import useYakitConfig from '../../hooks/useYakitConfig';
 import { getYakitTokenVariables, type YakitCSSProperties } from '../../styles/tokenVariables';
 
@@ -31,8 +31,6 @@ import type {
 } from './type';
 
 const prefixCls = 'yakit-input';
-const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
-
 const normalizeSize = (size: InputSize | undefined, fallback: InputSize = 'large') => {
   const resolved = size ?? fallback;
   return resolved === 'middle' ? 'medium' : resolved;

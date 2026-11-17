@@ -1,7 +1,8 @@
-import { forwardRef, type SVGProps } from 'react';
+import { forwardRef, type ComponentType, type SVGProps } from 'react';
 
 import { DEFAULT_ICON_COLOR } from '../createIcon.js';
 import { IconBase } from '../IconBase.js';
+import LoadingOutlinedSvg from '../outline/5237-120699.svg?react';
 import type { IconProps as BaseIconProps } from '../types.js';
 
 export interface LoadingProps extends BaseIconProps {
@@ -13,27 +14,12 @@ export interface LoadingProps extends BaseIconProps {
 export type IconProps = LoadingProps;
 
 const LOADING_KEYFRAME = 'yakitIconLoadingSpin_b1a35c158267';
-const DEFAULT_LOADING_STROKE_WIDTH = 1.5;
 
-const LoadingSvg = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={24}
-    height={24}
-    viewBox="0 0 24 24"
-    fill="none"
-    {...props}
-  >
-    <path
-      d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3"
-      stroke="currentColor"
-      strokeWidth={props.style?.strokeWidth ?? props.strokeWidth ?? DEFAULT_LOADING_STROKE_WIDTH}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+type SvgIcon = ComponentType<SVGProps<SVGSVGElement>>;
+// SVG 模块由 vite-plugin-svgr 提供类型，这里收成 IconBase 需要的 Svg 类型。
+const LoadingSvg = LoadingOutlinedSvg as SvgIcon;
 
+/** 图形与 `LoadingOutlined` 相同，复用 Figma Outline/loading 的 SVG。 */
 const Loading = forwardRef<HTMLSpanElement, LoadingProps>(
   ({ size = 24, spin = false, spinSpeed = 1, svgProps, ...rootProps }, ref) => {
     const animation = spin ? `${LOADING_KEYFRAME} ${spinSpeed}s linear infinite` : undefined;
@@ -62,5 +48,6 @@ const Loading = forwardRef<HTMLSpanElement, LoadingProps>(
 );
 
 Loading.displayName = 'Loading';
+(Loading as typeof Loading & { isYakitIcon?: boolean }).isYakitIcon = true;
 
 export default Loading;

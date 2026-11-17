@@ -6,6 +6,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
+import Spin from '../../src/components/Spin';
 import { NativeComponentsFixture } from '../fixtures/native-components';
 
 const markup = renderToString(<NativeComponentsFixture />);
@@ -25,7 +26,19 @@ describe('native component SSR', () => {
     expect(markup).toContain('yakit-checkbox-checked');
     expect(markup).toContain('yakit-checkbox-icon');
     expect(markup).toContain('yakit-checkbox-group');
+    expect(markup).toContain('yakit-spin');
     expect(markup).not.toContain('<button type="button"><span><button');
-    expect(markup).not.toMatch(/ant-(?:input|btn|otp)/);
+    expect(markup).not.toMatch(/ant-(?:input|btn|otp|spin)/);
+  });
+
+  it('renders only children on the server when getContainer is set', () => {
+    const portalMarkup = renderToString(
+      <Spin getContainer="#panel">
+        <p className="spin-ssr-body">content</p>
+      </Spin>,
+    );
+    expect(portalMarkup).toContain('spin-ssr-body');
+    expect(portalMarkup).toContain('content');
+    expect(portalMarkup).not.toContain('yakit-spin');
   });
 });

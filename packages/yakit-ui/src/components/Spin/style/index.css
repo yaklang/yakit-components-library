@@ -1,0 +1,209 @@
+.yakit-spin {
+  --yakit-spin-dot-size: 20px;
+  --yakit-spin-dot-item-size: calc((var(--yakit-spin-dot-size) - 2px) / 2);
+  box-sizing: border-box;
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary));
+  position: relative;
+}
+
+.yakit-spin-small {
+  --yakit-spin-dot-size: 14px;
+}
+
+.yakit-spin-medium {
+  --yakit-spin-dot-size: 20px;
+}
+
+.yakit-spin-large {
+  --yakit-spin-dot-size: 32px;
+}
+
+.yakit-spin:not(.yakit-spin-nested):not(.yakit-spin-portal) {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.yakit-spin-nested {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+}
+
+.yakit-spin-nested > .yakit-spin-container {
+  display: flex;
+  flex-flow: column;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.yakit-spin-container {
+  position: relative;
+  transition: opacity 0.3s;
+}
+
+.yakit-spin-container::after {
+  background: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background));
+  content: '';
+  height: 100%;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: all 0.3s;
+  width: 100%;
+  z-index: 10;
+}
+
+.yakit-spin-spinning > .yakit-spin-container {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.yakit-spin-spinning > .yakit-spin-container::after {
+  opacity: 0.4;
+  pointer-events: auto;
+}
+
+.yakit-spin-section {
+  align-items: center;
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+}
+
+.yakit-spin.yakit-spin-portal {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: auto;
+  inset: 0;
+  justify-content: center;
+  pointer-events: none;
+  position: absolute;
+  width: auto;
+  z-index: 1000;
+}
+
+.yakit-spin.yakit-spin-portal.yakit-spin-viewport {
+  position: fixed;
+}
+
+.yakit-spin.yakit-spin-portal.yakit-spin-spinning {
+  pointer-events: auto;
+}
+
+.yakit-spin.yakit-spin-portal.yakit-spin-spinning::before {
+  background: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background));
+  content: '';
+  inset: 0;
+  opacity: 0.4;
+  pointer-events: auto;
+  position: absolute;
+  z-index: 10;
+}
+
+.yakit-spin-portal > .yakit-spin-dot-holder,
+.yakit-spin-portal > .yakit-spin-custom,
+.yakit-spin-portal > .yakit-spin-tip {
+  position: relative;
+  z-index: 11;
+}
+
+.yakit-spin-tip {
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary));
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.yakit-spin-spinning .yakit-spin-tip {
+  text-shadow: 0 0 5px var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background));
+}
+
+.yakit-spin-nest {
+  height: 100%;
+  min-height: 32px;
+  width: 100%;
+}
+
+.yakit-spin-dot-holder {
+  display: inline-block;
+  font-size: var(--yakit-spin-dot-size);
+  height: 1em;
+  line-height: 1;
+  width: 1em;
+}
+
+.yakit-spin-dot {
+  display: inline-block;
+  font-size: var(--yakit-spin-dot-size);
+  height: 1em;
+  position: relative;
+  width: 1em;
+  will-change: transform, opacity;
+}
+
+.yakit-spin-dot-spin {
+  animation: yakit-spin-rotate 1.2s linear infinite;
+  transform: rotate(45deg);
+}
+
+.yakit-spin-dot-item {
+  animation: yakit-spin-dot-move 1s linear infinite alternate;
+  background: currentColor;
+  border-radius: 100%;
+  display: block;
+  height: var(--yakit-spin-dot-item-size);
+  opacity: 0.3;
+  position: absolute;
+  transform: scale(0.75);
+  transform-origin: 50% 50%;
+  width: var(--yakit-spin-dot-item-size);
+  will-change: transform, opacity;
+}
+
+.yakit-spin-dot-item:nth-child(1) {
+  animation-delay: 0s;
+  inset-inline-start: 0;
+  top: 0;
+}
+
+.yakit-spin-dot-item:nth-child(2) {
+  animation-delay: 0.4s;
+  inset-inline-end: 0;
+  top: 0;
+}
+
+.yakit-spin-dot-item:nth-child(3) {
+  animation-delay: 0.8s;
+  bottom: 0;
+  inset-inline-end: 0;
+}
+
+.yakit-spin-dot-item:nth-child(4) {
+  animation-delay: 1.2s;
+  bottom: 0;
+  inset-inline-start: 0;
+}
+
+@keyframes yakit-spin-rotate {
+  to {
+    transform: rotate(405deg);
+  }
+}
+
+@keyframes yakit-spin-dot-move {
+  to {
+    opacity: 1;
+  }
+}

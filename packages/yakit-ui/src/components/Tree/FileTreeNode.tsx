@@ -5,8 +5,9 @@ import {
 } from '@yakit-libs/yakit-ui-icons/outline';
 import type { TreeDataNode } from 'antd';
 import classNames from 'classnames';
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 
+import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect';
 import Input, { type InputRef } from '../Input';
 
 import { customNodeIcon } from './nodeIcon';
@@ -99,11 +100,11 @@ export const FileTreeNode = ({
   const selectionStart = editingSelection?.start;
   const selectionEnd = editingSelection?.end;
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     submitted.current = false;
   }, [editing, editingValue, node.key]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!editing) return;
     const input = inputRef.current?.input;
     if (!input) return;

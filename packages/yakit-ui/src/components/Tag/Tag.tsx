@@ -5,7 +5,6 @@ import {
   isValidElement,
   memo,
   useCallback,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -16,6 +15,7 @@ import {
   type ReactNode,
 } from 'react';
 
+import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect';
 import useYakitConfig from '../../hooks/useYakitConfig';
 import { getYakitTokenVariables } from '../../styles/tokenVariables';
 import type { YakitCSSProperties } from '../../styles/tokenVariables';
@@ -306,7 +306,7 @@ const TagInternal = memo(function TagInternal({
 
   // 仅在开启 ellipsis 且文本节点实际被截断时挂载原生 `title`。
   // 单例 ResizeObserver；rAF 合并；title 未变跳过 setState；同时观察 root，避免仅祖先约束变窄时 content 不触发回调。
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!ellipsis) {
       setContentTitle(undefined);
       setExtraTitle(undefined);

@@ -15,7 +15,6 @@ import {
   useEffect,
   useId,
   useImperativeHandle,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -28,6 +27,7 @@ import {
   type Ref,
 } from 'react';
 
+import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect';
 import useYakitConfig from '../../hooks/useYakitConfig';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
@@ -187,7 +187,7 @@ const SelectInner = <ValueType, OptionType extends DefaultOptionType = DefaultOp
     },
   }));
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     selectRef.current?.nativeElement?.setAttribute('data-theme', config.mode);
   }, [config.mode]);
 
@@ -206,7 +206,7 @@ const SelectInner = <ValueType, OptionType extends DefaultOptionType = DefaultOp
     setPopupPass((pass) => pass + 1);
   }, [mergedOpen]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!mergedOpen) {
       popupStamped.current = false;
       if (popupPass !== 0) setPopupPass(0);

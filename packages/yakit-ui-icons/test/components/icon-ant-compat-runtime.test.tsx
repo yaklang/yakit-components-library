@@ -4,7 +4,7 @@ import { createRoot, hydrateRoot, type Root } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { Loading, LogoOutlined, QuestionMarkCircleOutlined } from '../../src';
+import { Loading, LoadingOutlined, LogoOutlined, QuestionMarkCircleOutlined } from '../../src';
 import { iconRegistry } from '../../src/registry';
 import { iconCounts, iconExports } from '../icons/icon-inventory';
 
@@ -37,6 +37,7 @@ describe('Ant-compatible icon root', () => {
   it('renders one compatibility span with one direct SVG child', () => {
     const { span, svg } = getIconParts(render(<QuestionMarkCircleOutlined />));
 
+    expect(svg.hasAttribute('class')).toBe(false);
     expect(span.getAttribute('role')).toBe('img');
     expect(span.children).toHaveLength(1);
     expect(span.firstElementChild).toBe(svg);
@@ -267,6 +268,16 @@ describe('Ant-compatible registry and Loading contracts', () => {
     expect(container.querySelectorAll(':scope > svg')).toHaveLength(0);
   });
 
+  it('lets LoadingOutlined spin with the same frozen hashed keyframe', () => {
+    const { span, svg } = getIconParts(render(<LoadingOutlined spin />));
+
+    expect(span.style.animation).toBe('');
+    expect(svg.style.animation).toBe('');
+    expect(svg.classList.contains('yakit-icon-spinning')).toBe(true);
+    expect(getComputedStyle(svg).animationName).toBe('yakitIconLoadingSpin_b1a35c158267');
+    expect(svg.querySelector('style')).toBeNull();
+  });
+
   it('keeps Loading animation on the inner SVG with the frozen hashed keyframe', () => {
     const { span, svg } = getIconParts(render(<Loading spin spinSpeed={2} />));
 
@@ -290,6 +301,18 @@ describe('Ant-compatible registry and Loading contracts', () => {
 
     expect(span.style.color).toBe('rgb(18, 52, 86)');
     expect(svg.querySelector('path')?.getAttribute('stroke')).toBe('currentColor');
+  });
+
+  it('uses the same path as LoadingOutlined', () => {
+    const loading = getIconParts(render(<Loading />));
+    const outlined = getIconParts(render(<LoadingOutlined />));
+    const loadingPath = loading.svg.querySelector('path');
+    const outlinedPath = outlined.svg.querySelector('path');
+
+    expect(loadingPath).not.toBeNull();
+    expect(outlinedPath).not.toBeNull();
+    expect(loading.svg.getAttribute('viewBox')).toBe(outlined.svg.getAttribute('viewBox'));
+    expect(loadingPath?.getAttribute('d')).toBe(outlinedPath?.getAttribute('d'));
   });
 });
 

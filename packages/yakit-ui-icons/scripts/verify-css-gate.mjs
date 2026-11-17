@@ -22,6 +22,16 @@ import { build } from 'vite';
 const compatibilityRule = ':where(.anticon.yakit-icon)';
 const loadingKeyframe = 'yakitIconLoadingSpin_b1a35c158267';
 
+async function readResolvedIconCss(packageRoot) {
+  let css = await readFile(path.join(packageRoot, 'dist/icon.css'), 'utf8');
+  const manifest = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'));
+  if (manifest.dependencies?.['@yakit-libs/yakit-ui-icons']) {
+    const require = createRequire(path.join(packageRoot, 'package.json'));
+    css = await readFile(require.resolve('@yakit-libs/yakit-ui-icons/icon.css'), 'utf8');
+  }
+  return css;
+}
+
 async function collectFiles(directory) {
   const files = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -145,8 +155,13 @@ async function runBrowserBundle({ entries, packageName, packageRoot }) {
       throw new Error(`browser bundle must emit exactly one CSS asset, found ${cssFiles.length}`);
     }
     const css = await readFile(cssFiles[0], 'utf8');
-    if (css.split(compatibilityRule).length - 1 !== 3) {
-      throw new Error('browser bundle must contain exactly one compatibility rule block');
+    const packagedCss = await readResolvedIconCss(packageRoot);
+    const packagedRuleCount = packagedCss.split(compatibilityRule).length - 1;
+    const bundledRuleCount = css.split(compatibilityRule).length - 1;
+    if (packagedRuleCount < 1 || bundledRuleCount !== packagedRuleCount) {
+      throw new Error(
+        `browser bundle must contain exactly one compatibility rule block (found ${bundledRuleCount}, expected ${packagedRuleCount})`,
+      );
     }
     if (css.split(`@keyframes ${loadingKeyframe}`).length - 1 !== 1) {
       throw new Error('browser bundle must contain exactly one Loading keyframe');

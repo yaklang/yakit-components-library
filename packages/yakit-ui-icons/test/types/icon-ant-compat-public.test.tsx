@@ -2,6 +2,7 @@ import { createRef } from 'react';
 
 import {
   Loading,
+  LoadingOutlined,
   QuestionMarkCircleOutlined,
   type IconComponent,
   type IconProps,
@@ -50,6 +51,7 @@ const rootProps = {
 const svgProps = rootProps.svgProps satisfies IconSvgProps;
 const iconRefIsSpan: IconRef extends HTMLSpanElement ? true : false = true;
 const component: IconComponent = QuestionMarkCircleOutlined;
+const spunIconProps = { spin: true } satisfies IconProps;
 const loadingProps = { spin: true, spinSpeed: 2, ...rootProps } satisfies LoadingProps;
 const familyTypes:
   | [
@@ -71,6 +73,7 @@ const familyTypes:
 export const IconAntCompatTypeFixture = () => (
   <>
     <QuestionMarkCircleOutlined {...rootProps} data-icon-purpose="help" ref={spanRef} />
+    <LoadingOutlined spin />
     <Loading {...loadingProps} ref={spanRef} />
   </>
 );
@@ -104,6 +107,7 @@ const invalidSvgChildren: IconSvgProps = { children: <title>replacement</title> 
 // @ts-expect-error raw HTML cannot replace fixed icon children
 const invalidSvgHtml: IconSvgProps = { dangerouslySetInnerHTML: { __html: '<path />' } };
 
+void spunIconProps;
 void component;
 void familyTypes;
 void iconRefIsSpan;
