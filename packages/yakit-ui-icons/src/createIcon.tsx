@@ -25,5 +25,6 @@ export function createIcon(
   ));
 
   Icon.displayName = displayName;
-  return Icon;
+  (Icon as IconComponent).isYakitIcon = true;
+  return Icon as IconComponent;
 }

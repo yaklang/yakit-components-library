@@ -29,10 +29,16 @@ export type IconProps = Omit<
   color?: string;
   /** Overrides the Figma-defined SVG size. */
   size?: number | string;
+  /** Rotate the icon with animation, matching ant-design icons. */
+  spin?: boolean;
   /** Applies presentation-only attributes to the inner SVG. */
   svgProps?: IconSvgProps;
 };
 
 export type IconRef = HTMLSpanElement;
 
-export type IconComponent = ForwardRefExoticComponent<IconProps & RefAttributes<HTMLSpanElement>>;
+export type IconComponent = ForwardRefExoticComponent<
+  IconProps & RefAttributes<HTMLSpanElement>
+> & {
+  isYakitIcon?: boolean;
+};

@@ -64,6 +64,7 @@ export const IconBase = forwardRef<HTMLSpanElement, IconBaseProps>(
       role = 'img',
       size,
       style,
+      spin,
       svgProps,
       tabIndex,
       ...rootProps
@@ -72,6 +73,9 @@ export const IconBase = forwardRef<HTMLSpanElement, IconBaseProps>(
   ) => {
     const sanitizedSvgProps = sanitizeSvgProps(svgProps);
     const sizeProps = size === undefined ? undefined : { height: size, width: size };
+    const svgClassName =
+      joinClassNames(sanitizedSvgProps.className, spin ? 'yakit-icon-spinning' : undefined) ||
+      undefined;
     const inheritsColor = color?.trim().toLowerCase() === 'currentcolor';
     const rootStyle: IconRootStyle = {
       '--yakit-icon-default-color': inheritsColor ? 'currentColor' : defaultColor,
@@ -89,10 +93,17 @@ export const IconBase = forwardRef<HTMLSpanElement, IconBaseProps>(
         style={rootStyle}
         onClick={onClick}
       >
-        <Svg {...sizeProps} {...sanitizedSvgProps} aria-hidden="true" focusable="false" />
+        <Svg
+          {...sizeProps}
+          {...sanitizedSvgProps}
+          className={svgClassName}
+          aria-hidden="true"
+          focusable="false"
+        />
       </span>
     );
   },
 );
 
 IconBase.displayName = 'IconBase';
+(IconBase as typeof IconBase & { isYakitIcon?: boolean }).isYakitIcon = true;

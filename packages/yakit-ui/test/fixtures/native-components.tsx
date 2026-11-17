@@ -6,6 +6,7 @@ import Checkbox from '../../src/components/Checkbox';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import Input from '../../src/components/Input';
 import InputNumber from '../../src/components/InputNumber';
+import Spin from '../../src/components/Spin';
 import Tag from '../../src/components/Tag';
 
 export const NativeComponentsFixture = () => (
@@ -32,6 +33,7 @@ export const NativeComponentsFixture = () => (
     <Input.SearchTrigger />
     <Input.Select>https://</Input.Select>
     <InputNumber defaultValue={1} />
+    <Spin tip="Loading">content</Spin>
     <Tag>Tag</Tag>
     <Wave animation="wave">
       <button type="button">Wave</button>
