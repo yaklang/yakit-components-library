@@ -31,7 +31,7 @@ pnpm icons:import --input /absolute/path/icon-input.json
 - `family`：现有记录优先；新增时根据节点所属分类确定，不明确就询问。
 - `exportName`：可选。已有记录固定保留；新增英文名称可以自动转 PascalCase 加后缀。中文或含糊名称由 Agent 翻译建议、用户确认后明确传入。
 - `colorBindings`：保存实际取得的颜色绑定，格式见下文。`variableTokens` 单独保存变量 ID 到项目 CSS token 的映射。
-- `evidence`：可选对象，保存实际返回的组件关系、实例覆盖、提取过程及必要工具响应等补充证据。证据独立保存，通过 `evidenceFile` 引用。不能填入假想的空数组或审核结论。
+- `evidence`：可选对象，保存与图标自身有关的组件关系、提取过程及必要工具响应等补充证据。证据独立保存，通过 `evidenceFile` 引用。不能填入假想的空数组或审核结论。不登记 Figma 中的实例使用位置或实例覆盖；禁止传入 `evidence.placements`，包括空数组，否则整批导入报错。
 - `paintReplacements`：可选，例如 `{ "#F28C45": "var(--Colors-Use-Neutral-Text-2-Primary, #F28C45)" }`。只在实际取得变量映射或用户指定时使用。处理明确的 fill/stroke/stop-color 属性颜色，包括渐变色标；需要样式或分层角色判断时不要猜测。
 - `groupNodeId`：传实际取得的分组节点 ID，必须属于来源文件中已登记的分组。未传时保留已有记录的已知分组；新增 Outline/Solid 且分组未知时保存 null，不根据分类猜测。
 - Colorful 新增必须提供 `groupNodeId`；`category` 可选，用于校验项目分类标识。

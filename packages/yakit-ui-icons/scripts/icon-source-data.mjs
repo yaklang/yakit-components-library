@@ -51,11 +51,8 @@ export function sourceFiles(source) {
 export function sourceCounts(source) {
   const records = source.records;
   if (source.family === 'outline') {
-    const placements = records.flatMap((r) => r.placements);
     return {
       currentSymbols: records.length,
-      instances: placements.filter((r) => r.nodeType === 'instance').length,
-      placements: placements.length,
       publicExports: records.length,
     };
   }

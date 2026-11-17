@@ -45,7 +45,9 @@ Figma 后续又有变化，需要通过下一次更新 PR 进入仓库。检查�
 | `config/icon-sources/svg/<fileKey>/<nodeId短横线>.svg`       | Figma SVG 原始字节，不格式化、不做生产转换                                                                                                               |
 | `config/icon-project/<分类>.json`                            | 导出名、生产路径、默认颜色、变量到 CSS token 的映射、按色值替换和必要转换例外                                                                            |
 | `config/icon-display.json`                                   | 项目分类标识、Storybook 标签、导航和人工顺序                                                                                                             |
-| `config/icon-sources/evidence/<fileKey>/<nodeId短横线>.json` | 仍影响提取、实例覆盖或图形语义的采集证据                                                                                                                 |
+| `config/icon-sources/evidence/<fileKey>/<nodeId短横线>.json` | 仍影响提取或图形语义的采集证据                                                                                                                           |
+
+图标来源只维护图标自身，不登记 Figma 中的实例使用位置、实例覆盖或实例数量。导入请求不接受 `evidence.placements`（包括空数组），会在写入前报错。其他必要的图形提取证据继续通过 `evidenceFile` 保存。
 
 `groupNodeId` 保存实际取得的分组节点 ID。导入时未提供分组，则保留已有记录的已知分组；新增 Outline/Solid 且分组未知时保存 null，不根据分类推测远端父节点。Colorful 新增记录必须指定已登记的实际分组。
 

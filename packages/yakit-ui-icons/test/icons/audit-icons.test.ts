@@ -24,7 +24,7 @@ const validOutline =
   '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor"/></svg>';
 const dataCompareFormula = 'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
 
-const fixtureCounts = { currentSymbols: 4, instances: 3, placements: 7, publicExports: 4 };
+const fixtureCounts = { currentSymbols: 4, publicExports: 4 };
 const auditIcons = (options: Parameters<typeof auditWithPolicy>[0]) =>
   auditWithPolicy({
     ...options,
@@ -59,27 +59,12 @@ const completeManifest = (source = validOutline) => {
     localRawSvgSha256: sha256(source),
     normalizedAstSha256,
   });
-  const placements = Array.from({ length: fixtureCounts.placements }, (_, index) => {
-    const instance = index >= fixtureCounts.currentSymbols;
-    const exportedSourceNodeId = `${(index % fixtureCounts.currentSymbols) + 1}:1`;
-    return {
-      exportedSourceNodeId,
-      mainComponentId: exportedSourceNodeId,
-      mainComponentIdStatus: instance ? 'resolved' : 'self_symbol',
-      nodeType: instance ? 'instance' : 'component',
-      overrideHash: sha256(`override-${index}`),
-      overrideHashStatus: 'captured',
-      placementNodeId: `placement:${index}`,
-    };
-  });
   return {
     complete: true,
     expectedCounts: { ...fixtureCounts },
     fileKey: 'QWct5XE0Bg0bNDQ93eYgEw',
     frameNodeId: '46824:1930',
-    instanceVerification: placements.slice(-3),
     legacySources: [] as Array<Record<string, string | null>>,
-    placements,
     paintExceptions: [] as Array<Record<string, string>>,
     provenanceComplete: true,
     sourceEvidence: {} as Record<string, string>,

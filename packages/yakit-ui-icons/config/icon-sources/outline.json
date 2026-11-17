@@ -2193,8 +2193,7 @@
       "nodeSize": {
         "width": 24,
         "height": 24
-      },
-      "evidenceFile": "evidence/QWct5XE0Bg0bNDQ93eYgEw/1-2337.json"
+      }
     },
     {
       "nodeId": "1:2339",
@@ -2209,8 +2208,7 @@
       "nodeSize": {
         "width": 24,
         "height": 24
-      },
-      "evidenceFile": "evidence/QWct5XE0Bg0bNDQ93eYgEw/1-2339.json"
+      }
     },
     {
       "nodeId": "1:2341",
@@ -4237,8 +4235,7 @@
         "status": "unknown",
         "bindings": []
       },
-      "nodeType": "COMPONENT",
-      "evidenceFile": "evidence/QWct5XE0Bg0bNDQ93eYgEw/45049-18098.json"
+      "nodeType": "COMPONENT"
     },
     {
       "nodeId": "44999:1957",

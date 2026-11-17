@@ -83,17 +83,6 @@ export function joinIconSource(
       },
       scopeRole: placement.scopeRole,
       placement,
-      placements: [
-        {
-          placementNodeId: nodeId,
-          nodeType: 'component',
-          mainComponentId: nodeId,
-          mainComponentIdStatus: 'canonical-source-self',
-          overridePayload: null,
-          ...record.nodeSize,
-        },
-        ...(evidence?.placements ?? []),
-      ],
       figmaName: record.name,
       category: group?.category,
       rowDisposition: 'canonical-new',

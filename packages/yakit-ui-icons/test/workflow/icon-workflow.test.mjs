@@ -1,7 +1,7 @@
 import { readIconInput } from '../../scripts/icon-source-documents.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -15,6 +15,7 @@ import {
 } from '../../scripts/update-icons.mjs';
 import {
   planSourceImport,
+  runSourceImport,
   parseFigmaUrl,
   suggestExportName,
 } from '../../scripts/import-icon-sources.mjs';
@@ -44,6 +45,18 @@ async function fixture(run) {
     await rm(root, { recursive: true, force: true });
   }
 }
+async function snapshotConfig(root) {
+  const directory = path.join(root, 'config');
+  const files = (await readdir(directory, { recursive: true })).sort();
+  const result = [];
+  for (const file of files) {
+    const absolute = path.join(directory, file);
+    const info = await stat(absolute);
+    if (info.isFile()) result.push([file, await readFile(absolute, 'utf8'), info.mtimeMs]);
+  }
+  return result;
+}
+
 const fileKey = 'QWct5XE0Bg0bNDQ93eYgEw';
 const url = (id) => `https://www.figma.com/design/${fileKey}/Icons?node-id=${id.replace(':', '-')}`;
 const outlineSvg =
@@ -160,6 +173,32 @@ test('bad batch does not write good nodes, duplicate exports fail, missing recor
     await assert.rejects(planIconUpdate(root, { sources }), /PUBLIC_REMOVAL/);
   }));
 
+for (const kind of ['new', 'existing'])
+  test(`Outline stroke preflight rejects an unsupported ${kind} source without writing the batch`, () =>
+    fixture(async (root) => {
+      const request = await input(root, 'outline');
+      request.icons[0].evidence = { component: { nodeType: 'COMPONENT' } };
+      const existing = readIconSources(pathToFileURL(`${root}/config/icon-sources/`)).outline
+        .records[0];
+      const invalidSvgPath = path.join(root, 'unsupported-stroke.svg');
+      await writeFile(invalidSvgPath, outlineSvg.replace(' stroke-width="2"', ''));
+      request.icons.push({
+        ...request.icons[0],
+        url: url(kind === 'existing' ? existing.nodeId : '999999:2'),
+        name: kind === 'existing' ? existing.name : 'Outline/unsupported-stroke',
+        svgPath: invalidSvgPath,
+      });
+      const inputPath = path.join(root, 'input.json');
+      await writeFile(inputPath, jsonText(request));
+      const before = await snapshotConfig(root);
+      await assert.rejects(
+        runSourceImport(['--input', inputPath], root),
+        /ICON_STROKE_FILL_DISPOSITION_MISSING/,
+      );
+      // Includes source metadata, raw SVGs, project mappings and evidence for both nodes.
+      assert.deepEqual(await snapshotConfig(root), before);
+    }));
+
 test('Oldicon assets are manually maintained and never regenerated', () =>
   fixture(async (root) => {
     const { readOldiconAssets } = await import('../../scripts/oldicon-assets.mjs');
@@ -203,36 +242,78 @@ test('transaction restores earlier writes and detects concurrent edits', async (
   }
 });
 
-test('canonical sources preserve raw SVGs, placements and existing default colors', () =>
+test('canonical sources preserve raw SVGs, node sizes and defaults without instance inventories', () =>
   fixture(async (root) => {
-    const original = JSON.parse(
-      await readIconInput(path.join(root, 'config/icon-sources/solid.json#placement'), 'utf8'),
-    );
-    const migrated = readIconSources(pathToFileURL(`${root}/config/icon-sources/`));
+    const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`));
     assert.equal(
-      migrated.outline.records.find((r) => r.exportName === 'SunOutlined').defaultColor,
+      sources.outline.records.find((r) => r.exportName === 'SunOutlined').defaultColor,
       '#0A0A0A',
     );
-    assert.equal(
-      migrated.solid.records.flatMap((r) => r.placements).length,
-      original.placements.length,
-    );
-    for (const placement of original.placements) {
-      const record = migrated.solid.records.find(
-        (r) => r.nodeId === placement.exportedSourceNodeId,
+    for (const family of ['outline', 'solid']) {
+      const inventory = JSON.parse(
+        await readIconInput(
+          path.join(root, `config/icon-sources/${family}.json#placement`),
+          'utf8',
+        ),
       );
-      const preserved = record.placements.find(
-        (p) => p.placementNodeId === placement.placementNodeId,
+      const manifest = JSON.parse(
+        await readIconInput(path.join(root, `config/icon-sources/${family}.json#manifest`), 'utf8'),
       );
-      assert.equal(preserved.width, placement.width);
-      assert.equal(preserved.height, placement.height);
+      assert.equal(Object.hasOwn(inventory, 'placements'), false);
+      assert.equal(Object.hasOwn(inventory.counts, 'instances'), false);
+      assert.equal(Object.hasOwn(manifest, 'placements'), false);
+      assert.equal(Object.hasOwn(manifest, 'instanceVerification'), false);
+      assert.equal(Object.hasOwn(manifest.expectedCounts, 'instances'), false);
+      const symbols = [...inventory.currentSymbols, ...(inventory.supplementalSources ?? [])];
+      assert.equal(symbols.length, sources[family].records.length);
+      for (const record of sources[family].records) {
+        assert.equal(Object.hasOwn(record, 'placements'), false);
+        const symbol = symbols.find((r) => (r.nodeId ?? r.exportedSourceNodeId) === record.nodeId);
+        assert.equal(symbol.width, record.nodeSize?.width);
+        assert.equal(symbol.height, record.nodeSize?.height);
+        assert.equal(symbol.exportName, record.exportName);
+      }
     }
     const raw = JSON.parse(
       await readIconInput(path.join(root, 'config/icon-sources/outline.json#raw'), 'utf8'),
     );
-    for (const record of migrated.outline.records)
+    for (const record of sources.outline.records)
       assert.equal(record.raw.svg, raw.components.find((r) => r.nodeId === record.nodeId).svg);
   }));
+
+for (const family of ['outline', 'solid', 'colorful'])
+  test(`${family} rejects instance placements without writing any batch files`, () =>
+    fixture(async (root) => {
+      const request = await input(root, family);
+      request.icons[0].evidence = { extraction: { method: 'svg-export' } };
+      const existing = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))[family]
+        .records[0];
+      const before = await snapshotConfig(root);
+      for (const nodeId of ['999999:2', existing.nodeId]) {
+        for (const placements of [[], [{ placementNodeId: '999999:3', nodeType: 'instance' }]]) {
+          const invalid = {
+            ...request.icons[0],
+            url: url(nodeId),
+            name: nodeId === existing.nodeId ? existing.name : `${family}/unsupported-placement`,
+            evidence: { placements },
+          };
+          const inputPath = path.join(root, 'input.json');
+          await writeFile(inputPath, jsonText({ ...request, icons: [...request.icons, invalid] }));
+          await assert.rejects(
+            runSourceImport(['--input', inputPath], root),
+            /ICON_INSTANCE_PLACEMENTS_UNSUPPORTED.*remove evidence.placements/,
+          );
+          assert.deepEqual(await snapshotConfig(root), before);
+        }
+      }
+      // Necessary extraction evidence remains supported and idempotent.
+      await applyChanges(root, (await planSourceImport(request, root)).changes);
+      const record = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))[
+        family
+      ].records.find((r) => r.nodeId === '999999:1');
+      assert.deepEqual(record.evidence.captured, request.icons[0].evidence);
+      assert.equal((await planSourceImport(request, root)).changes.size, 0);
+    }));
 
 test('partial generation stays within its family and rejects public removals', () =>
   fixture(async (root) => {

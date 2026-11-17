@@ -13,6 +13,10 @@ import {
 import { parseSvg } from './audit-icons.mjs';
 import { loadPinnedTokenCatalog } from './colorful-color-resolver.mjs';
 import { inspectFragmentGraph } from './colorful-fragments.mjs';
+import {
+  generateIconStrokeContract,
+  sourceFixedFillDispositions,
+} from '../config/generateIconStrokeContract.mjs';
 
 export function parseFigmaUrl(value) {
   const url = new URL(value);
@@ -61,6 +65,10 @@ export async function planSourceImport(input, root = packageRoot) {
   const report = [];
   for (const icon of input.icons) {
     const { fileKey, nodeId } = parseFigmaUrl(icon.url);
+    required(
+      !Object.hasOwn(icon.evidence ?? {}, 'placements'),
+      `ICON_INSTANCE_PLACEMENTS_UNSUPPORTED: ${nodeId}: remove evidence.placements; only canonical icon sources are maintained`,
+    );
     required(!seen.has(`${fileKey}/${nodeId}`), `ICON_IMPORT_NODE_DUPLICATE: ${nodeId}`);
     seen.add(`${fileKey}/${nodeId}`);
     const owner = FIGMA_FAMILIES.find(
@@ -211,6 +219,11 @@ export async function planSourceImport(input, root = packageRoot) {
     for (const [, token] of normalized.matchAll(/var\(\s*(--[\w-]+)\s*,/g))
       required(knownTokens.has(token), `COLOR_TOKEN_UNKNOWN: ${nodeId}: ${token}`);
     if (family === 'outline') {
+      // Use the same capability rules as generation before committing any source files.
+      generateIconStrokeContract(undefined, {
+        fixedFill: sourceFixedFillDispositions([working]),
+        sources: new Map([[working.file, normalized]]),
+      });
       const foreground = [];
       const walk = (node, inDefinition = false) => {
         const inside =

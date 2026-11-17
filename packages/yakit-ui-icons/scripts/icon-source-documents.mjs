@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { canonicalJson, policyDigest, sortedPublicMapping } from './icon-audit-contracts.mjs';
+import { policyDigest, sortedPublicMapping } from './icon-audit-contracts.mjs';
 import { readIconSources, sourceCounts, sourceFiles } from './icon-source-data.mjs';
 import { validateColorfulInventory } from './colorful-icon-contracts.mjs';
 import { deriveIconStrokeManifests } from './update-icon-stroke-manifests.mjs';
@@ -64,49 +64,19 @@ export function monochromeDocuments(source) {
   if (family === 'outline') {
     raw.components = records.map(rawRecord);
     placement.currentSymbols = records.map(placementRecord);
-    placement.placements = records.flatMap((r) =>
-      r.placements.map((p) => ({
-        ...p,
-        name: p.nodeType === 'instance' ? (p.instanceName ?? r.name) : r.name,
-        exportedSourceNodeId: r.nodeId,
-      })),
-    );
-    placement.counts = {
-      placements: placement.placements.length,
-      currentSymbols: records.length,
-      instances: sourceCounts(source).instances,
-    };
-    manifest.placements = placement.placements.map((p) => ({
-      ...p,
-      mainComponentIdStatus:
-        p.nodeType === 'component'
-          ? 'self_symbol'
-          : p.mainComponentIdStatus === 'verified-via-plugin-api'
-            ? 'resolved'
-            : p.mainComponentIdStatus,
-      overrideHash: sha256(canonicalJson(p.overridePayload ?? null)),
-      overrideHashStatus: 'captured',
-    }));
-    manifest.instanceVerification = manifest.placements.filter((p) => p.nodeType === 'instance');
+    placement.counts = { currentSymbols: records.length };
     manifest.symbols = records.map(symbol);
     raw.frame = {
       ...raw.frame,
-      placementCount: placement.placements.length,
       componentCount: records.length,
-      instanceCount: sourceCounts(source).instances,
     };
   } else {
     const targets = records.filter((r) => r.scopeRole === 'target');
     const supplements = records.filter((r) => r.scopeRole === 'supplement');
     raw.components = targets.map(rawRecord);
     raw.supplementalComponents = supplements.map(rawRecord);
-    placement.placements = records.flatMap((r) =>
-      (r.placements ?? []).map((p) => ({ ...p, name: r.name, exportedSourceNodeId: r.nodeId })),
-    );
     placement.counts = {
-      placements: placement.placements.length,
       currentSymbols: targets.length,
-      instances: 0,
       supplementalSources: supplements.length,
     };
     placement.targetSymbols = targets.map(placementRecord);
@@ -126,7 +96,7 @@ export function monochromeDocuments(source) {
     manifest.publicMappingSha256 = policyDigest(sortedPublicMapping(manifest.publicExports));
     raw.targetOrderSha256 = manifest.targetOrderSha256;
     placement.targetOrderSha256 = manifest.targetOrderSha256;
-    raw.frame = { ...raw.frame, placementCount: targets.length, componentCount: targets.length };
+    raw.frame = { ...raw.frame, componentCount: targets.length };
   }
   manifest.completenessScope =
     'Registered source records; does not assert a complete remote Figma frame scan';
