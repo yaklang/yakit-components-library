@@ -3,50 +3,17 @@ import '@yakit-libs/yakit-ui-icons/icon.css';
 import * as OldIcons from '@yakit-libs/yakit-ui-icons/oldicon';
 import type { IconComponent } from '@yakit-libs/yakit-ui-icons/oldicon';
 
-import oldiconSource from '../../../yakit-ui-icons/config/icon-sources/oldicon.json';
-
-type OldIconSourceRow = {
-  exportName: string;
-  sourceFile: string;
-  sourceName: string;
-};
-
-const sourceRows = oldiconSource.records.flatMap<OldIconSourceRow>(({ sources }) => sources);
-const exportNames = [...new Set(sourceRows.map(({ exportName }) => exportName))].sort((a, b) =>
-  a.localeCompare(b),
-);
-const oldIconInventory = {
-  exports: exportNames.map((exportName) => ({
-    exportName,
-    sourceKeys: sourceRows
-      .filter((row) => row.exportName === exportName)
-      .map((row) => `${row.sourceFile}::${row.sourceName}`)
-      .sort(),
-  })),
-  totals: {
-    exports: exportNames.length,
-    artworks: oldiconSource.records.length,
-    sourcePaths: sourceRows.length,
-  },
-};
-
 const oldIconModule = OldIcons as Record<string, IconComponent>;
-const oldIconEntries = oldIconInventory.exports.map((entry) => {
-  const Component = oldIconModule[entry.exportName];
-  if (!Component) {
-    throw new Error(
-      `oldIcon inventory export is missing from the runtime module: ${entry.exportName}`,
-    );
-  }
-  return { ...entry, Component };
-});
+const oldIconEntries = Object.keys(oldIconModule)
+  .sort((a, b) => a.localeCompare(b))
+  .map((exportName) => ({ exportName, Component: oldIconModule[exportName] }));
 
 type OldIconEntry = (typeof oldIconEntries)[number];
 
 const oldIconImportPath = '@yakit-libs/yakit-ui-icons/oldicon';
 
 const OldIconCard = ({ entry }: { entry: OldIconEntry }) => {
-  const { Component, exportName, sourceKeys } = entry;
+  const { Component, exportName } = entry;
   const importSnippet = `import { ${exportName} } from '${oldIconImportPath}';`;
 
   return (
@@ -110,19 +77,6 @@ const OldIconCard = ({ entry }: { entry: OldIconEntry }) => {
         >
           {`<${exportName} />`}
         </code>
-        <small
-          title={sourceKeys.join('\n')}
-          style={{
-            color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
-            display: 'block',
-            marginTop: 8,
-            overflowWrap: 'anywhere',
-          }}
-        >
-          {sourceKeys.length} source {sourceKeys.length === 1 ? 'mapping' : 'mappings'} ·{' '}
-          {sourceKeys[0]}
-          {sourceKeys.length > 1 ? ` · +${sourceKeys.length - 1}` : ''}
-        </small>
       </div>
     </article>
   );
@@ -136,8 +90,7 @@ const OldIconOverview = () => (
       </h1>
       <p style={{ color: 'var(--Colors-Use-Neutral-Text-2-Primary)', lineHeight: 1.6, margin: 0 }}>
         这里收录 Yakit 迁移期间仍需保留的旧 SVG。它们通过 <code>{oldIconImportPath}</code>{' '}
-        独立导入，不进入正式图标 registry。内置描边已统一为 1 SVG
-        用户单位，原有图形、颜色和导出名称保留。
+        独立导入，不进入正式图标 registry。以现有 assets SVG 为准，素材、组件及入口手工维护。
       </p>
     </header>
     <div
@@ -153,13 +106,7 @@ const OldIconOverview = () => (
       }}
     >
       <span>
-        <strong>{oldIconInventory.totals.exports}</strong> public exports
-      </span>
-      <span>
-        <strong>{oldIconInventory.totals.artworks}</strong> unique artworks
-      </span>
-      <span>
-        <strong>{oldIconInventory.totals.sourcePaths}</strong> source paths
+        <strong>{oldIconEntries.length}</strong> public exports
       </span>
     </div>
     <p style={{ color: 'var(--Colors-Use-Neutral-Text-2-Primary)', lineHeight: 1.6, margin: 0 }}>
@@ -192,8 +139,7 @@ const OldIconGallery = () => (
         data-oldicon-total={oldIconEntries.length}
         style={{ color: 'var(--Colors-Use-Neutral-Text-2-Primary)', margin: 0 }}
       >
-        {oldIconEntries.length} public exports · {oldIconInventory.totals.artworks} unique artworks
-        · {oldIconInventory.totals.sourcePaths} source paths
+        {oldIconEntries.length} public exports
       </p>
     </header>
     <section

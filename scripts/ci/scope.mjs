@@ -42,7 +42,8 @@ export function classify(paths) {
     ) {
       flags.icons = flags.integration = true;
       const artwork =
-        /^packages\/yakit-ui-icons\/(?:src\/.*\.svg|config\/icon-sources\/[^/]+\.json|src\/(?:outline|solid|colorful|oldicon)\/index\.tsx|src\/colorful\/catalog\.ts|src\/figmaNameCatalog\.ts|config\/iconStrokeContract\.generated\.ts)$/.test(
+        file === "packages/yakit-ui-icons/catalog/index.html" ||
+        /^packages\/yakit-ui-icons\/(?:src\/.*\.svg|config\/icon-sources\/(?:[^/]+\.json|svg\/[^/]+\/[^/]+\.svg|evidence\/[^/]+\/[^/]+\.json)|src\/(?:outline|solid|colorful|oldicon)\/index\.tsx|src\/colorful\/catalog\.ts|src\/figmaNameCatalog\.ts|config\/iconStrokeContract\.generated\.ts)$/.test(
           file,
         );
       if (!artwork) {

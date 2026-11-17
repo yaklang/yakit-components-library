@@ -1,8 +1,7 @@
-import { buildIconDocuments } from '../../scripts/icon-source-documents.mjs';
 import { readIconInput } from '../../scripts/icon-source-documents.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -24,7 +23,7 @@ import { readIconSources } from '../../scripts/icon-source-data.mjs';
 async function fixture(run) {
   const root = await mkdtemp(path.join(tmpdir(), 'yakit-icons-'));
   try {
-    for (const directory of ['config/icon-sources', 'src', 'test/fixtures/icons', 'scripts'])
+    for (const directory of ['config', 'src', 'test/fixtures/icons', 'scripts'])
       await cp(path.join(packageRoot, directory), path.join(root, directory), {
         recursive: true,
       });
@@ -101,7 +100,9 @@ for (const family of ['outline', 'solid', 'colorful'])
       const request = await input(root, family);
       const imported = await planSourceImport(request, root);
       assert.equal(imported.report[0].status, 'added');
-      assert.deepEqual([...imported.changes.keys()], [`config/icon-sources/${family}.json`]);
+      assert.ok(imported.changes.has(`config/icon-sources/${family}.json`));
+      assert.ok(imported.changes.has(`config/icon-project/${family}.json`));
+      assert.ok(imported.changes.has(`config/icon-sources/svg/${fileKey}/999999-1.svg`));
       await applyChanges(root, imported.changes);
       await assert.rejects(
         runIconUpdate(['--check'], root),
@@ -159,25 +160,19 @@ test('bad batch does not write good nodes, duplicate exports fail, missing recor
     await assert.rejects(planIconUpdate(root, { sources }), /PUBLIC_REMOVAL/);
   }));
 
-test('Oldicon aliases share assets and retain all deep imports', () =>
+test('Oldicon assets are manually maintained and never regenerated', () =>
   fixture(async (root) => {
-    const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`));
-    const record = sources.oldicon.records[0];
-    record.sources.push({
-      ...record.sources[0],
-      exportName: 'WorkflowLegacyAliasIcon',
-      sourceName: 'WorkflowLegacyAliasIcon',
-    });
-    const changes = await planIconUpdate(root, { sources, family: 'oldicon' });
-    assert.ok(changes.has('src/oldicon/icons/WorkflowLegacyAliasIcon.tsx'));
-    assert.ok(![...changes.keys()].some((f) => f.includes('/assets/')));
-    const inventory = buildIconDocuments(root, { sources }).get(
-      'config/icon-sources/oldicon.json#manifest',
-    );
-    assert.equal(
-      inventory.exports.find((r) => r.exportName === 'WorkflowLegacyAliasIcon').assetFile,
-      record.assetFile,
-    );
+    const { readOldiconAssets } = await import('../../scripts/oldicon-assets.mjs');
+    const inventory = readOldiconAssets(root);
+    const file = path.join(root, 'src/oldicon', inventory.assets[0]);
+    const changed = (await readFile(file, 'utf8')).replace('</svg>', '<!-- manual edit --></svg>');
+    await writeFile(file, changed);
+    await assert.rejects(runIconUpdate(['--family', 'oldicon'], root), /OLDICON_HANDWRITTEN/);
+    const changes = await planIconUpdate(root);
+    assert.ok(![...changes.keys()].some((f) => f.includes('oldicon')));
+    await applyChanges(root, changes);
+    assert.equal(await readFile(file, 'utf8'), changed);
+    assert.deepEqual(readOldiconAssets(root), inventory);
   }));
 
 test('transaction restores earlier writes and detects concurrent edits', async () => {
@@ -317,51 +312,64 @@ test('Colorful exports normalize named white without changing source gradients',
 test('uniform stroke generation applies only to Outline', () => {
   const rawSvg =
     '<svg width="24" height="24"><path d="M1 1H20" stroke="#353639" stroke-width="3"/></svg>';
-  for (const family of ['solid', 'colorful', 'oldicon']) {
+  for (const family of ['solid', 'colorful']) {
     assert.match(renderImportedSvg({ nodeId: '1:2', rawSvg }, family), /stroke-width="3"/);
   }
   assert.match(renderImportedSvg({ nodeId: '1:2', rawSvg }, 'outline'), /stroke-width="1.5"/);
 });
 
-test('explicit synchronization repairs stale legacy groups even when raw SVG is unchanged', () =>
+test('all original SVGs rebuild missing products and repeated updates preserve mtimes', () =>
   fixture(async (root) => {
-    const sourcePath = path.join(root, 'config/icon-sources/outline.json');
-    const source = JSON.parse(await readFile(sourcePath, 'utf8'));
-    const record = source.records.find((r) => r.exportName === 'BookOpenTextOutlined');
-    delete record.production;
-    await writeFile(sourcePath, jsonText(source));
-    const svgPath = path.join(root, 'book-remote.svg');
-    await writeFile(svgPath, record.raw.svg);
-    const file = path.join(root, 'src/outline', record.file);
-    const expected = await readFile(file, 'utf8');
-    const stale = expected.replace('<path', '<g><g><path').replace('</svg>', '</g></g></svg>');
-    await writeFile(file, stale);
-    const icon = {
-      url: url(record.nodeId),
-      name: record.name,
-      family: 'outline',
-      nodeType: 'COMPONENT',
-      width: 24,
-      height: 24,
-      svgPath,
-    };
-    assert.equal(
-      (await planSourceImport({ schemaVersion: 1, icons: [icon] }, root)).report[0].status,
-      'unchanged',
+    await runIconUpdate([], root);
+    const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`));
+    const files = [
+      ...['outline', 'solid', 'colorful'].flatMap((f) =>
+        sources[f].records.map((r) => `src/${r.localFile}`),
+      ),
+      'src/outline/index.tsx',
+      'src/solid/index.tsx',
+      'src/colorful/index.tsx',
+      'src/colorful/catalog.ts',
+      'src/figmaNameCatalog.ts',
+      'config/iconStrokeContract.generated.ts',
+      'catalog/index.html',
+    ];
+    const expected = new Map(
+      await Promise.all(files.map(async (f) => [f, await readFile(path.join(root, f), 'utf8')])),
     );
-    const request = { schemaVersion: 1, icons: [{ ...icon, syncProduction: true }] };
-    const imported = await planSourceImport(request, root);
-    assert.equal(imported.report[0].status, 'updated');
-    await applyChanges(root, imported.changes);
-    await assert.rejects(runIconUpdate(['--check'], root), /ICON_GENERATED_DRIFT/);
-    assert.equal(await readFile(file, 'utf8'), stale);
+    for (const file of files) await rm(path.join(root, file));
     await runIconUpdate([], root);
-    assert.equal(await readFile(file, 'utf8'), expected);
-    assert.equal((await planSourceImport(request, root)).changes.size, 0);
-    await writeFile(file, expected.replace(/<path\b[^>]*\/>/, ''));
-    await assert.rejects(runIconUpdate(['--check'], root), /ICON_GENERATED_DRIFT/);
+    for (const [file, content] of expected)
+      assert.equal(await readFile(path.join(root, file), 'utf8'), content, file);
+    const { stat } = await import('node:fs/promises');
+    const times = await Promise.all(
+      files.map((f) => stat(path.join(root, f)).then((s) => s.mtimeMs)),
+    );
+    assert.equal(await runIconUpdate([], root), 'ICONS_UPDATED 0 file(s)\n');
+    assert.equal(await runIconUpdate(['--check'], root), 'ICONS_CHECK_OK 0 file(s)\n');
+    assert.deepEqual(
+      await Promise.all(files.map((f) => stat(path.join(root, f)).then((s) => s.mtimeMs))),
+      times,
+    );
+  }));
+
+test('raw changes with equal normalized output do not rewrite products; rule changes regenerate', () =>
+  fixture(async (root) => {
     await runIconUpdate([], root);
-    assert.equal(await readFile(file, 'utf8'), expected);
+    const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`));
+    const record = sources.outline.records.find((r) => r.raw.svg.includes('stroke-width="2"'));
+    await writeFile(
+      path.join(root, 'config/icon-sources', record.svgFile),
+      record.raw.svg.replaceAll('stroke-width="2"', 'stroke-width="3"'),
+    );
+    assert.equal((await planIconUpdate(root)).size, 0);
+    const file = path.join(root, 'config/icon-project/outline.json');
+    const project = JSON.parse(await readFile(file, 'utf8'));
+    project.records[record.nodeId].defaultColor = '#123456';
+    await writeFile(file, jsonText(project));
+    const changes = await planIconUpdate(root);
+    assert.ok(changes.has('src/outline/index.tsx'));
+    assert.ok(changes.has('catalog/index.html'));
   }));
 
 test('registered default foreground colors remain overridable after import', () => {
@@ -377,45 +385,6 @@ test('registered default foreground colors remain overridable after import', () 
   assert.doesNotMatch(output, /#0A0A0A/);
 });
 
-test('import keeps legacy mask paint exceptions attached to the normalized definition', () =>
-  fixture(async (root) => {
-    const sourcePath = path.join(root, 'config/icon-sources/outline.json');
-    const source = JSON.parse(await readFile(sourcePath, 'utf8'));
-    const record = source.records.find((r) => r.nodeId === '1:3058');
-    delete record.production;
-    for (const exception of source.metadata.paintExceptions)
-      if (exception.path === 'outline/1-3058.svg')
-        exception.definitionId = exception.definitionId.replace('icon_13058__', 'icon_1_3058__');
-    await writeFile(sourcePath, jsonText(source));
-    const svgPath = path.join(root, 'mask-remote.svg');
-    await writeFile(svgPath, record.raw.svg);
-    const imported = await planSourceImport(
-      {
-        schemaVersion: 1,
-        icons: [
-          {
-            url: url(record.nodeId),
-            name: record.name,
-            family: 'outline',
-            nodeType: 'COMPONENT',
-            width: 24,
-            height: 24,
-            svgPath,
-            syncProduction: true,
-          },
-        ],
-      },
-      root,
-    );
-    const next = JSON.parse(imported.changes.get('config/icon-sources/outline.json').after);
-    const exception = next.metadata.paintExceptions.find((e) => e.path === 'outline/1-3058.svg');
-    assert.equal(exception.definitionId, 'icon_13058__mask_0');
-    assert.equal(exception.value, '#D9D9D9');
-    await applyChanges(root, imported.changes);
-    await runIconUpdate([], root);
-    assert.equal(await runIconUpdate(['--check'], root), 'ICONS_CHECK_OK 0 file(s)\n');
-  }));
-
 test('filled outlines are admitted by default and remain idempotent', () =>
   fixture(async (root) => {
     const request = await input(root, 'outline');
@@ -427,8 +396,8 @@ test('filled outlines are admitted by default and remain idempotent', () =>
     const imported = await planSourceImport(request, root);
     const source = JSON.parse(imported.changes.get('config/icon-sources/outline.json').after);
     const record = source.records.find((r) => r.nodeId === '999999:1');
-    assert.equal(record.production.strokeMode, 'fixed-fill');
-    assert.equal(record.metadata.geometryReviewId, undefined);
+    assert.equal(record.production, undefined);
+    assert.equal(record.metadata, undefined);
     await applyChanges(root, imported.changes);
     await runIconUpdate([], root);
     const svg = await readFile(path.join(root, 'src/outline/999999-1.svg'), 'utf8');
@@ -452,8 +421,10 @@ test('source-native cutout authorization is restricted to the exported path and 
       outlineSvg.replace('</svg>', '<path d="M4 4L18 18" stroke="white" stroke-width="2"/></svg>'),
     );
     const imported = await planSourceImport(request, root);
-    const source = JSON.parse(imported.changes.get('config/icon-sources/outline.json').after);
-    const record = source.records.find((r) => r.nodeId === '999999:1');
+    await applyChanges(root, imported.changes);
+    const record = readIconSources(
+      pathToFileURL(`${root}/config/icon-sources/`),
+    ).outline.records.find((r) => r.nodeId === '999999:1');
     assert.deepEqual(record.metadata.sourceForegroundPaints, [
       { tag: 'path', d: 'M4 4L18 18', attribute: 'stroke', value: 'white' },
     ]);
@@ -474,6 +445,5 @@ test('source-native cutout authorization is restricted to the exported path and 
     assert.ok(
       inspect(normalized.replace('stroke="white"', 'stroke="red"')).includes('FOREGROUND_LITERAL'),
     );
-    await applyChanges(root, imported.changes);
     await runIconUpdate([], root);
   }));

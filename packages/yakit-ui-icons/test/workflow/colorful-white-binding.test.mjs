@@ -11,7 +11,7 @@ test('Colorful named white and hex white both use the explicit background bindin
     {
       nodeId: '999999:22',
       rawSvg,
-      production: { paintReplacements: { '#FFFFFF': background } },
+      transform: { paintReplacements: { '#FFFFFF': background } },
     },
     'colorful',
   );
@@ -48,7 +48,7 @@ test('Colorful gradient bindings preserve offsets, opacity and literal clip pain
       nodeId: '999999:24',
       rawSvg:
         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0H24V24Z" fill="url(#gradient)" clip-path="url(#clip)"/><defs><linearGradient id="gradient"><stop offset="0.25" stop-color="#1B8E9D" stop-opacity="0.5"/><stop offset="1" stop-color="#FFCE1E"/></linearGradient><clipPath id="clip"><rect width="24" height="24" fill="white"/></clipPath></defs></svg>',
-      production: { paintReplacements: { '#1B8E9D': color } },
+      transform: { paintReplacements: { '#1B8E9D': color } },
     },
     'colorful',
   );

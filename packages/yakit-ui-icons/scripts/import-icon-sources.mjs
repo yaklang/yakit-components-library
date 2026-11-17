@@ -1,7 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { readIconSources, sourceExports } from './icon-source-data.mjs';
+import { readIconSources, sourceExports, FIGMA_FAMILIES } from './icon-source-data.mjs';
+import { joinIconSource, sourceSvgPath } from './icon-source-model.mjs';
 import {
   applyChanges,
   jsonText,
@@ -9,11 +10,8 @@ import {
   renderImportedSvg,
   validateSources,
 } from './update-icons.mjs';
-import { parseSvg, collectPaintSemantics } from './audit-icons.mjs';
-import {
-  generateIconStrokeContract,
-  sourceFixedFillDispositions,
-} from '../config/generateIconStrokeContract.mjs';
+import { parseSvg } from './audit-icons.mjs';
+import { loadPinnedTokenCatalog } from './colorful-color-resolver.mjs';
 import { inspectFragmentGraph } from './colorful-fragments.mjs';
 
 export function parseFigmaUrl(value) {
@@ -43,61 +41,33 @@ export function suggestExportName(name, family) {
 function required(value, message) {
   if (!value) throw new Error(message);
 }
-function drawables(svg) {
-  let count = 0;
-  const visit = (node) => {
-    if (['defs', 'mask', 'clipPath', 'pattern', 'marker', 'symbol'].includes(node.name)) return;
-    if (
-      ['path', 'rect', 'circle', 'ellipse', 'line', 'polygon', 'polyline', 'use'].includes(
-        node.name,
-      )
-    )
-      count++;
-    node.children.forEach(visit);
-  };
-  visit(parseSvg(svg));
-  return count;
-}
+
 export async function planSourceImport(input, root = packageRoot) {
   required(
     input?.schemaVersion === 1 && Array.isArray(input.icons) && input.icons.length,
     'ICON_IMPORT_SCHEMA_INVALID',
   );
   const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`));
-  const before = new Map(Object.keys(sources).map((family) => [family, jsonText(sources[family])]));
+  const files = new Map();
+  const rawFiles = {};
+  const evidenceFiles = {};
+  for (const family of FIGMA_FAMILIES)
+    for (const r of sources[family].records) {
+      rawFiles[r.svgFile] = r.raw.svg;
+      if (r.evidenceFile) evidenceFiles[r.evidenceFile] = r.evidence;
+    }
+  const knownTokens = new Set((await loadPinnedTokenCatalog()).map((t) => t.name));
   const seen = new Set();
   const report = [];
   for (const icon of input.icons) {
-    required(
-      icon.preserveSourceGeometry === undefined || typeof icon.preserveSourceGeometry === 'boolean',
-      'ICON_SOURCE_GEOMETRY_INVALID',
-    );
-    required(
-      icon.syncProduction === undefined || typeof icon.syncProduction === 'boolean',
-      'ICON_SYNC_PRODUCTION_INVALID',
-    );
     const { fileKey, nodeId } = parseFigmaUrl(icon.url);
-    required(
-      icon.dimensionsSource === undefined || ['node', 'svg-export'].includes(icon.dimensionsSource),
-      `ICON_DIMENSIONS_SOURCE_INVALID: ${nodeId}`,
-    );
     required(!seen.has(`${fileKey}/${nodeId}`), `ICON_IMPORT_NODE_DUPLICATE: ${nodeId}`);
     seen.add(`${fileKey}/${nodeId}`);
-    let owner;
-    let existing;
-    for (const source of Object.values(sources))
-      if (source.fileKey === fileKey) {
-        const found = source.records.find((r) => r.nodeId === nodeId);
-        if (found) {
-          owner = source.family;
-          existing = found;
-        }
-      }
-    const family = icon.family ?? owner;
-    required(
-      ['outline', 'solid', 'colorful'].includes(family),
-      `ICON_IMPORT_FAMILY_REQUIRED: ${nodeId}`,
+    const owner = FIGMA_FAMILIES.find(
+      (f) => sources[f].fileKey === fileKey && sources[f].records.some((r) => r.nodeId === nodeId),
     );
+    const family = icon.family ?? owner;
+    required(FIGMA_FAMILIES.includes(family), `ICON_IMPORT_FAMILY_REQUIRED: ${nodeId}`);
     required(!owner || owner === family, `ICON_FAMILY_CHANGE_REQUIRES_MIGRATION: ${nodeId}`);
     const source = sources[family];
     required(source.fileKey === fileKey, `ICON_FILE_KEY_MISMATCH: ${nodeId}`);
@@ -106,16 +76,17 @@ export async function planSourceImport(input, root = packageRoot) {
       `ICON_NODE_METADATA_MISSING: ${nodeId}`,
     );
     required(
-      Number.isFinite(icon.width) &&
-        icon.width > 0 &&
-        Number.isFinite(icon.height) &&
-        icon.height > 0,
-      `ICON_DIMENSIONS_MISSING: ${nodeId}`,
-    );
-    // Instance resolution cannot be inferred from a flattened download.
-    required(
       icon.nodeType.toUpperCase() !== 'INSTANCE',
       `ICON_INSTANCE_CANONICAL_SOURCE_REQUIRED: ${nodeId}`,
+    );
+    if (family !== 'colorful')
+      required(
+        icon.nodeType.toUpperCase() === 'COMPONENT',
+        `ICON_COMPONENT_SOURCE_REQUIRED: ${nodeId}`,
+      );
+    required(
+      icon.dimensionsSource === undefined || ['node', 'svg-export'].includes(icon.dimensionsSource),
+      `ICON_DIMENSIONS_SOURCE_INVALID: ${nodeId}`,
     );
     required(
       typeof icon.svgPath === 'string' && path.isAbsolute(icon.svgPath),
@@ -123,13 +94,19 @@ export async function planSourceImport(input, root = packageRoot) {
     );
     const svg = await readFile(icon.svgPath, 'utf8');
     const parsed = parseSvg(svg);
-    const svgWidth = Number(parsed.attributes.get('width'));
-    const svgHeight = Number(parsed.attributes.get('height'));
     required(
-      svgWidth === icon.width && svgHeight === icon.height,
+      Number.isFinite(icon.width) &&
+        icon.width > 0 &&
+        Number.isFinite(icon.height) &&
+        icon.height > 0,
+      `ICON_DIMENSIONS_MISSING: ${nodeId}`,
+    );
+    required(
+      Number(parsed.attributes.get('width')) === icon.width &&
+        Number(parsed.attributes.get('height')) === icon.height,
       `ICON_SVG_DIMENSIONS_MISMATCH: ${nodeId}`,
     );
-    if (family === 'outline' || family === 'solid') {
+    if (family !== 'colorful') {
       const size = family === 'outline' ? 24 : 20;
       required(
         icon.width === size &&
@@ -138,10 +115,12 @@ export async function planSourceImport(input, root = packageRoot) {
         `ICON_${family.toUpperCase()}_VIEWPORT_INVALID: ${nodeId}`,
       );
     }
+    const existing = source.document.records.find((r) => r.nodeId === nodeId);
+    const priorMapping = source.project.records[nodeId];
     const exportName =
-      existing?.exportName ?? icon.exportName ?? suggestExportName(icon.name, family);
+      priorMapping?.exportName ?? icon.exportName ?? suggestExportName(icon.name, family);
     required(
-      !existing || !icon.exportName || icon.exportName === existing.exportName,
+      !priorMapping || !icon.exportName || icon.exportName === priorMapping.exportName,
       `ICON_EXPORT_RENAME_REQUIRES_MIGRATION: ${nodeId}`,
     );
     required(
@@ -154,267 +133,136 @@ export async function planSourceImport(input, root = packageRoot) {
         !Object.values(sources).some((s) => sourceExports(s).includes(exportName)),
         `ICON_EXPORT_DUPLICATE: ${exportName}`,
       );
-    // An identical fetch must not add timestamps or replace a legacy normalization recipe.
-    const oldSvg = existing?.raw?.svg ?? existing?.rawSvg;
-    let evidence = icon.evidence ?? existing?.evidence;
-    let themePaintBindings;
-    if (family === 'colorful') {
-      themePaintBindings =
-        icon.evidence?.themePaintBindings ??
-        existing?.themePaintBindings ??
-        existing?.evidence?.themePaintBindings;
-      if (evidence && Object.hasOwn(evidence, 'themePaintBindings')) {
-        const { themePaintBindings: _bindings, ...otherEvidence } = evidence;
-        evidence = Object.keys(otherEvidence).length ? otherEvidence : undefined;
+    const groupNodeId = icon.groupNodeId ?? existing?.groupNodeId ?? null;
+    const group = source.groups.find((g) => g.nodeId === groupNodeId);
+    required(
+      (group || (family !== 'colorful' && groupNodeId === null)) &&
+        (!icon.category || group?.category === icon.category),
+      `ICON_${family.toUpperCase()}_GROUP_REQUIRED: ${nodeId}`,
+    );
+    const record = {
+      ...existing,
+      nodeId,
+      name: icon.name,
+      groupNodeId,
+      svgFile: sourceSvgPath(fileKey, nodeId),
+    };
+    record.nodeType = icon.nodeType;
+    if (icon.dimensionsSource !== 'svg-export')
+      record.nodeSize = { width: icon.width, height: icon.height };
+    else delete record.nodeSize;
+    const oldSvg = existing ? rawFiles[existing.svgFile] : undefined;
+    const importedBindings =
+      icon.colorBindings ??
+      (icon.evidence?.themePaintBindings
+        ? { status: 'captured', bindings: icon.evidence.themePaintBindings }
+        : undefined);
+    record.colorBindings = importedBindings
+      ? {
+          ...importedBindings,
+          bindings: importedBindings.bindings.map(({ token: _token, ...b }) => b),
+        }
+      : ((oldSvg === svg ? existing?.colorBindings : undefined) ?? {
+          status: 'unknown',
+          bindings: [],
+        });
+    const mapping = {
+      ...priorMapping,
+      exportName,
+      file: priorMapping?.file ?? `${family}/${nodeId.replace(':', '-')}.svg`,
+    };
+    if (icon.paintReplacements !== undefined)
+      mapping.transform = { ...mapping.transform, paintReplacements: icon.paintReplacements };
+    const tokens = { ...mapping.variableTokens, ...icon.variableTokens };
+    for (const b of importedBindings?.bindings ?? [])
+      if (b.token) tokens[b.figmaVariableId] = b.token;
+    if (Object.keys(tokens).length) mapping.variableTokens = tokens;
+    if (!existing || oldSvg !== svg) {
+      if (icon.retrievedAt) record.retrievedAt = icon.retrievedAt;
+      else delete record.retrievedAt;
+    }
+    const oldEvidence = existing?.evidenceFile
+      ? jsonText(evidenceFiles[existing.evidenceFile])
+      : undefined;
+    if (icon.evidence) {
+      const { themePaintBindings: _bindings, ...captured } = icon.evidence;
+      if (Object.keys(captured).length) {
+        record.evidenceFile ??= `evidence/${fileKey}/${nodeId.replace(':', '-')}.json`;
+        evidenceFiles[record.evidenceFile] = {
+          ...(existing?.evidenceFile ? evidenceFiles[existing.evidenceFile] : {}),
+          captured,
+        };
       }
     }
-    if (
-      existing &&
-      (!icon.syncProduction || existing.production) &&
-      (!icon.preserveSourceGeometry || existing.production?.geometry === 'source') &&
-      oldSvg === svg &&
-      (existing.name ?? existing.figmaName) === icon.name &&
-      JSON.stringify(icon.paintReplacements ?? existing.production?.paintReplacements) ===
-        JSON.stringify(existing.production?.paintReplacements) &&
-      JSON.stringify(evidence) === JSON.stringify(existing.evidence) &&
-      (family !== 'colorful' ||
-        JSON.stringify(themePaintBindings) === JSON.stringify(existing.themePaintBindings)) &&
-      (!Number.isFinite(icon.x) ||
-        (family === 'colorful'
-          ? existing.x === icon.x
-          : existing.placements?.some((p) => p.nodeType !== 'instance' && p.x === icon.x))) &&
-      (!Number.isFinite(icon.y) ||
-        (family === 'colorful'
-          ? existing.y === icon.y
-          : existing.placements?.some((p) => p.nodeType !== 'instance' && p.y === icon.y)))
-    ) {
-      report.push({ nodeId, exportName, status: 'unchanged' });
-      continue;
-    }
-    const production = {
-      strategy: 'figma-svg-v1',
-      ...(icon.preserveSourceGeometry ||
-      existing?.production?.geometry === 'source' ||
-      (family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg))
-        ? {
-            geometry: 'source',
-            ...(family === 'outline' && !/\bstroke\s*=\s*["'](?!none["'])/i.test(svg)
-              ? { strokeMode: 'fixed-fill' }
-              : {}),
-          }
-        : {}),
-      ...(icon.paintReplacements
-        ? { paintReplacements: icon.paintReplacements }
-        : existing?.production?.paintReplacements
-          ? { paintReplacements: existing.production.paintReplacements }
-          : {}),
-    };
-    let record;
-    if (family === 'colorful') {
-      required(
-        !existing || existing.rowDisposition === 'canonical-new',
-        `ICON_ALIAS_IMPORT_REQUIRES_CANONICAL_SOURCE: ${nodeId}`,
-      );
-      const groupNodeId = existing?.groupNodeId ?? icon.groupNodeId;
-      const group = source.groups.find((g) => g.nodeId === groupNodeId);
-      required(
-        group && (!icon.category || icon.category === group.category),
-        `ICON_COLORFUL_GROUP_REQUIRED: ${nodeId}`,
-      );
-      record = {
-        ...existing,
-        nodeId,
-        figmaName: icon.name,
-        ...(Number.isFinite(icon.x) ? { x: icon.x } : {}),
-        ...(Number.isFinite(icon.y) ? { y: icon.y } : {}),
-        exportName,
-        localFile: existing?.localFile ?? `colorful/${nodeId.replace(':', '-')}.svg`,
-        groupNodeId,
-        category: group.category,
-        rowDisposition: 'canonical-new',
-        publicExposure: 'canonical',
-        paintMode: icon.paintReplacements ? 'mixed' : (existing?.paintMode ?? 'literal'),
-        sourceStatus: 'current',
-        width: icon.width,
-        height: icon.height,
-        componentWidth: icon.width,
-        componentHeight: icon.height,
-        assetIntrinsicWidth: svgWidth,
-        assetIntrinsicHeight: svgHeight,
-        assetViewBox: parsed.attributes.get('viewBox'),
-        sourceUrl: icon.url,
-        retrievedAt: icon.retrievedAt ?? new Date().toISOString(),
-        acquisitionStatus: 'figma-developer-mcp-node-export',
-        rawSvg: svg,
-        production,
-      };
-    } else {
-      required(
-        icon.nodeType.toUpperCase() === 'COMPONENT',
-        `ICON_COMPONENT_SOURCE_REQUIRED: ${nodeId}`,
-      );
-      record = {
-        ...existing,
-        nodeId,
-        name: icon.name,
-        exportName,
-        file: existing?.file ?? `${nodeId.replace(':', '-')}.svg`,
-        scopeRole: existing?.scopeRole ?? 'target',
-        metadata: {
-          ...(existing?.metadata ?? {}),
-          ...(family === 'outline'
-            ? {
-                width: icon.width,
-                height: icon.height,
-                nodeType: 'component',
-                disposition: existing?.metadata?.disposition ?? 'added',
-                figmaRawSvgStatus: 'captured-canonical-source',
-              }
-            : {}),
-        },
-        raw: {
-          nodeType: icon.nodeType,
-          svg,
-          source: { tool: 'figma-developer-mcp', url: icon.url },
-        },
-        placement: {
-          ...(existing?.placement ?? {}),
-          width: icon.width,
-          height: icon.height,
-          nodeType: family === 'outline' ? 'component' : icon.nodeType,
-        },
-        production,
-      };
-      if (family === 'outline')
-        record.placements = existing?.placements ?? [
-          {
-            placementNodeId: nodeId,
-            nodeType: 'component',
-            width: icon.width,
-            height: icon.height,
-            mainComponentId: nodeId,
-            mainComponentIdStatus: 'canonical-source-self',
-            sourceResolution: 'component-self',
-            overridePayload: null,
-            overrideHash: null,
-            overrideHashStatus: 'pending-updater-canonical-sha256',
-          },
-        ];
-    }
-    if (family === 'solid')
-      record.placements = existing?.placements ?? [
-        {
-          placementNodeId: nodeId,
-          nodeType: 'component',
-          width: icon.width,
-          height: icon.height,
-          mainComponentId: nodeId,
-          mainComponentIdStatus: 'canonical-source-self',
-          sourceResolution: 'component-self',
-          overridePayload: null,
-          overrideHash: null,
-          overrideHashStatus: 'not-applicable',
-        },
-      ];
-    if (record.placements)
-      record.placements = record.placements.map((placement) =>
-        placement.nodeType === 'instance'
-          ? placement
-          : {
-              ...placement,
-              width: icon.width,
-              height: icon.height,
-              ...(Number.isFinite(icon.x) ? { x: icon.x } : {}),
-              ...(Number.isFinite(icon.y) ? { y: icon.y } : {}),
-            },
-      );
-    if (icon.dimensionsSource) record.dimensionsSource = icon.dimensionsSource;
-    if (family === 'colorful' && icon.dimensionsSource === 'svg-export') {
-      delete record.componentWidth;
-      delete record.componentHeight;
-    }
-    if (evidence !== undefined) record.evidence = evidence;
-    else delete record.evidence;
-    if (family === 'colorful' && themePaintBindings !== undefined)
-      record.themePaintBindings = themePaintBindings;
-    const normalized = renderImportedSvg(record, family);
-    if (family === 'outline' && production.geometry === 'source') {
-      // The current source is no longer the historical reconstructed geometry.
-      // Frozen reviews remain in their independent evidence files.
-      delete record.metadata.geometryReviewId;
-      const foregroundPaints = [];
-      const visit = (node, insideDefinition = false) => {
-        const inDefinition =
-          insideDefinition ||
+    rawFiles[record.svgFile] = svg;
+    if (existing) source.document.records[source.document.records.indexOf(existing)] = record;
+    else source.document.records.push(record);
+    source.project.records[nodeId] = mapping;
+    const joined = joinIconSource(
+      source.document,
+      source.project,
+      rawFiles,
+      evidenceFiles,
+      source.display,
+    );
+    const working = joined.records.find((r) => r.nodeId === nodeId);
+    const normalized = renderImportedSvg(working, family);
+    inspectFragmentGraph(normalized);
+    for (const [, token] of normalized.matchAll(/var\(\s*(--[\w-]+)\s*,/g))
+      required(knownTokens.has(token), `COLOR_TOKEN_UNKNOWN: ${nodeId}: ${token}`);
+    if (family === 'outline') {
+      const foreground = [];
+      const walk = (node, inDefinition = false) => {
+        const inside =
+          inDefinition ||
           ['defs', 'mask', 'clipPath', 'pattern', 'marker', 'symbol'].includes(node.name);
-        if (!inDefinition && node.name === 'path')
+        if (!inside && node.name === 'path')
           for (const attribute of ['fill', 'stroke']) {
             const value = node.attributes.get(attribute);
             if (['white', '#fff', '#ffffff'].includes(value?.toLowerCase()))
-              foregroundPaints.push({
-                tag: node.name,
-                d: node.attributes.get('d'),
-                attribute,
-                value,
-              });
+              foreground.push({ tag: node.name, d: node.attributes.get('d'), attribute, value });
           }
-        node.children.forEach((child) => visit(child, inDefinition));
+        node.children.forEach((n) => walk(n, inside));
       };
-      visit(parseSvg(normalized));
-      if (foregroundPaints.length) record.metadata.sourceForegroundPaints = foregroundPaints;
-      else delete record.metadata.sourceForegroundPaints;
+      walk(parseSvg(normalized));
+      if (foreground.length) mapping.sourceForegroundPaints = foreground;
+      else delete mapping.sourceForegroundPaints;
     }
-    // Legacy Outline definitions used an underscore between the node ID parts.
-    // Keep their existing paint exceptions attached when the import normalizes IDs.
-    // Only move an existing exception to a definition that actually exists; this
-    // does not authorize any new paint values or discard unmatched exceptions.
-    if (family === 'outline') {
-      const definitionIds = new Set(inspectFragmentGraph(normalized).owners.map(({ id }) => id));
-      const legacyPrefix = `icon_${nodeId.replace(':', '_')}__`;
-      const importedPrefix = `icon_${nodeId.replace(':', '')}__`;
-      source.metadata.paintExceptions = (source.metadata.paintExceptions ?? []).map((exception) => {
-        if (
-          exception.path !== `outline/${record.file}` ||
-          !exception.definitionId.startsWith(legacyPrefix)
-        )
-          return exception;
-        const definitionId = exception.definitionId.replace(legacyPrefix, importedPrefix);
-        return definitionIds.has(definitionId)
-          ? {
-              ...exception,
-              definitionId,
-              reason: exception.reason?.replaceAll(exception.definitionId, definitionId),
-            }
-          : exception;
-      });
-    }
-    if (family === 'outline')
-      generateIconStrokeContract(undefined, {
-        fixedFill: sourceFixedFillDispositions([record]),
-        sources: new Map([[record.file, normalized]]),
-      });
-    if (family === 'solid') {
-      record.metadata.minimumDrawableCount = drawables(svg);
-      record.metadata.paintRoles = [
-        ...new Set(
-          collectPaintSemantics(normalized, {
-            normalizeFigmaPrimary: true,
-            normalizeStrokeWidth: false,
-          }).map((p) => p.role),
-        ),
-      ].sort();
-    }
-    if (existing) source.records[source.records.indexOf(existing)] = record;
-    else source.records.push(record);
-    report.push({ nodeId, exportName, status: existing ? 'updated' : 'added' });
+    sources[family] = joinIconSource(
+      source.document,
+      source.project,
+      rawFiles,
+      evidenceFiles,
+      source.display,
+    );
+    const unchanged =
+      existing &&
+      oldSvg === svg &&
+      jsonText(existing) === jsonText(record) &&
+      jsonText(priorMapping) === jsonText(mapping) &&
+      oldEvidence ===
+        (record.evidenceFile ? jsonText(evidenceFiles[record.evidenceFile]) : undefined);
+    report.push({
+      nodeId,
+      exportName,
+      status: unchanged ? 'unchanged' : existing ? 'updated' : 'added',
+    });
   }
   validateSources(sources);
+  for (const family of FIGMA_FAMILIES) {
+    files.set(`config/icon-sources/${family}.json`, jsonText(sources[family].document));
+    files.set(`config/icon-project/${family}.json`, jsonText(sources[family].project));
+  }
+  for (const [file, svg] of Object.entries(rawFiles)) files.set(`config/icon-sources/${file}`, svg);
+  for (const [file, evidence] of Object.entries(evidenceFiles))
+    files.set(`config/icon-sources/${file}`, jsonText(evidence));
   const changes = new Map();
-  for (const [family, source] of Object.entries(sources)) {
-    const file = `config/icon-sources/${family}.json`;
-    const after = jsonText(source);
-    if (before.get(family) !== after)
-      changes.set(file, { before: await readFile(path.join(root, file), 'utf8'), after });
+  for (const [file, after] of files) {
+    const before = await readFile(path.join(root, file), 'utf8').catch((e) => {
+      if (e.code === 'ENOENT') return null;
+      throw e;
+    });
+    if (before !== after) changes.set(file, { before, after });
   }
   return { changes, report };
 }

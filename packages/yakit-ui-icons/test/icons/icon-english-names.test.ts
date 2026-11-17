@@ -2,10 +2,10 @@ import { readFileSync } from 'node:fs';
 
 import { describe, expect, it } from 'vitest';
 
-import outline from '../../config/icon-sources/outline.json';
-import solid from '../../config/icon-sources/solid.json';
 import { parseIconIndexMapping } from '../../scripts/icon-name-catalog-core.mjs';
 import { figmaIconNameCatalog } from '../../src/figmaNameCatalog';
+import { outline as outline } from '../helpers/sources';
+import { solid as solid } from '../helpers/sources';
 
 describe('current English Figma icon names', () => {
   it.each([outline, solid])('$family maps every source to its public export', (source) => {

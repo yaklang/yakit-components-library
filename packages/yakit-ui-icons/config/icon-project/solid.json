@@ -1,0 +1,1035 @@
+{
+  "schemaVersion": 1,
+  "records": {
+    "1:2539": {
+      "exportName": "MailSolid",
+      "file": "solid/1-2539.svg"
+    },
+    "1:2541": {
+      "exportName": "LocationMarkerSolid",
+      "file": "solid/1-2541.svg"
+    },
+    "1:2543": {
+      "exportName": "ColorSwatchSolid",
+      "file": "solid/1-2543.svg"
+    },
+    "1:2545": {
+      "exportName": "MenuSolid",
+      "file": "solid/1-2545.svg"
+    },
+    "1:2547": {
+      "exportName": "QuestionMarkCircleSolid",
+      "file": "solid/1-2547.svg"
+    },
+    "1:2549": {
+      "exportName": "CameraSolid",
+      "file": "solid/1-2549.svg"
+    },
+    "1:2551": {
+      "exportName": "MailOpenSolid",
+      "file": "solid/1-2551.svg"
+    },
+    "1:2553": {
+      "exportName": "ArrowUpSolid",
+      "file": "solid/1-2553.svg"
+    },
+    "1:2555": {
+      "exportName": "XCircleSolid",
+      "file": "solid/1-2555.svg"
+    },
+    "1:2557": {
+      "exportName": "DotsHorizontalSolid",
+      "file": "solid/1-2557.svg"
+    },
+    "1:2559": {
+      "exportName": "CurrencyDollarSolid",
+      "file": "solid/1-2559.svg"
+    },
+    "1:2561": {
+      "exportName": "ChatSolid",
+      "file": "solid/1-2561.svg"
+    },
+    "1:2563": {
+      "exportName": "ExternalLinkSolid",
+      "file": "solid/1-2563.svg"
+    },
+    "1:2565": {
+      "exportName": "FolderSolid",
+      "file": "solid/1-2565.svg"
+    },
+    "1:2567": {
+      "exportName": "BellSolid",
+      "file": "solid/1-2567.svg"
+    },
+    "1:2569": {
+      "exportName": "UserSolid",
+      "file": "solid/1-2569.svg"
+    },
+    "1:2571": {
+      "exportName": "InboxSolid",
+      "file": "solid/1-2571.svg"
+    },
+    "1:2573": {
+      "exportName": "MenuAlt1Solid",
+      "file": "solid/1-2573.svg"
+    },
+    "1:2575": {
+      "exportName": "ExclamationSolid",
+      "file": "solid/1-2575.svg"
+    },
+    "1:2577": {
+      "exportName": "GlobeAltSolid",
+      "file": "solid/1-2577.svg"
+    },
+    "1:2579": {
+      "exportName": "DocumentDuplicateSolid",
+      "file": "solid/1-2579.svg"
+    },
+    "1:2581": {
+      "exportName": "ArrowRightSolid",
+      "file": "solid/1-2581.svg"
+    },
+    "1:2583": {
+      "exportName": "CheckCircleSolid",
+      "file": "solid/1-2583.svg"
+    },
+    "1:2585": {
+      "exportName": "DotsVerticalSolid",
+      "file": "solid/1-2585.svg"
+    },
+    "2281:144183": {
+      "exportName": "DragSortSolid",
+      "file": "solid/2281-144183.svg"
+    },
+    "1:2587": {
+      "exportName": "CurrencyYenSolid",
+      "file": "solid/1-2587.svg"
+    },
+    "1:2589": {
+      "exportName": "ReceiptRefundSolid",
+      "file": "solid/1-2589.svg"
+    },
+    "1:2591": {
+      "exportName": "SunSolid",
+      "file": "solid/1-2591.svg"
+    },
+    "1:2593": {
+      "exportName": "SparklesSolid",
+      "file": "solid/1-2593.svg"
+    },
+    "1:2595": {
+      "exportName": "HomeSolid",
+      "file": "solid/1-2595.svg"
+    },
+    "1:2597": {
+      "exportName": "UsersSolid",
+      "file": "solid/1-2597.svg"
+    },
+    "1:2599": {
+      "exportName": "InboxInSolid",
+      "file": "solid/1-2599.svg"
+    },
+    "1:2601": {
+      "exportName": "MenuAlt2Solid",
+      "file": "solid/1-2601.svg"
+    },
+    "1:2603": {
+      "exportName": "DuplicateSolid",
+      "file": "solid/1-2603.svg"
+    },
+    "1:2605": {
+      "exportName": "CreditCardSolid",
+      "file": "solid/1-2605.svg"
+    },
+    "1:2607": {
+      "exportName": "ArrowDownSolid",
+      "file": "solid/1-2607.svg"
+    },
+    "1:2609": {
+      "exportName": "ExclamationCircleSolid",
+      "file": "solid/1-2609.svg"
+    },
+    "1:2611": {
+      "exportName": "UploadSolid",
+      "file": "solid/1-2611.svg"
+    },
+    "1:2613": {
+      "exportName": "CurrencyEuroSolid",
+      "file": "solid/1-2613.svg"
+    },
+    "1:2615": {
+      "exportName": "TicketSolid",
+      "file": "solid/1-2615.svg"
+    },
+    "1:2617": {
+      "exportName": "MoonSolid",
+      "file": "solid/1-2617.svg"
+    },
+    "1:2619": {
+      "exportName": "UserRemoveSolid",
+      "file": "solid/1-2619.svg"
+    },
+    "1:2621": {
+      "exportName": "BriefcaseSolid",
+      "file": "solid/1-2621.svg"
+    },
+    "1:2623": {
+      "exportName": "UserGroupSolid",
+      "file": "solid/1-2623.svg"
+    },
+    "1:2625": {
+      "exportName": "ArchiveSolid",
+      "file": "solid/1-2625.svg"
+    },
+    "1:2627": {
+      "exportName": "MenuAlt3Solid",
+      "file": "solid/1-2627.svg"
+    },
+    "1:2629": {
+      "exportName": "ShareSolid",
+      "file": "solid/1-2629.svg"
+    },
+    "1:2631": {
+      "exportName": "LockClosedSolid",
+      "file": "solid/1-2631.svg"
+    },
+    "1:2633": {
+      "exportName": "ArrowLeftSolid",
+      "file": "solid/1-2633.svg"
+    },
+    "1:2635": {
+      "exportName": "PlusCircleSolid",
+      "file": "solid/1-2635.svg"
+    },
+    "1:2637": {
+      "exportName": "DownloadSolid",
+      "file": "solid/1-2637.svg"
+    },
+    "1:2639": {
+      "exportName": "CurrencyPoundSolid",
+      "file": "solid/1-2639.svg"
+    },
+    "1:2641": {
+      "exportName": "LockOpenSolid",
+      "file": "solid/1-2641.svg"
+    },
+    "1:2643": {
+      "exportName": "IconCurrencyDollarSolid",
+      "file": "solid/1-2643.svg"
+    },
+    "1:2645": {
+      "exportName": "ArrowNarrowUpSolid",
+      "file": "solid/1-2645.svg"
+    },
+    "1:2647": {
+      "exportName": "ShieldCheckSolid",
+      "file": "solid/1-2647.svg"
+    },
+    "1:2649": {
+      "exportName": "OfficeBuildingSolid",
+      "file": "solid/1-2649.svg"
+    },
+    "1:2651": {
+      "exportName": "ClockSolid",
+      "file": "solid/1-2651.svg"
+    },
+    "1:2655": {
+      "exportName": "MenuAlt4Solid",
+      "file": "solid/1-2655.svg"
+    },
+    "1:2657": {
+      "exportName": "ChartPieSolid",
+      "file": "solid/1-2657.svg"
+    },
+    "1:2659": {
+      "exportName": "HeartSolid",
+      "file": "solid/1-2659.svg"
+    },
+    "1:2661": {
+      "exportName": "TrendingUpSolid",
+      "file": "solid/1-2661.svg"
+    },
+    "1:2663": {
+      "exportName": "ArrowCircleRightSolid",
+      "file": "solid/1-2663.svg"
+    },
+    "1:2665": {
+      "exportName": "MinusCircleSolid",
+      "file": "solid/1-2665.svg"
+    },
+    "1:2667": {
+      "exportName": "ViewListSolid",
+      "file": "solid/1-2667.svg"
+    },
+    "1:2669": {
+      "exportName": "CurrencyRupeeSolid",
+      "file": "solid/1-2669.svg"
+    },
+    "1:2671": {
+      "exportName": "DotsCircleHorizontalSolid",
+      "file": "solid/1-2671.svg"
+    },
+    "1:2673": {
+      "exportName": "AnnotationSolid",
+      "file": "solid/1-2673.svg"
+    },
+    "1:2675": {
+      "exportName": "ArrowNarrowRightSolid",
+      "file": "solid/1-2675.svg"
+    },
+    "1:2677": {
+      "exportName": "ShieldExclamationSolid",
+      "file": "solid/1-2677.svg"
+    },
+    "1:2679": {
+      "exportName": "ScaleSolid",
+      "file": "solid/1-2679.svg"
+    },
+    "1:2681": {
+      "exportName": "PhotographSolid",
+      "file": "solid/1-2681.svg"
+    },
+    "1:2683": {
+      "exportName": "SwitchVerticalSolid",
+      "file": "solid/1-2683.svg"
+    },
+    "1:2685": {
+      "exportName": "DocumentSolid",
+      "file": "solid/1-2685.svg"
+    },
+    "1:2687": {
+      "exportName": "GlobeSolid",
+      "file": "solid/1-2687.svg"
+    },
+    "1:2689": {
+      "exportName": "TrendingDownSolid",
+      "file": "solid/1-2689.svg"
+    },
+    "1:2691": {
+      "exportName": "ArrowCircleDownSolid",
+      "file": "solid/1-2691.svg"
+    },
+    "1:2693": {
+      "exportName": "UserCircleSolid",
+      "file": "solid/1-2693.svg"
+    },
+    "1:2695": {
+      "exportName": "ViewBoardsSolid",
+      "file": "solid/1-2695.svg"
+    },
+    "1:2697": {
+      "exportName": "ChevronDownSolid",
+      "file": "solid/1-2697.svg"
+    },
+    "1:2699": {
+      "exportName": "HashtagSolid",
+      "file": "solid/1-2699.svg"
+    },
+    "1:2701": {
+      "exportName": "FlagSolid",
+      "file": "solid/1-2701.svg"
+    },
+    "1:2703": {
+      "exportName": "ArrowNarrowDownSolid",
+      "file": "solid/1-2703.svg"
+    },
+    "1:2705": {
+      "exportName": "CogSolid",
+      "file": "solid/1-2705.svg"
+    },
+    "1:2707": {
+      "exportName": "PencilAltSolid",
+      "file": "solid/1-2707.svg"
+    },
+    "1:2709": {
+      "exportName": "TagSolid",
+      "file": "solid/1-2709.svg"
+    },
+    "1:2711": {
+      "exportName": "SwitchHorizontalSolid",
+      "file": "solid/1-2711.svg"
+    },
+    "1:2713": {
+      "exportName": "DocumentDownloadSolid",
+      "file": "solid/1-2713.svg"
+    },
+    "1:2715": {
+      "exportName": "VolumeUpSolid",
+      "file": "solid/1-2715.svg"
+    },
+    "1:2717": {
+      "exportName": "FilterSolid",
+      "file": "solid/1-2717.svg"
+    },
+    "1:2719": {
+      "exportName": "ArrowCircleLeftSolid",
+      "file": "solid/1-2719.svg"
+    },
+    "1:2721": {
+      "exportName": "ZoomInSolid",
+      "file": "solid/1-2721.svg"
+    },
+    "1:2723": {
+      "exportName": "PaperClipSolid",
+      "file": "solid/1-2723.svg"
+    },
+    "1:2725": {
+      "exportName": "ChevronRightSolid",
+      "file": "solid/1-2725.svg"
+    },
+    "1:2727": {
+      "exportName": "QrcodeSolid",
+      "file": "solid/1-2727.svg"
+    },
+    "1:2729": {
+      "exportName": "CollectionSolid",
+      "file": "solid/1-2729.svg"
+    },
+    "1:2731": {
+      "exportName": "ArrowNarrowLeftSolid",
+      "file": "solid/1-2731.svg"
+    },
+    "1:2733": {
+      "exportName": "CheckSolid",
+      "file": "solid/1-2733.svg"
+    },
+    "1:2735": {
+      "exportName": "PencilSolid",
+      "file": "solid/1-2735.svg"
+    },
+    "1:2737": {
+      "exportName": "PhoneSolid",
+      "file": "solid/1-2737.svg"
+    },
+    "1:2739": {
+      "exportName": "XSolid",
+      "file": "solid/1-2739.svg"
+    },
+    "1:2741": {
+      "exportName": "DocumentAddSolid",
+      "file": "solid/1-2741.svg"
+    },
+    "1:2743": {
+      "exportName": "VolumeOffSolid",
+      "file": "solid/1-2743.svg"
+    },
+    "1:2745": {
+      "exportName": "AtSymbolSolid",
+      "file": "solid/1-2745.svg"
+    },
+    "1:2747": {
+      "exportName": "ArrowCircleUpSolid",
+      "file": "solid/1-2747.svg"
+    },
+    "1:2749": {
+      "exportName": "ZoomOutSolid",
+      "file": "solid/1-2749.svg"
+    },
+    "1:2751": {
+      "exportName": "EmojiHappySolid",
+      "file": "solid/1-2751.svg"
+    },
+    "1:2753": {
+      "exportName": "ChevronUpSolid",
+      "file": "solid/1-2753.svg"
+    },
+    "1:2755": {
+      "exportName": "ClipboardCheckSolid",
+      "file": "solid/1-2755.svg"
+    },
+    "1:2757": {
+      "exportName": "BookOpenSolid",
+      "file": "solid/1-2757.svg"
+    },
+    "1:2759": {
+      "exportName": "TemplateSolid",
+      "file": "solid/1-2759.svg"
+    },
+    "1:2761": {
+      "exportName": "TranslateSolid",
+      "file": "solid/1-2761.svg"
+    },
+    "1:2763": {
+      "exportName": "EyeSolid",
+      "file": "solid/1-2763.svg"
+    },
+    "1:2765": {
+      "exportName": "PhoneOutgoingSolid",
+      "file": "solid/1-2765.svg"
+    },
+    "1:2767": {
+      "exportName": "PlusSolid",
+      "file": "solid/1-2767.svg"
+    },
+    "1:2769": {
+      "exportName": "DocumentRemoveSolid",
+      "file": "solid/1-2769.svg"
+    },
+    "1:2771": {
+      "exportName": "AdjustmentsSolid",
+      "file": "solid/1-2771.svg"
+    },
+    "1:2773": {
+      "exportName": "TrashSolid",
+      "file": "solid/1-2773.svg"
+    },
+    "1:2775": {
+      "exportName": "SortAscendingSolid",
+      "file": "solid/1-2775.svg"
+    },
+    "1:2777": {
+      "exportName": "SearchSolid",
+      "file": "solid/1-2777.svg"
+    },
+    "1:2779": {
+      "exportName": "EmojiSadSolid",
+      "file": "solid/1-2779.svg"
+    },
+    "1:2781": {
+      "exportName": "ChevronLeftSolid",
+      "file": "solid/1-2781.svg"
+    },
+    "1:2783": {
+      "exportName": "ClipboardListSolid",
+      "file": "solid/1-2783.svg"
+    },
+    "1:2785": {
+      "exportName": "CodeSolid",
+      "file": "solid/1-2785.svg"
+    },
+    "1:2787": {
+      "exportName": "ReplySolid",
+      "file": "solid/1-2787.svg"
+    },
+    "1:2789": {
+      "exportName": "CashSolid",
+      "file": "solid/1-2789.svg"
+    },
+    "1:2791": {
+      "exportName": "BookmarkSolid",
+      "file": "solid/1-2791.svg"
+    },
+    "1:2793": {
+      "exportName": "PhoneIncomingSolid",
+      "file": "solid/1-2793.svg"
+    },
+    "1:2795": {
+      "exportName": "RefreshSolid",
+      "file": "solid/1-2795.svg"
+    },
+    "1:2797": {
+      "exportName": "CalendarSolid",
+      "file": "solid/1-2797.svg"
+    },
+    "1:2799": {
+      "exportName": "LinkSolid",
+      "file": "solid/1-2799.svg"
+    },
+    "1:2801": {
+      "exportName": "InformationCircleSolid",
+      "file": "solid/1-2801.svg"
+    },
+    "1:2803": {
+      "exportName": "SortDescendingSolid",
+      "file": "solid/1-2803.svg"
+    },
+    "1:2805": {
+      "exportName": "UserAddSolid",
+      "file": "solid/1-2805.svg"
+    },
+    "1:2807": {
+      "exportName": "PrinterSolid",
+      "file": "solid/1-2807.svg"
+    },
+    "1:2809": {
+      "exportName": "SelectorSolid",
+      "file": "solid/1-2809.svg"
+    },
+    "1:2811": {
+      "exportName": "ClipboardCopySolid",
+      "file": "solid/1-2811.svg"
+    },
+    "1:2813": {
+      "exportName": "LightningBoltSolid",
+      "file": "solid/1-2813.svg"
+    },
+    "1:2815": {
+      "exportName": "LightBulbSolid",
+      "file": "solid/1-2815.svg"
+    },
+    "1:2817": {
+      "exportName": "ChatAltSolid",
+      "file": "solid/1-2817.svg"
+    },
+    "1:2819": {
+      "exportName": "LoginSolid",
+      "file": "solid/1-2819.svg"
+    },
+    "1:2821": {
+      "exportName": "KeySolid",
+      "file": "solid/1-2821.svg"
+    },
+    "1:2823": {
+      "exportName": "BanSolid",
+      "file": "solid/1-2823.svg"
+    },
+    "1:2825": {
+      "exportName": "DownloadFigma12825Solid",
+      "file": "solid/1-2825.svg"
+    },
+    "1:2827": {
+      "exportName": "MicrophoneSolid",
+      "file": "solid/1-2827.svg"
+    },
+    "1:2829": {
+      "exportName": "BadgeCheckSolid",
+      "file": "solid/1-2829.svg"
+    },
+    "1:2831": {
+      "exportName": "CursorClickSolid",
+      "file": "solid/1-2831.svg"
+    },
+    "1:2833": {
+      "exportName": "SpeakerphoneSolid",
+      "file": "solid/1-2833.svg"
+    },
+    "1:2835": {
+      "exportName": "DocumentReportSolid",
+      "file": "solid/1-2835.svg"
+    },
+    "1:2837": {
+      "exportName": "DesktopComputerSolid",
+      "file": "solid/1-2837.svg"
+    },
+    "1:2839": {
+      "exportName": "SupportSolid",
+      "file": "solid/1-2839.svg"
+    },
+    "1:2841": {
+      "exportName": "NewspaperSolid",
+      "file": "solid/1-2841.svg"
+    },
+    "1:2843": {
+      "exportName": "BookmarkAltSolid",
+      "file": "solid/1-2843.svg"
+    },
+    "1:2845": {
+      "exportName": "ViewGridAddSolid",
+      "file": "solid/1-2845.svg"
+    },
+    "1:2847": {
+      "exportName": "MdLibrarySolid",
+      "file": "solid/1-2847.svg"
+    },
+    "1:2849": {
+      "exportName": "PlaySolid",
+      "file": "solid/1-2849.svg"
+    },
+    "1:2851": {
+      "exportName": "PauseSolid",
+      "file": "solid/1-2851.svg"
+    },
+    "1:2853": {
+      "exportName": "StopSolid",
+      "file": "solid/1-2853.svg"
+    },
+    "1:2855": {
+      "exportName": "ChatAlt2Solid",
+      "file": "solid/1-2855.svg"
+    },
+    "1:2857": {
+      "exportName": "EyeOffSolid",
+      "file": "solid/1-2857.svg"
+    },
+    "1:2859": {
+      "exportName": "StarSolid",
+      "file": "solid/1-2859.svg"
+    },
+    "1:2861": {
+      "exportName": "TerminalSolid",
+      "file": "solid/1-2861.svg"
+    },
+    "1:2863": {
+      "exportName": "ChartBarSolid",
+      "file": "solid/1-2863.svg"
+    },
+    "1:2865": {
+      "exportName": "ChartSquareBarSolid",
+      "file": "solid/1-2865.svg"
+    },
+    "1:2867": {
+      "exportName": "FireSolid",
+      "file": "solid/1-2867.svg"
+    },
+    "1:2869": {
+      "exportName": "ShoppingBagSolid",
+      "file": "solid/1-2869.svg"
+    },
+    "1:2871": {
+      "exportName": "ThumbUpSolid",
+      "file": "solid/1-2871.svg"
+    },
+    "1:2873": {
+      "exportName": "ThumbDownSolid",
+      "file": "solid/1-2873.svg"
+    },
+    "1:2875": {
+      "exportName": "HandSolid",
+      "file": "solid/1-2875.svg"
+    },
+    "1:2877": {
+      "exportName": "ArrowsExpandSolid",
+      "file": "solid/1-2877.svg"
+    },
+    "1:2879": {
+      "exportName": "ViewGridSolid",
+      "file": "solid/1-2879.svg"
+    },
+    "1:2881": {
+      "exportName": "PuzzleSolid",
+      "file": "solid/1-2881.svg"
+    },
+    "1:2883": {
+      "exportName": "FolderDownloadSolid",
+      "file": "solid/1-2883.svg"
+    },
+    "1:2885": {
+      "exportName": "FolderAddSolid",
+      "file": "solid/1-2885.svg"
+    },
+    "1:2887": {
+      "exportName": "FolderRemoveSolid",
+      "file": "solid/1-2887.svg"
+    },
+    "1:2889": {
+      "exportName": "StatusOnlineSolid",
+      "file": "solid/1-2889.svg"
+    },
+    "1:2891": {
+      "exportName": "ReceiptTaxSolid",
+      "file": "solid/1-2891.svg"
+    },
+    "1:2893": {
+      "exportName": "StatusOfflineSolid",
+      "file": "solid/1-2893.svg"
+    },
+    "1:2895": {
+      "exportName": "PresentationChartLineSolid",
+      "file": "solid/1-2895.svg"
+    },
+    "1:2897": {
+      "exportName": "ChipSolid",
+      "file": "solid/1-2897.svg"
+    },
+    "1:2899": {
+      "exportName": "FastForwardSolid",
+      "file": "solid/1-2899.svg"
+    },
+    "1:2901": {
+      "exportName": "RewindSolid",
+      "file": "solid/1-2901.svg"
+    },
+    "1:2903": {
+      "exportName": "PresentationChartBarSolid",
+      "file": "solid/1-2903.svg"
+    },
+    "1:2905": {
+      "exportName": "CubeTransparentSolid",
+      "file": "solid/1-2905.svg"
+    },
+    "1:2907": {
+      "exportName": "SearchCircleSolid",
+      "file": "solid/1-2907.svg"
+    },
+    "1:2909": {
+      "exportName": "CloudSolid",
+      "file": "solid/1-2909.svg"
+    },
+    "1:2911": {
+      "exportName": "VariableSolid",
+      "file": "solid/1-2911.svg"
+    },
+    "1:2913": {
+      "exportName": "AcademicCapSolid",
+      "file": "solid/1-2913.svg"
+    },
+    "1:2915": {
+      "exportName": "PhoneMissedCallSolid",
+      "file": "solid/1-2915.svg"
+    },
+    "1:2917": {
+      "exportName": "PlusSmSolid",
+      "file": "solid/1-2917.svg"
+    },
+    "1:2919": {
+      "exportName": "MinusSmSolid",
+      "file": "solid/1-2919.svg"
+    },
+    "1:2921": {
+      "exportName": "GiftSolid",
+      "file": "solid/1-2921.svg"
+    },
+    "1:2923": {
+      "exportName": "TruckSolid",
+      "file": "solid/1-2923.svg"
+    },
+    "1:2925": {
+      "exportName": "CurrencyBangladeshiSolid",
+      "file": "solid/1-2925.svg"
+    },
+    "1:2927": {
+      "exportName": "DocumentSearchSolid",
+      "file": "solid/1-2927.svg"
+    },
+    "1:2929": {
+      "exportName": "DocumentTextSolid",
+      "file": "solid/1-2929.svg"
+    },
+    "1:2931": {
+      "exportName": "CakeSolid",
+      "file": "solid/1-2931.svg"
+    },
+    "1:2933": {
+      "exportName": "VideoCameraSolid",
+      "file": "solid/1-2933.svg"
+    },
+    "1:2935": {
+      "exportName": "BeakerSolid",
+      "file": "solid/1-2935.svg"
+    },
+    "1:2937": {
+      "exportName": "CalculatorSolid",
+      "file": "solid/1-2937.svg"
+    },
+    "1:2939": {
+      "exportName": "TableSolid",
+      "file": "solid/1-2939.svg"
+    },
+    "1:2941": {
+      "exportName": "CloudUploadSolid",
+      "file": "solid/1-2941.svg"
+    },
+    "1:2943": {
+      "exportName": "SaveSolid",
+      "file": "solid/1-2943.svg"
+    },
+    "1:2945": {
+      "exportName": "ChevronDoubleRightSolid",
+      "file": "solid/1-2945.svg"
+    },
+    "1:2947": {
+      "exportName": "ChevronDoubleLeftSolid",
+      "file": "solid/1-2947.svg"
+    },
+    "1:2949": {
+      "exportName": "ChevronDoubleDownSolid",
+      "file": "solid/1-2949.svg"
+    },
+    "1:2951": {
+      "exportName": "ChevronDoubleUpSolid",
+      "file": "solid/1-2951.svg"
+    },
+    "1:2953": {
+      "exportName": "FingerPrintSolid",
+      "file": "solid/1-2953.svg"
+    },
+    "1:2955": {
+      "exportName": "CubeSolid",
+      "file": "solid/1-2955.svg"
+    },
+    "1:2957": {
+      "exportName": "CloudDownloadSolid",
+      "file": "solid/1-2957.svg"
+    },
+    "1:2959": {
+      "exportName": "SaveAsSolid",
+      "file": "solid/1-2959.svg"
+    },
+    "1:2961": {
+      "exportName": "FolderOpenSolid",
+      "file": "solid/1-2961.svg"
+    },
+    "1:2963": {
+      "exportName": "MobileSolid",
+      "file": "solid/1-2963.svg"
+    },
+    "1:2965": {
+      "exportName": "BackspaceSolid",
+      "file": "solid/1-2965.svg"
+    },
+    "1:2967": {
+      "exportName": "PaperAirplaneSolid",
+      "file": "solid/1-2967.svg"
+    },
+    "1:2969": {
+      "exportName": "DeviceMobileSolid",
+      "file": "solid/1-2969.svg"
+    },
+    "1:2971": {
+      "exportName": "MusicNoteSolid",
+      "file": "solid/1-2971.svg"
+    },
+    "1:2973": {
+      "exportName": "FilmSolid",
+      "file": "solid/1-2973.svg"
+    },
+    "1:2975": {
+      "exportName": "DatabaseSolid",
+      "file": "solid/1-2975.svg"
+    },
+    "1:2977": {
+      "exportName": "ServerSolid",
+      "file": "solid/1-2977.svg"
+    },
+    "1:2979": {
+      "exportName": "LogoutSolid",
+      "file": "solid/1-2979.svg"
+    },
+    "1:2981": {
+      "exportName": "WifiSolid",
+      "file": "solid/1-2981.svg"
+    },
+    "1:2983": {
+      "exportName": "IdentificationSolid",
+      "file": "solid/1-2983.svg"
+    },
+    "1:2985": {
+      "exportName": "RssSolid",
+      "file": "solid/1-2985.svg"
+    },
+    "1:2987": {
+      "exportName": "MapSolid",
+      "file": "solid/1-2987.svg"
+    },
+    "1:2989": {
+      "exportName": "ScissorsSolid",
+      "file": "solid/1-2989.svg"
+    },
+    "1:2991": {
+      "exportName": "MinusSolid",
+      "file": "solid/1-2991.svg"
+    },
+    "1:3001": {
+      "exportName": "ArrowSmUpSolid",
+      "file": "solid/1-3001.svg"
+    },
+    "1:3003": {
+      "exportName": "ArrowSmRightSolid",
+      "file": "solid/1-3003.svg"
+    },
+    "1:3005": {
+      "exportName": "ArrowSmDownSolid",
+      "file": "solid/1-3005.svg"
+    },
+    "1:3007": {
+      "exportName": "ArrowSmLeftSolid",
+      "file": "solid/1-3007.svg"
+    },
+    "175:7009": {
+      "exportName": "BugSolid",
+      "file": "solid/175-7009.svg"
+    },
+    "16035:380989": {
+      "exportName": "ImportSolid",
+      "file": "solid/16035-380989.svg"
+    },
+    "30345:236811": {
+      "exportName": "AISolid",
+      "file": "solid/30345-236811.svg"
+    },
+    "32242:38533": {
+      "exportName": "DocumentDocSolid",
+      "file": "solid/32242-38533.svg"
+    },
+    "6500:198204": {
+      "exportName": "ExportSolid",
+      "file": "solid/6500-198204.svg"
+    },
+    "23101:329992": {
+      "exportName": "AbandonSolid",
+      "file": "solid/23101-329992.svg"
+    },
+    "22425:254718": {
+      "exportName": "PaintbrushSolid",
+      "file": "solid/22425-254718.svg"
+    },
+    "3409:118983": {
+      "exportName": "PayloadSolid",
+      "file": "solid/3409-118983.svg"
+    },
+    "2249:69180": {
+      "exportName": "PortSolid",
+      "file": "solid/2249-69180.svg"
+    },
+    "7612:141119": {
+      "exportName": "GitHubSolid",
+      "file": "solid/7612-141119.svg"
+    },
+    "15460:250575": {
+      "exportName": "CodecSolid",
+      "file": "solid/15460-250575.svg"
+    },
+    "16256:302540": {
+      "exportName": "StorageSolid",
+      "file": "solid/16256-302540.svg"
+    },
+    "1855:45375": {
+      "exportName": "MinusEnlargeWindowSolid",
+      "file": "solid/1855-45375.svg"
+    },
+    "1855:45374": {
+      "exportName": "MinusShrinkWindowSolid",
+      "file": "solid/1855-45374.svg"
+    },
+    "16594:253276": {
+      "exportName": "SwitchConfigurationSolid",
+      "file": "solid/16594-253276.svg"
+    },
+    "2248:69141": {
+      "exportName": "YakitSolid",
+      "file": "solid/2248-69141.svg"
+    },
+    "37330:17938": {
+      "exportName": "PointSolid",
+      "file": "solid/37330-17938.svg"
+    },
+    "37377:17319": {
+      "exportName": "WinnowerSolid",
+      "file": "solid/37377-17319.svg"
+    },
+    "37768:14221": {
+      "exportName": "ToolSolid",
+      "file": "solid/37768-14221.svg"
+    },
+    "37831:7379": {
+      "exportName": "PillSolid",
+      "file": "solid/37831-7379.svg"
+    },
+    "4936:115787": {
+      "exportName": "FloatingSolid",
+      "file": "solid/4936-115787.svg",
+      "catalogStatus": "supplement"
+    },
+    "4936:115790": {
+      "exportName": "ParkLeftSolid",
+      "file": "solid/4936-115790.svg",
+      "catalogStatus": "supplement"
+    },
+    "4936:115789": {
+      "exportName": "ParkRightSolid",
+      "file": "solid/4936-115789.svg",
+      "catalogStatus": "supplement"
+    },
+    "4936:115788": {
+      "exportName": "ParkBelowSolid",
+      "file": "solid/4936-115788.svg",
+      "catalogStatus": "supplement"
+    },
+    "46709:8109": {
+      "exportName": "ParkAboveSolid",
+      "file": "solid/46709-8109.svg",
+      "catalogStatus": "supplement"
+    }
+  },
+  "rules": {}
+}

@@ -1,0 +1,15 @@
+{
+  "sourceAssetEvidence": {
+    "contextTargetImgCount": 4,
+    "contextTargetImgVariables": [
+      "child:37560:24821",
+      "child:37560:24824",
+      "child:37560:25049",
+      "child:37560:25050"
+    ],
+    "exactComponentNodeExport": true,
+    "contextLayoutComposite": false,
+    "contextFallback": "component-timeout-smaller-child-context",
+    "isolatedComponentSubtree": true
+  }
+}

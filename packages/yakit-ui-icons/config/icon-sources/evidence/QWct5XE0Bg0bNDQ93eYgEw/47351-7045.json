@@ -1,0 +1,5 @@
+{
+  "captured": {
+    "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47351:7045:\n  id: 47351:7045\n  key: f349b3a9269fdc1e4f92289bea049bf4e1fa8b5f\n  name: Outline/CircleArrowUp\n\nNODES:\n[COMPONENT] \"Outline/CircleArrowUp\" #47351:7045 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #47351:7044 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":2,\"y\":2},\"dimensions\":{\"width\":20,\"height\":20}} strokes=[\"#353639\"] strokeWeight=2px"
+  }
+}

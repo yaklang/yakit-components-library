@@ -77,7 +77,7 @@ const IconSection = ({
           gridTemplateColumns: `repeat(auto-fill, minmax(${intrinsicPreview ? 380 : 255}px, 1fr))`,
         }}
       >
-        {icons.map(({ Component, exportName, family, figmaName, name, sourceStatus }) => (
+        {icons.map(({ Component, exportName, family, figmaName, sourceNodeId }) => (
           <div
             data-icon-category={category}
             data-icon-export={exportName}
@@ -119,35 +119,32 @@ const IconSection = ({
             ) : (
               <Component size={size} />
             )}
-            <div style={{ minWidth: 0 }}>
+            <div style={{ display: 'grid', gap: 4, minWidth: 0 }}>
               <div
+                title={figmaName ?? 'Figma name unavailable'}
                 style={{
                   color: 'var(--Colors-Use-Neutral-Text-1-Title)',
                   fontSize: 12,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                {name}
+                Figma 名称：{figmaName ?? 'Figma name unavailable'}
               </div>
-              <small
+              <code
+                title={exportName}
                 style={{
                   color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
                   display: 'block',
-                  fontSize: 10,
+                  fontSize: 11,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                {sourceStatus}
-                {figmaName === null ? ' · Figma name unavailable' : ''}
-              </small>
-              <code
-                style={{
-                  color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
-                  display: intrinsicPreview ? 'block' : undefined,
-                  fontSize: 11,
-                  overflowWrap: intrinsicPreview ? 'anywhere' : undefined,
-                }}
-              >{`import { ${exportName} } from '@yakit-libs/yakit-ui';`}</code>
+                组件名称：{exportName}
+              </code>
               <code
                 style={{
                   color: 'var(--Colors-Use-Neutral-Text-3-Secondary)',
@@ -155,7 +152,9 @@ const IconSection = ({
                   fontSize: 11,
                   overflowWrap: intrinsicPreview ? 'anywhere' : undefined,
                 }}
-              >{`<${exportName} />`}</code>
+              >
+                Figma nodeId：{sourceNodeId}
+              </code>
             </div>
           </div>
         ))}

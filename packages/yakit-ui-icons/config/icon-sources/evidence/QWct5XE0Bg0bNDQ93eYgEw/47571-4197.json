@@ -1,0 +1,5 @@
+{
+  "captured": {
+    "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47571:4197:\n  id: 47571:4197\n  key: 1e81e24d57d2189b42a3d17f230a16fae77a7f95\n  name: Outline/At\n\nNODES:\n[COMPONENT] \"Outline/At\" #47571:4197 layout={\"mode\":\"none\",\"sizing\":{}} fills=[]\n  [IMAGE-SVG] \"Vector\" #47571:4196 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":3,\"y\":3},\"dimensions\":{\"width\":18,\"height\":18}} strokes=[\"#353639\"] strokeWeight=2px"
+  }
+}

@@ -5,22 +5,17 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import colorfulSource from '../../config/icon-sources/colorful.json';
-import solidSource from '../../config/icon-sources/solid.json';
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
+import { readOldiconAssets } from '../../scripts/oldicon-assets.mjs';
 import * as Icons from '../../src';
 import * as OldIcons from '../../src/oldicon';
+import { solid as solidSource } from '../helpers/sources';
+import { colorful as colorfulSource } from '../helpers/sources';
 
 import { iconCounts, iconExports } from './icon-inventory';
 
 describe('family-specific server rendered stroke widths without CSS', () => {
   it('normalizes only Outline and preserves other SVG source widths', () => {
-    const oldManifest = JSON.parse(
-      readIconInputSync(
-        new URL('../../config/icon-sources/oldicon.json#manifest', import.meta.url),
-        'utf8',
-      ),
-    );
+    const oldManifest = readOldiconAssets();
     const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
     expect(icons).toHaveLength(iconCounts.all);
     expect(icons.map(([name]) => name).sort()).toEqual([...iconExports.all].sort());

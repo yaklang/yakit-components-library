@@ -2,9 +2,9 @@ import { readFileSync } from 'node:fs';
 
 import { describe, expect, it } from 'vitest';
 
-import outline from '../../config/icon-sources/outline.json';
-import solid from '../../config/icon-sources/solid.json';
 import { parseSvg } from '../../scripts/audit-icons.mjs';
+import { outline as outline } from '../helpers/sources';
+import { solid as solid } from '../helpers/sources';
 
 import {
   expectCurrentFigmaSource,

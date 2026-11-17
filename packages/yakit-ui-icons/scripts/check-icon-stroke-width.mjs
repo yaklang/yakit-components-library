@@ -2,6 +2,8 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { parseSvg } from './audit-icons.mjs';
+import { readOldiconAssets } from './oldicon-assets.mjs';
 import { readIconSources, sourceFiles } from './icon-source-data.mjs';
 import { normalizeSvgStrokeWidth, svgStrokeWidths } from './icon-stroke-width.mjs';
 
@@ -25,6 +27,7 @@ export async function checkIconStrokeWidths(root = packageRoot) {
   try {
     const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`));
     const expected = new Set([
+      ...readOldiconAssets(root).assets.map((file) => `oldicon/${file}`),
       ...Object.values(sources)
         .flatMap(sourceFiles)
         .filter((file) => file.endsWith('.svg')),
@@ -38,10 +41,11 @@ export async function checkIconStrokeWidths(root = packageRoot) {
     errors.push(`${sourceDirectory}: ${error.message}`);
   }
   for (const file of files) {
-    // Only Outline uses the uniform width policy.
-    if (!file.startsWith('outline/')) continue;
     try {
       const source = await readFile(path.join(root, 'src', file), 'utf8');
+      parseSvg(source);
+      // Only Outline uses the uniform width policy.
+      if (!file.startsWith('outline/')) continue;
       normalizeSvgStrokeWidth(source);
       for (const { tag, value } of svgStrokeWidths(source))
         if (value !== '1.5') errors.push(`${file}: ${tag} stroke-width=${value}`);

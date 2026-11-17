@@ -4,22 +4,23 @@ import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
 import { ICON_FAMILIES, readIconSources, sourceExports, sourceFiles } from './icon-source-data.mjs';
+import { renderOfflineCatalog } from './offline-catalog.mjs';
+import { colorfulComponentNodeId } from './colorful-icon-contracts.mjs';
 
 import { inspectSvg, parseSvg } from './audit-icons.mjs';
 import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs';
 import { normalizeColorfulFragments } from './colorful-fragments.mjs';
-import {
-  buildIconDocuments,
-  oldiconInventory,
-  manifestPath,
-  evidencePath,
-} from './icon-source-documents.mjs';
+import { buildIconDocuments, manifestPath, evidencePath } from './icon-source-documents.mjs';
 import {
   buildIconNameCatalog,
   renderIconNameCatalog,
   parseIconIndexMapping,
 } from './icon-name-catalog-core.mjs';
-import { renderColorfulBarrel, renderColorfulCatalog } from './colorful-entry-generator.mjs';
+import {
+  publicRows,
+  renderColorfulBarrel,
+  renderColorfulCatalog,
+} from './colorful-entry-generator.mjs';
 
 import { auditColorfulInputs } from './colorful-audit.mjs';
 import { loadPinnedTokenCatalog } from './colorful-color-resolver.mjs';
@@ -73,7 +74,11 @@ export function validateSources(sources) {
   const identities = new Set();
   for (const family of ICON_FAMILIES) {
     const source = sources[family];
-    if (source?.schemaVersion !== 1 || source.family !== family || !Array.isArray(source.records))
+    if (
+      source?.schemaVersion !== (family === 'loading' ? 1 : 2) ||
+      source.family !== family ||
+      !Array.isArray(source.records)
+    )
       fail(`ICON_SOURCE_SCHEMA_INVALID: ${family}`);
     for (const name of sourceExports(source)) {
       if (!/^[A-Za-z_$][\w$]*$/.test(name ?? '') || publicNames.has(name))
@@ -107,8 +112,52 @@ export function validateSources(sources) {
   }
 }
 
-// Only explicit MCP-imported recipes regenerate production artwork. Migrated artwork keeps
-// its existing normalization, theme tokens and independently reviewed geometry corrections.
+// Every Figma icon is derived from its original SVG and explicit project rules.
+export function applyPaintBindings(svg, record) {
+  const root = parseSvg(svg);
+  const edits = new Map();
+  const occupied = new Set();
+  for (const binding of record.themePaintBindings ?? []) {
+    const token = record.variableTokens?.[binding.figmaVariableId] ?? binding.token;
+    if (!token) continue;
+    if (!/^--[\w-]+$/.test(token) || !/^#[a-fA-F0-9]{6}$/.test(binding.fallbackHex))
+      fail(`ICON_BINDING_VALUE_INVALID: ${record.nodeId}`);
+    if (!binding.targets?.length) {
+      if (!Object.keys(record.transform?.paintReplacements ?? {}).length)
+        fail(`ICON_BINDING_TARGET_REQUIRED: ${record.nodeId}`);
+      continue;
+    }
+    for (const target of binding.targets) {
+      if (
+        typeof target.expectedValue !== 'string' ||
+        !Array.isArray(target.locator) ||
+        !target.locator.every((i) => Number.isInteger(i) && i >= 0) ||
+        !['fill', 'stroke', 'stop-color'].includes(target.attribute)
+      )
+        fail(`ICON_BINDING_TARGET_INVALID: ${record.nodeId}`);
+      let node = root;
+      for (const index of target.locator) node = node?.children[index];
+      const key = `${target.locator.join('.')}/${target.attribute}`;
+      if (
+        !node ||
+        occupied.has(key) ||
+        node.attributes.get(target.attribute) !== target.expectedValue
+      )
+        fail(`ICON_BINDING_TARGET_AMBIGUOUS: ${record.nodeId}/${key}`);
+      occupied.add(key);
+      const tag = edits.get(node.sourceStart)?.text ?? svg.slice(node.sourceStart, node.sourceEnd);
+      const pattern = new RegExp(`(\\s${target.attribute}\\s*=\\s*)["'][^"']*["']`);
+      edits.set(node.sourceStart, {
+        end: node.sourceEnd,
+        text: tag.replace(pattern, `$1"var(${token}, ${binding.fallbackHex})"`),
+      });
+    }
+  }
+  for (const [start, edit] of [...edits].sort(([a], [b]) => b - a))
+    svg = svg.slice(0, start) + edit.text + svg.slice(edit.end);
+  return svg;
+}
+
 export function renderImportedSvg(record, family) {
   const raw = record.raw?.svg ?? record.rawSvg;
   if (!raw) fail(`ICON_RAW_SVG_MISSING: ${record.nodeId}`);
@@ -128,7 +177,7 @@ export function renderImportedSvg(record, family) {
     node.children.forEach(checkReferences);
   };
   checkReferences(parsed);
-  let svg = raw;
+  let svg = applyPaintBindings(raw, record);
   if (family !== 'colorful')
     svg = svg.replace(/(\b(?:fill|stroke)=)["']#353639["']/gi, '$1"currentColor"');
   // A registered default color is supplied by createIcon; the SVG must still
@@ -146,7 +195,7 @@ export function renderImportedSvg(record, family) {
       (_, attribute, color) =>
         `${attribute}"${color.toLowerCase() === 'white' ? '#FFFFFF' : '#000000'}"`,
     );
-  for (const [from, to] of Object.entries(record.production?.paintReplacements ?? {})) {
+  for (const [from, to] of Object.entries(record.transform?.paintReplacements ?? {})) {
     if (!/^#[a-fA-F0-9]{6}$/.test(from) || !/^var\(--[\w-]+,\s*#[a-fA-F0-9]{6}\)$/.test(to))
       fail(`ICON_PAINT_MAPPING_INVALID: ${record.nodeId}`);
     svg = svg.replace(
@@ -184,6 +233,7 @@ export async function planIconUpdate(
   root = packageRoot,
   { family, sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`)) } = {},
 ) {
+  if (family === 'oldicon') fail('OLDICON_HANDWRITTEN: edit assets and component modules directly');
   if (family && !ICON_FAMILIES.includes(family)) fail(`ICON_FAMILY_INVALID: ${family}`);
   validateSources(sources);
   const selected = family ? [family] : ICON_FAMILIES;
@@ -192,18 +242,19 @@ export async function planIconUpdate(
   for (const kind of ICON_FAMILIES) {
     const source = sources[kind];
     for (const file of sourceFiles(source)) {
-      let svg = await optionalRead(root, `src/${file}`);
+      let svg = null;
       const record = source.records.find(
         (r) => `${kind}/${r.file}` === file || r.localFile === file,
       );
-      if (record?.production && selected.includes(kind)) svg = renderImportedSvg(record, kind);
+      if (kind !== 'loading') svg = renderImportedSvg(record, kind);
+      else svg = await optionalRead(root, `src/${file}`);
       if (svg === null) fail(`ICON_SOURCE_MISSING: ${file}`);
       if (file.endsWith('.svg')) {
         parseSvg(svg);
         if (kind === 'outline' && normalizeSvgStrokeWidth(svg) !== svg)
           fail(`ICON_STROKE_WIDTH_STALE: ${file}`);
         assets.set(file, svg);
-        if (record?.production && selected.includes(kind)) output.set(`src/${file}`, svg);
+        if (selected.includes(kind)) output.set(`src/${file}`, svg);
       }
     }
     // No implicit removal or rename: all currently public names must still be present.
@@ -211,9 +262,7 @@ export async function planIconUpdate(
     const names =
       kind === 'loading'
         ? [...(await read(root, 'src/index.tsx')).matchAll(/export \{ (\w+) \}/g)].map((m) => m[1])
-        : kind === 'oldicon'
-          ? [...(existing ?? '').matchAll(/export \{ (\w+) \} from/g)].map((m) => m[1])
-          : [...parseIconIndexMapping(existing ?? '').keys()];
+        : [...parseIconIndexMapping(existing ?? '').keys()];
     for (const name of names)
       if (!sourceExports(source).includes(name))
         fail(`ICON_PUBLIC_REMOVAL_REQUIRES_EXPLICIT_MIGRATION: ${kind}/${name}`);
@@ -261,22 +310,45 @@ export async function planIconUpdate(
     output.set('src/colorful/index.tsx', renderColorfulBarrel(colorful));
     output.set('src/colorful/catalog.ts', renderColorfulCatalog(colorful));
   }
+  const monochromeCatalog = buildIconNameCatalog({
+    outlineIndexSource: renderBarrel(sources.outline),
+    outlineManifest: documents.get(manifestPath('outline')),
+    outlineRawProvenance: documents.get(evidencePath('outline', 'raw')),
+    outlinePlacementProvenance: documents.get(evidencePath('outline', 'placement')),
+    solidIndexSource: renderBarrel(sources.solid),
+    solidManifest: documents.get(manifestPath('solid')),
+    solidRawProvenance: documents.get(evidencePath('solid', 'raw')),
+    solidPlacementProvenance: documents.get(evidencePath('solid', 'placement')),
+  });
   if (selected.some((f) => ['outline', 'solid'].includes(f)))
+    output.set('src/figmaNameCatalog.ts', renderIconNameCatalog(monochromeCatalog));
+  if (selected.some((f) => ['outline', 'solid', 'colorful'].includes(f))) {
+    const entries = [
+      ...monochromeCatalog.map((entry) => {
+        const record = sources[entry.family].records.find((r) => r.exportName === entry.exportName);
+        return {
+          ...entry,
+          file: `${entry.family}/${record.file}`,
+          defaultColor: record.defaultColor,
+        };
+      }),
+      ...publicRows(colorful).map((row) => ({
+        family: 'colorful',
+        figmaName: row.figmaName ?? null,
+        exportName: row.exportName,
+        sourceNodeId: colorfulComponentNodeId(row),
+        file: row.canonicalLocalFile.replace(/^src\//, ''),
+      })),
+    ];
     output.set(
-      'src/figmaNameCatalog.ts',
-      renderIconNameCatalog(
-        buildIconNameCatalog({
-          outlineIndexSource: renderBarrel(sources.outline),
-          outlineManifest: documents.get(manifestPath('outline')),
-          outlineRawProvenance: documents.get(evidencePath('outline', 'raw')),
-          outlinePlacementProvenance: documents.get(evidencePath('outline', 'placement')),
-          solidIndexSource: renderBarrel(sources.solid),
-          solidManifest: documents.get(manifestPath('solid')),
-          solidRawProvenance: documents.get(evidencePath('solid', 'raw')),
-          solidPlacementProvenance: documents.get(evidencePath('solid', 'placement')),
-        }),
-      ),
+      'catalog/index.html',
+      await renderOfflineCatalog({
+        entries,
+        assets,
+        brands: JSON.parse(await read(root, 'config/brand-themes.json')),
+      }),
     );
+  }
   if (selected.includes('outline'))
     output.set(
       'config/iconStrokeContract.generated.ts',
@@ -291,25 +363,6 @@ export async function planIconUpdate(
         }),
       ),
     );
-  if (selected.includes('oldicon')) {
-    const inventory = oldiconInventory(sources.oldicon, assets);
-    const header = '// Generated by scripts/update-icons.mjs. Do not edit manually.\n\n';
-    output.set(
-      'src/oldicon/index.tsx',
-      header +
-        "export type { IconComponent, IconProps, IconRef, IconSvgProps } from '../types.js';\n\n" +
-        inventory.exports
-          .map((r) => `export { ${r.exportName} } from './icons/${r.exportName}.js';`)
-          .join('\n') +
-        '\n',
-    );
-    for (const r of inventory.exports)
-      output.set(
-        `src/oldicon/icons/${r.exportName}.tsx`,
-        header +
-          `import { createIcon } from '../../createIcon.js';\nimport OldIconAssetSvg from '../${r.assetFile}?react';\n\nexport const ${r.exportName} = createIcon(OldIconAssetSvg, '${r.exportName}');\n`,
-      );
-  }
   // Loading implementations stay handwritten; only the public entry is generated.
   if (selected.includes('loading'))
     output.set(

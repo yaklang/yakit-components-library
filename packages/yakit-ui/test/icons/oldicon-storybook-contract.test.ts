@@ -2,20 +2,12 @@ import { type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+import { readOldiconAssets } from '../../../yakit-ui-icons/scripts/oldicon-assets.mjs';
 import { iconCounts } from '../../../yakit-ui-icons/test/icons/icon-inventory';
 import iconMeta from '../../.storybook/stories/Icon.stories';
 import oldIconMeta, * as oldIconStories from '../../.storybook/stories/OldIcon.stories';
 
-const oldIconInventory: {
-  exports: { exportName: string }[];
-  totals: { artworks: number; sourcePaths: number };
-} = JSON.parse(
-  readIconInputSync(
-    new URL('../../../yakit-ui-icons/config/icon-sources/oldicon.json#manifest', import.meta.url),
-    'utf8',
-  ),
-);
+const oldIconInventory = readOldiconAssets();
 
 const expectedExports = oldIconInventory.exports.map(({ exportName }) => exportName);
 const oldIconImportPath = '@yakit-libs/yakit-ui-icons/oldicon';
@@ -74,8 +66,7 @@ describe('oldIcon Storybook contract', () => {
     expect(attributeValues(markup, 'data-oldicon-export')).toHaveLength(0);
     expect(markup).toContain('data-oldicon-summary="true"');
     expect(markup).toContain(String(iconCounts.oldicon));
-    expect(markup).toContain(String(oldIconInventory.totals.artworks));
-    expect(markup).toContain(String(oldIconInventory.totals.sourcePaths));
+    expect(markup).not.toContain('source paths');
     expect(markup).toContain(oldIconImportPath);
     expect(markup).toContain('没有可靠的 Outline、Solid 或 Colorful family 元数据');
   });

@@ -5,9 +5,9 @@ import { fileURLToPath } from 'node:url';
 import { build, type Plugin, type PluginOption, type Rollup } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import outlineSource from '../../config/icon-sources/outline.json';
 import viteConfig from '../../vite.config';
 import vitestConfig from '../../vitest.config';
+import { outline as outlineSource } from '../helpers/sources';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const outlineRoot = resolve(packageRoot, 'src/outline');
@@ -23,10 +23,7 @@ describe('Outline raw fragment contract', () => {
 
     for (const file of files) {
       const source = readFileSync(resolve(outlineRoot, file), 'utf8');
-      const imported = outlineSource.records.some(
-        (record) => record.file === file && 'production' in record,
-      );
-      const fileBase = file.slice(0, -4).replace('-', imported ? '' : '_');
+      const fileBase = file.slice(0, -4).replace('-', '');
       for (const id of referencedIds(source)) {
         if (!new RegExp(`^icon_${fileBase}__[A-Za-z][A-Za-z0-9_-]*_\\d+$`).test(id)) {
           invalid.push(`${file}:${id}`);

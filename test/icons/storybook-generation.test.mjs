@@ -85,23 +85,36 @@ test("root update covers new icons and navigation, checks drift without writing 
     }
     await runWorkspaceIconUpdate([], root);
     const source = JSON.parse(await read(sourcePath));
+    const projectPath =
+      "packages/yakit-ui-icons/config/icon-project/colorful.json";
+    const project = JSON.parse(await read(projectPath));
+    const displayPath = "packages/yakit-ui-icons/config/icon-display.json";
+    const display = JSON.parse(await read(displayPath));
     const template = source.records.find(
-      (row) => row.exportName === "AddFileTypeColorful",
+      (row) => project.records[row.nodeId].exportName === "AddFileTypeColorful",
     );
     source.records.push({
       ...template,
       nodeId: "99999:1",
-      exportName: "NewFileTypeColorful",
-      sourceUrl:
-        "https://www.figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/Icons?node-id=99999-1",
-      localFile: "colorful/99999-1.svg",
-      rawSvg:
-        '<svg width="48" height="48" viewBox="0 0 48 48"><path d="M1 1H40" fill="#123456"/></svg>',
+      svgFile: `svg/${source.fileKey}/99999-1.svg`,
+      colorBindings: { status: "unknown", bindings: [] },
     });
+    project.records["99999:1"] = {
+      exportName: "NewFileTypeColorful",
+      file: "colorful/99999-1.svg",
+    };
+    await write(
+      `packages/yakit-ui-icons/config/icon-sources/svg/${source.fileKey}/99999-1.svg`,
+      '<svg width="48" height="48" viewBox="0 0 48 48"><path d="M1 1H40" fill="#123456"/></svg>',
+    );
     // Verify that static navigation exports are regenerated from source metadata.
-    const group = source.groups.find((g) => g.category === "colorful-icon");
+    const group = Object.values(display.families.colorful.groups).find(
+      (g) => g.category === "colorful-icon",
+    );
     group.storybook.exportName = "NewColorfulGroup";
     await write(sourcePath, JSON.stringify(source, null, 2) + "\n");
+    await write(projectPath, JSON.stringify(project, null, 2) + "\n");
+    await write(displayPath, JSON.stringify(display, null, 2) + "\n");
     const before = await read(storyPath);
     const beforeCatalog = await read(generatedPath);
     await assert.rejects(
@@ -113,6 +126,8 @@ test("root update covers new icons and navigation, checks drift without writing 
     // Invalid presentation must prevent even public SVG writes.
     group.storybook.exportName = "Overview";
     await write(sourcePath, JSON.stringify(source, null, 2) + "\n");
+    await write(projectPath, JSON.stringify(project, null, 2) + "\n");
+    await write(displayPath, JSON.stringify(display, null, 2) + "\n");
     await assert.rejects(
       runWorkspaceIconUpdate([], root),
       /STORYBOOK_EXPORT_INVALID/,
@@ -123,9 +138,14 @@ test("root update covers new icons and navigation, checks drift without writing 
     );
     group.storybook.exportName = "NewColorfulGroup";
     await write(sourcePath, JSON.stringify(source, null, 2) + "\n");
+    await write(projectPath, JSON.stringify(project, null, 2) + "\n");
+    await write(displayPath, JSON.stringify(display, null, 2) + "\n");
     await runWorkspaceIconUpdate(["--family", "colorful"], root);
     assert.match(await read(storyPath), /export const NewColorfulGroup/);
     assert.match(await read(generatedPath), /99999:1/);
+    const offlinePage = "packages/yakit-ui-icons/catalog/index.html";
+    assert.match(await read(offlinePage), /NewFileTypeColorful/);
+    assert.match(await read(offlinePage), /99999:1/);
     assert.match(
       await read("packages/yakit-ui-icons/src/colorful/99999-1.svg"),
       /#123456/,
@@ -135,6 +155,14 @@ test("root update covers new icons and navigation, checks drift without writing 
       await runWorkspaceIconUpdate(["--check"], root),
       /CHECK_OK 0 file/,
     );
+    await write(offlinePage, "stale catalog\n");
+    await assert.rejects(
+      runWorkspaceIconUpdate(["--check"], root),
+      /catalog\/index.html/,
+    );
+    assert.equal(await read(offlinePage), "stale catalog\n");
+    await runWorkspaceIconUpdate([], root);
+    assert.match(await read(offlinePage), /NewFileTypeColorful/);
     await write(generatedPath, "// stale\n");
     await assert.rejects(
       runWorkspaceIconUpdate(["--family", "colorful", "--check"], root),

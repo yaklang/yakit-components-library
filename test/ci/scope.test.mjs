@@ -14,6 +14,10 @@ test("docs skip expensive jobs; icon assets run full icons and consumer checks",
   assert.equal(flags.ui, false);
   assert.equal(flags.storybook, false);
   assert.equal(flags.platforms, false);
+  assert.deepEqual(
+    classify(["packages/yakit-ui-icons/catalog/index.html"]),
+    flags,
+  );
 });
 test("shared icon code runs UI and platform checks; UI does not repeat icon tests", () => {
   const icons = classify([
@@ -67,4 +71,24 @@ test("PR compares from merge base", () => {
   });
   assert.deepEqual(calls[0], ["merge-base", "target", "merge"]);
   assert.deepEqual(calls[1].slice(-2), ["base", "merge"]);
+});
+
+test("split original files select icon checks; transformation and display policy also select platforms", () => {
+  for (const file of [
+    "config/icon-sources/svg/key/1-2.svg",
+    "config/icon-sources/evidence/key/1-2.json",
+  ]) {
+    const flags = classify([`packages/yakit-ui-icons/${file}`]);
+    assert.equal(flags.icons, true);
+    assert.equal(flags.platforms, false);
+  }
+  for (const file of [
+    "config/icon-project/outline.json",
+    "config/icon-display.json",
+  ]) {
+    const flags = classify([`packages/yakit-ui-icons/${file}`]);
+    assert.equal(flags.icons, true);
+    assert.equal(flags.platforms, true);
+    assert.equal(flags.storybook, true);
+  }
 });

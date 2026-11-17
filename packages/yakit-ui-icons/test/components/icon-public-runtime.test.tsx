@@ -3,11 +3,11 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import outlineSource from '../../config/icon-sources/outline.json';
 import * as PackageApi from '../../src';
 import { DEFAULT_ICON_COLOR } from '../../src/createIcon';
 import { outlineIconNameCatalog } from '../../src/figmaNameCatalog';
 import { outlineIconRegistry } from '../../src/registry';
+import { outline as outlineSource } from '../helpers/sources';
 import { iconCounts } from '../icons/icon-inventory';
 
 const roots: Root[] = [];

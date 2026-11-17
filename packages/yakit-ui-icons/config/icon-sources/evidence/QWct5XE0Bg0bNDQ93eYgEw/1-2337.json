@@ -1,0 +1,21 @@
+{
+  "placements": [
+    {
+      "placementNodeId": "46216:5529",
+      "nodeType": "instance",
+      "x": 463,
+      "y": 2182,
+      "width": 24,
+      "height": 24,
+      "mainComponentId": "1:2337",
+      "mainComponentIdStatus": "verified-via-plugin-api",
+      "sourceResolution": "instance.getMainComponentAsync",
+      "mainComponentKey": "347b81ab832a90e91cc8b685dec14036c7175cdc",
+      "overridePayload": {
+        "componentProperties": {},
+        "overrides": [],
+        "variantProperties": null
+      }
+    }
+  ]
+}

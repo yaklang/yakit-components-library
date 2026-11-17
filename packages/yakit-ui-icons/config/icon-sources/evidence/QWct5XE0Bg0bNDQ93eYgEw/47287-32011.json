@@ -1,0 +1,5 @@
+{
+  "captured": {
+    "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47287:32011:\n  id: 47287:32011\n  key: e337f1f5c949e7f46f0908aaa11837c74f916f2f\n  name: Outline/SwitchCamera\n\nNODES:\n[COMPONENT] \"Outline/SwitchCamera\" #47287:32011 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #47287:32008 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":2,\"y\":2},\"dimensions\":{\"width\":20,\"height\":20}} strokes=[\"#353639\"] strokeWeight=2px"
+  }
+}

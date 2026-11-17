@@ -1,0 +1,5 @@
+{
+  "captured": {
+    "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47662:1975:\n  id: 47662:1975\n  key: 72b91c706a562d9064d6537d652e5baa4f5f9999\n  name: Outline/TimerOff\n\nNODES:\n[COMPONENT] \"Outline/TimerOff\" #47662:1975 layout={\"mode\":\"none\",\"sizing\":{}}\n  [IMAGE-SVG] \"Vector\" #47662:1974 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":2,\"y\":2},\"dimensions\":{\"width\":20,\"height\":20.01}} strokes=[\"#353639\"] strokeWeight=2px"
+  }
+}

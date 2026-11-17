@@ -136,8 +136,8 @@ export function validateColorfulRow(row, { requireProvenance = false } = {}) {
         row.height <= 0
       )
         fail('FIGMA_PROVENANCE_INVALID', `${rowId} requires positive dimensions`);
-      if (Number.isNaN(Date.parse(row.retrievedAt ?? '')))
-        fail('FIGMA_PROVENANCE_INVALID', `${rowId} requires retrievedAt`);
+      if (row.retrievedAt !== undefined && Number.isNaN(Date.parse(row.retrievedAt)))
+        fail('FIGMA_PROVENANCE_INVALID', `${rowId} has invalid retrievedAt`);
       if (
         typeof row.sourceUrl !== 'string' ||
         !row.sourceUrl.includes('figma.com/design/QWct5XE0Bg0bNDQ93eYgEw/') ||
