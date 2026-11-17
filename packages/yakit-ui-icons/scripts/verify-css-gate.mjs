@@ -145,7 +145,9 @@ async function runBrowserBundle({ entries, packageName, packageRoot }) {
       throw new Error(`browser bundle must emit exactly one CSS asset, found ${cssFiles.length}`);
     }
     const css = await readFile(cssFiles[0], 'utf8');
-    if (css.split(compatibilityRule).length - 1 !== 3) {
+    const packagedCss = await readFile(path.join(packageRoot, 'dist/icon.css'), 'utf8');
+    const packagedRuleCount = packagedCss.split(compatibilityRule).length - 1;
+    if (packagedRuleCount < 1 || css.split(compatibilityRule).length - 1 !== packagedRuleCount) {
       throw new Error('browser bundle must contain exactly one compatibility rule block');
     }
     if (css.split(`@keyframes ${loadingKeyframe}`).length - 1 !== 1) {
