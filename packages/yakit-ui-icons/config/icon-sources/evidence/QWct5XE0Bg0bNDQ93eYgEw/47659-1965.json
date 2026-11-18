@@ -1,0 +1,5 @@
+{
+  "captured": {
+    "mcpNodeResponse": "NAME: \"Yakit Design System V1.0\"\nCOMPONENTS:\n47659:1965:\n  id: 47659:1965\n  key: fd5fef56745dcbf5513315224488bda6f6fd7052\n  name: Outline/HandDeposit\n\nNODES:\n[COMPONENT] \"Outline/HandDeposit\" #47659:1965 layout={\"mode\":\"none\",\"sizing\":{}} fills=[]\n  [IMAGE-SVG] \"Vector\" #47659:1964 layout={\"mode\":\"none\",\"sizing\":{},\"locationRelativeToParent\":{\"x\":5.25,\"y\":1.5},\"dimensions\":{\"width\":15.75,\"height\":21}} strokes=[\"#353639\"] strokeWeight=2px"
+  }
+}

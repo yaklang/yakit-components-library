@@ -131,7 +131,7 @@ import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon/PopoverArro
 `TaskWaitIcon` 是产品侧 DOM 动画而不是 SVG，不属于此兼容图标集合。
 
 `oldicon` 保留旧实现的路径几何、颜色、`viewBox` 和固有尺寸，仅用于迁移既有消费者。
-Oldicon 保留现有 SVG 线宽和内容哈希路径，不再统一改写描边宽度；原有公开导出名称和来源映射不变。
+Oldicon 以 `src/oldicon/assets/` 为准，保留现有文件名、线宽、公开导出和深层路径。素材、单图标组件和入口手工维护，不登记来源，也不参加生成流程。
 它不是第四个正式图标家族，不会进入根入口或 `iconRegistry`；新功能应优先选择
 `/outline`、`/solid` 或 `/colorful`。同名但图形不同的旧实现会使用来源限定的导出名，
 迁移时应按生成清单中的源文件映射选择，不能仅凭名称互换。

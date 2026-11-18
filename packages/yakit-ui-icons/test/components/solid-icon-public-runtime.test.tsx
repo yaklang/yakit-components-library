@@ -3,11 +3,11 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import solidSource from '../../config/icon-sources/solid.json';
 import * as PackageApi from '../../src';
 import { DEFAULT_ICON_COLOR } from '../../src/createIcon';
 import { solidIconNameCatalog } from '../../src/figmaNameCatalog';
 import { solidIconRegistry } from '../../src/registry';
+import { solid as solidSource } from '../helpers/sources';
 import { iconCounts } from '../icons/icon-inventory';
 
 const roots: Root[] = [];

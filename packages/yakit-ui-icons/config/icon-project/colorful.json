@@ -1,0 +1,3026 @@
+{
+  "schemaVersion": 1,
+  "records": {
+    "37150:32094": {
+      "exportName": "MitmPrimaryMenuColorful",
+      "file": "colorful/37150-32094.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37150:32108": {
+      "exportName": "HistoryPrimaryMenuColorful",
+      "file": "colorful/37150-32108.svg",
+      "transform": {
+        "paintReplacements": {
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)",
+          "#5A5D64": "var(--Colors-Use-Neutral-Text-2-Primary, #5A5D64)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary",
+        "VariableID:34701:3819": "--Colors-Use-Neutral-Text-2-Primary",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32124": {
+      "exportName": "PortFingerprintScanPrimaryMenuColorful",
+      "file": "colorful/37150-32124.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37150:32134": {
+      "exportName": "TargetedVulnerabilityDetectionPrimaryMenuColorful",
+      "file": "colorful/37150-32134.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32148": {
+      "exportName": "SubdomainCollectionPrimaryMenuColorful",
+      "file": "colorful/37150-32148.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37150:32170": {
+      "exportName": "PluginStorePrimaryMenuColorful",
+      "file": "colorful/37150-32170.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F9C5A2": "var(--Colors-Use-Main-Border, #F9C5A2)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51343": "--Colors-Use-Main-Border"
+      }
+    },
+    "37150:32183": {
+      "exportName": "MyPluginsPrimaryMenuColorful",
+      "file": "colorful/37150-32183.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32193": {
+      "exportName": "LocalPluginsPrimaryMenuColorful",
+      "file": "colorful/37150-32193.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)",
+          "#5A5D64": "var(--Colors-Use-Neutral-Text-2-Primary, #5A5D64)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary",
+        "VariableID:34701:3819": "--Colors-Use-Neutral-Text-2-Primary"
+      }
+    },
+    "37150:32212": {
+      "exportName": "BatchPluginExecutionPrimaryMenuColorful",
+      "file": "colorful/37150-32212.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32225": {
+      "exportName": "PortListenerPrimaryMenuColorful",
+      "file": "colorful/37150-32225.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37373:59652": {
+      "exportName": "CveDatabaseManagementPrimaryMenuColorful",
+      "file": "colorful/37373-59652.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "37373:59684": {
+      "exportName": "CodeAuditPrimaryMenuColorful",
+      "file": "colorful/37373-59684.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37373:60026": {
+      "exportName": "CodeScanPrimaryMenuColorful",
+      "file": "colorful/37373-60026.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37474:99330": {
+      "exportName": "RuleManagementPrimaryMenuColorful",
+      "file": "colorful/37474-99330.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "38723:89067": {
+      "exportName": "JavaDecompilerPrimaryMenuColorful",
+      "file": "colorful/38723-89067.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "43309:4783": {
+      "exportName": "AuditVulnerabilityPrimaryMenuColorful",
+      "file": "colorful/43309-4783.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "43309:4784": {
+      "exportName": "ProjectManagementPrimaryMenuColorful",
+      "file": "colorful/43309-4784.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44680:5802": {
+      "exportName": "NotebookManagementPrimaryMenuColorful",
+      "file": "colorful/44680-5802.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44683:1953": {
+      "exportName": "DictionaryManagementPrimaryMenuColorful",
+      "file": "colorful/44683-1953.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "44683:1954": {
+      "exportName": "InformationCollectionPrimaryMenuColorful",
+      "file": "colorful/44683-1954.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44683:2001": {
+      "exportName": "AiPrimaryMenuColorful",
+      "file": "colorful/44683-2001.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FEF5EE": "var(--Colors-Use-Main-On-Primary, #FEF5EE)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3808": "--Colors-Use-Main-On-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "46724:7633": {
+      "exportName": "AiCodeAuditPrimaryMenuColorful",
+      "file": "colorful/46724-7633.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32268": {
+      "exportName": "WebFuzzerSecondaryMenuColorful",
+      "file": "colorful/37150-32268.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32278": {
+      "exportName": "WebsocketFuzzerSecondaryMenuColorful",
+      "file": "colorful/37150-32278.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32287": {
+      "exportName": "CodecSecondaryMenuColorful",
+      "file": "colorful/37150-32287.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#9CA3B1": "var(--Colors-Use-Neutral-Text-4-Help-text, #9CA3B1)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3816": "--Colors-Use-Neutral-Text-4-Help-text",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32298": {
+      "exportName": "DataComparisonSecondaryMenuColorful",
+      "file": "colorful/37150-32298.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#9CA3B1": "var(--Colors-Use-Neutral-Text-4-Help-text, #9CA3B1)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3816": "--Colors-Use-Neutral-Text-4-Help-text",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32320": {
+      "exportName": "BasicCrawlerSecondaryMenuColorful",
+      "file": "colorful/37150-32320.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary"
+      }
+    },
+    "37150:32342": {
+      "exportName": "CyberspaceEngineSecondaryMenuColorful",
+      "file": "colorful/37150-32342.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32380": {
+      "exportName": "WeakPasswordDetectionSecondaryMenuColorful",
+      "file": "colorful/37150-32380.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32391": {
+      "exportName": "DirectoryScanSecondaryMenuColorful",
+      "file": "colorful/37150-32391.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32413": {
+      "exportName": "GenericPluginSecondaryMenuColorful",
+      "file": "colorful/37150-32413.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32441": {
+      "exportName": "DnsLogSecondaryMenuColorful",
+      "file": "colorful/37150-32441.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32448": {
+      "exportName": "IcmpSizeLogSecondaryMenuColorful",
+      "file": "colorful/37150-32448.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32455": {
+      "exportName": "TcpPortLogSecondaryMenuColorful",
+      "file": "colorful/37150-32455.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32462": {
+      "exportName": "YsoJavaHackSecondaryMenuColorful",
+      "file": "colorful/37150-32462.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32474": {
+      "exportName": "ReverseConnectionServerSecondaryMenuColorful",
+      "file": "colorful/37150-32474.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32484": {
+      "exportName": "ReportSecondaryMenuColorful",
+      "file": "colorful/37150-32484.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32503": {
+      "exportName": "VulnerabilitySecondaryMenuColorful",
+      "file": "colorful/37150-32503.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32521": {
+      "exportName": "PortAssetSecondaryMenuColorful",
+      "file": "colorful/37150-32521.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37150:32541": {
+      "exportName": "DomainAssetSecondaryMenuColorful",
+      "file": "colorful/37150-32541.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37373:60069": {
+      "exportName": "WebsiteTreeSecondaryMenuColorful",
+      "file": "colorful/37373-60069.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37373:60086": {
+      "exportName": "FingerprintLibrarySecondaryMenuColorful",
+      "file": "colorful/37373-60086.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44683:2024": {
+      "exportName": "CustomDetectionSecondaryMenuColorful",
+      "file": "colorful/44683-2024.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "45074:33180": {
+      "exportName": "ToolLibrarySecondaryMenuColorful",
+      "file": "colorful/45074-33180.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "45171:106981": {
+      "exportName": "KnowledgeBaseSecondaryMenuColorful",
+      "file": "colorful/45171-106981.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FEF5EE": "var(--Colors-Use-Main-On-Primary, #FEF5EE)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3808": "--Colors-Use-Main-On-Primary"
+      }
+    },
+    "45172:110544": {
+      "exportName": "SkillLibrarySecondaryMenuColorful",
+      "file": "colorful/45172-110544.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "46718:12237": {
+      "exportName": "MemoryLibrarySecondaryMenuColorful",
+      "file": "colorful/46718-12237.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F9C5A2": "var(--Colors-Use-Main-Border, #F9C5A2)",
+          "#FEF5EE": "var(--Colors-Use-Main-On-Primary, #FEF5EE)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51343": "--Colors-Use-Main-Border",
+        "VariableID:34701:3808": "--Colors-Use-Main-On-Primary",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "45:955": {
+      "exportName": "BruteForceUnauthorizedOutlineColorful",
+      "file": "colorful/45-955.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "46:887": {
+      "exportName": "BugOutlineColorful",
+      "file": "colorful/46-887.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "46:914": {
+      "exportName": "SpaceEngineOutlineColorful",
+      "file": "colorful/46-914.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "46:929": {
+      "exportName": "PortScanOutlineColorful",
+      "file": "colorful/46-929.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "46:943": {
+      "exportName": "ComprehensiveDirectoryScanOutlineColorful",
+      "file": "colorful/46-943.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "66:1969": {
+      "exportName": "MitmOutlineColorful",
+      "file": "colorful/66-1969.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "70:2017": {
+      "exportName": "WebFuzzerPrimaryOutlineColorful",
+      "file": "colorful/70-2017.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "74:2045": {
+      "exportName": "TargetedVulnerabilityDetectionOutlineColorful",
+      "file": "colorful/74-2045.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "77:1722": {
+      "exportName": "BatchVulnerabilityDetectionOutlineColorful",
+      "file": "colorful/77-1722.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "78:1750": {
+      "exportName": "PluginOutlineColorful",
+      "file": "colorful/78-1750.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "78:1778": {
+      "exportName": "YakRunnerOutlineColorful",
+      "file": "colorful/78-1778.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "78:1791": {
+      "exportName": "CodecOutlineColorful",
+      "file": "colorful/78-1791.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "86:1736": {
+      "exportName": "DataComparisonOutlineColorful",
+      "file": "colorful/86-1736.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "86:1761": {
+      "exportName": "PayloadOutlineColorful",
+      "file": "colorful/86-1761.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "88:1820": {
+      "exportName": "PortListenerOutlineColorful",
+      "file": "colorful/88-1820.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "89:1870": {
+      "exportName": "ReverseConnectionServerOutlineColorful",
+      "file": "colorful/89-1870.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "89:1898": {
+      "exportName": "DnsLogOutlineColorful",
+      "file": "colorful/89-1898.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "92:1713": {
+      "exportName": "IcmpSizeLogOutlineColorful",
+      "file": "colorful/92-1713.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "92:1761": {
+      "exportName": "TcpPortLogOutlineColorful",
+      "file": "colorful/92-1761.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "2581:76280": {
+      "exportName": "YsoJavaHackOutlineColorful",
+      "file": "colorful/2581-76280.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "2743:86612": {
+      "exportName": "PluginRepositoryOutlineColorful",
+      "file": "colorful/2743-86612.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "2956:80557": {
+      "exportName": "WebFuzzerSecondaryOutlineColorful",
+      "file": "colorful/2956-80557.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "2956:80711": {
+      "exportName": "WebsocketFuzzerOutlineColorful",
+      "file": "colorful/2956-80711.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "2956:80990": {
+      "exportName": "ReportOutlineColorful",
+      "file": "colorful/2956-80990.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "2956:81015": {
+      "exportName": "PluginExecutionResultOutlineColorful",
+      "file": "colorful/2956-81015.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "2960:81053": {
+      "exportName": "VulnerabilitiesAndRisksOutlineColorful",
+      "file": "colorful/2960-81053.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "2960:81120": {
+      "exportName": "PortAssetsOutlineColorful",
+      "file": "colorful/2960-81120.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "2970:81207": {
+      "exportName": "DomainAssetsOutlineColorful",
+      "file": "colorful/2970-81207.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "2970:81496": {
+      "exportName": "SubdomainCollectionOutlineColorful",
+      "file": "colorful/2970-81496.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "2970:81535": {
+      "exportName": "HttpHistoryOutlineColorful",
+      "file": "colorful/2970-81535.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "14476:204436": {
+      "exportName": "MyPluginsOutlineColorful",
+      "file": "colorful/14476-204436.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "14476:204482": {
+      "exportName": "LocalPluginOutlineColorful",
+      "file": "colorful/14476-204482.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "14476:204653": {
+      "exportName": "CveManagementOutlineColorful",
+      "file": "colorful/14476-204653.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "15311:236843": {
+      "exportName": "WebsiteTreeOutlineColorful",
+      "file": "colorful/15311-236843.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:13886": {
+      "exportName": "PluginBatchExecutionOutlineColorful",
+      "file": "colorful/37151-13886.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37151:15166": {
+      "exportName": "WebsiteTreeSolidColorful",
+      "file": "colorful/37151-15166.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15167": {
+      "exportName": "CveManagementSolidColorful",
+      "file": "colorful/37151-15167.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15168": {
+      "exportName": "LocalPluginSolidColorful",
+      "file": "colorful/37151-15168.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15169": {
+      "exportName": "MyPluginsSolidColorful",
+      "file": "colorful/37151-15169.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15170": {
+      "exportName": "PluginStoreSolidColorful",
+      "file": "colorful/37151-15170.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15171": {
+      "exportName": "PluginBatchExecutionSolidColorful",
+      "file": "colorful/37151-15171.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15172": {
+      "exportName": "WebFuzzerSecondarySolidColorful",
+      "file": "colorful/37151-15172.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15173": {
+      "exportName": "WebsocketFuzzerSolidColorful",
+      "file": "colorful/37151-15173.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15174": {
+      "exportName": "ReportSolidColorful",
+      "file": "colorful/37151-15174.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15176": {
+      "exportName": "PluginExecutionResultSolidColorful",
+      "file": "colorful/37151-15176.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15179": {
+      "exportName": "VulnerabilitiesAndRisksSolidColorful",
+      "file": "colorful/37151-15179.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15180": {
+      "exportName": "PortAssetsSolidColorful",
+      "file": "colorful/37151-15180.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15181": {
+      "exportName": "DomainAssetsSolidColorful",
+      "file": "colorful/37151-15181.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15182": {
+      "exportName": "SubdomainCollectionSolidColorful",
+      "file": "colorful/37151-15182.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15183": {
+      "exportName": "HttpHistorySolidColorful",
+      "file": "colorful/37151-15183.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15184": {
+      "exportName": "YsoJavaHackSolidColorful",
+      "file": "colorful/37151-15184.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15185": {
+      "exportName": "TcpPortLogSolidColorful",
+      "file": "colorful/37151-15185.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15186": {
+      "exportName": "IcmpSizeLogSolidColorful",
+      "file": "colorful/37151-15186.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15187": {
+      "exportName": "DnsLogSolidColorful",
+      "file": "colorful/37151-15187.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15188": {
+      "exportName": "ReverseConnectionServerSolidColorful",
+      "file": "colorful/37151-15188.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15189": {
+      "exportName": "PortListenerSolidColorful",
+      "file": "colorful/37151-15189.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15190": {
+      "exportName": "PayloadSolidColorful",
+      "file": "colorful/37151-15190.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15191": {
+      "exportName": "DataComparisonSolidColorful",
+      "file": "colorful/37151-15191.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15192": {
+      "exportName": "CodecSolidColorful",
+      "file": "colorful/37151-15192.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15193": {
+      "exportName": "YakRunnerSolidColorful",
+      "file": "colorful/37151-15193.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15194": {
+      "exportName": "PluginSolidColorful",
+      "file": "colorful/37151-15194.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15195": {
+      "exportName": "BatchVulnerabilityDetectionSolidColorful",
+      "file": "colorful/37151-15195.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "37151:15196": {
+      "exportName": "TargetedVulnerabilityDetectionSolidColorful",
+      "file": "colorful/37151-15196.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15197": {
+      "exportName": "WebFuzzerPrimarySolidColorful",
+      "file": "colorful/37151-15197.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15198": {
+      "exportName": "MitmSolidColorful",
+      "file": "colorful/37151-15198.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15199": {
+      "exportName": "ComprehensiveDirectoryScanBruteForceSolidColorful",
+      "file": "colorful/37151-15199.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15200": {
+      "exportName": "PortFingerprintScanSolidColorful",
+      "file": "colorful/37151-15200.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15201": {
+      "exportName": "SpaceEngineSolidColorful",
+      "file": "colorful/37151-15201.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15202": {
+      "exportName": "BugSolidColorful",
+      "file": "colorful/37151-15202.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37151:15203": {
+      "exportName": "BruteForceUnauthorizedSolidColorful",
+      "file": "colorful/37151-15203.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37560:24987": {
+      "exportName": "CodeScanSolidColorful",
+      "file": "colorful/37560-24987.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37560:24988": {
+      "exportName": "CodeAuditSolidColorful",
+      "file": "colorful/37560-24988.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37560:24989": {
+      "exportName": "RuleManagementSolidColorful",
+      "file": "colorful/37560-24989.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "37560:24990": {
+      "exportName": "CodeScanOutlineColorful",
+      "file": "colorful/37560-24990.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37560:24991": {
+      "exportName": "CodeAuditOutlineColorful",
+      "file": "colorful/37560-24991.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "37560:24992": {
+      "exportName": "RuleManagementOutlineColorful",
+      "file": "colorful/37560-24992.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "38051:62408": {
+      "exportName": "FingerprintLibraryOutlineColorful",
+      "file": "colorful/38051-62408.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "38051:63673": {
+      "exportName": "FingerprintLibrarySolidColorful",
+      "file": "colorful/38051-63673.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "38723:88885": {
+      "exportName": "JavaDecompilerOutlineColorful",
+      "file": "colorful/38723-88885.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "38723:89101": {
+      "exportName": "JavaDecompilerSolidColorful",
+      "file": "colorful/38723-89101.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44983:1900": {
+      "exportName": "NotebookOutlineColorful",
+      "file": "colorful/44983-1900.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "44984:1932": {
+      "exportName": "NotebookSolidColorful",
+      "file": "colorful/44984-1932.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "15444:242046": {
+      "exportName": "YakLogoWithBackgroundColorful",
+      "file": "colorful/15444-242046.svg"
+    },
+    "15454:242111": {
+      "exportName": "YakLogoColorful",
+      "file": "colorful/15454-242111.svg"
+    },
+    "37154:12490": {
+      "exportName": "YakitLogoColorful",
+      "file": "colorful/37154-12490.svg"
+    },
+    "37154:12492": {
+      "exportName": "YakitLogoWithBackgroundColorful",
+      "file": "colorful/37154-12492.svg"
+    },
+    "37221:35129": {
+      "exportName": "YakLogoHorizontalColorful",
+      "file": "colorful/37221-35129.svg"
+    },
+    "37221:35146": {
+      "exportName": "YakLogoHorizontalWithBackgroundColorful",
+      "file": "colorful/37221-35146.svg"
+    },
+    "37221:35164": {
+      "exportName": "YakLogoVerticalColorful",
+      "file": "colorful/37221-35164.svg"
+    },
+    "37221:35186": {
+      "exportName": "YakLogoVerticalWithBackgroundColorful",
+      "file": "colorful/37221-35186.svg"
+    },
+    "37221:35328": {
+      "exportName": "YakitLogoHorizontalColorful",
+      "file": "colorful/37221-35328.svg"
+    },
+    "37221:35332": {
+      "exportName": "YakitLogoVerticalColorful",
+      "file": "colorful/37221-35332.svg"
+    },
+    "37221:35427": {
+      "exportName": "YakitLogoHorizontalWithBackgroundColorful",
+      "file": "colorful/37221-35427.svg"
+    },
+    "37221:35443": {
+      "exportName": "YakitLogoVerticalWithBackgroundColorful",
+      "file": "colorful/37221-35443.svg"
+    },
+    "44518:10212": {
+      "exportName": "MemfitLogoWithBackgroundColorful",
+      "file": "colorful/44518-10212.svg"
+    },
+    "44520:1884": {
+      "exportName": "MemfitLogoHorizontalWithBackgroundColorful",
+      "file": "colorful/44520-1884.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44520:3491": {
+      "exportName": "MemfitLogoVerticalWithBackgroundColorful",
+      "file": "colorful/44520-3491.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44520:3547": {
+      "exportName": "MemfitLogoColorful",
+      "file": "colorful/44520-3547.svg"
+    },
+    "44520:3560": {
+      "exportName": "MemfitLogoVerticalColorful",
+      "file": "colorful/44520-3560.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44520:3632": {
+      "exportName": "MemfitLogoHorizontalColorful",
+      "file": "colorful/44520-3632.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44520:5040": {
+      "exportName": "IrifyLogoWithBackgroundColorful",
+      "file": "colorful/44520-5040.svg"
+    },
+    "44521:5060": {
+      "exportName": "IrifyLogoVerticalWithBackgroundColorful",
+      "file": "colorful/44521-5060.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44521:5122": {
+      "exportName": "IrifyLogoHorizontalWithBackgroundColorful",
+      "file": "colorful/44521-5122.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44521:5198": {
+      "exportName": "IrifyLogoColorful",
+      "file": "colorful/44521-5198.svg"
+    },
+    "44521:5204": {
+      "exportName": "IrifyLogoVerticalColorful",
+      "file": "colorful/44521-5204.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "44522:5642": {
+      "exportName": "IrifyLogoHorizontalColorful",
+      "file": "colorful/44522-5642.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "46336:19924": {
+      "exportName": "PenetraXLogoWithBackgroundColorful",
+      "file": "colorful/46336-19924.svg"
+    },
+    "46336:19932": {
+      "exportName": "PenetraXLogoVerticalWithBackgroundColorful",
+      "file": "colorful/46336-19932.svg"
+    },
+    "46336:19968": {
+      "exportName": "PenetraXLogoHorizontalWithBackgroundColorful",
+      "file": "colorful/46336-19968.svg"
+    },
+    "46336:19981": {
+      "exportName": "PenetraXLogoColorful",
+      "file": "colorful/46336-19981.svg"
+    },
+    "46336:19983": {
+      "exportName": "PenetraXLogoVerticalColorful",
+      "file": "colorful/46336-19983.svg"
+    },
+    "46336:19988": {
+      "exportName": "PenetraXLogoHorizontalColorful",
+      "file": "colorful/46336-19988.svg"
+    },
+    "38803:60735": {
+      "exportName": "YakNiuNiuWithBackgroundAiModelColorful",
+      "file": "colorful/38803-60735.svg"
+    },
+    "38808:60821": {
+      "exportName": "OpenAiWithBackgroundAiModelColorful",
+      "file": "colorful/38808-60821.svg"
+    },
+    "38808:60837": {
+      "exportName": "ChatGlmWithBackgroundAiModelColorful",
+      "file": "colorful/38808-60837.svg"
+    },
+    "38808:60849": {
+      "exportName": "MoonshotWithBackgroundAiModelColorful",
+      "file": "colorful/38808-60849.svg"
+    },
+    "38808:67833": {
+      "exportName": "TongyiWithBackgroundAiModelColorful",
+      "file": "colorful/38808-67833.svg"
+    },
+    "38808:67843": {
+      "exportName": "TongyiWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67843.svg"
+    },
+    "38808:67848": {
+      "exportName": "MoonshotWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67848.svg"
+    },
+    "38808:67851": {
+      "exportName": "ChatGlmWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67851.svg"
+    },
+    "38808:67857": {
+      "exportName": "OpenAiWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67857.svg"
+    },
+    "38808:67860": {
+      "exportName": "ComateWithBackgroundAiModelColorful",
+      "file": "colorful/38808-67860.svg"
+    },
+    "38808:67874": {
+      "exportName": "ComateWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67874.svg"
+    },
+    "38808:67883": {
+      "exportName": "DeepSeekWithBackgroundAiModelColorful",
+      "file": "colorful/38808-67883.svg"
+    },
+    "38808:67893": {
+      "exportName": "DeepSeekWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67893.svg"
+    },
+    "38808:67896": {
+      "exportName": "SiliconFlowWithBackgroundAiModelColorful",
+      "file": "colorful/38808-67896.svg"
+    },
+    "38808:67907": {
+      "exportName": "SiliconFlowWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67907.svg"
+    },
+    "38808:67916": {
+      "exportName": "YakNiuNiuWithoutBackgroundAiModelColorful",
+      "file": "colorful/38808-67916.svg"
+    },
+    "38864:130867": {
+      "exportName": "DefaultWithBackgroundAiModelColorful",
+      "file": "colorful/38864-130867.svg"
+    },
+    "38864:130874": {
+      "exportName": "DefaultWithoutBackgroundAiModelColorful",
+      "file": "colorful/38864-130874.svg"
+    },
+    "39233:7592": {
+      "exportName": "OllamaWithBackgroundAiModelColorful",
+      "file": "colorful/39233-7592.svg"
+    },
+    "39233:7601": {
+      "exportName": "OllamaWithoutBackgroundAiModelColorful",
+      "file": "colorful/39233-7601.svg"
+    },
+    "39233:7605": {
+      "exportName": "OpenRouterWithBackgroundAiModelColorful",
+      "file": "colorful/39233-7605.svg"
+    },
+    "39233:7631": {
+      "exportName": "GeminiWithBackgroundAiModelColorful",
+      "file": "colorful/39233-7631.svg"
+    },
+    "39233:7642": {
+      "exportName": "OpenRouterWithoutBackgroundAiModelColorful",
+      "file": "colorful/39233-7642.svg"
+    },
+    "39233:7669": {
+      "exportName": "GeminiWithoutBackgroundAiModelColorful",
+      "file": "colorful/39233-7669.svg"
+    },
+    "45038:1909": {
+      "exportName": "MemfitWithBackgroundAiModelColorful",
+      "file": "colorful/45038-1909.svg"
+    },
+    "45038:1923": {
+      "exportName": "MemfitWithoutBackgroundAiModelColorful",
+      "file": "colorful/45038-1923.svg"
+    },
+    "45594:5407": {
+      "exportName": "SystemOutputWithBackgroundAiModelColorful",
+      "file": "colorful/45594-5407.svg"
+    },
+    "45594:5420": {
+      "exportName": "SystemOutputWithoutBackgroundAiModelColorful",
+      "file": "colorful/45594-5420.svg"
+    },
+    "37202:11824": {
+      "exportName": "OfficialAvatarColorful",
+      "file": "colorful/37202-11824.svg"
+    },
+    "37202:11830": {
+      "exportName": "UserAvatarColorful",
+      "file": "colorful/37202-11830.svg"
+    },
+    "37202:11853": {
+      "exportName": "GuestAvatarColorful",
+      "file": "colorful/37202-11853.svg"
+    },
+    "37221:35731": {
+      "exportName": "CodecAvatarColorful",
+      "file": "colorful/37221-35731.svg"
+    },
+    "37221:35732": {
+      "exportName": "PortScanAvatarColorful",
+      "file": "colorful/37221-35732.svg"
+    },
+    "37221:35736": {
+      "exportName": "LuaAvatarColorful",
+      "file": "colorful/37221-35736.svg"
+    },
+    "37221:35740": {
+      "exportName": "YakNativeAvatarColorful",
+      "file": "colorful/37221-35740.svg"
+    },
+    "37221:35744": {
+      "exportName": "NucleiYamlAvatarColorful",
+      "file": "colorful/37221-35744.svg"
+    },
+    "37221:35748": {
+      "exportName": "MitmAvatarColorful",
+      "file": "colorful/37221-35748.svg"
+    },
+    "3054:91957": {
+      "exportName": "YakitEePluginSourceColorful",
+      "file": "colorful/3054-91957.svg"
+    },
+    "3409:103588": {
+      "exportName": "PrivatePluginSourceColorful",
+      "file": "colorful/3409-103588.svg"
+    },
+    "3409:103589": {
+      "exportName": "CloudPluginSourceColorful",
+      "file": "colorful/3409-103589.svg"
+    },
+    "3409:103590": {
+      "exportName": "OfficialPluginSourceColorful",
+      "file": "colorful/3409-103590.svg"
+    },
+    "37153:16224": {
+      "exportName": "OfficialPluginSourceBadgeColorful",
+      "file": "colorful/37153-16224.svg"
+    },
+    "37152:11641": {
+      "exportName": "CriticalRiskColorful",
+      "file": "colorful/37152-11641.svg",
+      "transform": {
+        "paintReplacements": {
+          "#B93939": "var(--Colors-Use-Status-Serious, #B93939)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36199:11620": "--Colors-Use-Status-Serious"
+      }
+    },
+    "37152:11667": {
+      "exportName": "HighRiskColorful",
+      "file": "colorful/37152-11667.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Status-High, #F15757)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36199:11621": "--Colors-Use-Status-High"
+      }
+    },
+    "37152:11681": {
+      "exportName": "MediumRiskColorful",
+      "file": "colorful/37152-11681.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F6A823": "var(--Colors-Use-Status-Medium, #F6A823)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36199:11622": "--Colors-Use-Status-Medium"
+      }
+    },
+    "37152:11695": {
+      "exportName": "LowRiskColorful",
+      "file": "colorful/37152-11695.svg",
+      "transform": {
+        "paintReplacements": {
+          "#FFCE1E": "var(--Colors-Use-Status-Low, #FFCE1E)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36199:11623": "--Colors-Use-Status-Low"
+      }
+    },
+    "37152:11709": {
+      "exportName": "DefaultRiskColorful",
+      "file": "colorful/37152-11709.svg",
+      "transform": {
+        "paintReplacements": {
+          "#9CA3B1": "var(--Colors-Use-Status-Unknown, #9CA3B1)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36228:51852": "--Colors-Use-Status-Unknown"
+      }
+    },
+    "37152:11723": {
+      "exportName": "FingerprintInfoRiskColorful",
+      "file": "colorful/37152-11723.svg",
+      "transform": {
+        "paintReplacements": {
+          "#28C08E": "var(--Colors-Use-Status-Safe, #28C08E)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36199:11624": "--Colors-Use-Status-Safe"
+      }
+    },
+    "13807:174539": {
+      "exportName": "InfoLogColorful",
+      "file": "colorful/13807-174539.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "13807:174540": {
+      "exportName": "WarningLogColorful",
+      "file": "colorful/13807-174540.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F6A823": "var(--Colors-Use-Warning-Primary, #F6A823)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13571": "--Colors-Use-Warning-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "13807:174541": {
+      "exportName": "ErrorLogColorful",
+      "file": "colorful/13807-174541.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "13807:174542": {
+      "exportName": "SuccessLogColorful",
+      "file": "colorful/13807-174542.svg",
+      "transform": {
+        "paintReplacements": {
+          "#28C08E": "var(--Colors-Use-Success-Primary, #28C08E)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13579": "--Colors-Use-Success-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "13807:174543": {
+      "exportName": "TextOutputLogColorful",
+      "file": "colorful/13807-174543.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "13807:174544": {
+      "exportName": "ChartLogColorful",
+      "file": "colorful/13807-174544.svg",
+      "transform": {
+        "paintReplacements": {
+          "#8862F8": "var(--Colors-Use-Purple-Primary, #8862F8)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34819:5263": "--Colors-Use-Purple-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "13807:174545": {
+      "exportName": "BugLogColorful",
+      "file": "colorful/13807-174545.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "14012:175288": {
+      "exportName": "CurrentNodeLogColorful",
+      "file": "colorful/14012-175288.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F9C5A2": "var(--Colors-Use-Main-Border, #F9C5A2)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51343": "--Colors-Use-Main-Border",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "14586:211780": {
+      "exportName": "CreatedLogColorful",
+      "file": "colorful/14586-211780.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "14586:211782": {
+      "exportName": "ReviewApprovedLogColorful",
+      "file": "colorful/14586-211782.svg",
+      "transform": {
+        "paintReplacements": {
+          "#28C08E": "var(--Colors-Use-Status-Safe, #28C08E)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36199:11624": "--Colors-Use-Status-Safe",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "14586:211797": {
+      "exportName": "ReviewRejectedLogColorful",
+      "file": "colorful/14586-211797.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "14586:211801": {
+      "exportName": "ModifiedLogColorful",
+      "file": "colorful/14586-211801.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "14586:211810": {
+      "exportName": "DeletedLogColorful",
+      "file": "colorful/14586-211810.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "15752:248591": {
+      "exportName": "RestoredLogColorful",
+      "file": "colorful/15752-248591.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "31042:85219": {
+      "exportName": "CommentLogColorful",
+      "file": "colorful/31042-85219.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "37153:13731": {
+      "exportName": "FolderLogColorful",
+      "file": "colorful/37153-13731.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "37153:13733": {
+      "exportName": "FolderFailedLogColorful",
+      "file": "colorful/37153-13733.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "37153:13735": {
+      "exportName": "FileLogColorful",
+      "file": "colorful/37153-13735.svg",
+      "transform": {
+        "paintReplacements": {
+          "#EEF0F3": "var(--Colors-Use-Neutral-Bg-Hover, #EEF0F3)",
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3812": "--Colors-Use-Neutral-Bg-Hover",
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "37153:13737": {
+      "exportName": "FileFailedLogColorful",
+      "file": "colorful/37153-13737.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "37153:13739": {
+      "exportName": "MarkdownLogColorful",
+      "file": "colorful/37153-13739.svg",
+      "transform": {
+        "paintReplacements": {
+          "#4493FF": "var(--Colors-Use-Blue-Primary, #4493FF)",
+          "#FFFFFF": "var(--Colors-Use-Basic-White, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:39203:132771": "--Colors-Use-Blue-Primary",
+        "VariableID:34713:3826": "--Colors-Use-Basic-White"
+      }
+    },
+    "45425:2003": {
+      "exportName": "AppSuccessTaskColorful",
+      "file": "colorful/45425-2003.svg",
+      "transform": {
+        "paintReplacements": {
+          "#28C08E": "var(--Colors-Use-Status-Safe, #28C08E)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36199:11624": "--Colors-Use-Status-Safe",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "45425:2005": {
+      "exportName": "AppSkipTaskColorful",
+      "file": "colorful/45425-2005.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "45425:2011": {
+      "exportName": "AppErrorTaskColorful",
+      "file": "colorful/45425-2011.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "45425:2030": {
+      "exportName": "AppWorkingTaskColorful",
+      "file": "colorful/45425-2030.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F9C5A2": "var(--Colors-Use-Main-Border, #F9C5A2)",
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)",
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51343": "--Colors-Use-Main-Border",
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary",
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background"
+      }
+    },
+    "45425:2032": {
+      "exportName": "AppWaitTaskColorful",
+      "file": "colorful/45425-2032.svg",
+      "transform": {
+        "paintReplacements": {
+          "#FFFFFF": "var(--Colors-Use-Basic-Background, #FFFFFF)",
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34614:51335": "--Colors-Use-Basic-Background",
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable"
+      }
+    },
+    "45428:2083": {
+      "exportName": "WebSuccessTaskColorful",
+      "file": "colorful/45428-2083.svg",
+      "transform": {
+        "paintReplacements": {
+          "#28C08E": "var(--Colors-Use-Success-Primary, #28C08E)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13579": "--Colors-Use-Success-Primary"
+      }
+    },
+    "45428:2093": {
+      "exportName": "WebErrorTaskColorful",
+      "file": "colorful/45428-2093.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F15757": "var(--Colors-Use-Error-Primary, #F15757)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:36198:13307": "--Colors-Use-Error-Primary"
+      }
+    },
+    "45428:2103": {
+      "exportName": "WebSkipTaskColorful",
+      "file": "colorful/45428-2103.svg",
+      "transform": {
+        "paintReplacements": {
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)",
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable",
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title"
+      }
+    },
+    "45428:2113": {
+      "exportName": "WebWaitTaskColorful",
+      "file": "colorful/45428-2113.svg",
+      "transform": {
+        "paintReplacements": {
+          "#353639": "var(--Colors-Use-Neutral-Text-1-Title, #353639)",
+          "#C0C6D1": "var(--Colors-Use-Neutral-Disable, #C0C6D1)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3820": "--Colors-Use-Neutral-Text-1-Title",
+        "VariableID:34701:3815": "--Colors-Use-Neutral-Disable"
+      }
+    },
+    "45428:2123": {
+      "exportName": "WebWorkingTaskColorful",
+      "file": "colorful/45428-2123.svg",
+      "transform": {
+        "paintReplacements": {
+          "#F28C45": "var(--Colors-Use-Main-Primary, #F28C45)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34624:51344": "--Colors-Use-Main-Primary"
+      }
+    },
+    "32338:71072": {
+      "exportName": "PdfFileTypeColorful",
+      "file": "colorful/32338-71072.svg"
+    },
+    "32338:71073": {
+      "exportName": "ExcelFileTypeColorful",
+      "file": "colorful/32338-71073.svg"
+    },
+    "32338:71074": {
+      "exportName": "PowerPointFileTypeColorful",
+      "file": "colorful/32338-71074.svg"
+    },
+    "32338:71075": {
+      "exportName": "ArchiveFileTypeColorful",
+      "file": "colorful/32338-71075.svg"
+    },
+    "32338:71076": {
+      "exportName": "UnknownFileTypeColorful",
+      "file": "colorful/32338-71076.svg"
+    },
+    "32338:71077": {
+      "exportName": "FolderFileTypeColorful",
+      "file": "colorful/32338-71077.svg"
+    },
+    "32338:71082": {
+      "exportName": "WordFileTypeColorful",
+      "file": "colorful/32338-71082.svg"
+    },
+    "45132:119394": {
+      "exportName": "AddFolderFileTypeColorful",
+      "file": "colorful/45132-119394.svg"
+    },
+    "37155:19588": {
+      "exportName": "EdgeBrowserColorful",
+      "file": "colorful/37155-19588.svg"
+    },
+    "37155:19590": {
+      "exportName": "BraveBrowserColorful",
+      "file": "colorful/37155-19590.svg"
+    },
+    "37155:19592": {
+      "exportName": "FirefoxBrowserColorful",
+      "file": "colorful/37155-19592.svg"
+    },
+    "37155:19605": {
+      "exportName": "DuckDuckGoBrowserColorful",
+      "file": "colorful/37155-19605.svg"
+    },
+    "37155:19607": {
+      "exportName": "ChromeBrowserColorful",
+      "file": "colorful/37155-19607.svg"
+    },
+    "37155:19617": {
+      "exportName": "OperaBrowserColorful",
+      "file": "colorful/37155-19617.svg"
+    },
+    "37155:19619": {
+      "exportName": "SafariBrowserColorful",
+      "file": "colorful/37155-19619.svg"
+    },
+    "44537:34394": {
+      "exportName": "MacOperatingSystemColorful",
+      "file": "colorful/44537-34394.svg"
+    },
+    "44537:34396": {
+      "exportName": "WindowsOperatingSystemColorful",
+      "file": "colorful/44537-34396.svg"
+    },
+    "44538:34454": {
+      "exportName": "LinuxOperatingSystemColorful",
+      "file": "colorful/44538-34454.svg"
+    },
+    "46015:1900": {
+      "exportName": "MacOperatingSystemGreyColorful",
+      "file": "colorful/46015-1900.svg",
+      "transform": {
+        "paintReplacements": {
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "46015:1903": {
+      "exportName": "WindowsOperatingSystemGreyColorful",
+      "file": "colorful/46015-1903.svg",
+      "transform": {
+        "paintReplacements": {
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "46015:1906": {
+      "exportName": "LinuxOperatingSystemGreyColorful",
+      "file": "colorful/46015-1906.svg",
+      "transform": {
+        "paintReplacements": {
+          "#868C97": "var(--Colors-Use-Neutral-Text-3-Secondary, #868C97)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:34701:3818": "--Colors-Use-Neutral-Text-3-Secondary"
+      }
+    },
+    "44554:2141": {
+      "exportName": "GithubSocialColorful",
+      "file": "colorful/44554-2141.svg"
+    },
+    "44554:2144": {
+      "exportName": "WeChatSocialColorful",
+      "file": "colorful/44554-2144.svg"
+    },
+    "46068:5400": {
+      "exportName": "TwitterSocialColorful",
+      "file": "colorful/46068-5400.svg"
+    },
+    "46069:5411": {
+      "exportName": "BilibiliSocialColorful",
+      "file": "colorful/46069-5411.svg"
+    },
+    "46069:5431": {
+      "exportName": "YouTubeSocialColorful",
+      "file": "colorful/46069-5431.svg"
+    },
+    "46118:7444": {
+      "exportName": "FeishuSocialColorful",
+      "file": "colorful/46118-7444.svg"
+    },
+    "46119:5405": {
+      "exportName": "DingTalkSocialColorful",
+      "file": "colorful/46119-5405.svg"
+    },
+    "46343:2262": {
+      "exportName": "AlipaySocialColorful",
+      "file": "colorful/46343-2262.svg"
+    },
+    "22799:2274": {
+      "exportName": "DockerCodingColorful",
+      "file": "colorful/22799-2274.svg"
+    },
+    "22801:2402": {
+      "exportName": "HadoopCodingColorful",
+      "file": "colorful/22801-2402.svg"
+    },
+    "22801:2404": {
+      "exportName": "CppCodingColorful",
+      "file": "colorful/22801-2404.svg"
+    },
+    "22801:2406": {
+      "exportName": "TypeScriptCodingColorful",
+      "file": "colorful/22801-2406.svg"
+    },
+    "37155:20116": {
+      "exportName": "GitCodingColorful",
+      "file": "colorful/37155-20116.svg"
+    },
+    "37155:20119": {
+      "exportName": "Css3CodingColorful",
+      "file": "colorful/37155-20119.svg"
+    },
+    "37155:20123": {
+      "exportName": "Html5CodingColorful",
+      "file": "colorful/37155-20123.svg"
+    },
+    "37155:20127": {
+      "exportName": "JavaScriptCodingColorful",
+      "file": "colorful/37155-20127.svg"
+    },
+    "37155:20130": {
+      "exportName": "NodeJsCodingColorful",
+      "file": "colorful/37155-20130.svg"
+    },
+    "37155:20132": {
+      "exportName": "BitbucketCodingColorful",
+      "file": "colorful/37155-20132.svg"
+    },
+    "37155:20137": {
+      "exportName": "CodepenCodingColorful",
+      "file": "colorful/37155-20137.svg"
+    },
+    "37155:20140": {
+      "exportName": "VisualStudioCodeCodingColorful",
+      "file": "colorful/37155-20140.svg"
+    },
+    "37155:20145": {
+      "exportName": "JQueryCodingColorful",
+      "file": "colorful/37155-20145.svg"
+    },
+    "37155:20148": {
+      "exportName": "PythonCodingColorful",
+      "file": "colorful/37155-20148.svg"
+    },
+    "37155:20152": {
+      "exportName": "JavaCodingColorful",
+      "file": "colorful/37155-20152.svg"
+    },
+    "37155:20156": {
+      "exportName": "SwiftCodingColorful",
+      "file": "colorful/37155-20156.svg"
+    },
+    "37155:20158": {
+      "exportName": "PhpCodingColorful",
+      "file": "colorful/37155-20158.svg"
+    },
+    "37155:20161": {
+      "exportName": "CSharpCodingColorful",
+      "file": "colorful/37155-20161.svg"
+    },
+    "37155:20168": {
+      "exportName": "RubyCodingColorful",
+      "file": "colorful/37155-20168.svg"
+    },
+    "37155:20188": {
+      "exportName": "AngularCodingColorful",
+      "file": "colorful/37155-20188.svg"
+    },
+    "37155:20193": {
+      "exportName": "VueCodingColorful",
+      "file": "colorful/37155-20193.svg"
+    },
+    "37155:20197": {
+      "exportName": "DrupalCodingColorful",
+      "file": "colorful/37155-20197.svg"
+    },
+    "37155:20200": {
+      "exportName": "JoomlaCodingColorful",
+      "file": "colorful/37155-20200.svg"
+    },
+    "37155:20206": {
+      "exportName": "WordPressCodingColorful",
+      "file": "colorful/37155-20206.svg"
+    },
+    "37155:20209": {
+      "exportName": "ReactCodingColorful",
+      "file": "colorful/37155-20209.svg"
+    },
+    "256:9484": {
+      "exportName": "HorizontalResizeCursorColorful",
+      "file": "colorful/256-9484.svg"
+    },
+    "266:9426": {
+      "exportName": "VerticalResizeCursorColorful",
+      "file": "colorful/266-9426.svg"
+    },
+    "13394:167118": {
+      "exportName": "MouseCursorColorful",
+      "file": "colorful/13394-167118.svg"
+    },
+    "14666:220525": {
+      "exportName": "DisabledCursorColorful",
+      "file": "colorful/14666-220525.svg"
+    },
+    "37153:13454": {
+      "exportName": "HandCursorColorful",
+      "file": "colorful/37153-13454.svg"
+    },
+    "47752:13925": {
+      "exportName": "AIColorful",
+      "file": "colorful/47752-13925.svg",
+      "transform": {
+        "paintReplacements": {
+          "#1B8E9D": "var(--yakit-colors-Lake-blue-80, #1B8E9D)",
+          "#2E7CE7": "var(--yakit-colors-Blue-70, #2E7CE7)",
+          "#DC5CDF": "var(--yakit-colors-Magenta-60, #DC5CDF)",
+          "#FFCE1E": "var(--yakit-colors-Yellow-60, #FFCE1E)"
+        }
+      },
+      "variableTokens": {
+        "VariableID:86376802e98b85d27645d07621727a5d48d5d7b8/38864:421": "--yakit-colors-Lake-blue-80",
+        "VariableID:36e4ec800259a057fb58cc25bbfee1d945cddf21/38864:260": "--yakit-colors-Blue-70",
+        "VariableID:6c63858a469cc65eaadc9a046d0a5ab0e8d923fc/38864:383": "--yakit-colors-Magenta-60",
+        "VariableID:3e3f15528e45abf0d0520865620a308a9b1e4fe4/38864:296": "--yakit-colors-Yellow-60"
+      }
+    },
+    "47588:12657": {
+      "exportName": "AddFileTypeColorful",
+      "file": "colorful/47588-12657.svg"
+    },
+    "47588:12636": {
+      "exportName": "UnknownFileType2Colorful",
+      "file": "colorful/47588-12636.svg"
+    },
+    "47588:12525": {
+      "exportName": "PowerPointFileType2Colorful",
+      "file": "colorful/47588-12525.svg"
+    },
+    "47588:12604": {
+      "exportName": "ExcelFileType2Colorful",
+      "file": "colorful/47588-12604.svg"
+    },
+    "47588:12572": {
+      "exportName": "PdfFileType2Colorful",
+      "file": "colorful/47588-12572.svg"
+    },
+    "47588:12540": {
+      "exportName": "WordFileType2Colorful",
+      "file": "colorful/47588-12540.svg"
+    }
+  },
+  "rules": {}
+}

@@ -1,0 +1,12 @@
+{
+  "sourceAssetEvidence": {
+    "contextTargetImgCount": 1,
+    "contextTargetImgVariables": [
+      "imgBasicOutlineYsoJavaHack"
+    ],
+    "exactComponentNodeExport": false,
+    "contextLayoutComposite": false,
+    "contextFallback": null,
+    "isolatedComponentSubtree": false
+  }
+}

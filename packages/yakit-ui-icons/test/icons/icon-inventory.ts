@@ -1,8 +1,8 @@
-import colorfulSource from '../../config/icon-sources/colorful.json';
 import loadingSource from '../../config/icon-sources/loading.json';
-import oldiconSource from '../../config/icon-sources/oldicon.json';
-import outlineSource from '../../config/icon-sources/outline.json';
-import solidSource from '../../config/icon-sources/solid.json';
+import * as OldIcons from '../../src/oldicon';
+import { colorful as colorfulSource } from '../helpers/sources';
+import { outline as outlineSource } from '../helpers/sources';
+import { solid as solidSource } from '../helpers/sources';
 
 // Expectations come from the maintained sources, not generated barrels or runtime exports.
 const publicColorful = colorfulSource.records.filter(({ publicExposure }) =>
@@ -18,11 +18,7 @@ const rootExports = [
   ...registryExports,
   ...loadingSource.records.map(({ exportName }) => exportName),
 ];
-const oldiconExports = [
-  ...new Set(
-    oldiconSource.records.flatMap(({ sources }) => sources.map(({ exportName }) => exportName)),
-  ),
-];
+const oldiconExports = Object.keys(OldIcons);
 export const iconExports = {
   ...familyExports,
   registry: registryExports,
@@ -50,14 +46,8 @@ export const iconSourceFiles = [
     ...colorfulSource.records
       .filter(({ localFile }) => localFile)
       .map(({ localFile }) => `icons/${localFile}`),
-    ...oldiconSource.records.map(({ assetFile }) => `icons/oldicon/${assetFile}`),
+    ...Object.keys(import.meta.glob('../../src/oldicon/assets/*.svg')).map((file) =>
+      file.replace('../../src/', 'icons/'),
+    ),
   ]),
 ].sort();
-
-export const oldiconSourceCounts = {
-  entries: oldiconSource.records.reduce((count, row) => count + row.sources.length, 0),
-  repaired: oldiconSource.records.reduce(
-    (count, row) => count + row.sources.filter((source) => source.repairs.length > 0).length,
-    0,
-  ),
-};

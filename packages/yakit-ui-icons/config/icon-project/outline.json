@@ -1,0 +1,1616 @@
+{
+  "schemaVersion": 1,
+  "records": {
+    "1:2087": {
+      "exportName": "MailOutlined",
+      "file": "outline/1-2087.svg"
+    },
+    "1:2089": {
+      "exportName": "LocationMarkerOutlined",
+      "file": "outline/1-2089.svg"
+    },
+    "1:2091": {
+      "exportName": "ColorSwatchOutlined",
+      "file": "outline/1-2091.svg"
+    },
+    "1:2093": {
+      "exportName": "MenuOutlined",
+      "file": "outline/1-2093.svg"
+    },
+    "1:2095": {
+      "exportName": "QuestionMarkCircleOutlined",
+      "file": "outline/1-2095.svg"
+    },
+    "22849:135002": {
+      "exportName": "StethoscopeOutlined",
+      "file": "outline/22849-135002.svg"
+    },
+    "1:2097": {
+      "exportName": "CameraOutlined",
+      "file": "outline/1-2097.svg"
+    },
+    "1:2099": {
+      "exportName": "MailOpenOutlined",
+      "file": "outline/1-2099.svg"
+    },
+    "1:2101": {
+      "exportName": "ArrowUpOutlined",
+      "file": "outline/1-2101.svg"
+    },
+    "1:2103": {
+      "exportName": "XCircleOutlined",
+      "file": "outline/1-2103.svg"
+    },
+    "1:2105": {
+      "exportName": "DotsHorizontalOutlined",
+      "file": "outline/1-2105.svg"
+    },
+    "1:2107": {
+      "exportName": "CurrencyDollarOutlined",
+      "file": "outline/1-2107.svg"
+    },
+    "1:2109": {
+      "exportName": "ChatOutlined",
+      "file": "outline/1-2109.svg"
+    },
+    "1:2111": {
+      "exportName": "BellOutlined",
+      "file": "outline/1-2111.svg"
+    },
+    "1:2113": {
+      "exportName": "UserOutlined",
+      "file": "outline/1-2113.svg"
+    },
+    "1:2115": {
+      "exportName": "InboxOutlined",
+      "file": "outline/1-2115.svg"
+    },
+    "1:2117": {
+      "exportName": "MenuAlt1Outlined",
+      "file": "outline/1-2117.svg"
+    },
+    "1:2119": {
+      "exportName": "ExclamationOutlined",
+      "file": "outline/1-2119.svg"
+    },
+    "1:2121": {
+      "exportName": "GlobeAltOutlined",
+      "file": "outline/1-2121.svg"
+    },
+    "1:2123": {
+      "exportName": "DocumentDuplicateOutlined",
+      "file": "outline/1-2123.svg"
+    },
+    "1:2125": {
+      "exportName": "ArrowRightOutlined",
+      "file": "outline/1-2125.svg"
+    },
+    "1:2127": {
+      "exportName": "CheckCircleOutlined",
+      "file": "outline/1-2127.svg"
+    },
+    "1:2129": {
+      "exportName": "DotsVerticalOutlined",
+      "file": "outline/1-2129.svg"
+    },
+    "1:2131": {
+      "exportName": "CurrencyYenOutlined",
+      "file": "outline/1-2131.svg"
+    },
+    "1:2133": {
+      "exportName": "ReceiptRefundOutlined",
+      "file": "outline/1-2133.svg"
+    },
+    "1:2135": {
+      "exportName": "HomeOutlined",
+      "file": "outline/1-2135.svg"
+    },
+    "1:2137": {
+      "exportName": "UsersOutlined",
+      "file": "outline/1-2137.svg"
+    },
+    "1:2139": {
+      "exportName": "InboxInOutlined",
+      "file": "outline/1-2139.svg"
+    },
+    "1:2141": {
+      "exportName": "MenuAlt2Outlined",
+      "file": "outline/1-2141.svg"
+    },
+    "1:2143": {
+      "exportName": "DuplicateOutlined",
+      "file": "outline/1-2143.svg"
+    },
+    "1:2145": {
+      "exportName": "CreditCardOutlined",
+      "file": "outline/1-2145.svg"
+    },
+    "1:2147": {
+      "exportName": "ArrowDownOutlined",
+      "file": "outline/1-2147.svg"
+    },
+    "1:2149": {
+      "exportName": "ExclamationCircleOutlined",
+      "file": "outline/1-2149.svg"
+    },
+    "1:2151": {
+      "exportName": "UploadOutlined",
+      "file": "outline/1-2151.svg"
+    },
+    "1:2153": {
+      "exportName": "CurrencyEuroOutlined",
+      "file": "outline/1-2153.svg"
+    },
+    "1:2155": {
+      "exportName": "TicketOutlined",
+      "file": "outline/1-2155.svg"
+    },
+    "1:2157": {
+      "exportName": "BriefcaseOutlined",
+      "file": "outline/1-2157.svg"
+    },
+    "1:2159": {
+      "exportName": "UserGroupOutlined",
+      "file": "outline/1-2159.svg"
+    },
+    "1:2161": {
+      "exportName": "ArchiveOutlined",
+      "file": "outline/1-2161.svg"
+    },
+    "1:2163": {
+      "exportName": "MenuAlt3Outlined",
+      "file": "outline/1-2163.svg"
+    },
+    "1:2165": {
+      "exportName": "ShareOutlined",
+      "file": "outline/1-2165.svg"
+    },
+    "1:2167": {
+      "exportName": "LockClosedOutlined",
+      "file": "outline/1-2167.svg"
+    },
+    "1:2169": {
+      "exportName": "ArrowLeftOutlined",
+      "file": "outline/1-2169.svg"
+    },
+    "1:2171": {
+      "exportName": "PlusCircleOutlined",
+      "file": "outline/1-2171.svg"
+    },
+    "1:2173": {
+      "exportName": "DownloadOutlined",
+      "file": "outline/1-2173.svg"
+    },
+    "1:2175": {
+      "exportName": "CurrencyPoundOutlined",
+      "file": "outline/1-2175.svg"
+    },
+    "1:2177": {
+      "exportName": "LockOpenOutlined",
+      "file": "outline/1-2177.svg"
+    },
+    "1:2179": {
+      "exportName": "ShieldCheckOutlined",
+      "file": "outline/1-2179.svg"
+    },
+    "1:2181": {
+      "exportName": "OfficeBuildingOutlined",
+      "file": "outline/1-2181.svg"
+    },
+    "1:2183": {
+      "exportName": "ClockOutlined",
+      "file": "outline/1-2183.svg"
+    },
+    "37483:99837": {
+      "exportName": "PositionOutlined",
+      "file": "outline/37483-99837.svg"
+    },
+    "37690:1987": {
+      "exportName": "List1Outlined",
+      "file": "outline/37690-1987.svg"
+    },
+    "37690:1986": {
+      "exportName": "List2Outlined",
+      "file": "outline/37690-1986.svg"
+    },
+    "37831:7414": {
+      "exportName": "PillOutlined",
+      "file": "outline/37831-7414.svg"
+    },
+    "1:2185": {
+      "exportName": "MenuAlt4Outlined",
+      "file": "outline/1-2185.svg"
+    },
+    "1:2187": {
+      "exportName": "ChartPieOutlined",
+      "file": "outline/1-2187.svg"
+    },
+    "1:2189": {
+      "exportName": "HeartOutlined",
+      "file": "outline/1-2189.svg"
+    },
+    "1:2191": {
+      "exportName": "TrendingUpOutlined",
+      "file": "outline/1-2191.svg"
+    },
+    "1:2193": {
+      "exportName": "ArrowCircleRightOutlined",
+      "file": "outline/1-2193.svg"
+    },
+    "1:2195": {
+      "exportName": "MinusCircleOutlined",
+      "file": "outline/1-2195.svg"
+    },
+    "22915:169930": {
+      "exportName": "AbandonOutlined",
+      "file": "outline/22915-169930.svg"
+    },
+    "1:2197": {
+      "exportName": "ViewListOutlined",
+      "file": "outline/1-2197.svg"
+    },
+    "1:2199": {
+      "exportName": "CurrencyRupeeOutlined",
+      "file": "outline/1-2199.svg"
+    },
+    "1:2201": {
+      "exportName": "DotsCircleHorizontalOutlined",
+      "file": "outline/1-2201.svg"
+    },
+    "1:2203": {
+      "exportName": "ShieldExclamationOutlined",
+      "file": "outline/1-2203.svg"
+    },
+    "1:2205": {
+      "exportName": "ScaleOutlined",
+      "file": "outline/1-2205.svg"
+    },
+    "1:2207": {
+      "exportName": "PhotographOutlined",
+      "file": "outline/1-2207.svg"
+    },
+    "1:2209": {
+      "exportName": "SwitchVerticalOutlined",
+      "file": "outline/1-2209.svg"
+    },
+    "1:2211": {
+      "exportName": "DocumentOutlined",
+      "file": "outline/1-2211.svg"
+    },
+    "1:2213": {
+      "exportName": "GlobeOutlined",
+      "file": "outline/1-2213.svg"
+    },
+    "1:2215": {
+      "exportName": "TrendingDownOutlined",
+      "file": "outline/1-2215.svg"
+    },
+    "1:2217": {
+      "exportName": "ArrowCircleDownOutlined",
+      "file": "outline/1-2217.svg"
+    },
+    "1:2219": {
+      "exportName": "UserCircleOutlined",
+      "file": "outline/1-2219.svg"
+    },
+    "1:2221": {
+      "exportName": "ViewBoardsOutlined",
+      "file": "outline/1-2221.svg"
+    },
+    "1:2223": {
+      "exportName": "ChevronDownOutlined",
+      "file": "outline/1-2223.svg"
+    },
+    "1:2225": {
+      "exportName": "HashtagOutlined",
+      "file": "outline/1-2225.svg"
+    },
+    "1:2227": {
+      "exportName": "CogOutlined",
+      "file": "outline/1-2227.svg"
+    },
+    "1:2229": {
+      "exportName": "PencilAltOutlined",
+      "file": "outline/1-2229.svg"
+    },
+    "1:2231": {
+      "exportName": "TagOutlined",
+      "file": "outline/1-2231.svg"
+    },
+    "1:2233": {
+      "exportName": "SwitchHorizontalOutlined",
+      "file": "outline/1-2233.svg"
+    },
+    "1:2235": {
+      "exportName": "DocumentDownloadOutlined",
+      "file": "outline/1-2235.svg"
+    },
+    "1:2237": {
+      "exportName": "VolumeUpOutlined",
+      "file": "outline/1-2237.svg"
+    },
+    "1:2239": {
+      "exportName": "FilterOutlined",
+      "file": "outline/1-2239.svg"
+    },
+    "1:2241": {
+      "exportName": "ArrowCircleLeftOutlined",
+      "file": "outline/1-2241.svg"
+    },
+    "1:2243": {
+      "exportName": "ZoomInOutlined",
+      "file": "outline/1-2243.svg"
+    },
+    "1:2245": {
+      "exportName": "PaperClipOutlined",
+      "file": "outline/1-2245.svg"
+    },
+    "1:2247": {
+      "exportName": "ChevronRightOutlined",
+      "file": "outline/1-2247.svg"
+    },
+    "1:2249": {
+      "exportName": "QrcodeOutlined",
+      "file": "outline/1-2249.svg"
+    },
+    "1:2251": {
+      "exportName": "CheckOutlined",
+      "file": "outline/1-2251.svg"
+    },
+    "1:2253": {
+      "exportName": "PencilOutlined",
+      "file": "outline/1-2253.svg"
+    },
+    "1:2255": {
+      "exportName": "PhoneOutlined",
+      "file": "outline/1-2255.svg"
+    },
+    "1:2257": {
+      "exportName": "XOutlined",
+      "file": "outline/1-2257.svg"
+    },
+    "1:2259": {
+      "exportName": "DocumentAddOutlined",
+      "file": "outline/1-2259.svg"
+    },
+    "1:2261": {
+      "exportName": "VolumeOffOutlined",
+      "file": "outline/1-2261.svg"
+    },
+    "1:2263": {
+      "exportName": "AtSymbolOutlined",
+      "file": "outline/1-2263.svg"
+    },
+    "1:2265": {
+      "exportName": "ArrowCircleUpOutlined",
+      "file": "outline/1-2265.svg"
+    },
+    "1:2267": {
+      "exportName": "ZoomOutOutlined",
+      "file": "outline/1-2267.svg"
+    },
+    "1:2269": {
+      "exportName": "EmojiHappyOutlined",
+      "file": "outline/1-2269.svg"
+    },
+    "1:2271": {
+      "exportName": "ChevronUpOutlined",
+      "file": "outline/1-2271.svg"
+    },
+    "1:2273": {
+      "exportName": "ClipboardCheckOutlined",
+      "file": "outline/1-2273.svg"
+    },
+    "1:2275": {
+      "exportName": "TranslateOutlined",
+      "file": "outline/1-2275.svg"
+    },
+    "1:2277": {
+      "exportName": "EyeOutlined",
+      "file": "outline/1-2277.svg"
+    },
+    "1:2279": {
+      "exportName": "PhoneOutgoingOutlined",
+      "file": "outline/1-2279.svg"
+    },
+    "1:2281": {
+      "exportName": "PlusOutlined",
+      "file": "outline/1-2281.svg"
+    },
+    "1:2283": {
+      "exportName": "DocumentRemoveOutlined",
+      "file": "outline/1-2283.svg"
+    },
+    "1:2285": {
+      "exportName": "AdjustmentsOutlined",
+      "file": "outline/1-2285.svg"
+    },
+    "1:2287": {
+      "exportName": "TrashOutlined",
+      "file": "outline/1-2287.svg"
+    },
+    "30492:93384": {
+      "exportName": "Trash2Outlined",
+      "file": "outline/30492-93384.svg"
+    },
+    "3101:83797": {
+      "exportName": "RobotOutlined",
+      "file": "outline/3101-83797.svg"
+    },
+    "1855:45419": {
+      "exportName": "LargeWindowOutlined",
+      "file": "outline/1855-45419.svg"
+    },
+    "280:11782": {
+      "exportName": "Play2Outlined",
+      "file": "outline/280-11782.svg"
+    },
+    "280:11794": {
+      "exportName": "LogOutOutlined",
+      "file": "outline/280-11794.svg"
+    },
+    "350:20585": {
+      "exportName": "ScreenshotOutlined",
+      "file": "outline/350-20585.svg"
+    },
+    "287:15134": {
+      "exportName": "ArrowsCollapseOutlined",
+      "file": "outline/287-15134.svg"
+    },
+    "1:3136": {
+      "exportName": "BugOutlined",
+      "file": "outline/1-3136.svg"
+    },
+    "6562:207833": {
+      "exportName": "ChromeOutlined",
+      "file": "outline/6562-207833.svg"
+    },
+    "6708:131177": {
+      "exportName": "RemoteOutlined",
+      "file": "outline/6708-131177.svg"
+    },
+    "6695:131133": {
+      "exportName": "PlugsOutlined",
+      "file": "outline/6695-131133.svg"
+    },
+    "201:7756": {
+      "exportName": "ExportOutlined",
+      "file": "outline/201-7756.svg"
+    },
+    "6480:193584": {
+      "exportName": "ImportOutlined",
+      "file": "outline/6480-193584.svg"
+    },
+    "8739:166467": {
+      "exportName": "LogOutlined",
+      "file": "outline/8739-166467.svg"
+    },
+    "8990:150359": {
+      "exportName": "Log2Outlined",
+      "file": "outline/8990-150359.svg"
+    },
+    "37148:26363": {
+      "exportName": "ScreenShareOffOutlined",
+      "file": "outline/37148-26363.svg"
+    },
+    "37148:26362": {
+      "exportName": "ScreenShareOutlined",
+      "file": "outline/37148-26362.svg"
+    },
+    "233:8925": {
+      "exportName": "Filter2Outlined",
+      "file": "outline/233-8925.svg"
+    },
+    "34227:111185": {
+      "exportName": "Compilation2Outlined",
+      "file": "outline/34227-111185.svg"
+    },
+    "34819:6674": {
+      "exportName": "FlowOutlined",
+      "file": "outline/34819-6674.svg"
+    },
+    "1:3058": {
+      "exportName": "Link2Outlined",
+      "file": "outline/1-3058.svg"
+    },
+    "1:3057": {
+      "exportName": "LinkoutOutlined",
+      "file": "outline/1-3057.svg"
+    },
+    "18256:183881": {
+      "exportName": "ArchiveRestoreOutlined",
+      "file": "outline/18256-183881.svg"
+    },
+    "18256:183882": {
+      "exportName": "ArrowBigUpOutlined",
+      "file": "outline/18256-183882.svg"
+    },
+    "18256:183883": {
+      "exportName": "FileUpOutlined",
+      "file": "outline/18256-183883.svg"
+    },
+    "34227:111184": {
+      "exportName": "CompilationOutlined",
+      "file": "outline/34227-111184.svg"
+    },
+    "28376:283": {
+      "exportName": "Link2OffOutlined",
+      "file": "outline/28376-283.svg"
+    },
+    "28376:288": {
+      "exportName": "Link2Figma28376288Outlined",
+      "file": "outline/28376-288.svg"
+    },
+    "1:2289": {
+      "exportName": "SortAscendingOutlined",
+      "file": "outline/1-2289.svg"
+    },
+    "1:2291": {
+      "exportName": "SearchOutlined",
+      "file": "outline/1-2291.svg"
+    },
+    "1:2293": {
+      "exportName": "EmojiSadOutlined",
+      "file": "outline/1-2293.svg"
+    },
+    "1:2295": {
+      "exportName": "ChevronLeftOutlined",
+      "file": "outline/1-2295.svg"
+    },
+    "1:2297": {
+      "exportName": "ClipboardListOutlined",
+      "file": "outline/1-2297.svg"
+    },
+    "1:2299": {
+      "exportName": "CashOutlined",
+      "file": "outline/1-2299.svg"
+    },
+    "1:2301": {
+      "exportName": "BookmarkOutlined",
+      "file": "outline/1-2301.svg"
+    },
+    "1:2303": {
+      "exportName": "PhoneIncomingOutlined",
+      "file": "outline/1-2303.svg"
+    },
+    "1:2305": {
+      "exportName": "RefreshOutlined",
+      "file": "outline/1-2305.svg"
+    },
+    "1:2307": {
+      "exportName": "CalendarOutlined",
+      "file": "outline/1-2307.svg"
+    },
+    "1:2309": {
+      "exportName": "Link1Outlined",
+      "file": "outline/1-2309.svg"
+    },
+    "1:2311": {
+      "exportName": "InformationCircleOutlined",
+      "file": "outline/1-2311.svg"
+    },
+    "1:2313": {
+      "exportName": "SortDescendingOutlined",
+      "file": "outline/1-2313.svg"
+    },
+    "1:2315": {
+      "exportName": "UserAddOutlined",
+      "file": "outline/1-2315.svg"
+    },
+    "1:2317": {
+      "exportName": "PrinterOutlined",
+      "file": "outline/1-2317.svg"
+    },
+    "1:2319": {
+      "exportName": "SelectorOutlined",
+      "file": "outline/1-2319.svg"
+    },
+    "1:2321": {
+      "exportName": "ClipboardOutlined",
+      "file": "outline/1-2321.svg"
+    },
+    "1:2323": {
+      "exportName": "CakeOutlined",
+      "file": "outline/1-2323.svg"
+    },
+    "1:2325": {
+      "exportName": "DocumentSearchOutlined",
+      "file": "outline/1-2325.svg"
+    },
+    "1:2327": {
+      "exportName": "ChipOutlined",
+      "file": "outline/1-2327.svg"
+    },
+    "4866:167279": {
+      "exportName": "EngineOutlined",
+      "file": "outline/4866-167279.svg"
+    },
+    "5237:120699": {
+      "exportName": "LoadingOutlined",
+      "file": "outline/5237-120699.svg"
+    },
+    "1:2329": {
+      "exportName": "AcademicCapOutlined",
+      "file": "outline/1-2329.svg"
+    },
+    "1:2331": {
+      "exportName": "VariableOutlined",
+      "file": "outline/1-2331.svg"
+    },
+    "1:2333": {
+      "exportName": "CubeTransparentOutlined",
+      "file": "outline/1-2333.svg"
+    },
+    "1:2335": {
+      "exportName": "ExternalLinkOutlined",
+      "file": "outline/1-2335.svg"
+    },
+    "1:2337": {
+      "exportName": "SunOutlined",
+      "file": "outline/1-2337.svg",
+      "defaultColor": "#0A0A0A"
+    },
+    "1:2339": {
+      "exportName": "MoonOutlined",
+      "file": "outline/1-2339.svg"
+    },
+    "1:2341": {
+      "exportName": "ClipboardCopyOutlined",
+      "file": "outline/1-2341.svg"
+    },
+    "1:2343": {
+      "exportName": "AnnotationOutlined",
+      "file": "outline/1-2343.svg"
+    },
+    "38768:9896": {
+      "exportName": "AnnotationCloseOutlined",
+      "file": "outline/38768-9896.svg"
+    },
+    "1:2345": {
+      "exportName": "FlagOutlined",
+      "file": "outline/1-2345.svg"
+    },
+    "1:2347": {
+      "exportName": "CollectionOutlined",
+      "file": "outline/1-2347.svg"
+    },
+    "1:2349": {
+      "exportName": "BookOpenOutlined",
+      "file": "outline/1-2349.svg"
+    },
+    "1:2351": {
+      "exportName": "CodeOutlined",
+      "file": "outline/1-2351.svg"
+    },
+    "1:2353": {
+      "exportName": "LightningBoltOutlined",
+      "file": "outline/1-2353.svg"
+    },
+    "1:2355": {
+      "exportName": "ViewGridOutlined",
+      "file": "outline/1-2355.svg"
+    },
+    "1:2357": {
+      "exportName": "FolderOutlined",
+      "file": "outline/1-2357.svg"
+    },
+    "1:2359": {
+      "exportName": "SparklesOutlined",
+      "file": "outline/1-2359.svg"
+    },
+    "1:2361": {
+      "exportName": "IconUserRemoveOutlined",
+      "file": "outline/1-2361.svg"
+    },
+    "1:2363": {
+      "exportName": "ArrowNarrowUpOutlined",
+      "file": "outline/1-2363.svg"
+    },
+    "1:2365": {
+      "exportName": "ArrowNarrowRightOutlined",
+      "file": "outline/1-2365.svg"
+    },
+    "1:2367": {
+      "exportName": "ArrowNarrowDownOutlined",
+      "file": "outline/1-2367.svg"
+    },
+    "1:2369": {
+      "exportName": "ArrowNarrowLeftOutlined",
+      "file": "outline/1-2369.svg"
+    },
+    "1:2371": {
+      "exportName": "TemplateOutlined",
+      "file": "outline/1-2371.svg"
+    },
+    "1:2373": {
+      "exportName": "ReplyOutlined",
+      "file": "outline/1-2373.svg"
+    },
+    "1:2375": {
+      "exportName": "LightBulbOutlined",
+      "file": "outline/1-2375.svg"
+    },
+    "1:2377": {
+      "exportName": "ShoppingCartOutlined",
+      "file": "outline/1-2377.svg"
+    },
+    "1:2379": {
+      "exportName": "BadgeCheckOutlined",
+      "file": "outline/1-2379.svg"
+    },
+    "1:2381": {
+      "exportName": "CursorClickOutlined",
+      "file": "outline/1-2381.svg"
+    },
+    "1:2383": {
+      "exportName": "KeyOutlined",
+      "file": "outline/1-2383.svg"
+    },
+    "1:2385": {
+      "exportName": "MicrophoneOutlined",
+      "file": "outline/1-2385.svg"
+    },
+    "1:2387": {
+      "exportName": "DocumentReportOutlined",
+      "file": "outline/1-2387.svg"
+    },
+    "1:2389": {
+      "exportName": "LoginOutlined",
+      "file": "outline/1-2389.svg"
+    },
+    "1:2391": {
+      "exportName": "SpeakerphoneOutlined",
+      "file": "outline/1-2391.svg"
+    },
+    "1:2393": {
+      "exportName": "BanOutlined",
+      "file": "outline/1-2393.svg"
+    },
+    "1:2395": {
+      "exportName": "ChatAltOutlined",
+      "file": "outline/1-2395.svg"
+    },
+    "1:2397": {
+      "exportName": "BookmarkAltOutlined",
+      "file": "outline/1-2397.svg"
+    },
+    "1:2399": {
+      "exportName": "NewspaperOutlined",
+      "file": "outline/1-2399.svg"
+    },
+    "1:2401": {
+      "exportName": "SmViewGridAddOutlined",
+      "file": "outline/1-2401.svg"
+    },
+    "1:2403": {
+      "exportName": "PlayOutlined",
+      "file": "outline/1-2403.svg"
+    },
+    "1:2405": {
+      "exportName": "PauseOutlined",
+      "file": "outline/1-2405.svg"
+    },
+    "1:2407": {
+      "exportName": "SupportOutlined",
+      "file": "outline/1-2407.svg"
+    },
+    "1:2409": {
+      "exportName": "ChartBarOutlined",
+      "file": "outline/1-2409.svg"
+    },
+    "1:2411": {
+      "exportName": "TerminalOutlined",
+      "file": "outline/1-2411.svg"
+    },
+    "1:2413": {
+      "exportName": "StarOutlined",
+      "file": "outline/1-2413.svg"
+    },
+    "38678:28634": {
+      "exportName": "StarOffOutlined",
+      "file": "outline/38678-28634.svg",
+      "sourceForegroundPaints": [
+        {
+          "tag": "path",
+          "d": "M3.6001 1.19995L22.2677 19.8676",
+          "attribute": "stroke",
+          "value": "white"
+        }
+      ]
+    },
+    "1:2415": {
+      "exportName": "ChartSquareBarOutlined",
+      "file": "outline/1-2415.svg"
+    },
+    "1:2417": {
+      "exportName": "EyeOffOutlined",
+      "file": "outline/1-2417.svg"
+    },
+    "1:2419": {
+      "exportName": "LibraryOutlined",
+      "file": "outline/1-2419.svg"
+    },
+    "1:2421": {
+      "exportName": "DesktopComputerOutlined",
+      "file": "outline/1-2421.svg"
+    },
+    "1:2423": {
+      "exportName": "ChatAlt2Outlined",
+      "file": "outline/1-2423.svg"
+    },
+    "1:2425": {
+      "exportName": "StopOutlined",
+      "file": "outline/1-2425.svg"
+    },
+    "1:2427": {
+      "exportName": "FireOutlined",
+      "file": "outline/1-2427.svg"
+    },
+    "1:2429": {
+      "exportName": "ShoppingBagOutlined",
+      "file": "outline/1-2429.svg"
+    },
+    "1:2431": {
+      "exportName": "ThumbUpOutlined",
+      "file": "outline/1-2431.svg"
+    },
+    "1:2433": {
+      "exportName": "ThumbDownOutlined",
+      "file": "outline/1-2433.svg"
+    },
+    "1:2435": {
+      "exportName": "HandOutlined",
+      "file": "outline/1-2435.svg"
+    },
+    "1:2437": {
+      "exportName": "ArrowsExpandOutlined",
+      "file": "outline/1-2437.svg"
+    },
+    "1:2439": {
+      "exportName": "PuzzleOutlined",
+      "file": "outline/1-2439.svg"
+    },
+    "1:2441": {
+      "exportName": "FolderDownloadOutlined",
+      "file": "outline/1-2441.svg"
+    },
+    "1:2443": {
+      "exportName": "FolderAddOutlined",
+      "file": "outline/1-2443.svg"
+    },
+    "1:2445": {
+      "exportName": "FolderRemoveOutlined",
+      "file": "outline/1-2445.svg"
+    },
+    "1:2447": {
+      "exportName": "CalculatorOutlined",
+      "file": "outline/1-2447.svg"
+    },
+    "1:2449": {
+      "exportName": "TableOutlined",
+      "file": "outline/1-2449.svg"
+    },
+    "1:2451": {
+      "exportName": "CurrencyBangladeshiOutlined",
+      "file": "outline/1-2451.svg"
+    },
+    "1:2453": {
+      "exportName": "DocumentTextOutlined",
+      "file": "outline/1-2453.svg"
+    },
+    "1:2455": {
+      "exportName": "BeakerOutlined",
+      "file": "outline/1-2455.svg"
+    },
+    "1:2457": {
+      "exportName": "GiftOutlined",
+      "file": "outline/1-2457.svg"
+    },
+    "1:2459": {
+      "exportName": "VideoCameraOutlined",
+      "file": "outline/1-2459.svg"
+    },
+    "1:2461": {
+      "exportName": "TruckOutlined",
+      "file": "outline/1-2461.svg"
+    },
+    "1:2463": {
+      "exportName": "DeviceTabletOutlined",
+      "file": "outline/1-2463.svg"
+    },
+    "1:2465": {
+      "exportName": "MapOutlined",
+      "file": "outline/1-2465.svg"
+    },
+    "1:2467": {
+      "exportName": "IdentificationOutlined",
+      "file": "outline/1-2467.svg"
+    },
+    "1:2469": {
+      "exportName": "RssOutlined",
+      "file": "outline/1-2469.svg"
+    },
+    "1:2471": {
+      "exportName": "CloudUploadOutlined",
+      "file": "outline/1-2471.svg"
+    },
+    "1:2473": {
+      "exportName": "ScissorsOutlined",
+      "file": "outline/1-2473.svg"
+    },
+    "1:2475": {
+      "exportName": "SaveOutlined",
+      "file": "outline/1-2475.svg"
+    },
+    "1:2477": {
+      "exportName": "PaperAirplaneOutlined",
+      "file": "outline/1-2477.svg"
+    },
+    "1:2479": {
+      "exportName": "BackspaceOutlined",
+      "file": "outline/1-2479.svg"
+    },
+    "1:2481": {
+      "exportName": "MusicNoteOutlined",
+      "file": "outline/1-2481.svg"
+    },
+    "1:2483": {
+      "exportName": "FilmOutlined",
+      "file": "outline/1-2483.svg"
+    },
+    "1:2485": {
+      "exportName": "DatabaseOutlined",
+      "file": "outline/1-2485.svg"
+    },
+    "1:2487": {
+      "exportName": "LogoutOutlined",
+      "file": "outline/1-2487.svg"
+    },
+    "1:2489": {
+      "exportName": "DeviceMobileOutlined",
+      "file": "outline/1-2489.svg"
+    },
+    "1:2491": {
+      "exportName": "ChevronDoubleRightOutlined",
+      "file": "outline/1-2491.svg"
+    },
+    "1:2493": {
+      "exportName": "ChevronDoubleDownOutlined",
+      "file": "outline/1-2493.svg"
+    },
+    "1:2495": {
+      "exportName": "ChevronDoubleLeftOutlined",
+      "file": "outline/1-2495.svg"
+    },
+    "1:2497": {
+      "exportName": "ChevronDoubleUpOutlined",
+      "file": "outline/1-2497.svg"
+    },
+    "1:2499": {
+      "exportName": "FingerPrintOutlined",
+      "file": "outline/1-2499.svg"
+    },
+    "1:2501": {
+      "exportName": "CubeOutlined",
+      "file": "outline/1-2501.svg"
+    },
+    "1:2503": {
+      "exportName": "CloudDownloadOutlined",
+      "file": "outline/1-2503.svg"
+    },
+    "1:2505": {
+      "exportName": "FolderOpenOutlined",
+      "file": "outline/1-2505.svg"
+    },
+    "1:2507": {
+      "exportName": "ServerOutlined",
+      "file": "outline/1-2507.svg"
+    },
+    "1:2509": {
+      "exportName": "SaveAsOutlined",
+      "file": "outline/1-2509.svg"
+    },
+    "1:2511": {
+      "exportName": "WifiOutlined",
+      "file": "outline/1-2511.svg"
+    },
+    "1:2513": {
+      "exportName": "PhoneMissedCallOutlined",
+      "file": "outline/1-2513.svg"
+    },
+    "1:2515": {
+      "exportName": "PlusSmOutlined",
+      "file": "outline/1-2515.svg"
+    },
+    "1:2517": {
+      "exportName": "MinusSmOutlined",
+      "file": "outline/1-2517.svg"
+    },
+    "1:2519": {
+      "exportName": "PresentationChartLineOutlined",
+      "file": "outline/1-2519.svg"
+    },
+    "1:2521": {
+      "exportName": "StatusOnlineOutlined",
+      "file": "outline/1-2521.svg"
+    },
+    "1:2523": {
+      "exportName": "StatusOfflineOutlined",
+      "file": "outline/1-2523.svg"
+    },
+    "1:2525": {
+      "exportName": "ReceiptTaxOutlined",
+      "file": "outline/1-2525.svg"
+    },
+    "1:2527": {
+      "exportName": "FastForwardOutlined",
+      "file": "outline/1-2527.svg"
+    },
+    "1:2529": {
+      "exportName": "RewindOutlined",
+      "file": "outline/1-2529.svg"
+    },
+    "1:2531": {
+      "exportName": "PresentationChartBarOutlined",
+      "file": "outline/1-2531.svg"
+    },
+    "1:2533": {
+      "exportName": "CloudOutlined",
+      "file": "outline/1-2533.svg"
+    },
+    "1:2535": {
+      "exportName": "SearchCircleOutlined",
+      "file": "outline/1-2535.svg"
+    },
+    "1:2537": {
+      "exportName": "MinusOutlined",
+      "file": "outline/1-2537.svg"
+    },
+    "1:2993": {
+      "exportName": "ArrowSmUpOutlined",
+      "file": "outline/1-2993.svg"
+    },
+    "1:2995": {
+      "exportName": "ArrowSmRightOutlined",
+      "file": "outline/1-2995.svg"
+    },
+    "1:2997": {
+      "exportName": "ArrowSmDownOutlined",
+      "file": "outline/1-2997.svg"
+    },
+    "1:2999": {
+      "exportName": "ArrowSmLeftOutlined",
+      "file": "outline/1-2999.svg"
+    },
+    "9061:150407": {
+      "exportName": "CameraFigma9061150407Outlined",
+      "file": "outline/9061-150407.svg"
+    },
+    "11100:165929": {
+      "exportName": "LineBreakOutlined",
+      "file": "outline/11100-165929.svg"
+    },
+    "13208:172881": {
+      "exportName": "StorageOutlined",
+      "file": "outline/13208-172881.svg"
+    },
+    "14203:193637": {
+      "exportName": "RocketOffOutlined",
+      "file": "outline/14203-193637.svg"
+    },
+    "37148:25909": {
+      "exportName": "RocketOutlined",
+      "file": "outline/37148-25909.svg"
+    },
+    "37148:25910": {
+      "exportName": "RocketLaunchOutlined",
+      "file": "outline/37148-25910.svg"
+    },
+    "14203:193724": {
+      "exportName": "RocketLaunchOffOutlined",
+      "file": "outline/14203-193724.svg",
+      "sourceForegroundPaints": [
+        {
+          "tag": "path",
+          "d": "M3.6001 1.19995L22.2677 19.8676",
+          "attribute": "stroke",
+          "value": "white"
+        }
+      ]
+    },
+    "31752:46880": {
+      "exportName": "Wrench1Outlined",
+      "file": "outline/31752-46880.svg"
+    },
+    "18256:183879": {
+      "exportName": "CloseOutlined",
+      "file": "outline/18256-183879.svg"
+    },
+    "18256:183880": {
+      "exportName": "OpenOutlined",
+      "file": "outline/18256-183880.svg"
+    },
+    "22849:134660": {
+      "exportName": "SplitScreenOutlined",
+      "file": "outline/22849-134660.svg"
+    },
+    "22971:301511": {
+      "exportName": "Variable2Outlined",
+      "file": "outline/22971-301511.svg"
+    },
+    "15106:225789": {
+      "exportName": "DatabaseBackupOutlined",
+      "file": "outline/15106-225789.svg"
+    },
+    "16884:235418": {
+      "exportName": "ScanOutlined",
+      "file": "outline/16884-235418.svg"
+    },
+    "17117:250680": {
+      "exportName": "AddPayloadOutlined",
+      "file": "outline/17117-250680.svg"
+    },
+    "22425:254701": {
+      "exportName": "PaintbrushOutlined",
+      "file": "outline/22425-254701.svg"
+    },
+    "40049:68240": {
+      "exportName": "ListOrderedOutlined",
+      "file": "outline/40049-68240.svg"
+    },
+    "40049:68242": {
+      "exportName": "ListTodoOutlined",
+      "file": "outline/40049-68242.svg"
+    },
+    "38736:91125": {
+      "exportName": "WandSparklesOutlined",
+      "file": "outline/38736-91125.svg"
+    },
+    "38736:91127": {
+      "exportName": "WandOutlined",
+      "file": "outline/38736-91127.svg"
+    },
+    "38799:19764": {
+      "exportName": "AtomOutlined",
+      "file": "outline/38799-19764.svg"
+    },
+    "39233:37845": {
+      "exportName": "GitPullRequestCreateArrowOutlined",
+      "file": "outline/39233-37845.svg"
+    },
+    "39262:37848": {
+      "exportName": "MergeOutlined",
+      "file": "outline/39262-37848.svg"
+    },
+    "39262:37851": {
+      "exportName": "Rotate3dOutlined",
+      "file": "outline/39262-37851.svg"
+    },
+    "39290:37854": {
+      "exportName": "Scale3dOutlined",
+      "file": "outline/39290-37854.svg"
+    },
+    "39320:7449": {
+      "exportName": "FileAxis3dOutlined",
+      "file": "outline/39320-7449.svg"
+    },
+    "39320:7452": {
+      "exportName": "BookOpenTextOutlined",
+      "file": "outline/39320-7452.svg"
+    },
+    "39330:10456": {
+      "exportName": "SpeechToTextOutlined",
+      "file": "outline/39330-10456.svg"
+    },
+    "39338:10493": {
+      "exportName": "SpeechToText2Outlined",
+      "file": "outline/39338-10493.svg"
+    },
+    "39914:27743": {
+      "exportName": "BrainOutlined",
+      "file": "outline/39914-27743.svg"
+    },
+    "39957:11194": {
+      "exportName": "BoxOutlined",
+      "file": "outline/39957-11194.svg"
+    },
+    "40049:68237": {
+      "exportName": "ListTreeOutlined",
+      "file": "outline/40049-68237.svg"
+    },
+    "40293:42285": {
+      "exportName": "BrainCircuitOutlined",
+      "file": "outline/40293-42285.svg"
+    },
+    "40519:27173": {
+      "exportName": "WaypointsOutlined",
+      "file": "outline/40519-27173.svg"
+    },
+    "40519:27176": {
+      "exportName": "RouteOutlined",
+      "file": "outline/40519-27176.svg"
+    },
+    "40936:5891": {
+      "exportName": "BotOutlined",
+      "file": "outline/40936-5891.svg"
+    },
+    "41157:69818": {
+      "exportName": "BoxesOutlined",
+      "file": "outline/41157-69818.svg"
+    },
+    "41157:69820": {
+      "exportName": "BrainCogOutlined",
+      "file": "outline/41157-69820.svg"
+    },
+    "41157:69822": {
+      "exportName": "CodepenOutlined",
+      "file": "outline/41157-69822.svg"
+    },
+    "41277:17407": {
+      "exportName": "SirenOutlined",
+      "file": "outline/41277-17407.svg"
+    },
+    "42228:6008": {
+      "exportName": "MCPOutlined",
+      "file": "outline/42228-6008.svg"
+    },
+    "44545:34556": {
+      "exportName": "PinOffOutlined",
+      "file": "outline/44545-34556.svg"
+    },
+    "44545:34558": {
+      "exportName": "PinOutlined",
+      "file": "outline/44545-34558.svg"
+    },
+    "44687:74992": {
+      "exportName": "RedoDotOutlined",
+      "file": "outline/44687-74992.svg"
+    },
+    "44870:141148": {
+      "exportName": "TelescopeOutlined",
+      "file": "outline/44870-141148.svg"
+    },
+    "44870:141151": {
+      "exportName": "MicroscopeOutlined",
+      "file": "outline/44870-141151.svg"
+    },
+    "44953:5888": {
+      "exportName": "AtSignOutlined",
+      "file": "outline/44953-5888.svg"
+    },
+    "44960:5345": {
+      "exportName": "MessageCirclePlusOutlined",
+      "file": "outline/44960-5345.svg"
+    },
+    "45049:18098": {
+      "exportName": "AIOutlined",
+      "file": "outline/45049-18098.svg"
+    },
+    "44999:1957": {
+      "exportName": "ChevronsDownUpOutlined",
+      "file": "outline/44999-1957.svg"
+    },
+    "44999:1959": {
+      "exportName": "ChevronsUpDownOutlined",
+      "file": "outline/44999-1959.svg"
+    },
+    "45003:9600": {
+      "exportName": "ScrollTextOutlined",
+      "file": "outline/45003-9600.svg"
+    },
+    "45018:22401": {
+      "exportName": "LoaderOutlined",
+      "file": "outline/45018-22401.svg"
+    },
+    "45035:1908": {
+      "exportName": "DataComparisonOutlined",
+      "file": "outline/45035-1908.svg"
+    },
+    "45031:5719": {
+      "exportName": "PointerOutlined",
+      "file": "outline/45031-5719.svg"
+    },
+    "45033:2063": {
+      "exportName": "EarOffOutlined",
+      "file": "outline/45033-2063.svg"
+    },
+    "45035:1892": {
+      "exportName": "EarOutlined",
+      "file": "outline/45035-1892.svg",
+      "defaultColor": "#0A0A0A"
+    },
+    "45294:1902": {
+      "exportName": "MoveDiagonalOutlined",
+      "file": "outline/45294-1902.svg"
+    },
+    "45454:1952": {
+      "exportName": "LogoOutlined",
+      "file": "outline/45454-1952.svg"
+    },
+    "45460:1953": {
+      "exportName": "CommandOutlined",
+      "file": "outline/45460-1953.svg"
+    },
+    "45515:1942": {
+      "exportName": "StopFigma455151942Outlined",
+      "file": "outline/45515-1942.svg"
+    },
+    "45568:1889": {
+      "exportName": "AudioLinesOutlined",
+      "file": "outline/45568-1889.svg"
+    },
+    "45576:1892": {
+      "exportName": "CheckCheckOutlined",
+      "file": "outline/45576-1892.svg"
+    },
+    "45627:1900": {
+      "exportName": "FileSlidersOutlined",
+      "file": "outline/45627-1900.svg"
+    },
+    "46035:3020": {
+      "exportName": "ArrowUpRightOutlined",
+      "file": "outline/46035-3020.svg"
+    },
+    "46103:7441": {
+      "exportName": "UserRoundCogOutlined",
+      "file": "outline/46103-7441.svg"
+    },
+    "46141:5483": {
+      "exportName": "Wrench2Outlined",
+      "file": "outline/46141-5483.svg"
+    },
+    "46174:9893": {
+      "exportName": "LandPlotOutlined",
+      "file": "outline/46174-9893.svg"
+    },
+    "46275:1906": {
+      "exportName": "GoalOutlined",
+      "file": "outline/46275-1906.svg"
+    },
+    "46287:1908": {
+      "exportName": "Goal2Outlined",
+      "file": "outline/46287-1908.svg"
+    },
+    "46300:1925": {
+      "exportName": "Grid2x2CheckOutlined",
+      "file": "outline/46300-1925.svg"
+    },
+    "46620:1904": {
+      "exportName": "Settings2Outlined",
+      "file": "outline/46620-1904.svg"
+    },
+    "46671:8055": {
+      "exportName": "TimelineOutlined",
+      "file": "outline/46671-8055.svg"
+    },
+    "45386:154724": {
+      "exportName": "NotebookOutlined",
+      "file": "outline/45386-154724.svg"
+    },
+    "46707:8089": {
+      "exportName": "Notebook2Outlined",
+      "file": "outline/46707-8089.svg"
+    },
+    "46783:88121": {
+      "exportName": "RotateCcwOutlined",
+      "file": "outline/46783-88121.svg"
+    },
+    "46705:8074": {
+      "exportName": "FeatherOutlined",
+      "file": "outline/46705-8074.svg"
+    },
+    "46767:87743": {
+      "exportName": "HardDriveDownloadOutlined",
+      "file": "outline/46767-87743.svg"
+    },
+    "46767:87745": {
+      "exportName": "RotateCcwSquareOutlined",
+      "file": "outline/46767-87745.svg"
+    },
+    "46705:8072": {
+      "exportName": "BookMarkedOutlined",
+      "file": "outline/46705-8072.svg"
+    },
+    "46707:8102": {
+      "exportName": "BookMarked2Outlined",
+      "file": "outline/46707-8102.svg"
+    },
+    "46879:8170": {
+      "exportName": "TimerOutlined",
+      "file": "outline/46879-8170.svg"
+    },
+    "46992:25036": {
+      "exportName": "HourglassOutlined",
+      "file": "outline/46992-25036.svg"
+    },
+    "47154:15989": {
+      "exportName": "GitMergeOutlined",
+      "file": "outline/47154-15989.svg"
+    },
+    "47154:15992": {
+      "exportName": "LoaderPinwheelOutlined",
+      "file": "outline/47154-15992.svg"
+    },
+    "47158:15995": {
+      "exportName": "FolderArchiveOutlined",
+      "file": "outline/47158-15995.svg"
+    },
+    "47161:15998": {
+      "exportName": "FileArchiveOutlined",
+      "file": "outline/47161-15998.svg"
+    },
+    "47184:9638": {
+      "exportName": "Sparkles2Outlined",
+      "file": "outline/47184-9638.svg"
+    },
+    "47199:15022": {
+      "exportName": "IntentionOutlined",
+      "file": "outline/47199-15022.svg"
+    },
+    "47252:26041": {
+      "exportName": "GanttChartOutlined",
+      "file": "outline/47252-26041.svg"
+    },
+    "47254:26877": {
+      "exportName": "SquareGanttChartOutlined",
+      "file": "outline/47254-26877.svg"
+    },
+    "47297:32125": {
+      "exportName": "ArrowUpToLineOutlined",
+      "file": "outline/47297-32125.svg"
+    },
+    "47351:7055": {
+      "exportName": "ArrowUpFromDotOutlined",
+      "file": "outline/47351-7055.svg"
+    },
+    "47385:1963": {
+      "exportName": "ArrowsUpDownOutlined",
+      "file": "outline/47385-1963.svg"
+    },
+    "47385:1964": {
+      "exportName": "ArrowsTransferUpOutlined",
+      "file": "outline/47385-1964.svg"
+    },
+    "47385:1965": {
+      "exportName": "ArrowsTransferDownOutlined",
+      "file": "outline/47385-1965.svg"
+    },
+    "47287:32011": {
+      "exportName": "SwitchCameraOutlined",
+      "file": "outline/47287-32011.svg"
+    },
+    "47351:7045": {
+      "exportName": "CircleArrowUpOutlined",
+      "file": "outline/47351-7045.svg"
+    },
+    "47427:1947": {
+      "exportName": "HistoryOutlined",
+      "file": "outline/47427-1947.svg"
+    },
+    "47571:4197": {
+      "exportName": "AtOutlined",
+      "file": "outline/47571-4197.svg"
+    },
+    "47659:1965": {
+      "exportName": "HandDepositOutlined",
+      "file": "outline/47659-1965.svg"
+    },
+    "47662:1975": {
+      "exportName": "TimerOffOutlined",
+      "file": "outline/47662-1975.svg"
+    },
+    "47822:21814": {
+      "exportName": "MenuCollapseOutlined",
+      "file": "outline/47822-21814.svg"
+    },
+    "47822:21815": {
+      "exportName": "MenuExpandOutlined",
+      "file": "outline/47822-21815.svg"
+    }
+  },
+  "rules": {
+    "semanticEraseNormalizations": [
+      {
+        "exportedSourceNodeId": "14203:193724",
+        "strategy": "luminance-mask-overdraw-v1"
+      },
+      {
+        "exportedSourceNodeId": "38678:28634",
+        "strategy": "luminance-mask-overdraw-v1"
+      }
+    ],
+    "paintExceptions": [
+      {
+        "path": "outline/1-3058.svg",
+        "definitionId": "icon_13058__mask_0",
+        "attribute": "fill",
+        "value": "#D9D9D9",
+        "reason": "rect paint participates in referenced icon_13058__mask_0 semantics"
+      },
+      {
+        "path": "outline/1-3057.svg",
+        "definitionId": "icon_13057__mask_0",
+        "attribute": "fill",
+        "value": "#D9D9D9",
+        "reason": "rect paint participates in referenced icon_13057__mask_0 semantics"
+      },
+      {
+        "path": "outline/1-2413.svg",
+        "definitionId": "icon_12413__clip_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_12413__clip_0 semantics"
+      },
+      {
+        "path": "outline/38678-28634.svg",
+        "definitionId": "icon_3867828634__clip_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_3867828634__clip_0 semantics"
+      },
+      {
+        "path": "outline/38678-28634.svg",
+        "definitionId": "icon_38678_28634__mask_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_38678_28634__mask_0 semantics"
+      },
+      {
+        "path": "outline/38678-28634.svg",
+        "definitionId": "icon_38678_28634__mask_0",
+        "attribute": "stroke",
+        "value": "black",
+        "reason": "path paint participates in referenced icon_38678_28634__mask_0 semantics"
+      },
+      {
+        "path": "outline/1-2477.svg",
+        "definitionId": "icon_12477__clip_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_12477__clip_0 semantics"
+      },
+      {
+        "path": "outline/14203-193724.svg",
+        "definitionId": "icon_14203_193724__mask_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_14203_193724__mask_0 semantics"
+      },
+      {
+        "path": "outline/14203-193724.svg",
+        "definitionId": "icon_14203_193724__mask_0",
+        "attribute": "stroke",
+        "value": "black",
+        "reason": "path paint participates in referenced icon_14203_193724__mask_0 semantics"
+      },
+      {
+        "path": "outline/31752-46880.svg",
+        "definitionId": "icon_3175246880__clip_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_3175246880__clip_0 semantics"
+      },
+      {
+        "path": "outline/45454-1952.svg",
+        "definitionId": "icon_454541952__mask_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "path paint participates in referenced icon_454541952__mask_0 semantics"
+      },
+      {
+        "path": "outline/45454-1952.svg",
+        "definitionId": "icon_454541952__clip_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_454541952__clip_0 semantics"
+      },
+      {
+        "path": "outline/46287-1908.svg",
+        "definitionId": "icon_462871908__clip_0",
+        "attribute": "fill",
+        "value": "white",
+        "reason": "rect paint participates in referenced icon_462871908__clip_0 semantics"
+      }
+    ]
+  }
+}

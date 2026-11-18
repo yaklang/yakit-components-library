@@ -1,0 +1,18 @@
+{
+  "sourceAssetEvidence": {
+    "contextTargetImgCount": 7,
+    "contextTargetImgVariables": [
+      "imgRectangle845",
+      "imgVector127Stroke",
+      "imgVector128Stroke",
+      "imgRectangle840",
+      "imgRectangle846Stroke",
+      "imgRectangle842Stroke",
+      "imgGroup4613"
+    ],
+    "exactComponentNodeExport": true,
+    "contextLayoutComposite": false,
+    "contextFallback": null,
+    "isolatedComponentSubtree": true
+  }
+}

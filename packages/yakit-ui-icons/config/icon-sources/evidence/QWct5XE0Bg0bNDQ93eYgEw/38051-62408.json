@@ -1,0 +1,17 @@
+{
+  "sourceAssetEvidence": {
+    "contextTargetImgCount": 6,
+    "contextTargetImgVariables": [
+      "imgPolygon9",
+      "imgRectangle777",
+      "imgRectangle779",
+      "imgRectangle782",
+      "imgRectangle783",
+      "imgUnion"
+    ],
+    "exactComponentNodeExport": true,
+    "contextLayoutComposite": false,
+    "contextFallback": null,
+    "isolatedComponentSubtree": true
+  }
+}

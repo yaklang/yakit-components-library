@@ -1,0 +1,12 @@
+{
+  "sourceAssetEvidence": {
+    "contextTargetImgCount": 1,
+    "contextTargetImgVariables": [
+      "imgGroup40"
+    ],
+    "exactComponentNodeExport": true,
+    "contextLayoutComposite": true,
+    "contextFallback": null,
+    "isolatedComponentSubtree": true
+  }
+}

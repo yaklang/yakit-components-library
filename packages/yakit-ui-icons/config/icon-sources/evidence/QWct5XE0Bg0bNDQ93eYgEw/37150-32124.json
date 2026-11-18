@@ -1,0 +1,9 @@
+{
+  "extractionSelector": "g[id^=\"功能菜单/一级/\"]",
+  "ancestorDecisions": [
+    "discarded page Function Icons wrapper",
+    "discarded #E7E7F5 canvas background",
+    "discarded giant page clip; retained unique semantic component subtree and referenced defs closure"
+  ],
+  "sourceAssetEvidence": "unique semantic subtree corroborated by per-component get_design_context"
+}

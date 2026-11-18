@@ -6,18 +6,14 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import colorfulSource from '../../../yakit-ui-icons/config/icon-sources/colorful.json';
-import outlineSource from '../../../yakit-ui-icons/config/icon-sources/outline.json';
-import solidSource from '../../../yakit-ui-icons/config/icon-sources/solid.json';
 import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
+import { readOldiconAssets } from '../../../yakit-ui-icons/scripts/oldicon-assets.mjs';
+import { colorful as colorfulSource } from '../../../yakit-ui-icons/test/helpers/sources';
+import { outline as outlineSource } from '../../../yakit-ui-icons/test/helpers/sources';
+import { solid as solidSource } from '../../../yakit-ui-icons/test/helpers/sources';
 import { iconCounts, iconExports } from '../../../yakit-ui-icons/test/icons/icon-inventory';
 
-const oldiconInventory = JSON.parse(
-  readIconInputSync(
-    new URL('../../../yakit-ui-icons/config/icon-sources/oldicon.json#manifest', import.meta.url),
-    'utf8',
-  ),
-);
+const oldiconInventory = readOldiconAssets();
 
 const packageRoot = resolve(import.meta.dirname, '../..');
 const repositoryRoot = resolve(packageRoot, '../..');

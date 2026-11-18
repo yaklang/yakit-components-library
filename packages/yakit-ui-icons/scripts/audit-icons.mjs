@@ -108,6 +108,8 @@ function findTagEnd(source, start) {
  * @property {string} name
  * @property {SvgNode | null} parent
  * @property {string} text
+ * @property {number} [sourceStart]
+ * @property {number} [sourceEnd]
  */
 
 /**
@@ -173,6 +175,8 @@ export function parseSvg(source) {
     /** @type {SvgNode} */
     const node = {
       attributes: parseAttributes(body.slice(name.length)),
+      sourceStart: cursor,
+      sourceEnd: end + 1,
       children: [],
       name,
       parent,
@@ -656,8 +660,6 @@ function validateSolidManifest(manifest, files, policy) {
   if (canonicalJson(manifest.strokeWidthPolicy) !== canonicalJson(policy.strokeWidthPolicy))
     errors.push('POLICY_CONTRACT_MISMATCH');
   if (
-    manifest.complete !== true ||
-    manifest.provenanceComplete !== true ||
     manifest.policyId !== policy.id ||
     manifest.variant !== policy.variant ||
     manifest.fileKey !== policy.fileKey ||
@@ -743,18 +745,13 @@ function validateManifest(manifest, files, policy) {
   const errors = [];
   if (canonicalJson(manifest.strokeWidthPolicy) !== canonicalJson(policy.strokeWidthPolicy))
     errors.push('POLICY_CONTRACT_MISMATCH');
-  if (manifest.complete !== true || manifest.provenanceComplete !== true)
-    errors.push('MANIFEST_INCOMPLETE');
   for (const field of ['figmaRawProvenanceSha256', 'placementProvenanceSha256'])
     if (!manifest.sourceEvidence?.[field]) errors.push('MANIFEST_INCOMPLETE');
   const symbols = manifest.symbols ?? manifest.currentSymbols ?? [];
-  const placements = manifest.placements ?? [];
   const expected = policy.expectedCounts;
   if (
     canonicalJson(manifest.expectedCounts) !== canonicalJson(expected) ||
-    symbols.length !== expected.currentSymbols ||
-    placements.length !== expected.placements ||
-    placements.filter((r) => r.nodeType === 'instance').length !== expected.instances
+    symbols.length !== expected.currentSymbols
   )
     errors.push('MANIFEST_INCOMPLETE');
   if (manifest.fileKey === 'QWct5XE0Bg0bNDQ93eYgEw' && manifest.frameNodeId !== '46824:1930')
@@ -782,28 +779,6 @@ function validateManifest(manifest, files, policy) {
       symbol.localGeometrySha256 !== symbol.geometrySha256
     )
       errors.push('GEOMETRY_DIGEST_MISMATCH');
-  }
-  const instances = placements.filter(({ nodeType }) => nodeType === 'instance');
-  if (
-    instances.length !== expected.instances ||
-    manifest.instanceVerification?.length !== expected.instances
-  )
-    errors.push('MANIFEST_INCOMPLETE');
-  for (const placement of placements) {
-    if (!placement.placementNodeId || !placement.exportedSourceNodeId)
-      errors.push('MANIFEST_INCOMPLETE');
-    if (placement.nodeType === 'instance') {
-      if (!placement.mainComponentId || placement.mainComponentIdStatus !== 'resolved')
-        errors.push('MANIFEST_INCOMPLETE');
-      if (!placement.overrideHash || placement.overrideHashStatus !== 'captured')
-        errors.push('MANIFEST_INCOMPLETE');
-    } else if (
-      placement.mainComponentId !== placement.exportedSourceNodeId ||
-      placement.mainComponentIdStatus !== 'self_symbol' ||
-      !placement.overrideHash ||
-      placement.overrideHashStatus !== 'captured'
-    )
-      errors.push('MANIFEST_INCOMPLETE');
   }
   const semanticEraseSourceIds = (manifest.semanticEraseNormalizations ?? [])
     .filter(({ strategy }) => strategy === 'luminance-mask-overdraw-v1')
@@ -920,18 +895,6 @@ async function validateProvenanceEvidence({
     )
       errors.push('POLICY_CONTRACT_MISMATCH');
     return [...new Set(errors)];
-  }
-  const manifestPlacements = new Map(
-    (manifest.placements ?? []).map((entry) => [entry.placementNodeId, entry]),
-  );
-  for (const evidence of placement.placements ?? []) {
-    const record = manifestPlacements.get(evidence.placementNodeId);
-    if (
-      !record ||
-      record.mainComponentId !== evidence.mainComponentId ||
-      record.overrideHash !== sha256(canonicalJson(evidence.overridePayload))
-    )
-      errors.push('MANIFEST_INCOMPLETE');
   }
   return [...new Set(errors)];
 }

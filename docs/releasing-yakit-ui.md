@@ -144,8 +144,9 @@ exact registry compatibility baseline. Deferred probes never become tarballs,
 outbox entries, publication attempts or recovery releases. Existing v3 manifests
 without deferral evidence retain their original validation rules.
 
-Move deferred Changesets to `docs/pending-releases` with their bump levels and
-text intact. Restore them before that package's later release. This releases
+Keep deferred Changesets in `docs/pending-releases` with their declared bump
+levels. Review their descriptions against the final implementation and restore
+them before that package's later release. This releases
 only the selected package through the existing verified-tarball and protected
 Trusted Publishing flow; it does not authorize publishing local candidate packs.
 
@@ -162,5 +163,3 @@ Trusted Publishing flow; it does not authorize publishing local candidate packs.
 `npm publish` 成功返回后，npm 仍可能需要几分钟才能让 registry 查询到新版本。发布脚本使用独立的 `PUBLICATION_REGISTRY_CONFIRMATION_TIMEOUT_MS`（默认及工作流配置均为 `300000`，即每包 5 分钟）确认版本、dist-tag 和产物哈希；先立即查询，再以 1、2、4、8 秒递增等待，后续间隔最多 15 秒。查询耗时计入等待预算，每轮输出状态和已用时间。普通发布和恢复发布共用此机制。
 
 `PUBLICATION_REGISTRY_PROPAGATION_WINDOW_MS` 仍仅用于重试授权前的缺失证据校验，与发布后确认窗口分开。确认期间只查询，不重复调用 `npm publish`；超时仍未确认时保留 ambiguous 回执，需按上面的只读核对流程处理。哈希、dist-tag 冲突或查询错误仍直接失败。
-
-2026-11-09 的 icons `0.3.1` 发布对应 `source_run_id=42596607962`、`verification_artifact_id=13663469507`。修复合入 `main` 后，进入 GitHub Actions → **Publish Yakit UI packages** → **Run workflow**，选择 `main`，先按上述只读核对参数执行。成功标准是 `reconcile-published` 通过并上传新的 recovery intent/receipt；旧失败运行保留作为历史记录，无需点击其 **Re-run jobs**。原产物受 14 天恢复窗口限制。

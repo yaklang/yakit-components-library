@@ -5,8 +5,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import outline from '../../config/icon-sources/outline.json';
 import { ViewGridOutlined } from '../../src/outline';
+import { outline as outline } from '../helpers/sources';
 
 describe('Outline/view-grid Figma contract', () => {
   it('preserves current source geometry when rendering', () => {

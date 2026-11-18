@@ -1,0 +1,16 @@
+{
+  "sourceAssetEvidence": {
+    "contextTargetImgCount": 5,
+    "contextTargetImgVariables": [
+      "imgSubtract1",
+      "imgSubtractStroke",
+      "imgVector21",
+      "imgVector21Stroke",
+      "imgVector22Stroke"
+    ],
+    "exactComponentNodeExport": true,
+    "contextLayoutComposite": false,
+    "contextFallback": null,
+    "isolatedComponentSubtree": true
+  }
+}

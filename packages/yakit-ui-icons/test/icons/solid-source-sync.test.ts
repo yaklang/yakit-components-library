@@ -4,10 +4,10 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import source from '../../config/icon-sources/solid.json';
 import { canonicalizeSvg, inspectSvg } from '../../scripts/audit-icons.mjs';
 import { planSourceImport } from '../../scripts/import-icon-sources.mjs';
 import { renderImportedSvg } from '../../scripts/update-icons.mjs';
+import { solid as source } from '../helpers/sources';
 
 const updatedNames = [
   'ParkLeftSolid',
@@ -73,12 +73,11 @@ describe('Solid source synchronization', () => {
           },
         ],
       });
-      const next = JSON.parse(plan.changes.get('config/icon-sources/solid.json').after);
-      const imported = next.records.find(
-        (r: { exportName: string }) => r.exportName === 'ImportSolid',
+      const raw = plan.changes.get(`config/icon-sources/${record.svgFile}`).after;
+      expect(raw.match(/<path\b/g)).toHaveLength(2);
+      expect(renderImportedSvg({ ...record, raw: { svg: raw } }, 'solid')).not.toMatch(
+        /<(?:mask|defs)\b|stroke-width=/,
       );
-      expect(imported.metadata.minimumDrawableCount).toBe(2);
-      expect(renderImportedSvg(imported, 'solid')).not.toMatch(/<(?:mask|defs)\b|stroke-width=/);
     } finally {
       rmSync(root, { recursive: true, force: true });
     }

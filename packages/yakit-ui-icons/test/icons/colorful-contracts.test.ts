@@ -9,6 +9,7 @@ import {
   validateColorfulInventory,
   validateColorfulRow,
 } from '../../scripts/colorful-icon-contracts.mjs';
+import { colorful as colorfulSource } from '../helpers/sources';
 
 const sample = JSON.parse(
   readFileSync(
@@ -48,9 +49,6 @@ const logNodeBackgroundColors = {
   WarningLogColorful: 'var(--Colors-Use-Warning-Primary, #F6A823)',
 } as const;
 
-const colorfulSource: { records: { exportName: string; localFile: string }[] } = JSON.parse(
-  readFileSync(resolve(import.meta.dirname, '../../config/icon-sources/colorful.json'), 'utf8'),
-);
 const readColorfulIcon = (name: string) => {
   const record = colorfulSource.records.find((row) => row.exportName === name);
   if (!record?.localFile) throw new Error(`Missing Colorful source for ${name}`);

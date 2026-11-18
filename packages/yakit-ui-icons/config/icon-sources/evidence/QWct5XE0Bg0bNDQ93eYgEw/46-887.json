@@ -1,0 +1,12 @@
+{
+  "sourceAssetEvidence": {
+    "contextTargetImgCount": 1,
+    "contextTargetImgVariables": [
+      "imgBasicOutlineBug"
+    ],
+    "exactComponentNodeExport": false,
+    "contextLayoutComposite": false,
+    "contextFallback": null,
+    "isolatedComponentSubtree": false
+  }
+}

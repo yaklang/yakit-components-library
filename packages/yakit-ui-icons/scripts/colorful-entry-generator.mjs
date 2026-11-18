@@ -31,7 +31,7 @@ const typescriptString = (value) => {
     .replace(/\u2029/g, '\\u2029')}'`;
 };
 
-function publicRows(inventory) {
+export function publicRows(inventory) {
   const canonicalRows = new Map(
     inventory.rows
       .filter((row) => row.rowDisposition === 'canonical-new')

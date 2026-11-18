@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import { createServer } from 'vite';
 import { describe, expect, it } from 'vitest';
 
-import outlineSource from '../../../yakit-ui-icons/config/icon-sources/outline.json';
+import { outline as outlineSource } from '../../../yakit-ui-icons/test/helpers/sources';
 import type {} from '../../../yakit-ui-icons/test/fixtures/icons/icon-adjustable-consumer-entry';
 import { outlineStrokeContract } from '../../../yakit-ui-icons/config/iconStrokeContract.generated';
 

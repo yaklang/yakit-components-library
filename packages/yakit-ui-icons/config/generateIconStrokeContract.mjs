@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 
 import { format } from 'prettier';
 
+import { readIconSources } from '../scripts/icon-source-data.mjs';
+import { pathToFileURL } from 'node:url';
 import { parseSvg } from '../scripts/audit-icons.mjs';
 
 const configRoot = dirname(fileURLToPath(import.meta.url));
@@ -17,8 +19,7 @@ export function sourceFixedFillDispositions(records) {
     records
       .filter(
         (record) =>
-          record.production?.geometry === 'source' &&
-          record.production?.strokeMode === 'fixed-fill',
+          !/\bstroke\s*=\s*["'](?!none["'])/i.test(record.raw?.svg ?? record.rawSvg ?? ''),
       )
       .map((record) => [
         record.file,
@@ -134,9 +135,9 @@ export function generateIconStrokeContract(
     .filter((file) => file.endsWith('.svg'))
     .sort();
   if (!fixedFill) {
-    const source = JSON.parse(
-      readFileSync(resolve(root, '../../config/icon-sources/outline.json'), 'utf8'),
-    );
+    const source = readIconSources(
+      pathToFileURL(`${resolve(root, '../../config/icon-sources')}/`),
+    ).outline;
     fixedFill = sourceFixedFillDispositions(
       source.records.filter((record) => files.includes(record.file)),
     );

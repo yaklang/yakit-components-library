@@ -2,4 +2,4 @@
 "@yakit-libs/yakit-ui": minor
 ---
 
-Unify built-in icon stroke widths to 1.5 SVG user units across Outline, Solid, Colorful, Oldicon and Loading. Preserve existing exports and presentation overrides. Correct the legacy OutlineViewGridIcon to the four hollow cells in Figma Outline/view-grid. Oldicon compatibility assets intentionally adopt this width policy while retaining their source identity. Add deterministic source/hash audits and independent rendering regressions.
+统一 Outline 真实描边的默认宽度为 1.5 SVG 用户单位，纯填充图标保持填充。Solid、Colorful 保留原稿描边；Oldicon 以手工维护的素材为准，Loading 由组件定义默认线宽。更新 Outline/view-grid 为 Figma 原稿中的四个空心单元，保留公开导出及颜色、描边参数覆盖行为，并根据当前来源和规则检查生成及渲染结果。

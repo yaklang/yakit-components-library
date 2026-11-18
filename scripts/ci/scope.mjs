@@ -35,6 +35,13 @@ export function classify(paths) {
       !file.includes("/.storybook/")
     )
       continue;
+    // Release contracts also inspect package manifests and type-test configuration.
+    if (
+      /^packages\/yakit-ui(?:-icons)?\/(?:package\.json$|tsconfig[^/]*\.json$|test\/types\/)/.test(
+        file,
+      )
+    )
+      flags.release_tools = true;
     if (
       file.startsWith("packages/yakit-ui-icons/") ||
       file.startsWith("scripts/icons/") ||
@@ -42,7 +49,8 @@ export function classify(paths) {
     ) {
       flags.icons = flags.integration = true;
       const artwork =
-        /^packages\/yakit-ui-icons\/(?:src\/.*\.svg|config\/icon-sources\/[^/]+\.json|src\/(?:outline|solid|colorful|oldicon)\/index\.tsx|src\/colorful\/catalog\.ts|src\/figmaNameCatalog\.ts|config\/iconStrokeContract\.generated\.ts)$/.test(
+        file === "packages/yakit-ui-icons/catalog/index.html" ||
+        /^packages\/yakit-ui-icons\/(?:src\/.*\.svg|config\/icon-sources\/(?:[^/]+\.json|svg\/[^/]+\/[^/]+\.svg|evidence\/[^/]+\/[^/]+\.json)|src\/(?:outline|solid|colorful|oldicon)\/index\.tsx|src\/colorful\/catalog\.ts|src\/figmaNameCatalog\.ts|config\/iconStrokeContract\.generated\.ts)$/.test(
           file,
         );
       if (!artwork) {
@@ -59,11 +67,7 @@ export function classify(paths) {
         flags.isolation = true;
     } else if (file.startsWith("packages/yakit-ui/")) {
       flags.ui = flags.integration = flags.storybook = true;
-      if (
-        file.includes("/scripts/release/") ||
-        file.includes("/test/release/") ||
-        file.endsWith("/package.json")
-      )
+      if (file.includes("/scripts/release/") || file.includes("/test/release/"))
         flags.release_tools = true;
     } else if (
       file.startsWith("scripts/release/") ||

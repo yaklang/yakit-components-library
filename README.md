@@ -20,6 +20,12 @@ Yakit 业务组件库 monorepo（pnpm workspace + Turborepo），对外发布两
 └── docs/                 # 发布流程文档
 ```
 
+## 离线图标目录
+
+克隆仓库后，用浏览器直接打开 [图标目录](packages/yakit-ui-icons/catalog/index.html)，无需安装依赖或启动服务。包含 Outline、Solid、Colorful，支持 nodeId 精准搜索、分类分页，以及 Yakit、irify、memfit 三套品牌的亮暗主题。
+
+维护时运行 `pnpm icons:update` 生成页面并随改动提交；`pnpm icons:check` 和 PR CI 会检查是否同步。详见 [图标维护说明](docs/icon-maintenance.md#离线图标查询页)。
+
 ## 环境要求
 
 - Node.js `^22.11.0 || ^24.0.0 || >=26.0.0`

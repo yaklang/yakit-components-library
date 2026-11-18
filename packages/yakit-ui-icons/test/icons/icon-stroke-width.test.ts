@@ -14,6 +14,40 @@ import { normalizeSvgStrokeWidth, svgStrokeWidths } from '../../scripts/icon-str
 
 import { iconSourceFiles } from './icon-inventory';
 
+const register = (root: string, family: string, present: boolean) => {
+  writeFileSync(
+    resolve(root, 'config/icon-sources/svg/test/1-1.svg'),
+    '<svg width="24" height="24"/>',
+  );
+  writeFileSync(
+    resolve(root, `config/icon-sources/${family}.json`),
+    JSON.stringify({
+      schemaVersion: 2,
+      family,
+      fileKey: 'test',
+      groups: [{ nodeId: '1:0', name: 'Group' }],
+      records: present
+        ? [
+            {
+              nodeId: '1:1',
+              name: 'Example',
+              groupNodeId: '1:0',
+              svgFile: 'svg/test/1-1.svg',
+              colorBindings: { status: 'unknown', bindings: [] },
+            },
+          ]
+        : [],
+    }),
+  );
+  writeFileSync(
+    resolve(root, `config/icon-project/${family}.json`),
+    JSON.stringify({
+      schemaVersion: 1,
+      records: present ? { '1:1': { file: `${family}/example.svg`, exportName: 'Example' } } : {},
+    }),
+  );
+};
+
 const createCheckRoot = () => {
   const root = mkdtempSync(join(tmpdir(), 'icon-stroke-check-'));
   mkdirSync(resolve(root, 'src/loading'), { recursive: true });
@@ -26,21 +60,20 @@ const createCheckRoot = () => {
     resolve(root, 'src/loading/index.tsx'),
     'export const Loading = () => <path d="M0 0" strokeWidth={1.5} />;\n',
   );
-  mkdirSync(resolve(root, 'config/icon-sources'), { recursive: true });
+  mkdirSync(resolve(root, 'config/icon-sources/svg/test'), { recursive: true });
+  mkdirSync(resolve(root, 'config/icon-project'), { recursive: true });
   writeFileSync(
-    resolve(root, 'config/icon-sources/private.json'),
-    JSON.stringify({ schemaVersion: 1, files: [] }),
+    resolve(root, 'config/icon-display.json'),
+    JSON.stringify({ schemaVersion: 1, families: {} }),
   );
-  for (const family of ['outline', 'solid', 'colorful', 'oldicon', 'loading']) {
-    writeFileSync(
-      resolve(root, `config/icon-sources/${family}.json`),
-      JSON.stringify({
-        schemaVersion: 1,
-        family,
-        records: family === 'outline' ? [{ file: 'example.svg' }] : [],
-      }),
-    );
-  }
+  mkdirSync(resolve(root, 'src/oldicon/assets'), { recursive: true });
+  writeFileSync(resolve(root, 'src/oldicon/index.tsx'), '');
+  for (const family of ['outline', 'solid', 'colorful'])
+    register(root, family, family === 'outline');
+  writeFileSync(
+    resolve(root, 'config/icon-sources/loading.json'),
+    JSON.stringify({ schemaVersion: 1, family: 'loading', records: [] }),
+  );
   return root;
 };
 
@@ -140,23 +173,18 @@ describe('read-only stroke-width check CLI', () => {
   it('accepts registered non-Outline widths and independent Loading defaults', async () => {
     const root = createCheckRoot();
     try {
-      for (const family of ['solid', 'colorful', 'oldicon']) {
+      for (const family of ['solid', 'colorful']) {
         mkdirSync(resolve(root, `src/${family}`), { recursive: true });
         writeFileSync(
           resolve(root, `src/${family}/example.svg`),
           '<svg><path stroke-width="3" style="stroke-width: 2.5"/></svg>',
         );
-        const record =
-          family === 'oldicon'
-            ? { assetFile: 'example.svg' }
-            : family === 'colorful'
-              ? { localFile: 'colorful/example.svg' }
-              : { file: 'example.svg' };
-        writeFileSync(
-          resolve(root, `config/icon-sources/${family}.json`),
-          JSON.stringify({ schemaVersion: 1, family, records: [record] }),
-        );
+        register(root, family, true);
       }
+      writeFileSync(
+        resolve(root, 'src/oldicon/assets/manual.svg'),
+        '<svg><path stroke-width="3"/></svg>',
+      );
       writeFileSync(
         resolve(root, 'src/loading/index.tsx'),
         'export const Loading = () => <path strokeWidth={3}/>;',

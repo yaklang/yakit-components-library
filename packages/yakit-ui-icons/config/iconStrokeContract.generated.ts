@@ -2898,7 +2898,7 @@ export const outlineStrokeContract = {
   '1-2477.svg': {
     classification: 'adjustable',
     file: '1-2477.svg',
-    sha256: '0bf37f4559fb840f6d41fb15d62d353528d9e7954a965f2c38c8f84855089d5d',
+    sha256: 'cc3b61cbc69b52e1cfac5be401860dee401c1b879796f008e9bae2dccaebaf5e',
     targets: [
       {
         element: 'path',
@@ -5852,7 +5852,7 @@ export const outlineStrokeContract = {
   '47351-7055.svg': {
     classification: 'adjustable',
     file: '47351-7055.svg',
-    sha256: '217e97235c8b7519fe5822fcebbbc8d3765640097459da7ebff4bc3cff3f54ab',
+    sha256: '5ed69a3a4f745d8b6c0538a2134f44dc632f28d88bc2a117d9407643aaf75f4e',
     targets: [
       {
         element: 'path',
@@ -5867,7 +5867,7 @@ export const outlineStrokeContract = {
   '47385-1963.svg': {
     classification: 'adjustable',
     file: '47385-1963.svg',
-    sha256: '59fb50d234415fca2324fec7bd2f5c0fe4e9c7d4c3777becf7fcfa1af0ad6fdf',
+    sha256: 'b9fbf562ba77ea81f1e954c6e3c2d56437e52e60cd5a942a139847401bc79126',
     targets: [
       {
         element: 'path',
@@ -5882,7 +5882,7 @@ export const outlineStrokeContract = {
   '47385-1964.svg': {
     classification: 'adjustable',
     file: '47385-1964.svg',
-    sha256: '8e8250b9a5b626410756f9941f167313c9fde86eec1a7ca6dedf9ebea6ba5b29',
+    sha256: 'b28a9e747bdf26f5c31bff9b946a8d5fec9811542791f953f70d2f6b371581e5',
     targets: [
       {
         element: 'path',
@@ -5897,7 +5897,7 @@ export const outlineStrokeContract = {
   '47385-1965.svg': {
     classification: 'adjustable',
     file: '47385-1965.svg',
-    sha256: 'dfd8905b9b80ed331009f42cce70b95d196e9a46866a9b48142cfe28e5d34db9',
+    sha256: '6dda64929f1f9342f0123d9751a0edb858237e78f0f21eae40fb8a7276a161df',
     targets: [
       {
         element: 'path',

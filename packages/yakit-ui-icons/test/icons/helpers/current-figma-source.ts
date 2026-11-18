@@ -1,18 +1,16 @@
 import { expect } from 'vitest';
 
-import outline from '../../../config/icon-sources/outline.json';
-import solid from '../../../config/icon-sources/solid.json';
 import { canonicalizeSvg, parseSvg } from '../../../scripts/audit-icons.mjs';
+import { outline as outline } from '../../helpers/sources';
+import { solid as solid } from '../../helpers/sources';
 
 export const importedMonochromeSources = [outline, solid].flatMap(({ family, records }) =>
-  records
-    .filter((record) => 'production' in record)
-    .map((record) => ({
-      family,
-      file: record.file,
-      raw: record.raw.svg,
-      name: record.exportName,
-    })),
+  records.map((record) => ({
+    family,
+    file: record.file,
+    raw: record.raw.svg,
+    name: record.exportName,
+  })),
 );
 
 export const svgStructure = (node: ReturnType<typeof parseSvg>): unknown => [

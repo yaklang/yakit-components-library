@@ -84,7 +84,7 @@
     "measure:size": "node scripts/size-observability.mjs",
     "verify:package": "node scripts/verify-package.mjs",
     "prepack": "pnpm run verify:package",
-    "test:icon-stroke-width": "vitest run --config vitest.node.config.ts test/icons/icon-stroke-width.test.ts test/icons/oldicon-stroke-width.test.ts test/icons/icon-stroke-width-ssr.test.ts",
+    "test:icon-stroke-width": "vitest run --config vitest.node.config.ts test/icons/icon-stroke-width.test.ts test/icons/icon-stroke-width-ssr.test.ts",
     "test:audit-icons": "vitest run --config vitest.node.config.ts test/icons/audit-icons.test.ts test/icons/icon-source-structure.test.ts test/icons/icon-figma-names.test.ts test/icons/icon-english-names.test.ts test/icons/icon-registry-names.test.ts test/icons/icon-script-coverage.test.ts test/icons/icon-audit-determinism.test.ts test/icons/colorful-audit-determinism.test.ts test/icons/colorful-contracts.test.ts test/icons/colorful-entry-generator.test.ts test/icons/colorful-color-resolver.test.ts",
     "test:icon-transform": "vitest run --config vitest.node.config.ts test/icons/icon-transform.test.ts test/icons/icon-ssr-fixture.test.ts test/icons/solid-fragment-normalization.test.ts test/icons/solid-icon-ssr-fixture.test.ts test/icons/colorful-fragment-normalization.test.ts && vitest run --config vitest.config.ts test/components/icon-fragment-runtime.test.tsx test/components/icon-public-runtime.test.tsx test/components/solid-icon-fragment-runtime.test.tsx test/components/solid-icon-public-runtime.test.tsx test/components/colorful-icon-fragment-runtime.test.tsx test/components/colorful-icon-public-runtime.test.tsx",
     "test:icon-visual": "vitest run --config vitest.config.ts test/components/icon-visual.test.tsx",

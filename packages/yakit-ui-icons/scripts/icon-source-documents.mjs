@@ -1,9 +1,10 @@
+import { parseSvg, collectPaintSemantics } from './audit-icons.mjs';
 // In-memory views of the canonical source records. These documents are never persisted.
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { canonicalJson, policyDigest, sortedPublicMapping } from './icon-audit-contracts.mjs';
+import { policyDigest, sortedPublicMapping } from './icon-audit-contracts.mjs';
 import { readIconSources, sourceCounts, sourceFiles } from './icon-source-data.mjs';
 import { validateColorfulInventory } from './colorful-icon-contracts.mjs';
 import { deriveIconStrokeManifests } from './update-icon-stroke-manifests.mjs';
@@ -13,10 +14,22 @@ export const manifestPath = (family) => `config/icon-sources/${family}.json#mani
 export const evidencePath = (family, kind) => `config/icon-sources/${family}.json#${kind}`;
 export const jsonText = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
-const fail = (message) => {
-  throw new Error(message);
-};
 
+function countDrawables(svg) {
+  let count = 0;
+  const walk = (node) => {
+    if (['defs', 'mask', 'clipPath', 'pattern', 'marker', 'symbol'].includes(node.name)) return;
+    if (
+      ['path', 'rect', 'circle', 'ellipse', 'line', 'polygon', 'polyline', 'use'].includes(
+        node.name,
+      )
+    )
+      count++;
+    node.children.forEach(walk);
+  };
+  walk(parseSvg(svg));
+  return count;
+}
 export function monochromeDocuments(source) {
   const { family, fileKey, records } = source;
   const raw = { ...source.rawMetadata, fileKey };
@@ -32,6 +45,16 @@ export function monochromeDocuments(source) {
     [family === 'outline' ? 'exportedSourceNodeId' : 'nodeId']: r.nodeId,
     name: r.name,
     ...r.metadata,
+    ...(family === 'solid'
+      ? {
+          minimumDrawableCount: countDrawables(r.raw.svg),
+          paintRoles: [
+            ...new Set(
+              collectPaintSemantics(r.raw.svg, { normalizeFigmaPrimary: true }).map((p) => p.role),
+            ),
+          ].sort(),
+        }
+      : {}),
     ...(family === 'outline'
       ? { file: r.file }
       : { localFile: `solid/${r.file}`, scopeRole: r.scopeRole }),
@@ -41,49 +64,19 @@ export function monochromeDocuments(source) {
   if (family === 'outline') {
     raw.components = records.map(rawRecord);
     placement.currentSymbols = records.map(placementRecord);
-    placement.placements = records.flatMap((r) =>
-      r.placements.map((p) => ({
-        ...p,
-        name: p.nodeType === 'instance' ? (p.instanceName ?? r.name) : r.name,
-        exportedSourceNodeId: r.nodeId,
-      })),
-    );
-    placement.counts = {
-      placements: placement.placements.length,
-      currentSymbols: records.length,
-      instances: sourceCounts(source).instances,
-    };
-    manifest.placements = placement.placements.map((p) => ({
-      ...p,
-      mainComponentIdStatus:
-        p.nodeType === 'component'
-          ? 'self_symbol'
-          : p.mainComponentIdStatus === 'verified-via-plugin-api'
-            ? 'resolved'
-            : p.mainComponentIdStatus,
-      overrideHash: sha256(canonicalJson(p.overridePayload ?? null)),
-      overrideHashStatus: 'captured',
-    }));
-    manifest.instanceVerification = manifest.placements.filter((p) => p.nodeType === 'instance');
+    placement.counts = { currentSymbols: records.length };
     manifest.symbols = records.map(symbol);
     raw.frame = {
       ...raw.frame,
-      placementCount: placement.placements.length,
       componentCount: records.length,
-      instanceCount: sourceCounts(source).instances,
     };
   } else {
     const targets = records.filter((r) => r.scopeRole === 'target');
     const supplements = records.filter((r) => r.scopeRole === 'supplement');
     raw.components = targets.map(rawRecord);
     raw.supplementalComponents = supplements.map(rawRecord);
-    placement.placements = records.flatMap((r) =>
-      (r.placements ?? []).map((p) => ({ ...p, name: r.name, exportedSourceNodeId: r.nodeId })),
-    );
     placement.counts = {
-      placements: placement.placements.length,
       currentSymbols: targets.length,
-      instances: 0,
       supplementalSources: supplements.length,
     };
     placement.targetSymbols = targets.map(placementRecord);
@@ -103,7 +96,7 @@ export function monochromeDocuments(source) {
     manifest.publicMappingSha256 = policyDigest(sortedPublicMapping(manifest.publicExports));
     raw.targetOrderSha256 = manifest.targetOrderSha256;
     placement.targetOrderSha256 = manifest.targetOrderSha256;
-    raw.frame = { ...raw.frame, placementCount: targets.length, componentCount: targets.length };
+    raw.frame = { ...raw.frame, componentCount: targets.length };
   }
   manifest.completenessScope =
     'Registered source records; does not assert a complete remote Figma frame scan';
@@ -120,48 +113,6 @@ export function monochromeDocuments(source) {
     [evidencePath(family, 'placement'), placement],
   ]);
 }
-export function oldiconInventory(source, assets) {
-  const entries = source.records
-    .flatMap((r) => {
-      const hash = sha256(assets.get(`oldicon/${r.assetFile}`));
-      if (r.assetFile !== `assets/${hash}.svg`) fail(`OLDICON_ASSET_HASH_MISMATCH: ${r.assetFile}`);
-      return r.sources.map((s) => ({
-        ...s,
-        assetFile: r.assetFile,
-        assetSha256: hash,
-        artworkSha256: hash,
-      }));
-    })
-    .sort((a, b) =>
-      `${a.sourceFile}\0${a.sourceName}`.localeCompare(`${b.sourceFile}\0${b.sourceName}`),
-    );
-  const exports = [...new Set(entries.map((r) => r.exportName))]
-    .sort((a, b) => a.localeCompare(b))
-    .map((exportName) => {
-      const rows = entries.filter((r) => r.exportName === exportName);
-      if (new Set(rows.map((r) => r.assetFile)).size !== 1)
-        fail(`OLDICON_EXPORT_ASSET_CONFLICT: ${exportName}`);
-      return {
-        assetFile: rows[0].assetFile,
-        artworkSha256: rows[0].artworkSha256,
-        exportName,
-        sourceKeys: rows.map((r) => `${r.sourceFile}::${r.sourceName}`).sort(),
-      };
-    });
-  return {
-    ...source.metadata,
-    totals: {
-      artworks: source.records.length,
-      exports: exports.length,
-      repairedSourcePaths: entries.filter((r) => r.repairs?.length).length,
-      sourceNames: new Set(entries.map((r) => r.sourceName)).size,
-      sourcePaths: entries.length,
-    },
-    entries,
-    exports,
-  };
-}
-
 export function colorfulDocument(source, assets) {
   const colorful = {
     ...source.metadata,
@@ -173,12 +124,14 @@ export function colorfulDocument(source, assets) {
     rows: source.records.map((r) => {
       const { rawSvg } = r;
       const row = Object.fromEntries(
-        Object.entries(r).filter(([key]) => !['rawSvg', 'production', 'evidence'].includes(key)),
+        Object.entries(r).filter(
+          ([key]) => !['rawSvg', 'raw', 'transform', 'evidence'].includes(key),
+        ),
       );
       return {
         ...row,
-        ...(r.production?.paintReplacements
-          ? { projectPaintBindings: Object.values(r.production.paintReplacements) }
+        ...(r.transform?.paintReplacements
+          ? { projectPaintBindings: Object.values(r.transform.paintReplacements) }
           : {}),
         fileKey: source.fileKey,
         componentNodeId: r.nodeId,
@@ -215,7 +168,6 @@ export function buildIconDocuments(root = packageRoot, options = {}) {
     ...monochromeDocuments(sources.outline),
     ...monochromeDocuments(sources.solid),
     [manifestPath('colorful'), colorfulDocument(sources.colorful, assets)],
-    [manifestPath('oldicon'), oldiconInventory(sources.oldicon, assets)],
   ]);
   const manifests = deriveIconStrokeManifests(
     root,
@@ -247,25 +199,15 @@ export function buildIconDocuments(root = packageRoot, options = {}) {
 export function readIconInputSync(input, encoding) {
   const value = input instanceof URL ? fileURLToPath(input) + input.hash : String(input);
   const match =
-    /^(.*)[/\\]config[/\\]icon-sources[/\\](outline|solid|colorful|oldicon)\.json#(manifest|raw|placement)$/.exec(
+    /^(.*)[/\\]config[/\\]icon-sources[/\\](outline|solid|colorful)\.json#(manifest|raw|placement)$/.exec(
       path.resolve(value),
     );
   if (!match) return readFileSync(resolveHistoricalIconPath(input), encoding);
   const [, root, family, kind] = match;
   let document;
   if (kind !== 'manifest') {
-    const source = JSON.parse(
-      readFileSync(path.join(root, 'config/icon-sources', `${family}.json`), 'utf8'),
-    );
+    const source = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))[family];
     document = monochromeDocuments(source).get(evidencePath(family, kind));
-  } else if (family === 'oldicon') {
-    const source = JSON.parse(
-      readFileSync(path.join(root, 'config/icon-sources/oldicon.json'), 'utf8'),
-    );
-    const assets = new Map(
-      sourceFiles(source).map((file) => [file, readFileSync(path.join(root, 'src', file), 'utf8')]),
-    );
-    document = oldiconInventory(source, assets);
   } else document = buildIconDocuments(root).get(manifestPath(family));
   if (!document) throw new Error(`ICON_DOCUMENT_UNKNOWN: ${family}#${kind}`);
   const text = jsonText(document);

@@ -3,9 +3,9 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import solidSource from '../../config/icon-sources/solid.json';
 import * as Icons from '../../src';
 import * as OldIcons from '../../src/oldicon';
+import { solid as solidSource } from '../helpers/sources';
 import { iconCounts, iconExports } from '../icons/icon-inventory';
 
 let root: Root | undefined;
