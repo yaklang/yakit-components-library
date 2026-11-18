@@ -43,6 +43,32 @@ test("release code and shared dependency changes select their consumers", () => 
   ])
     assert.ok(Object.values(classify([file])).every(Boolean));
 });
+test("package and type contract inputs select release tests without losing package checks", () => {
+  for (const name of ["yakit-ui", "yakit-ui-icons"]) {
+    for (const file of [
+      "package.json",
+      "tsconfig.lib.json",
+      "test/types/tsconfig.json",
+      "test/types/tsconfig.public.json",
+      "test/types/spin-public.test.tsx",
+    ]) {
+      const path = `packages/${name}/${file}`;
+      for (const input of [path, path.replaceAll("/", "\\")]) {
+        const flags = classify([input]);
+        assert.equal(flags.release_tools, true, input);
+        assert.equal(flags[name === "yakit-ui" ? "ui" : "icons"], true, input);
+        assert.equal(flags.integration, true, input);
+        assert.equal(flags.icon_build, true, input);
+      }
+    }
+  }
+  for (const file of [
+    "packages/yakit-ui/src/components/Spin/Spin.tsx",
+    "packages/yakit-ui/test/components/spin-behavior.test.tsx",
+    "packages/yakit-ui-icons/src/outline/1-2.svg",
+  ])
+    assert.equal(classify([file]).release_tools, false, file);
+});
 test("rename paths are treated as deletion plus addition; unavailable base runs all", () => {
   const git = (_command, args) => {
     assert.ok(args.includes("--no-renames"));
