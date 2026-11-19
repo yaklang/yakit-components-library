@@ -14,6 +14,7 @@ description: 根据用户给出的一个或多个 Figma 图标节点 URL，通�
 1. 解析用户提供的 URL，提取 fileKey、node-id（将 `123-456` 转为 `123:456`）。只处理用户指定节点，不因父页面或工具返回更多节点而扩大范围。
 2. 发现实际可用的 **figma-developer-mcp** 工具；当前配置可能名为 `figma-personal-token`，不能假定其他机器也用这个服务名。需要节点读取和 SVG 下载能力。缺少连接、权限或能力时说明具体缺项，不自行改用另一个 Figma 服务，不要求用户手写来源 JSON。
 3. 调用 `get_figma_data` 读取该节点；除用户明确要求外不要传 depth。调用 `download_figma_images` 下载对应 SVG 到工具允许的目录。读取下载结果，检查文件是完整 SVG，并与节点尺寸一致。保存工具实际返回的名称、类型、尺寸、原始 SVG。若节点未返回尺寸，读取下载 SVG 根元素的 width/height，并标记 `dimensionsSource: "svg-export"`；不要拿子路径的尺寸代替图标尺寸。实际取得的变量绑定整理为 `colorBindings`，项目 CSS token 映射单独放在 `variableTokens`；组件关系、overrides 及必要工具响应保留为 `evidence`。未取得绑定时标记 unknown，其他未返回字段保持缺失，不能写成“没有绑定/没有 overrides”。
+   对包含可见纯填充 path 的 Outline，按输入格式文档采集带 `geometry=paths` 的当前节点数据；多图层优先下载带节点标识的 SVG。导入器会识别展开的描边，保留同图中的原生填充。
 4. 通过 fileKey + nodeId 查找已有来源记录。已有图标保留导出名、分类和本地路径。新增 SVG 用 `nodeId.replace(':', '-') + '.svg'`，英文导出名由节点名称按 PascalCase 加分类后缀生成（Outlined / Solid / Colorful）。不能可靠翻译、分类不明确或名称重名时询问用户。Oldicon 和 Loading 使用其兼容路径与代码流程，不强行套用 Figma SVG 模板。
 
 ## 导入及生成

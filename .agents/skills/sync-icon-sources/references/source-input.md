@@ -48,6 +48,12 @@ Outline 生产尺寸为 24×24，Solid 为 20×20；不符合时停止，不能�
 
 `paintReplacements` 是明确的项目颜色替换规则，按色值匹配 fill、stroke、stop-color 属性，可能同时影响多个同色元素；需要区分同色元素时使用有真实定位证据的精确绑定。该规则保存于项目 `transform.paintReplacements`，不作为 Figma 绑定证据。原稿变化且没有新的绑定证据时标记 unknown；相同输入保持既有绑定证据。
 
+## Outline 中导出为填充的描边
+
+导入器逐个检查可见的纯填充 `path`。采集时使用同一 Figma 文件的 `GET /v1/files/{fileKey}/nodes?ids=…&geometry=paths` 获取原始节点树。可以批量获取，将完整响应存到临时文件，在输入 JSON 的顶层指定 `figmaNodesPath`（绝对路径）。多图层图标使用同次导出、带 `data-node-id` 的 SVG（`svg_include_node_id=true`），便于区分原生填充、描边和展开轮廓。节点快照和带标识的 SVG 可以离线导入。也可给导入进程提供已配置的 `FIGMA_API_KEY` 或 `FIGMA_OAUTH_TOKEN`，由它按需读取几何和图层标识；凭据只通过环境传递。
+
+只有能对应到单色、居中、纯描边 Vector 的填充轮廓才会提取中心线。导入器保留同一 SVG 中其他图层的填充、描边和绘制顺序。提取时用项目已有的 Playwright Chromium，以设计稿线宽对照本次下载的 SVG；几何缺失、无法区分填充和描边或渲染不匹配时整批不写入。成功时 `svgFile` 保存带真实描边的来源 SVG，`icons:update` 继续执行项目的颜色和线宽归一化。
+
 ## 生成规则
 
 - Outline 的真实描边统一为 1.5；纯填充图形保持填充，不补造描边。

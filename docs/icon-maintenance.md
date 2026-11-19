@@ -42,7 +42,7 @@ Figma 后续又有变化，需要通过下一次更新 PR 进入仓库。检查�
 | 文件                                                         | 保存内容                                                                                                                                                 |
 | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `config/icon-sources/{outline,solid,colorful}.json`          | schemaVersion 2、分类、fileKey、真实分组；逐图 nodeId、原始名称、groupNodeId、svgFile、colorBindings，以及已取得的节点类型、尺寸、采集时间、evidenceFile |
-| `config/icon-sources/svg/<fileKey>/<nodeId短横线>.svg`       | Figma SVG 原始字节，不格式化、不做生产转换                                                                                                               |
+| `config/icon-sources/svg/<fileKey>/<nodeId短横线>.svg`       | Figma 来源 SVG；确认存在展开描边的 Outline 保存提取中心线后的 SVG                                                                                                               |
 | `config/icon-project/<分类>.json`                            | 导出名、生产路径、默认颜色、变量到 CSS token 的映射、按色值替换和必要转换例外                                                                            |
 | `config/icon-display.json`                                   | 项目分类标识、Storybook 标签、导航和人工顺序                                                                                                             |
 | `config/icon-sources/evidence/<fileKey>/<nodeId短横线>.json` | 仍影响提取或图形语义的采集证据                                                                                                                           |
@@ -56,6 +56,8 @@ Figma 后续又有变化，需要通过下一次更新 PR 进入仓库。检查�
 `colorBindings.status` 的 `unknown` 表示未取得证据，`none` 表示已确认无绑定，`captured` 保存真实绑定；缺失信息不补造。绑定可保留 `figmaVariableId`、`sourceNodeIds`、解析颜色 `fallbackHex`，并用 `targets: [{ locator: [0, 1], attribute: "fill", expectedValue: "#F28C45" }]` 精确定位原稿元素及颜色属性。locator 从 SVG 根节点沿元素子节点索引定位；支持 fill、stroke、stop-color。CSS token 单独在项目配置的 `variableTokens` 中映射。定位重复或与原稿不符时失败，不按相同颜色猜测目标。
 
 按色值替换保存在项目 `transform.paintReplacements`，可能同时影响多个同色元素，不作为精确 Figma 绑定证据。需要区分同色元素时使用有真实定位证据的绑定。三个 Figma 分类的全部记录每次都重新计算，生成文本与现有文件完全一致时不写文件；原稿修改但归一化结果相同也不会重写产物。
+
+Outline 下载结果中可能同时存在原生描边、实心细节和已展开的描边。导入器用当前 Figma 节点的中心线还原可确认的描边图层，按原线宽与本次下载结果做渲染对照；其他图层原样保留。采集参数和离线导入格式见[图标来源输入说明](../.agents/skills/sync-icon-sources/references/source-input.md)。
 
 ## SVG 结构核对
 
