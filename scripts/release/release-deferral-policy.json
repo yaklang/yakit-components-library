@@ -3,7 +3,7 @@
   "releases": [
     {
       "name": "@yakit-libs/yakit-ui-icons",
-      "version": "0.3.2"
+      "version": "0.3.3"
     }
   ],
   "deferred": [
@@ -14,7 +14,7 @@
       "integrity": "sha512-Cf/Wopo2BxZzO1hF5/Siwhoj+P6BZZJsEW2BToOP9mWjnKQa6O4AUMqk/4dvMEsGNMLjpHshwZ/D1+Vc21KGFg==",
       "sha256": "d7963628d04ea1ad1475a8220f42f80326dc03f78116f4cfd91b3f5daa81b03a",
       "baseRevision": "2ae1c3c9a41746ec57b820d226a7f91153d90a9d",
-      "reason": "Release icons 0.3.2 independently according to the current patch Changeset. Defer the accumulated UI React 19 / antd 6 changes, icon package migration and Storybook integration; keep npm UI at 0.2.3. UI development may continue without changing this release scope. Restore the pending UI Changesets when preparing its own release.",
+      "reason": "Release icons 0.3.3 independently according to the current patch Changeset. Defer the accumulated UI React 19 / antd 6 changes, icon package migration and Storybook integration; keep npm UI at 0.2.3. UI development may continue without changing this release scope. Restore the pending UI Changesets when preparing its own release.",
       "followUpPath": "docs/pending-releases/README.md"
     }
   ]
