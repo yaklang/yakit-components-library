@@ -1,5 +1,12 @@
 # @yakit-libs/yakit-ui-icons
 
+## 0.3.3
+
+### Patch Changes
+
+- 7b3c5ae: 修复 `BugOutlined` 的 `svgProps.strokeWidth` 不生效的问题。后续从 Figma 同步该图标时也会保留可调描边。
+- 7f68007: 让图标根节点的 `style.color` 直接覆盖后代 SVG 上的竞争颜色规则，无需调用方额外传入 `svgProps`。
+
 ## 0.3.2
 
 ### Patch Changes
