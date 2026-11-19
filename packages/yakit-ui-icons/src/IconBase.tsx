@@ -72,9 +72,14 @@ export const IconBase = forwardRef<HTMLSpanElement, IconBaseProps>(
     ref,
   ) => {
     const sanitizedSvgProps = sanitizeSvgProps(svgProps);
+    const hasSvgColor = sanitizedSvgProps.color || sanitizedSvgProps.style?.color;
+    const resolvedSvgProps =
+      style?.color && !hasSvgColor
+        ? { ...sanitizedSvgProps, style: { color: 'inherit', ...sanitizedSvgProps.style } }
+        : sanitizedSvgProps;
     const sizeProps = size === undefined ? undefined : { height: size, width: size };
     const svgClassName =
-      joinClassNames(sanitizedSvgProps.className, spin ? 'yakit-icon-spinning' : undefined) ||
+      joinClassNames(resolvedSvgProps.className, spin ? 'yakit-icon-spinning' : undefined) ||
       undefined;
     const inheritsColor = color?.trim().toLowerCase() === 'currentcolor';
     const rootStyle: IconRootStyle = {
@@ -95,7 +100,7 @@ export const IconBase = forwardRef<HTMLSpanElement, IconBaseProps>(
       >
         <Svg
           {...sizeProps}
-          {...sanitizedSvgProps}
+          {...resolvedSvgProps}
           className={svgClassName}
           aria-hidden="true"
           focusable="false"
