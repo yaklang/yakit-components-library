@@ -246,6 +246,16 @@ describe('Ant-compatible icon color', () => {
 
     expect(span.style.color).toBe('rgb(101, 67, 33)');
   });
+
+  it('lets explicit root style.color override descendant SVG color rules', () => {
+    addStyle('.anticon svg { color: rgb(9, 9, 9); }');
+    const { svg } = getIconParts(
+      render(<QuestionMarkCircleOutlined style={{ color: 'rgb(36, 104, 172)' }} />),
+    );
+
+    expect(svg.style.color).toBe('inherit');
+    expect(getComputedStyle(svg).color).toBe('rgb(36, 104, 172)');
+  });
 });
 
 describe('Ant-compatible registry and Loading contracts', () => {
