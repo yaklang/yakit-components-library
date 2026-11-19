@@ -470,6 +470,23 @@ test('filled outlines are admitted by default and remain idempotent', () =>
   fixture(async (root) => {
     const request = await input(root, 'outline');
     const icon = request.icons[0];
+    request.figmaNodesPath = path.join(root, 'figma-nodes.json');
+    await writeFile(
+      request.figmaNodesPath,
+      jsonText({
+        nodes: {
+          '999999:1': {
+            document: {
+              id: '999999:1',
+              type: 'COMPONENT',
+              children: [
+                { id: '999999:2', type: 'VECTOR', fills: [{ type: 'SOLID' }], strokes: [] },
+              ],
+            },
+          },
+        },
+      }),
+    );
     await writeFile(
       icon.svgPath,
       '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2L20 20L2 20Z" fill="#353639"/></svg>\n',
@@ -527,4 +544,62 @@ test('source-native cutout authorization is restricted to the exported path and 
       inspect(normalized.replace('stroke="white"', 'stroke="red"')).includes('FOREGROUND_LITERAL'),
     );
     await runIconUpdate([], root);
+  }));
+
+test('mixed Outline import restores only expanded strokes and leaves genuine fills intact', () =>
+  fixture(async (root) => {
+    const request = await input(root, 'outline');
+    const icon = request.icons[0];
+    const exportSvg =
+      '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+      '<path data-node-id="2:1" fill="#000000" d="M2 5H20V7H2Z"/>' +
+      '<path data-node-id="2:2" fill="#000000" d="M8 10H12V14H8Z"/>' +
+      '<path data-node-id="2:3" d="M2 20H20" stroke="#000000" stroke-width="2"/>' +
+      '<circle data-node-id="2:4" cx="3" cy="12" r="1" fill="red" stroke="black" stroke-width="1"/></svg>';
+    await writeFile(icon.svgPath, exportSvg);
+    const paint = { type: 'SOLID', color: { r: 0, g: 0, b: 0, a: 1 } };
+    const vector = {
+      id: '2:1',
+      type: 'VECTOR',
+      fills: [],
+      strokes: [paint],
+      strokeWeight: 2,
+      strokeAlign: 'CENTER',
+      relativeTransform: [
+        [1, 0, 2],
+        [0, 1, 6],
+      ],
+      vectorNetwork: {
+        vertices: [{ position: { x: 0, y: 0 } }, { position: { x: 18, y: 0 } }],
+        segments: [{ start: 0, end: 1 }],
+      },
+    };
+    const document = {
+      id: '999999:1',
+      type: 'COMPONENT',
+      children: [
+        vector,
+        { id: '2:2', type: 'VECTOR', fills: [paint] },
+        { ...vector, id: '2:3' },
+        { id: '2:4', type: 'ELLIPSE', fills: [paint], strokes: [paint] },
+      ],
+    };
+    request.figmaNodesPath = path.join(root, 'figma-nodes.json');
+    const saveSnapshot = () =>
+      writeFile(request.figmaNodesPath, jsonText({ nodes: { [document.id]: { document } } }));
+    await saveSnapshot();
+    const first = await planSourceImport(request, root);
+    const file = `config/icon-sources/svg/${fileKey}/999999-1.svg`;
+    const restored = first.changes.get(file).after;
+    assert.match(restored, /d="M2 6 L20 6" stroke="#000000" stroke-width="2"/);
+    assert.equal(
+      restored.slice(restored.indexOf('<path data-node-id="2:2"')),
+      exportSvg.slice(exportSvg.indexOf('<path data-node-id="2:2"')),
+    );
+    await applyChanges(root, first.changes);
+    assert.equal((await planSourceImport(request, root)).changes.size, 0);
+    vector.vectorNetwork.vertices[1].position.x = 9;
+    await saveSnapshot();
+    await assert.rejects(planSourceImport(request, root), /ICON_FIGMA_STROKE_RENDER_MISMATCH/);
+    assert.equal(await readFile(path.join(root, file), 'utf8'), restored);
   }));

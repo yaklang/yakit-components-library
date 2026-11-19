@@ -3491,11 +3491,19 @@ export const outlineStrokeContract = {
     ],
   },
   '1-3136.svg': {
-    classification: 'fixed-fill',
+    classification: 'adjustable',
     file: '1-3136.svg',
-    reason: 'Explicit Figma source sync: filled contours have no adjustable stroke.',
-    sha256: 'f4512e36dd170546443f33beda29625aba1b3e20da47f399375e98f0ea72e8f0',
-    targets: [],
+    sha256: '60b45dea5f64b95b63c580604f5f919a289d9473eabb7c0b718346512223d35f',
+    targets: [
+      {
+        element: 'path',
+        expectedMatches: 1,
+        locator: [0],
+        role: 'adjustable-primary',
+        sourceDefault: '1.5',
+        surface: 'attribute',
+      },
+    ],
   },
   '11100-165929.svg': {
     classification: 'adjustable',

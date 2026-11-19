@@ -11,6 +11,7 @@ import {
   validateSources,
 } from './update-icons.mjs';
 import { parseSvg } from './audit-icons.mjs';
+import { filledPaths, readGeometryNode, restoreOutlineStrokes } from './figma-outline-stroke.mjs';
 import { loadPinnedTokenCatalog } from './colorful-color-resolver.mjs';
 import { inspectFragmentGraph } from './colorful-fragments.mjs';
 import {
@@ -63,6 +64,7 @@ export async function planSourceImport(input, root = packageRoot) {
   const knownTokens = new Set((await loadPinnedTokenCatalog()).map((t) => t.name));
   const seen = new Set();
   const report = [];
+  let geometrySnapshot;
   for (const icon of input.icons) {
     const { fileKey, nodeId } = parseFigmaUrl(icon.url);
     required(
@@ -100,7 +102,7 @@ export async function planSourceImport(input, root = packageRoot) {
       typeof icon.svgPath === 'string' && path.isAbsolute(icon.svgPath),
       `ICON_SVG_PATH_REQUIRED: ${nodeId}`,
     );
-    const svg = await readFile(icon.svgPath, 'utf8');
+    let svg = await readFile(icon.svgPath, 'utf8');
     const parsed = parseSvg(svg);
     required(
       Number.isFinite(icon.width) &&
@@ -160,6 +162,16 @@ export async function planSourceImport(input, root = packageRoot) {
       record.nodeSize = { width: icon.width, height: icon.height };
     else delete record.nodeSize;
     const oldSvg = existing ? rawFiles[existing.svgFile] : undefined;
+    const filled = family === 'outline' ? filledPaths(parsed) : [];
+    let strokeLocators = [];
+    if (filled.length) {
+      if (input.figmaNodesPath && !geometrySnapshot)
+        geometrySnapshot = JSON.parse(await readFile(input.figmaNodesPath, 'utf8'));
+      const component = await readGeometryNode(fileKey, nodeId, geometrySnapshot);
+      const restored = await restoreOutlineStrokes(svg, filled, component, fileKey);
+      svg = restored.svg;
+      strokeLocators = restored.locators.map((path) => path.join('.'));
+    }
     const importedBindings =
       icon.colorBindings ??
       (icon.evidence?.themePaintBindings
@@ -174,6 +186,15 @@ export async function planSourceImport(input, root = packageRoot) {
           status: 'unknown',
           bindings: [],
         });
+    if (importedBindings && strokeLocators.length) {
+      for (const binding of record.colorBindings.bindings)
+        if (binding.targets)
+          binding.targets = binding.targets.map((target) =>
+            target.attribute === 'fill' && strokeLocators.includes(target.locator.join('.'))
+              ? { ...target, attribute: 'stroke' }
+              : target,
+          );
+    }
     const mapping = {
       ...priorMapping,
       exportName,

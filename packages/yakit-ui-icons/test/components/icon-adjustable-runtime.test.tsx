@@ -130,7 +130,8 @@ describe('adjustable icon runtime stroke contract', () => {
             `${sourceNodeId.replace(':', '-')}.svg` as keyof typeof outlineStrokeContract
           ].classification === 'adjustable',
       );
-      expect(adjustable).toHaveLength(iconCounts.outline - 12);
+      expect(adjustable).toHaveLength(iconCounts.outline - 11);
+      expect(adjustable.some(({ exportName }) => exportName === 'BugOutlined')).toBe(true);
       const { container } = render(
         <>
           {adjustable.map(({ Component, exportName }) => (
