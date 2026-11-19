@@ -15,7 +15,14 @@ const packages = [];
 
 for (const workspaceRoot of workspaceRoots) {
   const absoluteRoot = path.join(root, workspaceRoot);
-  for (const entry of await readdir(absoluteRoot, { withFileTypes: true })) {
+  let entries;
+  try {
+    entries = await readdir(absoluteRoot, { withFileTypes: true });
+  } catch (error) {
+    if (workspaceRoot === "apps" && error?.code === "ENOENT") continue;
+    throw error;
+  }
+  for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     const manifestPath = path.join(absoluteRoot, entry.name, "package.json");
     let manifest;

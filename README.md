@@ -10,8 +10,6 @@ Yakit 业务组件库 monorepo（pnpm workspace + Turborepo），对外发布两
 ## 仓库结构
 
 ```
-├── apps/
-│   └── console/          # Electron 应用（私有，不发布）
 ├── packages/
 │   ├── yakit-ui/         # 组件库 + 图标兼容入口 + Storybook（发布）
 │   └── yakit-ui-icons/   # 图标源码（发布）

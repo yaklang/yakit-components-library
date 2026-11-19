@@ -31,3 +31,4 @@ packages/yakit-ui/test-results/
 *.njsproj
 *.sln
 *.sw?
+/.omx/
