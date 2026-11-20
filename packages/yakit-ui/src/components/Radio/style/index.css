@@ -1,0 +1,651 @@
+.yakit-radio {
+  --yakit-radio-border: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+  --yakit-radio-bg: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #ffffff));
+  --yakit-radio-dot: transparent;
+  --yakit-radio-label: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title, #353639));
+  --yakit-radio-description: var(--yakit-color-text-help, var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1));
+  align-items: center;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'PingFang SC', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  gap: var(--yakit-radio-gap, 8px);
+  margin: 0;
+  position: relative;
+  user-select: none;
+  vertical-align: top;
+}
+
+.yakit-radio-control {
+  display: inline-flex;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.yakit-radio-input {
+  cursor: pointer;
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.yakit-radio-inner {
+  background: var(--yakit-radio-bg);
+  border: 1px solid var(--yakit-radio-border);
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.yakit-radio-inner::after {
+  background: var(--yakit-radio-dot);
+  border-radius: 50%;
+  content: '';
+  height: 50%;
+  left: 50%;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    background-color 0.2s ease;
+  width: 50%;
+}
+
+/* sizes: medium = md-16, large = lg-20  */
+.yakit-radio-medium .yakit-radio-control,
+.yakit-radio-medium .yakit-radio-inner {
+  height: var(--yakit-radio-size-md, 16px);
+  width: var(--yakit-radio-size-md, 16px);
+}
+
+.yakit-radio-large .yakit-radio-control,
+.yakit-radio-large .yakit-radio-inner {
+  height: var(--yakit-radio-size-lg, 20px);
+  width: var(--yakit-radio-size-lg, 20px);
+}
+
+.yakit-radio-medium .yakit-radio-label {
+  font-size: var(--yakit-radio-font-size-md, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-radio-line-height-md, 16px);
+}
+
+.yakit-radio-medium .yakit-radio-description {
+  font-size: var(--yakit-radio-description-font-size, 12px);
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-radio-description-line-height, 16px);
+}
+
+.yakit-radio-large .yakit-radio-label {
+  font-size: var(--yakit-radio-font-size-lg, 14px);
+  letter-spacing: 0.1px;
+  line-height: var(--yakit-radio-line-height-lg, 20px);
+}
+
+.yakit-radio-large .yakit-radio-description {
+  font-size: var(--yakit-radio-description-font-size, 12px);
+  letter-spacing: 0.1px;
+  line-height: var(--yakit-radio-description-line-height, 16px);
+}
+
+.yakit-radio-content {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.yakit-radio-label {
+  color: var(--yakit-radio-label);
+}
+
+.yakit-radio-description {
+  color: var(--yakit-radio-description);
+}
+
+/* hover: empty */
+.yakit-radio:hover:not(.yakit-radio-disabled):not(.yakit-radio-checked) {
+  --yakit-radio-border: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64));
+  --yakit-radio-bg: var(--yakit-color-primary-bg-hover, var(--Colors-Use-Main-Bg-Hover, #fdf0e6));
+}
+
+/* hover: selected */
+.yakit-radio-checked:hover:not(.yakit-radio-disabled) {
+  --yakit-radio-border: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64));
+  --yakit-radio-dot: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64));
+}
+
+/* checked primary */
+.yakit-radio-checked {
+  --yakit-radio-border: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  --yakit-radio-dot: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+}
+
+.yakit-radio-checked .yakit-radio-inner::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* disabled empty */
+.yakit-radio-disabled {
+  cursor: not-allowed;
+  --yakit-radio-border: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
+  --yakit-radio-bg: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover, #eef0f3));
+  --yakit-radio-label: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+  --yakit-radio-description: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+}
+
+.yakit-radio-disabled .yakit-radio-input {
+  cursor: not-allowed;
+}
+
+/* disabled selected */
+.yakit-radio-disabled.yakit-radio-checked {
+  --yakit-radio-border: var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  --yakit-radio-dot: var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  --yakit-radio-bg: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #ffffff));
+}
+
+/* 键盘焦点：提高选择器优先级，压掉 antd 5 的 focus outline 与主项目 theme 的 focus box-shadow */
+.yakit-radio.ant-radio-wrapper .yakit-radio-input:focus-visible + .yakit-radio-inner {
+  outline: 2px solid var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+.yakit-radio-group {
+  --radio-buttons-box-shadow-color: var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  --radio-buttons-border-color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  --radio-buttons-border-hover-color: var(--yakit-color-primary-border, var(--Colors-Use-Main-Border, #f9c5a2));
+  --radio-buttons-border-active-color: var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e));
+  --radio-buttons-primary-font-color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  --radio-buttons-primary-font-hover-color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  --radio-buttons-background-color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  --radio-buttons-background-hover-color: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64));
+  --radio-buttons-background-active-color: var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e));
+  --radio-buttons-solid-font-color: var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee));
+}
+/* ========================== Group ========================== */
+/* 默认横排，对齐 antd / yakit 常见用法 */
+.yakit-radio-group {
+  align-items: center;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.yakit-radio-group-vertical {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.yakit-radio-group-block {
+  display: flex;
+  width: 100%;
+}
+
+/* ========================== Button group ========================== */
+.yakit-radio-group-button {
+  /* button token vars inherit from .yakit-radio-group / .ant-radio-group */
+  align-items: stretch;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0;
+}
+
+.yakit-radio-group-button.yakit-radio-group-vertical {
+  flex-direction: column;
+}
+
+.yakit-radio-group-button.yakit-radio-group-vertical .yakit-radio-group-button-item {
+  flex: none;
+  margin-block-start: -1px;
+  margin-inline-start: 0;
+}
+
+.yakit-radio-group-button.yakit-radio-group-vertical .yakit-radio-group-button-item:first-child {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+  border-start-end-radius: var(--yakit-radio-button-border-radius, 4px);
+  border-start-start-radius: var(--yakit-radio-button-border-radius, 4px);
+  margin-block-start: 0;
+}
+
+.yakit-radio-group-button.yakit-radio-group-vertical .yakit-radio-group-button-item:last-child {
+  border-end-start-radius: var(--yakit-radio-button-border-radius, 4px);
+  border-end-end-radius: var(--yakit-radio-button-border-radius, 4px);
+  border-start-end-radius: 0;
+  border-start-start-radius: 0;
+}
+
+.yakit-radio-group-button.yakit-radio-group-vertical .yakit-radio-group-button-item:only-child {
+  border-radius: var(--yakit-radio-button-border-radius, 4px);
+}
+
+.yakit-radio-group-button.yakit-radio-group-vertical.yakit-radio-group-block .yakit-radio-group-button-item {
+  width: 100%;
+}
+
+.yakit-radio-group-button.yakit-radio-group-block {
+  display: flex;
+}
+
+.yakit-radio-group-button.yakit-radio-group-block .yakit-radio-group-button-item {
+  flex: 1;
+  justify-content: center;
+}
+
+.yakit-radio-group-button-item {
+  align-items: center;
+  background: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #ffffff));
+  border: 1px solid var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
+  box-sizing: border-box;
+  color: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title, #353639));
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'PingFang SC', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  height: 24px;
+  line-height: 24px;
+  margin-inline-start: -1px;
+  padding: 0 14px;
+  position: relative;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  user-select: none;
+  word-break: keep-all;
+}
+
+.yakit-radio-group-button-item:first-child {
+  border-start-start-radius: var(--yakit-radio-button-border-radius, 4px);
+  border-end-start-radius: var(--yakit-radio-button-border-radius, 4px);
+  margin-inline-start: 0;
+}
+
+.yakit-radio-group-button-item:last-child {
+  border-start-end-radius: var(--yakit-radio-button-border-radius, 4px);
+  border-end-end-radius: var(--yakit-radio-button-border-radius, 4px);
+}
+
+.yakit-radio-group-button-item:only-child {
+  border-radius: var(--yakit-radio-button-border-radius, 4px);
+}
+
+.yakit-radio-group-button-input {
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  width: 0;
+}
+
+.yakit-radio-group-button-label {
+  pointer-events: none;
+}
+
+.yakit-radio-group-button-item:hover:not(.yakit-radio-group-button-item-disabled):not(.yakit-radio-group-button-item-checked) {
+  color: var(--radio-buttons-primary-font-hover-color);
+  z-index: 1;
+}
+
+/* outline（默认）：选中仅描边 + 主色字，对齐主项目非 solid */
+.yakit-radio-group-button-outline .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled) {
+  background: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #ffffff));
+  border-color: var(--radio-buttons-border-color);
+  color: var(--radio-buttons-primary-font-color);
+  z-index: 2;
+}
+
+.yakit-radio-group-button-outline .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):focus-within,
+.yakit-radio-group-button-outline .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):active {
+  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color);
+}
+
+/* solid：选中填充主色 + On-Primary 字色，对齐主项目 YakitRadioButtons solid */
+.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled) {
+  background: var(--radio-buttons-background-color);
+  border-color: var(--radio-buttons-border-color);
+  color: var(--radio-buttons-solid-font-color);
+  z-index: 2;
+}
+
+.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover {
+  background: var(--radio-buttons-background-hover-color);
+  border-color: var(--radio-buttons-border-hover-color);
+}
+
+.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):focus-within {
+  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color);
+}
+
+.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):active {
+  background: var(--radio-buttons-background-active-color);
+  border-color: var(--radio-buttons-border-active-color);
+  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color);
+}
+
+.yakit-radio-group-button-item:focus-within {
+  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color);
+  z-index: 2;
+}
+
+.yakit-radio-group-button-item-disabled {
+  background: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover, #eef0f3));
+  color: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+  cursor: not-allowed;
+}
+
+.yakit-radio-group-button-item-disabled:hover {
+  color: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+}
+
+.yakit-radio-group-button-item-checked.yakit-radio-group-button-item-disabled {
+  background: var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  border-color: var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6));
+  color: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64));
+}
+
+/* ---------- button sizes（对齐主项目 heights） ---------- */
+.yakit-radio-group-button.yakit-radio-group-small .yakit-radio-group-button-item {
+  font-size: 11px;
+  font-weight: 500;
+  height: 20px;
+  line-height: 14px;
+  padding: 0 14px;
+}
+
+.yakit-radio-group-button.yakit-radio-group-middle .yakit-radio-group-button-item {
+  font-size: 12px;
+  font-weight: 600;
+  height: 24px;
+  line-height: 24px;
+  padding: 0 14px;
+}
+
+.yakit-radio-group-button.yakit-radio-group-large .yakit-radio-group-button-item {
+  font-size: 12px;
+  font-weight: 500;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 14px;
+}
+
+.yakit-radio-group-button.yakit-radio-group-max-large .yakit-radio-group-button-item {
+  font-size: 14px;
+  font-weight: 500;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 14px;
+}
+
+/* ==========================================================================
+ * antd .ant-radio-* 兼容层
+ * 对照主项目 theme/componentsTheme/radio.scss、YakitRadioButtons.module.scss
+ * 以及各页面 :global(.ant-radio-button-wrapper) 等选择器，保证换 import 后仍能命中。
+ * DOM 同时挂 yakit-* 与 ant-*；下列规则补结构与分隔线，视觉主源仍是上方 yakit 规则。
+ * ========================================================================== */
+
+/* 圆形：antd wrapper / control / inner 与 yakit 双挂，结构对齐 RcCheckbox */
+.yakit-radio.ant-radio-wrapper {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 有副文案时顶对齐；双 class 提高优先级，避免被上方 ant-radio-wrapper 的 center 盖掉 */
+.yakit-radio.yakit-radio-with-description {
+  align-items: flex-start;
+}
+
+/* block：圆形项撑满并居中（antd 6 与主项目 antd 5 都有 wrapper-block，但库内需要自带样式） */
+.yakit-radio.ant-radio-wrapper-block {
+  flex: 1;
+  justify-content: center;
+}
+
+.yakit-radio .ant-radio {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.yakit-radio .ant-radio-input {
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.yakit-radio-disabled .ant-radio-input,
+.yakit-radio.ant-radio-wrapper-disabled {
+  cursor: not-allowed;
+}
+
+/* 按钮：antd wrapper 结构 + 分隔 ::before（主项目 scss 会改 ::before 背景色） */
+.yakit-radio-group .ant-radio-button-wrapper {
+  position: relative;
+}
+
+.yakit-radio-group .ant-radio-button {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.yakit-radio-group .ant-radio-button-input {
+  cursor: pointer;
+  height: 100%;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.yakit-radio-group .ant-radio-button-wrapper-disabled .ant-radio-button-input {
+  cursor: not-allowed;
+}
+
+.yakit-radio-group .ant-radio-button-inner {
+  display: none;
+}
+
+/* 对齐 antd / 主项目：非首项 inline-start 侧 1px 分隔线 */
+.yakit-radio-group .ant-radio-button-wrapper:not(:first-child)::before {
+  background-color: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
+  box-sizing: content-box;
+  content: '';
+  display: block;
+  height: 100%;
+  inset-inline-start: -1px;
+  padding: 1px 0;
+  position: absolute;
+  top: -1px;
+  width: 1px;
+}
+
+.yakit-radio-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
+  background-color: var(--radio-buttons-background-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+}
+
+.yakit-radio-group-vertical .ant-radio-button-wrapper:not(:first-child)::before {
+  height: 1px;
+  inset-block-start: -1px;
+  inset-inline-start: 0;
+  padding: 0 1px;
+  top: auto;
+  width: 100%;
+}
+
+/* 尺寸：antd 仅 small/large；maxLarge 走 yakit-radio-group-max-large */
+.yakit-radio-group.ant-radio-group-small .ant-radio-button-wrapper {
+  font-size: 11px;
+  font-weight: 500;
+  height: 20px;
+  line-height: 14px;
+  padding: 0 14px;
+}
+
+.yakit-radio-group.ant-radio-group-large .ant-radio-button-wrapper {
+  font-size: 12px;
+  font-weight: 500;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 14px;
+}
+
+.yakit-radio-group.yakit-radio-group-max-large .ant-radio-button-wrapper {
+  font-size: 14px;
+  font-weight: 500;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 14px;
+}
+
+/* solid：对齐主项目
+ * .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)
+ */
+.yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background: var(--radio-buttons-background-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+  border-color: var(--radio-buttons-border-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+  color: var(--radio-buttons-solid-font-color, var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee)));
+  z-index: 2;
+}
+
+.yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  background: var(--radio-buttons-background-hover-color, var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64)));
+  border-color: var(--radio-buttons-border-hover-color, var(--yakit-color-primary-border, var(--Colors-Use-Main-Border, #f9c5a2)));
+}
+
+.yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active {
+  background: var(--radio-buttons-background-active-color, var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e)));
+  border-color: var(--radio-buttons-border-active-color, var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e)));
+  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color, var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6)));
+}
+
+/* 选中项 hover/focus：提高优先级，避免被通用 :hover 盖掉字色与 z-index（实心选中勿变成主色字叠主色底） */
+.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover,
+.yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  color: var(--radio-buttons-solid-font-color, var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee)));
+  z-index: 2;
+}
+
+.yakit-radio-group-button-outline .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover,
+.yakit-radio-group.ant-radio-group-outline .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  border-color: var(--radio-buttons-border-hover-color, var(--yakit-color-primary-border, var(--Colors-Use-Main-Border, #f9c5a2)));
+  color: var(--radio-buttons-primary-font-hover-color, var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64)));
+  z-index: 2;
+}
+
+.yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled),
+.yakit-radio-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  z-index: 2;
+}
+
+/* outline 选中态（antd / 主项目非 solid） */
+.yakit-radio-group.ant-radio-group-outline .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  border-color: var(--radio-buttons-border-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+  color: var(--radio-buttons-primary-font-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+  z-index: 2;
+}
+
+.yakit-radio-group .ant-radio-button-wrapper:hover:not(.ant-radio-button-wrapper-disabled):not(.ant-radio-button-wrapper-checked) {
+  color: var(--radio-buttons-primary-font-hover-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+  z-index: 1;
+}
+
+.yakit-radio-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):focus-within,
+.yakit-radio-group .ant-radio-button-wrapper:focus-within {
+  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color, var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6)));
+}
+
+/* ==========================================================================
+ * antd 5 base reset
+ * 主项目 ConfigProvider 设置 hashed:false，antd 5 的裸 .ant-radio-* 选择器会命中
+ * 兼容 DOM。这里用组合 class 接管库内未声明、会被 antd 带偏的几何属性；
+ * 颜色仍由主项目 theme/componentsTheme/radio.scss 决定。
+ * 注意：主项目升级 antd 6 后圆框样式会移到 .ant-radio 本身，届时需要重新核对本段。
+ * ========================================================================== */
+
+.yakit-radio.ant-radio-wrapper {
+  margin-inline-end: 0;
+}
+
+/* antd 5 会在 wrapper 上生成零宽 ::after 作为 flex item，多吃一个 gap */
+.yakit-radio.ant-radio-wrapper::after {
+  content: none;
+}
+
+/* antd 5 的 span.ant-radio + * 会给文案区加 8px 左右 padding */
+.yakit-radio.ant-radio-wrapper span.ant-radio + * {
+  padding-inline: 0;
+}
+
+/* antd 5 的 dot 用 width:16px + margin:-8px 居中；库内是 50% + translate，需清掉 margin */
+.yakit-radio .yakit-radio-inner::after {
+  margin: 0;
+}
+
+/* antd 5 的 checked 规则优先级更高且只写 scale，会丢掉库内的 translate */
+.yakit-radio.yakit-radio-checked .yakit-radio-inner::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* antd 5 的按钮项自带 margin-inline-end:-1px，会与库的 start:-1px 叠加成 2px */
+.yakit-radio-group .yakit-radio-group-button-item {
+  margin-inline-end: 0;
+}
+
+/* antd 5 的 :first-child/:last-child（0,2,0）会盖掉库内单 class 的圆角与首项边框色 */
+.yakit-radio-group .yakit-radio-group-button-item:first-child {
+  border-inline-start-color: var(
+    --yakit-color-neutral-border,
+    var(--Colors-Use-Neutral-Border, #e6e8ed)
+  );
+  border-start-start-radius: var(--yakit-radio-button-border-radius, 4px);
+  border-end-start-radius: var(--yakit-radio-button-border-radius, 4px);
+}
+
+.yakit-radio-group .yakit-radio-group-button-item:last-child {
+  border-start-end-radius: var(--yakit-radio-button-border-radius, 4px);
+  border-end-end-radius: var(--yakit-radio-button-border-radius, 4px);
+}
+
+.yakit-radio-group .yakit-radio-group-button-item:only-child {
+  border-radius: var(--yakit-radio-button-border-radius, 4px);
+}
+
+/* antd 5 的 :has(:focus-visible) outline 与库的 :focus-within shadow 会叠两层 */
+.yakit-radio-group .ant-radio-button-wrapper:has(:focus-visible) {
+  outline: none;
+}

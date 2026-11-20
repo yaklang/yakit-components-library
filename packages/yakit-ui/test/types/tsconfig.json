@@ -8,6 +8,7 @@
     "../../src/vite-env.d.ts",
     "input-public.test.tsx",
     "tree-public.test.tsx",
-    "spin-public.test.tsx"
+    "spin-public.test.tsx",
+    "radio-public.test.tsx"
   ]
 }
