@@ -32,7 +32,7 @@ export function assertSafePackEntries(entries) {
     throw new Error(`forbidden package paths: ${forbidden.join(", ")}`);
   for (const entry of normalized) {
     if (
-      !/^(?:dist|storybook-static)\//.test(entry) &&
+      !/^dist\//.test(entry) &&
       !/^(?:package\.json|README(?:\.md)?|LICENSE(?:\..*)?)$/.test(entry)
     ) {
       throw new Error(`unexpected package path: ${entry}`);

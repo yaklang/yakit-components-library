@@ -13,6 +13,50 @@ const expectedPublicPackages = [
 const failures = [];
 const packages = [];
 
+async function inspectPackage(directory) {
+  const manifestPath = path.join(directory, "package.json");
+  let manifest;
+  try {
+    manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  } catch (error) {
+    if (error?.code === "ENOENT") return;
+    throw error;
+  }
+
+  const relativePath = path.relative(root, manifestPath);
+  const publishable = manifest.private !== true;
+  packages.push({
+    name: manifest.name,
+    path: relativePath,
+    private: manifest.private === true,
+  });
+
+  if (publishable && !expectedPublicPackages.includes(manifest.name)) {
+    failures.push(
+      `${relativePath}: only ${expectedPublicPackages.join(" and ")} may be non-private`,
+    );
+  }
+  if (
+    expectedPublicPackages.includes(manifest.name) &&
+    manifest.private === true
+  ) {
+    failures.push(`${relativePath}: ${manifest.name} must remain publishable`);
+  }
+
+  const nestedLockfile = path.join(
+    path.dirname(manifestPath),
+    "pnpm-lock.yaml",
+  );
+  try {
+    await readFile(nestedLockfile, "utf8");
+    failures.push(
+      `${path.relative(root, nestedLockfile)}: nested workspace lockfiles are forbidden`,
+    );
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+  }
+}
+
 for (const workspaceRoot of workspaceRoots) {
   const absoluteRoot = path.join(root, workspaceRoot);
   let entries;
@@ -24,51 +68,11 @@ for (const workspaceRoot of workspaceRoots) {
   }
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
-    const manifestPath = path.join(absoluteRoot, entry.name, "package.json");
-    let manifest;
-    try {
-      manifest = JSON.parse(await readFile(manifestPath, "utf8"));
-    } catch (error) {
-      if (error?.code === "ENOENT") continue;
-      throw error;
-    }
-
-    const relativePath = path.relative(root, manifestPath);
-    const publishable = manifest.private !== true;
-    packages.push({
-      name: manifest.name,
-      path: relativePath,
-      private: manifest.private === true,
-    });
-
-    if (publishable && !expectedPublicPackages.includes(manifest.name)) {
-      failures.push(
-        `${relativePath}: only ${expectedPublicPackages.join(" and ")} may be non-private`,
-      );
-    }
-    if (
-      expectedPublicPackages.includes(manifest.name) &&
-      manifest.private === true
-    ) {
-      failures.push(
-        `${relativePath}: ${manifest.name} must remain publishable`,
-      );
-    }
-
-    const nestedLockfile = path.join(
-      path.dirname(manifestPath),
-      "pnpm-lock.yaml",
-    );
-    try {
-      await readFile(nestedLockfile, "utf8");
-      failures.push(
-        `${path.relative(root, nestedLockfile)}: nested workspace lockfiles are forbidden`,
-      );
-    } catch (error) {
-      if (error?.code !== "ENOENT") throw error;
-    }
+    await inspectPackage(path.join(absoluteRoot, entry.name));
   }
 }
+
+await inspectPackage(path.join(root, "storybook"));
 
 const publishableNames = packages
   .filter((item) => !item.private)

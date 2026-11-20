@@ -62,11 +62,9 @@ const POLICIES = {
       "package/dist/index.js",
       "package/dist/index.d.ts",
       "package/dist/index.css",
-      "package/dist/bin/yakit-ui-storybook.mjs",
-      "package/storybook-static/index.html",
       "package/LICENSE",
     ],
-    prefixes: ["package/dist/", "package/storybook-static/"],
+    prefixes: ["package/dist/"],
   },
   "@yakit-libs/yakit-ui-icons": {
     required: [
@@ -206,6 +204,8 @@ export async function verifyPackageTarball(tarball) {
     .map((entry) => entry.trim())
     .filter(Boolean);
   const failures = [];
+  if (manifest.name === "@yakit-libs/yakit-ui" && (manifest.bin || entries.includes("package/dist/bin/yakit-ui-storybook.mjs")))
+    failures.push("the offline launcher belongs in the documentation ZIP");
   for (const entry of policy.required)
     if (!entries.includes(entry)) failures.push(`missing ${entry}`);
   for (const entry of entries) {

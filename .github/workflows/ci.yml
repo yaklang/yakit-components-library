@@ -140,6 +140,8 @@ jobs:
         run: pnpm --filter @yakit-libs/yakit-ui run build:package:prepared
       - if: needs.scope.outputs.storybook != 'true'
         run: pnpm --filter @yakit-libs/yakit-ui run build:lib:prepared
+      - if: needs.scope.outputs.storybook == 'true'
+        run: pnpm --dir storybook run lint && pnpm --dir storybook run check-types && pnpm --dir storybook run build:static
       - run: pnpm run test:auto-import
       - run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
       - run: pnpm --filter @yakit-libs/yakit-ui exec vitest run --config vitest.node.config.ts test/icons/dist-consumer.test.ts test/icons/icon-stroke-width-dist.test.ts test/icons/icon-adjustable-consumer.test.ts

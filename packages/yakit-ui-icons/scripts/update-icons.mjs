@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile, readdir, mkdir, writeFile, rename, unlink, lstat } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
-import { format, resolveConfig } from 'prettier';
+import { formatGeneratedTypeScript } from './format-generated-typescript.mjs';
 import { ICON_FAMILIES, readIconSources, sourceExports, sourceFiles } from './icon-source-data.mjs';
 import { renderOfflineCatalog } from './offline-catalog.mjs';
 import { colorfulComponentNodeId } from './colorful-icon-contracts.mjs';
@@ -375,16 +375,9 @@ export async function planIconUpdate(
         .join('\n') +
         "\nexport * from './colorful/index.js';\nexport * from './outline/index.js';\nexport * from './solid/index.js';\nexport type { IconComponent, IconProps, IconRef, IconSvgProps } from './types.js';\n",
     );
-  const prettier = (await resolveConfig(path.join(root, 'src/index.tsx'))) ?? {};
   for (const [file, content] of output)
     if (/\.tsx?$/.test(file))
-      output.set(
-        file,
-        await format(file.endsWith('.json') ? JSON.stringify(JSON.parse(content)) : content, {
-          ...prettier,
-          filepath: file,
-        }),
-      );
+      output.set(file, await formatGeneratedTypeScript(content, file));
   const changes = new Map();
   for (const [file, content] of output) {
     const before = await optionalRead(root, file);

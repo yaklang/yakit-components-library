@@ -118,3 +118,11 @@ test("split original files select icon checks; transformation and display policy
     assert.equal(flags.storybook, true);
   }
 });
+
+test("standalone stories select the documentation build without package release gates", () => {
+  const flags = classify(["storybook/stories/ui/Input.stories.tsx"]);
+  assert.equal(flags.storybook, true);
+  assert.equal(flags.icon_build, true);
+  assert.equal(flags.release_tools, false);
+  assert.equal(flags.integration, true);
+});

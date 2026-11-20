@@ -51,14 +51,14 @@ test("the root lockfile is the only workspace pnpm lockfile", () => {
   assert.deepEqual(found.sort(), ["pnpm-lock.yaml"]);
 });
 
-test("package allowlist publishes library, Storybook, and package documentation only", () => {
+test("package allowlist publishes library and package documentation only", () => {
   const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
   assert.ok(manifest.files.includes("dist"));
-  assert.ok(manifest.files.includes("storybook-static"));
+  assert.ok(!manifest.files.includes("storybook-static"));
   assert.ok(manifest.files.includes("LICENSE"));
   assert.ok(
     manifest.files.every((entry) =>
-      /^(?:dist|storybook-static|README(?:\.md)?|LICENSE(?:\..*)?)$/.test(
+      /^(?:dist|README(?:\.md)?|LICENSE(?:\..*)?)$/.test(
         entry,
       ),
     ),
@@ -176,12 +176,9 @@ test("package exports the ESM library, declarations, and CSS contract", () => {
   assert.deepEqual(manifest.sideEffects, ["**/*.css", "dist/browser/**/*.js"]);
 });
 
-test("package declares the offline Storybook launcher bin", () => {
-  const manifest = readJson(join(root, "packages/yakit-ui/package.json"));
-  assert.equal(
-    manifest.bin["yakit-ui-storybook"],
-    "./dist/bin/yakit-ui-storybook.mjs",
-  );
+test("offline Storybook is a private workspace separate from npm packages", () => {
+  assert.equal(readJson(join(root, "storybook/package.json")).private, true);
+  assert.equal(readJson(join(root, "packages/yakit-ui/package.json")).bin, undefined);
 });
 
 test("React runtimes are peers, removed UI runtimes are absent, and package-owned runtimes are dependencies", () => {
@@ -385,11 +382,9 @@ test("package verification hard-gates every final zero-dependency surface", () =
     "utf8",
   );
   for (const surface of [
-    "'.storybook'",
     "'config'",
     "'dist'",
     "'src'",
-    "'storybook-static'",
     "'vite.config.ts'",
     "'vitest.config.ts'",
     "'vitest.node.config.ts'",

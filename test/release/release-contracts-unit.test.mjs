@@ -8,14 +8,13 @@ import {
   resolveStaticAsset,
 } from "./helpers/release-contracts.mjs";
 
-test("pack allowlist accepts public library and Storybook files", () => {
+test("pack allowlist accepts public library files", () => {
   assert.deepEqual(
     assertSafePackEntries([
       "package/dist/index.js",
-      "package/storybook-static/index.html",
       "package/package.json",
     ]),
-    ["dist/index.js", "storybook-static/index.html", "package.json"],
+    ["dist/index.js", "package.json"],
   );
 });
 

@@ -32,3 +32,4 @@ packages/yakit-ui/test-results/
 *.sln
 *.sw?
 /.omx/
+storybook/storybook-static/

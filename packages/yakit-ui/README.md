@@ -1,6 +1,6 @@
 # @yakit-libs/yakit-ui
 
-Yakit 的 React 组件库。npm 包同时包含与组件版本一致的静态 Storybook，可在本地离线浏览。
+Yakit 的 React 组件库。离线 Storybook 随组件库的 GitHub Release 提供。
 
 ## 安装
 
@@ -89,19 +89,15 @@ export function Example() {
 
 `style.css` 包含由 `@yakit-libs/color@1.4.1` 生成的 Main 主题 light/dark 变量；将根元素的 `data-theme` 设置为 `dark` 即可切换暗色变量。
 
-## 浏览当前版本的 Storybook
+## 离线 Storybook
+
+在对应的 [GitHub Release](https://github.com/yaklang/yakit-components-library/releases) 下载 `storybook-ui-<UI版本>-icons-<图标版本>.zip`，解压后运行：
 
 ```bash
-pnpm exec yakit-ui-storybook
+node serve.mjs --open
 ```
 
-服务默认仅监听 `127.0.0.1:6006`。可通过参数调整：
-
-```bash
-pnpm exec yakit-ui-storybook --port 6100 --host 127.0.0.1 --open
-```
-
-使用 `--help` 查看所有参数。该命令只读取 npm 包内置的 `storybook-static`，不需要重新构建项目。
+默认地址是 `http://127.0.0.1:6006/`。运行 `node serve.mjs --help` 查看端口等选项。双包同批发布时，图标 Release 链接到 UI Release 的同一附件。
 
 ## 仓库开发
 

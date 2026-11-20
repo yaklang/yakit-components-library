@@ -22,8 +22,6 @@ const createTarball = (extraEntries = []) => {
     "dist/index.js",
     "dist/index.d.ts",
     "dist/index.css",
-    "dist/bin/yakit-ui-storybook.mjs",
-    "storybook-static/index.html",
     ...extraEntries,
   ]) {
     const file = join(packageRoot, entry);

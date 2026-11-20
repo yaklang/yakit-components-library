@@ -2,6 +2,16 @@
 
 Yakit UI 的 React 图标包。它不依赖组件库或 CSS-in-JS 运行时，颜色 token 由运行时依赖 `@yakit-libs/color` 提供。
 
+## 离线 Storybook
+
+在对应的 [GitHub Release](https://github.com/yaklang/yakit-components-library/releases) 下载 `storybook-ui-<UI版本>-icons-<图标版本>.zip`，解压后运行：
+
+```bash
+node serve.mjs --open
+```
+
+默认地址是 `http://127.0.0.1:6006/`。运行 `node serve.mjs --help` 查看端口等选项。双包同批发布时，图标 Release 链接到 UI Release 的同一附件。
+
 ## 安装
 
 在已有 React 的项目中安装图标包：

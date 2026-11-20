@@ -83,7 +83,9 @@ pnpm --filter @yakit-libs/yakit-ui-icons run build
 
 `icons:check` 默认离线检查当前全量图标，不访问 Figma、不写回来源或生成文件。它覆盖生成结果、当前来源与规则、功能测试和类型检查；完整发布检查仍使用上面的 `release:dry-run`。
 
-The UI package includes the Storybook site. Its total packed size, unpacked size and file count have no hard ceilings; normal growth of the component library and documentation does not block CI or publication. Package-content, export, type and consumer checks remain required. The independent icon package retains its own size limits. Use `pnpm --filter @yakit-libs/yakit-ui run pack:dry-run` to inspect the current UI package contents and sizes.
+The private root Storybook workspace builds the offline ZIP from both exact tarballs recorded in verification evidence. A single-package release uses the frozen registry counterpart and its tagged stories. The ZIP and its SHA-256 travel with the verification artifact. After registry smoke and GitHub metadata reconciliation, the workflow uploads the ZIP to the released package (UI for a joint release), and links it from the second release. A failed attachment job can be rerun on its own. Recovery uses the original verified ZIP and checks existing asset digests before adding missing links. For manual bootstrap, run the existing recovery workflow after publishing the verified tarballs to reconcile metadata and deliver the ZIP.
+
+Open the extracted directory and run `node serve.mjs --open` with Node.js. For local authoring, run `pnpm storybook` or `pnpm storybook:build` from the repository root.
 
 ## Stable flow
 

@@ -2,7 +2,7 @@
   "name": "@yakit-libs/yakit-ui",
   "private": false,
   "version": "0.2.3",
-  "description": "Yakit React component library with a version-matched offline Storybook.",
+  "description": "Yakit React component library.",
   "keywords": [
     "@yakit-libs/yakit-ui",
     "@yakit-libs",
@@ -13,7 +13,6 @@
   "type": "module",
   "files": [
     "dist",
-    "storybook-static",
     "README.md",
     "LICENSE"
   ],
@@ -53,9 +52,6 @@
     "./icons/icon.css": "./dist/icon.css",
     "./style.css": "./dist/index.css"
   },
-  "bin": {
-    "yakit-ui-storybook": "./dist/bin/yakit-ui-storybook.mjs"
-  },
   "sideEffects": [
     "**/*.css",
     "dist/browser/**/*.js"
@@ -78,11 +74,10 @@
   },
   "scripts": {
     "dev": "node scripts/dev-with-icons.mjs vite",
-    "start:dev": "node scripts/dev-with-icons.mjs storybook dev -p 6006",
     "build": "pnpm --filter @yakit-libs/yakit-ui-icons run build && tsc -b && vite build",
     "generate:color-css": "yakit-color-css --theme Main --out src/styles/color.css",
     "build:lib": "pnpm --filter @yakit-libs/yakit-ui-icons run build && pnpm run build:lib:prepared",
-    "build:package": "node scripts/release/build-package.mjs",
+    "build:package": "pnpm run build:lib && pnpm run verify:package",
     "verify:package": "node scripts/release/verify-package.mjs",
     "test:release": "node --test test/release/*.test.mjs",
     "test:ssr-fixtures": "vitest run --config vitest.node.config.ts test/ssr/native-components-ssr.test.tsx",
@@ -90,20 +85,18 @@
     "release:dry-run": "pnpm run test:release && pnpm run build:package && pnpm run verify:package && pnpm run pack:dry-run",
     "pack:dry-run": "pnpm pack --dry-run",
     "prepack": "node scripts/release/verify-package.mjs",
-    "lint": "eslint src scripts .storybook test/icons test/components test/fixtures test/ssr test/types vite.config.ts vitest.config.ts vitest.node.config.ts vitest.react18.config.ts",
-    "lint:fix": "eslint src scripts .storybook test/icons test/components test/fixtures test/ssr test/types vite.config.ts vitest.config.ts vitest.node.config.ts vitest.react18.config.ts --fix",
+    "lint": "eslint src scripts test/icons test/components test/fixtures test/ssr test/types vite.config.ts vitest.config.ts vitest.node.config.ts vitest.react18.config.ts",
+    "lint:fix": "eslint src scripts test/icons test/components test/fixtures test/ssr test/types vite.config.ts vitest.config.ts vitest.node.config.ts vitest.react18.config.ts --fix",
     "test": "vitest run --config vitest.config.ts",
     "test:icon-dist-consumer": "pnpm --filter @yakit-libs/yakit-ui-icons run build && pnpm run build:lib && vitest run --config vitest.node.config.ts test/icons/dist-consumer.test.ts test/icons/icon-stroke-width-dist.test.ts test/icons/icon-adjustable-consumer.test.ts",
     "test:icon-package-contract": "tsc -p test/types/tsconfig.public.json --noEmit && vitest run --config vitest.node.config.ts test/icons/light-entry-contract.test.ts test/icons/dedicated-package-contract.test.ts",
     "test:types": "tsc -p test/types/tsconfig.json --noEmit",
     "format": "prettier --write 'src/**/*.{ts,tsx,less,json,md}'",
     "format:check": "prettier --check 'src/**/*.{ts,tsx,less,json,md}'",
-    "storybook": "node scripts/dev-with-icons.mjs storybook dev -p 6006",
-    "build-storybook": "pnpm --filter @yakit-libs/yakit-ui-icons run build && storybook build",
     "test:icon-integration": "vitest run --config vitest.node.config.ts test/icons/icon-storybook-contract.test.ts test/icons/oldicon-storybook-contract.test.ts",
     "icons:check-private": "node scripts/check-private-icons.mjs",
     "build:lib:prepared": "pnpm run generate:color-css && vite build --mode lib && tsc -p tsconfig.lib.json && node scripts/release/fix-declaration-imports.mjs",
-    "build:package:prepared": "node scripts/release/build-package.mjs --icons-built"
+    "build:package:prepared": "pnpm run build:lib:prepared && pnpm run verify:package"
   },
   "dependencies": {
     "@yakit-libs/color": "1.4.1",
@@ -116,18 +109,7 @@
     "react-dom": "^18.2.0 || ^19.0.0"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^3.2.7",
     "@eslint/js": "^9.25.0",
-    "@storybook/addon-essentials": "8",
-    "@storybook/addon-interactions": "8",
-    "@storybook/addon-onboarding": "8.6.14",
-    "@storybook/blocks": "8.6.14",
-    "@storybook/builder-vite": "^8.6.14",
-    "@storybook/experimental-addon-test": "8.6.14",
-    "@storybook/react": "^8.6.14",
-    "@storybook/react-vite": "8.6.14",
-    "@storybook/test": "8.6.14",
-    "@storybook/testing-library": "0.2.2",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
@@ -142,14 +124,12 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
-    "eslint-plugin-storybook": "^9.1.6",
     "eslint-plugin-unused-imports": "^4.2.0",
     "globals": "^16.0.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.1.6",
     "playwright": "^1.65.1",
     "prettier": "^3.6.2",
-    "storybook": "8.6.14",
     "tsconfig-paths": "^4.2.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
@@ -160,10 +140,5 @@
     "react-18": "npm:react@18.3.1",
     "react-dom": "^19.1.0",
     "react-dom-18": "npm:react-dom@18.3.1"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
   }
 }

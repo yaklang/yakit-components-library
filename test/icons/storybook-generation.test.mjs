@@ -67,16 +67,16 @@ test("root update covers new icons and navigation, checks drift without writing 
   const write = (file, value) => writeFile(path.join(root, file), value);
   const sourcePath =
     "packages/yakit-ui-icons/config/icon-sources/colorful.json";
-  const storyPath = "packages/yakit-ui/.storybook/stories/Icon.stories.tsx";
+  const storyPath = "storybook/stories/icons/Icon.stories.tsx";
   const generatedPath =
-    "packages/yakit-ui/.storybook/stories/icon-colorful.generated.ts";
+    "storybook/stories/icons/icon-colorful.generated.ts";
   try {
     for (const dir of [
       "packages/yakit-ui-icons/config",
       "packages/yakit-ui-icons/src",
       "packages/yakit-ui/src/components",
       "packages/yakit-ui/config/icon-sources",
-      "packages/yakit-ui/.storybook/stories",
+      "storybook/stories/icons",
     ]) {
       await mkdir(path.dirname(path.join(root, dir)), { recursive: true });
       await cp(new URL(`../../${dir}`, import.meta.url), path.join(root, dir), {

@@ -24,8 +24,6 @@ const requiredFiles = [
   'dist/browser/icons/colorful/index.js',
   'dist/icons/colorful/index.js',
   'dist/icons/colorful/index.d.ts',
-  'dist/bin/yakit-ui-storybook.mjs',
-  'storybook-static/index.html',
   'README.md',
   'LICENSE',
 ];
@@ -51,15 +49,14 @@ for (const relativePath of requiredFiles) {
 const manifest = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'));
 const expected = {
   name: '@yakit-libs/yakit-ui',
-  bin: './dist/bin/yakit-ui-storybook.mjs',
   css: './dist/index.css',
 };
 if (manifest.name !== expected.name || manifest.private === true) {
   failures.push(`package must be the public ${expected.name} package`);
 }
 
-if (manifest.bin?.['yakit-ui-storybook'] !== expected.bin) {
-  failures.push(`bin.yakit-ui-storybook must be ${expected.bin}`);
+if (manifest.bin || manifest.files.includes('storybook-static')) {
+  failures.push('Offline documentation belongs in the release ZIP');
 }
 if (manifest.exports?.['./style.css'] !== expected.css) {
   failures.push(`exports["./style.css"] must be ${expected.css}`);
@@ -103,7 +100,7 @@ for (const dependencyType of [
     }
   }
 }
-for (const includedPath of ['dist', 'storybook-static', 'README.md', 'LICENSE']) {
+for (const includedPath of ['dist', 'README.md', 'LICENSE']) {
   if (!manifest.files?.includes(includedPath)) {
     failures.push(`files must include ${includedPath}`);
   }
@@ -153,11 +150,9 @@ failures.push(
 
 try {
   const findings = await scanRemovedUiRuntimesInTrees([
-    path.join(packageRoot, '.storybook'),
     path.join(packageRoot, 'config'),
     path.join(packageRoot, 'dist'),
     path.join(packageRoot, 'src'),
-    path.join(packageRoot, 'storybook-static'),
   ]);
   for (const finding of findings) {
     failures.push(
@@ -165,7 +160,7 @@ try {
     );
   }
 } catch {
-  failures.push('source, config, dist, and Storybook removed-runtime scan could not be completed');
+  failures.push('source, config, and dist removed-runtime scan could not be completed');
 }
 
 for (const sourceFile of [

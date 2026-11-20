@@ -2,9 +2,9 @@ import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
 
-const storyPath = "packages/yakit-ui/.storybook/stories/Icon.stories.tsx";
+const storyPath = "storybook/stories/icons/Icon.stories.tsx";
 const catalogPath =
-  "packages/yakit-ui/.storybook/stories/icon-colorful.generated.ts";
+  "storybook/stories/icons/icon-colorful.generated.ts";
 const begin = "// BEGIN GENERATED COLORFUL STORIES";
 const end = "// END GENERATED COLORFUL STORIES";
 const reserved = new Set([

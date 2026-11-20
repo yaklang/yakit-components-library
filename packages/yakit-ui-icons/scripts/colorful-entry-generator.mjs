@@ -4,7 +4,7 @@ const colorfulSource = readIconSources().colorful;
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { format, resolveConfig } from 'prettier';
+import { formatGeneratedTypeScript } from './format-generated-typescript.mjs';
 
 import {
   colorfulComponentNodeId,
@@ -162,14 +162,10 @@ export async function runColorfulEntryGenerator(args = process.argv.slice(2)) {
       path: path.resolve(PACKAGE_ROOT, 'src/colorful/catalog.ts'),
     },
   ];
-  const prettierConfig = (await resolveConfig(rawOutputs[0].path)) ?? {};
   const outputs = await Promise.all(
     rawOutputs.map(async (output) => ({
       ...output,
-      content: await format(output.content, {
-        ...prettierConfig,
-        filepath: output.path,
-      }),
+      content: await formatGeneratedTypeScript(output.content, output.path),
     })),
   );
   for (const output of outputs) {

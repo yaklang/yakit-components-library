@@ -1,0 +1,33 @@
+{
+  "name": "@yakit-internal/storybook",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "storybook dev -p 6006",
+    "build:static": "storybook build --disable-telemetry",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint .storybook stories"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "8",
+    "@storybook/blocks": "8.6.14",
+    "@storybook/experimental-addon-test": "8.6.14",
+    "@storybook/react": "^8.6.14",
+    "@storybook/react-vite": "8.6.14",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
+    "@yakit-libs/color": "1.4.1",
+    "@yakit-libs/yakit-ui": "workspace:*",
+    "@yakit-libs/yakit-ui-icons": "workspace:*",
+    "antd": "^6.6.7",
+    "eslint": "^9.25.0",
+    "playwright": "^1.65.1",
+    "prettier": "^3.6.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "storybook": "8.6.14",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

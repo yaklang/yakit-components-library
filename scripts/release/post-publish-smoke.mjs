@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { execFile, spawn } from "node:child_process";
-import { createServer } from "node:net";
 import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -73,74 +72,6 @@ async function waitForRegistry(packageName, version, distTag) {
     if (attempt < 24) await delay(5_000);
   }
   throw new Error(`registry propagation timed out: ${lastStatus}`);
-}
-
-async function reservePort() {
-  return new Promise((resolve, reject) => {
-    const server = createServer();
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => {
-      const address = server.address();
-      const port =
-        typeof address === "object" && address ? address.port : undefined;
-      if (!port) {
-        server.close();
-        reject(new Error("could not reserve a local Storybook port"));
-        return;
-      }
-      server.close((error) => (error ? reject(error) : resolve(port)));
-    });
-  });
-}
-
-function observeLauncher(launcher) {
-  let output = "";
-  let spawnError;
-  const append = (chunk) => {
-    output = `${output}${chunk}`.slice(-8_192);
-  };
-  launcher.stdout.on("data", append);
-  launcher.stderr.on("data", append);
-  launcher.once("error", (error) => {
-    spawnError = error;
-  });
-  return {
-    assertRunning() {
-      if (spawnError)
-        throw new Error(
-          `installed Storybook launcher failed to start: ${spawnError.message}`,
-        );
-      if (launcher.exitCode !== null || launcher.signalCode !== null) {
-        const result =
-          launcher.exitCode !== null
-            ? `exit code ${launcher.exitCode}`
-            : `signal ${launcher.signalCode}`;
-        throw new Error(
-          `installed Storybook launcher stopped with ${result}${output.trim() ? `: ${output.trim()}` : ""}`,
-        );
-      }
-    },
-    output: () => output.trim(),
-  };
-}
-
-async function waitForStorybook(url, launcher, observation) {
-  let lastError = "connection was not accepted";
-  for (let attempt = 1; attempt <= 80; attempt += 1) {
-    observation.assertRunning();
-    try {
-      const response = await fetch(url);
-      if (response.ok) return response.text();
-      lastError = `HTTP ${response.status}`;
-    } catch (error) {
-      // The launcher may still be binding the port.
-      lastError = error.cause?.code ?? error.message;
-    }
-    await delay(250);
-  }
-  throw new Error(
-    `installed Storybook launcher did not become ready at ${url}: ${lastError}${observation.output() ? `; ${observation.output()}` : ""}`,
-  );
 }
 
 const packageName = requiredEnvironment("PACKAGE_NAME");
@@ -373,42 +304,6 @@ await access(cssPath);
 if (!(await readFile(cssPath, "utf8")).trim())
   throw new Error("installed CSS export is empty");
 
-const port = await reservePort();
-const launcher = spawn(
-  process.execPath,
-  [
-    path.join(installedPackage, "dist/bin/yakit-ui-storybook.mjs"),
-    "--host",
-    "127.0.0.1",
-    "--port",
-    String(port),
-  ],
-  {
-    cwd: fixture,
-    env: publicRegistryEnvironment(),
-    stdio: ["ignore", "pipe", "pipe"],
-  },
-);
-const launcherObservation = observeLauncher(launcher);
-try {
-  const baseUrl = `http://127.0.0.1:${port}/`;
-  const html = await waitForStorybook(baseUrl, launcher, launcherObservation);
-  const asset = html.match(
-    /(?:src|href)=["']([^"']+\.(?:css|js)(?:\?[^"']*)?)["']/i,
-  )?.[1];
-  if (!asset)
-    throw new Error(
-      "installed Storybook index contains no CSS or JavaScript asset",
-    );
-  const response = await fetch(new URL(asset, baseUrl));
-  if (!response.ok)
-    throw new Error(
-      `installed Storybook asset returned HTTP ${response.status}`,
-    );
-} finally {
-  launcher.kill("SIGTERM");
-}
-
 console.log(
   JSON.stringify(
     {
@@ -417,7 +312,6 @@ console.log(
       bundler: "passed",
       package: `${packageName}@${packageVersion}`,
       runtimeDependencies: "passed",
-      storybook: "passed",
       typescript: "passed",
     },
     null,

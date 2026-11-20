@@ -28,6 +28,11 @@ export function classify(paths) {
       flags.icons = true;
       continue;
     }
+    if (file.startsWith("storybook/")) {
+      flags.storybook = flags.integration = true;
+      if (file.startsWith("storybook/test/") || file === "storybook/serve.mjs") flags.release_tools = true;
+      continue;
+    }
     if (
       /\.md$/.test(file) &&
       !file.startsWith(".changeset/") &&

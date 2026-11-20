@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-import { execFile, spawn } from "node:child_process";
+import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
-import { createServer } from "node:net";
 import {
   access,
   mkdir,
@@ -40,92 +39,6 @@ function publicRegistryEnvironment() {
   environment.npm_config_fund = "false";
   environment.npm_config_registry = "https://registry.npmjs.org/";
   return environment;
-}
-
-async function reservePort() {
-  return new Promise((resolve, reject) => {
-    const server = createServer();
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => {
-      const address = server.address();
-      const port =
-        typeof address === "object" && address ? address.port : undefined;
-      if (!port) {
-        server.close();
-        reject(new Error("could not reserve a local Storybook port"));
-        return;
-      }
-      server.close((error) => (error ? reject(error) : resolve(port)));
-    });
-  });
-}
-
-const delay = (milliseconds) =>
-  new Promise((resolve) => setTimeout(resolve, milliseconds));
-
-function observeLauncher(launcher) {
-  let output = "";
-  let spawnError;
-  const append = (chunk) => {
-    output = `${output}${chunk}`.slice(-8_192);
-  };
-  launcher.stdout.on("data", append);
-  launcher.stderr.on("data", append);
-  launcher.once("error", (error) => {
-    spawnError = error;
-  });
-  return {
-    assertRunning() {
-      if (spawnError)
-        throw new Error(
-          `packed Storybook launcher failed to start: ${spawnError.message}`,
-        );
-      if (launcher.exitCode !== null || launcher.signalCode !== null) {
-        const result =
-          launcher.exitCode !== null
-            ? `exit code ${launcher.exitCode}`
-            : `signal ${launcher.signalCode}`;
-        throw new Error(
-          `packed Storybook launcher stopped with ${result}${output.trim() ? `: ${output.trim()}` : ""}`,
-        );
-      }
-    },
-    output: () => output.trim(),
-  };
-}
-
-async function waitForStorybook(url, launcher, observation) {
-  let lastError = "connection was not accepted";
-  for (let attempt = 1; attempt <= 80; attempt += 1) {
-    observation.assertRunning();
-    try {
-      const response = await fetch(url);
-      if (response.ok) return response.text();
-      lastError = `HTTP ${response.status}`;
-    } catch (error) {
-      // The launcher may still be binding the port.
-      lastError = error.cause?.code ?? error.message;
-    }
-    await delay(250);
-  }
-  throw new Error(
-    `packed Storybook launcher did not become ready at ${url}: ${lastError}${observation.output() ? `; ${observation.output()}` : ""}`,
-  );
-}
-
-async function stopLauncher(launcher) {
-  if (launcher.exitCode !== null || launcher.signalCode !== null) return;
-  await new Promise((resolve) => {
-    const timeout = setTimeout(() => {
-      launcher.kill("SIGKILL");
-      resolve();
-    }, 2_000);
-    launcher.once("exit", () => {
-      clearTimeout(timeout);
-      resolve();
-    });
-    launcher.kill("SIGTERM");
-  });
 }
 
 const isDirectRun =
@@ -426,42 +339,6 @@ try {
   if (!(await readFile(cssPath, "utf8")).trim())
     throw new Error("packed CSS export is empty");
 
-  const port = await reservePort();
-  const launcher = spawn(
-    process.execPath,
-    [
-      path.join(installedPackage, "dist/bin/yakit-ui-storybook.mjs"),
-      "--host",
-      "127.0.0.1",
-      "--port",
-      String(port),
-    ],
-    {
-      cwd: fixture,
-      env: publicRegistryEnvironment(),
-      stdio: ["ignore", "pipe", "pipe"],
-    },
-  );
-  const launcherObservation = observeLauncher(launcher);
-  try {
-    const baseUrl = `http://127.0.0.1:${port}/`;
-    const html = await waitForStorybook(baseUrl, launcher, launcherObservation);
-    const asset = html.match(
-      /(?:src|href)=["']([^"']+\.(?:css|js)(?:\?[^"']*)?)["']/i,
-    )?.[1];
-    if (!asset)
-      throw new Error(
-        "packed Storybook index contains no CSS or JavaScript asset",
-      );
-    const response = await fetch(new URL(asset, baseUrl));
-    if (!response.ok)
-      throw new Error(
-        `packed Storybook asset returned HTTP ${response.status}`,
-      );
-  } finally {
-    await stopLauncher(launcher);
-  }
-
   console.log(
     JSON.stringify(
       {
@@ -472,7 +349,6 @@ try {
         runtimeDependencies: "passed",
         pnpmStrictLayout: "passed",
         ssr: "passed",
-        storybook: "passed",
         typescript: "passed",
       },
       null,

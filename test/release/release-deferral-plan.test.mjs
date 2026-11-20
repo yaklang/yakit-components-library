@@ -92,7 +92,7 @@ async function fixture(t) {
     "scripts/release/release-deferral-policy.json": input.policy,
     "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
     "turbo.json": { tasks: {} },
-    "packages/yakit-ui/.storybook/preview.tsx": "export default {};\n",
+    "storybook/.storybook/preview.tsx": "export default {};\n",
     "packages/yakit-ui/test/icon.test.ts": "// reviewed test\n",
     "packages/yakit-ui/tsconfig.json": { compilerOptions: {} },
     "packages/yakit-ui-icons/tsconfig.json": { compilerOptions: {} },
@@ -265,7 +265,7 @@ test("removing the completed deferral policy restores the normal release workflo
 
 for (const [file, content] of [
   [
-    "packages/yakit-ui/.storybook/preview.tsx",
+    "storybook/.storybook/preview.tsx",
     "export default { theme: 'dark' };\n",
   ],
   ["packages/yakit-ui/test/icon.test.ts", "// changed test\n"],
@@ -296,8 +296,8 @@ for (const [file, content] of [
 
 test("release scope ignores build outputs and deletion of a test", async (t) => {
   const directory = await fixture(t);
-  for (const file of ["dist/index.js", "storybook-static/index.html"]) {
-    const target = path.join(directory, "packages/yakit-ui", file);
+  for (const file of ["packages/yakit-ui/dist/index.js", "storybook/storybook-static/index.html"]) {
+    const target = path.join(directory, file);
     await mkdir(path.dirname(target), { recursive: true });
     await writeFile(target, "generated output");
   }

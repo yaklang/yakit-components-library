@@ -226,7 +226,6 @@ const manifest = await createVerificationManifest({
   gates: {
     build: "passed",
     packagePolicy: "passed",
-    storybook: "passed",
   },
 });
 const outputDirectory = path.join(root, ".release/verified");

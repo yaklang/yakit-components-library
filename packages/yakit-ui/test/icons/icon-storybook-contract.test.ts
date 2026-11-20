@@ -1,43 +1,39 @@
-import { existsSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { createElement, type ReactElement } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { createElement, type ReactElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { describe, expect, it } from 'vitest'
 
-import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs';
-import iconStory, * as iconStories from '../../.storybook/stories/Icon.stories';
-import {
-  colorfulIconRegistry,
-  outlineIconRegistry,
-  solidIconRegistry,
-} from '../../src/icons/registry';
+import iconStory, * as iconStories from '../../../../storybook/stories/icons/Icon.stories'
+import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs'
+import { colorfulIconRegistry, outlineIconRegistry, solidIconRegistry } from '../../src/icons/registry'
 
 const colorfulManifest: {
   groups: {
-    category: string;
-    name: string;
-    storybook?: { label?: string; exportName?: string };
-  }[];
+    category: string
+    name: string
+    storybook?: { label?: string; exportName?: string }
+  }[]
   rows: {
-    nodeId: string;
-    category: string;
-    exportName: string;
-    publicExposure: string;
-  }[];
+    nodeId: string
+    category: string
+    exportName: string
+    publicExposure: string
+  }[]
 } = JSON.parse(
   readIconInputSync(
     new URL('../../../yakit-ui-icons/config/icon-sources/colorful.json#manifest', import.meta.url),
     'utf8',
   ),
-);
+)
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const storiesRoot = resolve(packageRoot, '.storybook/stories');
-const colorfulIconsRoot = resolve(packageRoot, '../yakit-ui-icons/src/colorful');
-const iconStorySource = readIconInputSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8');
-const iconStoryMarkup = renderToStaticMarkup(createElement(iconStory.component));
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const storiesRoot = resolve(packageRoot, '../../storybook/stories/icons')
+const colorfulIconsRoot = resolve(packageRoot, '../yakit-ui-icons/src/colorful')
+const iconStorySource = readIconInputSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8')
+const iconStoryMarkup = renderToStaticMarkup(createElement(iconStory.component))
 const colorfulStorySpecs = colorfulManifest.groups.map(({ category, storybook, name }) => ({
   category,
   displayName: `Colorful · ${storybook?.label ?? name}`,
@@ -47,35 +43,31 @@ const colorfulStorySpecs = colorfulManifest.groups.map(({ category, storybook, n
       .split('-')
       .map((part) => part[0].toUpperCase() + part.slice(1))
       .join(''),
-}));
+}))
 const storySpecs = [
   { displayName: 'Overview', exportName: 'Overview' },
   { displayName: 'Outline', exportName: 'Outline' },
   { displayName: 'Solid', exportName: 'Solid' },
   ...colorfulStorySpecs,
-] as const;
+] as const
 
-const storyExports = () =>
-  [...iconStorySource.matchAll(/^export const (\w+)/gm)].map((match) => match[1]);
+const storyExports = () => [...iconStorySource.matchAll(/^export const (\w+)/gm)].map((match) => match[1])
 
 const renderStory = (story: unknown) => {
   const render = (
     story as {
-      render?: (args: Record<string, never>, context: never) => ReactElement;
+      render?: (args: Record<string, never>, context: never) => ReactElement
     }
-  ).render;
-  expect(render).toBeTypeOf('function');
-  return renderToStaticMarkup(render!({}, {} as never));
-};
+  ).render
+  expect(render).toBeTypeOf('function')
+  return renderToStaticMarkup(render!({}, {} as never))
+}
 
-const renderedExports = (markup: string) =>
-  [...markup.matchAll(/data-icon-export="([^"]+)"/g)].map((match) => match[1]);
+const renderedExports = (markup: string) => [...markup.matchAll(/data-icon-export="([^"]+)"/g)].map((match) => match[1])
 
-const colorfulByExport = new Map(
-  colorfulIconRegistry.map((icon) => [icon.exportName, icon] as const),
-);
+const colorfulByExport = new Map(colorfulIconRegistry.map((icon) => [icon.exportName, icon] as const))
 const renderedSourceNodeIds = (markup: string) =>
-  renderedExports(markup).map((exportName) => colorfulByExport.get(exportName)?.sourceNodeId);
+  renderedExports(markup).map((exportName) => colorfulByExport.get(exportName)?.sourceNodeId)
 
 const figmaStorySourceNodeOrder: Record<string, readonly string[]> = {
   'ai-model': [
@@ -216,132 +208,109 @@ const figmaStorySourceNodeOrder: Record<string, readonly string[]> = {
     '44521:5204',
     '44522:5642',
   ],
-} as const;
+} as const
 
 describe('Icon Storybook contract', () => {
   it('keeps one Icon meta group and exposes every navigation story in frozen order', () => {
-    expect(iconStory.title).toBe('YakitUi/通用/Icon');
-    expect(existsSync(resolve(storiesRoot, 'IconAudit.stories.tsx'))).toBe(false);
-    expect(existsSync(resolve(storiesRoot, 'SolidIconAudit.stories.tsx'))).toBe(false);
-    expect(storyExports()).toEqual([
-      ...storySpecs.map(({ exportName }) => exportName),
-      'StrokeWidth',
-    ]);
+    expect(iconStory.title).toBe('YakitUi/通用/Icon')
+    expect(existsSync(resolve(storiesRoot, 'IconAudit.stories.tsx'))).toBe(false)
+    expect(existsSync(resolve(storiesRoot, 'SolidIconAudit.stories.tsx'))).toBe(false)
+    expect(storyExports()).toEqual([...storySpecs.map(({ exportName }) => exportName), 'StrokeWidth'])
     expect(
       Object.keys(iconStories)
         .filter((name) => name !== 'default')
         .sort(),
-    ).toEqual([...storySpecs.map(({ exportName }) => exportName), 'StrokeWidth'].sort());
+    ).toEqual([...storySpecs.map(({ exportName }) => exportName), 'StrokeWidth'].sort())
     for (const { displayName, exportName } of storySpecs) {
       expect(iconStories[exportName as keyof typeof iconStories]).toMatchObject({
         name: displayName,
-      });
-      expect(
-        iconStorySource,
-        `${exportName} requires a statically extractable Storybook name`,
-      ).toContain(`export const ${exportName}: Story = {\n  name: '${displayName}',`);
+      })
+      expect(iconStorySource, `${exportName} requires a statically extractable Storybook name`).toContain(
+        `export const ${exportName}: Story = {\n  name: '${displayName}',`,
+      )
     }
-  });
+  })
 
   it('exposes an interactive stroke width example using the public SVG API', () => {
     expect(iconStories.StrokeWidth).toMatchObject({
       name: '描边宽度',
       args: { strokeWidth: 1.5 },
       argTypes: { strokeWidth: { control: { type: 'range', min: 0, max: 3, step: 0.5 } } },
-    });
-    const markup = renderToStaticMarkup(
-      iconStories.StrokeWidth.render!({ strokeWidth: 0 }, {} as never),
-    );
-    expect(markup).toContain('stroke-width="0"');
-    for (const name of ['BugOutlined', 'HomeOutlined', 'StarOffOutlined', 'Loading'])
-      expect(markup).toContain(name);
-  });
+    })
+    const markup = renderToStaticMarkup(iconStories.StrokeWidth.render!({ strokeWidth: 0 }, {} as never))
+    expect(markup).toContain('stroke-width="0"')
+    for (const name of ['BugOutlined', 'HomeOutlined', 'StarOffOutlined', 'Loading']) expect(markup).toContain(name)
+  })
 
   it('renders every colorful category once in frozen Figma group order', () => {
-    let previousPosition = -1;
+    let previousPosition = -1
     for (const { category } of colorfulManifest.groups) {
-      const marker = `data-colorful-category="${category}"`;
-      const position = iconStoryMarkup.indexOf(marker);
-      expect(position, category).toBeGreaterThan(previousPosition);
-      expect(iconStoryMarkup.split(marker)).toHaveLength(2);
-      previousPosition = position;
+      const marker = `data-colorful-category="${category}"`
+      const position = iconStoryMarkup.indexOf(marker)
+      expect(position, category).toBeGreaterThan(previousPosition)
+      expect(iconStoryMarkup.split(marker)).toHaveLength(2)
+      previousPosition = position
     }
-  });
+  })
 
   it('renders every public colorful icon exactly once', () => {
     const publicRows = colorfulManifest.rows.filter(({ publicExposure }) =>
       ['canonical', 'semantic-alias'].includes(publicExposure),
-    );
+    )
 
-    expect(iconStoryMarkup.match(/data-icon-family="colorful"/g)).toHaveLength(publicRows.length);
+    expect(iconStoryMarkup.match(/data-icon-family="colorful"/g)).toHaveLength(publicRows.length)
     for (const { category, exportName } of publicRows) {
-      const marker = `data-icon-category="${category}" data-icon-export="${exportName}" data-icon-family="colorful"`;
-      expect(iconStoryMarkup.split(marker), exportName).toHaveLength(2);
+      const marker = `data-icon-category="${category}" data-icon-export="${exportName}" data-icon-family="colorful"`
+      expect(iconStoryMarkup.split(marker), exportName).toHaveLength(2)
     }
-  });
+  })
 
   it('projects Outline and Solid into isolated navigation stories', () => {
     for (const { expected, family, story } of [
       { expected: outlineIconRegistry, family: 'outline', story: iconStories.Outline },
       { expected: solidIconRegistry, family: 'solid', story: iconStories.Solid },
     ]) {
-      const markup = renderStory(story);
-      expect(renderedExports(markup)).toEqual(expected.map(({ exportName }) => exportName));
-      expect(markup.match(new RegExp(`data-icon-family="${family}"`, 'g'))).toHaveLength(
-        expected.length,
-      );
+      const markup = renderStory(story)
+      expect(renderedExports(markup)).toEqual(expected.map(({ exportName }) => exportName))
+      expect(markup.match(new RegExp(`data-icon-family="${family}"`, 'g'))).toHaveLength(expected.length)
     }
-  });
+  })
 
   it('projects every public colorful icon into exactly one navigation group', () => {
     const publicRows = colorfulManifest.rows.filter(({ publicExposure }) =>
       ['canonical', 'semantic-alias'].includes(publicExposure),
-    );
-    const groupedExports: string[] = [];
+    )
+    const groupedExports: string[] = []
 
     for (const { category, exportName } of colorfulStorySpecs) {
-      const expected = publicRows
-        .filter((row) => row.category === category)
-        .map((row) => row.exportName);
-      const markup = renderStory(iconStories[exportName as keyof typeof iconStories]);
-      const actual = renderedExports(markup);
-      expect([...actual].sort(), category).toEqual([...expected].sort());
-      expect(markup.match(/data-icon-family="colorful"/g), category).toHaveLength(expected.length);
-      expect(markup).toContain(`data-colorful-category="${category}"`);
-      groupedExports.push(...actual);
+      const expected = publicRows.filter((row) => row.category === category).map((row) => row.exportName)
+      const markup = renderStory(iconStories[exportName as keyof typeof iconStories])
+      const actual = renderedExports(markup)
+      expect([...actual].sort(), category).toEqual([...expected].sort())
+      expect(markup.match(/data-icon-family="colorful"/g), category).toHaveLength(expected.length)
+      expect(markup).toContain(`data-colorful-category="${category}"`)
+      groupedExports.push(...actual)
     }
 
-    expect([...groupedExports].sort()).toEqual(
-      publicRows.map(({ exportName }) => exportName).sort(),
-    );
-    expect(new Set(groupedExports).size).toBe(publicRows.length);
-    expect([...groupedExports].sort()).toEqual(
-      colorfulIconRegistry.map(({ exportName }) => exportName).sort(),
-    );
-  });
+    expect([...groupedExports].sort()).toEqual(publicRows.map(({ exportName }) => exportName).sort())
+    expect(new Set(groupedExports).size).toBe(publicRows.length)
+    expect([...groupedExports].sort()).toEqual(colorfulIconRegistry.map(({ exportName }) => exportName).sort())
+  })
 
   it('uses the visual Figma node order inside audited colorful stories', () => {
-    const basicMarkup = renderStory(iconStories.Basic);
-    const basicExports = renderedExports(basicMarkup);
+    const basicMarkup = renderStory(iconStories.Basic)
+    const basicExports = renderedExports(basicMarkup)
     const historicalBasic = new Set(
       colorfulManifest.rows
         .filter((row) => row.category === 'basic')
         .slice(0, 82)
         .map((row) => row.exportName),
-    );
-    const historicalExports = basicExports.filter((name) => historicalBasic.has(name));
-    expect(historicalExports).toHaveLength(82);
-    expect(historicalExports.slice(0, 41).every((name) => name.endsWith('SolidColorful'))).toBe(
-      true,
-    );
-    expect(historicalExports.slice(41).every((name) => name.endsWith('OutlineColorful'))).toBe(
-      true,
-    );
-    expect(renderedSourceNodeIds(basicMarkup).slice(0, 3)).toEqual([
-      '37151:15203',
-      '37151:15202',
-      '37151:15201',
-    ]);
+    )
+    const historicalExports = basicExports.filter((name) => historicalBasic.has(name))
+    expect(historicalExports).toHaveLength(82)
+    expect(historicalExports.slice(0, 41).every((name) => name.endsWith('SolidColorful'))).toBe(true)
+    expect(historicalExports.slice(41).every((name) => name.endsWith('OutlineColorful'))).toBe(true)
+    expect(renderedSourceNodeIds(basicMarkup).slice(0, 3)).toEqual(['37151:15203', '37151:15202', '37151:15201'])
     expect(
       renderedSourceNodeIds(basicMarkup)
         .filter((id) =>
@@ -351,29 +320,29 @@ describe('Icon Storybook contract', () => {
             .some((row) => row.nodeId === id),
         )
         .slice(-3),
-    ).toEqual(['38051:62408', '38723:88885', '44983:1900']);
+    ).toEqual(['38051:62408', '38723:88885', '44983:1900'])
 
     for (const [category, expected] of Object.entries(figmaStorySourceNodeOrder)) {
-      const story = colorfulStorySpecs.find((spec) => spec.category === category);
-      expect(story, category).toBeTruthy();
+      const story = colorfulStorySpecs.find((spec) => spec.category === category)
+      expect(story, category).toBeTruthy()
       expect(
-        renderedSourceNodeIds(
-          renderStory(iconStories[story!.exportName as keyof typeof iconStories]),
-        ).filter((id) => id !== undefined && expected.includes(id)),
+        renderedSourceNodeIds(renderStory(iconStories[story!.exportName as keyof typeof iconStories])).filter(
+          (id) => id !== undefined && expected.includes(id),
+        ),
         category,
-      ).toEqual(expected);
+      ).toEqual(expected)
     }
-  });
+  })
 
   it('keeps the two unbacked Memfit compositions on their exact Figma geometry', () => {
-    const horizontal = readIconInputSync(resolve(colorfulIconsRoot, '44520-3632.svg'), 'utf8');
-    const vertical = readIconInputSync(resolve(colorfulIconsRoot, '44520-3560.svg'), 'utf8');
+    const horizontal = readIconInputSync(resolve(colorfulIconsRoot, '44520-3632.svg'), 'utf8')
+    const vertical = readIconInputSync(resolve(colorfulIconsRoot, '44520-3560.svg'), 'utf8')
 
-    expect(horizontal).toContain('M8.49335 14.0987H6V26.7533H8.49335V14.0987Z');
-    expect(horizontal).not.toContain('scale(0.2284173884793107');
-    expect(vertical).toContain('M13.7761 14.86H11.6396V25.7743H13.7761V14.86Z');
-    expect(vertical).not.toContain('scale(0.5132218874996354');
-  });
+    expect(horizontal).toContain('M8.49335 14.0987H6V26.7533H8.49335V14.0987Z')
+    expect(horizontal).not.toContain('scale(0.2284173884793107')
+    expect(vertical).toContain('M13.7761 14.86H11.6396V25.7743H13.7761V14.86Z')
+    expect(vertical).not.toContain('scale(0.5132218874996354')
+  })
 
   it('keeps the combined Overview catalog complete', () => {
     expect(renderedExports(iconStoryMarkup)).toEqual([
@@ -382,6 +351,6 @@ describe('Icon Storybook contract', () => {
       ...colorfulStorySpecs.flatMap(({ exportName }) =>
         renderedExports(renderStory(iconStories[exportName as keyof typeof iconStories])),
       ),
-    ]);
-  });
-});
+    ])
+  })
+})

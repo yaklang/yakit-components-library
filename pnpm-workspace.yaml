@@ -1,5 +1,6 @@
 packages:
   - "packages/*"
+  - "storybook"
 
 onlyBuiltDependencies:
   - esbuild

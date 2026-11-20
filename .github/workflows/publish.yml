@@ -237,7 +237,7 @@ jobs:
       - select-mode
       - build-and-pack
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     permissions:
       actions: read
       contents: read
@@ -256,6 +256,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, reviewed 2026-08-21
         with:
+          fetch-depth: 0
           persist-credentials: false
       - name: Set up pnpm
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0, reviewed 2026-08-21
@@ -294,6 +295,12 @@ jobs:
         run: node scripts/release/verify-tarball-consumer.mjs .release/verified
       - name: Seal exact consumer verification in the final manifest
         run: node scripts/release/record-verification-gate.mjs .release/verified/verification-manifest.json consumer
+      - name: Build offline documentation from the exact verified package pair
+        run: node scripts/release/build-storybook-zip.mjs .release/verified
+      - name: Exercise the offline ZIP without external requests
+        run: |
+          pnpm --dir storybook exec playwright install --with-deps chromium
+          node storybook/test/check-offline.mjs .release/verified/storybook-*.zip
       - name: Resolve package release identity
         id: identity
         run: node scripts/release/emit-release-identity.mjs
@@ -719,6 +726,38 @@ jobs:
           RELEASE_COMMIT: ${{ needs.recovery-verify.outputs.commit-sha }}
           PACKAGE_NAME: ${{ matrix.package }}
           PACKAGE_VERSION: ${{ matrix.version }}
+
+  offline-documentation:
+    needs: [verify-pack, post-publish, metadata, recovery-metadata]
+    if: >-
+      always() && !cancelled() &&
+      ((needs.post-publish.result == 'success' && needs.metadata.result == 'success') ||
+      needs.recovery-metadata.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.12.0
+          package-manager-cache: false
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.source_run_id || github.run_id }}
+          artifact-ids: ${{ inputs.verification_artifact_id || needs.verify-pack.outputs.verification-artifact-id }}
+          merge-multiple: true
+          path: .release/verified
+      - name: Attach the verified ZIP and link the counterpart release
+        run: node scripts/release/attach-storybook-zip.mjs .release/verified
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id || github.run_id }}
+          LEGACY_RECOVERY: ${{ needs.recovery-metadata.result == 'success' }}
 
   reconcile-published:
     if: github.event_name == 'workflow_dispatch' && inputs.reconciliation_only

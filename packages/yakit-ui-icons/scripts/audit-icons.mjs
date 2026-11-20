@@ -15,6 +15,7 @@ import {
   sortedPublicMapping,
 } from './icon-audit-contracts.mjs';
 import { buildIconNameCatalog, renderIconNameCatalog } from './icon-name-catalog-core.mjs';
+import { formatGeneratedTypeScript } from './format-generated-typescript.mjs';
 
 export { canonicalJson } from './icon-audit-contracts.mjs';
 
@@ -1115,7 +1116,7 @@ export async function auditIcons({
           solidRawProvenance: JSON.parse(solidRawSource),
         }),
       );
-      if (actualCatalog !== expectedCatalog)
+      if (actualCatalog !== await formatGeneratedTypeScript(expectedCatalog, iconNameCatalogPath))
         failures.push({ path: iconNameCatalogPath, token: 'FIGMA_NAME_CATALOG_CHANGED' });
     } catch (error) {
       const explicitToken = /^FIGMA_NAME_[A-Z_]+/.exec(error.message)?.[0];
