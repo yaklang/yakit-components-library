@@ -1,0 +1,166 @@
+.yakit-card {
+  --yakit-card-border: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #eaecf3));
+  --yakit-card-title: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title, #353639));
+  --yakit-card-bg: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #ffffff));
+  --yakit-card-icon: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title, #353639));
+  --yakit-card-icon-hover: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f28b44));
+
+  background: var(--yakit-card-bg);
+  border: 1px solid var(--yakit-card-border);
+  border-radius: var(--yakit-card-border-radius, 0);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.yakit-card-header {
+  align-items: center;
+  border-bottom: 1px solid var(--yakit-card-border);
+  box-sizing: border-box;
+  display: flex;
+  gap: var(--yakit-card-icon-gap, 8px);
+  height: var(--yakit-card-header-height, 32px);
+  justify-content: space-between;
+  line-height: var(--yakit-card-title-line-height, 16px);
+  padding: var(--yakit-card-header-padding, 6px 12px);
+}
+
+.yakit-card-header-title {
+  color: var(--yakit-card-title);
+  flex: 1;
+  font-size: var(--yakit-card-title-font-size, 12px);
+  font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yakit-card-header-extra {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  max-width: 50%;
+  min-width: 0;
+}
+
+.yakit-card-body {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  padding: var(--yakit-card-body-padding, 12px);
+}
+
+.yakit-card-bordered-hidden {
+  border: none;
+}
+
+/* size=small：对齐 antd Card small / 更紧凑的 header 与 body
+   直接覆盖后代具体属性而非重定义根变量，避免被组件的内联 token 注入在级联中击败 */
+.yakit-card-size-small .yakit-card-header {
+  height: 28px;
+  line-height: 16px;
+  padding: 4px 8px;
+}
+
+.yakit-card-size-small .yakit-card-header-title {
+  font-size: 12px;
+}
+
+.yakit-card-size-small .yakit-card-body {
+  padding: 8px;
+}
+
+.yakit-card-hoverable {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.yakit-card-hoverable:hover {
+  box-shadow:
+    0 1px 2px -2px rgba(0, 0, 0, 0.16),
+    0 3px 6px 0 rgba(0, 0, 0, 0.12),
+    0 5px 12px 4px rgba(0, 0, 0, 0.09);
+}
+
+.yakit-card-loading .yakit-card-body > *:not(.yakit-card-loading-mask) {
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+}
+
+.yakit-card-loading-mask {
+  align-items: center;
+  background: var(--yakit-card-bg);
+  background: color-mix(in srgb, var(--yakit-card-bg) 55%, transparent);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: absolute;
+  z-index: 1;
+}
+
+.yakit-card-spin {
+  animation: yakit-card-spin 0.8s linear infinite;
+  border: 2px solid var(--yakit-card-border);
+  border-radius: 50%;
+  border-top-color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28b44));
+  box-sizing: border-box;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}
+
+.yakit-card-sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@keyframes yakit-card-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yakit-card-spin {
+    animation: none;
+    opacity: 0.85;
+  }
+
+  .yakit-card-hoverable {
+    transition: none;
+  }
+}
+
+/* 可选图标槽位（主项目 .yakit-card-icon） */
+.yakit-card-icon {
+  cursor: pointer;
+  flex-shrink: 0;
+  height: var(--yakit-card-icon-size, 16px);
+  margin-left: var(--yakit-card-icon-gap, 8px);
+  width: var(--yakit-card-icon-size, 16px);
+}
+
+.yakit-card-icon svg {
+  color: var(--yakit-card-icon);
+  height: var(--yakit-card-icon-size, 16px);
+  width: var(--yakit-card-icon-size, 16px);
+}
+
+.yakit-card-icon svg:hover {
+  color: var(--yakit-card-icon-hover);
+}
