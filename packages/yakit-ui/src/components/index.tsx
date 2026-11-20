@@ -121,3 +121,14 @@ export type { CopyTextProps, CopyTextRef, CopyTextSize } from './CopyText';
 
 export { default as CollapseText } from './CollapseText';
 export type { CollapseTextProps, CollapseTextRef } from './CollapseText';
+
+export { default as Switch, YakitSwitch } from './Switch';
+export type {
+  SwitchProps,
+  SwitchRef,
+  SwitchSemanticClassNames,
+  SwitchSemanticInfo,
+  SwitchSemanticStyles,
+  SwitchSize,
+  YakitSwitchProps,
+} from './Switch';
