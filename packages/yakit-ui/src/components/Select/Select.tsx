@@ -3,8 +3,8 @@ import {
   ChevronDownOutlined,
   ChevronUpOutlined,
   TrashOutlined,
-  XCircleSolid,
-} from '@yakit-libs/yakit-ui-icons';
+} from '@yakit-libs/yakit-ui-icons/outline';
+import { XCircleSolid } from '@yakit-libs/yakit-ui-icons/solid';
 import { ConfigProvider, Select as AntSelect } from 'antd';
 import type { ThemeConfig } from 'antd';
 import type { DefaultOptionType, SelectProps as AntSelectProps } from 'antd/es/select';

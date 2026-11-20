@@ -1,0 +1,37 @@
+.yakit-collapse-text {
+  box-sizing: border-box;
+  color: var(--yakit-color-text, var(--Colors-Use-Neutral-Text-1-Title));
+}
+
+.yakit-collapse-text-content {
+  color: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.yakit-collapse-text-action {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary));
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  margin: 8px 0 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+  user-select: none;
+}
+
+.yakit-collapse-text-action:focus-visible {
+  outline: 2px solid var(--yakit-color-primary, var(--Colors-Use-Main-Primary));
+  outline-offset: 2px;
+}

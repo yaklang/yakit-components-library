@@ -37,6 +37,10 @@ export const defaultYakitLocale: YakitLocale = {
   Select: {
     removeOption: '删除选项',
   },
+  CollapseText: {
+    expand: '展开',
+    collapse: '收起',
+  },
 };
 
 export const defaultYakitConfig: YakitConfigContextValue = {
@@ -64,4 +68,5 @@ export const mergeYakitLocale = (parent: YakitLocale, locale?: YakitLocale): Yak
   Tag: mergeDefined(parent.Tag ?? {}, locale?.Tag),
   Checkbox: mergeDefined(parent.Checkbox ?? {}, locale?.Checkbox),
   Select: mergeDefined(parent.Select ?? {}, locale?.Select),
+  CollapseText: mergeDefined(parent.CollapseText ?? {}, locale?.CollapseText),
 });

@@ -1,4 +1,4 @@
-import { XOutlined } from '@yakit-libs/yakit-ui-icons';
+import { XOutlined } from '@yakit-libs/yakit-ui-icons/outline';
 import classNames from 'classnames';
 import {
   cloneElement,

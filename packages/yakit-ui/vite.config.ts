@@ -32,6 +32,10 @@ export default defineConfig(({ mode }) => {
 
   if (mode === 'lib') {
     return {
+      // yakit 的图标守卫不允许 `import { Foo as Bar }`；库构建不能压缩导入标识符。
+      esbuild: {
+        minifyIdentifiers: false,
+      },
       build: {
         copyPublicDir: false,
         lib: {

@@ -56,6 +56,12 @@ export interface YakitLocale {
     /** 下拉项删除按钮的无障碍名称 */
     removeOption?: string;
   };
+  CollapseText?: {
+    /** 展开按钮文案 */
+    expand?: string;
+    /** 收起按钮文案 */
+    collapse?: string;
+  };
 }
 
 export type YakitComponentSize = 'small' | 'medium' | 'large' | 'huge';

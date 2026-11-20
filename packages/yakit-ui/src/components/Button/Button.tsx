@@ -1,4 +1,4 @@
-import { Loading } from '@yakit-libs/yakit-ui-icons';
+import { LoadingOutlined } from '@yakit-libs/yakit-ui-icons/outline';
 import classNames from 'classnames';
 import {
   forwardRef,
@@ -195,7 +195,9 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
         className={classNames(`${prefixCls}-icon`, semanticClassNames?.icon)}
         style={styles?.icon}
       >
-        {loadingConfig.icon ?? <Loading color="currentColor" spin size={iconSizeMap[size]} />}
+        {loadingConfig.icon ?? (
+          <LoadingOutlined color="currentColor" spin size={iconSizeMap[size]} />
+        )}
       </span>
     ) : icon ? (
       <span
