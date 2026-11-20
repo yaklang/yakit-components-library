@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgSolidPlus"
-    ],
+    "contextTargetImgVariables": ["imgSolidPlus"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": true,
     "contextFallback": null,

@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgBasicSolidBug"
-    ],
+    "contextTargetImgVariables": ["imgBasicSolidBug"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": false,
     "contextFallback": null,

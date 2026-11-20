@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgBasicSolidTcpPortLog"
-    ],
+    "contextTargetImgVariables": ["imgBasicSolidTcpPortLog"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": false,
     "contextFallback": null,

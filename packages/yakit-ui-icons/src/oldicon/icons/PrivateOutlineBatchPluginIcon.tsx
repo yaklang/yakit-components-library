@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/76746250d24fe6d969d8950f14b058bdf3bc4b051f89c8e2f7ff56de79fe5c41.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/76746250d24fe6d969d8950f14b058bdf3bc4b051f89c8e2f7ff56de79fe5c41.svg?react'
 
-export const PrivateOutlineBatchPluginIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateOutlineBatchPluginIcon',
-);
+export const PrivateOutlineBatchPluginIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineBatchPluginIcon')

@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgProperty1SuccessProperty2Web"
-    ],
+    "contextTargetImgVariables": ["imgProperty1SuccessProperty2Web"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": false,
     "contextFallback": null,

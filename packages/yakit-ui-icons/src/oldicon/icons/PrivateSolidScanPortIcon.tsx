@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/43d43e7312efd21b8e97a302c83b201ae869ccef4e36dcfbf7b514bcee6f0082.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/43d43e7312efd21b8e97a302c83b201ae869ccef4e36dcfbf7b514bcee6f0082.svg?react'
 
-export const PrivateSolidScanPortIcon = createIcon(OldIconAssetSvg, 'PrivateSolidScanPortIcon');
+export const PrivateSolidScanPortIcon = createIcon(OldIconAssetSvg, 'PrivateSolidScanPortIcon')

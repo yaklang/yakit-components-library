@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/88fd415a0375856fedd343586910734942123fad9c03dc202a7c9790453dd459.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/88fd415a0375856fedd343586910734942123fad9c03dc202a7c9790453dd459.svg?react'
 
-export const PrivateSolidAuditCodeIcon = createIcon(OldIconAssetSvg, 'PrivateSolidAuditCodeIcon');
+export const PrivateSolidAuditCodeIcon = createIcon(OldIconAssetSvg, 'PrivateSolidAuditCodeIcon')

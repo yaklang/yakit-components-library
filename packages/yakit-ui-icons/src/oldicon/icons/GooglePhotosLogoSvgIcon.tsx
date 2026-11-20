@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/4c67f9fc0b7447a48e7a0f184e105ef31b69cdf3aeea8df853fbdf7e7eefe63f.svg?react'
 
-export const GooglePhotosLogoSvgIcon = createIcon(OldIconAssetSvg, 'GooglePhotosLogoSvgIcon');
+export const GooglePhotosLogoSvgIcon = createIcon(OldIconAssetSvg, 'GooglePhotosLogoSvgIcon')

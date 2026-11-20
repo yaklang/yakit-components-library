@@ -15,15 +15,12 @@
  * TagCopy 独立默认是 12px，选择器特异性需高于 `.yakit-tag-copy:not(...size) svg`。
  * 显式传入 size 时仍走 TagCopy 的 10 / 12 / 14px。
  */
-.yakit-copy-text
-  .yakit-tag-copy:not(.yakit-tag-copy-sm):not(.yakit-tag-copy-md):not(.yakit-tag-copy-lg) {
+.yakit-copy-text .yakit-tag-copy:not(.yakit-tag-copy-sm):not(.yakit-tag-copy-md):not(.yakit-tag-copy-lg) {
   height: 16px;
   width: 16px;
 }
 
-.yakit-copy-text
-  .yakit-tag-copy:not(.yakit-tag-copy-sm):not(.yakit-tag-copy-md):not(.yakit-tag-copy-lg)
-  svg {
+.yakit-copy-text .yakit-tag-copy:not(.yakit-tag-copy-sm):not(.yakit-tag-copy-md):not(.yakit-tag-copy-lg) svg {
   height: 16px;
   width: 16px;
 }

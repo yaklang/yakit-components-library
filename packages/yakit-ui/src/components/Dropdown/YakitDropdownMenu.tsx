@@ -1,10 +1,10 @@
-import classNames from 'classnames';
-import { memo, type ReactNode } from 'react';
+import classNames from 'classnames'
+import { memo, type ReactNode } from 'react'
 
-import { Dropdown } from './Dropdown';
-import type { YakitDropdownMenuProps } from './type';
+import { Dropdown } from './Dropdown'
+import type { YakitDropdownMenuProps } from './type'
 
-const yakitPrefix = 'yakit-dropdown';
+const yakitPrefix = 'yakit-dropdown'
 
 /**
  * 主项目同名封装：dropdown 配置 + menu 配置。
@@ -13,9 +13,9 @@ const yakitPrefix = 'yakit-dropdown';
  * 否则菜单项拿不到 onItemClick，点击后不会关闭。
  */
 export const YakitDropdownMenu = memo(function YakitDropdownMenu(props: YakitDropdownMenuProps) {
-  const { dropdown = {}, menu, children } = props;
-  const { dropdownRender, ...dropdownProps } = dropdown;
-  const { menuWrapperClassName, ...resetMenu } = menu;
+  const { dropdown = {}, menu, children } = props
+  const { dropdownRender, ...dropdownProps } = dropdown
+  const { menuWrapperClassName, ...resetMenu } = menu
 
   return (
     <Dropdown
@@ -30,9 +30,9 @@ export const YakitDropdownMenu = memo(function YakitDropdownMenu(props: YakitDro
     >
       {children as ReactNode}
     </Dropdown>
-  );
-});
+  )
+})
 
-YakitDropdownMenu.displayName = 'YakitDropdownMenu';
+YakitDropdownMenu.displayName = 'YakitDropdownMenu'
 
-export default YakitDropdownMenu;
+export default YakitDropdownMenu

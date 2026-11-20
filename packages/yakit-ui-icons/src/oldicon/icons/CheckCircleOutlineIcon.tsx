@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/2ad50345a9ff318349f5609690e884d82e7de59c4f46892c456c4c37e6277547.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/2ad50345a9ff318349f5609690e884d82e7de59c4f46892c456c4c37e6277547.svg?react'
 
-export const CheckCircleOutlineIcon = createIcon(OldIconAssetSvg, 'CheckCircleOutlineIcon');
+export const CheckCircleOutlineIcon = createIcon(OldIconAssetSvg, 'CheckCircleOutlineIcon')

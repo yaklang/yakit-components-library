@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgWrench"
-    ],
+    "contextTargetImgVariables": ["imgWrench"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": true,
     "contextFallback": null,

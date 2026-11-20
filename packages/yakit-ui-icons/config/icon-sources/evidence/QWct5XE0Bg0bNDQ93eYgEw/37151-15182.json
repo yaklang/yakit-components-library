@@ -1,11 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 3,
-    "contextTargetImgVariables": [
-      "imgRectangle793Stroke1",
-      "imgVector",
-      "imgUnion"
-    ],
+    "contextTargetImgVariables": ["imgRectangle793Stroke1", "imgVector", "imgUnion"],
     "exactComponentNodeExport": true,
     "contextLayoutComposite": false,
     "contextFallback": null,

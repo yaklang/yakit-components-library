@@ -15,7 +15,7 @@ pnpm add @yakit-libs/yakit-ui-icons react
 ```
 
 ```tsx
-import { HomeOutlined } from '@yakit-libs/yakit-ui-icons';
+import { HomeOutlined } from '@yakit-libs/yakit-ui-icons'
 ```
 
 `@yakit-libs/yakit-ui-icons` 是图标的规范导入包。`@yakit-libs/yakit-ui/icons`、
@@ -79,11 +79,11 @@ Solid、Colorful、Oldicon 保持根 SVG 的原生属性透传；没有统一覆
 ## 使用组件和样式
 
 ```tsx
-import { Button } from '@yakit-libs/yakit-ui';
-import '@yakit-libs/yakit-ui/style.css';
+import { Button } from '@yakit-libs/yakit-ui'
+import '@yakit-libs/yakit-ui/style.css'
 
 export function Example() {
-  return <Button>Run</Button>;
+  return <Button>Run</Button>
 }
 ```
 

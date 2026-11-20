@@ -1,4 +1,4 @@
-import type { YakitTheme } from '../types/theme';
+import type { YakitTheme } from '../types/theme'
 
 const yakitTheme = Object.freeze({
   /**
@@ -142,6 +142,6 @@ const yakitTheme = Object.freeze({
    * 边框颜色
    */
   colorBorder: 'var(--Colors-Use-Neutral-Border)',
-} as YakitTheme);
+} as YakitTheme)
 
-export default yakitTheme;
+export default yakitTheme

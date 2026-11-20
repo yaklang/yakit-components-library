@@ -1,7 +1,7 @@
-import type { TreeDataNode } from 'antd';
-import { useState, type Key } from 'react';
+import type { TreeDataNode } from 'antd'
+import { useState, type Key } from 'react'
 
-import { initialExpandedKeys } from './treeData';
+import { initialExpandedKeys } from './treeData'
 
 /**
  * 文件树内部展开列表。只在第一次挂载时用 defaultExpandAll / defaultExpandedKeys /
@@ -30,7 +30,7 @@ export const useInnerExpanded = (
           defaultExpandParent,
         )
       : [],
-  );
-  const expanded = enabled ? (expandedKeys ?? innerExpanded) : expandedKeys;
-  return { expanded, setInnerExpanded };
-};
+  )
+  const expanded = enabled ? (expandedKeys ?? innerExpanded) : expandedKeys
+  return { expanded, setInnerExpanded }
+}

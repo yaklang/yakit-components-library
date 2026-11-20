@@ -70,8 +70,12 @@
   background-color: var(--Colors-Use-Neutral-Bg-Hover);
 }
 
-.yakit-tree-website .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover > .ant-tree-switcher.ant-tree-switcher-noop,
-.yakit-tree-website .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover > .ant-tree-node-content-wrapper:not(.ant-tree-node-selected) {
+.yakit-tree-website
+  .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover
+  > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree-website
+  .ant-tree-treenode:not(.ant-tree-treenode-disabled):hover
+  > .ant-tree-node-content-wrapper:not(.ant-tree-node-selected) {
   background-color: var(--ant-tree-node-hover-bg, var(--Colors-Use-Neutral-Bg));
 }
 
@@ -117,8 +121,16 @@
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher .yakit-icon,
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-switcher-icon,
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher svg,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .yakit-icon,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher .yakit-tree-switcher-icon,
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher
+  .yakit-icon,
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher
+  .yakit-tree-switcher-icon,
 .yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher svg {
   color: var(--Colors-Use-Basic-White);
   fill: none;
@@ -138,35 +150,65 @@
 
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:hover > .ant-tree-switcher::after,
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher:hover::after,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher::after,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher:hover::after {
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected:hover
+  > .ant-tree-switcher::after,
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher:hover::after {
   background-color: var(--Colors-Use-Main-Primary);
 }
 
 /* 叶子箭头位在选中、选中再悬停时跟 Basic（内容区）一个颜色。 */
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop {
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher.ant-tree-switcher-noop {
   background: var(--Colors-Use-Main-Primary);
   background-color: var(--Colors-Use-Main-Primary);
 }
 
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop::after {
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher.ant-tree-switcher-noop::after {
   background-color: var(--Colors-Use-Main-Primary);
 }
 
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
 .yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover {
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected:hover
+  > .ant-tree-switcher.ant-tree-switcher-noop,
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher.ant-tree-switcher-noop:hover {
   background: var(--Colors-Use-Main-Hover);
   background-color: var(--Colors-Use-Main-Hover);
 }
 
-.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
-.yakit-tree.yakit-tree-website .ant-tree .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover::after,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected:hover > .ant-tree-switcher.ant-tree-switcher-noop::after,
-.yakit-tree.yakit-tree-website .ant-tree.ant-tree-show-line .ant-tree-treenode-selected > .ant-tree-switcher.ant-tree-switcher-noop:hover::after {
+.yakit-tree.yakit-tree-website
+  .ant-tree
+  .ant-tree-treenode-selected:hover
+  > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website
+  .ant-tree
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher.ant-tree-switcher-noop:hover::after,
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected:hover
+  > .ant-tree-switcher.ant-tree-switcher-noop::after,
+.yakit-tree.yakit-tree-website
+  .ant-tree.ant-tree-show-line
+  .ant-tree-treenode-selected
+  > .ant-tree-switcher.ant-tree-switcher-noop:hover::after {
   background-color: var(--Colors-Use-Main-Hover);
 }
 

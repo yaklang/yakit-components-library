@@ -5,7 +5,7 @@ import type {
   ForwardRefExoticComponent,
   RefAttributes,
   SVGProps,
-} from 'react';
+} from 'react'
 
 type ForbiddenIconSvgProps =
   | keyof AriaAttributes
@@ -15,30 +15,25 @@ type ForbiddenIconSvgProps =
   | 'focusable'
   | 'ref'
   | 'children'
-  | 'dangerouslySetInnerHTML';
+  | 'dangerouslySetInnerHTML'
 
 /** Presentation-only overrides for the inner SVG; strokeWidth controls stroked Outline icons and Loading. */
-export type IconSvgProps = Omit<SVGProps<SVGSVGElement>, ForbiddenIconSvgProps>;
+export type IconSvgProps = Omit<SVGProps<SVGSVGElement>, ForbiddenIconSvgProps>
 
 /** Shared props for every icon exported by Yakit UI. */
-export type IconProps = Omit<
-  ComponentPropsWithoutRef<'span'>,
-  'children' | 'dangerouslySetInnerHTML' | 'color'
-> & {
+export type IconProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'dangerouslySetInnerHTML' | 'color'> & {
   /** Applies an explicit root color. `currentColor` preserves natural inheritance. */
-  color?: string;
+  color?: string
   /** Overrides the Figma-defined SVG size. */
-  size?: number | string;
+  size?: number | string
   /** Rotate the icon with animation, matching ant-design icons. */
-  spin?: boolean;
+  spin?: boolean
   /** Applies presentation-only attributes to the inner SVG. */
-  svgProps?: IconSvgProps;
-};
+  svgProps?: IconSvgProps
+}
 
-export type IconRef = HTMLSpanElement;
+export type IconRef = HTMLSpanElement
 
-export type IconComponent = ForwardRefExoticComponent<
-  IconProps & RefAttributes<HTMLSpanElement>
-> & {
-  isYakitIcon?: boolean;
-};
+export type IconComponent = ForwardRefExoticComponent<IconProps & RefAttributes<HTMLSpanElement>> & {
+  isYakitIcon?: boolean
+}

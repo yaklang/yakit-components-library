@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/2ee7137548efc15a857991cfd95041b618e0023a58e05e2ce012547fce9adbaf.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/2ee7137548efc15a857991cfd95041b618e0023a58e05e2ce012547fce9adbaf.svg?react'
 
-export const PluginTestWarningIcon = createIcon(OldIconAssetSvg, 'PluginTestWarningIcon');
+export const PluginTestWarningIcon = createIcon(OldIconAssetSvg, 'PluginTestWarningIcon')

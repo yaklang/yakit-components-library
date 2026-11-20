@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import classNames from 'classnames'
 import {
   cloneElement,
   isValidElement,
@@ -12,130 +12,130 @@ import {
   type ReactElement,
   type KeyboardEvent,
   type Ref,
-} from 'react';
+} from 'react'
 
-import type { BaseProps } from '../../../types/common';
+import type { BaseProps } from '../../../types/common'
 
-import './style/index.css';
+import './style/index.css'
 
 export interface WaveProps extends BaseProps {
-  children: ReactNode;
-  className?: string;
-  animation?: 'wave' | false;
+  children: ReactNode
+  className?: string
+  animation?: 'wave' | false
 }
 
 type WaveChildProps = {
-  ref?: Ref<HTMLElement>;
-  className?: string;
-  onMouseUp?: (e: MouseEvent<HTMLElement>) => void;
-  onKeyUp?: (e: KeyboardEvent<HTMLElement>) => void;
-};
+  ref?: Ref<HTMLElement>
+  className?: string
+  onMouseUp?: (e: MouseEvent<HTMLElement>) => void
+  onKeyUp?: (e: KeyboardEvent<HTMLElement>) => void
+}
 
-const prefixCls = 'yakit-wave';
+const prefixCls = 'yakit-wave'
 
 // React 18 将子元素 ref 存在元素自身并从 props 剥离；React 19 起移入 props。
-const isReact19OrLater = Number.parseInt(version, 10) >= 19;
+const isReact19OrLater = Number.parseInt(version, 10) >= 19
 
 const assignRef = <T,>(ref: Ref<T> | undefined, value: T | null) => {
-  if (typeof ref === 'function') ref(value);
-  else if (ref) (ref as { current: T | null }).current = value;
-};
+  if (typeof ref === 'function') ref(value)
+  else if (ref) (ref as { current: T | null }).current = value
+}
 
 export const Wave: FC<WaveProps> = ({ children, className, animation, rootClassName }) => {
-  const nodeRef = useRef<HTMLElement | null>(null);
-  const holderCleanupsRef = useRef<Map<HTMLElement, () => void>>(new Map());
+  const nodeRef = useRef<HTMLElement | null>(null)
+  const holderCleanupsRef = useRef<Map<HTMLElement, () => void>>(new Map())
 
-  const classes = classNames(prefixCls, className, rootClassName);
+  const classes = classNames(prefixCls, className, rootClassName)
 
   useEffect(
     () => () => {
-      holderCleanupsRef.current.forEach((cleanup) => cleanup());
-      holderCleanupsRef.current.clear();
+      holderCleanupsRef.current.forEach((cleanup) => cleanup())
+      holderCleanupsRef.current.clear()
     },
     [],
-  );
+  )
 
   const showWave = useCallback(() => {
-    const node = nodeRef.current;
-    if (!node) return;
+    const node = nodeRef.current
+    if (!node) return
 
-    const holder = document.createElement('div');
-    const rect = node.getBoundingClientRect();
-    const style = getComputedStyle(node);
-    const borderTop = parseFloat(style.borderTopWidth) || 0;
-    const borderWidth = parseFloat(style.borderLeftWidth) || 0;
+    const holder = document.createElement('div')
+    const rect = node.getBoundingClientRect()
+    const style = getComputedStyle(node)
+    const borderTop = parseFloat(style.borderTopWidth) || 0
+    const borderWidth = parseFloat(style.borderLeftWidth) || 0
 
-    holder.style.width = `${rect.width}px`;
-    holder.style.height = `${rect.height}px`;
-    holder.style.left = `-${borderTop}px`;
-    holder.style.top = `-${borderWidth}px`;
-    holder.className = `${prefixCls}-holder`;
+    holder.style.width = `${rect.width}px`
+    holder.style.height = `${rect.height}px`
+    holder.style.left = `-${borderTop}px`
+    holder.style.top = `-${borderWidth}px`
+    holder.className = `${prefixCls}-holder`
 
-    const wave = document.createElement('div');
-    wave.className = `${prefixCls}-effect`;
+    const wave = document.createElement('div')
+    wave.className = `${prefixCls}-effect`
 
-    holder.appendChild(wave);
-    node.appendChild(holder);
-    let animationFrame: number | undefined;
-    let fallbackTimer: number | undefined;
+    holder.appendChild(wave)
+    node.appendChild(holder)
+    let animationFrame: number | undefined
+    let fallbackTimer: number | undefined
 
     const cleanup = () => {
-      if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
-      if (fallbackTimer !== undefined) window.clearTimeout(fallbackTimer);
-      holderCleanupsRef.current.delete(holder);
-      holder.remove();
-    };
-    holderCleanupsRef.current.set(holder, cleanup);
+      if (animationFrame !== undefined) cancelAnimationFrame(animationFrame)
+      if (fallbackTimer !== undefined) window.clearTimeout(fallbackTimer)
+      holderCleanupsRef.current.delete(holder)
+      holder.remove()
+    }
+    holderCleanupsRef.current.set(holder, cleanup)
 
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      cleanup();
-      return;
+      cleanup()
+      return
     }
 
     // 触发动画
     animationFrame = requestAnimationFrame(() => {
-      animationFrame = undefined;
-      wave.style.boxShadow = '0 0 0 8px var(--wave-color)';
-      wave.style.opacity = '0';
-    });
+      animationFrame = undefined
+      wave.style.boxShadow = '0 0 0 8px var(--wave-color)'
+      wave.style.opacity = '0'
+    })
 
     // 动画结束自动删除
-    wave.addEventListener('transitionend', cleanup, { once: true });
-    fallbackTimer = window.setTimeout(cleanup, 500);
-  }, []);
+    wave.addEventListener('transitionend', cleanup, { once: true })
+    fallbackTimer = window.setTimeout(cleanup, 500)
+  }, [])
 
   const childRef = isValidElement(children)
     ? isReact19OrLater
       ? (children as ReactElement<WaveChildProps>).props.ref
       : (children as ReactElement & { ref?: Ref<HTMLElement> }).ref
-    : undefined;
+    : undefined
   const mergedRef = useCallback(
     (node: HTMLElement | null) => {
-      nodeRef.current = node;
-      assignRef(childRef, node);
+      nodeRef.current = node
+      assignRef(childRef, node)
     },
     [childRef],
-  );
+  )
 
-  if (!isValidElement(children)) return children as ReactNode;
+  if (!isValidElement(children)) return children as ReactNode
 
-  const child = children as ReactElement<WaveChildProps> & { ref?: Ref<HTMLElement> };
-  const childProps: WaveChildProps = child.props;
+  const child = children as ReactElement<WaveChildProps> & { ref?: Ref<HTMLElement> }
+  const childProps: WaveChildProps = child.props
 
   return cloneElement(child, {
     ref: mergedRef,
     className: classNames(childProps.className, classes),
     onMouseUp: (e: MouseEvent<HTMLElement>) => {
-      childProps.onMouseUp?.(e);
-      if (animation === 'wave') showWave();
+      childProps.onMouseUp?.(e)
+      if (animation === 'wave') showWave()
     },
     onKeyUp: (e: KeyboardEvent<HTMLElement>) => {
-      childProps.onKeyUp?.(e);
+      childProps.onKeyUp?.(e)
       if (animation === 'wave' && (e.key === 'Enter' || e.key === ' ')) {
-        showWave();
+        showWave()
       }
     },
-  });
-};
+  })
+}
 
-export default Wave;
+export default Wave

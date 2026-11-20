@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/8044af2446f74be149ef6be908fe0ea455474a49792cf0e9e0fc6bc257ceb016.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/8044af2446f74be149ef6be908fe0ea455474a49792cf0e9e0fc6bc257ceb016.svg?react'
 
-export const PrivateSolidWebsocketFuzzerIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateSolidWebsocketFuzzerIcon',
-);
+export const PrivateSolidWebsocketFuzzerIcon = createIcon(OldIconAssetSvg, 'PrivateSolidWebsocketFuzzerIcon')

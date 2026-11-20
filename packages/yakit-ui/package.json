@@ -75,7 +75,7 @@
   "scripts": {
     "dev": "node scripts/dev-with-icons.mjs vite",
     "build": "pnpm --filter @yakit-libs/yakit-ui-icons run build && tsc -b && vite build",
-    "generate:color-css": "yakit-color-css --theme Main --out src/styles/color.css",
+    "generate:color-css": "yakit-color-css --theme Main --out src/styles/color.css && prettier --write src/styles/color.css",
     "build:lib": "pnpm --filter @yakit-libs/yakit-ui-icons run build && pnpm run build:lib:prepared",
     "build:package": "pnpm run build:lib && pnpm run verify:package",
     "verify:package": "node scripts/release/verify-package.mjs",

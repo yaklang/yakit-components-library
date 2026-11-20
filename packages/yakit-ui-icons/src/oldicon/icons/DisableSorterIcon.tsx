@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/72c47c797ef5d7e6877b46eb7f7f5c8428737aee9d22feea49f909d0a9501eb0.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/72c47c797ef5d7e6877b46eb7f7f5c8428737aee9d22feea49f909d0a9501eb0.svg?react'
 
-export const DisableSorterIcon = createIcon(OldIconAssetSvg, 'DisableSorterIcon');
+export const DisableSorterIcon = createIcon(OldIconAssetSvg, 'DisableSorterIcon')

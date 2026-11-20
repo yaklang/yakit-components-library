@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgBasicSolidYsoJavaHack"
-    ],
+    "contextTargetImgVariables": ["imgBasicSolidYsoJavaHack"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": false,
     "contextFallback": null,

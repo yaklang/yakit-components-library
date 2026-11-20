@@ -1,17 +1,18 @@
-import { useMemo, type FC } from 'react';
+import { useMemo, type FC } from 'react'
 
-import type { YakitConfigProviderProps } from '../types/token';
+import type { YakitConfigProviderProps } from '../types/token'
 
-import {
-  mergeDefined,
-  mergeYakitLocale,
-  YakitConfigContext,
-  type YakitConfigContextValue,
-} from './YakitConfigContext';
+import { mergeDefined, mergeYakitLocale, YakitConfigContext, type YakitConfigContextValue } from './YakitConfigContext'
 
-export const YakitConfigContextProvider: FC<
-  YakitConfigProviderProps & { parent: YakitConfigContextValue }
-> = ({ children, componentDisabled, componentSize, direction, locale, parent, theme }) => {
+export const YakitConfigContextProvider: FC<YakitConfigProviderProps & { parent: YakitConfigContextValue }> = ({
+  children,
+  componentDisabled,
+  componentSize,
+  direction,
+  locale,
+  parent,
+  theme,
+}) => {
   const value = useMemo<YakitConfigContextValue>(
     () => ({
       componentDisabled: componentDisabled ?? parent.componentDisabled,
@@ -23,14 +24,8 @@ export const YakitConfigContextProvider: FC<
         ...mergeDefined(parent.token, theme?.token),
         YakitButton: mergeDefined(parent.token.YakitButton ?? {}, theme?.components?.YakitButton),
         YakitCard: mergeDefined(parent.token.YakitCard ?? {}, theme?.components?.YakitCard),
-        YakitCheckbox: mergeDefined(
-          parent.token.YakitCheckbox ?? {},
-          theme?.components?.YakitCheckbox,
-        ),
-        YakitDropdown: mergeDefined(
-          parent.token.YakitDropdown ?? {},
-          theme?.components?.YakitDropdown,
-        ),
+        YakitCheckbox: mergeDefined(parent.token.YakitCheckbox ?? {}, theme?.components?.YakitCheckbox),
+        YakitDropdown: mergeDefined(parent.token.YakitDropdown ?? {}, theme?.components?.YakitDropdown),
         YakitRadio: mergeDefined(parent.token.YakitRadio ?? {}, theme?.components?.YakitRadio),
         YakitSelect: mergeDefined(parent.token.YakitSelect ?? {}, theme?.components?.YakitSelect),
         YakitSwitch: mergeDefined(parent.token.YakitSwitch ?? {}, theme?.components?.YakitSwitch),
@@ -39,7 +34,7 @@ export const YakitConfigContextProvider: FC<
       },
     }),
     [componentDisabled, componentSize, direction, locale, parent, theme],
-  );
+  )
 
-  return <YakitConfigContext.Provider value={value}>{children}</YakitConfigContext.Provider>;
-};
+  return <YakitConfigContext.Provider value={value}>{children}</YakitConfigContext.Provider>
+}

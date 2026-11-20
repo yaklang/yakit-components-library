@@ -1,12 +1,12 @@
-import type { ThemeConfig } from 'antd';
-import type { CSSProperties } from 'react';
+import type { ThemeConfig } from 'antd'
+import type { CSSProperties } from 'react'
 
-import type { YakitSelectToken } from '../../types/token/YakitSelect';
-import { defined } from '../../utils';
+import type { YakitSelectToken } from '../../types/token/YakitSelect'
+import { defined } from '../../utils'
 
-import type { SelectSize } from './type';
+import type { SelectSize } from './type'
 
-type VisualSize = SelectSize;
+type VisualSize = SelectSize
 
 const color = {
   text: 'var(--Colors-Use-Neutral-Text-1-Title)',
@@ -15,21 +15,17 @@ const color = {
   main: 'var(--Colors-Use-Main-Primary)',
   mainBg: 'var(--Colors-Use-Main-Bg)',
   mainFocus: 'var(--Colors-Use-Main-Focus)',
-};
+}
 
 /** 选中后再悬浮的背景不走组件 token，用户覆盖 `optionSelectedBg` 时改用这个变量。 */
 export const selectPopupVars = (overrides?: YakitSelectToken): CSSProperties | undefined => {
-  const background = defined(overrides).optionSelectedBg;
-  if (background === undefined) return undefined;
-  return { '--yakit-select-option-selected-bg': String(background) } as CSSProperties;
-};
+  const background = defined(overrides).optionSelectedBg
+  if (background === undefined) return undefined
+  return { '--yakit-select-option-selected-bg': String(background) } as CSSProperties
+}
 
 /** `checkbox` 为 true 时选中项不铺主色，改由左侧勾选框表达。用户传入的组件 token 覆盖同名默认值。 */
-export const createSelectTheme = (
-  size: VisualSize,
-  checkbox: boolean,
-  overrides?: YakitSelectToken,
-): ThemeConfig => ({
+export const createSelectTheme = (size: VisualSize, checkbox: boolean, overrides?: YakitSelectToken): ThemeConfig => ({
   components: {
     Select: {
       selectorBg: color.bg,
@@ -48,4 +44,4 @@ export const createSelectTheme = (
       ...defined(overrides),
     },
   },
-});
+})

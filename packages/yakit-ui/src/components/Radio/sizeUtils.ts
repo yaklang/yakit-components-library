@@ -1,10 +1,10 @@
-import type { RadioButtonsSize, RadioSize } from './type';
+import type { RadioButtonsSize, RadioSize } from './type'
 
 /** 圆形 Radio：middle → medium；其余非 large 一律 medium */
 export const resolveCircularSize = (size?: RadioSize | RadioButtonsSize): 'medium' | 'large' => {
-  if (size === 'large' || size === 'maxLarge') return 'large';
-  return 'medium';
-};
+  if (size === 'large' || size === 'maxLarge') return 'large'
+  return 'medium'
+}
 
 /**
  * 按钮组尺寸 class 后缀，对齐主项目 YakitRadioButtons
@@ -15,14 +15,14 @@ export const resolveButtonSizeClass = (
 ): 'small' | 'middle' | 'large' | 'max-large' => {
   switch (size) {
     case 'small':
-      return 'small';
+      return 'small'
     case 'large':
-      return 'large';
+      return 'large'
     case 'maxLarge':
-      return 'max-large';
+      return 'max-large'
     case 'medium':
     case 'middle':
     default:
-      return 'middle';
+      return 'middle'
   }
-};
+}

@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vitest/config'
 
-import { createSvgReactPlugin } from './config/svgReactTransform';
+import { createSvgReactPlugin } from './config/svgReactTransform'
 
 export default defineConfig({
   plugins: [createSvgReactPlugin()],
@@ -8,4 +8,4 @@ export default defineConfig({
     environment: 'node',
     include: ['test/icons/**/*.test.ts', 'test/ssr/**/*.test.tsx'],
   },
-});
+})

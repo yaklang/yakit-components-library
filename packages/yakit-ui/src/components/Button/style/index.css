@@ -8,19 +8,10 @@
   --yakit-btn-color-bg-hover: var(--yakit-color-primary-bg-hover);
   --yakit-btn-color-border: var(--yakit-color-primary-border);
   --yakit-btn-neutral-text: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title));
-  --yakit-btn-neutral-text-secondary: var(
-    --yakit-color-text-secondary,
-    var(--Colors-Use-Neutral-Text-3-Secondary)
-  );
-  --yakit-btn-neutral-bg-hover: var(
-    --yakit-color-neutral-bg-hover,
-    var(--Colors-Use-Neutral-Bg-Hover)
-  );
+  --yakit-btn-neutral-text-secondary: var(--yakit-color-text-secondary, var(--Colors-Use-Neutral-Text-3-Secondary));
+  --yakit-btn-neutral-bg-hover: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover));
   --yakit-btn-neutral-border: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border));
-  --yakit-btn-neutral-disable: var(
-    --yakit-color-neutral-disable,
-    var(--Colors-Use-Neutral-Disable)
-  );
+  --yakit-btn-neutral-disable: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable));
   --yakit-btn-surface: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background));
   --wave-color: var(--yakit-btn-color-focus);
   align-items: center;
@@ -190,16 +181,14 @@
   color: var(--yakit-btn-color-text);
 }
 
-.yakit-btn-primary:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-primary:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    :active
+  ):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-hover);
   color: var(--yakit-btn-color-text);
 }
 
-.yakit-btn-primary:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-primary:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-text);
 }
@@ -260,9 +249,9 @@
   color: var(--yakit-btn-neutral-disable);
 }
 
-.yakit-btn-secondary2.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(
-    .yakit-btn-active
-  ):not(:disabled):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-secondary2.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-base);
 }
@@ -273,17 +262,15 @@
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-outline1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-outline1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    :active
+  ):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-base);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-outline1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-outline1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-pressed);
@@ -302,17 +289,15 @@
   color: var(--yakit-btn-neutral-text);
 }
 
-.yakit-btn-outline2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-outline2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    :active
+  ):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-surface);
   border-color: var(--yakit-btn-color-base);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-outline2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-outline2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-surface);
   border-color: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-pressed);
@@ -325,25 +310,19 @@
   color: var(--yakit-btn-neutral-disable);
 }
 
-.yakit-btn-outline2:is(
-    .yakit-btn-color-danger,
-    .yakit-btn-color-success,
-    .yakit-btn-color-infoBlue
-  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-outline2:is(.yakit-btn-color-danger, .yakit-btn-color-success, .yakit-btn-color-infoBlue):is(
+    :hover,
+    .yakit-btn-hover
+  ):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-base);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-outline2:is(
-    .yakit-btn-color-danger,
-    .yakit-btn-color-success,
-    .yakit-btn-color-infoBlue
-  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-outline2:is(.yakit-btn-color-danger, .yakit-btn-color-success, .yakit-btn-color-infoBlue):is(
+    :active,
+    .yakit-btn-active
+  ):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   border-color: var(--yakit-btn-color-pressed);
   color: var(--yakit-btn-color-pressed);
@@ -375,99 +354,79 @@
   color: var(--yakit-btn-neutral-text-secondary);
 }
 
-.yakit-btn-text:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-text:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    :active
+  ):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-text:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-text:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-pressed);
 }
 
-.yakit-btn-text2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group),
-.yakit-btn-text2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-text2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    :active
+  ):not(.yakit-btn-in-group),
+.yakit-btn-text2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-neutral-bg-hover);
   color: var(--yakit-btn-neutral-text);
 }
 
-.yakit-btn-text2:is(
-    .yakit-btn-color-danger,
-    .yakit-btn-color-success,
-    .yakit-btn-color-infoBlue
-  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-text2:is(.yakit-btn-color-danger, .yakit-btn-color-success, .yakit-btn-color-infoBlue):is(
+    :hover,
+    .yakit-btn-hover
+  ):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg);
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-text2:is(
-    .yakit-btn-color-danger,
-    .yakit-btn-color-success,
-    .yakit-btn-color-infoBlue
-  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-text2:is(.yakit-btn-color-danger, .yakit-btn-color-success, .yakit-btn-color-infoBlue):is(
+    :active,
+    .yakit-btn-active
+  ):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   background: var(--yakit-btn-color-bg-hover);
   color: var(--yakit-btn-color-pressed);
 }
 
-.yakit-btn-link1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-link1:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    :active
+  ):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-hover);
 }
 
-.yakit-btn-link1.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(
-    :disabled
-  ):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-link1.yakit-btn-color-danger:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
+    [aria-disabled='true']
+  ):not(:active):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-link1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-link1:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-pressed);
 }
 
-.yakit-btn-link2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-link2:is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
+    :active
+  ):not(.yakit-btn-in-group) {
   color: var(--yakit-color-primary);
 }
 
-.yakit-btn-link2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-link2:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   color: var(--yakit-color-primary-pressed);
 }
 
-.yakit-btn-link2:is(
-    .yakit-btn-color-danger,
-    .yakit-btn-color-success,
-    .yakit-btn-color-infoBlue
-  ):is(:hover, .yakit-btn-hover):not(.yakit-btn-active):not(:disabled):not(
-    [aria-disabled='true']
-  ):not(:active):not(.yakit-btn-in-group) {
+.yakit-btn-link2:is(.yakit-btn-color-danger, .yakit-btn-color-success, .yakit-btn-color-infoBlue):is(
+    :hover,
+    .yakit-btn-hover
+  ):not(.yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(:active):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-base);
 }
 
-.yakit-btn-link2:is(
-    .yakit-btn-color-danger,
-    .yakit-btn-color-success,
-    .yakit-btn-color-infoBlue
-  ):is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']):not(
-    .yakit-btn-in-group
-  ) {
+.yakit-btn-link2:is(.yakit-btn-color-danger, .yakit-btn-color-success, .yakit-btn-color-infoBlue):is(
+    :active,
+    .yakit-btn-active
+  ):not(:disabled):not([aria-disabled='true']):not(.yakit-btn-in-group) {
   color: var(--yakit-btn-color-pressed);
 }
 
@@ -494,8 +453,7 @@
   background: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #fff));
   border: none;
   border-radius: 4px;
-  box-shadow: inset 0 0 0 1px
-    var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
+  box-shadow: inset 0 0 0 1px var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
   box-sizing: border-box;
   display: inline-flex;
   overflow: hidden;
@@ -561,21 +519,17 @@
   outline-offset: -2px;
 }
 
-.yakit-btn-group
-  > .yakit-btn:is(:hover, .yakit-btn-hover):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-group > .yakit-btn:is(:hover, .yakit-btn-hover):not(:disabled):not([aria-disabled='true']) {
   background: var(--yakit-btn-neutral-bg-hover);
   color: var(--yakit-btn-neutral-text);
 }
 
-.yakit-btn-group
-  > .yakit-btn:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
+.yakit-btn-group > .yakit-btn:is(:active, .yakit-btn-active):not(:disabled):not([aria-disabled='true']) {
   background: var(--yakit-btn-neutral-bg-hover);
   color: var(--yakit-btn-neutral-text);
 }
 
-.yakit-btn-group
-  > .yakit-btn:is(:hover, .yakit-btn-hover, :active, .yakit-btn-active)
-  .yakit-btn-icon {
+.yakit-btn-group > .yakit-btn:is(:hover, .yakit-btn-hover, :active, .yakit-btn-active) .yakit-btn-icon {
   color: var(--yakit-btn-neutral-text-secondary);
 }
 

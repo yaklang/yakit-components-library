@@ -1,5 +1,5 @@
 ---
-"@yakit-libs/yakit-ui": patch
+'@yakit-libs/yakit-ui': patch
 ---
 
 Use `@yakit-libs/yakit-ui-icons` as a runtime dependency for public icons. Preserve

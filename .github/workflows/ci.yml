@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - "pre/**"
+      - 'pre/**'
 
 permissions: {}
 concurrency:
@@ -224,16 +224,7 @@ jobs:
 
   quality:
     if: always()
-    needs:
-      [
-        scope,
-        repository,
-        icons,
-        ui,
-        release-tools,
-        icon-platforms,
-        icon-isolation,
-      ]
+    needs: [scope, repository, icons, ui, release-tools, icon-platforms, icon-isolation]
     runs-on: ubuntu-latest
     steps:
       - name: Require success for selected jobs

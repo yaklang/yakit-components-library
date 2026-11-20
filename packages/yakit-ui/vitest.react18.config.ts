@@ -1,19 +1,19 @@
-import { createRequire } from 'node:module';
-import { dirname, join } from 'node:path';
+import { createRequire } from 'node:module'
+import { dirname, join } from 'node:path'
 
-import react from '@vitejs/plugin-react';
-import type {} from '@vitest/browser/providers/playwright';
-import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react'
+import type {} from '@vitest/browser/providers/playwright'
+import { defineConfig } from 'vitest/config'
 
-const require = createRequire(import.meta.url);
-const react18 = dirname(require.resolve('react-18/package.json'));
-const reactDom18 = dirname(require.resolve('react-dom-18/package.json'));
+const require = createRequire(import.meta.url)
+const react18 = dirname(require.resolve('react-18/package.json'))
+const reactDom18 = dirname(require.resolve('react-dom-18/package.json'))
 
 const executablePath = (
   globalThis as {
-    process?: { env?: Record<string, string | undefined> };
+    process?: { env?: Record<string, string | undefined> }
   }
-).process?.env?.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
+).process?.env?.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
 
 // 用同一份 Wave 源码，在 React 18 下再跑一遍子节点 ref 用例。
 export default defineConfig({
@@ -45,4 +45,4 @@ export default defineConfig({
     },
     include: ['test/components/wave-child-ref.test.tsx'],
   },
-});
+})

@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/1ee48d6978225b38941cd819b92ae07b096eaff5de7e97208273f85ed11c29af.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/1ee48d6978225b38941cd819b92ae07b096eaff5de7e97208273f85ed11c29af.svg?react'
 
-export const PublicToolTCPPortLogIcon = createIcon(OldIconAssetSvg, 'PublicToolTCPPortLogIcon');
+export const PublicToolTCPPortLogIcon = createIcon(OldIconAssetSvg, 'PublicToolTCPPortLogIcon')

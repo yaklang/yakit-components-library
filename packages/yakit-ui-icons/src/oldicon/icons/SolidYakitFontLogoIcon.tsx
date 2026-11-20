@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/4e7c94908700f8438dfd84b702816a840120528e03a2cd021c3af623898793e0.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/4e7c94908700f8438dfd84b702816a840120528e03a2cd021c3af623898793e0.svg?react'
 
-export const SolidYakitFontLogoIcon = createIcon(OldIconAssetSvg, 'SolidYakitFontLogoIcon');
+export const SolidYakitFontLogoIcon = createIcon(OldIconAssetSvg, 'SolidYakitFontLogoIcon')

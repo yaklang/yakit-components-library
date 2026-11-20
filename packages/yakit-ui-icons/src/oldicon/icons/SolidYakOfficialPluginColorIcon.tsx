@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/36802d881dbd0bcce9fcb1478473d629532c221ab068fc1e86a3a6943a22cd1f.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/36802d881dbd0bcce9fcb1478473d629532c221ab068fc1e86a3a6943a22cd1f.svg?react'
 
-export const SolidYakOfficialPluginColorIcon = createIcon(
-  OldIconAssetSvg,
-  'SolidYakOfficialPluginColorIcon',
-);
+export const SolidYakOfficialPluginColorIcon = createIcon(OldIconAssetSvg, 'SolidYakOfficialPluginColorIcon')

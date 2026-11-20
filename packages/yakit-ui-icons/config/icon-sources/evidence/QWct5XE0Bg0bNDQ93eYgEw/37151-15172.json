@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgBasicSolidWebFuzzer"
-    ],
+    "contextTargetImgVariables": ["imgBasicSolidWebFuzzer"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": false,
     "contextFallback": null,

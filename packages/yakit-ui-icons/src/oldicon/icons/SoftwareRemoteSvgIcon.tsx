@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/4fcb3f297b61108f979091a22fea30b020aa6bfbebd393967db4a12cab96dc34.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/4fcb3f297b61108f979091a22fea30b020aa6bfbebd393967db4a12cab96dc34.svg?react'
 
-export const SoftwareRemoteSvgIcon = createIcon(OldIconAssetSvg, 'SoftwareRemoteSvgIcon');
+export const SoftwareRemoteSvgIcon = createIcon(OldIconAssetSvg, 'SoftwareRemoteSvgIcon')

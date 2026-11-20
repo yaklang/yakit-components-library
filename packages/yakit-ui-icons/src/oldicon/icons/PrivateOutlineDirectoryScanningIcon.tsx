@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/a83c0c65444419828b81cbd2922cc6db3cd336d7f9bc08ecfeb8e564d12e5851.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/a83c0c65444419828b81cbd2922cc6db3cd336d7f9bc08ecfeb8e564d12e5851.svg?react'
 
-export const PrivateOutlineDirectoryScanningIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateOutlineDirectoryScanningIcon',
-);
+export const PrivateOutlineDirectoryScanningIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineDirectoryScanningIcon')

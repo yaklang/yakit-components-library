@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/f0445ae7ca954386bc3ebf5ca7152b6538cf8ed0965a496adc2d54f7a459c23c.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/f0445ae7ca954386bc3ebf5ca7152b6538cf8ed0965a496adc2d54f7a459c23c.svg?react'
 
-export const ArrowsRetractIcon = createIcon(OldIconAssetSvg, 'ArrowsRetractIcon');
+export const ArrowsRetractIcon = createIcon(OldIconAssetSvg, 'ArrowsRetractIcon')

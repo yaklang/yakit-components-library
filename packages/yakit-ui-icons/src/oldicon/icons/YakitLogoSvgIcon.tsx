@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/e03916b718dea2d9d2927fd6a192f4cebee5a75d2e2e2aaa8b458f333044a450.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/e03916b718dea2d9d2927fd6a192f4cebee5a75d2e2e2aaa8b458f333044a450.svg?react'
 
-export const YakitLogoSvgIcon = createIcon(OldIconAssetSvg, 'YakitLogoSvgIcon');
+export const YakitLogoSvgIcon = createIcon(OldIconAssetSvg, 'YakitLogoSvgIcon')

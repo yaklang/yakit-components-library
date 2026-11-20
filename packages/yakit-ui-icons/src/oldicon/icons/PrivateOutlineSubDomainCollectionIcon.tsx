@@ -1,7 +1,7 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/7ba991d59ccd39abe39bea0089d5d4e71adbaf48f553c99097778facef6e8e31.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/7ba991d59ccd39abe39bea0089d5d4e71adbaf48f553c99097778facef6e8e31.svg?react'
 
 export const PrivateOutlineSubDomainCollectionIcon = createIcon(
   OldIconAssetSvg,
   'PrivateOutlineSubDomainCollectionIcon',
-);
+)

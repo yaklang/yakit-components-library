@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/7bd29c60080cd6b036aac706ccc175f12e383e1fb13575906319b4149ba92a5e.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/7bd29c60080cd6b036aac706ccc175f12e383e1fb13575906319b4149ba92a5e.svg?react'
 
-export const PublicToolDBRiskIcon = createIcon(OldIconAssetSvg, 'PublicToolDBRiskIcon');
+export const PublicToolDBRiskIcon = createIcon(OldIconAssetSvg, 'PublicToolDBRiskIcon')

@@ -79,7 +79,9 @@
 
 .yakit-card-hoverable {
   cursor: pointer;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .yakit-card-hoverable:hover {

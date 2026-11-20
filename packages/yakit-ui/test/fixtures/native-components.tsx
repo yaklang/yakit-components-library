@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import Wave from '../../src/components/Animation/Wave';
-import Button from '../../src/components/Button';
-import Checkbox from '../../src/components/Checkbox';
-import CollapseText from '../../src/components/CollapseText';
-import ConfigProvider from '../../src/components/ConfigProvider';
-import CopyText from '../../src/components/CopyText';
-import Input from '../../src/components/Input';
-import InputNumber from '../../src/components/InputNumber';
-import Spin from '../../src/components/Spin';
-import Tag from '../../src/components/Tag';
+import Wave from '../../src/components/Animation/Wave'
+import Button from '../../src/components/Button'
+import Checkbox from '../../src/components/Checkbox'
+import CollapseText from '../../src/components/CollapseText'
+import ConfigProvider from '../../src/components/ConfigProvider'
+import CopyText from '../../src/components/CopyText'
+import Input from '../../src/components/Input'
+import InputNumber from '../../src/components/InputNumber'
+import Spin from '../../src/components/Spin'
+import Tag from '../../src/components/Tag'
 
 export const NativeComponentsFixture = () => (
   <ConfigProvider
@@ -28,10 +28,7 @@ export const NativeComponentsFixture = () => (
     <Input.TextArea defaultValue="textarea" />
     <Input.Password defaultValue="password" />
     <Input.OTP defaultValue="12" length={2} />
-    <Input.Search
-      defaultValue="search"
-      enterButton={<button type="button">Custom search</button>}
-    />
+    <Input.Search defaultValue="search" enterButton={<button type="button">Custom search</button>} />
     <Input.SearchTrigger />
     <Input.Select>https://</Input.Select>
     <InputNumber defaultValue={1} />
@@ -43,4 +40,4 @@ export const NativeComponentsFixture = () => (
       <button type="button">Wave</button>
     </Wave>
   </ConfigProvider>
-);
+)

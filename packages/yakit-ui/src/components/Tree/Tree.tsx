@@ -1,25 +1,17 @@
-import { ConfigProvider, Tree as AntTree } from 'antd';
-import type { ThemeConfig, TreeDataNode } from 'antd';
-import classNames from 'classnames';
-import {
-  forwardRef,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  type Key,
-  type ReactElement,
-  type ReactNode,
-} from 'react';
+import { ConfigProvider, Tree as AntTree } from 'antd'
+import type { ThemeConfig, TreeDataNode } from 'antd'
+import classNames from 'classnames'
+import { forwardRef, useImperativeHandle, useMemo, useRef, type Key, type ReactElement, type ReactNode } from 'react'
 
-import useYakitConfig from '../../hooks/useYakitConfig';
+import useYakitConfig from '../../hooks/useYakitConfig'
 
-import { FileTreeNode, type FileTreeNodeProps } from './FileTreeNode';
-import { renderWebsiteIcon } from './nodeIcon';
-import { isLeafIconEnabled, resolveTreeShowLine } from './showLine';
-import './style/index.css';
-import { renderSwitcherIcon, type SwitcherNode } from './switcher';
-import { createTreeTheme } from './theme';
-import { collectFolders } from './treeData';
+import { FileTreeNode, type FileTreeNodeProps } from './FileTreeNode'
+import { renderWebsiteIcon } from './nodeIcon'
+import { isLeafIconEnabled, resolveTreeShowLine } from './showLine'
+import './style/index.css'
+import { renderSwitcherIcon, type SwitcherNode } from './switcher'
+import { createTreeTheme } from './theme'
+import { collectFolders } from './treeData'
 import type {
   DirectoryTreeProps,
   TreeRef,
@@ -27,52 +19,46 @@ import type {
   TreeVariant,
   WebsiteTreeProps,
   YakitTreeProps,
-} from './type';
-import { hasFocusedKey, useFileTreeFocus } from './useFileTreeFocus';
-import { useFileTreeSelection } from './useFileTreeSelection';
-import { useInnerExpanded } from './useInnerExpanded';
+} from './type'
+import { hasFocusedKey, useFileTreeFocus } from './useFileTreeFocus'
+import { useFileTreeSelection } from './useFileTreeSelection'
+import { useInnerExpanded } from './useInnerExpanded'
 
 /** 三种树共用的内部视图。目录树字段只有 `variant="file"` 时会读。 */
 interface TreeViewProps extends YakitTreeProps {
-  variant?: TreeVariant;
-  editingKey?: DirectoryTreeProps['editingKey'];
-  editingValue?: DirectoryTreeProps['editingValue'];
-  editingSelection?: DirectoryTreeProps['editingSelection'];
-  onEditSubmit?: DirectoryTreeProps['onEditSubmit'];
-  suffix?: DirectoryTreeProps['suffix'];
-  focusedKey?: DirectoryTreeProps['focusedKey'];
-  defaultFocusedKey?: DirectoryTreeProps['defaultFocusedKey'];
-  onFocusedKeyChange?: DirectoryTreeProps['onFocusedKeyChange'];
-  selectDirectory?: DirectoryTreeProps['selectDirectory'];
+  variant?: TreeVariant
+  editingKey?: DirectoryTreeProps['editingKey']
+  editingValue?: DirectoryTreeProps['editingValue']
+  editingSelection?: DirectoryTreeProps['editingSelection']
+  onEditSubmit?: DirectoryTreeProps['onEditSubmit']
+  suffix?: DirectoryTreeProps['suffix']
+  focusedKey?: DirectoryTreeProps['focusedKey']
+  defaultFocusedKey?: DirectoryTreeProps['defaultFocusedKey']
+  onFocusedKeyChange?: DirectoryTreeProps['onFocusedKeyChange']
+  selectDirectory?: DirectoryTreeProps['selectDirectory']
 }
 
 // antd 的组件类型带着它自己解析到的 React。这里收成当前文件的 ReactNode，避免两份 @types/react 对不上。
 const AntdConfigProvider = ConfigProvider as unknown as (props: {
-  children?: ReactNode;
-  direction?: 'ltr' | 'rtl';
-  theme: ThemeConfig;
-}) => ReactElement;
+  children?: ReactNode
+  direction?: 'ltr' | 'rtl'
+  theme: ThemeConfig
+}) => ReactElement
 
-const AntdTreeView = AntTree as unknown as (
-  props: YakitTreeProps & { ref?: unknown },
-) => ReactElement;
+const AntdTreeView = AntTree as unknown as (props: YakitTreeProps & { ref?: unknown }) => ReactElement
 
-const asNode = (value: unknown): ReactNode => value as unknown as ReactNode;
+const asNode = (value: unknown): ReactNode => value as unknown as ReactNode
 
-const renderTitle = (
-  node: TreeDataNode,
-  titleName: string,
-  titleRender?: YakitTreeProps['titleRender'],
-): ReactNode => {
-  if (titleRender) return asNode(titleRender(node));
-  const record = node as unknown as Record<string, unknown>;
-  const named = record[titleName];
-  const value = named !== undefined ? named : node.title;
+const renderTitle = (node: TreeDataNode, titleName: string, titleRender?: YakitTreeProps['titleRender']): ReactNode => {
+  if (titleRender) return asNode(titleRender(node))
+  const record = node as unknown as Record<string, unknown>
+  const named = record[titleName]
+  const value = named !== undefined ? named : node.title
   if (typeof value === 'function') {
-    return asNode((value as (data: TreeDataNode) => ReactNode)(node));
+    return asNode((value as (data: TreeDataNode) => ReactNode)(node))
   }
-  return asNode(value);
-};
+  return asNode(value)
+}
 
 const TreeView = forwardRef<TreeRef, TreeViewProps>(
   (
@@ -120,18 +106,18 @@ const TreeView = forwardRef<TreeRef, TreeViewProps>(
     },
     ref,
   ) => {
-    const config = useYakitConfig();
-    const disabled = disabledProp ?? config.componentDisabled;
-    const innerRef = useRef<{ scrollTo?: (scroll: TreeScrollTarget) => void }>(null);
-    const keyName = fieldNames?.key ?? 'key';
-    const childrenName = fieldNames?.children ?? 'children';
-    const titleName = fieldNames?.title ?? 'title';
-    const fileTree = variant === 'file';
+    const config = useYakitConfig()
+    const disabled = disabledProp ?? config.componentDisabled
+    const innerRef = useRef<{ scrollTo?: (scroll: TreeScrollTarget) => void }>(null)
+    const keyName = fieldNames?.key ?? 'key'
+    const childrenName = fieldNames?.children ?? 'children'
+    const titleName = fieldNames?.title ?? 'title'
+    const fileTree = variant === 'file'
     const folders = useMemo(() => {
-      const next = new Set<Key>();
-      collectFolders(treeData, keyName, childrenName, next, !!loadData);
-      return next;
-    }, [childrenName, keyName, loadData, treeData]);
+      const next = new Set<Key>()
+      collectFolders(treeData, keyName, childrenName, next, !!loadData)
+      return next
+    }, [childrenName, keyName, loadData, treeData])
     const { expanded, setInnerExpanded } = useInnerExpanded(
       fileTree,
       treeData,
@@ -141,12 +127,8 @@ const TreeView = forwardRef<TreeRef, TreeViewProps>(
       defaultExpandedKeys,
       defaultExpandAll,
       defaultExpandParent,
-    );
-    const { activeFocused, bumpFocused } = useFileTreeFocus(
-      focusedKey,
-      defaultFocusedKey,
-      onFocusedKeyChange,
-    );
+    )
+    const { activeFocused, bumpFocused } = useFileTreeFocus(focusedKey, defaultFocusedKey, onFocusedKeyChange)
     const { fileSelected, selectFile } = useFileTreeSelection({
       active: fileTree,
       selectedKeys,
@@ -161,31 +143,31 @@ const TreeView = forwardRef<TreeRef, TreeViewProps>(
       onSelect,
       bumpFocused,
       activeFocused,
-    });
+    })
 
     useImperativeHandle(
       ref,
       () => ({
         scrollTo: (scroll) => {
-          innerRef.current?.scrollTo?.(scroll);
+          innerRef.current?.scrollTo?.(scroll)
         },
       }),
       [],
-    );
+    )
 
-    const expandedKeySet = useMemo(() => new Set(expanded ?? []), [expanded]);
-    const fileExpandAction = expandAction ?? 'click';
-    const passedExpandedKeys = fileTree ? expanded : expandedKeys;
-    const passedSelectedKeys = fileTree ? fileSelected : selectedKeys;
-    const resolvedShowLine = resolveTreeShowLine(variant, showLine, !!disabled);
-    const lineVisible = !!resolvedShowLine;
+    const expandedKeySet = useMemo(() => new Set(expanded ?? []), [expanded])
+    const fileExpandAction = expandAction ?? 'click'
+    const passedExpandedKeys = fileTree ? expanded : expandedKeys
+    const passedSelectedKeys = fileTree ? fileSelected : selectedKeys
+    const resolvedShowLine = resolveTreeShowLine(variant, showLine, !!disabled)
+    const lineVisible = !!resolvedShowLine
     const theme = useMemo(
       () => createTreeTheme(variant, lineVisible, config.token.YakitTree),
       [config.token.YakitTree, lineVisible, variant],
-    );
+    )
     // 用解析后的值：showLeafIcon 可能从布尔 true 换成图标函数。
-    const leafIconEnabled = isLeafIconEnabled(fileTree ? false : resolvedShowLine);
-    const mergedItemHeight = itemHeight ?? (fileTree ? 22 : variant === 'website' ? 24 : undefined);
+    const leafIconEnabled = isLeafIconEnabled(fileTree ? false : resolvedShowLine)
+    const mergedItemHeight = itemHeight ?? (fileTree ? 22 : variant === 'website' ? 24 : undefined)
 
     return (
       <div
@@ -231,10 +213,7 @@ const TreeView = forwardRef<TreeRef, TreeViewProps>(
             showIcon={fileTree ? false : (showIcon ?? variant === 'website')}
             disabled={disabled}
             showLine={resolvedShowLine}
-            switcherIcon={
-              switcherIcon ??
-              ((node: SwitcherNode) => renderSwitcherIcon(variant, node, !!disabled))
-            }
+            switcherIcon={switcherIcon ?? ((node: SwitcherNode) => renderSwitcherIcon(variant, node, !!disabled))}
             titleRender={
               fileTree
                 ? (node: TreeDataNode) => (
@@ -244,11 +223,7 @@ const TreeView = forwardRef<TreeRef, TreeViewProps>(
                       editingValue={editingValue}
                       expanded={expandedKeySet.has(node.key)}
                       focused={hasFocusedKey(activeFocused) && node.key === activeFocused}
-                      node={
-                        folders.has(node.key) && node.isLeaf !== false
-                          ? { ...node, isLeaf: false }
-                          : node
-                      }
+                      node={folders.has(node.key) && node.isLeaf !== false ? { ...node, isLeaf: false } : node}
                       showIcon={showIcon !== false}
                       icon={showIcon !== false ? (icon as FileTreeNodeProps['icon']) : undefined}
                       suffix={suffix?.(node)}
@@ -261,31 +236,31 @@ const TreeView = forwardRef<TreeRef, TreeViewProps>(
             treeData={treeData}
             onExpand={(keys, info) => {
               if (fileTree) {
-                setInnerExpanded(keys);
-                bumpFocused(info.node.key);
+                setInnerExpanded(keys)
+                bumpFocused(info.node.key)
               }
-              onExpand?.(keys, info);
+              onExpand?.(keys, info)
             }}
             onCheck={onCheck}
             onSelect={fileTree ? selectFile : onSelect}
           />
         </AntdConfigProvider>
       </div>
-    );
+    )
   },
-);
+)
 
 export const DefaultTree = forwardRef<TreeRef, YakitTreeProps>((props, ref) => (
   <TreeView ref={ref} {...props} variant="default" />
-));
-DefaultTree.displayName = 'Tree';
+))
+DefaultTree.displayName = 'Tree'
 
 export const WebsiteTree = forwardRef<TreeRef, WebsiteTreeProps>((props, ref) => (
   <TreeView ref={ref} {...props} variant="website" />
-));
-WebsiteTree.displayName = 'WebsiteTree';
+))
+WebsiteTree.displayName = 'WebsiteTree'
 
 export const DirectoryTree = forwardRef<TreeRef, DirectoryTreeProps>((props, ref) => (
   <TreeView ref={ref} {...props} variant="file" />
-));
-DirectoryTree.displayName = 'DirectoryTree';
+))
+DirectoryTree.displayName = 'DirectoryTree'

@@ -1,5 +1,5 @@
 ---
-"@yakit-libs/yakit-ui": minor
+'@yakit-libs/yakit-ui': minor
 ---
 
 Add the Yakit Dropdown, covering List/Menu Item layouts from the design system.

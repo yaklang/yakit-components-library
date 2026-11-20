@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/5020ee4b1d70a0f3dc5bb1a8675691d4b44abc75252d0c50e8e945d0f98ef860.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/5020ee4b1d70a0f3dc5bb1a8675691d4b44abc75252d0c50e8e945d0f98ef860.svg?react'
 
-export const BurpSuiteCommunityIcon = createIcon(OldIconAssetSvg, 'BurpSuiteCommunityIcon');
+export const BurpSuiteCommunityIcon = createIcon(OldIconAssetSvg, 'BurpSuiteCommunityIcon')

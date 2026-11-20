@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/395fdea643b41d96722f0814f1df8275640ea4cf997afc8c2eddc6df19928240.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/395fdea643b41d96722f0814f1df8275640ea4cf997afc8c2eddc6df19928240.svg?react'
 
-export const RectangleFailIcon = createIcon(OldIconAssetSvg, 'RectangleFailIcon');
+export const RectangleFailIcon = createIcon(OldIconAssetSvg, 'RectangleFailIcon')

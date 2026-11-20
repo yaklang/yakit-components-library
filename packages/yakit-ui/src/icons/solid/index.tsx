@@ -1,1 +1,1 @@
-export * from '@yakit-libs/yakit-ui-icons/solid';
+export * from '@yakit-libs/yakit-ui-icons/solid'

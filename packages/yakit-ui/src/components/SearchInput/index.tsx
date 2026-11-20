@@ -1,4 +1,4 @@
-import { SearchInput } from './SearchInput';
+import { SearchInput } from './SearchInput'
 
 export type {
   SearchIconPosition,
@@ -7,5 +7,5 @@ export type {
   SearchInputVariant,
   SearchSelectorOption,
   SearchSelectorProps,
-} from './type';
-export default SearchInput;
+} from './type'
+export default SearchInput

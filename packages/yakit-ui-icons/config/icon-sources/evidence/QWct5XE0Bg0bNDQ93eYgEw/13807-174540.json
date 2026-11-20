@@ -1,9 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 1,
-    "contextTargetImgVariables": [
-      "imgSolidExclamation"
-    ],
+    "contextTargetImgVariables": ["imgSolidExclamation"],
     "exactComponentNodeExport": false,
     "contextLayoutComposite": true,
     "contextFallback": null,

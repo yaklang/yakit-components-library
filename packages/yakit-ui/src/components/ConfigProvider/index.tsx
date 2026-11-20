@@ -4,16 +4,10 @@ import type {
   YakitConfigProviderProps,
   YakitLocale,
   YakitThemeMode,
-} from '../../types/token';
+} from '../../types/token'
 
-import { ConfigProvider } from './ConfigProvider';
+import { ConfigProvider } from './ConfigProvider'
 
-export type {
-  CustomThemeConfig,
-  GlobalToken,
-  YakitConfigProviderProps,
-  YakitLocale,
-  YakitThemeMode,
-};
+export type { CustomThemeConfig, GlobalToken, YakitConfigProviderProps, YakitLocale, YakitThemeMode }
 
-export default ConfigProvider;
+export default ConfigProvider

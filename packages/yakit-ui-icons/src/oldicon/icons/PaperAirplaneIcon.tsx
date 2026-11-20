@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/d6c39d8c901c34af22995b51bd595589adc0e60fd0279308d0048f8a93069a13.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/d6c39d8c901c34af22995b51bd595589adc0e60fd0279308d0048f8a93069a13.svg?react'
 
-export const PaperAirplaneIcon = createIcon(OldIconAssetSvg, 'PaperAirplaneIcon');
+export const PaperAirplaneIcon = createIcon(OldIconAssetSvg, 'PaperAirplaneIcon')

@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/a9521dec0949436fa4c387b532b1a534ad1f56e2a1027c3f4102fa7c216a0599.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/a9521dec0949436fa4c387b532b1a534ad1f56e2a1027c3f4102fa7c216a0599.svg?react'
 
-export const AIToDoListPendingIcon = createIcon(OldIconAssetSvg, 'AIToDoListPendingIcon');
+export const AIToDoListPendingIcon = createIcon(OldIconAssetSvg, 'AIToDoListPendingIcon')

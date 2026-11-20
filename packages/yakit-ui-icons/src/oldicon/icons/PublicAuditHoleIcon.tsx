@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/4b785f0ed6379a15a6f7556ed98c567a5766db796a51ffe9333e85ebb9c0a334.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/4b785f0ed6379a15a6f7556ed98c567a5766db796a51ffe9333e85ebb9c0a334.svg?react'
 
-export const PublicAuditHoleIcon = createIcon(OldIconAssetSvg, 'PublicAuditHoleIcon');
+export const PublicAuditHoleIcon = createIcon(OldIconAssetSvg, 'PublicAuditHoleIcon')

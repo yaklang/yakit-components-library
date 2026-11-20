@@ -1,17 +1,17 @@
-import { spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { readdirSync, statSync } from 'node:fs';
-import { dirname, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { readdirSync, statSync } from 'node:fs'
+import { dirname, relative, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest'
 
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs'
 
-import { iconCounts } from './icon-inventory';
+import { iconCounts } from './icon-inventory'
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex')
 const trackedRoots = [
   resolve(packageRoot, 'scripts/audit-icons.mjs'),
   resolve(packageRoot, 'scripts/icon-audit-contracts.mjs'),
@@ -20,19 +20,19 @@ const trackedRoots = [
   resolve(packageRoot, 'src/solid/index.tsx'),
   resolve(packageRoot, 'config/icon-sources/solid.json'),
   resolve(packageRoot, 'config/icon-sources/solid.json'),
-];
+]
 const snapshot = () => {
-  const result: Record<string, string> = {};
+  const result: Record<string, string> = {}
   const visit = (entry: string) => {
     if (statSync(entry).isDirectory()) {
-      for (const child of readdirSync(entry).sort()) visit(resolve(entry, child));
-      return;
+      for (const child of readdirSync(entry).sort()) visit(resolve(entry, child))
+      return
     }
-    result[relative(packageRoot, entry)] = sha256(readIconInputSync(entry));
-  };
-  trackedRoots.forEach(visit);
-  return result;
-};
+    result[relative(packageRoot, entry)] = sha256(readIconInputSync(entry))
+  }
+  trackedRoots.forEach(visit)
+  return result
+}
 const runAudit = () => {
   const result = spawnSync(
     process.execPath,
@@ -60,33 +60,33 @@ const runAudit = () => {
         )}`.trim(),
       },
     },
-  );
-  return { status: result.status, stderr: result.stderr, stdout: result.stdout };
-};
+  )
+  return { status: result.status, stderr: result.stderr, stdout: result.stdout }
+}
 
 describe('Solid audit determinism and read-only behavior', () => {
-  let before: Record<string, string>;
-  let after: Record<string, string>;
-  let first: ReturnType<typeof runAudit>;
-  let second: ReturnType<typeof runAudit>;
+  let before: Record<string, string>
+  let after: Record<string, string>
+  let first: ReturnType<typeof runAudit>
+  let second: ReturnType<typeof runAudit>
 
   beforeAll(() => {
-    before = snapshot();
-    first = runAudit();
-    second = runAudit();
-    after = snapshot();
-  });
+    before = snapshot()
+    first = runAudit()
+    second = runAudit()
+    after = snapshot()
+  })
 
   it('passes without network access', () => {
-    expect(first).toEqual({ status: 0, stderr: '', stdout: `AUDIT_OK ${iconCounts.solid}\n` });
-  });
+    expect(first).toEqual({ status: 0, stderr: '', stdout: `AUDIT_OK ${iconCounts.solid}\n` })
+  })
 
   it('emits byte-identical timestamp-free output on consecutive runs', () => {
-    expect(second).toEqual(first);
-    expect(`${first.stdout}\n${first.stderr}`).not.toMatch(/\b20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}/);
-  });
+    expect(second).toEqual(first)
+    expect(`${first.stdout}\n${first.stderr}`).not.toMatch(/\b20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}/)
+  })
 
   it('does not mutate source, manifest, policy, or evidence inputs', () => {
-    expect(after).toEqual(before);
-  });
-});
+    expect(after).toEqual(before)
+  })
+})

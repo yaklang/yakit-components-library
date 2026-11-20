@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/64cf472080e520169edd1222186bf444e62fb676cb15745454a61195ba6f22fa.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/64cf472080e520169edd1222186bf444e62fb676cb15745454a61195ba6f22fa.svg?react'
 
-export const ChevronLeftIcon = createIcon(OldIconAssetSvg, 'ChevronLeftIcon');
+export const ChevronLeftIcon = createIcon(OldIconAssetSvg, 'ChevronLeftIcon')

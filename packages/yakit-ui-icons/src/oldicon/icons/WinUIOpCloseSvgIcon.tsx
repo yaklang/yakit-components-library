@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/c7248af8f28fbdf6a1118965e527cbf8fdc9d2febdab9b188c535771c843d7ac.svg?react'
 
-export const WinUIOpCloseSvgIcon = createIcon(OldIconAssetSvg, 'WinUIOpCloseSvgIcon');
+export const WinUIOpCloseSvgIcon = createIcon(OldIconAssetSvg, 'WinUIOpCloseSvgIcon')

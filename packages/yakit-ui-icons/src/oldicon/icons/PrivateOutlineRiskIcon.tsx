@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/ec637a2a36592198f65b26bed689e0d320899cea0ea058d8a771e365f7654a47.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/ec637a2a36592198f65b26bed689e0d320899cea0ea058d8a771e365f7654a47.svg?react'
 
-export const PrivateOutlineRiskIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineRiskIcon');
+export const PrivateOutlineRiskIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineRiskIcon')

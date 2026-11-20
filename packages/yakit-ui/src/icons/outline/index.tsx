@@ -1,1 +1,1 @@
-export * from '@yakit-libs/yakit-ui-icons/outline';
+export * from '@yakit-libs/yakit-ui-icons/outline'

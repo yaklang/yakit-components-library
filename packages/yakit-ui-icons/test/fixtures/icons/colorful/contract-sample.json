@@ -1,9 +1,7 @@
 {
   "schemaVersion": "colorful-inventory-v1",
   "policyId": "colorful-v1",
-  "groups": [
-    { "nodeId": "37150:33924", "name": "Primary menu" }
-  ],
+  "groups": [{ "nodeId": "37150:33924", "name": "Primary menu" }],
   "rows": [
     {
       "rowId": "37150:33924/37373:59879",

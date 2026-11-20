@@ -104,7 +104,9 @@ button.ant-switch.yakit-switch.yakit-switch-disabled.yakit-switch-checked {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  transition: inset-inline-start var(--yakit-switch-duration) ease, left var(--yakit-switch-duration) ease,
+  transition:
+    inset-inline-start var(--yakit-switch-duration) ease,
+    left var(--yakit-switch-duration) ease,
     background-color var(--yakit-switch-duration) ease;
   width: var(--yakit-switch-handle-size, 12px);
   z-index: 1;
@@ -159,7 +161,8 @@ button.ant-switch.yakit-switch.yakit-switch-disabled.yakit-switch-checked {
   padding-inline-end: var(--yakit-switch-inner-min-margin, 5px);
   pointer-events: none;
   position: relative;
-  transition: padding-inline-start var(--yakit-switch-duration) ease-in-out,
+  transition:
+    padding-inline-start var(--yakit-switch-duration) ease-in-out,
     padding-inline-end var(--yakit-switch-duration) ease-in-out;
   border-radius: 100px;
 }
@@ -190,7 +193,8 @@ button.ant-switch.yakit-switch.yakit-switch-disabled.yakit-switch-checked {
   pointer-events: none;
   position: static;
   transform: none;
-  transition: margin-inline-start var(--yakit-switch-duration) ease-in-out,
+  transition:
+    margin-inline-start var(--yakit-switch-duration) ease-in-out,
     margin-inline-end var(--yakit-switch-duration) ease-in-out;
   opacity: 1;
   white-space: nowrap;

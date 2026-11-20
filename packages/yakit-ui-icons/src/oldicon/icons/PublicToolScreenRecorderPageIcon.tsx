@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/ac9becafa07680919343d7369f6961b3937a6d1dd9a72592ff27436cdadaaa13.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/ac9becafa07680919343d7369f6961b3937a6d1dd9a72592ff27436cdadaaa13.svg?react'
 
-export const PublicToolScreenRecorderPageIcon = createIcon(
-  OldIconAssetSvg,
-  'PublicToolScreenRecorderPageIcon',
-);
+export const PublicToolScreenRecorderPageIcon = createIcon(OldIconAssetSvg, 'PublicToolScreenRecorderPageIcon')

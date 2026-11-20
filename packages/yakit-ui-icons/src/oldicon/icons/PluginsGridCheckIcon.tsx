@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/1715292d58ff572ac4a814b134d51595e867deb42dd9619b05287b543939571f.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/1715292d58ff572ac4a814b134d51595e867deb42dd9619b05287b543939571f.svg?react'
 
-export const PluginsGridCheckIcon = createIcon(OldIconAssetSvg, 'PluginsGridCheckIcon');
+export const PluginsGridCheckIcon = createIcon(OldIconAssetSvg, 'PluginsGridCheckIcon')

@@ -1,5 +1,5 @@
-import { Button as InternalButton } from './Button';
-import { Group } from './Group';
+import { Button as InternalButton } from './Button'
+import { Group } from './Group'
 import type {
   ButtonColors,
   ButtonGroupProps,
@@ -9,14 +9,14 @@ import type {
   ButtonShape,
   ButtonSize,
   ButtonType,
-} from './type';
+} from './type'
 
 type CompoundedButton = typeof InternalButton & {
-  Group: typeof Group;
-};
+  Group: typeof Group
+}
 
-const Button = InternalButton as CompoundedButton;
-Button.Group = Group;
+const Button = InternalButton as CompoundedButton
+Button.Group = Group
 
 export type {
   ButtonColors,
@@ -27,5 +27,5 @@ export type {
   ButtonShape,
   ButtonSize,
   ButtonType,
-};
-export default Button;
+}
+export default Button

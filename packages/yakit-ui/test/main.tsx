@@ -1,6 +1,6 @@
-import ReactDom from 'react-dom/client';
+import ReactDom from 'react-dom/client'
 
-import { Button } from '../src/components';
+import { Button } from '../src/components'
 
 ReactDom.createRoot(document.getElementById('root') as HTMLElement).render(
   <div
@@ -14,4 +14,4 @@ ReactDom.createRoot(document.getElementById('root') as HTMLElement).render(
   >
     <Button type="outline1">按钮</Button>
   </div>,
-);
+)

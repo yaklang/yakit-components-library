@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/09ffe04ebd72825e98111891ee135a5b7a49b035e6de7ecdae480df0089f4682.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/09ffe04ebd72825e98111891ee135a5b7a49b035e6de7ecdae480df0089f4682.svg?react'
 
-export const PublicBasicCrawlerIcon = createIcon(OldIconAssetSvg, 'PublicBasicCrawlerIcon');
+export const PublicBasicCrawlerIcon = createIcon(OldIconAssetSvg, 'PublicBasicCrawlerIcon')

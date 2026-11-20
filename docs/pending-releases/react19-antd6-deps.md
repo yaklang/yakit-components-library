@@ -1,5 +1,5 @@
 ---
-"@yakit-libs/yakit-ui": minor
+'@yakit-libs/yakit-ui': minor
 ---
 
 Add React 19 support and antd 6 as a runtime dependency.

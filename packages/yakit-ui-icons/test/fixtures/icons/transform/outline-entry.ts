@@ -1,3 +1,3 @@
-import HomeOutlinedSvg from '../../../../src/outline/1-2135.svg?react';
+import HomeOutlinedSvg from '../../../../src/outline/1-2135.svg?react'
 
-export default HomeOutlinedSvg;
+export default HomeOutlinedSvg

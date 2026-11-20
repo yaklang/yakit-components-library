@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/636e908bb9281503afde7eab6315a6efc370a11adb966aebd6f1cb9961a4af56.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/636e908bb9281503afde7eab6315a6efc370a11adb966aebd6f1cb9961a4af56.svg?react'
 
-export const PrivateOutlineAIAgentIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineAIAgentIcon');
+export const PrivateOutlineAIAgentIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineAIAgentIcon')

@@ -1,5 +1,5 @@
-import { Wave, type WaveProps } from './Wave';
+import { Wave, type WaveProps } from './Wave'
 
-export type { WaveProps };
+export type { WaveProps }
 
-export default Wave;
+export default Wave

@@ -1,53 +1,45 @@
-import {
-  DocumentOutlined,
-  FolderOpenOutlined,
-  FolderOutlined,
-} from '@yakit-libs/yakit-ui-icons/outline';
-import type { TreeDataNode } from 'antd';
-import classNames from 'classnames';
-import { useRef, useState, type ReactNode } from 'react';
+import { DocumentOutlined, FolderOpenOutlined, FolderOutlined } from '@yakit-libs/yakit-ui-icons/outline'
+import type { TreeDataNode } from 'antd'
+import classNames from 'classnames'
+import { useRef, useState, type ReactNode } from 'react'
 
-import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect';
-import Input, { type InputRef } from '../Input';
+import useIsomorphicLayoutEffect from '../../hooks/useIsomorphicLayoutEffect'
+import Input, { type InputRef } from '../Input'
 
-import { customNodeIcon } from './nodeIcon';
-import type { TreeEditingSelection } from './type';
+import { customNodeIcon } from './nodeIcon'
+import type { TreeEditingSelection } from './type'
 
 export interface FileTreeNodeProps {
-  node: TreeDataNode;
-  expanded: boolean;
-  editing: boolean;
+  node: TreeDataNode
+  expanded: boolean
+  editing: boolean
   /** 焦点描边；可与 antd selected 同时存在且不必相同。 */
-  focused?: boolean;
-  editingValue?: string;
-  editingSelection?: TreeEditingSelection;
-  title: ReactNode;
-  suffix?: ReactNode;
+  focused?: boolean
+  editingValue?: string
+  editingSelection?: TreeEditingSelection
+  title: ReactNode
+  suffix?: ReactNode
   /** false 隐藏行内文件/文件夹图标。不传仍显示。 */
-  showIcon?: boolean;
+  showIcon?: boolean
   /** 树级 icon。showIcon 为 true 时，节点没设 icon 就用它。 */
-  icon?: ReactNode | ((node: TreeDataNode & { expanded: boolean }) => ReactNode);
-  onEditSubmit?: (value: string) => void;
+  icon?: ReactNode | ((node: TreeDataNode & { expanded: boolean }) => ReactNode)
+  onEditSubmit?: (value: string) => void
 }
 
-const nodeIcon = (
-  node: TreeDataNode,
-  expanded: boolean,
-  treeIcon?: FileTreeNodeProps['icon'],
-): ReactNode => {
-  const props = { ...node, expanded };
-  const custom = customNodeIcon(node, expanded);
-  if (custom) return custom.value;
-  if (typeof treeIcon === 'function') return treeIcon(props);
-  if (treeIcon) return treeIcon;
-  const isLeaf = node.isLeaf ?? !node.children?.length;
-  if (isLeaf) return <DocumentOutlined size={16} color="currentColor" />;
+const nodeIcon = (node: TreeDataNode, expanded: boolean, treeIcon?: FileTreeNodeProps['icon']): ReactNode => {
+  const props = { ...node, expanded }
+  const custom = customNodeIcon(node, expanded)
+  if (custom) return custom.value
+  if (typeof treeIcon === 'function') return treeIcon(props)
+  if (treeIcon) return treeIcon
+  const isLeaf = node.isLeaf ?? !node.children?.length
+  if (isLeaf) return <DocumentOutlined size={16} color="currentColor" />
   return expanded ? (
     <FolderOpenOutlined size={16} color="currentColor" />
   ) : (
     <FolderOutlined size={16} color="currentColor" />
-  );
-};
+  )
+}
 
 export const FileTreeNode = ({
   node,
@@ -62,54 +54,50 @@ export const FileTreeNode = ({
   icon,
   onEditSubmit,
 }: FileTreeNodeProps) => {
-  const [draft, setDraft] = useState(editingValue);
+  const [draft, setDraft] = useState(editingValue)
   const [draftSource, setDraftSource] = useState({
     editing,
     editingValue,
     key: node.key,
-  });
-  const submitted = useRef(false);
-  const inputRef = useRef<InputRef>(null);
+  })
+  const submitted = useRef(false)
+  const inputRef = useRef<InputRef>(null)
 
-  if (
-    draftSource.editing !== editing ||
-    draftSource.editingValue !== editingValue ||
-    draftSource.key !== node.key
-  ) {
-    setDraftSource({ editing, editingValue, key: node.key });
-    setDraft(editingValue);
+  if (draftSource.editing !== editing || draftSource.editingValue !== editingValue || draftSource.key !== node.key) {
+    setDraftSource({ editing, editingValue, key: node.key })
+    setDraft(editingValue)
   }
 
   const submit = (value: string) => {
-    if (submitted.current) return;
-    submitted.current = true;
-    onEditSubmit?.(value);
-  };
+    if (submitted.current) return
+    submitted.current = true
+    onEditSubmit?.(value)
+  }
 
   const selectEditingText = (input: HTMLInputElement) => {
-    const length = input.value.length;
+    const length = input.value.length
     if (!editingSelection || editingSelection.end < 0) {
-      input.select();
-      return;
+      input.select()
+      return
     }
-    const start = Math.min(Math.max(editingSelection.start, 0), length);
-    const end = Math.min(Math.max(editingSelection.end, start), length);
-    input.setSelectionRange(start, end);
-  };
+    const start = Math.min(Math.max(editingSelection.start, 0), length)
+    const end = Math.min(Math.max(editingSelection.end, start), length)
+    input.setSelectionRange(start, end)
+  }
 
-  const selectionStart = editingSelection?.start;
-  const selectionEnd = editingSelection?.end;
-
-  useIsomorphicLayoutEffect(() => {
-    submitted.current = false;
-  }, [editing, editingValue, node.key]);
+  const selectionStart = editingSelection?.start
+  const selectionEnd = editingSelection?.end
 
   useIsomorphicLayoutEffect(() => {
-    if (!editing) return;
-    const input = inputRef.current?.input;
-    if (!input) return;
-    selectEditingText(input);
-  }, [editing, editingValue, node.key, selectionStart, selectionEnd]);
+    submitted.current = false
+  }, [editing, editingValue, node.key])
+
+  useIsomorphicLayoutEffect(() => {
+    if (!editing) return
+    const input = inputRef.current?.input
+    if (!input) return
+    selectEditingText(input)
+  }, [editing, editingValue, node.key, selectionStart, selectionEnd])
 
   return (
     <div
@@ -120,9 +108,7 @@ export const FileTreeNode = ({
     >
       <span className="yakit-tree-file-cluster">
         <span className="yakit-tree-file-main">
-          {showIcon ? (
-            <span className="yakit-tree-file-icon">{nodeIcon(node, expanded, icon)}</span>
-          ) : null}
+          {showIcon ? <span className="yakit-tree-file-icon">{nodeIcon(node, expanded, icon)}</span> : null}
           {editing ? (
             <Input
               ref={inputRef}
@@ -134,14 +120,14 @@ export const FileTreeNode = ({
               onMouseDown={(event) => event.stopPropagation()}
               onClick={(event) => event.stopPropagation()}
               onFocus={(event) => {
-                event.stopPropagation();
-                submitted.current = false;
-                selectEditingText(event.currentTarget);
+                event.stopPropagation()
+                submitted.current = false
+                selectEditingText(event.currentTarget)
               }}
               onKeyDown={(event) => {
-                if (event.key !== 'Enter') return;
-                event.preventDefault();
-                submit(draft);
+                if (event.key !== 'Enter') return
+                event.preventDefault()
+                submit(draft)
               }}
               onBlur={() => submit(draft)}
             />
@@ -152,5 +138,5 @@ export const FileTreeNode = ({
       </span>
       {suffix ? <span className="yakit-tree-file-suffix">{suffix}</span> : null}
     </div>
-  );
-};
+  )
+}

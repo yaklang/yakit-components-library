@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/eec80d4a57402e27033d294541bc468c64ac50c01faddc9a854357e161f09429.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/eec80d4a57402e27033d294541bc468c64ac50c01faddc9a854357e161f09429.svg?react'
 
-export const PublicDNSLogIcon = createIcon(OldIconAssetSvg, 'PublicDNSLogIcon');
+export const PublicDNSLogIcon = createIcon(OldIconAssetSvg, 'PublicDNSLogIcon')

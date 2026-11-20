@@ -1,20 +1,20 @@
-import type { ThemeConfig } from 'antd';
+import type { ThemeConfig } from 'antd'
 
-import type { YakitTreeToken } from '../../types/token/YakitTree';
-import { defined } from '../../utils';
+import type { YakitTreeToken } from '../../types/token/YakitTree'
+import { defined } from '../../utils'
 
-import type { TreeVariant } from './type';
+import type { TreeVariant } from './type'
 
-const text = 'var(--Colors-Use-Neutral-Text-1-Title)';
-const iconColor = 'var(--Colors-Use-Neutral-Text-3-Secondary)';
-const background = 'var(--Colors-Use-Basic-Background)';
-const neutralHover = 'var(--Colors-Use-Neutral-Bg-Hover)';
-const neutralBg = 'var(--Colors-Use-Neutral-Bg)';
-const mainBg = 'var(--Colors-Use-Main-Bg)';
-const primary = 'var(--Colors-Use-Main-Primary)';
-const onPrimary = 'var(--Colors-Use-Basic-White)';
-const border = 'var(--Colors-Use-Neutral-Border)';
-const disabled = 'var(--Colors-Use-Neutral-Disable)';
+const text = 'var(--Colors-Use-Neutral-Text-1-Title)'
+const iconColor = 'var(--Colors-Use-Neutral-Text-3-Secondary)'
+const background = 'var(--Colors-Use-Basic-Background)'
+const neutralHover = 'var(--Colors-Use-Neutral-Bg-Hover)'
+const neutralBg = 'var(--Colors-Use-Neutral-Bg)'
+const mainBg = 'var(--Colors-Use-Main-Bg)'
+const primary = 'var(--Colors-Use-Main-Primary)'
+const onPrimary = 'var(--Colors-Use-Basic-White)'
+const border = 'var(--Colors-Use-Neutral-Border)'
+const disabled = 'var(--Colors-Use-Neutral-Disable)'
 
 const aliasToken = {
   colorBgContainer: background,
@@ -27,7 +27,7 @@ const aliasToken = {
   colorTextDisabled: disabled,
   colorTextQuaternary: iconColor,
   colorTextLightSolid: onPrimary,
-};
+}
 
 const componentToken = (variant: TreeVariant, showLine: boolean): YakitTreeToken => {
   if (variant === 'website') {
@@ -41,7 +41,7 @@ const componentToken = (variant: TreeVariant, showLine: boolean): YakitTreeToken
       nodeSelectedColor: onPrimary,
       switcherSize: 20,
       titleHeight: 24,
-    };
+    }
   }
   if (variant === 'file') {
     return {
@@ -55,7 +55,7 @@ const componentToken = (variant: TreeVariant, showLine: boolean): YakitTreeToken
       nodeSelectedColor: text,
       switcherSize: showLine ? 24 : 16,
       titleHeight: 22,
-    };
+    }
   }
   return {
     // 对齐 YakitTree：选中是实心主色，悬停画在 content-wrapper 上。
@@ -65,15 +65,11 @@ const componentToken = (variant: TreeVariant, showLine: boolean): YakitTreeToken
     nodeHoverColor: text,
     nodeSelectedBg: primary,
     nodeSelectedColor: onPrimary,
-  };
-};
+  }
+}
 
 /** 当前皮肤的默认 token 在前，`YakitTree` 里写出的项覆盖同名默认值。 */
-export const createTreeTheme = (
-  variant: TreeVariant,
-  showLine: boolean,
-  overrides?: YakitTreeToken,
-): ThemeConfig => ({
+export const createTreeTheme = (variant: TreeVariant, showLine: boolean, overrides?: YakitTreeToken): ThemeConfig => ({
   token: aliasToken,
   components: {
     Tree: {
@@ -81,4 +77,4 @@ export const createTreeTheme = (
       ...defined(overrides),
     },
   },
-});
+})

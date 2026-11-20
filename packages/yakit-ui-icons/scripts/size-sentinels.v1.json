@@ -14,13 +14,7 @@
     "outline": ["LocationOutlined", "MailSolid", "iconRegistry"],
     "solid": ["BookSolid", "MailOutlined", "iconRegistry"],
     "colorful": ["OfficialAvatarColorful", "MailOutlined", "iconRegistry"],
-    "oldicon": [
-      "TaskSuccessIcon",
-      "MailOutlined",
-      "MailSolid",
-      "MitmPrimaryMenuColorful",
-      "iconRegistry"
-    ],
+    "oldicon": ["TaskSuccessIcon", "MailOutlined", "MailSolid", "MitmPrimaryMenuColorful", "iconRegistry"],
     "registry": []
   },
   "registryFull": ["MailOutlined", "MailSolid", "MitmPrimaryMenuColorful"]

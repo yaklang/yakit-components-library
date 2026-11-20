@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/ab5fcd057aae0700ea64493a51ebd2720c4ffff604bda7ba98ca159a9d62a4e8.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/ab5fcd057aae0700ea64493a51ebd2720c4ffff604bda7ba98ca159a9d62a4e8.svg?react'
 
-export const PublicSequenceAnimationIcon = createIcon(
-  OldIconAssetSvg,
-  'PublicSequenceAnimationIcon',
-);
+export const PublicSequenceAnimationIcon = createIcon(OldIconAssetSvg, 'PublicSequenceAnimationIcon')

@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/98aaf188336c466d8dbfdbd5ea1129cc7980fa46341f07329209d1fc8b77c114.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/98aaf188336c466d8dbfdbd5ea1129cc7980fa46341f07329209d1fc8b77c114.svg?react'
 
-export const HollowLightningBoltIcon = createIcon(OldIconAssetSvg, 'HollowLightningBoltIcon');
+export const HollowLightningBoltIcon = createIcon(OldIconAssetSvg, 'HollowLightningBoltIcon')
