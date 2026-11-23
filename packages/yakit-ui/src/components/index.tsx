@@ -135,3 +135,30 @@ export type {
 
 export { default as Card, YakitCard } from './Card';
 export type { CardProps, CardSize, CardStyles, CardVariant, YakitCardProps } from './Card';
+
+export {
+  default as Dropdown,
+  DropdownButton,
+  YakitDropdownMenu,
+  DropdownMenuPanel,
+} from './Dropdown';
+export type {
+  DropdownButtonProps,
+  DropdownButtonType,
+  DropdownMenuDivider,
+  DropdownMenuGroup,
+  DropdownMenuInfo,
+  DropdownMenuItem,
+  DropdownMenuItemType,
+  DropdownMenuItemTypeUnion,
+  DropdownMenuProps,
+  DropdownMenuSize,
+  DropdownMenuType,
+  DropdownPlacement,
+  DropdownProps,
+  DropdownSemanticClassNames,
+  DropdownSemanticInfo,
+  DropdownSemanticStyles,
+  DropdownTrigger,
+  YakitDropdownMenuProps,
+} from './Dropdown';
