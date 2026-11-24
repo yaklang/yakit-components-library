@@ -1,0 +1,516 @@
+/* Dropdown — Figma List/Menu Item md-28 / lg-32；双层 token；antd 兼容前缀 */
+
+.yakit-dropdown {
+  --yakit-dropdown-bg: var(
+    --yakit-color-basic-background,
+    var(--Colors-Use-Basic-Background, #ffffff)
+  );
+  --yakit-dropdown-border: var(
+    --yakit-color-neutral-bg-hover,
+    var(--Colors-Use-Neutral-Bg-Hover, #eef0f3)
+  );
+  --yakit-dropdown-shadow: 0 8px 16px 0 var(--Colors-Use-Basic-Shadow, rgba(23, 23, 23, 0.08));
+  --yakit-dropdown-radius: 4px;
+  --yakit-dropdown-item-radius: 4px;
+  --yakit-dropdown-item-color: var(
+    --yakit-color-text-title,
+    var(--Colors-Use-Neutral-Text-1-Title, #353639)
+  );
+  --yakit-dropdown-item-desc: var(
+    --yakit-color-text-help,
+    var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1)
+  );
+  --yakit-dropdown-item-hover-bg: var(
+    --yakit-color-neutral-bg-hover,
+    var(--Colors-Use-Neutral-Bg-Hover, #eef0f3)
+  );
+  --yakit-dropdown-item-selected-bg: var(
+    --yakit-color-primary,
+    var(--Colors-Use-Main-Primary, #f28c45)
+  );
+  --yakit-dropdown-item-selected-color: var(--Colors-Use-Basic-White, #ffffff);
+  --yakit-dropdown-item-selected-extra: var(--Colors-Use-Basic-White, #ffffff);
+  --yakit-dropdown-item-disabled: var(
+    --yakit-color-neutral-disable,
+    var(--Colors-Use-Neutral-Disable, #c0c6d1)
+  );
+  --yakit-dropdown-item-danger: var(--yakit-color-error, var(--Colors-Use-Error-Primary, #f04438));
+  --yakit-dropdown-item-danger-hover-bg: var(
+    --yakit-color-error-focus,
+    var(--Colors-Use-Error-Focus, #fde8e6)
+  );
+  --yakit-dropdown-item-success: var(
+    --yakit-color-success,
+    var(--Colors-Use-Success-Primary, #28c08e)
+  );
+  --yakit-dropdown-item-success-hover-bg: var(
+    --yakit-color-success-focus,
+    var(--Colors-Use-Success-Focus, #cff1e6)
+  );
+  --yakit-dropdown-item-info: var(
+    --yakit-color-neutral-disable,
+    var(--Colors-Use-Neutral-Disable, #c0c6d1)
+  );
+  --yakit-dropdown-item-info-hover-bg: var(
+    --yakit-color-neutral-bg-hover,
+    var(--Colors-Use-Neutral-Bg-Hover, #eef0f3)
+  );
+  --yakit-dropdown-item-text: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+  --yakit-dropdown-item-text-hover-bg: var(
+    --yakit-color-primary-bg,
+    var(--Colors-Use-Main-Bg, #fef5ee)
+  );
+  --yakit-dropdown-divider: var(
+    --yakit-color-neutral-border,
+    var(--Colors-Use-Neutral-Border, #e6e8ed)
+  );
+  --yakit-dropdown-group-title: var(
+    --yakit-color-text-help,
+    var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1)
+  );
+  --yakit-dropdown-extra: var(
+    --yakit-color-text-secondary,
+    var(--Colors-Use-Neutral-Text-3-Secondary, #85898e)
+  );
+  --yakit-dropdown-icon: var(
+    --yakit-color-text-secondary,
+    var(--Colors-Use-Neutral-Text-3-Secondary, #85898e)
+  );
+
+  box-sizing: border-box;
+  font-family: 'PingFang SC', sans-serif;
+  font-size: var(--yakit-dropdown-font-size, 12px);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: var(--yakit-dropdown-line-height, 16px);
+}
+
+.yakit-dropdown-hidden,
+.ant-dropdown-hidden {
+  display: none;
+}
+
+.yakit-dropdown-panel {
+  background: var(--yakit-dropdown-bg);
+  border: 1px solid var(--yakit-dropdown-border);
+  border-radius: var(--yakit-dropdown-radius);
+  box-shadow: var(--yakit-dropdown-shadow);
+  box-sizing: border-box;
+  overflow: visible;
+  /* 对齐主项目 yakit-menu-wrapper: 6px 4px 8px 4px */
+  padding: var(--yakit-dropdown-panel-padding, 6px 4px 8px 4px);
+}
+
+.yakit-dropdown-menu-wrapper {
+  display: block;
+}
+
+.yakit-dropdown-menu-root .yakit-dropdown-panel,
+.yakit-dropdown-menu-root {
+  border-radius: var(--yakit-dropdown-radius);
+}
+
+/* ---------- menu ---------- */
+.yakit-dropdown-menu,
+.ant-dropdown-menu {
+  background: transparent;
+  box-shadow: none;
+  list-style: none;
+  margin: 0;
+  box-sizing: border-box;
+  min-width: 160px;
+  outline: none;
+  padding: 0;
+}
+
+.yakit-dropdown-menu-item,
+.ant-dropdown-menu-item {
+  /* 重置自定义属性，避免父级 submenu 的单项类型颜色继承到子菜单 */
+  --yakit-dropdown-item-type-color: initial;
+  --yakit-dropdown-item-type-hover-bg: initial;
+  align-items: center;
+  background: transparent;
+  border-radius: var(--yakit-dropdown-item-radius);
+  box-sizing: border-box;
+  color: var(--yakit-dropdown-item-type-color, var(--yakit-dropdown-item-color));
+  cursor: pointer;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 0 var(--yakit-dropdown-item-padding-inline, 8px);
+  position: relative;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  user-select: none;
+}
+
+.yakit-dropdown-menu-item-medium {
+  min-height: var(--yakit-dropdown-item-min-height-md, 28px);
+}
+
+.yakit-dropdown-menu-item-large {
+  min-height: var(--yakit-dropdown-item-min-height-lg, 32px);
+}
+
+.yakit-dropdown-menu-item-inner {
+  align-items: center;
+  display: flex;
+  flex: 1 1 auto;
+  gap: var(--yakit-dropdown-item-gap, 8px);
+  min-width: 0;
+  padding: 6px 0;
+  width: 100%;
+}
+
+.yakit-dropdown-menu-item-large .yakit-dropdown-menu-item-inner {
+  padding: 8px 0;
+}
+
+.yakit-dropdown-menu-item-icon,
+.ant-dropdown-menu-item-icon {
+  align-items: center;
+  color: var(--yakit-dropdown-item-type-color, var(--yakit-dropdown-icon));
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 16px;
+  height: 16px;
+  justify-content: center;
+  line-height: 0;
+  width: 16px;
+}
+
+.yakit-dropdown-menu-item-content,
+.ant-dropdown-menu-title-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.yakit-dropdown-menu-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yakit-dropdown-menu-item-description {
+  color: var(--yakit-dropdown-item-desc);
+  font-size: var(--yakit-dropdown-description-font-size, 12px);
+  line-height: var(--yakit-dropdown-description-line-height, 16px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yakit-dropdown-menu-item-extra {
+  color: var(--yakit-dropdown-extra);
+  flex-shrink: 0;
+  font-size: 12px;
+  line-height: 16px;
+  margin-left: auto;
+}
+
+.yakit-dropdown-menu-item-arrow {
+  align-items: center;
+  color: var(--yakit-dropdown-icon);
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+  margin-left: auto;
+}
+
+/* hover — grey / default */
+.yakit-dropdown-menu-item:hover:not(.yakit-dropdown-menu-item-disabled):not(
+    .yakit-dropdown-menu-item-selected
+  ),
+.ant-dropdown-menu-item:hover:not(.ant-dropdown-menu-item-disabled):not(
+    .ant-dropdown-menu-item-selected
+  ) {
+  background: var(--yakit-dropdown-item-type-hover-bg, var(--yakit-dropdown-item-hover-bg));
+  color: var(--yakit-dropdown-item-type-color, var(--yakit-dropdown-item-color));
+}
+
+/* primary selected — Figma 橙底白字 */
+.yakit-dropdown-menu-primary
+  .yakit-dropdown-menu-item-selected:not(.yakit-dropdown-menu-item-disabled),
+.yakit-dropdown-menu-primary
+  .ant-dropdown-menu-item-selected:not(.ant-dropdown-menu-item-disabled) {
+  background: var(--yakit-dropdown-item-selected-bg);
+  color: var(--yakit-dropdown-item-selected-color);
+}
+
+.yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-icon,
+.yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-extra,
+.yakit-dropdown-menu-primary
+  .yakit-dropdown-menu-item-selected
+  .yakit-dropdown-menu-item-description,
+.yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-arrow {
+  color: var(--yakit-dropdown-item-selected-extra);
+}
+
+.yakit-dropdown-menu-primary
+  .yakit-dropdown-menu-item-selected:hover:not(.yakit-dropdown-menu-item-disabled) {
+  background: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64));
+  color: var(--yakit-dropdown-item-selected-color);
+}
+
+/* 选中态保持 Figma 橙底白字（primary）；提高与 ant 双前缀并存时的命中率 */
+.yakit-dropdown
+  .yakit-dropdown-menu-primary
+  .yakit-dropdown-menu-item.yakit-dropdown-menu-item-selected:not(
+    .yakit-dropdown-menu-item-disabled
+  ),
+.yakit-dropdown
+  .yakit-dropdown-menu-primary
+  .ant-dropdown-menu-item.ant-dropdown-menu-item-selected:not(.ant-dropdown-menu-item-disabled) {
+  background: var(--yakit-dropdown-item-selected-bg);
+  color: var(--yakit-dropdown-item-selected-color);
+}
+
+/* grey selected — 主项目 grey：悬停灰底，选中弱强调 */
+.yakit-dropdown-menu-grey
+  .yakit-dropdown-menu-item-selected:not(.yakit-dropdown-menu-item-disabled) {
+  background: var(--yakit-color-primary-bg, var(--Colors-Use-Main-Bg, #fef5ee));
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+}
+
+.yakit-dropdown-menu-grey .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-icon,
+.yakit-dropdown-menu-grey .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-extra {
+  color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
+}
+
+/* disabled */
+.yakit-dropdown-menu-item-disabled,
+.ant-dropdown-menu-item-disabled {
+  color: var(--yakit-dropdown-item-disabled);
+  cursor: not-allowed;
+}
+
+.yakit-dropdown-menu-item-disabled .yakit-dropdown-menu-item-icon,
+.yakit-dropdown-menu-item-disabled .yakit-dropdown-menu-item-extra,
+.yakit-dropdown-menu-item-disabled .yakit-dropdown-menu-item-description {
+  color: var(--yakit-dropdown-item-disabled);
+}
+
+.yakit-dropdown-menu-item-disabled:hover {
+  background: transparent;
+  color: var(--yakit-dropdown-item-disabled);
+}
+
+/* danger / error / success / info / text — 单项 type 颜色经自定义属性参与 hover */
+.yakit-dropdown-menu-item-danger,
+.yakit-dropdown-menu-item-error,
+.ant-dropdown-menu-item-danger {
+  --yakit-dropdown-item-type-color: var(--yakit-dropdown-item-danger);
+  --yakit-dropdown-item-type-hover-bg: var(--yakit-dropdown-item-danger-hover-bg);
+}
+
+.yakit-dropdown-menu-item-success {
+  --yakit-dropdown-item-type-color: var(--yakit-dropdown-item-success);
+  --yakit-dropdown-item-type-hover-bg: var(--yakit-dropdown-item-success-hover-bg);
+}
+
+.yakit-dropdown-menu-item-info {
+  --yakit-dropdown-item-type-color: var(--yakit-dropdown-item-info);
+  --yakit-dropdown-item-type-hover-bg: var(--yakit-dropdown-item-info-hover-bg);
+}
+
+.yakit-dropdown-menu-item-text {
+  --yakit-dropdown-item-type-color: var(--yakit-dropdown-item-text);
+  --yakit-dropdown-item-type-hover-bg: var(--yakit-dropdown-item-text-hover-bg);
+}
+
+/* divider */
+.yakit-dropdown-menu-item-divider,
+.ant-dropdown-menu-item-divider {
+  background: var(--yakit-dropdown-divider);
+  border: 0;
+  height: 1px;
+  list-style: none;
+  margin: 4px 8px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.yakit-dropdown-menu-item-divider-dashed {
+  background: transparent;
+  border-top: 1px dashed var(--yakit-dropdown-divider);
+  height: 0;
+}
+
+/* group */
+.yakit-dropdown-menu-item-group-title,
+.ant-dropdown-menu-item-group-title {
+  color: var(--yakit-dropdown-group-title);
+  font-size: 12px;
+  line-height: 16px;
+  padding: 6px 8px 4px;
+}
+
+.yakit-dropdown-menu-item-group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* submenu：一级展开；JS 负责贴边左右翻转 + 竖直偏移 */
+.yakit-dropdown-menu-item-has-children {
+  position: relative;
+}
+
+.yakit-dropdown-menu-sub,
+.ant-dropdown-menu-sub {
+  background: var(--yakit-dropdown-bg);
+  border: 1px solid var(--yakit-dropdown-border);
+  border-radius: var(--yakit-dropdown-radius);
+  box-shadow: var(--yakit-dropdown-shadow);
+  display: none;
+  min-width: 160px;
+  padding: var(--yakit-dropdown-panel-padding, 6px 4px 8px 4px);
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}
+
+.yakit-dropdown-menu-sub-placement-right {
+  left: calc(100% + 4px);
+  right: auto;
+}
+
+.yakit-dropdown-menu-sub-placement-left {
+  left: auto;
+  right: calc(100% + 4px);
+}
+
+.yakit-dropdown-menu-item-submenu-open > .yakit-dropdown-menu-sub,
+.yakit-dropdown-menu-sub-open {
+  display: block;
+}
+
+/* arrow */
+.yakit-dropdown-arrow,
+.ant-dropdown-arrow {
+  background: var(--yakit-dropdown-bg);
+  border: 1px solid var(--yakit-dropdown-border);
+  border-bottom: none;
+  border-right: none;
+  box-sizing: border-box;
+  height: 8px;
+  pointer-events: none;
+  position: absolute;
+  width: 8px;
+  z-index: 1;
+}
+
+.yakit-dropdown-placement-bottomLeft .yakit-dropdown-arrow,
+.yakit-dropdown-placement-bottom .yakit-dropdown-arrow,
+.yakit-dropdown-placement-bottomCenter .yakit-dropdown-arrow,
+.yakit-dropdown-placement-bottomRight .yakit-dropdown-arrow {
+  left: 16px;
+  top: -4px;
+  transform: rotate(45deg);
+}
+
+.yakit-dropdown-placement-bottomRight .yakit-dropdown-arrow {
+  left: auto;
+  right: 16px;
+}
+
+.yakit-dropdown-placement-bottom .yakit-dropdown-arrow,
+.yakit-dropdown-placement-bottomCenter .yakit-dropdown-arrow {
+  left: 50%;
+  margin-left: -4px;
+}
+
+/* arrow 时 JS 写入 inline left/top 指向触发器中心，居中规则的负 margin 会叠加偏移，需重置 */
+.yakit-dropdown .yakit-dropdown-arrow[style*='left'],
+.ant-dropdown .ant-dropdown-arrow[style*='left'] {
+  margin-left: 0;
+}
+
+.yakit-dropdown .yakit-dropdown-arrow[style*='top'],
+.ant-dropdown .ant-dropdown-arrow[style*='top'] {
+  margin-top: 0;
+}
+
+.yakit-dropdown-placement-topLeft .yakit-dropdown-arrow,
+.yakit-dropdown-placement-top .yakit-dropdown-arrow,
+.yakit-dropdown-placement-topCenter .yakit-dropdown-arrow,
+.yakit-dropdown-placement-topRight .yakit-dropdown-arrow {
+  bottom: -4px;
+  left: 16px;
+  top: auto;
+  transform: rotate(225deg);
+}
+
+.yakit-dropdown-placement-topRight .yakit-dropdown-arrow {
+  left: auto;
+  right: 16px;
+}
+
+.yakit-dropdown-placement-top .yakit-dropdown-arrow,
+.yakit-dropdown-placement-topCenter .yakit-dropdown-arrow {
+  left: 50%;
+  margin-left: -4px;
+}
+
+.yakit-dropdown-placement-left .yakit-dropdown-arrow,
+.yakit-dropdown-placement-leftTop .yakit-dropdown-arrow,
+.yakit-dropdown-placement-leftBottom .yakit-dropdown-arrow {
+  right: -4px;
+  transform: rotate(135deg);
+}
+
+.yakit-dropdown-placement-left .yakit-dropdown-arrow,
+.yakit-dropdown-placement-right .yakit-dropdown-arrow {
+  top: 50%;
+  margin-top: -4px;
+}
+
+.yakit-dropdown-placement-leftTop .yakit-dropdown-arrow,
+.yakit-dropdown-placement-rightTop .yakit-dropdown-arrow {
+  top: 16px;
+}
+
+.yakit-dropdown-placement-leftBottom .yakit-dropdown-arrow,
+.yakit-dropdown-placement-rightBottom .yakit-dropdown-arrow {
+  bottom: 16px;
+  top: auto;
+}
+
+.yakit-dropdown-placement-right .yakit-dropdown-arrow,
+.yakit-dropdown-placement-rightTop .yakit-dropdown-arrow,
+.yakit-dropdown-placement-rightBottom .yakit-dropdown-arrow {
+  left: -4px;
+  right: auto;
+  transform: rotate(-45deg);
+}
+
+/* Dropdown.Button */
+.yakit-dropdown-button {
+  display: inline-flex;
+  gap: 0;
+  vertical-align: middle;
+}
+
+.yakit-dropdown-button > .yakit-btn:first-child {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.yakit-dropdown-button-trigger .yakit-btn {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+  min-width: 28px;
+  padding-inline: 8px;
+}
+
+.yakit-dropdown-button-ellipsis {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+}
