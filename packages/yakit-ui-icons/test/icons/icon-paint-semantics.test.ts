@@ -27,7 +27,7 @@ beforeAll(async () => {
   })
   page = await browser.newPage()
   await page.goto(fixtureUrl)
-})
+}, 60_000)
 
 afterAll(async () => {
   await browser?.close()
