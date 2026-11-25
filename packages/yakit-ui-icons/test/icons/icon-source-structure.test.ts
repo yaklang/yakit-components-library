@@ -2,27 +2,20 @@ import { readFileSync } from 'node:fs'
 
 import { describe, expect, it } from 'vitest'
 
-import { parseSvg } from '../../scripts/audit-icons.mjs'
-import { outline as outline } from '../helpers/sources'
-import { solid as solid } from '../helpers/sources'
-
-import { expectCurrentFigmaSource, importedMonochromeSources, svgStructure } from './helpers/current-figma-source'
+import { expectCurrentFigmaSource, importedMonochromeSources } from './helpers/current-figma-source'
 
 describe('imported Figma SVG structure', () => {
-  it.each([outline, solid])('$family checks every registered icon', (source) => {
-    for (const record of source.records) {
-      const local = readFileSync(new URL(`../../src/${source.family}/${record.file}`, import.meta.url), 'utf8')
-      expect(svgStructure(parseSvg(local)), record.exportName).toEqual(svgStructure(parseSvg(record.raw.svg)))
-    }
-  })
   it.each(importedMonochromeSources)('$name preserves source tags and nesting', (source) => {
     const svg = readFileSync(new URL(`../../src/${source.family}/${source.file}`, import.meta.url), 'utf8')
     expectCurrentFigmaSource(source, svg)
+    if (source.family === 'outline' && source.file === '39320-7452.svg') {
+      expect(svg).not.toMatch(/<g\b/)
+      expect(svg.match(/<path\b/g)).toHaveLength(1)
+    }
   })
-
-  it('BookOpenText contains one path directly under the SVG', () => {
-    const svg = readFileSync(new URL('../../src/outline/39320-7452.svg', import.meta.url), 'utf8')
-    expect(svg).not.toMatch(/<g\b/)
-    expect(svg.match(/<path\b/g)).toHaveLength(1)
+  it('includes BookOpenText in the imported sources', () => {
+    expect(importedMonochromeSources).toContainEqual(
+      expect.objectContaining({ family: 'outline', file: '39320-7452.svg' }),
+    )
   })
 })

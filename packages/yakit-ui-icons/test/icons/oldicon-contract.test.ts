@@ -1,4 +1,4 @@
-import { readdirSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { createElement, Fragment, type ComponentType } from 'react'
@@ -9,7 +9,7 @@ import { readIconInputSync } from '../../scripts/icon-source-documents.mjs'
 import { readOldiconAssets } from '../../scripts/oldicon-assets.mjs'
 import * as OldIcons from '../../src/oldicon'
 
-const inventory = readOldiconAssets()
+import { strokeWidths } from './helpers/stroke-widths'
 
 const packageRoot = resolve(import.meta.dirname, '../..')
 const oldiconRoot = resolve(packageRoot, 'src/oldicon')
@@ -17,7 +17,16 @@ const packageManifest = JSON.parse(readIconInputSync(resolve(packageRoot, 'packa
 
 type IconComponent = ComponentType<Record<string, unknown>>
 
-const assetSource = (assetFile: string) => readIconInputSync(resolve(oldiconRoot, assetFile), 'utf8')
+const texts = new Map<string, string>()
+const readText = (file: string) => {
+  let text = texts.get(file)
+  if (text === undefined) {
+    text = readFileSync(file, 'utf8')
+    texts.set(file, text)
+  }
+  return text
+}
+const inventory = readOldiconAssets(packageRoot, readText)
 const fragmentIds = (source: string) => [...source.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1])
 const fragmentReferences = (source: string) =>
   [...source.matchAll(/url\(\s*#([^)\s]+)\s*\)|(?:href|xlink:href)=["']#([^"']+)["']/g)]
@@ -25,6 +34,13 @@ const fragmentReferences = (source: string) =>
     .filter(Boolean)
 const exportedIcon = (exportName: string) =>
   (OldIcons as Record<string, unknown>)[exportName] as IconComponent | undefined
+const assets = new Map(
+  [...new Set(inventory.exports.map(({ assetFile }) => assetFile))].map((file) => {
+    const svg = readText(resolve(oldiconRoot, file))
+    return [file, { svg, ids: fragmentIds(svg) }] as const
+  }),
+)
+
 describe('oldicon package entry and server rendering', () => {
   it('publishes matching runtime, browser, and declaration entry points', () => {
     expect(packageManifest.exports['./oldicon']).toEqual({
@@ -41,31 +57,21 @@ describe('oldicon package entry and server rendering', () => {
 
     expect(iconFiles).toEqual(exportNames.map((exportName) => `${exportName}.tsx`))
     expect(exportNames).not.toContain('TaskWaitIcon')
-    const barrel = readIconInputSync(resolve(oldiconRoot, 'index.tsx'), 'utf8')
+    const barrel = readText(resolve(oldiconRoot, 'index.tsx'))
     expect(barrel).not.toContain('?react')
     expect(barrel).not.toContain('createIcon(')
     for (const { assetFile, exportName } of inventory.exports) {
       expect(barrel).toContain(`export { ${exportName} } from './icons/${exportName}.js'`)
-      const source = readIconInputSync(resolve(oldiconRoot, 'icons', `${exportName}.tsx`), 'utf8')
+      const source = readText(resolve(oldiconRoot, 'icons', `${exportName}.tsx`))
       expect(source).toContain(`from '../${assetFile}?react'`)
       expect(source).toContain(`export const ${exportName} = createIcon(`)
       expect(source.match(/\.svg\?react/g)).toHaveLength(1)
     }
   })
 
-  it('SSR renders every oldicon export as an accessible icon wrapper', () => {
-    for (const { exportName } of inventory.exports) {
-      const Component = exportedIcon(exportName)!
-      const markup = renderToStaticMarkup(createElement(Component))
-      expect(markup, exportName).toMatch(/^<span role="img" class="anticon yakit-icon"[^>]*><svg\b/)
-      expect(markup, exportName).toContain('aria-hidden="true"')
-      expect(markup, exportName).toContain('focusable="false"')
-    }
-  })
-
-  it('SSR renders representative themeable, colorful, large, and special-size icons', () => {
+  it('SSR preserves wrappers and source widths for every export, including representative viewBoxes', () => {
     const entries = inventory.exports.map((entry) => {
-      const svg = assetSource(entry.assetFile)
+      const { svg } = assets.get(entry.assetFile)!
       const attr = (name: string) => svg.match(new RegExp(`\\b${name}=["']([^"']*)["']`))?.[1] ?? ''
       return {
         ...entry,
@@ -85,12 +91,14 @@ describe('oldicon package entry and server rendering', () => {
     const representatives = [themeable, colorful, large, special]
 
     expect(representatives.every(Boolean)).toBe(true)
-    for (const entry of representatives as typeof entries) {
-      const Component = exportedIcon(entry.exportName)!
-      const markup = renderToStaticMarkup(createElement(Component))
-      expect(markup, entry.exportName).toContain('<span')
-      expect(markup, entry.exportName).toContain('<svg')
-      expect(markup, entry.exportName).toContain(`viewBox="${entry.dimensions.viewBox}"`)
+    for (const entry of entries) {
+      const markup = renderToStaticMarkup(createElement(exportedIcon(entry.exportName)!))
+      expect(markup, entry.exportName).toMatch(/^<span role="img" class="anticon yakit-icon"[^>]*><svg\b/)
+      expect(markup, entry.exportName).toContain('aria-hidden="true"')
+      expect(markup, entry.exportName).toContain('focusable="false"')
+      expect(strokeWidths(markup), entry.exportName).toEqual(strokeWidths(assets.get(entry.assetFile)!.svg))
+      if (representatives.includes(entry))
+        expect(markup, entry.exportName).toContain(`viewBox="${entry.dimensions.viewBox}"`)
     }
     expect(special?.dimensions).toMatchObject({ height: '36', width: '9' })
   })
@@ -98,16 +106,10 @@ describe('oldicon package entry and server rendering', () => {
 
 describe('oldicon fragment safety', () => {
   it('keeps every raw fragment owner unique, normalized, referenced, and local', () => {
-    const assets = [...new Set(inventory.exports.map(({ assetFile }) => assetFile))]
     const owners = new Map<string, string>()
-    let fragmentAssetCount = 0
 
-    for (const assetFile of assets) {
-      const source = assetSource(assetFile)
-      const ids = fragmentIds(source)
+    for (const [assetFile, { svg: source, ids }] of assets) {
       const references = fragmentReferences(source)
-      if (ids.length > 0) fragmentAssetCount += 1
-      expect(new Set(ids).size, assetFile).toBe(ids.length)
       expect(new Set(references), assetFile).toEqual(new Set(ids))
       for (const id of ids) {
         expect(id, `${assetFile}:${id}`).toMatch(/^icon_[0-9_]+__[A-Za-z][A-Za-z0-9_]*_\d+$/)
@@ -115,11 +117,11 @@ describe('oldicon fragment safety', () => {
         owners.set(id, assetFile)
       }
     }
-    expect(fragmentAssetCount).toBeGreaterThan(0)
+    expect(owners.size).toBeGreaterThan(0)
   })
 
   it('SSR gives repeated fragment-bearing icons unique owner-local IDs', () => {
-    const fragmentExports = inventory.exports.filter(({ assetFile }) => fragmentIds(assetSource(assetFile)).length > 0)
+    const fragmentExports = inventory.exports.filter(({ assetFile }) => assets.get(assetFile)!.ids.length > 0)
     expect(fragmentExports.length).toBeGreaterThan(0)
     const markup = renderToStaticMarkup(
       createElement(

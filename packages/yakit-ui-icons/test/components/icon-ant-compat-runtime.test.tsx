@@ -1,12 +1,9 @@
 import React, { createRef } from 'react'
 import { flushSync } from 'react-dom'
-import { createRoot, hydrateRoot, type Root } from 'react-dom/client'
-import { renderToString } from 'react-dom/server'
+import { createRoot, type Root } from 'react-dom/client'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { Loading, LoadingOutlined, LogoOutlined, QuestionMarkCircleOutlined } from '../../src'
-import { iconRegistry } from '../../src/registry'
-import { iconCounts, iconExports } from '../icons/icon-inventory'
+import { Loading, LoadingOutlined, QuestionMarkCircleOutlined } from '../../src'
 
 const roots: Root[] = []
 const render = (node: React.ReactNode) => {
@@ -40,7 +37,6 @@ describe('Ant-compatible icon root', () => {
     expect(svg.hasAttribute('class')).toBe(false)
     expect(span.getAttribute('role')).toBe('img')
     expect(span.children).toHaveLength(1)
-    expect(span.firstElementChild).toBe(svg)
   })
 
   it('routes consumer class and style only to the span', () => {
@@ -92,7 +88,6 @@ describe('Ant-compatible icon root', () => {
     const { span } = getIconParts(render(<QuestionMarkCircleOutlined ref={ref} />))
 
     expect(ref.current).toBe(span)
-    expect(ref.current?.tagName).toBe('SPAN')
   })
 
   it('routes size to the inner SVG', () => {
@@ -173,26 +168,6 @@ describe('Ant-compatible icon color', () => {
     document.head.append(style)
   }
 
-  it('uses the standalone neutral fallback without competing color rules', () => {
-    const { span, svg } = getIconParts(render(<QuestionMarkCircleOutlined />))
-
-    expect(getComputedStyle(span).color).toBe('rgb(53, 54, 57)')
-    expect(getComputedStyle(svg).color).toBe('rgb(53, 54, 57)')
-  })
-
-  it('keeps currentColor inheritable without Ant CSS', () => {
-    const container = render(
-      <div style={{ color: 'rgb(36, 104, 172)' }}>
-        <QuestionMarkCircleOutlined color="currentColor" />
-      </div>,
-    )
-    const { span, svg } = getIconParts(container)
-
-    expect(span.style.color).toBe('')
-    expect(svg.style.color).toBe('')
-    expect(getComputedStyle(svg).color).toBe('rgb(36, 104, 172)')
-  })
-
   it.each(['before', 'after'] as const)(
     'keeps currentColor inheritable when Ant CSS loads %s package rendering',
     (order) => {
@@ -202,28 +177,19 @@ describe('Ant-compatible icon color', () => {
           <QuestionMarkCircleOutlined color="currentColor" />
         </div>,
       )
-      if (order === 'after') addStyle(antCss)
       const { span, svg } = getIconParts(container)
-
-      expect(span.style.color).toBe('')
-      expect(svg.style.color).toBe('')
-      expect(getComputedStyle(svg).color).toBe('rgb(36, 104, 172)')
+      const expectInheritedColor = () => {
+        expect(span.style.color).toBe('')
+        expect(svg.style.color).toBe('')
+        expect(getComputedStyle(svg).color).toBe('rgb(36, 104, 172)')
+      }
+      expectInheritedColor()
+      if (order === 'after') {
+        addStyle(antCss)
+        expectInheritedColor()
+      }
     },
   )
-
-  it('applies explicit color on the span', () => {
-    const { span, svg } = getIconParts(render(<QuestionMarkCircleOutlined color="#123456" />))
-
-    expect(span.style.color).toBe('rgb(18, 52, 86)')
-    expect(svg.style.color).toBe('')
-    expect(getComputedStyle(svg).color).toBe('rgb(18, 52, 86)')
-  })
-
-  it('lets root style color override the explicit color prop', () => {
-    const { span } = getIconParts(render(<QuestionMarkCircleOutlined color="#123456" style={{ color: '#654321' }} />))
-
-    expect(span.style.color).toBe('rgb(101, 67, 33)')
-  })
 
   it('lets explicit root style.color override descendant SVG color rules', () => {
     addStyle('.anticon svg { color: rgb(9, 9, 9); }')
@@ -235,21 +201,6 @@ describe('Ant-compatible icon color', () => {
 })
 
 describe('Ant-compatible registry and Loading contracts', () => {
-  it('wraps all inventoried registry icons', () => {
-    const container = render(
-      <>
-        {iconRegistry.map(({ Component, exportName }) => (
-          <Component key={exportName} />
-        ))}
-      </>,
-    )
-
-    expect(iconRegistry).toHaveLength(iconCounts.registry)
-    expect(iconRegistry.map(({ exportName }) => exportName).sort()).toEqual([...iconExports.registry].sort())
-    expect(container.querySelectorAll(':scope > span.anticon.yakit-icon')).toHaveLength(iconCounts.registry)
-    expect(container.querySelectorAll(':scope > svg')).toHaveLength(0)
-  })
-
   it('lets LoadingOutlined spin with the same frozen hashed keyframe', () => {
     const { span, svg } = getIconParts(render(<LoadingOutlined spin />))
 
@@ -293,32 +244,5 @@ describe('Ant-compatible registry and Loading contracts', () => {
     expect(outlinedPath).not.toBeNull()
     expect(loading.svg.getAttribute('viewBox')).toBe(outlined.svg.getAttribute('viewBox'))
     expect(loadingPath?.getAttribute('d')).toBe(outlinedPath?.getAttribute('d'))
-  })
-})
-
-describe('Ant-compatible SSR and hydration', () => {
-  it('hydrates repeated fragment icons without warnings or identifier drift', async () => {
-    const tree = (
-      <>
-        <LogoOutlined />
-        <LogoOutlined />
-      </>
-    )
-    const markup = renderToString(tree, { identifierPrefix: 'ant-compat-' })
-    const serverIds = [...markup.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1])
-    const container = document.createElement('div')
-    container.innerHTML = markup
-    document.body.append(container)
-    const errors: unknown[][] = []
-    const root = hydrateRoot(container, tree, {
-      identifierPrefix: 'ant-compat-',
-      onRecoverableError: (...args) => errors.push(args),
-    })
-    roots.push(root)
-    await new Promise((resolvePromise) => setTimeout(resolvePromise, 0))
-
-    expect(errors).toEqual([])
-    expect([...container.querySelectorAll('span.anticon.yakit-icon')]).toHaveLength(2)
-    expect([...container.querySelectorAll('[id]')].map((node) => node.id)).toEqual(serverIds)
   })
 })

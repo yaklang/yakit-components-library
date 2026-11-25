@@ -1,6 +1,5 @@
-import { readIconInput } from './icon-source-documents.mjs'
-import { readIconSources } from './icon-source-data.mjs'
-const colorfulSource = readIconSources().colorful
+import { createIconInputReader } from './icon-source-documents.mjs'
+import { createRequire } from 'node:module'
 import { createHash } from 'node:crypto'
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
@@ -15,6 +14,7 @@ import {
 } from './colorful-icon-contracts.mjs'
 import { auditColorfulFragmentFiles } from './colorful-fragments.mjs'
 
+const colorfulSource = createRequire(import.meta.url)('../config/icon-sources/colorful.json')
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const PAINT_ATTRIBUTE = /\b(?:fill|stroke|stop-color|flood-color)\s*=\s*(["'])(.*?)\1/gi
 const STYLE_ATTRIBUTE = /\bstyle\s*=\s*(["'])(.*?)\1/gi
@@ -232,11 +232,11 @@ function option(args, name, fallback) {
   return index < 0 ? fallback : args[index + 1]
 }
 
-async function listSvgFiles(root, relativeRoot = root) {
+async function listSvgFiles(root, relativeRoot, readIconInput) {
   const files = []
   for (const entry of await readdir(root, { withFileTypes: true })) {
     const absolute = path.join(root, entry.name)
-    if (entry.isDirectory()) files.push(...(await listSvgFiles(absolute, relativeRoot)))
+    if (entry.isDirectory()) files.push(...(await listSvgFiles(absolute, relativeRoot, readIconInput)))
     else if (entry.name.endsWith('.svg'))
       files.push({
         path: path.relative(relativeRoot, absolute).split(path.sep).join('/'),
@@ -252,10 +252,11 @@ export async function runColorfulAuditCli(args = process.argv.slice(2)) {
     option(args, '--manifest', 'config/icon-sources/colorful.json#manifest'),
   )
   const sourceRoot = path.resolve(PACKAGE_ROOT, option(args, '--source-root', 'src'))
-  const inventory = JSON.parse(await readIconInput(manifestPath, 'utf8'))
+  const readIconInput = createIconInputReader()
+  const inventory = JSON.parse(readIconInput(manifestPath, 'utf8'))
   const tokenCatalog = await loadPinnedTokenCatalog()
-  const sources = (await listSvgFiles(path.join(sourceRoot, 'colorful'), sourceRoot)).sort((left, right) =>
-    left.path.localeCompare(right.path),
+  const sources = (await listSvgFiles(path.join(sourceRoot, 'colorful'), sourceRoot, readIconInput)).sort(
+    (left, right) => left.path.localeCompare(right.path),
   )
   const result = auditColorfulInputs(
     { inventory, sources },

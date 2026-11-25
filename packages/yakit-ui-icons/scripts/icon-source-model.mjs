@@ -7,12 +7,15 @@ export const svgDimensions = (svg) => {
   const attr = (name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`))?.[1]
   return { width: Number(attr('width')), height: Number(attr('height')), viewBox: attr('viewBox') }
 }
+export const sourceScopeRole = (mapping) => (mapping.catalogStatus === 'supplement' ? 'supplement' : 'target')
+export const sourceGroups = (document, display) => document.groups.map((g) => ({ ...g, ...display.groups?.[g.nodeId] }))
+
 export function joinIconSource(document, project, rawFiles, evidenceFiles = {}, display = { groups: {} }) {
   const { family, fileKey } = document
   if (document.schemaVersion !== 2 || !FIGMA_FAMILIES.includes(family) || !/^[A-Za-z0-9]+$/.test(fileKey))
     throw new Error(`ICON_SOURCE_SCHEMA_INVALID: ${family}`)
   if (project.schemaVersion !== 1) throw new Error(`ICON_PROJECT_SCHEMA_INVALID: ${family}`)
-  const groups = document.groups.map((g) => ({ ...g, ...display.groups?.[g.nodeId] }))
+  const groups = sourceGroups(document, display)
   const identities = new Set()
   const records = document.records.map((record) => {
     const { nodeId } = record
@@ -43,7 +46,7 @@ export function joinIconSource(document, project, rawFiles, evidenceFiles = {}, 
       nodeType: record.nodeType,
       localFile: mapping.file,
       exportName: mapping.exportName,
-      scopeRole: mapping.catalogStatus === 'supplement' ? 'supplement' : 'target',
+      scopeRole: sourceScopeRole(mapping),
     }
     const themePaintBindings = bindings.bindings.map((b) => ({
       ...b,

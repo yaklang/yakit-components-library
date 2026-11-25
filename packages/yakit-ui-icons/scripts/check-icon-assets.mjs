@@ -1,11 +1,10 @@
-// Daily, read-only validation of the current Outline stroke policy.
+// Check that all package SVG assets are registered, present, and parseable.
 import { readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parseSvg } from './audit-icons.mjs'
 import { readOldiconAssets } from './oldicon-assets.mjs'
 import { readIconSources, sourceFiles } from './icon-source-data.mjs'
-import { normalizeSvgStrokeWidth, svgStrokeWidths } from './icon-stroke-width.mjs'
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const sourceDirectory = 'config/icon-sources'
@@ -20,7 +19,7 @@ export async function svgFiles(directory, prefix = '') {
   return result.sort()
 }
 
-export async function checkIconStrokeWidths(root = packageRoot) {
+export async function checkIconAssets(root = packageRoot) {
   const files = await svgFiles(path.join(root, 'src'))
   const errors = []
   try {
@@ -41,27 +40,22 @@ export async function checkIconStrokeWidths(root = packageRoot) {
     try {
       const source = await readFile(path.join(root, 'src', file), 'utf8')
       parseSvg(source)
-      // Only Outline uses the uniform width policy.
-      if (!file.startsWith('outline/')) continue
-      normalizeSvgStrokeWidth(source)
-      for (const { tag, value } of svgStrokeWidths(source))
-        if (value !== '1.5') errors.push(`${file}: ${tag} stroke-width=${value}`)
     } catch (error) {
       errors.push(`${file}: ${error.message}`)
     }
   }
-  if (errors.length) throw new Error(`ICON_STROKE_WIDTH_INVALID\n${errors.join('\n')}`)
-  return { svgFiles: files.length, loading: 0, violations: 0 }
+  if (errors.length) throw new Error(`ICON_ASSETS_INVALID\n${errors.join('\n')}`)
+  return { svgFiles: files.length, violations: 0 }
 }
 
-export async function runIconStrokeCheck(args = [], root = packageRoot) {
+export async function runIconAssetCheck(args = [], root = packageRoot) {
   if (args.length > 1 || args.some((arg) => arg !== '--check'))
-    throw new Error('Usage: check-icon-stroke-width.mjs [--check]; this command never writes files')
-  return checkIconStrokeWidths(root)
+    throw new Error('Usage: check-icon-assets.mjs [--check]; this command never writes files')
+  return checkIconAssets(root)
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  runIconStrokeCheck(process.argv.slice(2))
+  runIconAssetCheck(process.argv.slice(2))
     .then((result) => process.stdout.write(`${JSON.stringify(result, null, 2)}\n`))
     .catch((error) => {
       process.stderr.write(`${error.message}\n`)

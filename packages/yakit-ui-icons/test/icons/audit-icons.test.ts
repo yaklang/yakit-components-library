@@ -178,6 +178,18 @@ describe('Outline icon audit structural failures', () => {
       '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="currentColor" stroke-width="2"/></svg>',
     ],
     [
+      'STROKE_WIDTH_INVALID',
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" style="stroke:currentColor;stroke-width:2.5"/></svg>',
+    ],
+    [
+      'STROKE_WIDTH_INVALID',
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="currentColor" stroke-width=" 1.5 "/></svg>',
+    ],
+    [
+      'STROKE_WIDTH_STYLESHEET_UNSUPPORTED',
+      '<svg width="24" height="24" viewBox="0 0 24 24"><style>path { stroke-width: 2 }</style><path d="M0 0h1" stroke="currentColor"/></svg>',
+    ],
+    [
       'FRAGMENT_BASE_INVALID',
       '<svg width="24" height="24" viewBox="0 0 24 24"><defs><clipPath id="clip0"><path d="M0 0h1"/></clipPath></defs><path clip-path="url(#clip0)" d="M0 0h1" stroke="currentColor"/></svg>',
     ],
@@ -476,15 +488,54 @@ describe('Versioned local stroke-width normalization', () => {
 })
 
 describe('Stroke-width manifest planner', () => {
-  it('reproduces all committed derived manifests from committed provenance and local sources', async () => {
-    const outputs = await planIconStrokeManifests(packageRoot, new Map())
-
-    expect([...outputs.keys()]).toEqual([
-      'config/icon-sources/outline.json#manifest',
-      'config/icon-sources/solid.json#manifest',
-      'config/icon-sources/colorful.json#manifest',
+  it('writes the three manifests with family-specific policies and hashes for known SVGs', async () => {
+    const outlinePath = 'config/icon-sources/outline.json#manifest'
+    const solidPath = 'config/icon-sources/solid.json#manifest'
+    const colorfulPath = 'config/icon-sources/colorful.json#manifest'
+    const original = '<svg><path d="M0 0h4" stroke="currentColor" stroke-width="3"/></svg>'
+    const normalized = '<svg><path d="M0 0h4" stroke="currentColor" stroke-width="1.5"/></svg>'
+    const colorful = '<svg><path fill="#123456" d="M1 2h5"/></svg>'
+    const documents = new Map<string, unknown>([
+      [outlinePath, { symbols: [{ exportedSourceNodeId: '1:1', file: 'line.svg' }] }],
+      ['config/icon-sources/outline.json#raw', { components: [{ nodeId: '1:1', svg: original }] }],
+      [solidPath, { symbols: [{ nodeId: '2:1', localFile: 'solid/line.svg' }], supplementalSources: [] }],
+      ['config/icon-sources/solid.json#raw', { components: [{ nodeId: '2:1', svg: original }] }],
+      [colorfulPath, { rows: [{ rowDisposition: 'canonical-new', localFile: 'colorful/shape.svg' }] }],
     ])
-    for (const [relativePath, source] of outputs)
-      expect(source, relativePath).toBe(readIconInputSync(resolve(packageRoot, relativePath), 'utf8'))
+    const assets = new Map([
+      ['icons/outline/line.svg', original],
+      ['icons/solid/line.svg', original],
+      ['icons/colorful/shape.svg', colorful],
+    ])
+
+    const outputs = await planIconStrokeManifests(packageRoot, assets, documents)
+    expect([...outputs.keys()]).toEqual([outlinePath, solidPath, colorfulPath])
+    const outline = JSON.parse(outputs.get(outlinePath)!)
+    const solid = JSON.parse(outputs.get(solidPath)!)
+    const multicolor = JSON.parse(outputs.get(colorfulPath)!)
+    expect(outline.strokeWidthPolicy).toEqual({ strategy: 'local-uniform-stroke-v1', value: '1.5' })
+    expect(solid.strokeWidthPolicy).toEqual({ strategy: 'preserve-source-stroke-v1' })
+    expect(multicolor.strokeWidthPolicy).toEqual({ strategy: 'preserve-source-stroke-v1' })
+    expect(multicolor.rows).toEqual([
+      { rowDisposition: 'canonical-new', localFile: 'colorful/shape.svg', normalizedSvgSha256: sha256(colorful) },
+    ])
+    for (const [manifest, width, localSvg] of [
+      [outline, '1.5', normalized],
+      [solid, '3', original],
+    ] as const) {
+      const geometry = sha256(`<svg><path d="M0 0h4" stroke="<paint>" stroke-width="${width}"></path></svg>`)
+      const ast = sha256(`<svg><path d="M0 0h4" stroke="<foreground>" stroke-width="${width}"></path></svg>`)
+      expect(manifest.symbols).toHaveLength(1)
+      expect(manifest.symbols[0]).toMatchObject({
+        figmaRawSvgSha256: sha256(original),
+        localRawSvgSha256: sha256(localSvg),
+        figmaGeometrySha256: geometry,
+        localGeometrySha256: geometry,
+        geometrySha256: geometry,
+        figmaNormalizedAstSha256: ast,
+        localNormalizedAstSha256: ast,
+        normalizedAstSha256: ast,
+      })
+    }
   })
 })

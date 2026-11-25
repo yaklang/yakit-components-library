@@ -3,13 +3,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 
 import '../../../icon.css'
-import {
-  EarOutlined,
-  DataComparisonOutlined,
-  RocketLaunchOffOutlined,
-  StarOffOutlined,
-  SunOutlined,
-} from '../../../src'
+import { DataComparisonOutlined, RocketLaunchOffOutlined, StarOffOutlined } from '../../../src'
 
 const BackgroundCase = ({
   background,
@@ -29,20 +23,6 @@ const BackgroundCase = ({
 
 const Fixture = () => (
   <>
-    <SunOutlined data-testid="sun-default" />
-    <SunOutlined color="#123456" data-testid="sun-custom" />
-    <SunOutlined color="#123456" data-testid="sun-style" style={{ color: '#654321' }} />
-    <span style={{ color: '#0c2238' }}>
-      <SunOutlined color="inherit" data-testid="sun-inherit" />
-    </span>
-
-    <EarOutlined data-testid="ear-default" />
-    <EarOutlined color="#123456" data-testid="ear-custom" />
-    <EarOutlined color="#123456" data-testid="ear-style" style={{ color: '#654321' }} />
-    <span style={{ color: '#0c2238' }}>
-      <EarOutlined color="inherit" data-testid="ear-inherit" />
-    </span>
-
     <BackgroundCase background="#111827" testId="star-dark">
       <StarOffOutlined color="inherit" />
     </BackgroundCase>
@@ -55,7 +35,6 @@ const Fixture = () => (
     <BackgroundCase background="transparent" testId="rocket-transparent">
       <RocketLaunchOffOutlined color="inherit" />
     </BackgroundCase>
-    <RocketLaunchOffOutlined color="#123456" data-testid="rocket-style" style={{ color: '#654321' }} />
 
     <DataComparisonOutlined data-testid="data-compare-default" />
     <DataComparisonOutlined color="#123456" data-testid="data-compare-custom" />

@@ -298,15 +298,16 @@ test('package verification hard-gates every final zero-dependency surface', () =
 test('each package generates SSR fixtures before its own browser tests', () => {
   const ui = readJson(join(root, 'packages/yakit-ui/package.json'))
   const icons = readJson(join(root, 'packages/yakit-ui-icons/package.json'))
-  for (const fixture of ['icon-ssr-fixture.test.ts', 'solid-icon-ssr-fixture.test.ts'])
-    assert.ok(icons.scripts['test:ssr-fixtures'].includes(`test/icons/${fixture}`))
+  for (const fixture of ['icon-ssr-fixture.test.ts', 'solid-icon-ssr-fixture.test.ts', 'oldicon-contract.test.ts']) {
+    assert.ok(existsSync(join(root, 'packages/yakit-ui-icons/test/icons', fixture)), `missing icon test: ${fixture}`)
+  }
   assert.ok(ui.scripts['test:ssr-fixtures'].includes('test/ssr/native-components-ssr.test.tsx'))
   const uiCommands = ui.scripts['test:ci'].split(' && ')
   assert.ok(
     uiCommands.indexOf('pnpm run test:ssr-fixtures') < uiCommands.indexOf('vitest run --config vitest.config.ts'),
   )
   assert.equal(icons.scripts['test:ci'], 'pnpm run test:node && pnpm run test:browser')
-  assert.match(icons.scripts['test:node'], /vitest.node.config.ts/)
+  assert.equal(icons.scripts['test:node'], 'vitest run --config vitest.node.config.ts')
   assert.doesNotMatch(ui.scripts['test:ci'], /--filter.*yakit-ui-icons/)
   assert.ok(ui.scripts['test:ci'].includes('vitest.react18.config.ts'))
 })

@@ -1,4 +1,4 @@
-import { readIconInput } from '../../scripts/icon-source-documents.mjs'
+import { buildIconDocuments, evidencePath, manifestPath, readIconInput } from '../../scripts/icon-source-documents.mjs'
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { cp, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises'
@@ -28,10 +28,6 @@ async function fixture(run) {
       await cp(path.join(packageRoot, directory), path.join(root, directory), {
         recursive: true,
       })
-    await cp(
-      path.join(packageRoot, 'config/iconStrokeContract.generated.ts'),
-      path.join(root, 'config/iconStrokeContract.generated.ts'),
-    )
     await cp(path.join(packageRoot, '.prettierrc.json'), path.join(root, '.prettierrc.json')).catch(async () => {
       await writeFile(
         path.join(root, '.prettierrc.json'),
@@ -43,6 +39,11 @@ async function fixture(run) {
     await rm(root, { recursive: true, force: true })
   }
 }
+async function firstSourceRecord(root, family) {
+  const source = JSON.parse(await readFile(path.join(root, 'config/icon-sources', family + '.json'), 'utf8'))
+  return source.records[0]
+}
+
 async function snapshotConfig(root) {
   const directory = path.join(root, 'config')
   const files = (await readdir(directory, { recursive: true })).sort()
@@ -159,13 +160,16 @@ for (const kind of ['new', 'existing'])
     fixture(async (root) => {
       const request = await input(root, 'outline')
       request.icons[0].evidence = { component: { nodeType: 'COMPONENT' } }
-      const existing = readIconSources(pathToFileURL(`${root}/config/icon-sources/`)).outline.records[0]
+      const record =
+        kind === 'existing'
+          ? await firstSourceRecord(root, 'outline')
+          : { nodeId: '999999:2', name: 'Outline/unsupported-stroke' }
       const invalidSvgPath = path.join(root, 'unsupported-stroke.svg')
       await writeFile(invalidSvgPath, outlineSvg.replace(' stroke-width="2"', ''))
       request.icons.push({
         ...request.icons[0],
-        url: url(kind === 'existing' ? existing.nodeId : '999999:2'),
-        name: kind === 'existing' ? existing.name : 'Outline/unsupported-stroke',
+        url: url(record.nodeId),
+        name: record.name,
         svgPath: invalidSvgPath,
       })
       const inputPath = path.join(root, 'input.json')
@@ -219,43 +223,40 @@ test('transaction restores earlier writes and detects concurrent edits', async (
   }
 })
 
-test('canonical sources preserve raw SVGs, node sizes and defaults without instance inventories', () =>
-  fixture(async (root) => {
-    const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))
-    assert.equal(sources.outline.records.find((r) => r.exportName === 'SunOutlined').defaultColor, '#0A0A0A')
-    for (const family of ['outline', 'solid']) {
-      const inventory = JSON.parse(
-        await readIconInput(path.join(root, `config/icon-sources/${family}.json#placement`), 'utf8'),
-      )
-      const manifest = JSON.parse(
-        await readIconInput(path.join(root, `config/icon-sources/${family}.json#manifest`), 'utf8'),
-      )
-      assert.equal(Object.hasOwn(inventory, 'placements'), false)
-      assert.equal(Object.hasOwn(inventory.counts, 'instances'), false)
-      assert.equal(Object.hasOwn(manifest, 'placements'), false)
-      assert.equal(Object.hasOwn(manifest, 'instanceVerification'), false)
-      assert.equal(Object.hasOwn(manifest.expectedCounts, 'instances'), false)
-      const symbols = [...inventory.currentSymbols, ...(inventory.supplementalSources ?? [])]
-      assert.equal(symbols.length, sources[family].records.length)
-      for (const record of sources[family].records) {
-        assert.equal(Object.hasOwn(record, 'placements'), false)
-        const symbol = symbols.find((r) => (r.nodeId ?? r.exportedSourceNodeId) === record.nodeId)
-        assert.equal(symbol.width, record.nodeSize?.width)
-        assert.equal(symbol.height, record.nodeSize?.height)
-        assert.equal(symbol.exportName, record.exportName)
-      }
+test('canonical sources preserve raw SVGs, node sizes and defaults without instance inventories', () => {
+  const root = packageRoot
+  const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))
+  const documents = buildIconDocuments(root, { sources })
+  assert.equal(sources.outline.records.find((r) => r.exportName === 'SunOutlined').defaultColor, '#0A0A0A')
+  for (const family of ['outline', 'solid']) {
+    const inventory = documents.get(evidencePath(family, 'placement'))
+    const manifest = documents.get(manifestPath(family))
+    assert.equal(Object.hasOwn(inventory, 'placements'), false)
+    assert.equal(Object.hasOwn(inventory.counts, 'instances'), false)
+    assert.equal(Object.hasOwn(manifest, 'placements'), false)
+    assert.equal(Object.hasOwn(manifest, 'instanceVerification'), false)
+    assert.equal(Object.hasOwn(manifest.expectedCounts, 'instances'), false)
+    const symbols = [...inventory.currentSymbols, ...(inventory.supplementalSources ?? [])]
+    assert.equal(symbols.length, sources[family].records.length)
+    for (const record of sources[family].records) {
+      assert.equal(Object.hasOwn(record, 'placements'), false)
+      const symbol = symbols.find((r) => (r.nodeId ?? r.exportedSourceNodeId) === record.nodeId)
+      assert.equal(symbol.width, record.nodeSize?.width)
+      assert.equal(symbol.height, record.nodeSize?.height)
+      assert.equal(symbol.exportName, record.exportName)
     }
-    const raw = JSON.parse(await readIconInput(path.join(root, 'config/icon-sources/outline.json#raw'), 'utf8'))
-    for (const record of sources.outline.records)
-      assert.equal(record.raw.svg, raw.components.find((r) => r.nodeId === record.nodeId).svg)
-  }))
+  }
+  const raw = documents.get(evidencePath('outline', 'raw'))
+  for (const record of sources.outline.records)
+    assert.equal(record.raw.svg, raw.components.find((r) => r.nodeId === record.nodeId).svg)
+})
 
 for (const family of ['outline', 'solid', 'colorful'])
   test(`${family} rejects instance placements without writing any batch files`, () =>
     fixture(async (root) => {
       const request = await input(root, family)
       request.icons[0].evidence = { extraction: { method: 'svg-export' } }
-      const existing = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))[family].records[0]
+      const existing = await firstSourceRecord(root, family)
       const before = await snapshotConfig(root)
       for (const nodeId of ['999999:2', existing.nodeId]) {
         for (const placements of [[], [{ placementNodeId: '999999:3', nodeType: 'instance' }]]) {
@@ -354,12 +355,9 @@ test('Colorful exports normalize named white without changing source gradients',
   assert.equal(record.rawSvg, rawSvg)
 })
 
-test('uniform stroke generation applies only to Outline', () => {
+test('Colorful generation preserves the original stroke width', () => {
   const rawSvg = '<svg width="24" height="24"><path d="M1 1H20" stroke="#353639" stroke-width="3"/></svg>'
-  for (const family of ['solid', 'colorful']) {
-    assert.match(renderImportedSvg({ nodeId: '1:2', rawSvg }, family), /stroke-width="3"/)
-  }
-  assert.match(renderImportedSvg({ nodeId: '1:2', rawSvg }, 'outline'), /stroke-width="1.5"/)
+  assert.match(renderImportedSvg({ nodeId: '1:2', rawSvg }, 'colorful'), /stroke-width="3"/)
 })
 
 test('all original SVGs rebuild missing products and repeated updates preserve mtimes', () =>

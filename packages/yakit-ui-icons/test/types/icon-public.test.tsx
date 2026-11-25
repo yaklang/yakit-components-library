@@ -740,7 +740,6 @@ const outlineRegistry = outlineIconRegistry satisfies Array<{
 
 void publicOutlineComponents
 void outlineRegistry
-void outlineIconRegistry
 void (<LandPlotOutlined aria-label="land plot" color="#f28c28" size={24} />)
 void (<NotebookOutlined color="inherit" size="1em" />)
 void (<SunOutlined color="#123456" style={{ color: '#654321' }} />)

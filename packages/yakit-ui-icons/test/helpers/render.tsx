@@ -9,8 +9,9 @@ export const render = (node: React.ReactNode) => {
   document.body.append(container)
   const root = createRoot(container)
   roots.push(root)
-  flushSync(() => root.render(node))
-  return { container, root }
+  const rerender = (next: React.ReactNode) => flushSync(() => root.render(next))
+  rerender(node)
+  return { container, root, rerender }
 }
 
 export const cleanup = () => {

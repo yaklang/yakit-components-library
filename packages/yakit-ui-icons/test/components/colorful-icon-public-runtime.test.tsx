@@ -1,21 +1,10 @@
 import React from 'react'
-import { flushSync } from 'react-dom'
-import { createRoot, type Root } from 'react-dom/client'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import * as PackageApi from '../../src'
 import { colorfulIconRegistry } from '../../src/registry'
-
-const roots: Root[] = []
-
-const render = (node: React.ReactNode) => {
-  const container = document.createElement('div')
-  document.body.append(container)
-  const root = createRoot(container)
-  roots.push(root)
-  flushSync(() => root.render(node))
-  return container
-}
+import { cleanup, render } from '../helpers/render'
+import { colorful as colorfulSource } from '../helpers/sources'
 
 const paintAttributes = (svg: SVGSVGElement) =>
   [...svg.querySelectorAll<SVGElement>('*')]
@@ -27,10 +16,7 @@ const paintAttributes = (svg: SVGSVGElement) =>
     )
     .sort()
 
-afterEach(() => {
-  roots.splice(0).forEach((root) => root.unmount())
-  document.body.replaceChildren()
-})
+afterEach(cleanup)
 
 describe('Colorful public component API', () => {
   it('exposes every colorful registry component from the package root', () => {
@@ -48,42 +34,40 @@ describe('Colorful public component API', () => {
     expect(literal).toBeTruthy()
     if (!literal) return
 
-    const defaultSvg = render(<literal.Component />).querySelector('svg')
-    const overrideSvg = render(<literal.Component color="#123456" />).querySelector('svg')
-
+    const { container, rerender } = render(<literal.Component />)
+    const defaultSvg = container.querySelector('svg')!
     expect(defaultSvg).not.toBeNull()
+    const defaultPaint = paintAttributes(defaultSvg)
+    rerender(<literal.Component color="#123456" />)
+    const overrideSvg = container.querySelector('svg')!
     expect(overrideSvg).not.toBeNull()
-    expect(paintAttributes(overrideSvg!)).toEqual(paintAttributes(defaultSvg!))
-    expect(paintAttributes(defaultSvg!).some((paint) => !paint.endsWith(':currentColor'))).toBe(true)
+    expect(paintAttributes(overrideSvg)).toEqual(defaultPaint)
+    expect(defaultPaint.some((paint) => !paint.endsWith(':currentColor'))).toBe(true)
   })
 
-  it('keeps intrinsic dimensions for a non-square colorful icon without size', () => {
-    const rendered = colorfulIconRegistry.map(({ Component }) => ({
-      container: render(<Component />),
-      Component,
-    }))
-    const representative = rendered.find(({ container }) => {
-      const svg = container.querySelector('svg')
-      return svg && svg.getAttribute('width') !== svg.getAttribute('height')
+  it('keeps intrinsic non-square dimensions by default and preserves the viewBox at a square size', () => {
+    const parser = new DOMParser()
+    const record = colorfulSource.records.find(({ publicExposure, raw }) => {
+      if (publicExposure !== 'canonical') return false
+      const source = parser.parseFromString(raw.svg, 'image/svg+xml').documentElement
+      const width = source.getAttribute('width'),
+        height = source.getAttribute('height')
+      return width && height && width !== height
     })
-
-    expect(representative).toBeTruthy()
-    const svg = representative?.container.querySelector('svg')
-    expect(svg?.getAttribute('width')).not.toBe(svg?.getAttribute('height'))
-  })
-
-  it('applies a square outer size without changing a non-square viewBox', () => {
-    const intrinsic = colorfulIconRegistry
-      .map(({ Component }) => ({ Component, svg: render(<Component />).querySelector('svg') }))
-      .find(({ svg }) => svg && svg.getAttribute('width') !== svg.getAttribute('height'))
-    expect(intrinsic?.svg).toBeTruthy()
-    if (!intrinsic?.svg) return
-
-    const originalViewBox = intrinsic.svg.getAttribute('viewBox')
-    const sized = render(<intrinsic.Component size={32} />).querySelector('svg')
-
+    const entry = colorfulIconRegistry.find(({ sourceNodeId }) => sourceNodeId === record?.nodeId)
+    if (!entry) throw new Error('Expected a registered non-square Colorful icon')
+    const { Component } = entry
+    const { container, rerender } = render(<Component />)
+    const intrinsic = container.querySelector('svg')!
+    expect(intrinsic.getAttribute('width')).toBeTruthy()
+    expect(intrinsic.getAttribute('height')).toBeTruthy()
+    expect(intrinsic.getAttribute('width')).not.toBe(intrinsic.getAttribute('height'))
+    const viewBox = intrinsic.getAttribute('viewBox')
+    expect(viewBox).toBeTruthy()
+    rerender(<Component size={32} />)
+    const sized = container.querySelector('svg')
     expect(sized?.getAttribute('width')).toBe('32')
     expect(sized?.getAttribute('height')).toBe('32')
-    expect(sized?.getAttribute('viewBox')).toBe(originalViewBox)
+    expect(sized?.getAttribute('viewBox')).toBe(viewBox)
   })
 })

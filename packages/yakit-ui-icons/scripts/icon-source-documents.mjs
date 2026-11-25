@@ -143,13 +143,14 @@ export function colorfulDocument(source, assets) {
 
 export function buildIconDocuments(root = packageRoot, options = {}) {
   const sources = options.sources ?? readIconSources(pathToFileURL(`${root}/config/icon-sources/`))
+  const readAsset = options.readAsset ?? readFileSync
   const assets =
     options.assets ??
     new Map(
       Object.values(sources)
         .flatMap(sourceFiles)
         .filter((file) => file.endsWith('.svg'))
-        .map((file) => [file, readFileSync(path.join(root, 'src', file), 'utf8')]),
+        .map((file) => [file, readAsset(path.join(root, 'src', file), 'utf8')]),
     )
   const documents = new Map([
     ...monochromeDocuments(sources.outline),
@@ -184,22 +185,45 @@ export function buildIconDocuments(root = packageRoot, options = {}) {
  * @returns {string | Buffer}
  */
 export function readIconInputSync(input, encoding) {
-  const value = input instanceof URL ? fileURLToPath(input) + input.hash : String(input)
-  const match = /^(.*)[/\\]config[/\\]icon-sources[/\\](outline|solid|colorful)\.json#(manifest|raw|placement)$/.exec(
-    path.resolve(value),
-  )
-  if (!match) return readFileSync(resolveHistoricalIconPath(input), encoding)
-  const [, root, family, kind] = match
-  let document
-  if (kind !== 'manifest') {
-    const source = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))[family]
-    document = monochromeDocuments(source).get(evidencePath(family, kind))
-  } else document = buildIconDocuments(root).get(manifestPath(family))
-  if (!document) throw new Error(`ICON_DOCUMENT_UNKNOWN: ${family}#${kind}`)
-  const text = jsonText(document)
-  return encoding
-    ? Buffer.from(text).toString(typeof encoding === 'string' ? encoding : encoding.encoding)
-    : Buffer.from(text)
+  return createIconInputReader()(input, encoding)
+}
+
+// Each read-only audit gets a fresh view, including audits of mutated temporary files.
+export function createIconInputReader() {
+  const roots = new Map()
+  const svgText = new Map()
+  const readLocal = (file, encoding) => {
+    if (encoding !== 'utf8' || !file.endsWith('.svg')) return readFileSync(file, encoding)
+    const absolute = path.resolve(file)
+    if (!svgText.has(absolute)) svgText.set(absolute, readFileSync(absolute, 'utf8'))
+    return svgText.get(absolute)
+  }
+  return (input, encoding) => {
+    const value = input instanceof URL ? fileURLToPath(input) + input.hash : String(input)
+    const match = /^(.*)[/\\]config[/\\]icon-sources[/\\](outline|solid|colorful)\.json#(manifest|raw|placement)$/.exec(
+      path.resolve(value),
+    )
+    if (!match) return readLocal(resolveHistoricalIconPath(input), encoding)
+    const [, root, family, kind] = match
+    let view = roots.get(root)
+    if (!view) {
+      view = { sources: readIconSources(pathToFileURL(`${root}/config/icon-sources/`)), evidence: new Map() }
+      roots.set(root, view)
+    }
+    const key = evidencePath(family, kind)
+    if (kind === 'manifest')
+      view.documents ??= buildIconDocuments(root, { sources: view.sources, readAsset: readLocal })
+    let document = view.documents?.get(key)
+    if (!document && kind !== 'manifest') {
+      if (!view.evidence.has(family)) view.evidence.set(family, monochromeDocuments(view.sources[family]))
+      document = view.evidence.get(family).get(key)
+    }
+    if (!document) throw new Error(`ICON_DOCUMENT_UNKNOWN: ${family}#${kind}`)
+    const text = jsonText(document)
+    return encoding
+      ? Buffer.from(text).toString(typeof encoding === 'string' ? encoding : encoding.encoding)
+      : Buffer.from(text)
+  }
 }
 export async function readIconInput(input, encoding) {
   return readIconInputSync(input, encoding)

@@ -107,12 +107,10 @@ describe('colorful offline audit', () => {
         { expectedGroupCount: 1, expectedRowCount: 1 },
       )
 
-    for (const width of ['1', '2']) {
+    for (const width of ['1', '2', ICON_STROKE_WIDTH]) {
       expect(() => audit(svg(`stroke-width="${width}"`))).not.toThrow()
       expect(() => audit(svg(`style="stroke-width: ${width}"`))).not.toThrow()
     }
-    expect(() => audit(svg(`stroke-width="${ICON_STROKE_WIDTH}"`))).not.toThrow()
-    expect(() => audit(svg(`style="stroke-width: ${ICON_STROKE_WIDTH}"`))).not.toThrow()
   })
 
   it('accepts only pinned tokens whose light and dark values equal the Figma fallback', () => {

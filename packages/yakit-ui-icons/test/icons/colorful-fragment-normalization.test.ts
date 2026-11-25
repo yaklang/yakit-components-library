@@ -24,6 +24,7 @@ describe('colorful source fragment normalization', () => {
       'icon_4633619924__semantic_2',
     ])
     expect(result.svg).not.toMatch(/(?:id|href)=["'](?:#)?(?:title0|desc0|paint0|clip0|shape0)/)
+    expect(result.svg).toContain('style="fill: url(\'#icon_4633619924__linearGradient_0\')"')
     const graph = inspectFragmentGraph(result.svg)
     expect(new Set(graph.references.map(({ id }) => id))).toEqual(new Set(graph.owners.map(({ id }) => id)))
     expect(auditColorfulFragmentFiles([{ path: 'fixture.svg', svg: result.svg }])).toEqual({
@@ -61,8 +62,6 @@ describe('colorful source fragment normalization', () => {
   })
 
   it('compiles every supported JSX reference form with one useId suffix', async () => {
-    const normalized = normalizeColorfulFragments(fixture, '46336:19924').svg
-    expect(normalized).toContain('style="fill: url(\'#icon_4633619924__linearGradient_0\')"')
     const result = (await build({
       build: {
         rollupOptions: {
@@ -82,18 +81,16 @@ describe('colorful source fragment normalization', () => {
       .map(({ code }) => code)
       .join('\n')
     expect(output.match(/useId/g)).toHaveLength(1)
-    for (const fragment of [
-      'icon_4633619924__semantic_0',
-      'icon_4633619924__semantic_1',
-      'icon_4633619924__linearGradient_0',
-      'icon_4633619924__clip_0',
-      'icon_4633619924__semantic_2',
-    ]) {
-      expect(output, fragment).toContain(`${fragment}__`)
+    for (const [fragment, occurrences] of [
+      ['icon_4633619924__semantic_0', undefined],
+      ['icon_4633619924__semantic_1', undefined],
+      ['icon_4633619924__linearGradient_0', 2],
+      ['icon_4633619924__clip_0', 2],
+      ['icon_4633619924__semantic_2', 3],
+    ] as const) {
+      if (occurrences === undefined) expect(output, fragment).toContain(`${fragment}__`)
+      else expect(output.split(`${fragment}__`).length - 1, fragment).toBe(occurrences)
       expect(output, fragment).not.toMatch(new RegExp(`${fragment}["']`))
     }
-    expect(output.match(/icon_4633619924__linearGradient_0__/g)).toHaveLength(2)
-    expect(output.match(/icon_4633619924__clip_0__/g)).toHaveLength(2)
-    expect(output.match(/icon_4633619924__semantic_2__/g)).toHaveLength(3)
   })
 })

@@ -17,11 +17,13 @@ export const svgStructure = (node: ReturnType<typeof parseSvg>): unknown => [nod
 
 export function expectCurrentFigmaSource(source: (typeof importedMonochromeSources)[number], local: string) {
   // Unlike canonical geometry comparison, this retains every group and tag.
-  expect(svgStructure(parseSvg(local)), source.name).toEqual(svgStructure(parseSvg(source.raw)))
+  const tree = parseSvg(local)
+  const rawTree = parseSvg(source.raw)
+  expect(svgStructure(tree), source.name).toEqual(svgStructure(rawTree))
   const options = {
     ignoreUnreferencedIds: true,
     normalizeForegroundPaint: true,
     normalizeStrokeWidth: source.family === 'outline',
   }
-  expect(canonicalizeSvg(local, options), source.name).toBe(canonicalizeSvg(source.raw, options))
+  expect(canonicalizeSvg(tree, options), source.name).toBe(canonicalizeSvg(rawTree, options))
 }

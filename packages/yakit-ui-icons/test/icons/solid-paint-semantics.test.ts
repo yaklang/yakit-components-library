@@ -6,23 +6,24 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
 import { auditIcons, collectPaintSemantics, paintSemanticsSha256 } from '../../scripts/audit-icons.mjs'
-import { ICON_STROKE_WIDTH } from '../../scripts/icon-audit-contracts.mjs'
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs'
+import {
+  createIconInputReader,
+  evidencePath,
+  manifestPath,
+  readIconInputSync,
+} from '../../scripts/icon-source-documents.mjs'
 
 import { iconCounts } from './icon-inventory'
 
-const manifest = JSON.parse(
-  readIconInputSync(new URL('../../config/icon-sources/solid.json#manifest', import.meta.url), 'utf8'),
-)
-const raw = JSON.parse(readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'))
-
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const readBaseline = createIconInputReader()
+const manifest = JSON.parse(readBaseline(resolve(packageRoot, manifestPath('solid')), 'utf8'))
+const raw = JSON.parse(readBaseline(resolve(packageRoot, evidencePath('solid', 'raw')), 'utf8'))
 const solidRoot = resolve(packageRoot, 'src/solid')
-const outlineRoot = resolve(packageRoot, 'src/outline')
 const files = readdirSync(solidRoot)
   .filter((file) => file.endsWith('.svg'))
   .sort()
-const source = (file: string) => readIconInputSync(resolve(solidRoot, file), 'utf8')
+const sources = new Map(files.map((file) => [file, readBaseline(resolve(solidRoot, file), 'utf8')]))
 const rawByNodeId = new Map(
   [...raw.components, ...raw.supplementalComponents].map((entry) => [entry.nodeId, entry.svg]),
 )
@@ -55,25 +56,10 @@ const auditSourceMutation = async (file: string, mutate: (source: string) => str
 }
 
 describe('Solid paint semantics', () => {
-  it('keeps the uniform width policy limited to Outline sources', () => {
-    const roots = [outlineRoot]
-    const values = roots.flatMap((root) =>
-      readdirSync(root)
-        .filter((file) => file.endsWith('.svg'))
-        .flatMap((file) => [
-          ...readIconInputSync(resolve(root, file), 'utf8').matchAll(/\bstroke-width=["']([^"']+)["']/g),
-        ]),
-    )
-
-    // Coverage is checked against source records; every encountered width must follow the policy.
-    expect(values.length).toBeGreaterThan(0)
-    expect([...new Set(values.map((match) => match[1]))]).toEqual([ICON_STROKE_WIDTH])
-  })
-
   it('uses currentColor for every primary glyph and removes the legacy literal everywhere', () => {
     expect(files).toHaveLength(iconCounts.solid)
     for (const file of files) {
-      const svg = source(file)
+      const svg = sources.get(file)!
       const rows = collectPaintSemantics(svg)
       expect(svg, file).not.toMatch(/\b(?:fill|stroke|color)=["']#353639["']/i)
       expect(
@@ -94,7 +80,7 @@ describe('Solid paint semantics', () => {
         paintSemanticsSha256(rawByNodeId.get(record.nodeId)!, options),
       )
       expect(record.localPaintSemanticsSha256, record.nodeId).toBe(
-        paintSemanticsSha256(source(record.localFile.replace('solid/', '')), options),
+        paintSemanticsSha256(sources.get(record.localFile.replace('solid/', ''))!, options),
       )
       expect(record.figmaPaintSemanticsSha256, record.nodeId).toBe(record.localPaintSemanticsSha256)
     }

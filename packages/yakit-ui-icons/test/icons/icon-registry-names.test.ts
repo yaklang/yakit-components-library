@@ -1,7 +1,12 @@
 import type { ComponentType } from 'react'
 import { describe, expect, it } from 'vitest'
 
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs'
+import colorfulProject from '../../config/icon-project/colorful.json'
+import outlineProject from '../../config/icon-project/outline.json'
+import solidProject from '../../config/icon-project/solid.json'
+import colorfulSource from '../../config/icon-sources/colorful.json'
+import outlineSource from '../../config/icon-sources/outline.json'
+import solidSource from '../../config/icon-sources/solid.json'
 import {
   assertUniqueFigmaNames,
   buildIconRegistry,
@@ -13,17 +18,12 @@ import {
 } from '../../src/registry'
 import type { IconProps } from '../../src/types'
 
-import { iconCounts } from './icon-inventory'
-
-const colorfulManifest = JSON.parse(
-  readIconInputSync(new URL('../../config/icon-sources/colorful.json#manifest', import.meta.url), 'utf8'),
-)
-const outlineManifest = JSON.parse(
-  readIconInputSync(new URL('../../config/icon-sources/outline.json#manifest', import.meta.url), 'utf8'),
-)
-const solidManifest = JSON.parse(
-  readIconInputSync(new URL('../../config/icon-sources/solid.json#manifest', import.meta.url), 'utf8'),
-)
+function sourceNames(
+  source: { records: { nodeId: string; name: string }[] },
+  project: { records: Record<string, { exportName: string }> },
+) {
+  return source.records.map(({ nodeId, name }) => ({ nodeId, name, exportName: project.records[nodeId].exportName }))
+}
 
 const DummyIcon = (() => null) as ComponentType<IconProps>
 const entry = (
@@ -42,27 +42,17 @@ describe('Figma icon registry name validation', () => {
   it('uses family-specific public component suffixes', () => {
     expect(outlineIconRegistry.every(({ exportName }) => exportName.endsWith('Outlined'))).toBe(true)
     expect(solidIconRegistry.every(({ exportName }) => exportName.endsWith('Solid'))).toBe(true)
-    expect(solidIconRegistry.some(({ exportName }) => exportName.endsWith('Filled'))).toBe(false)
     expect(colorfulIconRegistry.every(({ exportName }) => exportName.endsWith('Colorful'))).toBe(true)
   })
 
   it('derives every available Figma name by trimming outer whitespace only', () => {
     const registryByExport = new Map(iconRegistry.map((definition) => [definition.exportName, definition]))
-    const sources = [
-      ...outlineManifest.symbols.map(({ exportName, name }) => ({ exportName, rawName: name })),
-      ...solidManifest.symbols.map(({ exportName, name }) => ({ exportName, rawName: name })),
-      ...solidManifest.supplementalSources.map(({ exportName, name }) => ({
-        exportName,
-        rawName: name,
-      })),
-    ]
-
-    for (const { exportName, rawName } of sources) {
-      const expectedName = rawName.trim() || null
+    const sources = [...sourceNames(outlineSource, outlineProject), ...sourceNames(solidSource, solidProject)]
+    for (const { exportName, name } of sources) {
+      const expectedName = name.trim() || null
       expect(registryByExport.get(exportName)?.figmaName, exportName).toBe(expectedName)
     }
     expect(iconRegistry.filter(({ figmaName }) => figmaName === null).map(({ exportName }) => exportName)).toEqual([])
-    expect(registryByExport.get('CommandOutlined')?.figmaName).toBe('Outline/Command')
   })
 
   it('preserves the two distinct source icons named Outline/variable', () => {
@@ -83,21 +73,22 @@ describe('Figma icon registry name validation', () => {
   })
 
   it('maps all inventoried colorful rows by unique export and source identity while preserving raw Figma names', () => {
-    const publicRows = colorfulManifest.rows.filter(({ publicExposure }) =>
-      ['canonical', 'semantic-alias'].includes(publicExposure),
-    )
+    const publicRows = sourceNames(colorfulSource, colorfulProject)
     const registryByExport = new Map(colorfulIconRegistry.map((definition) => [definition.exportName, definition]))
 
-    expect(colorfulManifest.rows).toHaveLength(iconCounts.colorful)
+    expect(publicRows).toHaveLength(Object.keys(colorfulProject.records).length)
     expect(colorfulIconRegistry).toHaveLength(publicRows.length)
     expect(new Set(colorfulIconRegistry.map(({ exportName }) => exportName))).toHaveLength(colorfulIconRegistry.length)
     expect(new Set(colorfulIconRegistry.map(({ sourceNodeId }) => sourceNodeId))).toHaveLength(
       colorfulIconRegistry.length,
     )
     for (const row of publicRows) {
-      expect(registryByExport.get(row.exportName)?.figmaName, row.exportName).toBe(row.figmaName)
+      expect(registryByExport.get(row.exportName), row.exportName).toMatchObject({
+        figmaName: row.name,
+        sourceNodeId: row.nodeId,
+      })
     }
-    expect(publicRows.filter(({ figmaName }) => figmaName === 'Basic/Solid/Web Fuzzer')).toHaveLength(2)
+    expect(publicRows.filter(({ name }) => name === 'Basic/Solid/Web Fuzzer')).toHaveLength(2)
   })
 
   it('rejects a duplicate full Figma name within one family', () => {

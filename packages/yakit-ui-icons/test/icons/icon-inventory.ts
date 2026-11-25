@@ -1,5 +1,4 @@
 import loadingSource from '../../config/icon-sources/loading.json'
-import * as OldIcons from '../../src/oldicon'
 import { colorful as colorfulSource } from '../helpers/sources'
 import { outline as outlineSource } from '../helpers/sources'
 import { solid as solidSource } from '../helpers/sources'
@@ -15,7 +14,9 @@ const familyExports = {
 }
 const registryExports = Object.values(familyExports).flat()
 const rootExports = [...registryExports, ...loadingSource.records.map(({ exportName }) => exportName)]
-const oldiconExports = Object.keys(OldIcons)
+const oldiconExports = Object.keys(import.meta.glob('../../src/oldicon/icons/*.tsx')).map((file) =>
+  file.slice(file.lastIndexOf('/') + 1, -4),
+)
 export const iconExports = {
   ...familyExports,
   registry: registryExports,

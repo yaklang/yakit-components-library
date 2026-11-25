@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 
-import { canonicalizeSvg, paintSemanticsSha256 } from './audit-icons.mjs'
+import { canonicalizeSvg, paintSemanticsSha256, parseSvg } from './audit-icons.mjs'
 import { ICON_STROKE_WIDTH_POLICY, SOLID_STROKE_WIDTH_POLICY } from './icon-audit-contracts.mjs'
 import { normalizeSvgStrokeWidth } from './icon-stroke-width.mjs'
 
@@ -63,17 +63,19 @@ function planOutlineManifest(packageRoot, sourcesMap, documents) {
     const localSource = sourceFrom(sourcesMap, packageRoot, `icons/outline/${record.file}`)
     const figmaSource = figmaByNode.get(record.exportedSourceNodeId)
     if (!figmaSource) throw new Error(`FIGMA_RAW_SOURCE_MISSING: outline/${record.exportedSourceNodeId}`)
+    const figmaTree = parseSvg(figmaSource)
+    const localTree = parseSvg(localSource)
     const figmaNormalizedAstSha256 = sha256(
-      canonicalizeSvg(figmaSource, outlineCanonicalOptions(record.exportedSourceNodeId)),
+      canonicalizeSvg(figmaTree, outlineCanonicalOptions(record.exportedSourceNodeId)),
     )
     const localNormalizedAstSha256 = sha256(
-      canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId)),
+      canonicalizeSvg(localTree, outlineCanonicalOptions(record.exportedSourceNodeId)),
     )
     const figmaGeometrySha256 = sha256(
-      canonicalizeSvg(figmaSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
+      canonicalizeSvg(figmaTree, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
     )
     const localGeometrySha256 = sha256(
-      canonicalizeSvg(localSource, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
+      canonicalizeSvg(localTree, outlineCanonicalOptions(record.exportedSourceNodeId, true)),
     )
     if (figmaNormalizedAstSha256 !== localNormalizedAstSha256)
       throw new Error(`NORMALIZED_AST_MISMATCH: outline/${record.file}`)
@@ -107,6 +109,8 @@ function planSolidManifest(packageRoot, sourcesMap, documents) {
     const localSource = sourceFrom(sourcesMap, packageRoot, `icons/${record.localFile}`)
     const figmaSource = figmaByNode.get(record.nodeId)
     if (!figmaSource) throw new Error(`FIGMA_RAW_SOURCE_MISSING: solid/${record.nodeId}`)
+    const figmaTree = parseSvg(figmaSource)
+    const localTree = parseSvg(localSource)
     const normalizedOptions = {
       ignoreUnreferencedIds: true,
       normalizeForegroundPaint: true,
@@ -118,12 +122,12 @@ function planSolidManifest(packageRoot, sourcesMap, documents) {
       normalizeStrokeWidth: false,
     }
     const paintOptions = { normalizeFigmaPrimary: true, normalizeStrokeWidth: false }
-    const figmaNormalizedAstSha256 = sha256(canonicalizeSvg(figmaSource, normalizedOptions))
-    const localNormalizedAstSha256 = sha256(canonicalizeSvg(localSource, normalizedOptions))
-    const figmaGeometrySha256 = sha256(canonicalizeSvg(figmaSource, geometryOptions))
-    const localGeometrySha256 = sha256(canonicalizeSvg(localSource, geometryOptions))
-    const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaSource, paintOptions)
-    const localPaintSemanticsSha256 = paintSemanticsSha256(localSource, paintOptions)
+    const figmaNormalizedAstSha256 = sha256(canonicalizeSvg(figmaTree, normalizedOptions))
+    const localNormalizedAstSha256 = sha256(canonicalizeSvg(localTree, normalizedOptions))
+    const figmaGeometrySha256 = sha256(canonicalizeSvg(figmaTree, geometryOptions))
+    const localGeometrySha256 = sha256(canonicalizeSvg(localTree, geometryOptions))
+    const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaTree, paintOptions)
+    const localPaintSemanticsSha256 = paintSemanticsSha256(localTree, paintOptions)
     if (figmaNormalizedAstSha256 !== localNormalizedAstSha256)
       throw new Error(`NORMALIZED_AST_MISMATCH: ${record.localFile}`)
     if (figmaGeometrySha256 !== localGeometrySha256) throw new Error(`GEOMETRY_MISMATCH: ${record.localFile}`)

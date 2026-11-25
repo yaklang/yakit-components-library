@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { checkIconStrokeWidths, runIconStrokeCheck, svgFiles } from '../../scripts/check-icon-stroke-width.mjs'
+import { checkIconAssets, runIconAssetCheck, svgFiles } from '../../scripts/check-icon-assets.mjs'
 import { readIconInputSync } from '../../scripts/icon-source-documents.mjs'
 import { normalizeSvgStrokeWidth, svgStrokeWidths } from '../../scripts/icon-stroke-width.mjs'
 
@@ -42,7 +42,7 @@ const register = (root: string, family: string, present: boolean) => {
 }
 
 const createCheckRoot = () => {
-  const root = mkdtempSync(join(tmpdir(), 'icon-stroke-check-'))
+  const root = mkdtempSync(join(tmpdir(), 'icon-asset-check-'))
   mkdirSync(resolve(root, 'src/loading'), { recursive: true })
   mkdirSync(resolve(root, 'src/outline'), { recursive: true })
   writeFileSync(resolve(root, 'src/outline/example.svg'), '<svg><path stroke="currentColor" stroke-width="1.5"/></svg>')
@@ -108,15 +108,10 @@ describe('current source coverage', () => {
   it('covers component-local SVGs as well as every public family and Loading', async () => {
     const expected = iconSourceFiles.map((file) => file.replace(/^icons\//, '')).sort()
     expect(await svgFiles(resolve(packageRoot, 'src'))).toEqual(expected)
-    expect(await checkIconStrokeWidths(packageRoot)).toEqual({
-      svgFiles: expected.length,
-      loading: 0,
-      violations: 0,
-    })
   })
 })
 
-describe('read-only stroke-width check CLI', () => {
+describe('read-only asset check CLI', () => {
   it('keeps --check read-only, including source and inventory mtimes', async () => {
     const root = createCheckRoot()
     const paths = ['src/outline/example.svg', 'src/loading/index.tsx']
@@ -125,11 +120,10 @@ describe('read-only stroke-width check CLI', () => {
         contents: readIconInputSync(resolve(root, file), 'utf8'),
         mtimeNs: statSync(resolve(root, file), { bigint: true }).mtimeNs,
       }))
-      await expect(runIconStrokeCheck(['--write'], root)).rejects.toThrow(/never writes files/)
-      await expect(runIconStrokeCheck(['--capture'], root)).rejects.toThrow(/never writes files/)
-      await expect(runIconStrokeCheck(['--check'], root)).resolves.toEqual({
+      await expect(runIconAssetCheck(['--write'], root)).rejects.toThrow(/never writes files/)
+      await expect(runIconAssetCheck(['--capture'], root)).rejects.toThrow(/never writes files/)
+      await expect(runIconAssetCheck(['--check'], root)).resolves.toEqual({
         svgFiles: 1,
-        loading: 0,
         violations: 0,
       })
       expect(
@@ -143,23 +137,23 @@ describe('read-only stroke-width check CLI', () => {
     }
   })
 
-  it.each([
-    ['attribute', '<svg><path stroke-width="2"/></svg>', /stroke-width=2/],
-    ['inline style', '<svg><path style="stroke-width: 2.5"/></svg>', /stroke-width=2\.5/],
-  ])('locates an invalid %s declaration', async (_label, source, diagnostic) => {
+  it('rejects missing and malformed registered SVG assets', async () => {
     const root = createCheckRoot()
+    const file = resolve(root, 'src/outline/example.svg')
     try {
-      writeFileSync(resolve(root, 'src/outline/example.svg'), source)
-      await expect(checkIconStrokeWidths(root)).rejects.toThrow(diagnostic)
+      rmSync(file)
+      await expect(checkIconAssets(root)).rejects.toThrow('outline/example.svg: registered source is missing')
+      writeFileSync(file, '<svg>')
+      await expect(checkIconAssets(root)).rejects.toThrow(/outline\/example\.svg: /)
     } finally {
       rmSync(root, { force: true, recursive: true })
     }
   })
 
-  it('accepts registered non-Outline widths and independent Loading defaults', async () => {
+  it('accepts registered SVGs regardless of stroke width and ignores Loading defaults', async () => {
     const root = createCheckRoot()
     try {
-      for (const family of ['solid', 'colorful']) {
+      for (const family of ['outline', 'solid', 'colorful']) {
         mkdirSync(resolve(root, `src/${family}`), { recursive: true })
         writeFileSync(
           resolve(root, `src/${family}/example.svg`),
@@ -169,9 +163,8 @@ describe('read-only stroke-width check CLI', () => {
       }
       writeFileSync(resolve(root, 'src/oldicon/assets/manual.svg'), '<svg><path stroke-width="3"/></svg>')
       writeFileSync(resolve(root, 'src/loading/index.tsx'), 'export const Loading = () => <path strokeWidth={3}/>;')
-      await expect(checkIconStrokeWidths(root)).resolves.toMatchObject({
+      await expect(checkIconAssets(root)).resolves.toMatchObject({
         violations: 0,
-        loading: 0,
       })
     } finally {
       rmSync(root, { force: true, recursive: true })
@@ -186,7 +179,7 @@ describe('read-only stroke-width check CLI', () => {
         'export const Loading = () => <path d="M0 0" strokeWidth={2} />;\n',
       )
       writeFileSync(resolve(root, 'src/unregistered.svg'), '<svg><path stroke-width="1"/></svg>')
-      await expect(checkIconStrokeWidths(root)).rejects.toThrow(/unregistered\.svg: source is not registered/)
+      await expect(checkIconAssets(root)).rejects.toThrow(/unregistered\.svg: source is not registered/)
     } finally {
       rmSync(root, { force: true, recursive: true })
     }

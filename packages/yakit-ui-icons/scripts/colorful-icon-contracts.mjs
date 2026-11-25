@@ -1,6 +1,10 @@
-import { readIconSources } from './icon-source-data.mjs'
-const colorfulSource = readIconSources().colorful
 import { createHash } from 'node:crypto'
+import { createRequire } from 'node:module'
+import { sourceGroups } from './icon-source-model.mjs'
+
+const require = createRequire(import.meta.url)
+const colorfulSource = require('../config/icon-sources/colorful.json')
+const display = require('../config/icon-display.json').families.colorful
 
 export const COLORFUL_SCHEMA_VERSION = 'colorful-inventory-v1'
 export const COLORFUL_POLICY_ID = 'colorful-v1'
@@ -34,7 +38,7 @@ export const COLORFUL_ICON_CATEGORIES = Object.freeze([
   'cursor',
 ])
 export const COLORFUL_GROUP_POLICY = Object.freeze(
-  colorfulSource.groups.map((group) =>
+  sourceGroups(colorfulSource, display).map((group) =>
     Object.freeze({
       ...group,
       rowCount: colorfulSource.records.filter((row) => row.groupNodeId === group.nodeId).length,

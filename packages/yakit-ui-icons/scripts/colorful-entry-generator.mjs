@@ -1,6 +1,5 @@
 import { readIconInput } from './icon-source-documents.mjs'
-import { readIconSources } from './icon-source-data.mjs'
-const colorfulSource = readIconSources().colorful
+import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -8,6 +7,7 @@ import { formatGeneratedFile } from './format-generated-file.mjs'
 
 import { colorfulComponentNodeId, colorfulLocalFile, validateColorfulInventory } from './colorful-icon-contracts.mjs'
 
+const colorfulSource = createRequire(import.meta.url)('../config/icon-sources/colorful.json')
 const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const PUBLIC_EXPOSURES = new Set(['canonical', 'semantic-alias'])
 const IDENTIFIER = /^[A-Za-z_$][\w$]*$/

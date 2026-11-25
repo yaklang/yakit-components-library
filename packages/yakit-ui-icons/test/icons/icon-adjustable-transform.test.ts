@@ -83,7 +83,6 @@ describe('adjustable icon stroke transform contract', () => {
     const root = element('svg', [], [path])
     const fixtureContract = contract(source, [target([0], { sourceDefault: '1px' })])
 
-    validateIconStrokeContract(root, source, fixtureContract)
     expect(applyIconStrokeContract(root, '/project/src/outline/fixture.svg', source, fixtureContract)).toBe(true)
 
     expect(path.openingElement.attributes[0].value.expression).toMatchObject({

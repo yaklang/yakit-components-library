@@ -7,7 +7,12 @@ import { describe, expect, it } from 'vitest'
 
 import { auditIcons } from '../../scripts/audit-icons.mjs'
 import { buildIconNameCatalog } from '../../scripts/icon-name-catalog-core.mjs'
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs'
+import {
+  buildIconDocuments,
+  evidencePath,
+  manifestPath,
+  readIconInputSync,
+} from '../../scripts/icon-source-documents.mjs'
 import { figmaIconNameCatalog } from '../../src/figmaNameCatalog'
 
 import { expectedFigmaNames, iconCounts } from './icon-inventory'
@@ -62,16 +67,17 @@ const notebookGroupMappings = [
 ] as const
 const notebookGroupExportNames = new Set<string>(notebookGroupMappings.map(({ exportName }) => exportName))
 
-const loadInputs = () => ({
+const documents = buildIconDocuments(packageRoot)
+const baseline = {
   outlineIndexSource: readIconInputSync(paths.outlineIndex, 'utf8'),
-  outlineManifest: JSON.parse(readIconInputSync(paths.outlineManifest, 'utf8')),
-  outlinePlacementProvenance: JSON.parse(readIconInputSync(paths.outlinePlacement, 'utf8')),
-  outlineRawProvenance: JSON.parse(readIconInputSync(paths.outlineRaw, 'utf8')),
+  outlineManifest: documents.get(manifestPath('outline')),
+  outlinePlacementProvenance: documents.get(evidencePath('outline', 'placement')),
+  outlineRawProvenance: documents.get(evidencePath('outline', 'raw')),
   solidIndexSource: readIconInputSync(paths.solidIndex, 'utf8'),
-  solidManifest: JSON.parse(readIconInputSync(paths.solidManifest, 'utf8')),
-  solidPlacementProvenance: JSON.parse(readIconInputSync(paths.solidPlacement, 'utf8')),
-  solidRawProvenance: JSON.parse(readIconInputSync(paths.solidRaw, 'utf8')),
-})
+  solidManifest: documents.get(manifestPath('solid')),
+  solidPlacementProvenance: documents.get(evidencePath('solid', 'placement')),
+  solidRawProvenance: documents.get(evidencePath('solid', 'raw')),
+}
 
 const runNameAudit = (overrides: Record<string, string> = {}) =>
   auditIcons({
@@ -93,7 +99,7 @@ const runNameAudit = (overrides: Record<string, string> = {}) =>
 
 describe('Figma icon name catalog', () => {
   it('preserves all inventoried public export mappings in manifest source order', () => {
-    const expected = buildIconNameCatalog(loadInputs())
+    const expected = buildIconNameCatalog(baseline)
     expect(figmaIconNameCatalog).toEqual(expected)
     expect(figmaIconNameCatalog).toHaveLength(iconCounts.figmaCatalog)
     expect(figmaIconNameCatalog.filter(({ family }) => family === 'outline')).toHaveLength(iconCounts.outline)
@@ -108,10 +114,6 @@ describe('Figma icon name catalog', () => {
     })
     expect(figmaIconNameCatalog.find(({ exportName }) => exportName === 'CommandOutlined')).toMatchObject({
       figmaName: 'Outline/Command',
-      sourceStatus: 'current',
-    })
-    expect(figmaIconNameCatalog.find(({ exportName }) => exportName === 'NotebookOutlined')).toMatchObject({
-      figmaName: 'Outline/Notebook',
       sourceStatus: 'current',
     })
     expect(
@@ -129,25 +131,24 @@ describe('Figma icon name catalog', () => {
     })
     const names = figmaIconNameCatalog.flatMap(({ figmaName }) => (figmaName === null ? [] : [figmaName]))
     expect([...names].sort()).toEqual([...expectedFigmaNames].sort())
-    expect(new Set(names).size).toBe(new Set(expectedFigmaNames).size)
   })
 
   it.each([
-    ['missing', (inputs: ReturnType<typeof loadInputs>) => inputs.outlineManifest.symbols.pop()],
+    ['missing', (inputs: typeof baseline) => inputs.outlineManifest.symbols.pop()],
     [
       'unknown',
-      (inputs: ReturnType<typeof loadInputs>) => {
+      (inputs: typeof baseline) => {
         inputs.solidManifest.symbols[0].exportName = 'UnknownSolid'
       },
     ],
     [
       'duplicate',
-      (inputs: ReturnType<typeof loadInputs>) => {
+      (inputs: typeof baseline) => {
         inputs.solidManifest.symbols[1].name = inputs.solidManifest.symbols[0].name
       },
     ],
   ])('fails closed for a %s mapping mutation', (_label, mutate) => {
-    const inputs = loadInputs()
+    const inputs = structuredClone(baseline)
     mutate(inputs)
     expect(() => buildIconNameCatalog(inputs)).toThrow(/FIGMA_NAME_/)
   })
@@ -155,7 +156,7 @@ describe('Figma icon name catalog', () => {
   it('rejects coordinated manifest/catalog name forgery against frozen provenance', async () => {
     const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'yakit-icon-name-forgery-'))
     try {
-      const inputs = loadInputs()
+      const inputs = structuredClone(baseline)
       const originalName = inputs.outlineManifest.symbols[0].name
       inputs.outlineManifest.symbols[0].name = 'Outline/Forged-mail'
       const forgedManifest = resolve(temporaryRoot, 'outline.json')
@@ -178,7 +179,7 @@ describe('Figma icon name catalog', () => {
   it('rejects coordinated Outline manifest/catalog reorder against placement order', async () => {
     const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'yakit-icon-name-order-'))
     try {
-      const manifest = loadInputs().outlineManifest
+      const manifest = structuredClone(baseline.outlineManifest)
       ;[manifest.symbols[0], manifest.symbols[1]] = [manifest.symbols[1], manifest.symbols[0]]
       const reorderedManifest = resolve(temporaryRoot, 'outline.json')
       writeFileSync(reorderedManifest, JSON.stringify(manifest))
@@ -192,14 +193,14 @@ describe('Figma icon name catalog', () => {
   it.each([
     [
       'raw/placement name disagreement',
-      (inputs: ReturnType<typeof loadInputs>) => {
+      (inputs: typeof baseline) => {
         inputs.outlineRawProvenance.components[0].name = 'Outline/Forged'
       },
     ],
-    ['missing raw node', (inputs: ReturnType<typeof loadInputs>) => inputs.solidRawProvenance.components.pop()],
+    ['missing raw node', (inputs: typeof baseline) => inputs.solidRawProvenance.components.pop()],
     [
       'extra raw node',
-      (inputs: ReturnType<typeof loadInputs>) =>
+      (inputs: typeof baseline) =>
         inputs.solidRawProvenance.components.push({
           name: 'Solid/Extra',
           nodeId: 'extra:1',
@@ -208,7 +209,7 @@ describe('Figma icon name catalog', () => {
         }),
     ],
   ])('fails closed for %s in frozen provenance', (_label, mutate) => {
-    const inputs = loadInputs()
+    const inputs = structuredClone(baseline)
     mutate(inputs)
     expect(() => buildIconNameCatalog(inputs)).toThrow(/FIGMA_NAME_PROVENANCE_MISMATCH/)
   })

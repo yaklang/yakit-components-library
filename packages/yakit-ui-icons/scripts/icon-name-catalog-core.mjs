@@ -2,10 +2,11 @@ import { parseIconIndexMapping } from './icon-index-mapping.mjs'
 export { parseIconIndexMapping } from './icon-index-mapping.mjs'
 import path from 'node:path'
 
-import { readIconSources, sourceExports } from './icon-source-data.mjs'
-const sources = readIconSources()
-const outlineCount = sourceExports(sources.outline).length
-const solidCount = sourceExports(sources.solid).length
+import { createRequire } from 'node:module'
+
+const require = createRequire(import.meta.url)
+const outlineCount = require('../config/icon-sources/outline.json').records.length
+const solidCount = require('../config/icon-sources/solid.json').records.length
 const EXPECTED_COUNTS = Object.freeze({
   outline: outlineCount,
   solid: solidCount,

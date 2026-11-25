@@ -1492,7 +1492,8 @@ async function main() {
   const output = outputFlag === '--output' ? path.resolve(outputValue) : path.resolve('yakit-ui-icons-size-report.json')
   let report
   try {
-    if (!tarball) throw new Error('usage: pnpm measure:size <exact-tarball.tgz> [--output report.json]')
+    if (!tarball)
+      throw new Error('usage: node scripts/size-observability.mjs <exact-tarball.tgz> [--output report.json]')
     report = await measureTarball(tarball)
     const validationErrors = validateSizeReportV2(report)
     if (validationErrors.length > 0) {

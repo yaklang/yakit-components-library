@@ -1,17 +1,22 @@
-import { readFileSync, readdirSync } from 'node:fs'
+import { accessSync, constants, readFileSync, readdirSync, statSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 // Oldicon is ordinary handwritten source. Read actual modules; never generate or rename them.
-export function readOldiconAssets(root = fileURLToPath(new URL('../', import.meta.url))) {
+export function readOldiconAssets(
+  root = fileURLToPath(new URL('../', import.meta.url)),
+  readText = (file) => readFileSync(file, 'utf8'),
+) {
   const directory = path.join(root, 'src/oldicon')
-  const barrel = readFileSync(path.join(directory, 'index.tsx'), 'utf8')
+  const barrel = readText(path.join(directory, 'index.tsx'))
   const exports = [...barrel.matchAll(/export \{ (\w+) \} from ['"]\.\/icons\/(\w+)\.js['"]/g)].map(
     ([, exportName, module]) => {
-      const source = readFileSync(path.join(directory, 'icons', `${module}.tsx`), 'utf8')
+      const source = readText(path.join(directory, 'icons', `${module}.tsx`))
       const assetFile = source.match(/from ['"]\.\.\/(assets\/[^'"]+\.svg)\?react['"]/)?.[1]
       if (!assetFile || !source.includes(`export const ${exportName} =`))
         throw new Error(`OLDICON_MODULE_INVALID: ${exportName}`)
-      readFileSync(path.join(directory, assetFile))
+      const assetPath = path.join(directory, assetFile)
+      accessSync(assetPath, constants.R_OK)
+      if (!statSync(assetPath).isFile()) throw new Error(`OLDICON_ASSET_INVALID: ${assetFile}`)
       return { exportName, assetFile }
     },
   )

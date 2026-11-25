@@ -19,11 +19,6 @@ import { formatGeneratedFile } from './format-generated-file.mjs'
 
 export { canonicalJson } from './icon-audit-contracts.mjs'
 
-// Load source projections lazily: the document builder also uses this module's SVG parser.
-async function readIconInput(...args) {
-  return (await import('./icon-source-documents.mjs')).readIconInput(...args)
-}
-
 const DRAWABLES = new Set(['circle', 'ellipse', 'image', 'line', 'path', 'polygon', 'polyline', 'rect', 'text', 'use'])
 const DEFINITION_CONTAINERS = new Set([
   'clippath',
@@ -189,7 +184,7 @@ export function canonicalizeSvg(
     semanticEraseSourceId,
   } = {},
 ) {
-  const root = parseSvg(source)
+  const root = typeof source === 'string' ? parseSvg(source) : source
   const ignorePresentationIds = ignoreUnreferencedIds || geometryOnly
   const referencedIds = new Set()
   if (ignorePresentationIds) visit(root, (node) => referencesFrom(node).forEach(({ id }) => referencedIds.add(id)))
@@ -422,8 +417,8 @@ export function invalidStrokeWidths(source) {
   const violations = []
   visit(root, (node) => {
     const attributeValue = node.attributes.get('stroke-width')
-    if (attributeValue !== undefined && attributeValue.trim() !== ICON_STROKE_WIDTH)
-      violations.push({ surface: 'attribute', tag: lowerName(node), value: attributeValue.trim() })
+    if (attributeValue !== undefined && attributeValue !== ICON_STROKE_WIDTH)
+      violations.push({ surface: 'attribute', tag: lowerName(node), value: attributeValue })
     for (const { attribute, value } of styleDeclarations(node.attributes.get('style') ?? ''))
       if (attribute === 'stroke-width' && value !== ICON_STROKE_WIDTH)
         violations.push({ surface: 'style', tag: lowerName(node), value })
@@ -440,14 +435,18 @@ function paintValues(node) {
   return values
 }
 
-export function inspectSvg({ manifest, relativePath, source, variant }) {
-  const errors = []
+export function inspectSvg(options) {
   let root
   try {
-    root = parseSvg(source)
+    root = parseSvg(options.source)
   } catch {
     return ['XML_INVALID']
   }
+  return inspectParsedSvg(options, root)
+}
+
+function inspectParsedSvg({ manifest, relativePath, source, variant }, root) {
+  const errors = []
   if (variant === 'outline' && invalidStrokeWidths(root).length > 0) errors.push('STROKE_WIDTH_INVALID')
   const expectedSize = variant === 'outline' ? '24' : '20'
   const expectedViewBox = `0 0 ${expectedSize} ${expectedSize}`
@@ -480,6 +479,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
     }
     references.push(...referencesFrom(node))
     if (variant === 'outline') {
+      if (lowerName(node) === 'style') errors.push('STROKE_WIDTH_STYLESHEET_UNSUPPORTED')
       for (const { attribute, value } of paintValues(node)) {
         if (
           value === 'currentColor' ||
@@ -540,7 +540,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
   if (record?.figmaRawSvg && record.figmaRawSvgSha256 !== sha256(record.figmaRawSvg))
     errors.push('FIGMA_RAW_HASH_MISMATCH')
   const normalizedAstSha256 = sha256(
-    canonicalizeSvg(source, {
+    canonicalizeSvg(root, {
       ignoreUnreferencedIds: variant === 'solid',
       normalizeForegroundPaint: true,
       normalizeSemanticErase: true,
@@ -549,7 +549,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
     }),
   )
   const geometrySha256 = sha256(
-    canonicalizeSvg(source, {
+    canonicalizeSvg(root, {
       geometryOnly: true,
       ignoreUnreferencedIds: variant === 'solid',
       normalizeSemanticErase: true,
@@ -568,7 +568,7 @@ export function inspectSvg({ manifest, relativePath, source, variant }) {
     variant === 'solid' &&
     record?.localPaintSemanticsSha256 &&
     record.localPaintSemanticsSha256 !==
-      paintSemanticsSha256(source, {
+      paintSemanticsSha256(root, {
         normalizeFigmaPrimary: true,
         normalizeStrokeWidth: variant !== 'solid',
       })
@@ -726,7 +726,13 @@ function validateManifest(manifest, files, policy) {
   return [...new Set(errors)]
 }
 
-async function validateProvenanceEvidence({ figmaRawProvenancePath, manifest, placementProvenancePath, policy }) {
+async function validateProvenanceEvidence({
+  figmaRawProvenancePath,
+  manifest,
+  placementProvenancePath,
+  policy,
+  readIconInput,
+}) {
   if (!manifest || !figmaRawProvenancePath || !placementProvenancePath) return []
   const errors = []
   const [rawText, placementText] = await Promise.all([
@@ -751,8 +757,9 @@ async function validateProvenanceEvidence({ figmaRawProvenancePath, manifest, pl
       errors.push('FIGMA_RAW_HASH_MISMATCH')
       continue
     }
+    const figmaTree = parseSvg(figmaSource)
     const normalizedAstSha256 = sha256(
-      canonicalizeSvg(figmaSource, {
+      canonicalizeSvg(figmaTree, {
         ignoreUnreferencedIds: policy.variant === 'solid',
         normalizeForegroundPaint: true,
         normalizeSemanticErase: true,
@@ -761,7 +768,7 @@ async function validateProvenanceEvidence({ figmaRawProvenancePath, manifest, pl
       }),
     )
     const geometrySha256 = sha256(
-      canonicalizeSvg(figmaSource, {
+      canonicalizeSvg(figmaTree, {
         geometryOnly: true,
         ignoreUnreferencedIds: policy.variant === 'solid',
         normalizeSemanticErase: true,
@@ -773,7 +780,7 @@ async function validateProvenanceEvidence({ figmaRawProvenancePath, manifest, pl
       errors.push('AST_DIGEST_MISMATCH')
     if (symbol.figmaGeometrySha256 !== geometrySha256 || symbol.geometrySha256 !== geometrySha256)
       errors.push('GEOMETRY_DIGEST_MISMATCH')
-    const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaSource, {
+    const figmaPaintSemanticsSha256 = paintSemanticsSha256(figmaTree, {
       normalizeFigmaPrimary: policy.variant === 'solid',
       normalizeStrokeWidth: policy.variant !== 'solid',
     })
@@ -838,7 +845,7 @@ export function parseIconIndex(source) {
   return { duplicateExports, duplicateImports, exports, importFiles, missingImportTargets }
 }
 
-async function validateIndex({ files, indexPath, manifest, root }) {
+async function validateIndex({ files, indexPath, manifest, root, readIconInput }) {
   if (!indexPath) return []
   const errors = []
   let indexSource
@@ -856,6 +863,7 @@ async function validateIndex({ files, indexPath, manifest, root }) {
     files.filter((file) => file.variant === variant).map(({ relativePath }) => path.basename(relativePath)),
   )
   for (const file of parsed.importFiles.keys()) {
+    if (variantFiles.has(file)) continue
     try {
       await readIconInput(path.join(root, variant, file))
     } catch (error) {
@@ -928,6 +936,9 @@ export async function auditIcons({
   solidNamePlacementProvenancePath,
   solidNameRawProvenancePath,
 }) {
+  // The document builder also imports this SVG parser.
+  const { createIconInputReader } = await import('./icon-source-documents.mjs')
+  const readIconInput = createIconInputReader()
   const manifest = manifestPath ? JSON.parse(await readIconInput(manifestPath, 'utf8')) : undefined
   const resolvedPolicyId = policyId ?? manifest?.policyId ?? 'outline-v1'
   const policy = policyOverride ?? getIconAuditPolicy(resolvedPolicyId)
@@ -936,15 +947,6 @@ export async function auditIcons({
     policyId || manifest?.policyId || manifest?.variant ? [policy.variant] : undefined,
   )
   const failures = []
-  for (const file of files) {
-    const source = await readIconInput(file.absolutePath, 'utf8')
-    inspectSvg({
-      manifest,
-      relativePath: file.relativePath,
-      source,
-      variant: file.variant,
-    }).forEach((token) => failures.push({ path: file.relativePath, token }))
-  }
   const owners = new Map()
   for (const file of files) {
     const source = await readIconInput(file.absolutePath, 'utf8')
@@ -952,8 +954,11 @@ export async function auditIcons({
     try {
       svg = parseSvg(source)
     } catch {
+      failures.push({ path: file.relativePath, token: 'XML_INVALID' })
       continue
     }
+    const tokens = inspectParsedSvg({ manifest, relativePath: file.relativePath, source, variant: file.variant }, svg)
+    for (const token of tokens) failures.push({ path: file.relativePath, token })
     visit(svg, (node) => {
       const id = node.attributes.get('id')
       if (!id) return
@@ -964,13 +969,14 @@ export async function auditIcons({
   }
   validateManifest(manifest, files, policy).forEach((token) => failures.push({ path: manifestPath, token }))
   // validateIndex is deliberately async because import targets are resolved from disk.
-  const indexFailures = await validateIndex({ files, indexPath, manifest, root })
+  const indexFailures = await validateIndex({ files, indexPath, manifest, root, readIconInput })
   indexFailures.forEach((token) => failures.push({ path: indexPath, token }))
   const provenanceFailures = await validateProvenanceEvidence({
     figmaRawProvenancePath,
     manifest,
     placementProvenancePath,
     policy,
+    readIconInput,
   })
   provenanceFailures.forEach((token) => failures.push({ path: manifestPath, token }))
   if (iconNameCatalogPath) {
@@ -1038,27 +1044,12 @@ export async function auditIcons({
 }
 
 function parseArguments(argv) {
-  const options = {
-    iconNameCatalogPath: undefined,
-    outlineNameIndexPath: undefined,
-    outlineNameManifestPath: undefined,
-    outlineNamePlacementProvenancePath: undefined,
-    outlineNameRawProvenancePath: undefined,
-    figmaRawProvenancePath: undefined,
-    indexPath: undefined,
-    manifestPath: undefined,
-    placementProvenancePath: undefined,
-    policyId: undefined,
-    root: undefined,
-    solidNameIndexPath: undefined,
-    solidNameManifestPath: undefined,
-    solidNamePlacementProvenancePath: undefined,
-    solidNameRawProvenancePath: undefined,
-  }
+  const options = {}
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index]
     if (argument === '--check') continue
-    if (argument === '--manifest') options.manifestPath = argv[++index]
+    if (argument === '--package-inputs') options.packageInputs = true
+    else if (argument === '--manifest') options.manifestPath = argv[++index]
     else if (argument === '--policy') options.policyId = argv[++index]
     else if (argument === '--index') options.indexPath = argv[++index]
     else if (argument === '--name-catalog') options.iconNameCatalogPath = argv[++index]
@@ -1080,10 +1071,27 @@ function parseArguments(argv) {
   return options
 }
 
+async function packageAuditInputs(packageRoot, variant) {
+  const { manifestPath, evidencePath } = await import('./icon-source-documents.mjs')
+  const inputs = {
+    manifestPath: path.join(packageRoot, manifestPath(variant)),
+    indexPath: path.join(packageRoot, 'src', variant, 'index.tsx'),
+    iconNameCatalogPath: path.join(packageRoot, 'src/figmaNameCatalog.ts'),
+  }
+  for (const family of ['outline', 'solid']) {
+    inputs[`${family}NameIndexPath`] = path.join(packageRoot, 'src', family, 'index.tsx')
+    inputs[`${family}NameManifestPath`] = path.join(packageRoot, manifestPath(family))
+    inputs[`${family}NamePlacementProvenancePath`] = path.join(packageRoot, evidencePath(family, 'placement'))
+    inputs[`${family}NameRawProvenancePath`] = path.join(packageRoot, evidencePath(family, 'raw'))
+  }
+  return inputs
+}
+
 async function main() {
-  const options = parseArguments(process.argv.slice(2))
+  const args = parseArguments(process.argv.slice(2))
   const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-  const policy = getIconAuditPolicy(options.policyId ?? 'outline-v1')
+  const policy = getIconAuditPolicy(args.policyId ?? 'outline-v1')
+  const options = args.packageInputs ? { ...(await packageAuditInputs(packageRoot, policy.variant)), ...args } : args
   const root = path.resolve(process.cwd(), options.root ?? path.join(packageRoot, 'src'))
   const manifestPath = options.manifestPath ? path.resolve(process.cwd(), options.manifestPath) : undefined
   const indexPath = options.indexPath

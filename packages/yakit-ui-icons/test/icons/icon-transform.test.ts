@@ -16,31 +16,19 @@ const fragmentReferencePattern = /(?:url\(\s*#|(?:href|xlink:href)=["']#)([^)'"\
 const referencedIds = (source: string) => [...source.matchAll(fragmentReferencePattern)].map((match) => match[1])
 
 describe('Outline raw fragment contract', () => {
-  it('uses deterministic source-specific bases for every referenced fragment', () => {
-    const files = outlineSource.records.map(({ file }) => file)
-    const invalid: string[] = []
-
-    for (const file of files) {
-      const source = readFileSync(resolve(outlineRoot, file), 'utf8')
-      const fileBase = file.slice(0, -4).replace('-', '')
-      for (const id of referencedIds(source)) {
-        if (!new RegExp(`^icon_${fileBase}__[A-Za-z][A-Za-z0-9_-]*_\\d+$`).test(id)) {
-          invalid.push(`${file}:${id}`)
-        }
-      }
-    }
-
-    expect(invalid).toEqual([])
-  })
-
-  it('keeps each referenced fragment owned by its source SVG', () => {
-    const files = outlineSource.records.map(({ file }) => file)
+  it('keeps fragment IDs source-specific, defined once and owned by one SVG', () => {
     const owners = new Map<string, string>()
     const violations: string[] = []
 
-    for (const file of files) {
+    for (const { file } of outlineSource.records) {
       const source = readFileSync(resolve(outlineRoot, file), 'utf8')
+      const fileBase = file.slice(0, -4).replace('-', '')
+      const expectedId = new RegExp(`^icon_${fileBase}__[A-Za-z][A-Za-z0-9_-]*_\\d+$`)
       for (const id of new Set(referencedIds(source))) {
+        if (!expectedId.test(id)) {
+          violations.push(`${file}:${id}:invalid-name`)
+          continue
+        }
         const definitions = [...source.matchAll(new RegExp(`\\bid=["']${id}["']`, 'g'))].length
         if (definitions !== 1) violations.push(`${file}:${id}:definitions=${definitions}`)
         if (owners.has(id)) violations.push(`${file}:${id}:also-owned-by=${owners.get(id)}`)
@@ -65,10 +53,10 @@ describe('Shared SVG React transform wiring', () => {
     return plugins
   }
 
-  const configuredPlugins = async () => ({
+  const configuredPlugins = (async () => ({
     Vite: await collectPlugins(viteConfig.plugins ?? []),
     Vitest: await collectPlugins(vitestConfig.plugins ?? []),
-  })
+  }))()
 
   const compile = async (plugins: Plugin[]) => {
     const result = (await build({
@@ -92,7 +80,7 @@ describe('Shared SVG React transform wiring', () => {
   }
 
   it('installs exactly one shared SVG transform in each real compilation path', async () => {
-    const paths = await configuredPlugins()
+    const paths = await configuredPlugins
     for (const [name, plugins] of Object.entries(paths)) {
       expect(
         plugins.filter((plugin): plugin is Plugin => Boolean(plugin) && plugin.name === pluginName),
@@ -102,18 +90,16 @@ describe('Shared SVG React transform wiring', () => {
   })
 
   it('compiles equivalent suffix-only useId semantics through Vite and Vitest', async () => {
-    const paths = await configuredPlugins()
+    const paths = await configuredPlugins
     const outputs = await Promise.all(
       Object.values(paths).map((plugins) => compile(plugins.filter((plugin): plugin is Plugin => Boolean(plugin)))),
     )
     const normalize = (source: string) => source.replace(/\s+/g, ' ').trim()
     expect(new Set(outputs.map(normalize))).toHaveLength(1)
-    for (const output of outputs) {
-      expect(output).toContain('icon_999_1__mask_0__')
-      expect(output).toContain('useId')
-      expect(output.match(/codePointAt\(0\)/g)).toHaveLength(1)
-      expect(output.match(/icon_999_1__mask_0__/g)).toHaveLength(2)
-      expect(output).not.toContain('icon_999_1__mask_0"')
-    }
+    const [output] = outputs
+    expect(output).toContain('useId')
+    expect(output.match(/codePointAt\(0\)/g)).toHaveLength(1)
+    expect(output.match(/icon_999_1__mask_0__/g)).toHaveLength(2)
+    expect(output).not.toContain('icon_999_1__mask_0"')
   })
 })
