@@ -65,20 +65,27 @@ test('root update covers new icons and navigation, checks drift without writing 
   const sourcePath = 'packages/yakit-ui-icons/config/icon-sources/colorful.json'
   const storyPath = 'storybook/stories/icons/Icon.stories.tsx'
   const generatedPath = 'storybook/stories/icons/icon-colorful.generated.ts'
+  const offlinePage = 'packages/yakit-ui-icons/catalog/index.html'
+  const privateManifest = 'packages/yakit-ui/config/icon-sources/private.json'
+  const copy = async (file) => {
+    const target = path.join(root, file)
+    await mkdir(path.dirname(target), { recursive: true })
+    await cp(new URL(`../../${file}`, import.meta.url), target, { recursive: true })
+  }
   try {
-    for (const dir of [
+    for (const file of [
+      '.prettierrc',
       'packages/yakit-ui-icons/config',
       'packages/yakit-ui-icons/src',
-      'packages/yakit-ui/src/components',
-      'packages/yakit-ui/config/icon-sources',
-      'storybook/stories/icons',
-    ]) {
-      await mkdir(path.dirname(path.join(root, dir)), { recursive: true })
-      await cp(new URL(`../../${dir}`, import.meta.url), path.join(root, dir), {
-        recursive: true,
-      })
-    }
-    await runWorkspaceIconUpdate([], root)
+      offlinePage,
+      privateManifest,
+      storyPath,
+      generatedPath,
+    ])
+      await copy(file)
+    const privateIcons = JSON.parse(await read(privateManifest))
+    await mkdir(path.join(root, 'packages/yakit-ui/src/components'), { recursive: true })
+    for (const file of privateIcons.files) await copy(`packages/yakit-ui/src/${file}`)
     const source = JSON.parse(await read(sourcePath))
     const projectPath = 'packages/yakit-ui-icons/config/icon-project/colorful.json'
     const project = JSON.parse(await read(projectPath))
@@ -112,37 +119,32 @@ test('root update covers new icons and navigation, checks drift without writing 
     assert.equal(await read(generatedPath), beforeCatalog)
     // Invalid presentation must prevent even public SVG writes.
     group.storybook.exportName = 'Overview'
-    await write(sourcePath, JSON.stringify(source, null, 2) + '\n')
-    await write(projectPath, JSON.stringify(project, null, 2) + '\n')
     await write(displayPath, JSON.stringify(display, null, 2) + '\n')
     await assert.rejects(runWorkspaceIconUpdate([], root), /STORYBOOK_EXPORT_INVALID/)
     await assert.rejects(read('packages/yakit-ui-icons/src/colorful/99999-1.svg'), /ENOENT/)
     group.storybook.exportName = 'NewColorfulGroup'
-    await write(sourcePath, JSON.stringify(source, null, 2) + '\n')
-    await write(projectPath, JSON.stringify(project, null, 2) + '\n')
     await write(displayPath, JSON.stringify(display, null, 2) + '\n')
     await runWorkspaceIconUpdate(['--family', 'colorful'], root)
     assert.match(await read(storyPath), /export const NewColorfulGroup/)
     assert.match(await read(generatedPath), /99999:1/)
-    const offlinePage = 'packages/yakit-ui-icons/catalog/index.html'
     assert.match(await read(offlinePage), /NewFileTypeColorful/)
     assert.match(await read(offlinePage), /99999:1/)
     assert.match(await read('packages/yakit-ui-icons/src/colorful/99999-1.svg'), /#123456/)
-    assert.match(await runWorkspaceIconUpdate([], root), /UPDATED 0 file/)
-    assert.match(await runWorkspaceIconUpdate(['--check'], root), /CHECK_OK 0 file/)
     await write(offlinePage, 'stale catalog\n')
-    await assert.rejects(runWorkspaceIconUpdate(['--check'], root), /catalog\/index.html/)
-    assert.equal(await read(offlinePage), 'stale catalog\n')
-    await runWorkspaceIconUpdate([], root)
-    assert.match(await read(offlinePage), /NewFileTypeColorful/)
     await write(generatedPath, '// stale\n')
-    await assert.rejects(
-      runWorkspaceIconUpdate(['--family', 'colorful', '--check'], root),
-      /icon-colorful.generated.ts/,
-    )
-    await runWorkspaceIconUpdate(['--family', 'outline'], root)
+    await assert.rejects(runWorkspaceIconUpdate(['--family', 'colorful', '--check'], root), (error) => {
+      const lines = error.message.split('\n')
+      assert.ok(lines.includes(offlinePage))
+      assert.ok(lines.includes(generatedPath))
+      return true
+    })
+    assert.equal(await read(offlinePage), 'stale catalog\n')
     assert.equal(await read(generatedPath), '// stale\n')
-    await runWorkspaceIconUpdate(['--family', 'colorful'], root)
+    await runWorkspaceIconUpdate(['--family', 'outline'], root)
+    assert.match(await read(offlinePage), /NewFileTypeColorful/)
+    assert.equal(await read(generatedPath), '// stale\n')
+    assert.equal(await runWorkspaceIconUpdate([], root), `ICONS_UPDATED 1 file(s)\n${generatedPath}\n`)
+    assert.match(await read(generatedPath), /99999:1/)
     assert.match(await runWorkspaceIconUpdate(['--check'], root), /CHECK_OK 0 file/)
   } finally {
     await rm(root, { recursive: true, force: true })

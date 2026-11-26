@@ -21,19 +21,16 @@ import {
 } from '../../scripts/import-icon-sources.mjs'
 import { readIconSources } from '../../scripts/icon-source-data.mjs'
 
-async function fixture(run) {
+async function fixture(paths, run) {
   const root = await mkdtemp(path.join(tmpdir(), 'yakit-icons-'))
+  const oldiconRoot = path.join(packageRoot, 'src/oldicon')
   try {
-    for (const directory of ['config', 'src', 'test/fixtures/icons', 'scripts'])
-      await cp(path.join(packageRoot, directory), path.join(root, directory), {
+    for (const entry of paths)
+      await cp(path.join(packageRoot, entry), path.join(root, entry), {
         recursive: true,
+        // Tests that exercise handwritten icons request src/oldicon separately.
+        filter: entry === 'src' ? (source) => source !== oldiconRoot : undefined,
       })
-    await cp(path.join(packageRoot, '.prettierrc.json'), path.join(root, '.prettierrc.json')).catch(async () => {
-      await writeFile(
-        path.join(root, '.prettierrc.json'),
-        jsonText({ singleQuote: true, printWidth: 100, trailingComma: 'all' }),
-      )
-    })
     await run(root)
   } finally {
     await rm(root, { recursive: true, force: true })
@@ -101,43 +98,73 @@ test('URL and export naming reject ambiguity instead of guessing', () => {
   assert.ok(renderImportedSvg({ nodeId: '1:2', raw: { svg: solidSvg } }, 'outline').includes('currentColor'))
 })
 
-for (const family of ['outline', 'solid', 'colorful'])
-  test(`${family}: import, generate, update and idempotence without changing unrelated components`, () =>
-    fixture(async (root) => {
-      const originalLoading = await readIconInput(path.join(root, 'src/loading/index.tsx'), 'utf8')
-      const request = await input(root, family)
-      const imported = await planSourceImport(request, root)
-      assert.equal(imported.report[0].status, 'added')
+test('imports and generates all three families together and preserves exports on family updates', () =>
+  fixture(['config', 'src'], async (root) => {
+    const cases = [
+      { family: 'outline', nodeId: '999999:1', exportName: 'WorkflowExampleOutlined', paint: 'stroke="currentColor"' },
+      { family: 'solid', nodeId: '999999:2', exportName: 'WorkflowExampleSolid', paint: 'fill="currentColor"' },
+      {
+        family: 'colorful',
+        nodeId: '999999:3',
+        exportName: 'WorkflowExampleColorful',
+        paint: 'fill="var(--Colors-Use-Neutral-Text-2-Primary, #F28C45)"',
+      },
+    ].map((entry) => ({ ...entry, file: entry.nodeId.replace(':', '-') + '.svg' }))
+    const originalLoading = await readFile(path.join(root, 'src/loading/index.tsx'), 'utf8')
+    const request = { schemaVersion: 1, icons: [] }
+    for (const { family, nodeId } of cases) {
+      const { icons } = await input(root, family, nodeId)
+      request.icons.push(...icons)
+    }
+
+    const imported = await planSourceImport(request, root)
+    for (const { family, nodeId, exportName, file } of cases) {
+      assert.deepEqual(
+        imported.report.find((r) => r.nodeId === nodeId),
+        { nodeId, exportName, status: 'added' },
+      )
       assert.ok(imported.changes.has(`config/icon-sources/${family}.json`))
       assert.ok(imported.changes.has(`config/icon-project/${family}.json`))
-      assert.ok(imported.changes.has(`config/icon-sources/svg/${fileKey}/999999-1.svg`))
-      await applyChanges(root, imported.changes)
-      await assert.rejects(runIconUpdate(['--check'], root), /ICON_GENERATED_DRIFT|ICON_SOURCE_MISSING/)
-      const changes = await planIconUpdate(root)
-      assert.ok(changes.has(`src/${family}/999999-1.svg`))
+      assert.ok(imported.changes.has(`config/icon-sources/svg/${fileKey}/${file}`))
+    }
+    await applyChanges(root, imported.changes)
+    await assert.rejects(runIconUpdate(['--check'], root), (error) => {
+      assert.match(error.message, /ICON_GENERATED_DRIFT/)
+      const paths = error.message.split('\n')
+      for (const { family, file } of cases) assert.ok(paths.includes(`src/${family}/${file}`), family)
+      return true
+    })
+    await runIconUpdate([], root)
+    assert.equal((await planIconUpdate(root)).size, 0)
+    assert.equal((await planSourceImport(request, root)).changes.size, 0)
+
+    for (const { family, file, paint } of cases) {
+      const source = await readFile(path.join(root, 'src', family, file), 'utf8')
+      assert.ok(source.includes(paint), family)
+    }
+    for (const icon of request.icons) {
+      icon.name = `${icon.family}/renamed-in-figma`
+      const svg = await readFile(icon.svgPath, 'utf8')
+      await writeFile(icon.svgPath, svg.replace('M2 2', 'M3 3'))
+    }
+    const update = await planSourceImport(request, root)
+    await applyChanges(root, update.changes)
+    for (const { family, nodeId, exportName, file } of cases) {
+      assert.deepEqual(
+        update.report.find((r) => r.nodeId === nodeId),
+        { nodeId, exportName, status: 'updated' },
+      )
+      const changes = await planIconUpdate(root, { family })
+      assert.ok(changes.has(`src/${family}/${file}`))
       await applyChanges(root, changes)
-      assert.equal((await planIconUpdate(root)).size, 0)
-      const repeat = await planSourceImport(request, root)
-      assert.equal(repeat.changes.size, 0)
-      const source = await readIconInput(path.join(root, `src/${family}/999999-1.svg`), 'utf8')
-      assert.ok(
-        source.includes(family === 'colorful' ? 'var(--Colors-Use-Neutral-Text-2-Primary, #F28C45)' : 'currentColor'),
-      )
-      request.icons[0].name = `${family}/renamed-in-figma`
-      await writeFile(
-        request.icons[0].svgPath,
-        (await readIconInput(request.icons[0].svgPath, 'utf8')).replace('M2 2', 'M3 3'),
-      )
-      const update = await planSourceImport(request, root)
-      assert.equal(update.report[0].exportName, imported.report[0].exportName)
-      await applyChanges(root, update.changes)
-      await applyChanges(root, await planIconUpdate(root, { family }))
-      assert.equal((await planIconUpdate(root)).size, 0)
-      assert.equal(await readIconInput(path.join(root, 'src/loading/index.tsx'), 'utf8'), originalLoading)
-    }))
+      assert.match(await readFile(path.join(root, 'src', family, file), 'utf8'), /d="M3 3/)
+    }
+    assert.equal((await planIconUpdate(root)).size, 0)
+    assert.equal(await readFile(path.join(root, 'src/loading/index.tsx'), 'utf8'), originalLoading)
+  }))
 
 test('bad batch does not write good nodes, duplicate exports fail, missing records cannot remove public icons', () =>
-  fixture(async (root) => {
+  fixture(['config', 'src'], async (root) => {
     const request = await input(root, 'outline')
     request.icons.push({
       ...request.icons[0],
@@ -157,7 +184,7 @@ test('bad batch does not write good nodes, duplicate exports fail, missing recor
 
 for (const kind of ['new', 'existing'])
   test(`Outline stroke preflight rejects an unsupported ${kind} source without writing the batch`, () =>
-    fixture(async (root) => {
+    fixture(['config'], async (root) => {
       const request = await input(root, 'outline')
       request.icons[0].evidence = { component: { nodeType: 'COMPONENT' } }
       const record =
@@ -181,7 +208,7 @@ for (const kind of ['new', 'existing'])
     }))
 
 test('Oldicon assets are manually maintained and never regenerated', () =>
-  fixture(async (root) => {
+  fixture(['config', 'src', 'src/oldicon'], async (root) => {
     const { readOldiconAssets } = await import('../../scripts/oldicon-assets.mjs')
     const inventory = readOldiconAssets(root)
     const file = path.join(root, 'src/oldicon', inventory.assets[0])
@@ -253,7 +280,7 @@ test('canonical sources preserve raw SVGs, node sizes and defaults without insta
 
 for (const family of ['outline', 'solid', 'colorful'])
   test(`${family} rejects instance placements without writing any batch files`, () =>
-    fixture(async (root) => {
+    fixture(['config'], async (root) => {
       const request = await input(root, family)
       request.icons[0].evidence = { extraction: { method: 'svg-export' } }
       const existing = await firstSourceRecord(root, family)
@@ -285,7 +312,7 @@ for (const family of ['outline', 'solid', 'colorful'])
     }))
 
 test('partial generation stays within its family and rejects public removals', () =>
-  fixture(async (root) => {
+  fixture(['config', 'src', 'src/oldicon'], async (root) => {
     const request = await input(root, 'outline')
     await applyChanges(root, (await planSourceImport(request, root)).changes)
     const changes = await planIconUpdate(root, { family: 'outline' })
@@ -297,7 +324,7 @@ test('partial generation stays within its family and rejects public removals', (
   }))
 
 test('source projections remain read-only and updates never recreate retired JSON files', () =>
-  fixture(async (root) => {
+  fixture(['config', 'src'], async (root) => {
     const retired = [
       ...['outline', 'solid', 'colorful'].map((family) => `scripts/figma-${family}-icons-inventory.json`),
       ...['outline', 'solid'].flatMap((family) =>
@@ -305,7 +332,7 @@ test('source projections remain read-only and updates never recreate retired JSO
       ),
       'src/oldicon/inventory.json',
     ]
-    for (const file of retired) await assert.rejects(readFile(path.join(root, file)), /ENOENT/)
+    for (const file of retired) await assert.rejects(readFile(path.join(packageRoot, file)), /ENOENT/)
     const sourcePath = path.join(root, 'config/icon-sources/outline.json')
     const before = await readFile(sourcePath, 'utf8')
     const reference = path.join(root, 'config/icon-sources/outline.json#raw')
@@ -329,7 +356,7 @@ test('source projections remain read-only and updates never recreate retired JSO
   }))
 
 test('unified update repairs the name catalog while check mode leaves it untouched', () =>
-  fixture(async (root) => {
+  fixture(['config', 'src'], async (root) => {
     const catalog = path.join(root, 'src/figmaNameCatalog.ts')
     const expected = await readFile(catalog, 'utf8')
     const corrupted = expected.replace('ArrowUpFromDotOutlined', 'WrongPublicName')
@@ -361,8 +388,7 @@ test('Colorful generation preserves the original stroke width', () => {
 })
 
 test('all original SVGs rebuild missing products and repeated updates preserve mtimes', () =>
-  fixture(async (root) => {
-    await runIconUpdate([], root)
+  fixture(['config', 'src', 'catalog/index.html'], async (root) => {
     const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))
     const files = [
       ...['outline', 'solid', 'colorful'].flatMap((f) => sources[f].records.map((r) => `src/${r.localFile}`)),
@@ -386,8 +412,7 @@ test('all original SVGs rebuild missing products and repeated updates preserve m
   }))
 
 test('raw changes with equal normalized output do not rewrite products; rule changes regenerate', () =>
-  fixture(async (root) => {
-    await runIconUpdate([], root)
+  fixture(['config', 'src', 'catalog/index.html'], async (root) => {
     const sources = readIconSources(pathToFileURL(`${root}/config/icon-sources/`))
     const record = sources.outline.records.find((r) => r.raw.svg.includes('stroke-width="2"'))
     await writeFile(
@@ -418,7 +443,7 @@ test('registered default foreground colors remain overridable after import', () 
 })
 
 test('filled outlines are admitted by default and remain idempotent', () =>
-  fixture(async (root) => {
+  fixture(['config', 'src'], async (root) => {
     const request = await input(root, 'outline')
     const icon = request.icons[0]
     request.figmaNodesPath = path.join(root, 'figma-nodes.json')
@@ -457,7 +482,7 @@ test('filled outlines are admitted by default and remain idempotent', () =>
   }))
 
 test('source-native cutout authorization is restricted to the exported path and paint', () =>
-  fixture(async (root) => {
+  fixture(['config', 'src'], async (root) => {
     const request = await input(root, 'outline')
     request.icons[0].preserveSourceGeometry = true
     await writeFile(
@@ -489,7 +514,7 @@ test('source-native cutout authorization is restricted to the exported path and 
   }))
 
 test('mixed Outline import restores only expanded strokes and leaves genuine fills intact', () =>
-  fixture(async (root) => {
+  fixture(['config'], async (root) => {
     const request = await input(root, 'outline')
     const icon = request.icons[0]
     const exportSvg =
