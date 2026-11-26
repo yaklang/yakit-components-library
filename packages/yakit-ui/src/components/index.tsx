@@ -157,3 +157,17 @@ export type {
   DropdownTrigger,
   YakitDropdownMenuProps,
 } from './Dropdown'
+
+export { default as Modal, YakitModalCompat } from './Modal'
+export type {
+  ModalFooter,
+  ModalFooterContext,
+  ModalLayout,
+  ModalProps,
+  ModalSize,
+  ModalStatus,
+  ModalVariant,
+  YakitModalCompatProps,
+  YakitModalCompatSize,
+  YakitModalCompatType,
+} from './Modal'
