@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/c67167d9853a00f2e1f72cdfb0f2ae9509d921135ee71258cf3ae383c52e6c79.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/c67167d9853a00f2e1f72cdfb0f2ae9509d921135ee71258cf3ae383c52e6c79.svg?react'
 
-export const PrivateOutlineTCPPortLogIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateOutlineTCPPortLogIcon',
-);
+export const PrivateOutlineTCPPortLogIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineTCPPortLogIcon')

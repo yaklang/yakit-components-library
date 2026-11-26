@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/3197da0d3d177ea23b17c87ab48252caee16319cf0a1cc673a731299dc736896.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/3197da0d3d177ea23b17c87ab48252caee16319cf0a1cc673a731299dc736896.svg?react'
 
-export const MacUIOpRestoreSvgIcon = createIcon(OldIconAssetSvg, 'MacUIOpRestoreSvgIcon');
+export const MacUIOpRestoreSvgIcon = createIcon(OldIconAssetSvg, 'MacUIOpRestoreSvgIcon')

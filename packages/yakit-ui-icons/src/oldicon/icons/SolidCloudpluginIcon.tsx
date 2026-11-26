@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/c5dac543acc40d590be6299f55088f1d3bb881fe5b523ed42daa3719cb46ec39.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/c5dac543acc40d590be6299f55088f1d3bb881fe5b523ed42daa3719cb46ec39.svg?react'
 
-export const SolidCloudpluginIcon = createIcon(OldIconAssetSvg, 'SolidCloudpluginIcon');
+export const SolidCloudpluginIcon = createIcon(OldIconAssetSvg, 'SolidCloudpluginIcon')

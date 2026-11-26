@@ -1,18 +1,18 @@
-import { forwardRef } from 'react';
+import { forwardRef } from 'react'
 
-import { type IconComponent, type IconProps } from '../../src';
-import * as ColorfulIcons from '../../src/colorful';
+import { type IconComponent, type IconProps } from '../../src'
+import * as ColorfulIcons from '../../src/colorful'
 import {
   colorfulIconRegistry,
   iconRegistry,
   type ColorfulIconCategory,
   type ColorfulIconPaintMode,
   type IconDefinition,
-} from '../../src/registry';
+} from '../../src/registry'
 
-const publicComponents = ColorfulIcons satisfies Record<string, IconComponent>;
-const colorfulDefinitions = colorfulIconRegistry satisfies IconDefinition<'colorful'>[];
-const ExampleComponent = forwardRef<HTMLSpanElement, IconProps>(() => null);
+const publicComponents = ColorfulIcons satisfies Record<string, IconComponent>
+const colorfulDefinitions = colorfulIconRegistry satisfies IconDefinition<'colorful'>[]
+const ExampleComponent = forwardRef<HTMLSpanElement, IconProps>(() => null)
 
 const requiredMetadata: IconDefinition<'colorful'> = {
   Component: ExampleComponent,
@@ -24,7 +24,7 @@ const requiredMetadata: IconDefinition<'colorful'> = {
   paintMode: 'literal',
   sourceNodeId: '0:0',
   sourceStatus: 'current',
-};
+}
 
 // @ts-expect-error Colorful definitions require discovery category metadata.
 const missingCategory: IconDefinition<'colorful'> = {
@@ -36,7 +36,7 @@ const missingCategory: IconDefinition<'colorful'> = {
   paintMode: 'literal',
   sourceNodeId: '0:1',
   sourceStatus: 'current',
-};
+}
 
 // @ts-expect-error Colorful definitions require an explicit paint mode.
 const missingPaintMode: IconDefinition<'colorful'> = {
@@ -48,27 +48,27 @@ const missingPaintMode: IconDefinition<'colorful'> = {
   name: 'MissingPaintModeColorful',
   sourceNodeId: '0:2',
   sourceStatus: 'current',
-};
+}
 
 const consumeDefinition = (definition: IconDefinition) => {
   if (definition.family === 'colorful') {
-    const category: ColorfulIconCategory = definition.category;
-    const paintMode: ColorfulIconPaintMode = definition.paintMode;
-    void category;
-    void paintMode;
-    return;
+    const category: ColorfulIconCategory = definition.category
+    const paintMode: ColorfulIconPaintMode = definition.paintMode
+    void category
+    void paintMode
+    return
   }
 
   // @ts-expect-error Monochrome definitions do not expose colorful-only metadata.
-  void definition.category;
-};
+  void definition.category
+}
 
-const example = <ExampleComponent aria-label="colorful icon" color="#123456" size="1em" />;
+const example = <ExampleComponent aria-label="colorful icon" color="#123456" size="1em" />
 
-iconRegistry.forEach(consumeDefinition);
-void colorfulDefinitions;
-void example;
-void missingCategory;
-void missingPaintMode;
-void publicComponents;
-void requiredMetadata;
+iconRegistry.forEach(consumeDefinition)
+void colorfulDefinitions
+void example
+void missingCategory
+void missingPaintMode
+void publicComponents
+void requiredMetadata

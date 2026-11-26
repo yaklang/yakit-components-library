@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/b88e9f5e6db3086a321b90028be222abdfedf5aee7aa5522bd29b96837eb2080.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/b88e9f5e6db3086a321b90028be222abdfedf5aee7aa5522bd29b96837eb2080.svg?react'
 
-export const SolidCollectionPluginIcon = createIcon(OldIconAssetSvg, 'SolidCollectionPluginIcon');
+export const SolidCollectionPluginIcon = createIcon(OldIconAssetSvg, 'SolidCollectionPluginIcon')

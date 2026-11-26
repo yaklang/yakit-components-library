@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType } from 'react'
 
 import {
   IntentionOutlined,
@@ -362,8 +362,8 @@ import {
   TimelineOutlined,
   ArrowUpToLineOutlined,
   type IconProps,
-} from '../../src';
-import { outlineIconRegistry } from '../../src/registry';
+} from '../../src'
+import { outlineIconRegistry } from '../../src/registry'
 
 const publicOutlineComponents: readonly ComponentType<IconProps>[] = [
   IntentionOutlined,
@@ -726,22 +726,21 @@ const publicOutlineComponents: readonly ComponentType<IconProps>[] = [
   Settings2Outlined,
   TimelineOutlined,
   ArrowUpToLineOutlined,
-];
+]
 
 const outlineRegistry = outlineIconRegistry satisfies Array<{
-  Component: ComponentType<IconProps>;
-  exportName: string;
-  family: 'outline';
-  figmaName: string | null;
-  name: string;
-  sourceNodeId: string;
-  sourceStatus: 'current' | 'supplement' | 'unnamed-in-figma' | 'legacy-non-current-figma';
-}>;
+  Component: ComponentType<IconProps>
+  exportName: string
+  family: 'outline'
+  figmaName: string | null
+  name: string
+  sourceNodeId: string
+  sourceStatus: 'current' | 'supplement' | 'unnamed-in-figma' | 'legacy-non-current-figma'
+}>
 
-void publicOutlineComponents;
-void outlineRegistry;
-void outlineIconRegistry;
-void (<LandPlotOutlined aria-label="land plot" color="#f28c28" size={24} />);
-void (<NotebookOutlined color="inherit" size="1em" />);
-void (<SunOutlined color="#123456" style={{ color: '#654321' }} />);
-void (<EarOutlined color="inherit" />);
+void publicOutlineComponents
+void outlineRegistry
+void (<LandPlotOutlined aria-label="land plot" color="#f28c28" size={24} />)
+void (<NotebookOutlined color="inherit" size="1em" />)
+void (<SunOutlined color="#123456" style={{ color: '#654321' }} />)
+void (<EarOutlined color="inherit" />)

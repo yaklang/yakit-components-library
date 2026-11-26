@@ -1,11 +1,11 @@
-import { forwardRef } from 'react';
+import { forwardRef } from 'react'
 
-import { RadioOptionTypeContext } from './GroupContext';
-import { Radio } from './Radio';
-import type { RadioProps, RadioRef } from './type';
+import { RadioOptionTypeContext } from './GroupContext'
+import { Radio } from './Radio'
+import type { RadioProps, RadioRef } from './type'
 
 /** 与 antd Radio.Button 同义：RadioProps + ref */
-export type RadioButtonProps = RadioProps;
+export type RadioButtonProps = RadioProps
 
 /**
  * 按钮形态 Radio，对齐 antd Radio.Button。
@@ -17,9 +17,9 @@ export const RadioButton = forwardRef<RadioRef, RadioButtonProps>(function Radio
     <RadioOptionTypeContext.Provider value="button">
       <Radio {...props} ref={ref} />
     </RadioOptionTypeContext.Provider>
-  );
-});
+  )
+})
 
-RadioButton.displayName = 'Radio.Button';
+RadioButton.displayName = 'Radio.Button'
 
-export default RadioButton;
+export default RadioButton

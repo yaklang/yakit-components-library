@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/ae36050011c1c1c46cc29d35cb473c521fca79bb1be777bf0b4207577479b505.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/ae36050011c1c1c46cc29d35cb473c521fca79bb1be777bf0b4207577479b505.svg?react'
 
-export const OutlineModScanPortDataIcon = createIcon(OldIconAssetSvg, 'OutlineModScanPortDataIcon');
+export const OutlineModScanPortDataIcon = createIcon(OldIconAssetSvg, 'OutlineModScanPortDataIcon')

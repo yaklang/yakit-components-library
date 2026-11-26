@@ -8,10 +8,7 @@
   --yakit-tag-color-border: var(--yakit-color-neutral-border);
   --yakit-tag-color-text: var(--yakit-tag-color-base);
   --yakit-tag-color-on-solid: var(--yakit-color-text-base);
-  --yakit-tag-color-solid-bg: var(
-    --yakit-color-neutral-disable,
-    var(--Colors-Use-Grey-Primary, #b3bbc8)
-  );
+  --yakit-tag-color-solid-bg: var(--yakit-color-neutral-disable, var(--Colors-Use-Grey-Primary, #b3bbc8));
   --yakit-tag-color-dot: var(--yakit-tag-color-base);
   align-items: center;
   background: var(--yakit-tag-color-bg);
@@ -618,10 +615,7 @@
 .yakit-tag-color-primary {
   /* Figma soft Tag Color=Main：背景 Focus，hover 用 Bg-Hover */
   --yakit-tag-color-base: var(--yakit-color-primary);
-  --yakit-tag-color-bg: var(
-    --yakit-color-primary-focus,
-    var(--Colors-Use-Main-Focus, var(--yakit-colors-Main-30))
-  );
+  --yakit-tag-color-bg: var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, var(--yakit-colors-Main-30)));
   --yakit-tag-color-bg-hover: var(
     --yakit-color-primary-bg-hover,
     var(--Colors-Use-Main-Bg-Hover, var(--yakit-colors-Main-20))
@@ -666,10 +660,7 @@
 
 .yakit-tag-color-error {
   --yakit-tag-color-base: var(--yakit-color-error);
-  --yakit-tag-color-bg: var(
-    --yakit-color-error-focus,
-    var(--Colors-Use-Error-Focus, var(--yakit-color-error-bg))
-  );
+  --yakit-tag-color-bg: var(--yakit-color-error-focus, var(--Colors-Use-Error-Focus, var(--yakit-color-error-bg)));
   --yakit-tag-color-bg-hover: var(
     --yakit-color-error-bg-hover,
     var(--Colors-Use-Error-Bg-Hover, var(--yakit-tag-color-bg))
@@ -755,10 +746,7 @@
 .yakit-tag-color-high {
   --yakit-tag-color-base: var(--Colors-Use-Status-High, var(--yakit-colors-Error-60));
   --yakit-tag-color-bg: var(--Colors-Use-Error-Bg-Hover, var(--yakit-colors-Error-20));
-  --yakit-tag-color-bg-hover: var(
-    --Colors-Use-Error-Focus,
-    var(--yakit-colors-Error-30, var(--yakit-tag-color-bg))
-  );
+  --yakit-tag-color-bg-hover: var(--Colors-Use-Error-Focus, var(--yakit-colors-Error-30, var(--yakit-tag-color-bg)));
   --yakit-tag-color-border: var(--Colors-Use-Error-Border, var(--yakit-colors-Error-40));
   --yakit-tag-color-solid-bg: var(--Colors-Use-Status-High, var(--yakit-colors-Error-60));
   --yakit-tag-color-on-solid: var(--Colors-Use-Error-On-Primary, #fff);

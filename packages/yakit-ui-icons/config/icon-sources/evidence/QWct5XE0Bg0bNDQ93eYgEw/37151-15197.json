@@ -1,10 +1,7 @@
 {
   "sourceAssetEvidence": {
     "contextTargetImgCount": 2,
-    "contextTargetImgVariables": [
-      "imgGroup120",
-      "imgGroup117"
-    ],
+    "contextTargetImgVariables": ["imgGroup120", "imgGroup117"],
     "exactComponentNodeExport": true,
     "contextLayoutComposite": false,
     "contextFallback": null,

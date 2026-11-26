@@ -45,9 +45,9 @@ node scripts/release/release-impact.mjs \
 在 prepare manifest 前读取该 JSON，并调用：
 
 ```js
-import { impactProbesForRelease } from "./release-impact.mjs";
+import { impactProbesForRelease } from './release-impact.mjs'
 
-const impactProbeSet = impactProbesForRelease(impactOutput, packedReleaseSet);
+const impactProbeSet = impactProbesForRelease(impactOutput, packedReleaseSet)
 ```
 
 然后将 `impactProbeSet` 传给 `createVerificationManifest`。每项包含 base/head、source、lock、toolchain、config 和 package snapshot 哈希，并固定为 `kind: "impact-probe"`、`nonPublishable: true`。probe 不含 tarball、filename 或 publish 字段；`impactProbesForRelease` 会再次验证 probe、observed、declared 与实际 pack 集合完全一致。任何 shadow/probe `.tgz` 都不得复制进 `.release/verified`，也不得进入发布或恢复矩阵。

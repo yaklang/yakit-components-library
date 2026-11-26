@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import classNames from 'classnames'
 import {
   forwardRef,
   useContext,
@@ -11,20 +11,20 @@ import {
   type FocusEvent,
   type KeyboardEvent,
   type MouseEvent,
-} from 'react';
+} from 'react'
 
-import useYakitConfig from '../../hooks/useYakitConfig';
-import { getYakitTokenVariables } from '../../styles/tokenVariables';
-import type { YakitCSSProperties } from '../../styles/tokenVariables';
+import useYakitConfig from '../../hooks/useYakitConfig'
+import { getYakitTokenVariables } from '../../styles/tokenVariables'
+import type { YakitCSSProperties } from '../../styles/tokenVariables'
 
-import { RadioGroupContext, RadioOptionTypeContext } from './GroupContext';
-import { resolveCircularSize } from './sizeUtils';
-import './style/index.css';
-import type { RadioChangeEvent, RadioProps, RadioRef } from './type';
+import { RadioGroupContext, RadioOptionTypeContext } from './GroupContext'
+import { resolveCircularSize } from './sizeUtils'
+import './style/index.css'
+import type { RadioChangeEvent, RadioProps, RadioRef } from './type'
 
-const yakitPrefix = 'yakit-radio';
+const yakitPrefix = 'yakit-radio'
 /** antd 兼容前缀，供主项目 theme / 页面 :global(.ant-radio-*) 命中 */
-const antPrefix = 'ant-radio';
+const antPrefix = 'ant-radio'
 
 const createChangeEvent = (
   nativeEvent: ChangeEvent<HTMLInputElement>,
@@ -41,7 +41,7 @@ const createChangeEvent = (
   stopPropagation: () => nativeEvent.stopPropagation(),
   preventDefault: () => nativeEvent.preventDefault(),
   nativeEvent: nativeEvent.nativeEvent as globalThis.MouseEvent,
-});
+})
 
 export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
   {
@@ -76,86 +76,76 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
   },
   ref,
 ) {
-  const config = useYakitConfig();
-  const radioToken = config.token.YakitRadio;
-  const group = useContext(RadioGroupContext);
-  const optionTypeFromButton = useContext(RadioOptionTypeContext);
-  const reactId = useId();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const rootRef = useRef<HTMLLabelElement>(null);
+  const config = useYakitConfig()
+  const radioToken = config.token.YakitRadio
+  const group = useContext(RadioGroupContext)
+  const optionTypeFromButton = useContext(RadioOptionTypeContext)
+  const reactId = useId()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const rootRef = useRef<HTMLLabelElement>(null)
 
-  const isButtonType = group?.optionType === 'button' || optionTypeFromButton === 'button';
+  const isButtonType = group?.optionType === 'button' || optionTypeFromButton === 'button'
 
   const resolvedSize = resolveCircularSize(
     sizeProp ?? group?.size ?? (config.componentSize === 'large' ? 'large' : 'medium'),
-  );
+  )
 
-  const disabled = disabledProp ?? group?.disabled ?? config.componentDisabled ?? false;
-  const name = nameProp ?? group?.name;
-  const id = idProp ?? `${yakitPrefix}-${reactId}`;
+  const disabled = disabledProp ?? group?.disabled ?? config.componentDisabled ?? false
+  const name = nameProp ?? group?.name
+  const id = idProp ?? `${yakitPrefix}-${reactId}`
 
-  const isGrouped = group != null;
-  const isControlled = isGrouped || checkedProp !== undefined;
-  const [innerChecked, setInnerChecked] = useState(defaultChecked);
+  const isGrouped = group != null
+  const isControlled = isGrouped || checkedProp !== undefined
+  const [innerChecked, setInnerChecked] = useState(defaultChecked)
 
-  const checked = isGrouped
-    ? group!.value === value
-    : isControlled
-      ? Boolean(checkedProp)
-      : innerChecked;
+  const checked = isGrouped ? group!.value === value : isControlled ? Boolean(checkedProp) : innerChecked
 
   useImperativeHandle(ref, () => ({
     input: inputRef.current,
     nativeElement: rootRef.current,
     focus: (options) => inputRef.current?.focus(options),
     blur: () => inputRef.current?.blur(),
-  }));
+  }))
 
   useEffect(() => {
     if (autoFocus) {
-      inputRef.current?.focus();
+      inputRef.current?.focus()
     }
-  }, [autoFocus]);
+  }, [autoFocus])
 
-  const labelContent = label ?? children;
-  const hasDescription =
-    !isButtonType && description != null && description !== false && description !== '';
-  const hasLabel = labelContent != null && labelContent !== false && labelContent !== '';
+  const labelContent = label ?? children
+  const hasDescription = !isButtonType && description != null && description !== false && description !== ''
+  const hasLabel = labelContent != null && labelContent !== false && labelContent !== ''
 
   // 无障碍：文案/描述各自生成 ID，input 通过 aria-labelledby/describedby 关联；
   // 消费方显式传入的 aria 属性优先（对齐 Checkbox）。
-  const labelTextId = hasLabel ? `${id}-label` : undefined;
-  const descriptionTextId = hasDescription ? `${id}-description` : undefined;
+  const labelTextId = hasLabel ? `${id}-label` : undefined
+  const descriptionTextId = hasDescription ? `${id}-description` : undefined
   const resolvedAriaDescribedby =
-    ariaDescribedby ??
-    (hasDescription && (hasLabel || ariaLabel || ariaLabelledby) ? descriptionTextId : undefined);
+    ariaDescribedby ?? (hasDescription && (hasLabel || ariaLabel || ariaLabelledby) ? descriptionTextId : undefined)
   const resolvedAriaLabelledby =
     ariaLabelledby ??
-    (!ariaLabel && hasLabel
-      ? labelTextId
-      : !ariaLabel && !hasLabel && hasDescription
-        ? descriptionTextId
-        : undefined);
+    (!ariaLabel && hasLabel ? labelTextId : !ariaLabel && !hasLabel && hasDescription ? descriptionTextId : undefined)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    const nextChecked = e.target.checked;
+    if (disabled) return
+    const nextChecked = e.target.checked
     if (!isControlled) {
-      setInnerChecked(nextChecked);
+      setInnerChecked(nextChecked)
     }
-    const event = createChangeEvent(e, nextChecked, value, { name, id, disabled });
-    onChange?.(event);
-    group?.onChange?.(event);
-  };
+    const event = createChangeEvent(e, nextChecked, value, { name, id, disabled })
+    onChange?.(event)
+    group?.onChange?.(event)
+  }
 
   /**
    * onClick 挂在 input 上（对齐 antd / rc-checkbox），不要挂 label：
    * 点 label 文案时浏览器会再向嵌套 input 合成一次 click，挂 label 会双触发。
    */
   const handleInputClick = (e: MouseEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    onClick?.(e as unknown as MouseEvent<HTMLElement>);
-  };
+    if (disabled) return
+    onClick?.(e as unknown as MouseEvent<HTMLElement>)
+  }
 
   const sharedInputProps = {
     id,
@@ -178,7 +168,7 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
     onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => onKeyDown?.(e),
     onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => onKeyPress?.(e),
     onClick: handleInputClick,
-  };
+  }
 
   const tokenStyle = {
     ...getYakitTokenVariables(config.token),
@@ -193,11 +183,11 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
     '--yakit-radio-description-line-height': radioToken?.descriptionLineHeight,
     '--yakit-radio-button-border-radius': radioToken?.buttonBorderRadius,
     ...style,
-  } as YakitCSSProperties;
+  } as YakitCSSProperties
 
   // ---------- Button 形态（antd Radio.Button / optionType=button） ----------
   if (isButtonType) {
-    const antBtn = `${antPrefix}-button`;
+    const antBtn = `${antPrefix}-button`
     const wrapperCls = classNames(
       `${antBtn}-wrapper`,
       {
@@ -212,7 +202,7 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
       },
       className,
       rootClassName,
-    );
+    )
 
     return (
       <label
@@ -244,7 +234,7 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
           </span>
         )}
       </label>
-    );
+    )
   }
 
   // ---------- 圆形（Figma + antd Radio DOM） ----------
@@ -264,7 +254,7 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
     },
     className,
     rootClassName,
-  );
+  )
 
   return (
     <label
@@ -292,10 +282,7 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
           {...sharedInputProps}
           className={classNames(`${antPrefix}-input`, `${yakitPrefix}-input`)}
         />
-        <span
-          className={classNames(`${antPrefix}-inner`, `${yakitPrefix}-inner`)}
-          aria-hidden="true"
-        />
+        <span className={classNames(`${antPrefix}-inner`, `${yakitPrefix}-inner`)} aria-hidden="true" />
       </span>
       {(hasLabel || hasDescription) && (
         <span className={classNames(`${antPrefix}-label`, `${yakitPrefix}-content`)}>
@@ -312,9 +299,9 @@ export const Radio = forwardRef<RadioRef, RadioProps>(function Radio(
         </span>
       )}
     </label>
-  );
-});
+  )
+})
 
-Radio.displayName = 'Radio';
+Radio.displayName = 'Radio'
 
-export default Radio;
+export default Radio

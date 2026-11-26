@@ -31,3 +31,5 @@ packages/yakit-ui/test-results/
 *.njsproj
 *.sln
 *.sw?
+/.omx/
+storybook/storybook-static/

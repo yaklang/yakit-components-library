@@ -1,113 +1,94 @@
-import { readFile } from "node:fs/promises";
-import { createRequire } from "node:module";
-import path from "node:path";
+import { readFile } from 'node:fs/promises'
+import { createRequire } from 'node:module'
+import path from 'node:path'
 
-const storyPath = "packages/yakit-ui/.storybook/stories/Icon.stories.tsx";
-const catalogPath =
-  "packages/yakit-ui/.storybook/stories/icon-colorful.generated.ts";
-const begin = "// BEGIN GENERATED COLORFUL STORIES";
-const end = "// END GENERATED COLORFUL STORIES";
-const reserved = new Set([
-  "Overview",
-  "Outline",
-  "Solid",
-  "StrokeWidth",
-  "default",
-]);
+const storyPath = 'storybook/stories/icons/Icon.stories.tsx'
+const catalogPath = 'storybook/stories/icons/icon-colorful.generated.ts'
+const begin = '// BEGIN GENERATED COLORFUL STORIES'
+const end = '// END GENERATED COLORFUL STORIES'
+const reserved = new Set(['Overview', 'Outline', 'Solid', 'StrokeWidth', 'default'])
 
 export function colorfulStoryGroups(source) {
-  const publicRows = source.records.filter((row) =>
-    ["canonical", "semantic-alias"].includes(row.publicExposure),
-  );
-  const categories = new Set();
-  const names = new Set(reserved);
+  const publicRows = source.records.filter((row) => ['canonical', 'semantic-alias'].includes(row.publicExposure))
+  const categories = new Set()
+  const names = new Set(reserved)
   const groups = source.groups.map((group) => {
-    const { category, storybook = {} } = group;
-    if (categories.has(category))
-      throw new Error(`STORYBOOK_CATEGORY_DUPLICATE: ${category}`);
-    categories.add(category);
+    const { category, storybook = {} } = group
+    if (categories.has(category)) throw new Error(`STORYBOOK_CATEGORY_DUPLICATE: ${category}`)
+    categories.add(category)
     const exportName =
       storybook.exportName ??
       category
-        .split("-")
+        .split('-')
         .map((part) => part[0]?.toUpperCase() + part.slice(1))
-        .join("");
+        .join('')
     if (!/^[A-Z][A-Za-z0-9]*$/.test(exportName) || names.has(exportName))
-      throw new Error(`STORYBOOK_EXPORT_INVALID: ${exportName}`);
-    names.add(exportName);
-    const rows = publicRows.filter((row) => row.category === category);
-    const nodeIds = rows.map((row) => row.nodeId);
-    const preferred = storybook.preferredNodeOrder ?? [];
+      throw new Error(`STORYBOOK_EXPORT_INVALID: ${exportName}`)
+    names.add(exportName)
+    const rows = publicRows.filter((row) => row.category === category)
+    const nodeIds = rows.map((row) => row.nodeId)
+    const preferred = storybook.preferredNodeOrder ?? []
     if (
       !Array.isArray(preferred) ||
       new Set(preferred).size !== preferred.length ||
       preferred.some((id) => !nodeIds.includes(id))
     )
-      throw new Error(`STORYBOOK_ORDER_INVALID: ${category}`);
-    if (new Set(nodeIds).size !== nodeIds.length)
-      throw new Error(`STORYBOOK_NODE_DUPLICATE: ${category}`);
+      throw new Error(`STORYBOOK_ORDER_INVALID: ${category}`)
+    if (new Set(nodeIds).size !== nodeIds.length) throw new Error(`STORYBOOK_NODE_DUPLICATE: ${category}`)
     return {
       category,
       label: storybook.label ?? group.name,
       exportName,
       // Preserve reviewed presentation order; append new source records automatically.
       // Appended entries are not claimed to be newly audited Figma canvas order.
-      nodeIds: [
-        ...preferred,
-        ...nodeIds.filter((id) => !preferred.includes(id)),
-      ],
-    };
-  });
+      nodeIds: [...preferred, ...nodeIds.filter((id) => !preferred.includes(id))],
+    }
+  })
   for (const row of publicRows)
-    if (!categories.has(row.category))
-      throw new Error(`STORYBOOK_CATEGORY_MISSING: ${row.category}`);
-  return groups;
+    if (!categories.has(row.category)) throw new Error(`STORYBOOK_CATEGORY_MISSING: ${row.category}`)
+  return groups
 }
 
 export async function planStorybookUpdate(root, source) {
-  const groups = colorfulStoryGroups(source);
-  const require = createRequire(
-    new URL("../../packages/yakit-ui-icons/package.json", import.meta.url),
-  );
-  const { format, resolveConfig } = require("prettier");
-  const config = (await resolveConfig(path.join(root, storyPath))) ?? {};
-  const beforeStory = await readFile(path.join(root, storyPath), "utf8");
+  const groups = colorfulStoryGroups(source)
+  const require = createRequire(new URL('../../packages/yakit-ui-icons/package.json', import.meta.url))
+  const { format, resolveConfig } = require('prettier')
+  const config = (await resolveConfig(path.join(root, storyPath))) ?? {}
+  const beforeStory = await readFile(path.join(root, storyPath), 'utf8')
   if (
     beforeStory.split(begin).length !== 2 ||
     beforeStory.split(end).length !== 2 ||
     beforeStory.indexOf(begin) >= beforeStory.indexOf(end)
   )
-    throw new Error("STORYBOOK_GENERATED_MARKERS_INVALID");
+    throw new Error('STORYBOOK_GENERATED_MARKERS_INVALID')
   const stories = groups
     .map(
       ({ category, exportName, label }) =>
         `export const ${exportName}: Story = {\nname: ${JSON.stringify(`Colorful · ${label}`)},\nrender: () => <ColorfulCategoryGallery category=${JSON.stringify(category)} />,\n};`,
     )
-    .join("\n\n");
+    .join('\n\n')
   const story =
     beforeStory.slice(0, beforeStory.indexOf(begin)) +
     begin +
-    "\n" +
+    '\n' +
     stories +
-    "\n" +
-    beforeStory.slice(beforeStory.indexOf(end));
+    '\n' +
+    beforeStory.slice(beforeStory.indexOf(end))
   const catalog =
     `// Generated by pnpm icons:update. Do not edit manually.\n` +
     `import type { ColorfulIconCategory } from '@yakit-libs/yakit-ui-icons/registry';\n` +
-    `export const colorfulStoryGroups: readonly { category: ColorfulIconCategory; label: string; exportName: string; nodeIds: readonly string[] }[] = ${JSON.stringify(groups, null, 2)};\n`;
-  const changes = new Map();
+    `export const colorfulStoryGroups: readonly { category: ColorfulIconCategory; label: string; exportName: string; nodeIds: readonly string[] }[] = ${JSON.stringify(groups, null, 2)};\n`
+  const changes = new Map()
   for (const [file, content] of [
     [storyPath, story],
     [catalogPath, catalog],
   ]) {
-    const before = await readFile(path.join(root, file), "utf8").catch(
-      (error) => {
-        if (error.code === "ENOENT") return null;
-        throw error;
-      },
-    );
-    const after = await format(content, { ...config, filepath: file });
-    if (before !== after) changes.set(file, { before, after });
+    const before = await readFile(path.join(root, file), 'utf8').catch((error) => {
+      if (error.code === 'ENOENT') return null
+      throw error
+    })
+    const after = await format(content, { ...config, filepath: file })
+    if (before !== after) changes.set(file, { before, after })
   }
-  return changes;
+  return changes
 }

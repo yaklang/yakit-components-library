@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/b373b26b3254dafac3838fa0eb193d61a32b3cc383b08f5f288f83072e79226a.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/b373b26b3254dafac3838fa0eb193d61a32b3cc383b08f5f288f83072e79226a.svg?react'
 
-export const SolidToleftIcon = createIcon(OldIconAssetSvg, 'SolidToleftIcon');
+export const SolidToleftIcon = createIcon(OldIconAssetSvg, 'SolidToleftIcon')

@@ -1,39 +1,24 @@
-import classNames from 'classnames';
-import {
-  Children,
-  forwardRef,
-  isValidElement,
-  useCallback,
-  useId,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
+import classNames from 'classnames'
+import { Children, forwardRef, isValidElement, useCallback, useId, useMemo, useState, type ReactNode } from 'react'
 
-import useYakitConfig from '../../hooks/useYakitConfig';
-import { getYakitTokenVariables } from '../../styles/tokenVariables';
-import type { YakitCSSProperties } from '../../styles/tokenVariables';
+import useYakitConfig from '../../hooks/useYakitConfig'
+import { getYakitTokenVariables } from '../../styles/tokenVariables'
+import type { YakitCSSProperties } from '../../styles/tokenVariables'
 
-import { RadioGroupContext } from './GroupContext';
-import Radio from './Radio';
-import { resolveButtonSizeClass, resolveCircularSize } from './sizeUtils';
-import type {
-  RadioChangeEvent,
-  RadioGroupOption,
-  RadioGroupProps,
-  RadioOptionType,
-  RadioValue,
-} from './type';
+import { RadioGroupContext } from './GroupContext'
+import Radio from './Radio'
+import { resolveButtonSizeClass, resolveCircularSize } from './sizeUtils'
+import type { RadioChangeEvent, RadioGroupOption, RadioGroupProps, RadioOptionType, RadioValue } from './type'
 
-const yakitPrefix = 'yakit-radio-group';
-const antGroup = 'ant-radio-group';
+const yakitPrefix = 'yakit-radio-group'
+const antGroup = 'ant-radio-group'
 
 const normalizeOption = (option: RadioGroupOption): RadioOptionType => {
   if (typeof option === 'string' || typeof option === 'number') {
-    return { label: option, value: option };
+    return { label: option, value: option }
   }
-  return option;
-};
+  return option
+}
 
 /**
  * 递归查找 Radio.Button：antd 允许按钮项被 Badge / div / 自定义组件包裹，
@@ -42,21 +27,21 @@ const normalizeOption = (option: RadioGroupOption): RadioOptionType => {
  */
 const containsRadioButton = (children: ReactNode): boolean =>
   Children.toArray(children).some((child) => {
-    if (!isValidElement<{ children?: ReactNode }>(child)) return false;
-    if ((child.type as { displayName?: string }).displayName === 'Radio.Button') return true;
-    return containsRadioButton(child.props.children);
-  });
+    if (!isValidElement<{ children?: ReactNode }>(child)) return false
+    if ((child.type as { displayName?: string }).displayName === 'Radio.Button') return true
+    return containsRadioButton(child.props.children)
+  })
 
-const getOptionKey = (value: RadioValue): string => `${typeof value}:${String(value)}`;
+const getOptionKey = (value: RadioValue): string => `${typeof value}:${String(value)}`
 
 /** 映射到 antd Radio.Group 仅有的 small | large（middle 无 class） */
 const resolveAntGroupSizeClass = (
   buttonSize: 'small' | 'middle' | 'large' | 'max-large',
 ): 'small' | 'large' | undefined => {
-  if (buttonSize === 'small') return 'small';
-  if (buttonSize === 'large' || buttonSize === 'max-large') return 'large';
-  return undefined;
-};
+  if (buttonSize === 'small') return 'small'
+  if (buttonSize === 'large' || buttonSize === 'max-large') return 'large'
+  return undefined
+}
 
 export const Group = forwardRef<HTMLDivElement, RadioGroupProps>(function Group(
   {
@@ -87,36 +72,34 @@ export const Group = forwardRef<HTMLDivElement, RadioGroupProps>(function Group(
   },
   ref,
 ) {
-  const config = useYakitConfig();
-  const radioToken = config.token.YakitRadio;
-  const reactId = useId();
+  const config = useYakitConfig()
+  const radioToken = config.token.YakitRadio
+  const reactId = useId()
 
   // antd：写 Radio.Button 子节点时不必再传 optionType="button"；据此补 button 布局 class
-  const hasButtonChild = useMemo(() => containsRadioButton(children), [children]);
-  const isButton = optionType === 'button' || hasButtonChild;
-  const circularSize = resolveCircularSize(
-    sizeProp ?? (config.componentSize === 'large' ? 'large' : 'medium'),
-  );
-  const buttonSizeClass = isButton ? resolveButtonSizeClass(sizeProp ?? 'middle') : undefined;
-  const antSizeClass = buttonSizeClass ? resolveAntGroupSizeClass(buttonSizeClass) : undefined;
-  const disabled = disabledProp ?? config.componentDisabled ?? false;
-  const name = nameProp ?? `${yakitPrefix}-${reactId}`;
-  const isVertical = vertical === true || orientation === 'vertical';
+  const hasButtonChild = useMemo(() => containsRadioButton(children), [children])
+  const isButton = optionType === 'button' || hasButtonChild
+  const circularSize = resolveCircularSize(sizeProp ?? (config.componentSize === 'large' ? 'large' : 'medium'))
+  const buttonSizeClass = isButton ? resolveButtonSizeClass(sizeProp ?? 'middle') : undefined
+  const antSizeClass = buttonSizeClass ? resolveAntGroupSizeClass(buttonSizeClass) : undefined
+  const disabled = disabledProp ?? config.componentDisabled ?? false
+  const name = nameProp ?? `${yakitPrefix}-${reactId}`
+  const isVertical = vertical === true || orientation === 'vertical'
 
-  const controlled = valueProp !== undefined;
-  const [innerValue, setInnerValue] = useState<RadioValue | undefined>(defaultValue);
-  const value = controlled ? valueProp : innerValue;
+  const controlled = valueProp !== undefined
+  const [innerValue, setInnerValue] = useState<RadioValue | undefined>(defaultValue)
+  const value = controlled ? valueProp : innerValue
 
   const handleChange = useCallback(
     (e: RadioChangeEvent) => {
-      if (disabled) return;
+      if (disabled) return
       if (!controlled) {
-        setInnerValue(e.target.value);
+        setInnerValue(e.target.value)
       }
-      onChange?.(e);
+      onChange?.(e)
     },
     [controlled, disabled, onChange],
-  );
+  )
 
   const contextValue = useMemo(
     () => ({
@@ -129,7 +112,7 @@ export const Group = forwardRef<HTMLDivElement, RadioGroupProps>(function Group(
       onChange: handleChange,
     }),
     [value, disabled, name, circularSize, optionType, block, handleChange],
-  );
+  )
 
   const classes = classNames(
     // antd 兼容：主项目 theme / 页面 :global(.ant-radio-group*) 与 YakitRadioButtons.module :global
@@ -155,13 +138,13 @@ export const Group = forwardRef<HTMLDivElement, RadioGroupProps>(function Group(
     },
     className,
     rootClassName,
-  );
+  )
 
-  let childNodes = children;
+  let childNodes = children
   if (options && options.length > 0) {
     // 统一走 Radio：圆形 / 按钮 DOM + ant-* class 由 Radio 内部根据 optionType 决定
     childNodes = options.map((raw) => {
-      const option = normalizeOption(raw);
+      const option = normalizeOption(raw)
       return (
         <Radio
           key={getOptionKey(option.value)}
@@ -178,12 +161,12 @@ export const Group = forwardRef<HTMLDivElement, RadioGroupProps>(function Group(
         >
           {option.label}
         </Radio>
-      );
-    });
+      )
+    })
   }
 
   // 无障碍：aria-label / aria-labelledby 优先；仅无 labelledby 时用显式 name 兜底；不硬编文案
-  const groupAriaLabel = ariaLabel ?? (ariaLabelledby ? undefined : nameProp);
+  const groupAriaLabel = ariaLabel ?? (ariaLabelledby ? undefined : nameProp)
 
   const groupNode = (
     <div
@@ -219,16 +202,16 @@ export const Group = forwardRef<HTMLDivElement, RadioGroupProps>(function Group(
     >
       {childNodes}
     </div>
-  );
+  )
 
   // 仅有 wrapClassName 时才包外层，避免多一层空 div；Group 根仍挂 ant-radio-group
   return (
     <RadioGroupContext.Provider value={contextValue}>
       {wrapClassName ? <div className={wrapClassName}>{groupNode}</div> : groupNode}
     </RadioGroupContext.Provider>
-  );
-});
+  )
+})
 
-Group.displayName = 'Radio.Group';
+Group.displayName = 'Radio.Group'
 
-export default Group;
+export default Group

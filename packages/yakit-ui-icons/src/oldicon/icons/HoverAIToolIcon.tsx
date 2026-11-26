@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/044a72906c0d2eaa121c2be069083f9db593c9924c69c4ed036b4cb79e89aaa6.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/044a72906c0d2eaa121c2be069083f9db593c9924c69c4ed036b4cb79e89aaa6.svg?react'
 
-export const HoverAIToolIcon = createIcon(OldIconAssetSvg, 'HoverAIToolIcon');
+export const HoverAIToolIcon = createIcon(OldIconAssetSvg, 'HoverAIToolIcon')

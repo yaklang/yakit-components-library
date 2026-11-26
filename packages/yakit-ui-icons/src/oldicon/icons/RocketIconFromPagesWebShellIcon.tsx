@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/02f6a6bbd8b741577b85aba9181cf99e4418f9d96a19d38a3dd6b0a18a48dc3f.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/02f6a6bbd8b741577b85aba9181cf99e4418f9d96a19d38a3dd6b0a18a48dc3f.svg?react'
 
-export const RocketIconFromPagesWebShellIcon = createIcon(
-  OldIconAssetSvg,
-  'RocketIconFromPagesWebShellIcon',
-);
+export const RocketIconFromPagesWebShellIcon = createIcon(OldIconAssetSvg, 'RocketIconFromPagesWebShellIcon')

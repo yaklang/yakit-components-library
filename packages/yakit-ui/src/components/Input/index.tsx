@@ -1,6 +1,6 @@
-import { Input as BaseInput, OTP, Password, TextArea } from './Input';
-import { Search, SearchTrigger } from './Search';
-import { Select } from './Select';
+import { Input as BaseInput, OTP, Password, TextArea } from './Input'
+import { Search, SearchTrigger } from './Search'
+import { Select } from './Select'
 import type {
   InputProps,
   InputRef,
@@ -14,24 +14,24 @@ import type {
   SearchTriggerProps,
   TextAreaProps,
   TextAreaRef,
-} from './type';
+} from './type'
 
 type CompoundedInput = typeof BaseInput & {
-  OTP: typeof OTP;
-  Password: typeof Password;
-  Search: typeof Search;
-  SearchTrigger: typeof SearchTrigger;
-  Select: typeof Select;
-  TextArea: typeof TextArea;
-};
+  OTP: typeof OTP
+  Password: typeof Password
+  Search: typeof Search
+  SearchTrigger: typeof SearchTrigger
+  Select: typeof Select
+  TextArea: typeof TextArea
+}
 
-export const Input = BaseInput as CompoundedInput;
-Input.TextArea = TextArea;
-Input.Search = Search;
-Input.Password = Password;
-Input.OTP = OTP;
-Input.SearchTrigger = SearchTrigger;
-Input.Select = Select;
+export const Input = BaseInput as CompoundedInput
+Input.TextArea = TextArea
+Input.Search = Search
+Input.Password = Password
+Input.OTP = OTP
+Input.SearchTrigger = SearchTrigger
+Input.Select = Select
 
 export type {
   InputProps,
@@ -46,5 +46,5 @@ export type {
   SearchTriggerProps,
   TextAreaProps,
   TextAreaRef,
-};
-export default Input;
+}
+export default Input

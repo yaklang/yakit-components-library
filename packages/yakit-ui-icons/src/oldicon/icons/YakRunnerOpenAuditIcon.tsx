@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/75adaca977db5773ec129b9422b78802ab05c68bb01db12994c3cb2b2cdf9351.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/75adaca977db5773ec129b9422b78802ab05c68bb01db12994c3cb2b2cdf9351.svg?react'
 
-export const YakRunnerOpenAuditIcon = createIcon(OldIconAssetSvg, 'YakRunnerOpenAuditIcon');
+export const YakRunnerOpenAuditIcon = createIcon(OldIconAssetSvg, 'YakRunnerOpenAuditIcon')

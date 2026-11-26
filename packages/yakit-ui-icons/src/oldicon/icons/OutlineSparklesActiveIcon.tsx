@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/4ecac85fa1a78811c1d7ac6419130eff80870f1ff9bc1575137f66e965215d1f.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/4ecac85fa1a78811c1d7ac6419130eff80870f1ff9bc1575137f66e965215d1f.svg?react'
 
-export const OutlineSparklesActiveIcon = createIcon(OldIconAssetSvg, 'OutlineSparklesActiveIcon');
+export const OutlineSparklesActiveIcon = createIcon(OldIconAssetSvg, 'OutlineSparklesActiveIcon')

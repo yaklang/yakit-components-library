@@ -304,7 +304,9 @@
   pointer-events: none;
 }
 
-.yakit-radio-group-button-item:hover:not(.yakit-radio-group-button-item-disabled):not(.yakit-radio-group-button-item-checked) {
+.yakit-radio-group-button-item:hover:not(.yakit-radio-group-button-item-disabled):not(
+    .yakit-radio-group-button-item-checked
+  ) {
   color: var(--radio-buttons-primary-font-hover-color);
   z-index: 1;
 }
@@ -317,8 +319,10 @@
   z-index: 2;
 }
 
-.yakit-radio-group-button-outline .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):focus-within,
-.yakit-radio-group-button-outline .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):active {
+.yakit-radio-group-button-outline
+  .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):focus-within,
+.yakit-radio-group-button-outline
+  .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):active {
   box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color);
 }
 
@@ -330,16 +334,19 @@
   z-index: 2;
 }
 
-.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover {
+.yakit-radio-group-button-solid
+  .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover {
   background: var(--radio-buttons-background-hover-color);
   border-color: var(--radio-buttons-border-hover-color);
 }
 
-.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):focus-within {
+.yakit-radio-group-button-solid
+  .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):focus-within {
   box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color);
 }
 
-.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):active {
+.yakit-radio-group-button-solid
+  .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):active {
   background: var(--radio-buttons-background-active-color);
   border-color: var(--radio-buttons-border-active-color);
   box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color);
@@ -495,7 +502,10 @@
 }
 
 .yakit-radio-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
-  background-color: var(--radio-buttons-background-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+  background-color: var(
+    --radio-buttons-background-color,
+    var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45))
+  );
 }
 
 .yakit-radio-group-vertical .ant-radio-button-wrapper:not(:first-child)::before {
@@ -536,34 +546,68 @@
  * .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)
  */
 .yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-  background: var(--radio-buttons-background-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+  background: var(
+    --radio-buttons-background-color,
+    var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45))
+  );
   border-color: var(--radio-buttons-border-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
-  color: var(--radio-buttons-solid-font-color, var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee)));
+  color: var(
+    --radio-buttons-solid-font-color,
+    var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee))
+  );
   z-index: 2;
 }
 
-.yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
-  background: var(--radio-buttons-background-hover-color, var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64)));
-  border-color: var(--radio-buttons-border-hover-color, var(--yakit-color-primary-border, var(--Colors-Use-Main-Border, #f9c5a2)));
+.yakit-radio-group.ant-radio-group-solid
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  background: var(
+    --radio-buttons-background-hover-color,
+    var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64))
+  );
+  border-color: var(
+    --radio-buttons-border-hover-color,
+    var(--yakit-color-primary-border, var(--Colors-Use-Main-Border, #f9c5a2))
+  );
 }
 
-.yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active {
-  background: var(--radio-buttons-background-active-color, var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e)));
-  border-color: var(--radio-buttons-border-active-color, var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e)));
-  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color, var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6)));
+.yakit-radio-group.ant-radio-group-solid
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active {
+  background: var(
+    --radio-buttons-background-active-color,
+    var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e))
+  );
+  border-color: var(
+    --radio-buttons-border-active-color,
+    var(--yakit-color-primary-pressed, var(--Colors-Use-Main-Pressed, #db752e))
+  );
+  box-shadow: 0 0 0 2px
+    var(--radio-buttons-box-shadow-color, var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6)));
 }
 
 /* 选中项 hover/focus：提高优先级，避免被通用 :hover 盖掉字色与 z-index（实心选中勿变成主色字叠主色底） */
-.yakit-radio-group-button-solid .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover,
-.yakit-radio-group.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
-  color: var(--radio-buttons-solid-font-color, var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee)));
+.yakit-radio-group-button-solid
+  .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover,
+.yakit-radio-group.ant-radio-group-solid
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  color: var(
+    --radio-buttons-solid-font-color,
+    var(--yakit-color-primary-text, var(--Colors-Use-Main-On-Primary, #fef5ee))
+  );
   z-index: 2;
 }
 
-.yakit-radio-group-button-outline .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover,
-.yakit-radio-group.ant-radio-group-outline .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
-  border-color: var(--radio-buttons-border-hover-color, var(--yakit-color-primary-border, var(--Colors-Use-Main-Border, #f9c5a2)));
-  color: var(--radio-buttons-primary-font-hover-color, var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64)));
+.yakit-radio-group-button-outline
+  .yakit-radio-group-button-item-checked:not(.yakit-radio-group-button-item-disabled):hover,
+.yakit-radio-group.ant-radio-group-outline
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  border-color: var(
+    --radio-buttons-border-hover-color,
+    var(--yakit-color-primary-border, var(--Colors-Use-Main-Border, #f9c5a2))
+  );
+  color: var(
+    --radio-buttons-primary-font-hover-color,
+    var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64))
+  );
   z-index: 2;
 }
 
@@ -579,14 +623,19 @@
   z-index: 2;
 }
 
-.yakit-radio-group .ant-radio-button-wrapper:hover:not(.ant-radio-button-wrapper-disabled):not(.ant-radio-button-wrapper-checked) {
-  color: var(--radio-buttons-primary-font-hover-color, var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45)));
+.yakit-radio-group
+  .ant-radio-button-wrapper:hover:not(.ant-radio-button-wrapper-disabled):not(.ant-radio-button-wrapper-checked) {
+  color: var(
+    --radio-buttons-primary-font-hover-color,
+    var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45))
+  );
   z-index: 1;
 }
 
 .yakit-radio-group .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):focus-within,
 .yakit-radio-group .ant-radio-button-wrapper:focus-within {
-  box-shadow: 0 0 0 2px var(--radio-buttons-box-shadow-color, var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6)));
+  box-shadow: 0 0 0 2px
+    var(--radio-buttons-box-shadow-color, var(--yakit-color-primary-focus, var(--Colors-Use-Main-Focus, #fce5d6)));
 }
 
 /* ==========================================================================
@@ -628,10 +677,7 @@
 
 /* antd 5 的 :first-child/:last-child（0,2,0）会盖掉库内单 class 的圆角与首项边框色 */
 .yakit-radio-group .yakit-radio-group-button-item:first-child {
-  border-inline-start-color: var(
-    --yakit-color-neutral-border,
-    var(--Colors-Use-Neutral-Border, #e6e8ed)
-  );
+  border-inline-start-color: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
   border-start-start-radius: var(--yakit-radio-button-border-radius, 4px);
   border-end-start-radius: var(--yakit-radio-button-border-radius, 4px);
 }

@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/62af0b9cc079d5d897e9ee212d66c93660f28f958af24df7a98ae56c063ee145.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/62af0b9cc079d5d897e9ee212d66c93660f28f958af24df7a98ae56c063ee145.svg?react'
 
-export const NoLoginMessageIcon = createIcon(OldIconAssetSvg, 'NoLoginMessageIcon');
+export const NoLoginMessageIcon = createIcon(OldIconAssetSvg, 'NoLoginMessageIcon')

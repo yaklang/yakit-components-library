@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/f93c421c44ac62d498444350e2a1b9314a08eb4cf8ee91575fcb4295f078df40.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/f93c421c44ac62d498444350e2a1b9314a08eb4cf8ee91575fcb4295f078df40.svg?react'
 
-export const SolidYakCattleNoBackColorIcon = createIcon(
-  OldIconAssetSvg,
-  'SolidYakCattleNoBackColorIcon',
-);
+export const SolidYakCattleNoBackColorIcon = createIcon(OldIconAssetSvg, 'SolidYakCattleNoBackColorIcon')

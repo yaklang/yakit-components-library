@@ -1,48 +1,42 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 
-import { createElement } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { describe, expect, it } from 'vitest'
 
-import { readOldiconAssets } from '../../scripts/oldicon-assets.mjs';
-import * as Icons from '../../src';
-import * as OldIcons from '../../src/oldicon';
-import { solid as solidSource } from '../helpers/sources';
-import { colorful as colorfulSource } from '../helpers/sources';
+import * as Icons from '../../src'
+import { solid as solidSource } from '../helpers/sources'
+import { colorful as colorfulSource } from '../helpers/sources'
 
-import { iconCounts, iconExports } from './icon-inventory';
+import { shapeStrokeWidths, strokeWidths } from './helpers/stroke-widths'
+import { iconExports } from './icon-inventory'
 
 describe('family-specific server rendered stroke widths without CSS', () => {
   it('normalizes only Outline and preserves other SVG source widths', () => {
-    const oldManifest = readOldiconAssets();
-    const icons = [...Object.entries(Icons), ...Object.entries(OldIcons)];
-    expect(icons).toHaveLength(iconCounts.all);
-    expect(icons.map(([name]) => name).sort()).toEqual([...iconExports.all].sort());
+    const icons = Object.entries(Icons)
+    expect(icons.map(([name]) => name).sort()).toEqual([...iconExports.root].sort())
     for (const [name, Icon] of icons) {
-      const markup = renderToStaticMarkup(createElement(Icon, { 'aria-label': name }));
-      expect(markup, name).toContain('<svg');
-      const solid = solidSource.records.find((record) => record.exportName === name);
+      const markup = renderToStaticMarkup(createElement(Icon, { 'aria-label': name }))
+      expect(markup, name).toContain('<svg')
+      if (name === 'Loading' || name === 'HomeOutlined') {
+        expect(new Set(shapeStrokeWidths(markup)), name).toEqual(new Set(['1.5']))
+        if (name === 'Loading') continue
+      }
+      const solid = solidSource.records.find((record) => record.exportName === name)
       if (solid) {
-        const widths = (svg: string) =>
-          [...svg.matchAll(/stroke-width="([^"]+)"/g)].map((m) => m[1]);
-        expect(widths(markup), name).toEqual(widths(solid.raw.svg));
-        continue;
+        expect(strokeWidths(markup), name).toEqual(strokeWidths(solid.raw.svg))
+        continue
       }
       if (!iconExports.outline.includes(name)) {
-        if (name === 'Loading') continue;
-        const colorful = colorfulSource.records.find((r) => r.exportName === name);
-        const old = oldManifest.exports.find((r: { exportName: string }) => r.exportName === name);
-        const file = colorful?.localFile ?? (old ? `oldicon/${old.assetFile}` : undefined);
-        expect(file, name).toBeDefined();
-        const source = readFileSync(resolve(import.meta.dirname, '../../src', file!), 'utf8');
-        const widths = (svg: string) =>
-          [...svg.matchAll(/stroke-width="([^"]+)"/g)].map((m) => m[1]);
-        expect(widths(markup), name).toEqual(widths(source));
-        continue;
+        const colorful = colorfulSource.records.find((r) => r.exportName === name)
+        const file = colorful?.localFile
+        expect(file, name).toBeDefined()
+        const source = readFileSync(resolve(import.meta.dirname, '../../src', file!), 'utf8')
+        expect(strokeWidths(markup), name).toEqual(strokeWidths(source))
+        continue
       }
-      for (const match of markup.matchAll(/stroke-width="([^"]+)"/g))
-        expect(match[1], name).toBe('1.5');
+      for (const width of strokeWidths(markup)) expect(width, name).toBe('1.5')
     }
-  });
-});
+  })
+})

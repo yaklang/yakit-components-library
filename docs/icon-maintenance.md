@@ -42,7 +42,7 @@ Figma 后续又有变化，需要通过下一次更新 PR 进入仓库。检查�
 | 文件                                                         | 保存内容                                                                                                                                                 |
 | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `config/icon-sources/{outline,solid,colorful}.json`          | schemaVersion 2、分类、fileKey、真实分组；逐图 nodeId、原始名称、groupNodeId、svgFile、colorBindings，以及已取得的节点类型、尺寸、采集时间、evidenceFile |
-| `config/icon-sources/svg/<fileKey>/<nodeId短横线>.svg`       | Figma 来源 SVG；确认存在展开描边的 Outline 保存提取中心线后的 SVG                                                                                                               |
+| `config/icon-sources/svg/<fileKey>/<nodeId短横线>.svg`       | Figma 来源 SVG；确认存在展开描边的 Outline 保存提取中心线后的 SVG                                                                                        |
 | `config/icon-project/<分类>.json`                            | 导出名、生产路径、默认颜色、变量到 CSS token 的映射、按色值替换和必要转换例外                                                                            |
 | `config/icon-display.json`                                   | 项目分类标识、Storybook 标签、导航和人工顺序                                                                                                             |
 | `config/icon-sources/evidence/<fileKey>/<nodeId短横线>.json` | 仍影响提取或图形语义的采集证据                                                                                                                           |

@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/640fca8338c6a84c9396a8d4c2cf7970fc9fe82b84ce462e435cc948808e321c.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/640fca8338c6a84c9396a8d4c2cf7970fc9fe82b84ce462e435cc948808e321c.svg?react'
 
-export const TaskSuccessIcon = createIcon(OldIconAssetSvg, 'TaskSuccessIcon');
+export const TaskSuccessIcon = createIcon(OldIconAssetSvg, 'TaskSuccessIcon')

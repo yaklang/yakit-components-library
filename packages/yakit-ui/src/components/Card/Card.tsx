@@ -1,23 +1,22 @@
-import classNames from 'classnames';
-import type { CSSProperties, FC, ReactNode } from 'react';
+import classNames from 'classnames'
+import type { CSSProperties, FC, ReactNode } from 'react'
 
-import useYakitConfig from '../../hooks/useYakitConfig';
-import { getYakitTokenVariables } from '../../styles/tokenVariables';
-import type { YakitCSSProperties } from '../../styles/tokenVariables';
+import useYakitConfig from '../../hooks/useYakitConfig'
+import { getYakitTokenVariables } from '../../styles/tokenVariables'
+import type { YakitCSSProperties } from '../../styles/tokenVariables'
 
-import './style/index.css';
-import type { CardProps } from './type';
+import './style/index.css'
+import type { CardProps } from './type'
 
-const prefixCls = 'yakit-card';
+const prefixCls = 'yakit-card'
 
-const hasContent = (content: ReactNode) =>
-  content !== null && content !== undefined && typeof content !== 'boolean';
+const hasContent = (content: ReactNode) => content !== null && content !== undefined && typeof content !== 'boolean'
 
 const resolveBordered = (bordered: boolean | undefined, variant: CardProps['variant']) => {
-  if (variant === 'borderless') return false;
-  if (variant === 'outlined') return true;
-  return bordered !== false;
-};
+  if (variant === 'borderless') return false
+  if (variant === 'outlined') return true
+  return bordered !== false
+}
 
 export const Card: FC<CardProps> = ({
   title,
@@ -38,15 +37,15 @@ export const Card: FC<CardProps> = ({
   variant,
   ...rest
 }) => {
-  const config = useYakitConfig();
-  const cardToken = config.token.YakitCard;
-  const hasHeader = hasContent(title) || hasContent(extra);
-  const showBorder = resolveBordered(bordered, variant);
+  const config = useYakitConfig()
+  const cardToken = config.token.YakitCard
+  const hasHeader = hasContent(title) || hasContent(extra)
+  const showBorder = resolveBordered(bordered, variant)
 
   const mergedHeadStyle: CSSProperties | undefined =
-    headStyle || styles?.header ? { ...headStyle, ...styles?.header } : undefined;
+    headStyle || styles?.header ? { ...headStyle, ...styles?.header } : undefined
   const mergedBodyStyle: CSSProperties | undefined =
-    bodyStyle || styles?.body ? { ...bodyStyle, ...styles?.body } : undefined;
+    bodyStyle || styles?.body ? { ...bodyStyle, ...styles?.body } : undefined
 
   const classes = classNames(
     prefixCls,
@@ -58,7 +57,7 @@ export const Card: FC<CardProps> = ({
     },
     className,
     rootClassName,
-  );
+  )
 
   return (
     <div
@@ -101,12 +100,12 @@ export const Card: FC<CardProps> = ({
         {children}
       </div>
     </div>
-  );
-};
+  )
+}
 
-Card.displayName = 'Card';
+Card.displayName = 'Card'
 
 /** 主项目同名导出，便于迁移 */
-export const YakitCard = Card;
+export const YakitCard = Card
 
-export default Card;
+export default Card

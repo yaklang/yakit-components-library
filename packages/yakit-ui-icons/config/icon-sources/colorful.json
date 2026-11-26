@@ -97,16 +97,12 @@
           {
             "fallbackHex": "#F15757",
             "figmaVariableId": "VariableID:36198:13307",
-            "sourceNodeIds": [
-              "37150:32102"
-            ]
+            "sourceNodeIds": ["37150:32102"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:205854"
-            ]
+            "sourceNodeIds": ["47914:205854"]
           }
         ]
       },
@@ -128,33 +124,22 @@
           {
             "fallbackHex": "#868C97",
             "figmaVariableId": "VariableID:34701:3818",
-            "sourceNodeIds": [
-              "37150:32111"
-            ]
+            "sourceNodeIds": ["37150:32111"]
           },
           {
             "fallbackHex": "#5A5D64",
             "figmaVariableId": "VariableID:34701:3819",
-            "sourceNodeIds": [
-              "37150:32112"
-            ]
+            "sourceNodeIds": ["37150:32112"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32113",
-              "47914:205871"
-            ]
+            "sourceNodeIds": ["37150:32113", "47914:205871"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206422",
-              "37150:32122",
-              "37150:32123"
-            ]
+            "sourceNodeIds": ["47914:206422", "37150:32122", "37150:32123"]
           }
         ]
       },
@@ -176,18 +161,12 @@
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:205926",
-              "37150:32133"
-            ]
+            "sourceNodeIds": ["47914:205926", "37150:32133"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:205894",
-              "37150:32132"
-            ]
+            "sourceNodeIds": ["47914:205894", "37150:32132"]
           }
         ]
       },
@@ -209,19 +188,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32137",
-              "37150:32138",
-              "47914:205939"
-            ]
+            "sourceNodeIds": ["37150:32137", "37150:32138", "47914:205939"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206404",
-              "47914:205947"
-            ]
+            "sourceNodeIds": ["47914:206404", "47914:205947"]
           }
         ]
       },
@@ -243,19 +215,12 @@
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206376",
-              "47914:206386",
-              "37150:32156"
-            ]
+            "sourceNodeIds": ["47914:206376", "47914:206386", "37150:32156"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32152",
-              "37150:32155"
-            ]
+            "sourceNodeIds": ["37150:32152", "37150:32155"]
           }
         ]
       },
@@ -277,25 +242,17 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32175",
-              "37150:32180"
-            ]
+            "sourceNodeIds": ["37150:32175", "37150:32180"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206322",
-              "47914:206357"
-            ]
+            "sourceNodeIds": ["47914:206322", "47914:206357"]
           },
           {
             "fallbackHex": "#F9C5A2",
             "figmaVariableId": "VariableID:34624:51343",
-            "sourceNodeIds": [
-              "37150:32178"
-            ]
+            "sourceNodeIds": ["37150:32178"]
           }
         ]
       },
@@ -317,18 +274,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32185",
-              "37150:32191"
-            ]
+            "sourceNodeIds": ["37150:32185", "37150:32191"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206297",
-              "47914:206250"
-            ]
+            "sourceNodeIds": ["47914:206297", "47914:206250"]
           }
         ]
       },
@@ -350,35 +301,22 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32195"
-            ]
+            "sourceNodeIds": ["37150:32195"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "37150:32199",
-              "37150:32200",
-              "47914:206292"
-            ]
+            "sourceNodeIds": ["37150:32199", "37150:32200", "47914:206292"]
           },
           {
             "fallbackHex": "#868C97",
             "figmaVariableId": "VariableID:34701:3818",
-            "sourceNodeIds": [
-              "37150:32201",
-              "37150:32202",
-              "37150:32203"
-            ]
+            "sourceNodeIds": ["37150:32201", "37150:32202", "37150:32203"]
           },
           {
             "fallbackHex": "#5A5D64",
             "figmaVariableId": "VariableID:34701:3819",
-            "sourceNodeIds": [
-              "37150:32204",
-              "37150:32205"
-            ]
+            "sourceNodeIds": ["37150:32204", "37150:32205"]
           }
         ]
       },
@@ -400,17 +338,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32218",
-              "37150:32223"
-            ]
+            "sourceNodeIds": ["37150:32218", "37150:32223"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206271"
-            ]
+            "sourceNodeIds": ["47914:206271"]
           }
         ]
       },
@@ -432,17 +365,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32230",
-              "37150:32234"
-            ]
+            "sourceNodeIds": ["37150:32230", "37150:32234"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206432"
-            ]
+            "sourceNodeIds": ["47914:206432"]
           }
         ]
       },
@@ -464,24 +392,17 @@
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206456",
-              "37373:59646"
-            ]
+            "sourceNodeIds": ["47914:206456", "37373:59646"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37373:59645"
-            ]
+            "sourceNodeIds": ["37373:59645"]
           },
           {
             "fallbackHex": "#FFFFFF",
             "figmaVariableId": "VariableID:34614:51335",
-            "sourceNodeIds": [
-              "47914:205850"
-            ]
+            "sourceNodeIds": ["47914:205850"]
           }
         ]
       },
@@ -503,26 +424,17 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37373:59655",
-              "47914:206510",
-              "37373:59681"
-            ]
+            "sourceNodeIds": ["37373:59655", "47914:206510", "37373:59681"]
           },
           {
             "fallbackHex": "#FFFFFF",
             "figmaVariableId": "VariableID:34614:51335",
-            "sourceNodeIds": [
-              "37373:59657",
-              "37373:59683"
-            ]
+            "sourceNodeIds": ["37373:59657", "37373:59683"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206508"
-            ]
+            "sourceNodeIds": ["47914:206508"]
           }
         ]
       },
@@ -544,18 +456,12 @@
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47904:205830",
-              "37373:60025"
-            ]
+            "sourceNodeIds": ["47904:205830", "37373:60025"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47904:205837",
-              "37373:60024"
-            ]
+            "sourceNodeIds": ["47904:205837", "37373:60024"]
           }
         ]
       },
@@ -577,17 +483,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37474:99340",
-              "37474:99344"
-            ]
+            "sourceNodeIds": ["37474:99340", "37474:99344"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206560"
-            ]
+            "sourceNodeIds": ["47914:206560"]
           }
         ]
       },
@@ -609,17 +510,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:206562",
-              "38723:89063"
-            ]
+            "sourceNodeIds": ["47914:206562", "38723:89063"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206577"
-            ]
+            "sourceNodeIds": ["47914:206577"]
           }
         ]
       },
@@ -641,18 +537,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:206659",
-              "47914:206647",
-              "47914:206636"
-            ]
+            "sourceNodeIds": ["47914:206659", "47914:206647", "47914:206636"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206657"
-            ]
+            "sourceNodeIds": ["47914:206657"]
           }
         ]
       },
@@ -674,19 +564,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:206612",
-              "47914:206584",
-              "47914:206586",
-              "43309:4777"
-            ]
+            "sourceNodeIds": ["47914:206612", "47914:206584", "47914:206586", "43309:4777"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206619"
-            ]
+            "sourceNodeIds": ["47914:206619"]
           }
         ]
       },
@@ -708,17 +591,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "44680:5781",
-              "44680:5786"
-            ]
+            "sourceNodeIds": ["44680:5781", "44680:5786"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206666"
-            ]
+            "sourceNodeIds": ["47914:206666"]
           }
         ]
       },
@@ -740,30 +618,17 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "44681:1941",
-              "44681:1951",
-              "44681:1952"
-            ]
+            "sourceNodeIds": ["44681:1941", "44681:1951", "44681:1952"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "44681:1942",
-              "44681:1944",
-              "47914:206671",
-              "47914:206668"
-            ]
+            "sourceNodeIds": ["44681:1942", "44681:1944", "47914:206671", "47914:206668"]
           },
           {
             "fallbackHex": "#FFFFFF",
             "figmaVariableId": "VariableID:34614:51335",
-            "sourceNodeIds": [
-              "44681:1943",
-              "44681:1945",
-              "44681:1947"
-            ]
+            "sourceNodeIds": ["44681:1943", "44681:1945", "44681:1947"]
           }
         ]
       },
@@ -785,18 +650,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:206685",
-              "44681:1981",
-              "47914:206672"
-            ]
+            "sourceNodeIds": ["47914:206685", "44681:1981", "47914:206672"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206684"
-            ]
+            "sourceNodeIds": ["47914:206684"]
           }
         ]
       },
@@ -818,27 +677,17 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "44683:1983",
-              "44683:1981",
-              "44683:1988",
-              "44683:1990",
-              "47914:206732"
-            ]
+            "sourceNodeIds": ["44683:1983", "44683:1981", "44683:1988", "44683:1990", "47914:206732"]
           },
           {
             "fallbackHex": "#FEF5EE",
             "figmaVariableId": "VariableID:34701:3808",
-            "sourceNodeIds": [
-              "47914:206738"
-            ]
+            "sourceNodeIds": ["47914:206738"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206724"
-            ]
+            "sourceNodeIds": ["47914:206724"]
           }
         ]
       },
@@ -860,31 +709,22 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "46724:7614",
-              "47914:206532"
-            ]
+            "sourceNodeIds": ["46724:7614", "47914:206532"]
           },
           {
             "fallbackHex": "#FFFFFF",
             "figmaVariableId": "VariableID:34614:51335",
-            "sourceNodeIds": [
-              "46724:7616"
-            ]
+            "sourceNodeIds": ["46724:7616"]
           },
           {
             "fallbackHex": "#868C97",
             "figmaVariableId": "VariableID:34701:3818",
-            "sourceNodeIds": [
-              "46724:7618"
-            ]
+            "sourceNodeIds": ["46724:7618"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206518"
-            ]
+            "sourceNodeIds": ["47914:206518"]
           }
         ]
       },
@@ -906,24 +746,17 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "37150:32271"
-            ]
+            "sourceNodeIds": ["37150:32271"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32273",
-              "37150:32277"
-            ]
+            "sourceNodeIds": ["37150:32273", "37150:32277"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206843"
-            ]
+            "sourceNodeIds": ["47914:206843"]
           }
         ]
       },
@@ -945,24 +778,17 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "37150:32282"
-            ]
+            "sourceNodeIds": ["37150:32282"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32283",
-              "37150:32286"
-            ]
+            "sourceNodeIds": ["37150:32283", "37150:32286"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:206927"
-            ]
+            "sourceNodeIds": ["47914:206927"]
           }
         ]
       },
@@ -984,24 +810,17 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32290",
-              "37150:32296"
-            ]
+            "sourceNodeIds": ["37150:32290", "37150:32296"]
           },
           {
             "fallbackHex": "#9CA3B1",
             "figmaVariableId": "VariableID:34701:3816",
-            "sourceNodeIds": [
-              "47914:206941"
-            ]
+            "sourceNodeIds": ["47914:206941"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207039"
-            ]
+            "sourceNodeIds": ["47914:207039"]
           }
         ]
       },
@@ -1023,23 +842,17 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32301"
-            ]
+            "sourceNodeIds": ["37150:32301"]
           },
           {
             "fallbackHex": "#9CA3B1",
             "figmaVariableId": "VariableID:34701:3816",
-            "sourceNodeIds": [
-              "47914:207215"
-            ]
+            "sourceNodeIds": ["47914:207215"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207413"
-            ]
+            "sourceNodeIds": ["47914:207413"]
           }
         ]
       },
@@ -1061,25 +874,17 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32323",
-              "37150:32326"
-            ]
+            "sourceNodeIds": ["37150:32323", "37150:32326"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "37150:32328",
-              "47914:207503"
-            ]
+            "sourceNodeIds": ["37150:32328", "47914:207503"]
           },
           {
             "fallbackHex": "#F15757",
             "figmaVariableId": "VariableID:36198:13307",
-            "sourceNodeIds": [
-              "47914:207505"
-            ]
+            "sourceNodeIds": ["47914:207505"]
           }
         ]
       },
@@ -1101,30 +906,22 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "47914:207530"
-            ]
+            "sourceNodeIds": ["47914:207530"]
           },
           {
             "fallbackHex": "#868C97",
             "figmaVariableId": "VariableID:34701:3818",
-            "sourceNodeIds": [
-              "47914:207536"
-            ]
+            "sourceNodeIds": ["47914:207536"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207558"
-            ]
+            "sourceNodeIds": ["47914:207558"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207549"
-            ]
+            "sourceNodeIds": ["47914:207549"]
           }
         ]
       },
@@ -1146,16 +943,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32388"
-            ]
+            "sourceNodeIds": ["37150:32388"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207597"
-            ]
+            "sourceNodeIds": ["47914:207597"]
           }
         ]
       },
@@ -1177,17 +970,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207701",
-              "37150:32406"
-            ]
+            "sourceNodeIds": ["47914:207701", "37150:32406"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207671"
-            ]
+            "sourceNodeIds": ["47914:207671"]
           }
         ]
       },
@@ -1209,16 +997,12 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "47914:207718"
-            ]
+            "sourceNodeIds": ["47914:207718"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "37150:32419"
-            ]
+            "sourceNodeIds": ["37150:32419"]
           }
         ]
       },
@@ -1240,23 +1024,17 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "37150:32444"
-            ]
+            "sourceNodeIds": ["37150:32444"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207789"
-            ]
+            "sourceNodeIds": ["47914:207789"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207767"
-            ]
+            "sourceNodeIds": ["47914:207767"]
           }
         ]
       },
@@ -1278,23 +1056,17 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "37150:32451"
-            ]
+            "sourceNodeIds": ["37150:32451"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207805"
-            ]
+            "sourceNodeIds": ["47914:207805"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207799"
-            ]
+            "sourceNodeIds": ["47914:207799"]
           }
         ]
       },
@@ -1316,23 +1088,17 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "37150:32458"
-            ]
+            "sourceNodeIds": ["37150:32458"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207811"
-            ]
+            "sourceNodeIds": ["47914:207811"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207817"
-            ]
+            "sourceNodeIds": ["47914:207817"]
           }
         ]
       },
@@ -1354,16 +1120,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207904"
-            ]
+            "sourceNodeIds": ["47914:207904"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207872"
-            ]
+            "sourceNodeIds": ["47914:207872"]
           }
         ]
       },
@@ -1385,16 +1147,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32477"
-            ]
+            "sourceNodeIds": ["37150:32477"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207919"
-            ]
+            "sourceNodeIds": ["47914:207919"]
           }
         ]
       },
@@ -1416,24 +1174,17 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "47914:207947"
-            ]
+            "sourceNodeIds": ["47914:207947"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37150:32495",
-              "47914:207939"
-            ]
+            "sourceNodeIds": ["37150:32495", "47914:207939"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207937"
-            ]
+            "sourceNodeIds": ["47914:207937"]
           }
         ]
       },
@@ -1455,16 +1206,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207951"
-            ]
+            "sourceNodeIds": ["47914:207951"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207953"
-            ]
+            "sourceNodeIds": ["47914:207953"]
           }
         ]
       },
@@ -1486,16 +1233,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207970"
-            ]
+            "sourceNodeIds": ["47914:207970"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207968"
-            ]
+            "sourceNodeIds": ["47914:207968"]
           }
         ]
       },
@@ -1517,17 +1260,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:207984",
-              "37150:32552"
-            ]
+            "sourceNodeIds": ["47914:207984", "37150:32552"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207995"
-            ]
+            "sourceNodeIds": ["47914:207995"]
           }
         ]
       },
@@ -1549,16 +1287,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37373:60062"
-            ]
+            "sourceNodeIds": ["37373:60062"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:208005"
-            ]
+            "sourceNodeIds": ["47914:208005"]
           }
         ]
       },
@@ -1580,17 +1314,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "37373:60075",
-              "37373:60079"
-            ]
+            "sourceNodeIds": ["37373:60075", "37373:60079"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:208018"
-            ]
+            "sourceNodeIds": ["47914:208018"]
           }
         ]
       },
@@ -1612,16 +1341,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "44683:2023"
-            ]
+            "sourceNodeIds": ["44683:2023"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:207603"
-            ]
+            "sourceNodeIds": ["47914:207603"]
           }
         ]
       },
@@ -1643,16 +1368,12 @@
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:208036"
-            ]
+            "sourceNodeIds": ["47914:208036"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:208024"
-            ]
+            "sourceNodeIds": ["47914:208024"]
           }
         ]
       },
@@ -1674,33 +1395,22 @@
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:208046",
-              "45172:110589"
-            ]
+            "sourceNodeIds": ["47914:208046", "45172:110589"]
           },
           {
             "fallbackHex": "#FFFFFF",
             "figmaVariableId": "VariableID:34614:51335",
-            "sourceNodeIds": [
-              "45171:106970",
-              "45171:106964"
-            ]
+            "sourceNodeIds": ["45171:106970", "45171:106964"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47914:208041",
-              "45171:106966"
-            ]
+            "sourceNodeIds": ["47914:208041", "45171:106966"]
           },
           {
             "fallbackHex": "#FEF5EE",
             "figmaVariableId": "VariableID:34701:3808",
-            "sourceNodeIds": [
-              "45330:113839"
-            ]
+            "sourceNodeIds": ["45330:113839"]
           }
         ]
       },
@@ -1722,25 +1432,17 @@
           {
             "fallbackHex": "#C0C6D1",
             "figmaVariableId": "VariableID:34701:3815",
-            "sourceNodeIds": [
-              "45172:110557"
-            ]
+            "sourceNodeIds": ["45172:110557"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "45172:110559",
-              "45172:110563",
-              "45172:110564"
-            ]
+            "sourceNodeIds": ["45172:110559", "45172:110563", "45172:110564"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47914:208051"
-            ]
+            "sourceNodeIds": ["47914:208051"]
           }
         ]
       },
@@ -1762,31 +1464,22 @@
           {
             "fallbackHex": "#F9C5A2",
             "figmaVariableId": "VariableID:34624:51343",
-            "sourceNodeIds": [
-              "47922:208179"
-            ]
+            "sourceNodeIds": ["47922:208179"]
           },
           {
             "fallbackHex": "#FEF5EE",
             "figmaVariableId": "VariableID:34701:3808",
-            "sourceNodeIds": [
-              "47922:208180"
-            ]
+            "sourceNodeIds": ["47922:208180"]
           },
           {
             "fallbackHex": "#F28C45",
             "figmaVariableId": "VariableID:34624:51344",
-            "sourceNodeIds": [
-              "47922:208181",
-              "47922:208182"
-            ]
+            "sourceNodeIds": ["47922:208181", "47922:208182"]
           },
           {
             "fallbackHex": "#353639",
             "figmaVariableId": "VariableID:34701:3820",
-            "sourceNodeIds": [
-              "47922:208183"
-            ]
+            "sourceNodeIds": ["47922:208183"]
           }
         ]
       },
@@ -1808,16 +1501,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208601"
-            ]
+            "sourceNodeIds": ["47925:208601"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208600"
-            ]
+            "sourceNodeIds": ["47925:208600"]
           }
         ]
       },
@@ -1839,19 +1528,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "46:876",
-              "166:6094",
-              "2619:79459"
-            ]
+            "sourceNodeIds": ["46:876", "166:6094", "2619:79459"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "46:877",
-              "46:880"
-            ]
+            "sourceNodeIds": ["46:877", "46:880"]
           }
         ]
       },
@@ -1873,23 +1555,17 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "46:906"
-            ]
+            "sourceNodeIds": ["46:906"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "46:908"
-            ]
+            "sourceNodeIds": ["46:908"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208634"
-            ]
+            "sourceNodeIds": ["47925:208634"]
           }
         ]
       },
@@ -1911,23 +1587,17 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "46:923"
-            ]
+            "sourceNodeIds": ["46:923"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "46:925"
-            ]
+            "sourceNodeIds": ["46:925"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "46:927"
-            ]
+            "sourceNodeIds": ["46:927"]
           }
         ]
       },
@@ -1949,23 +1619,17 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "46:940"
-            ]
+            "sourceNodeIds": ["46:940"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "46:937"
-            ]
+            "sourceNodeIds": ["46:937"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "46:938"
-            ]
+            "sourceNodeIds": ["46:938"]
           }
         ]
       },
@@ -1987,17 +1651,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "66:1716"
-            ]
+            "sourceNodeIds": ["66:1716"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "66:1717",
-              "66:1718"
-            ]
+            "sourceNodeIds": ["66:1717", "66:1718"]
           }
         ]
       },
@@ -2019,20 +1678,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47810:19547",
-              "47810:19551",
-              "66:1988",
-              "66:1976"
-            ]
+            "sourceNodeIds": ["47810:19547", "47810:19551", "66:1988", "66:1976"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47810:19548",
-              "66:1989"
-            ]
+            "sourceNodeIds": ["47810:19548", "66:1989"]
           }
         ]
       },
@@ -2054,16 +1705,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208635"
-            ]
+            "sourceNodeIds": ["47925:208635"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "74:2053"
-            ]
+            "sourceNodeIds": ["74:2053"]
           }
         ]
       },
@@ -2085,27 +1732,17 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208641"
-            ]
+            "sourceNodeIds": ["47925:208641"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "75:2066",
-              "75:2067",
-              "76:1714"
-            ]
+            "sourceNodeIds": ["75:2066", "75:2067", "76:1714"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "75:2066",
-              "75:2067",
-              "76:1714"
-            ]
+            "sourceNodeIds": ["75:2066", "75:2067", "76:1714"]
           }
         ]
       },
@@ -2127,16 +1764,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "78:1746"
-            ]
+            "sourceNodeIds": ["78:1746"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "78:1748"
-            ]
+            "sourceNodeIds": ["78:1748"]
           }
         ]
       },
@@ -2158,16 +1791,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "78:1774"
-            ]
+            "sourceNodeIds": ["78:1774"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "78:1775"
-            ]
+            "sourceNodeIds": ["78:1775"]
           }
         ]
       },
@@ -2189,17 +1818,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "78:1790"
-            ]
+            "sourceNodeIds": ["78:1790"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "83:1689",
-              "78:1787"
-            ]
+            "sourceNodeIds": ["83:1689", "78:1787"]
           }
         ]
       },
@@ -2221,23 +1845,17 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "83:1716"
-            ]
+            "sourceNodeIds": ["83:1716"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "83:1714"
-            ]
+            "sourceNodeIds": ["83:1714"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208652"
-            ]
+            "sourceNodeIds": ["47925:208652"]
           }
         ]
       },
@@ -2259,16 +1877,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "86:1754"
-            ]
+            "sourceNodeIds": ["86:1754"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208658"
-            ]
+            "sourceNodeIds": ["47925:208658"]
           }
         ]
       },
@@ -2290,16 +1904,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208670"
-            ]
+            "sourceNodeIds": ["47925:208670"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208664"
-            ]
+            "sourceNodeIds": ["47925:208664"]
           }
         ]
       },
@@ -2321,18 +1931,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "89:1841",
-              "89:1842",
-              "47925:208677"
-            ]
+            "sourceNodeIds": ["89:1841", "89:1842", "47925:208677"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208676"
-            ]
+            "sourceNodeIds": ["47925:208676"]
           }
         ]
       },
@@ -2354,17 +1958,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "2970:81230",
-              "89:1895"
-            ]
+            "sourceNodeIds": ["2970:81230", "89:1895"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208679"
-            ]
+            "sourceNodeIds": ["47925:208679"]
           }
         ]
       },
@@ -2386,16 +1985,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208681"
-            ]
+            "sourceNodeIds": ["47925:208681"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208680"
-            ]
+            "sourceNodeIds": ["47925:208680"]
           }
         ]
       },
@@ -2417,26 +2012,17 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "92:1722",
-              "47925:208683"
-            ]
+            "sourceNodeIds": ["92:1722", "47925:208683"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "47925:208682",
-              "47925:208684"
-            ]
+            "sourceNodeIds": ["47925:208682", "47925:208684"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "92:1721",
-              "47925:208684"
-            ]
+            "sourceNodeIds": ["92:1721", "47925:208684"]
           }
         ]
       },
@@ -2458,16 +2044,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208685"
-            ]
+            "sourceNodeIds": ["47925:208685"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "2581:76279"
-            ]
+            "sourceNodeIds": ["2581:76279"]
           }
         ]
       },
@@ -2489,18 +2071,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "2743:86607",
-              "2743:86609"
-            ]
+            "sourceNodeIds": ["2743:86607", "2743:86609"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "2743:86608",
-              "47926:208790"
-            ]
+            "sourceNodeIds": ["2743:86608", "47926:208790"]
           }
         ]
       },
@@ -2522,16 +2098,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "2956:80553"
-            ]
+            "sourceNodeIds": ["2956:80553"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208767"
-            ]
+            "sourceNodeIds": ["47926:208767"]
           }
         ]
       },
@@ -2553,16 +2125,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208765"
-            ]
+            "sourceNodeIds": ["47926:208765"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47926:208766"
-            ]
+            "sourceNodeIds": ["47926:208766"]
           }
         ]
       },
@@ -2584,16 +2152,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "2956:80842"
-            ]
+            "sourceNodeIds": ["2956:80842"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208757"
-            ]
+            "sourceNodeIds": ["47926:208757"]
           }
         ]
       },
@@ -2615,17 +2179,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "2956:81005",
-              "2956:81008"
-            ]
+            "sourceNodeIds": ["2956:81005", "2956:81008"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208756"
-            ]
+            "sourceNodeIds": ["47926:208756"]
           }
         ]
       },
@@ -2647,16 +2206,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208755"
-            ]
+            "sourceNodeIds": ["47926:208755"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "2960:81043"
-            ]
+            "sourceNodeIds": ["2960:81043"]
           }
         ]
       },
@@ -2678,17 +2233,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "2960:81110",
-              "47926:208733"
-            ]
+            "sourceNodeIds": ["2960:81110", "47926:208733"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47926:208690"
-            ]
+            "sourceNodeIds": ["47926:208690"]
           }
         ]
       },
@@ -2710,17 +2260,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "2970:81191",
-              "2970:81195"
-            ]
+            "sourceNodeIds": ["2970:81191", "2970:81195"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "2970:81196"
-            ]
+            "sourceNodeIds": ["2970:81196"]
           }
         ]
       },
@@ -2742,16 +2287,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208689"
-            ]
+            "sourceNodeIds": ["47925:208689"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208688"
-            ]
+            "sourceNodeIds": ["47925:208688"]
           }
         ]
       },
@@ -2773,16 +2314,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208686"
-            ]
+            "sourceNodeIds": ["47925:208686"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208687"
-            ]
+            "sourceNodeIds": ["47925:208687"]
           }
         ]
       },
@@ -2804,16 +2341,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "14476:204428"
-            ]
+            "sourceNodeIds": ["14476:204428"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208798"
-            ]
+            "sourceNodeIds": ["47926:208798"]
           }
         ]
       },
@@ -2835,16 +2368,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47926:208800"
-            ]
+            "sourceNodeIds": ["47926:208800"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208799"
-            ]
+            "sourceNodeIds": ["47926:208799"]
           }
         ]
       },
@@ -2866,16 +2395,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208817"
-            ]
+            "sourceNodeIds": ["47926:208817"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47926:208823"
-            ]
+            "sourceNodeIds": ["47926:208823"]
           }
         ]
       },
@@ -2897,17 +2422,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "15311:236838"
-            ]
+            "sourceNodeIds": ["15311:236838"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208846",
-              "47926:208845"
-            ]
+            "sourceNodeIds": ["47926:208846", "47926:208845"]
           }
         ]
       },
@@ -2929,18 +2449,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "37151:13888",
-              "37151:13889",
-              "37151:13890"
-            ]
+            "sourceNodeIds": ["37151:13888", "37151:13889", "37151:13890"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47926:208768"
-            ]
+            "sourceNodeIds": ["47926:208768"]
           }
         ]
       },
@@ -2962,17 +2476,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208546",
-              "47925:208542"
-            ]
+            "sourceNodeIds": ["47925:208546", "47925:208542"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208544"
-            ]
+            "sourceNodeIds": ["47925:208544"]
           }
         ]
       },
@@ -2994,16 +2503,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208541"
-            ]
+            "sourceNodeIds": ["47925:208541"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208539"
-            ]
+            "sourceNodeIds": ["47925:208539"]
           }
         ]
       },
@@ -3025,17 +2530,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:31090",
-              "37150:31096"
-            ]
+            "sourceNodeIds": ["37150:31090", "37150:31096"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208535"
-            ]
+            "sourceNodeIds": ["47925:208535"]
           }
         ]
       },
@@ -3057,17 +2557,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37151:13828",
-              "47925:208497"
-            ]
+            "sourceNodeIds": ["37151:13828", "47925:208497"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208495"
-            ]
+            "sourceNodeIds": ["47925:208495"]
           }
         ]
       },
@@ -3089,18 +2584,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37151:13814",
-              "47925:208529",
-              "37151:13818"
-            ]
+            "sourceNodeIds": ["37151:13814", "47925:208529", "37151:13818"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208527"
-            ]
+            "sourceNodeIds": ["47925:208527"]
           }
         ]
       },
@@ -3122,17 +2611,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37151:13804",
-              "37151:13806"
-            ]
+            "sourceNodeIds": ["37151:13804", "37151:13806"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208523"
-            ]
+            "sourceNodeIds": ["47925:208523"]
           }
         ]
       },
@@ -3154,16 +2638,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208521"
-            ]
+            "sourceNodeIds": ["47925:208521"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208517"
-            ]
+            "sourceNodeIds": ["47925:208517"]
           }
         ]
       },
@@ -3185,17 +2665,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37151:13776",
-              "47925:208516"
-            ]
+            "sourceNodeIds": ["37151:13776", "47925:208516"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208515"
-            ]
+            "sourceNodeIds": ["47925:208515"]
           }
         ]
       },
@@ -3217,16 +2692,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208514"
-            ]
+            "sourceNodeIds": ["47925:208514"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208510"
-            ]
+            "sourceNodeIds": ["47925:208510"]
           }
         ]
       },
@@ -3248,17 +2719,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208503",
-              "37151:13760"
-            ]
+            "sourceNodeIds": ["47925:208503", "37151:13760"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208509"
-            ]
+            "sourceNodeIds": ["47925:208509"]
           }
         ]
       },
@@ -3280,16 +2746,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208500"
-            ]
+            "sourceNodeIds": ["47925:208500"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208498"
-            ]
+            "sourceNodeIds": ["47925:208498"]
           }
         ]
       },
@@ -3311,16 +2773,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30977"
-            ]
+            "sourceNodeIds": ["37150:30977"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208491"
-            ]
+            "sourceNodeIds": ["47925:208491"]
           }
         ]
       },
@@ -3342,17 +2800,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208442",
-              "37150:30973"
-            ]
+            "sourceNodeIds": ["47922:208442", "37150:30973"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208486"
-            ]
+            "sourceNodeIds": ["47922:208486"]
           }
         ]
       },
@@ -3374,17 +2827,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30952",
-              "37150:30955"
-            ]
+            "sourceNodeIds": ["37150:30952", "37150:30955"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208424"
-            ]
+            "sourceNodeIds": ["47922:208424"]
           }
         ]
       },
@@ -3406,17 +2854,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208419",
-              "37150:30949"
-            ]
+            "sourceNodeIds": ["47922:208419", "37150:30949"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208423"
-            ]
+            "sourceNodeIds": ["47922:208423"]
           }
         ]
       },
@@ -3438,17 +2881,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30930",
-              "37150:30931"
-            ]
+            "sourceNodeIds": ["37150:30930", "37150:30931"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208406"
-            ]
+            "sourceNodeIds": ["47922:208406"]
           }
         ]
       },
@@ -3470,17 +2908,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208403",
-              "47922:208405"
-            ]
+            "sourceNodeIds": ["47922:208403", "47922:208405"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208401"
-            ]
+            "sourceNodeIds": ["47922:208401"]
           }
         ]
       },
@@ -3502,17 +2935,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30898",
-              "37150:30899"
-            ]
+            "sourceNodeIds": ["37150:30898", "37150:30899"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208393"
-            ]
+            "sourceNodeIds": ["47922:208393"]
           }
         ]
       },
@@ -3534,17 +2962,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30888",
-              "37150:30895"
-            ]
+            "sourceNodeIds": ["37150:30888", "37150:30895"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208392"
-            ]
+            "sourceNodeIds": ["47922:208392"]
           }
         ]
       },
@@ -3566,18 +2989,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37151:13727",
-              "37151:13728",
-              "47922:208246"
-            ]
+            "sourceNodeIds": ["37151:13727", "37151:13728", "47922:208246"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208249"
-            ]
+            "sourceNodeIds": ["47922:208249"]
           }
         ]
       },
@@ -3599,18 +3016,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37151:13714",
-              "37151:13715",
-              "37151:13716"
-            ]
+            "sourceNodeIds": ["37151:13714", "37151:13715", "37151:13716"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208390"
-            ]
+            "sourceNodeIds": ["47922:208390"]
           }
         ]
       },
@@ -3632,16 +3043,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208388"
-            ]
+            "sourceNodeIds": ["47922:208388"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208386"
-            ]
+            "sourceNodeIds": ["47922:208386"]
           }
         ]
       },
@@ -3663,17 +3070,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37151:13697",
-              "47922:208383"
-            ]
+            "sourceNodeIds": ["37151:13697", "47922:208383"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208380"
-            ]
+            "sourceNodeIds": ["47922:208380"]
           }
         ]
       },
@@ -3695,17 +3097,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30835",
-              "37150:30838"
-            ]
+            "sourceNodeIds": ["37150:30835", "37150:30838"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208374"
-            ]
+            "sourceNodeIds": ["47922:208374"]
           }
         ]
       },
@@ -3727,16 +3124,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30829"
-            ]
+            "sourceNodeIds": ["37150:30829"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208263"
-            ]
+            "sourceNodeIds": ["47922:208263"]
           }
         ]
       },
@@ -3758,16 +3151,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30824"
-            ]
+            "sourceNodeIds": ["37150:30824"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208261"
-            ]
+            "sourceNodeIds": ["47922:208261"]
           }
         ]
       },
@@ -3789,25 +3178,17 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208259",
-              "37150:30815"
-            ]
+            "sourceNodeIds": ["47922:208259", "37150:30815"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208253",
-              "47922:208255"
-            ]
+            "sourceNodeIds": ["47922:208253", "47922:208255"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "47922:208257"
-            ]
+            "sourceNodeIds": ["47922:208257"]
           }
         ]
       },
@@ -3829,16 +3210,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208242"
-            ]
+            "sourceNodeIds": ["47922:208242"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208232"
-            ]
+            "sourceNodeIds": ["47922:208232"]
           }
         ]
       },
@@ -3860,17 +3237,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47810:19514",
-              "37150:30798"
-            ]
+            "sourceNodeIds": ["47810:19514", "37150:30798"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208231"
-            ]
+            "sourceNodeIds": ["47922:208231"]
           }
         ]
       },
@@ -3892,17 +3264,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30779",
-              "37150:30780"
-            ]
+            "sourceNodeIds": ["37150:30779", "37150:30780"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208226"
-            ]
+            "sourceNodeIds": ["47922:208226"]
           }
         ]
       },
@@ -3924,17 +3291,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208221",
-              "37150:30776"
-            ]
+            "sourceNodeIds": ["47922:208221", "37150:30776"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208225"
-            ]
+            "sourceNodeIds": ["47922:208225"]
           }
         ]
       },
@@ -3956,17 +3318,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208217",
-              "37150:30768"
-            ]
+            "sourceNodeIds": ["47922:208217", "37150:30768"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208215"
-            ]
+            "sourceNodeIds": ["47922:208215"]
           }
         ]
       },
@@ -3988,17 +3345,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208206",
-              "47922:208208"
-            ]
+            "sourceNodeIds": ["47922:208206", "47922:208208"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208204"
-            ]
+            "sourceNodeIds": ["47922:208204"]
           }
         ]
       },
@@ -4020,17 +3372,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47922:208197",
-              "37150:30746"
-            ]
+            "sourceNodeIds": ["47922:208197", "37150:30746"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208199"
-            ]
+            "sourceNodeIds": ["47922:208199"]
           }
         ]
       },
@@ -4052,17 +3399,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37150:30736",
-              "37150:30737"
-            ]
+            "sourceNodeIds": ["37150:30736", "37150:30737"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47922:208191"
-            ]
+            "sourceNodeIds": ["47922:208191"]
           }
         ]
       },
@@ -4084,18 +3426,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208549",
-              "37560:24931"
-            ]
+            "sourceNodeIds": ["47925:208549", "37560:24931"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208548",
-              "37560:24930"
-            ]
+            "sourceNodeIds": ["47925:208548", "37560:24930"]
           }
         ]
       },
@@ -4117,17 +3453,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208554",
-              "37560:24963"
-            ]
+            "sourceNodeIds": ["47925:208554", "37560:24963"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208556"
-            ]
+            "sourceNodeIds": ["47925:208556"]
           }
         ]
       },
@@ -4149,16 +3480,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208564"
-            ]
+            "sourceNodeIds": ["47925:208564"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208566"
-            ]
+            "sourceNodeIds": ["47925:208566"]
           }
         ]
       },
@@ -4180,18 +3507,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208848",
-              "37560:25050"
-            ]
+            "sourceNodeIds": ["47926:208848", "37560:25050"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47926:208847",
-              "37560:25049"
-            ]
+            "sourceNodeIds": ["47926:208847", "37560:25049"]
           }
         ]
       },
@@ -4213,16 +3534,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208850"
-            ]
+            "sourceNodeIds": ["47926:208850"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37560:25006"
-            ]
+            "sourceNodeIds": ["37560:25006"]
           }
         ]
       },
@@ -4244,16 +3561,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208854"
-            ]
+            "sourceNodeIds": ["47926:208854"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37560:25000"
-            ]
+            "sourceNodeIds": ["37560:25000"]
           }
         ]
       },
@@ -4275,19 +3588,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "38051:62385",
-              "38051:62387",
-              "47926:208855"
-            ]
+            "sourceNodeIds": ["38051:62385", "38051:62387", "47926:208855"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "38051:62390",
-              "38051:62407"
-            ]
+            "sourceNodeIds": ["38051:62390", "38051:62407"]
           }
         ]
       },
@@ -4309,16 +3615,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208579"
-            ]
+            "sourceNodeIds": ["47925:208579"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208581"
-            ]
+            "sourceNodeIds": ["47925:208581"]
           }
         ]
       },
@@ -4340,17 +3642,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47926:208863"
-            ]
+            "sourceNodeIds": ["47926:208863"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "38723:88891",
-              "47926:208862"
-            ]
+            "sourceNodeIds": ["38723:88891", "47926:208862"]
           }
         ]
       },
@@ -4372,17 +3669,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "38723:89100",
-              "47925:208593"
-            ]
+            "sourceNodeIds": ["38723:89100", "47925:208593"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208595"
-            ]
+            "sourceNodeIds": ["47925:208595"]
           }
         ]
       },
@@ -4404,16 +3696,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "44984:1945"
-            ]
+            "sourceNodeIds": ["44984:1945"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "44983:1898"
-            ]
+            "sourceNodeIds": ["44983:1898"]
           }
         ]
       },
@@ -4435,16 +3723,12 @@
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "47925:208599"
-            ]
+            "sourceNodeIds": ["47925:208599"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "47925:208597"
-            ]
+            "sourceNodeIds": ["47925:208597"]
           }
         ]
       },
@@ -5969,16 +5253,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "13807:174539"
-            ]
+            "sourceNodeIds": ["13807:174539"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I13806:174478;1:2558"
-            ]
+            "sourceNodeIds": ["I13806:174478;1:2558"]
           }
         ]
       },
@@ -6000,16 +5280,12 @@
           {
             "figmaVariableId": "VariableID:36198:13571",
             "fallbackHex": "#F6A823",
-            "sourceNodeIds": [
-              "13807:174540"
-            ]
+            "sourceNodeIds": ["13807:174540"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I13807:174498;1:2576"
-            ]
+            "sourceNodeIds": ["I13807:174498;1:2576"]
           }
         ]
       },
@@ -6031,16 +5307,12 @@
           {
             "figmaVariableId": "VariableID:36198:13307",
             "fallbackHex": "#F15757",
-            "sourceNodeIds": [
-              "13807:174541"
-            ]
+            "sourceNodeIds": ["13807:174541"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I13807:174504;1:2556"
-            ]
+            "sourceNodeIds": ["I13807:174504;1:2556"]
           }
         ]
       },
@@ -6062,16 +5334,12 @@
           {
             "figmaVariableId": "VariableID:36198:13579",
             "fallbackHex": "#28C08E",
-            "sourceNodeIds": [
-              "13807:174542"
-            ]
+            "sourceNodeIds": ["13807:174542"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I13807:174526;1:2584"
-            ]
+            "sourceNodeIds": ["I13807:174526;1:2584"]
           }
         ]
       },
@@ -6093,16 +5361,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "13807:174543"
-            ]
+            "sourceNodeIds": ["13807:174543"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I13807:174536;1:2862"
-            ]
+            "sourceNodeIds": ["I13807:174536;1:2862"]
           }
         ]
       },
@@ -6124,16 +5388,12 @@
           {
             "figmaVariableId": "VariableID:34819:5263",
             "fallbackHex": "#8862F8",
-            "sourceNodeIds": [
-              "13807:174544"
-            ]
+            "sourceNodeIds": ["13807:174544"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I13807:174530;1:2658"
-            ]
+            "sourceNodeIds": ["I13807:174530;1:2658"]
           }
         ]
       },
@@ -6155,16 +5415,12 @@
           {
             "figmaVariableId": "VariableID:36198:13307",
             "fallbackHex": "#F15757",
-            "sourceNodeIds": [
-              "13807:174545"
-            ]
+            "sourceNodeIds": ["13807:174545"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I13807:174510;37148:27333"
-            ]
+            "sourceNodeIds": ["I13807:174510;37148:27333"]
           }
         ]
       },
@@ -6186,23 +5442,17 @@
           {
             "figmaVariableId": "VariableID:34624:51343",
             "fallbackHex": "#F9C5A2",
-            "sourceNodeIds": [
-              "14012:175287"
-            ]
+            "sourceNodeIds": ["14012:175287"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "37715:90055"
-            ]
+            "sourceNodeIds": ["37715:90055"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "37715:90055"
-            ]
+            "sourceNodeIds": ["37715:90055"]
           }
         ]
       },
@@ -6224,16 +5474,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "14586:211780"
-            ]
+            "sourceNodeIds": ["14586:211780"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I14586:211778;1:2768"
-            ]
+            "sourceNodeIds": ["I14586:211778;1:2768"]
           }
         ]
       },
@@ -6255,16 +5501,12 @@
           {
             "figmaVariableId": "VariableID:36199:11624",
             "fallbackHex": "#28C08E",
-            "sourceNodeIds": [
-              "14586:211782"
-            ]
+            "sourceNodeIds": ["14586:211782"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I14586:211783;1:2830"
-            ]
+            "sourceNodeIds": ["I14586:211783;1:2830"]
           }
         ]
       },
@@ -6286,16 +5528,12 @@
           {
             "figmaVariableId": "VariableID:36198:13307",
             "fallbackHex": "#F15757",
-            "sourceNodeIds": [
-              "14586:211797"
-            ]
+            "sourceNodeIds": ["14586:211797"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I14586:211798;1:2824"
-            ]
+            "sourceNodeIds": ["I14586:211798;1:2824"]
           }
         ]
       },
@@ -6317,16 +5555,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "14586:211801"
-            ]
+            "sourceNodeIds": ["14586:211801"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I14586:211807;5941:32671"
-            ]
+            "sourceNodeIds": ["I14586:211807;5941:32671"]
           }
         ]
       },
@@ -6348,16 +5582,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "14586:211810"
-            ]
+            "sourceNodeIds": ["14586:211810"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I14586:211811;1:2774"
-            ]
+            "sourceNodeIds": ["I14586:211811;1:2774"]
           }
         ]
       },
@@ -6379,16 +5609,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "15752:248591"
-            ]
+            "sourceNodeIds": ["15752:248591"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I15752:248592;1:2796"
-            ]
+            "sourceNodeIds": ["I15752:248592;1:2796"]
           }
         ]
       },
@@ -6410,16 +5636,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "31042:85219"
-            ]
+            "sourceNodeIds": ["31042:85219"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I31042:85220;1:2562"
-            ]
+            "sourceNodeIds": ["I31042:85220;1:2562"]
           }
         ]
       },
@@ -6441,16 +5663,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "37153:13731"
-            ]
+            "sourceNodeIds": ["37153:13731"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I37153:13732;1:2566"
-            ]
+            "sourceNodeIds": ["I37153:13732;1:2566"]
           }
         ]
       },
@@ -6472,16 +5690,12 @@
           {
             "figmaVariableId": "VariableID:36198:13307",
             "fallbackHex": "#F15757",
-            "sourceNodeIds": [
-              "37153:13733"
-            ]
+            "sourceNodeIds": ["37153:13733"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I37153:13734;1:2566"
-            ]
+            "sourceNodeIds": ["I37153:13734;1:2566"]
           }
         ]
       },
@@ -6503,16 +5717,12 @@
           {
             "figmaVariableId": "VariableID:34701:3812",
             "fallbackHex": "#EEF0F3",
-            "sourceNodeIds": [
-              "37153:13735"
-            ]
+            "sourceNodeIds": ["37153:13735"]
           },
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "I37153:13736;1:2930"
-            ]
+            "sourceNodeIds": ["I37153:13736;1:2930"]
           }
         ]
       },
@@ -6534,16 +5744,12 @@
           {
             "figmaVariableId": "VariableID:36198:13307",
             "fallbackHex": "#F15757",
-            "sourceNodeIds": [
-              "37153:13737"
-            ]
+            "sourceNodeIds": ["37153:13737"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I37153:13738;1:2930"
-            ]
+            "sourceNodeIds": ["I37153:13738;1:2930"]
           }
         ]
       },
@@ -6565,16 +5771,12 @@
           {
             "figmaVariableId": "VariableID:39203:132771",
             "fallbackHex": "#4493FF",
-            "sourceNodeIds": [
-              "37153:13739"
-            ]
+            "sourceNodeIds": ["37153:13739"]
           },
           {
             "figmaVariableId": "VariableID:34713:3826",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "I37153:13740;36393:7839"
-            ]
+            "sourceNodeIds": ["I37153:13740;36393:7839"]
           }
         ]
       },
@@ -6596,16 +5798,12 @@
           {
             "figmaVariableId": "VariableID:36199:11624",
             "fallbackHex": "#28C08E",
-            "sourceNodeIds": [
-              "45425:2003"
-            ]
+            "sourceNodeIds": ["45425:2003"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "45429:1893"
-            ]
+            "sourceNodeIds": ["45429:1893"]
           }
         ]
       },
@@ -6627,16 +5825,12 @@
           {
             "figmaVariableId": "VariableID:34701:3815",
             "fallbackHex": "#C0C6D1",
-            "sourceNodeIds": [
-              "45425:2005"
-            ]
+            "sourceNodeIds": ["45425:2005"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "45429:1897"
-            ]
+            "sourceNodeIds": ["45429:1897"]
           }
         ]
       },
@@ -6658,16 +5852,12 @@
           {
             "figmaVariableId": "VariableID:36198:13307",
             "fallbackHex": "#F15757",
-            "sourceNodeIds": [
-              "45425:2011"
-            ]
+            "sourceNodeIds": ["45425:2011"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "45429:1895"
-            ]
+            "sourceNodeIds": ["45429:1895"]
           }
         ]
       },
@@ -6689,23 +5879,17 @@
           {
             "figmaVariableId": "VariableID:34624:51343",
             "fallbackHex": "#F9C5A2",
-            "sourceNodeIds": [
-              "45425:2028"
-            ]
+            "sourceNodeIds": ["45425:2028"]
           },
           {
             "figmaVariableId": "VariableID:34624:51344",
             "fallbackHex": "#F28C45",
-            "sourceNodeIds": [
-              "45425:2029"
-            ]
+            "sourceNodeIds": ["45425:2029"]
           },
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "45425:2029"
-            ]
+            "sourceNodeIds": ["45425:2029"]
           }
         ]
       },
@@ -6727,16 +5911,12 @@
           {
             "figmaVariableId": "VariableID:34614:51335",
             "fallbackHex": "#FFFFFF",
-            "sourceNodeIds": [
-              "45425:2033"
-            ]
+            "sourceNodeIds": ["45425:2033"]
           },
           {
             "figmaVariableId": "VariableID:34701:3815",
             "fallbackHex": "#C0C6D1",
-            "sourceNodeIds": [
-              "45425:2033"
-            ]
+            "sourceNodeIds": ["45425:2033"]
           }
         ]
       },
@@ -6758,10 +5938,7 @@
           {
             "figmaVariableId": "VariableID:36198:13579",
             "fallbackHex": "#28C08E",
-            "sourceNodeIds": [
-              "47955:208867",
-              "45428:2092"
-            ]
+            "sourceNodeIds": ["47955:208867", "45428:2092"]
           }
         ]
       },
@@ -6783,10 +5960,7 @@
           {
             "figmaVariableId": "VariableID:36198:13307",
             "fallbackHex": "#F15757",
-            "sourceNodeIds": [
-              "47955:208869",
-              "I45428:2102;1:2258"
-            ]
+            "sourceNodeIds": ["47955:208869", "I45428:2102;1:2258"]
           }
         ]
       },
@@ -6808,16 +5982,12 @@
           {
             "figmaVariableId": "VariableID:34701:3815",
             "fallbackHex": "#C0C6D1",
-            "sourceNodeIds": [
-              "47955:208871"
-            ]
+            "sourceNodeIds": ["47955:208871"]
           },
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "I45428:2112;1:2518"
-            ]
+            "sourceNodeIds": ["I45428:2112;1:2518"]
           }
         ]
       },
@@ -6839,16 +6009,12 @@
           {
             "figmaVariableId": "VariableID:34701:3820",
             "fallbackHex": "#353639",
-            "sourceNodeIds": [
-              "45428:2114"
-            ]
+            "sourceNodeIds": ["45428:2114"]
           },
           {
             "figmaVariableId": "VariableID:34701:3815",
             "fallbackHex": "#C0C6D1",
-            "sourceNodeIds": [
-              "47955:208865"
-            ]
+            "sourceNodeIds": ["47955:208865"]
           }
         ]
       },
@@ -7171,9 +6337,7 @@
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "46015:1902"
-            ]
+            "sourceNodeIds": ["46015:1902"]
           }
         ]
       },
@@ -7194,9 +6358,7 @@
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "46015:1905"
-            ]
+            "sourceNodeIds": ["46015:1905"]
           }
         ]
       },
@@ -7217,9 +6379,7 @@
           {
             "figmaVariableId": "VariableID:34701:3818",
             "fallbackHex": "#868C97",
-            "sourceNodeIds": [
-              "46015:1918"
-            ]
+            "sourceNodeIds": ["46015:1918"]
           }
         ]
       },
@@ -7840,34 +7000,22 @@
           {
             "fallbackHex": "#1B8E9D",
             "figmaVariableId": "VariableID:86376802e98b85d27645d07621727a5d48d5d7b8/38864:421",
-            "sourceNodeIds": [
-              "47752:13923",
-              "47752:13924"
-            ]
+            "sourceNodeIds": ["47752:13923", "47752:13924"]
           },
           {
             "fallbackHex": "#2E7CE7",
             "figmaVariableId": "VariableID:36e4ec800259a057fb58cc25bbfee1d945cddf21/38864:260",
-            "sourceNodeIds": [
-              "47752:13923",
-              "47752:13924"
-            ]
+            "sourceNodeIds": ["47752:13923", "47752:13924"]
           },
           {
             "fallbackHex": "#DC5CDF",
             "figmaVariableId": "VariableID:6c63858a469cc65eaadc9a046d0a5ab0e8d923fc/38864:383",
-            "sourceNodeIds": [
-              "47752:13923",
-              "47752:13924"
-            ]
+            "sourceNodeIds": ["47752:13923", "47752:13924"]
           },
           {
             "fallbackHex": "#FFCE1E",
             "figmaVariableId": "VariableID:3e3f15528e45abf0d0520865620a308a9b1e4fe4/38864:296",
-            "sourceNodeIds": [
-              "47752:13923",
-              "47752:13924"
-            ]
+            "sourceNodeIds": ["47752:13923", "47752:13924"]
           }
         ]
       },

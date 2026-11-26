@@ -1,35 +1,31 @@
-import { spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, relative, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest'
 
-import { auditIcons as auditWithPolicy, canonicalizeSvg } from '../../scripts/audit-icons.mjs';
-import {
-  getIconAuditPolicy,
-  ICON_STROKE_WIDTH_POLICY,
-} from '../../scripts/icon-audit-contracts.mjs';
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
-import { planIconStrokeManifests } from '../../scripts/update-icon-stroke-manifests.mjs';
+import { auditIcons as auditWithPolicy, canonicalizeSvg } from '../../scripts/audit-icons.mjs'
+import { getIconAuditPolicy, ICON_STROKE_WIDTH_POLICY } from '../../scripts/icon-audit-contracts.mjs'
+import { readIconInputSync } from '../../scripts/icon-source-documents.mjs'
+import { planIconStrokeManifests } from '../../scripts/update-icon-stroke-manifests.mjs'
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const auditScript = resolve(packageRoot, 'scripts/audit-icons.mjs');
-const manifest = resolve(packageRoot, 'config/icon-sources/outline.json#manifest');
-const networkGuard = resolve(packageRoot, 'test/icons/helpers/deny-network.cjs');
-const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
-const validOutline =
-  '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor"/></svg>';
-const dataCompareFormula = 'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))';
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const auditScript = resolve(packageRoot, 'scripts/audit-icons.mjs')
+const manifest = resolve(packageRoot, 'config/icon-sources/outline.json#manifest')
+const networkGuard = resolve(packageRoot, 'test/icons/helpers/deny-network.cjs')
+const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex')
+const validOutline = '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor"/></svg>'
+const dataCompareFormula = 'rgb(from currentColor calc(r + 139) calc(g + 144) calc(b + 152))'
 
-const fixtureCounts = { currentSymbols: 4, publicExports: 4 };
+const fixtureCounts = { currentSymbols: 4, publicExports: 4 }
 const auditIcons = (options: Parameters<typeof auditWithPolicy>[0]) =>
   auditWithPolicy({
     ...options,
     policyOverride: { ...getIconAuditPolicy('outline-v1'), expectedCounts: fixtureCounts },
-  });
+  })
 
 const completeManifest = (source = validOutline) => {
   const normalizedAstSha256 = sha256(
@@ -38,14 +34,14 @@ const completeManifest = (source = validOutline) => {
       normalizeSemanticErase: true,
       normalizeStrokeWidth: true,
     }),
-  );
+  )
   const geometrySha256 = sha256(
     canonicalizeSvg(source, {
       geometryOnly: true,
       normalizeSemanticErase: true,
       normalizeStrokeWidth: true,
     }),
-  );
+  )
   const symbol = (index: number) => ({
     exportedSourceNodeId: `${index + 1}:1`,
     exportName: `Example${index}Outlined`,
@@ -58,7 +54,7 @@ const completeManifest = (source = validOutline) => {
     localNormalizedAstSha256: normalizedAstSha256,
     localRawSvgSha256: sha256(source),
     normalizedAstSha256,
-  });
+  })
   return {
     complete: true,
     expectedCounts: { ...fixtureCounts },
@@ -71,36 +67,36 @@ const completeManifest = (source = validOutline) => {
     strokeWidthPolicy: { ...ICON_STROKE_WIDTH_POLICY },
     symbols: Array.from({ length: fixtureCounts.currentSymbols }, (_, index) => symbol(index)),
     variant: 'outline',
-  };
-};
-type ManifestFixture = ReturnType<typeof completeManifest>;
+  }
+}
+type ManifestFixture = ReturnType<typeof completeManifest>
 
 const withFixture = async (files: Record<string, string>, run: (root: string) => Promise<void>) => {
-  const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-audit-'));
+  const root = mkdtempSync(resolve(tmpdir(), 'yakit-icon-audit-'))
   try {
     for (const [name, source] of Object.entries(files)) {
-      const file = resolve(root, name);
-      mkdirSync(dirname(file), { recursive: true });
-      writeFileSync(file, source);
+      const file = resolve(root, name)
+      mkdirSync(dirname(file), { recursive: true })
+      writeFileSync(file, source)
     }
-    await run(root);
+    await run(root)
   } finally {
-    rmSync(root, { force: true, recursive: true });
+    rmSync(root, { force: true, recursive: true })
   }
-};
+}
 
 const snapshot = (roots: string[]) => {
-  const result: Record<string, string> = {};
+  const result: Record<string, string> = {}
   const visit = (path: string) => {
     if (!statSync(path).isDirectory()) {
-      result[relative(packageRoot, path)] = sha256(readIconInputSync(path));
-      return;
+      result[relative(packageRoot, path)] = sha256(readIconInputSync(path))
+      return
     }
-    for (const entry of readdirSync(path).sort()) visit(resolve(path, entry));
-  };
-  roots.forEach(visit);
-  return result;
-};
+    for (const entry of readdirSync(path).sort()) visit(resolve(path, entry))
+  }
+  roots.forEach(visit)
+  return result
+}
 
 const runAudit = () => {
   const result = spawnSync(process.execPath, [auditScript, '--check', '--manifest', manifest], {
@@ -108,44 +104,43 @@ const runAudit = () => {
     encoding: 'utf8',
     env: {
       ...process.env,
-      NODE_OPTIONS:
-        `${process.env.NODE_OPTIONS ?? ''} --require=${JSON.stringify(networkGuard)}`.trim(),
+      NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --require=${JSON.stringify(networkGuard)}`.trim(),
     },
-  });
-  return { status: result.status, stderr: result.stderr, stdout: result.stdout };
-};
+  })
+  return { status: result.status, stderr: result.stderr, stdout: result.stdout }
+}
 
 describe('Outline icon audit check mode', () => {
-  let before: Record<string, string>;
-  let after: Record<string, string>;
-  let first: ReturnType<typeof runAudit>;
-  let second: ReturnType<typeof runAudit>;
+  let before: Record<string, string>
+  let after: Record<string, string>
+  let first: ReturnType<typeof runAudit>
+  let second: ReturnType<typeof runAudit>
 
   beforeAll(() => {
-    const roots = [resolve(packageRoot, 'scripts'), resolve(packageRoot, 'src')];
-    before = snapshot(roots);
-    first = runAudit();
-    second = runAudit();
-    after = snapshot(roots);
-  });
+    const roots = [resolve(packageRoot, 'scripts'), resolve(packageRoot, 'src')]
+    before = snapshot(roots)
+    first = runAudit()
+    second = runAudit()
+    after = snapshot(roots)
+  })
 
   it('passes without network access', () => {
-    expect(first).toMatchObject({ status: 0, stderr: '' });
-    expect(first.stdout).toContain('AUDIT_OK');
-  });
+    expect(first).toMatchObject({ status: 0, stderr: '' })
+    expect(first.stdout).toContain('AUDIT_OK')
+  })
 
   it('produces byte-identical output on consecutive runs', () => {
-    expect(second).toEqual(first);
-  });
+    expect(second).toEqual(first)
+  })
 
   it('does not mutate icon or manifest inputs in check mode', () => {
-    expect(after).toEqual(before);
-  });
+    expect(after).toEqual(before)
+  })
 
   it('does not emit a generated timestamp', () => {
-    expect(`${first.stdout}\n${first.stderr}`).not.toMatch(/\b20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}/);
-  });
-});
+    expect(`${first.stdout}\n${first.stderr}`).not.toMatch(/\b20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}/)
+  })
+})
 
 describe('Outline icon audit structural failures', () => {
   it('accepts the Figma title token only with its verified fallback', async () => {
@@ -154,17 +149,12 @@ describe('Outline icon audit structural failures', () => {
       ['var(--Colors-Use-Neutral-Text-1-Title, #F28C45)', false],
       ['var(--unverified-color, #353639)', false],
     ] as const) {
-      await withFixture(
-        { 'outline/example.svg': validOutline.replaceAll('currentColor', paint) },
-        async (root) => {
-          const result = await auditIcons({ root });
-          expect(result.failures.some(({ token }) => token === 'FOREGROUND_LITERAL')).toBe(
-            !accepted,
-          );
-        },
-      );
+      await withFixture({ 'outline/example.svg': validOutline.replaceAll('currentColor', paint) }, async (root) => {
+        const result = await auditIcons({ root })
+        expect(result.failures.some(({ token }) => token === 'FOREGROUND_LITERAL')).toBe(!accepted)
+      })
     }
-  });
+  })
 
   it.each([
     ['XML_INVALID', '<svg>'],
@@ -172,11 +162,7 @@ describe('Outline icon audit structural failures', () => {
       'VIEWPORT_OUTLINE_INVALID',
       '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M0 0h1" stroke="currentColor"/></svg>',
     ],
-    [
-      'VIEWPORT_SOLID_INVALID',
-      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1"/></svg>',
-      'solid',
-    ],
+    ['VIEWPORT_SOLID_INVALID', '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1"/></svg>', 'solid'],
     [
       'PARTIAL_EXPORT',
       '<svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="none"><path d="M0 0h1" stroke="currentColor"/></svg>',
@@ -186,13 +172,22 @@ describe('Outline icon audit structural failures', () => {
       'PLACEHOLDER_RECT',
       '<svg width="24" height="24" viewBox="0 0 24 24"><rect width="24" height="24" fill="currentColor"/></svg>',
     ],
-    [
-      'FOREGROUND_LITERAL',
-      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="#353639"/></svg>',
-    ],
+    ['FOREGROUND_LITERAL', '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="#353639"/></svg>'],
     [
       'STROKE_WIDTH_INVALID',
       '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="currentColor" stroke-width="2"/></svg>',
+    ],
+    [
+      'STROKE_WIDTH_INVALID',
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" style="stroke:currentColor;stroke-width:2.5"/></svg>',
+    ],
+    [
+      'STROKE_WIDTH_INVALID',
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h1" stroke="currentColor" stroke-width=" 1.5 "/></svg>',
+    ],
+    [
+      'STROKE_WIDTH_STYLESHEET_UNSUPPORTED',
+      '<svg width="24" height="24" viewBox="0 0 24 24"><style>path { stroke-width: 2 }</style><path d="M0 0h1" stroke="currentColor"/></svg>',
     ],
     [
       'FRAGMENT_BASE_INVALID',
@@ -204,21 +199,21 @@ describe('Outline icon audit structural failures', () => {
     ],
   ])('reports %s', async (token, source, variant = 'outline') => {
     await withFixture({ [`${variant}/example.svg`]: source }, async (root) => {
-      const result = await auditIcons({ root });
-      expect(result.failures.map((failure) => failure.token)).toContain(token);
-    });
-  });
+      const result = await auditIcons({ root })
+      expect(result.failures.map((failure) => failure.token)).toContain(token)
+    })
+  })
 
   it('rejects invalid semantic paint evidence and accepts exact referenced mask evidence', async () => {
     const source =
-      '<svg width="24" height="24" viewBox="0 0 24 24"><path mask="url(#icon_1_1__mask_0)" d="M1 1h2" fill="currentColor"/><defs><mask id="icon_1_1__mask_0"><rect width="24" height="24" fill="white"/></mask></defs></svg>';
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path mask="url(#icon_1_1__mask_0)" d="M1 1h2" fill="currentColor"/><defs><mask id="icon_1_1__mask_0"><rect width="24" height="24" fill="white"/></mask></defs></svg>'
     await withFixture({ 'outline/example.svg': source }, async (root) => {
-      const invalidPath = resolve(root, 'invalid.json');
-      writeFileSync(invalidPath, JSON.stringify(completeManifest(source)));
-      const invalid = await auditIcons({ manifestPath: invalidPath, root });
-      expect(invalid.failures.map(({ token }) => token)).toContain('MASK_EXCEPTION_INVALID');
+      const invalidPath = resolve(root, 'invalid.json')
+      writeFileSync(invalidPath, JSON.stringify(completeManifest(source)))
+      const invalid = await auditIcons({ manifestPath: invalidPath, root })
+      expect(invalid.failures.map(({ token }) => token)).toContain('MASK_EXCEPTION_INVALID')
 
-      const validManifest = completeManifest(source);
+      const validManifest = completeManifest(source)
       validManifest.paintExceptions = [
         {
           attribute: 'fill',
@@ -227,13 +222,13 @@ describe('Outline icon audit structural failures', () => {
           reason: 'white establishes luminance mask visibility',
           value: 'white',
         },
-      ];
-      const validPath = resolve(root, 'valid.json');
-      writeFileSync(validPath, JSON.stringify(validManifest));
-      const valid = await auditIcons({ manifestPath: validPath, root });
-      expect(valid.failures.map(({ token }) => token)).not.toContain('MASK_EXCEPTION_INVALID');
-    });
-  });
+      ]
+      const validPath = resolve(root, 'valid.json')
+      writeFileSync(validPath, JSON.stringify(validManifest))
+      const valid = await auditIcons({ manifestPath: validPath, root })
+      expect(valid.failures.map(({ token }) => token)).not.toContain('MASK_EXCEPTION_INVALID')
+    })
+  })
 
   it.each([
     ['color', '<path d="M1 1h2" stroke="currentColor" color="white"/>'],
@@ -244,11 +239,11 @@ describe('Outline icon audit structural failures', () => {
         'outline/example.svg': `<svg width="24" height="24" viewBox="0 0 24 24">${drawable}</svg>`,
       },
       async (root) => {
-        const result = await auditIcons({ root });
-        expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL');
+        const result = await auditIcons({ root })
+        expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL')
       },
-    );
-  });
+    )
+  })
 
   const legacyRelativeColorManifest = (file = '45035-1908.svg') => ({
     relativeCurrentColorExceptions: [
@@ -262,14 +257,14 @@ describe('Outline icon audit structural failures', () => {
       },
     ],
     symbols: [{ exportedSourceNodeId: '45035:1908', file }],
-  });
+  })
 
   it.each([false, true])(
     'rejects the retired DataCompare formula with legacy exception = %s',
     async (withLegacyException) => {
-      const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`;
+      const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`
       await withFixture({ 'outline/45035-1908.svg': source }, async (root) => {
-        const manifestPath = resolve(root, 'manifest.json');
+        const manifestPath = resolve(root, 'manifest.json')
         writeFileSync(
           manifestPath,
           JSON.stringify(
@@ -277,53 +272,53 @@ describe('Outline icon audit structural failures', () => {
               ? legacyRelativeColorManifest()
               : { symbols: [{ exportedSourceNodeId: '45035:1908', file: '45035-1908.svg' }] },
           ),
-        );
-        const result = await auditIcons({ manifestPath, root });
-        expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL');
-      });
+        )
+        const result = await auditIcons({ manifestPath, root })
+        expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL')
+      })
     },
-  );
+  )
 
   it('rejects the same relative-currentColor syntax on another icon', async () => {
-    const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`;
+    const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`
     await withFixture({ 'outline/example.svg': source }, async (root) => {
-      const manifestPath = resolve(root, 'manifest.json');
-      writeFileSync(manifestPath, JSON.stringify(legacyRelativeColorManifest('example.svg')));
-      const result = await auditIcons({ manifestPath, root });
-      expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL');
-    });
-  });
+      const manifestPath = resolve(root, 'manifest.json')
+      writeFileSync(manifestPath, JSON.stringify(legacyRelativeColorManifest('example.svg')))
+      const result = await auditIcons({ manifestPath, root })
+      expect(result.failures.map(({ token }) => token)).toContain('FOREGROUND_LITERAL')
+    })
+  })
 
   it('rejects altered relative-currentColor offsets and fails AST provenance', async () => {
-    const alteredFormula = dataCompareFormula.replace('+ 152', '+ 151');
-    const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${alteredFormula}"/></svg>`;
-    const expectedSource = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`;
+    const alteredFormula = dataCompareFormula.replace('+ 152', '+ 151')
+    const source = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${alteredFormula}"/></svg>`
+    const expectedSource = `<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor" color="${dataCompareFormula}"/></svg>`
     await withFixture({ 'outline/45035-1908.svg': source }, async (root) => {
-      const value = legacyRelativeColorManifest();
+      const value = legacyRelativeColorManifest()
       Object.assign(value.symbols[0], {
         localNormalizedAstSha256: sha256(
           canonicalizeSvg(expectedSource, {
             normalizeForegroundPaint: true,
           }),
         ),
-      });
-      const manifestPath = resolve(root, 'manifest.json');
-      writeFileSync(manifestPath, JSON.stringify(value));
-      const result = await auditIcons({ manifestPath, root });
-      const tokens = result.failures.map(({ token }) => token);
-      expect(tokens).toContain('FOREGROUND_LITERAL');
-      expect(tokens).toContain('AST_DIGEST_MISMATCH');
-    });
-  });
+      })
+      const manifestPath = resolve(root, 'manifest.json')
+      writeFileSync(manifestPath, JSON.stringify(value))
+      const result = await auditIcons({ manifestPath, root })
+      const tokens = result.failures.map(({ token }) => token)
+      expect(tokens).toContain('FOREGROUND_LITERAL')
+      expect(tokens).toContain('AST_DIGEST_MISMATCH')
+    })
+  })
 
   it('detects duplicate fragment ownership across sources', async () => {
     const source =
-      '<svg width="24" height="24" viewBox="0 0 24 24"><path mask="url(#icon_1_1__mask_0)" d="M1 1h2"/><defs><mask id="icon_1_1__mask_0"><path d="M1 1h2"/></mask></defs></svg>';
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path mask="url(#icon_1_1__mask_0)" d="M1 1h2"/><defs><mask id="icon_1_1__mask_0"><path d="M1 1h2"/></mask></defs></svg>'
     await withFixture({ 'outline/a.svg': source, 'outline/b.svg': source }, async (root) => {
-      const result = await auditIcons({ root });
-      expect(result.failures.map(({ token }) => token)).toContain('FRAGMENT_BASE_COLLISION');
-    });
-  });
+      const result = await auditIcons({ root })
+      expect(result.failures.map(({ token }) => token)).toContain('FRAGMENT_BASE_COLLISION')
+    })
+  })
 
   it.each([
     [
@@ -336,11 +331,11 @@ describe('Outline icon audit structural failures', () => {
     ],
   ])('reports %s fragment reachability', async (token, source) => {
     await withFixture({ 'outline/example.svg': source }, async (root) => {
-      const result = await auditIcons({ root });
-      expect(result.failures.map(({ token: actual }) => actual)).toContain(token);
-    });
-  });
-});
+      const result = await auditIcons({ root })
+      expect(result.failures.map(({ token: actual }) => actual)).toContain(token)
+    })
+  })
+})
 
 describe('Outline index and manifest failures', () => {
   it.each([
@@ -350,18 +345,15 @@ describe('Outline index and manifest failures', () => {
       "import ExampleSvg from './example.svg?react';\nexport const ExampleOutlined = createIcon(ExampleSvg, 'ExampleOutlined');\nexport const ExampleOutlined = createIcon(ExampleSvg, 'Again');",
     ],
   ])('reports %s from the public index', async (token, indexSource) => {
-    await withFixture(
-      { 'outline/example.svg': validOutline, 'outline/index.tsx': indexSource },
-      async (root) => {
-        const result = await auditIcons({ indexPath: resolve(root, 'outline/index.tsx'), root });
-        expect(result.failures.map(({ token: actual }) => actual)).toContain(token);
-      },
-    );
-  });
+    await withFixture({ 'outline/example.svg': validOutline, 'outline/index.tsx': indexSource }, async (root) => {
+      const result = await auditIcons({ indexPath: resolve(root, 'outline/index.tsx'), root })
+      expect(result.failures.map(({ token: actual }) => actual)).toContain(token)
+    })
+  })
 
   it('rejects an SVG directory file that is not imported by the public index', async () => {
     const indexSource =
-      "import ExampleSvg from './example.svg?react';\nexport const ExampleOutlined = createIcon(ExampleSvg, 'ExampleOutlined');";
+      "import ExampleSvg from './example.svg?react';\nexport const ExampleOutlined = createIcon(ExampleSvg, 'ExampleOutlined');"
     await withFixture(
       {
         'outline/example.svg': validOutline,
@@ -369,48 +361,48 @@ describe('Outline index and manifest failures', () => {
         'outline/index.tsx': indexSource,
       },
       async (root) => {
-        const result = await auditIcons({ indexPath: resolve(root, 'outline/index.tsx'), root });
-        expect(result.failures.map(({ token }) => token)).toContain('INVENTORY_CURRENT_MISSING');
+        const result = await auditIcons({ indexPath: resolve(root, 'outline/index.tsx'), root })
+        expect(result.failures.map(({ token }) => token)).toContain('INVENTORY_CURRENT_MISSING')
       },
-    );
-  });
+    )
+  })
 
   it.each([
     [
       'MANIFEST_INCOMPLETE',
       (value: ManifestFixture) => {
-        value.complete = false;
+        value.complete = false
       },
     ],
     [
       'FIGMA_RAW_HASH_MISMATCH',
       (value: ManifestFixture) => {
         // Deliberately corrupt the fixture to exercise runtime validation.
-        Object.assign(value.symbols[0], { figmaRawSvgSha256: null });
+        Object.assign(value.symbols[0], { figmaRawSvgSha256: null })
       },
     ],
     [
       'LOCAL_RAW_HASH_MISMATCH',
       (value: ManifestFixture) => {
-        value.symbols[0].localRawSvgSha256 = '0'.repeat(64);
+        value.symbols[0].localRawSvgSha256 = '0'.repeat(64)
       },
     ],
     [
       'AST_DIGEST_MISMATCH',
       (value: ManifestFixture) => {
-        value.symbols[0].normalizedAstSha256 = '0'.repeat(64);
+        value.symbols[0].normalizedAstSha256 = '0'.repeat(64)
       },
     ],
     [
       'GEOMETRY_DIGEST_MISMATCH',
       (value: ManifestFixture) => {
-        value.symbols[0].geometrySha256 = '0'.repeat(64);
+        value.symbols[0].geometrySha256 = '0'.repeat(64)
       },
     ],
     [
       'INVENTORY_CURRENT_MISSING',
       (value: ManifestFixture) => {
-        value.symbols[0].file = 'missing.svg';
+        value.symbols[0].file = 'missing.svg'
       },
     ],
     [
@@ -420,55 +412,55 @@ describe('Outline index and manifest failures', () => {
           exportName: 'LegacyOutlined',
           figmaRawSvgSha256: null,
           provenanceStatus: 'current',
-        });
+        })
       },
     ],
   ])('reports %s for fail-closed manifest evidence', async (token, mutate) => {
     await withFixture({ 'outline/example.svg': validOutline }, async (root) => {
-      const value = completeManifest();
-      mutate(value);
-      const manifestPath = resolve(root, 'manifest.json');
-      writeFileSync(manifestPath, JSON.stringify(value));
-      const result = await auditIcons({ manifestPath, root });
-      expect(result.failures.map(({ token: actual }) => actual)).toContain(token);
-    });
-  });
+      const value = completeManifest()
+      mutate(value)
+      const manifestPath = resolve(root, 'manifest.json')
+      writeFileSync(manifestPath, JSON.stringify(value))
+      const result = await auditIcons({ manifestPath, root })
+      expect(result.failures.map(({ token: actual }) => actual)).toContain(token)
+    })
+  })
 
   it('recomputes an embedded Figma raw hash when fixture evidence is available', async () => {
     await withFixture({ 'outline/example.svg': validOutline }, async (root) => {
-      const value = completeManifest();
-      Object.assign(value.symbols[0], { figmaRawSvg: validOutline });
-      value.symbols[0].figmaRawSvgSha256 = '0'.repeat(64);
-      const manifestPath = resolve(root, 'manifest.json');
-      writeFileSync(manifestPath, JSON.stringify(value));
-      const result = await auditIcons({ manifestPath, root });
-      expect(result.failures.map(({ token }) => token)).toContain('FIGMA_RAW_HASH_MISMATCH');
-    });
-  });
-});
+      const value = completeManifest()
+      Object.assign(value.symbols[0], { figmaRawSvg: validOutline })
+      value.symbols[0].figmaRawSvgSha256 = '0'.repeat(64)
+      const manifestPath = resolve(root, 'manifest.json')
+      writeFileSync(manifestPath, JSON.stringify(value))
+      const result = await auditIcons({ manifestPath, root })
+      expect(result.failures.map(({ token }) => token)).toContain('FIGMA_RAW_HASH_MISMATCH')
+    })
+  })
+})
 
 describe('Versioned semantic erase normalization', () => {
   const figma =
-    '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor"/><path d="M3 1L22 20" stroke="white" stroke-width="2"/><path d="M2 2L21 21" stroke="currentColor" stroke-width="2"/></svg>';
+    '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="currentColor"/><path d="M3 1L22 20" stroke="white" stroke-width="2"/><path d="M2 2L21 21" stroke="currentColor" stroke-width="2"/></svg>'
   const local = (maskBody: string, reference = ' mask="url(#icon_14203_193724__mask_0)"') =>
-    `<svg width="24" height="24" viewBox="0 0 24 24"><g${reference}><path d="M1 1h2" stroke="currentColor"/></g><path d="M2 2L21 21" stroke="currentColor" stroke-width="2"/><defs>${maskBody}</defs></svg>`;
+    `<svg width="24" height="24" viewBox="0 0 24 24"><g${reference}><path d="M1 1h2" stroke="currentColor"/></g><path d="M2 2L21 21" stroke="currentColor" stroke-width="2"/><defs>${maskBody}</defs></svg>`
   const options = {
     normalizeForegroundPaint: true,
     normalizeSemanticErase: true,
     semanticEraseSourceId: '14203:193724',
-  };
+  }
   const validMask =
-    '<mask id="icon_14203_193724__mask_0" mask-type="luminance"><rect width="24" height="24" fill="white"/><path d="M3 1L22 20" stroke="black" stroke-width="2"/></mask>';
+    '<mask id="icon_14203_193724__mask_0" mask-type="luminance"><rect width="24" height="24" fill="white"/><path d="M3 1L22 20" stroke="black" stroke-width="2"/></mask>'
 
   it('matches only the validated referenced 24x24 luminance erase topology', () => {
-    expect(canonicalizeSvg(local(validMask), options)).toBe(canonicalizeSvg(figma, options));
+    expect(canonicalizeSvg(local(validMask), options)).toBe(canonicalizeSvg(figma, options))
     expect(
       canonicalizeSvg(local(validMask), {
         ...options,
         geometryOnly: true,
       }),
-    ).toBe(canonicalizeSvg(figma, { ...options, geometryOnly: true }));
-  });
+    ).toBe(canonicalizeSvg(figma, { ...options, geometryOnly: true }))
+  })
 
   it.each([
     [
@@ -478,37 +470,72 @@ describe('Versioned semantic erase normalization', () => {
     ],
     ['unreferenced mask', validMask, ''],
   ])('rejects %s instead of hiding topology differences', (_label, mask, reference) => {
-    expect(canonicalizeSvg(local(mask, reference), options)).not.toBe(
-      canonicalizeSvg(figma, options),
-    );
-  });
-});
+    expect(canonicalizeSvg(local(mask, reference), options)).not.toBe(canonicalizeSvg(figma, options))
+  })
+})
 
 describe('Versioned local stroke-width normalization', () => {
   it('compares immutable Figma widths against the local 1 policy only when requested', () => {
     const figma =
-      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="black" stroke-width="2"/></svg>';
-    const local = figma.replace('stroke-width="2"', 'stroke-width="1"');
+      '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M1 1h2" stroke="black" stroke-width="2"/></svg>'
+    const local = figma.replace('stroke-width="2"', 'stroke-width="1"')
 
-    expect(canonicalizeSvg(local)).not.toBe(canonicalizeSvg(figma));
+    expect(canonicalizeSvg(local)).not.toBe(canonicalizeSvg(figma))
     expect(canonicalizeSvg(local, { normalizeStrokeWidth: true })).toBe(
       canonicalizeSvg(figma, { normalizeStrokeWidth: true }),
-    );
-  });
-});
+    )
+  })
+})
 
 describe('Stroke-width manifest planner', () => {
-  it('reproduces all committed derived manifests from committed provenance and local sources', async () => {
-    const outputs = await planIconStrokeManifests(packageRoot, new Map());
+  it('writes the three manifests with family-specific policies and hashes for known SVGs', async () => {
+    const outlinePath = 'config/icon-sources/outline.json#manifest'
+    const solidPath = 'config/icon-sources/solid.json#manifest'
+    const colorfulPath = 'config/icon-sources/colorful.json#manifest'
+    const original = '<svg><path d="M0 0h4" stroke="currentColor" stroke-width="3"/></svg>'
+    const normalized = '<svg><path d="M0 0h4" stroke="currentColor" stroke-width="1.5"/></svg>'
+    const colorful = '<svg><path fill="#123456" d="M1 2h5"/></svg>'
+    const documents = new Map<string, unknown>([
+      [outlinePath, { symbols: [{ exportedSourceNodeId: '1:1', file: 'line.svg' }] }],
+      ['config/icon-sources/outline.json#raw', { components: [{ nodeId: '1:1', svg: original }] }],
+      [solidPath, { symbols: [{ nodeId: '2:1', localFile: 'solid/line.svg' }], supplementalSources: [] }],
+      ['config/icon-sources/solid.json#raw', { components: [{ nodeId: '2:1', svg: original }] }],
+      [colorfulPath, { rows: [{ rowDisposition: 'canonical-new', localFile: 'colorful/shape.svg' }] }],
+    ])
+    const assets = new Map([
+      ['icons/outline/line.svg', original],
+      ['icons/solid/line.svg', original],
+      ['icons/colorful/shape.svg', colorful],
+    ])
 
-    expect([...outputs.keys()]).toEqual([
-      'config/icon-sources/outline.json#manifest',
-      'config/icon-sources/solid.json#manifest',
-      'config/icon-sources/colorful.json#manifest',
-    ]);
-    for (const [relativePath, source] of outputs)
-      expect(source, relativePath).toBe(
-        readIconInputSync(resolve(packageRoot, relativePath), 'utf8'),
-      );
-  });
-});
+    const outputs = await planIconStrokeManifests(packageRoot, assets, documents)
+    expect([...outputs.keys()]).toEqual([outlinePath, solidPath, colorfulPath])
+    const outline = JSON.parse(outputs.get(outlinePath)!)
+    const solid = JSON.parse(outputs.get(solidPath)!)
+    const multicolor = JSON.parse(outputs.get(colorfulPath)!)
+    expect(outline.strokeWidthPolicy).toEqual({ strategy: 'local-uniform-stroke-v1', value: '1.5' })
+    expect(solid.strokeWidthPolicy).toEqual({ strategy: 'preserve-source-stroke-v1' })
+    expect(multicolor.strokeWidthPolicy).toEqual({ strategy: 'preserve-source-stroke-v1' })
+    expect(multicolor.rows).toEqual([
+      { rowDisposition: 'canonical-new', localFile: 'colorful/shape.svg', normalizedSvgSha256: sha256(colorful) },
+    ])
+    for (const [manifest, width, localSvg] of [
+      [outline, '1.5', normalized],
+      [solid, '3', original],
+    ] as const) {
+      const geometry = sha256(`<svg><path d="M0 0h4" stroke="<paint>" stroke-width="${width}"></path></svg>`)
+      const ast = sha256(`<svg><path d="M0 0h4" stroke="<foreground>" stroke-width="${width}"></path></svg>`)
+      expect(manifest.symbols).toHaveLength(1)
+      expect(manifest.symbols[0]).toMatchObject({
+        figmaRawSvgSha256: sha256(original),
+        localRawSvgSha256: sha256(localSvg),
+        figmaGeometrySha256: geometry,
+        localGeometrySha256: geometry,
+        geometrySha256: geometry,
+        figmaNormalizedAstSha256: ast,
+        localNormalizedAstSha256: ast,
+        normalizedAstSha256: ast,
+      })
+    }
+  })
+})

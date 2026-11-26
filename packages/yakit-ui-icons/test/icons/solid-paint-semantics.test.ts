@@ -1,54 +1,46 @@
-import { cpSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { cpSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest'
 
+import { auditIcons, collectPaintSemantics, paintSemanticsSha256 } from '../../scripts/audit-icons.mjs'
 import {
-  auditIcons,
-  collectPaintSemantics,
-  paintSemanticsSha256,
-} from '../../scripts/audit-icons.mjs';
-import { ICON_STROKE_WIDTH } from '../../scripts/icon-audit-contracts.mjs';
-import { readIconInputSync } from '../../scripts/icon-source-documents.mjs';
+  createIconInputReader,
+  evidencePath,
+  manifestPath,
+  readIconInputSync,
+} from '../../scripts/icon-source-documents.mjs'
 
-import { iconCounts } from './icon-inventory';
+import { iconCounts } from './icon-inventory'
 
-const manifest = JSON.parse(
-  readIconInputSync(
-    new URL('../../config/icon-sources/solid.json#manifest', import.meta.url),
-    'utf8',
-  ),
-);
-const raw = JSON.parse(
-  readIconInputSync(new URL('../../config/icon-sources/solid.json#raw', import.meta.url), 'utf8'),
-);
-
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const solidRoot = resolve(packageRoot, 'src/solid');
-const outlineRoot = resolve(packageRoot, 'src/outline');
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const readBaseline = createIconInputReader()
+const manifest = JSON.parse(readBaseline(resolve(packageRoot, manifestPath('solid')), 'utf8'))
+const raw = JSON.parse(readBaseline(resolve(packageRoot, evidencePath('solid', 'raw')), 'utf8'))
+const solidRoot = resolve(packageRoot, 'src/solid')
 const files = readdirSync(solidRoot)
   .filter((file) => file.endsWith('.svg'))
-  .sort();
-const source = (file: string) => readIconInputSync(resolve(solidRoot, file), 'utf8');
+  .sort()
+const sources = new Map(files.map((file) => [file, readBaseline(resolve(solidRoot, file), 'utf8')]))
 const rawByNodeId = new Map(
   [...raw.components, ...raw.supplementalComponents].map((entry) => [entry.nodeId, entry.svg]),
-);
+)
 const roles = new Set([
   'primary-currentColor',
   'secondary-literal',
   'foreground-cutout-literal',
   'definition-semantic-literal',
-]);
+])
 
 const auditSourceMutation = async (file: string, mutate: (source: string) => string) => {
-  const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'yakit-solid-paint-'));
-  const iconRoot = resolve(temporaryRoot, 'icons');
+  const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'yakit-solid-paint-'))
+  const iconRoot = resolve(temporaryRoot, 'icons')
   try {
-    cpSync(solidRoot, resolve(iconRoot, 'solid'), { recursive: true });
-    const target = resolve(iconRoot, 'solid', file);
-    writeFileSync(target, mutate(readIconInputSync(target, 'utf8')));
+    cpSync(solidRoot, resolve(iconRoot, 'solid'), { recursive: true })
+    const target = resolve(iconRoot, 'solid', file)
+    writeFileSync(target, mutate(readIconInputSync(target, 'utf8')))
     const result = await auditIcons({
       figmaRawProvenancePath: resolve(packageRoot, 'config/icon-sources/solid.json#raw'),
       indexPath: resolve(packageRoot, 'src/solid/index.tsx'),
@@ -56,99 +48,64 @@ const auditSourceMutation = async (file: string, mutate: (source: string) => str
       placementProvenancePath: resolve(packageRoot, 'config/icon-sources/solid.json#placement'),
       policyId: 'solid-v1',
       root: iconRoot,
-    });
-    return result.failures.map(({ token }) => token);
+    })
+    return result.failures.map(({ token }) => token)
   } finally {
-    rmSync(temporaryRoot, { force: true, recursive: true });
+    rmSync(temporaryRoot, { force: true, recursive: true })
   }
-};
+}
 
 describe('Solid paint semantics', () => {
-  it('keeps the uniform width policy limited to Outline sources', () => {
-    const roots = [outlineRoot];
-    const values = roots.flatMap((root) =>
-      readdirSync(root)
-        .filter((file) => file.endsWith('.svg'))
-        .flatMap((file) => [
-          ...readIconInputSync(resolve(root, file), 'utf8').matchAll(
-            /\bstroke-width=["']([^"']+)["']/g,
-          ),
-        ]),
-    );
-
-    // Coverage is checked against source records; every encountered width must follow the policy.
-    expect(values.length).toBeGreaterThan(0);
-    expect([...new Set(values.map((match) => match[1]))]).toEqual([ICON_STROKE_WIDTH]);
-  });
-
   it('uses currentColor for every primary glyph and removes the legacy literal everywhere', () => {
-    expect(files).toHaveLength(iconCounts.solid);
+    expect(files).toHaveLength(iconCounts.solid)
     for (const file of files) {
-      const svg = source(file);
-      const rows = collectPaintSemantics(svg);
-      expect(svg, file).not.toMatch(/\b(?:fill|stroke|color)=["']#353639["']/i);
+      const svg = sources.get(file)!
+      const rows = collectPaintSemantics(svg)
+      expect(svg, file).not.toMatch(/\b(?:fill|stroke|color)=["']#353639["']/i)
       expect(
         rows.some(({ role, value }) => role === 'primary-currentColor' && value === 'currentColor'),
         file,
-      ).toBe(true);
+      ).toBe(true)
       expect(
         rows.every(({ role }) => roles.has(role)),
         file,
-      ).toBe(true);
+      ).toBe(true)
     }
-  });
+  })
 
   it('matches independently recomputed current source and local paint semantics', () => {
     for (const record of [...manifest.symbols, ...manifest.supplementalSources]) {
-      const options = { normalizeFigmaPrimary: true, normalizeStrokeWidth: false };
+      const options = { normalizeFigmaPrimary: true, normalizeStrokeWidth: false }
       expect(record.figmaPaintSemanticsSha256, record.nodeId).toBe(
         paintSemanticsSha256(rawByNodeId.get(record.nodeId)!, options),
-      );
+      )
       expect(record.localPaintSemanticsSha256, record.nodeId).toBe(
-        paintSemanticsSha256(source(record.localFile.replace('solid/', '')), options),
-      );
-      expect(record.figmaPaintSemanticsSha256, record.nodeId).toBe(
-        record.localPaintSemanticsSha256,
-      );
+        paintSemanticsSha256(sources.get(record.localFile.replace('solid/', ''))!, options),
+      )
+      expect(record.figmaPaintSemanticsSha256, record.nodeId).toBe(record.localPaintSemanticsSha256)
     }
-  });
+  })
 
   it.each([
-    [
-      'primary paint',
-      '37831-7379.svg',
-      (svg: string) => svg.replace('fill="currentColor"', 'fill="#9CA3B1"'),
-    ],
-    [
-      'foreground paint',
-      '16035-380989.svg',
-      (svg: string) => svg.replace('fill="currentColor"', 'fill="white"'),
-    ],
-    [
-      'definition paint',
-      '1-2967.svg',
-      (svg: string) => svg.replace('fill="white"', 'fill="black"'),
-    ],
+    ['primary paint', '37831-7379.svg', (svg: string) => svg.replace('fill="currentColor"', 'fill="#9CA3B1"')],
+    ['foreground paint', '16035-380989.svg', (svg: string) => svg.replace('fill="currentColor"', 'fill="white"')],
+    ['definition paint', '1-2967.svg', (svg: string) => svg.replace('fill="white"', 'fill="black"')],
   ])('rejects mutated %s with a stable paint token', async (_label, file, mutate) => {
-    expect(await auditSourceMutation(file, mutate)).toContain('PAINT_SEMANTICS_MISMATCH');
-  });
+    expect(await auditSourceMutation(file, mutate)).toContain('PAINT_SEMANTICS_MISMATCH')
+  })
 
   it('rejects opacity drift from the updated Pill source', async () => {
     expect(
-      await auditSourceMutation('37831-7379.svg', (svg) =>
-        svg.replace('opacity="0.5"', 'opacity="0.6"'),
-      ),
-    ).toContain('GEOMETRY_DIGEST_MISMATCH');
-  });
+      await auditSourceMutation('37831-7379.svg', (svg) => svg.replace('opacity="0.5"', 'opacity="0.6"')),
+    ).toContain('GEOMETRY_DIGEST_MISMATCH')
+  })
 
   it.each([
     ['presentation ID', 'id="Basic Icons"'],
     ['retained unreferenced ID', 'id="icon_1_2539__semantic_0"'],
   ])('rejects an unreferenced %s', async (_label, attribute) => {
-    expect(
-      await auditSourceMutation('1-2539.svg', (svg) =>
-        svg.replace('<path ', `<path ${attribute} `),
-      ),
-    ).toContain('FRAGMENT_UNUSED_ID');
-  });
-});
+    expect(await auditSourceMutation('1-2539.svg', (svg) => svg.replace('<path ', `<path ${attribute} `))).toContain(
+      'FRAGMENT_UNUSED_ID',
+    )
+  })
+})

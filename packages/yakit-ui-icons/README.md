@@ -2,6 +2,16 @@
 
 Yakit UI 的 React 图标包。它不依赖组件库或 CSS-in-JS 运行时，颜色 token 由运行时依赖 `@yakit-libs/color` 提供。
 
+## 离线 Storybook
+
+在对应的 [GitHub Release](https://github.com/yaklang/yakit-components-library/releases) 下载 `storybook-ui-<UI版本>-icons-<图标版本>.zip`，解压后运行：
+
+```bash
+node serve.mjs --open
+```
+
+默认地址是 `http://127.0.0.1:6006/`。运行 `node serve.mjs --help` 查看端口等选项。双包同批发布时，图标 Release 链接到 UI Release 的同一附件。
+
 ## 安装
 
 在已有 React 的项目中安装图标包：
@@ -26,10 +36,10 @@ pnpm add @yakit-libs/color@1.4.1
 `@yakit-libs/color@1.4.1` 通过 JavaScript 生成颜色变量，不再提供 `dist/index.css`。在应用的浏览器入口初始化主题：
 
 ```tsx
-import { applyThemeColors, getColors } from "@yakit-libs/color/preview";
+import { applyThemeColors, getColors } from '@yakit-libs/color/preview'
 
-const theme = "light";
-applyThemeColors(theme, getColors(theme));
+const theme = 'light'
+applyThemeColors(theme, getColors(theme))
 ```
 
 这段初始化只能在浏览器生命周期执行；SSR 或静态主题可以在构建阶段使用 `@yakit-libs/color/css` 或 `yakit-color-css` 生成主题 CSS。图标包本身不会隐式操作 `document`，因此 Node SSR 与按图标摇树仍然可用。未提供颜色变量时，图标使用各自声明的备用颜色；大多数 Outline 和 Solid 图标的默认主色回退为 `#353639`，多色图标保留各处的备用颜色。
@@ -43,14 +53,14 @@ applyThemeColors(theme, getColors(theme));
 本包与 `@yakit-libs/yakit-ui` 独立遵循 SemVer，版本号不要求相同；任一包单独发布不会强制另一个包升版。
 
 ```tsx
-import { HomeSolid, HomeOutlined } from "@yakit-libs/yakit-ui-icons";
+import { HomeSolid, HomeOutlined } from '@yakit-libs/yakit-ui-icons'
 
 export const HomeEntry = () => (
   <button type="button">
     <HomeOutlined aria-hidden size={16} />
     <HomeSolid aria-label="首页" size={16} />
   </button>
-);
+)
 ```
 
 所有默认图标都会渲染为与 Yakit 原 Ant Design 4.8 自定义图标兼容的结构：
@@ -104,9 +114,9 @@ Outline 与 Solid 的主色默认使用 `var(--Colors-Use-Neutral-Text-1-Title, 
 也可以按图标家族导入：
 
 ```tsx
-import { HomeOutlined } from "@yakit-libs/yakit-ui-icons/outline";
-import { HomeSolid } from "@yakit-libs/yakit-ui-icons/solid";
-import * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";
+import { HomeOutlined } from '@yakit-libs/yakit-ui-icons/outline'
+import { HomeSolid } from '@yakit-libs/yakit-ui-icons/solid'
+import * as ColorfulIcons from '@yakit-libs/yakit-ui-icons/colorful'
 ```
 
 ### 遗留图标兼容入口
@@ -115,7 +125,7 @@ import * as ColorfulIcons from "@yakit-libs/yakit-ui-icons/colorful";
 兼容入口提供：
 
 ```tsx
-import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon";
+import { PopoverArrowIcon } from '@yakit-libs/yakit-ui-icons/oldicon'
 ```
 
 `/oldicon` 仍是兼容现有 Yakit 消费代码的 named-export 入口，但内部已经按图标拆成独立
@@ -123,7 +133,7 @@ ESM factory；静态导入一个图标时，打包器无需保留其他 oldicon�
 公开路径（例如懒加载模块或手写依赖边界）时，也可以使用同名的 named export：
 
 ```tsx
-import { PopoverArrowIcon } from "@yakit-libs/yakit-ui-icons/oldicon/PopoverArrowIcon";
+import { PopoverArrowIcon } from '@yakit-libs/yakit-ui-icons/oldicon/PopoverArrowIcon'
 ```
 
 单图标路径不提供 default export，也不允许通过 `/dist`、`/src` 或 SVG hash 深层导入。
@@ -139,7 +149,7 @@ Oldicon 以 `src/oldicon/assets/` 为准，保留现有文件名、线宽、公�
 完整注册表是显式的重入口，仅在图标浏览器等需要枚举所有图标的场景使用：
 
 ```tsx
-import { iconRegistry } from "@yakit-libs/yakit-ui-icons/registry";
+import { iconRegistry } from '@yakit-libs/yakit-ui-icons/registry'
 ```
 
 ### 编辑器自动导入

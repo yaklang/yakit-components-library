@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/91cb8a2b357f10f02a20c33817041ab53f5cd68d8166f474447a5e27db96e74e.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/91cb8a2b357f10f02a20c33817041ab53f5cd68d8166f474447a5e27db96e74e.svg?react'
 
-export const ControlMyselfIcon = createIcon(OldIconAssetSvg, 'ControlMyselfIcon');
+export const ControlMyselfIcon = createIcon(OldIconAssetSvg, 'ControlMyselfIcon')

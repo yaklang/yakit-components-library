@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/cd527d98bd4d6e49821fed920463f55b770a8b9a9b124e9199333ff2d7276ddc.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/cd527d98bd4d6e49821fed920463f55b770a8b9a9b124e9199333ff2d7276ddc.svg?react'
 
-export const OutlineChartPieIcon = createIcon(OldIconAssetSvg, 'OutlineChartPieIcon');
+export const OutlineChartPieIcon = createIcon(OldIconAssetSvg, 'OutlineChartPieIcon')

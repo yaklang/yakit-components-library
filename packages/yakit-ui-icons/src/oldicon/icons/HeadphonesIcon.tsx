@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/e9514f8006b920cefa905d50a35fac22151d26a39ba41d60d67f15d97b91437e.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/e9514f8006b920cefa905d50a35fac22151d26a39ba41d60d67f15d97b91437e.svg?react'
 
-export const HeadphonesIcon = createIcon(OldIconAssetSvg, 'HeadphonesIcon');
+export const HeadphonesIcon = createIcon(OldIconAssetSvg, 'HeadphonesIcon')

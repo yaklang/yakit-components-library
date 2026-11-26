@@ -1,5 +1,5 @@
-import { Checkbox as BaseCheckbox } from './Checkbox';
-import { CheckboxGroup } from './Group';
+import { Checkbox as BaseCheckbox } from './Checkbox'
+import { CheckboxGroup } from './Group'
 import type {
   CheckboxChangeEvent,
   CheckboxGroupProps,
@@ -8,14 +8,14 @@ import type {
   CheckboxRef,
   CheckboxSize,
   CheckboxValueType,
-} from './type';
+} from './type'
 
 type CompoundedCheckbox = typeof BaseCheckbox & {
-  Group: typeof CheckboxGroup;
-};
+  Group: typeof CheckboxGroup
+}
 
-const Checkbox = BaseCheckbox as CompoundedCheckbox;
-Checkbox.Group = CheckboxGroup;
+const Checkbox = BaseCheckbox as CompoundedCheckbox
+Checkbox.Group = CheckboxGroup
 
 export type {
   CheckboxChangeEvent,
@@ -25,6 +25,6 @@ export type {
   CheckboxRef,
   CheckboxSize,
   CheckboxValueType,
-};
-export { CheckboxGroup };
-export default Checkbox;
+}
+export { CheckboxGroup }
+export default Checkbox

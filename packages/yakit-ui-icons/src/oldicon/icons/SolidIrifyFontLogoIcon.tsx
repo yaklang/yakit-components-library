@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/eff018707bf704a4bdf64c389231707d2840beac82bf27918a13840f3862096f.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/eff018707bf704a4bdf64c389231707d2840beac82bf27918a13840f3862096f.svg?react'
 
-export const SolidIrifyFontLogoIcon = createIcon(OldIconAssetSvg, 'SolidIrifyFontLogoIcon');
+export const SolidIrifyFontLogoIcon = createIcon(OldIconAssetSvg, 'SolidIrifyFontLogoIcon')

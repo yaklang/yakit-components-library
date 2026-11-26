@@ -1,13 +1,13 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import importPlugin from 'eslint-plugin-import';
-import prettierPlugin from 'eslint-plugin-prettier';
-import unusedImports from 'eslint-plugin-unused-imports';
+import js from '@eslint/js'
+import globals from 'globals'
+import tsParser from '@typescript-eslint/parser'
+import tsPlugin from '@typescript-eslint/eslint-plugin'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import importPlugin from 'eslint-plugin-import'
+import prettierPlugin from 'eslint-plugin-prettier'
+import unusedImports from 'eslint-plugin-unused-imports'
 
 export default [
   { ignores: ['dist', 'node_modules'] },
@@ -75,18 +75,12 @@ export default [
 
       // --- unused-imports 规则 ---
       'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
-        'warn',
-        { vars: 'all', varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
-      ],
+      'unused-imports/no-unused-vars': ['warn', { vars: 'all', varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
 
       // --- React Refresh ---
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
-      'unused-imports/no-unused-vars': [
-        'warn',
-        { vars: 'all', varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
-      ],
+      'unused-imports/no-unused-vars': ['warn', { vars: 'all', varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
 
       // --- 其他 ---
       'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -109,4 +103,4 @@ export default [
       globals: globals.node,
     },
   },
-];
+]

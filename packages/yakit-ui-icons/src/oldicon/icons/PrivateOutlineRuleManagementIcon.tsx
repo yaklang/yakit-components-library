@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/82aac7926c7e28df15c720be5a5b5e8a2ba4c358cc98988a09194f70d62f7246.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/82aac7926c7e28df15c720be5a5b5e8a2ba4c358cc98988a09194f70d62f7246.svg?react'
 
-export const PrivateOutlineRuleManagementIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateOutlineRuleManagementIcon',
-);
+export const PrivateOutlineRuleManagementIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineRuleManagementIcon')

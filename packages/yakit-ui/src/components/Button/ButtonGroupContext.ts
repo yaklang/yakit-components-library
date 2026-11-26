@@ -1,9 +1,9 @@
-import { createContext } from 'react';
+import { createContext } from 'react'
 
-import type { ButtonSize } from './type';
+import type { ButtonSize } from './type'
 
 export interface ButtonGroupContextValue {
-  size?: ButtonSize;
+  size?: ButtonSize
 }
 
-export const ButtonGroupContext = createContext<ButtonGroupContextValue | null>(null);
+export const ButtonGroupContext = createContext<ButtonGroupContextValue | null>(null)

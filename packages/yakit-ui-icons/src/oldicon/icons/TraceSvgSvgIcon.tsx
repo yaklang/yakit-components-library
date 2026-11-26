@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/e9527eb5af9c1b32d686172560dc72c588a207fcc7fd4cb0e8c2ddd090b55b92.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/e9527eb5af9c1b32d686172560dc72c588a207fcc7fd4cb0e8c2ddd090b55b92.svg?react'
 
-export const TraceSvgSvgIcon = createIcon(OldIconAssetSvg, 'TraceSvgSvgIcon');
+export const TraceSvgSvgIcon = createIcon(OldIconAssetSvg, 'TraceSvgSvgIcon')

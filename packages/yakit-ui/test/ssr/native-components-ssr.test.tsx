@@ -1,46 +1,43 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { cwd } from 'node:process';
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { cwd } from 'node:process'
 
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { describe, expect, it } from 'vitest'
 
-import Spin from '../../src/components/Spin';
-import { NativeComponentsFixture } from '../fixtures/native-components';
+import Spin from '../../src/components/Spin'
+import { NativeComponentsFixture } from '../fixtures/native-components'
 
-const markup = renderToString(<NativeComponentsFixture />);
-const outputDirectory = resolve(cwd(), 'test-results/components');
-mkdirSync(outputDirectory, { recursive: true });
-writeFileSync(
-  resolve(outputDirectory, 'native-components-ssr.json'),
-  `${JSON.stringify({ markup })}\n`,
-);
+const markup = renderToString(<NativeComponentsFixture />)
+const outputDirectory = resolve(cwd(), 'test-results/components')
+mkdirSync(outputDirectory, { recursive: true })
+writeFileSync(resolve(outputDirectory, 'native-components-ssr.json'), `${JSON.stringify({ markup })}\n`)
 
 describe('native component SSR', () => {
   it('renders every public component family without browser globals or AntD markup', () => {
-    expect(markup).toContain('yakit-input');
-    expect(markup).toContain('yakit-input-number');
-    expect(markup).toContain('yakit-btn');
-    expect(markup).toContain('yakit-tag');
-    expect(markup).toContain('yakit-checkbox-checked');
-    expect(markup).toContain('yakit-checkbox-icon');
-    expect(markup).toContain('yakit-checkbox-group');
-    expect(markup).toContain('yakit-spin');
-    expect(markup).toContain('yakit-copy-text');
-    expect(markup).toContain('yakit-collapse-text');
-    expect(markup).not.toContain('<button type="button"><span><button');
-    expect(markup).not.toMatch(/ant-(?:input|btn|otp|spin)/);
-  });
+    expect(markup).toContain('yakit-input')
+    expect(markup).toContain('yakit-input-number')
+    expect(markup).toContain('yakit-btn')
+    expect(markup).toContain('yakit-tag')
+    expect(markup).toContain('yakit-checkbox-checked')
+    expect(markup).toContain('yakit-checkbox-icon')
+    expect(markup).toContain('yakit-checkbox-group')
+    expect(markup).toContain('yakit-spin')
+    expect(markup).toContain('yakit-copy-text')
+    expect(markup).toContain('yakit-collapse-text')
+    expect(markup).not.toContain('<button type="button"><span><button')
+    expect(markup).not.toMatch(/ant-(?:input|btn|otp|spin)/)
+  })
 
   it('renders only children on the server when getContainer is set', () => {
     const portalMarkup = renderToString(
       <Spin getContainer="#panel">
         <p className="spin-ssr-body">content</p>
       </Spin>,
-    );
-    expect(portalMarkup).toContain('spin-ssr-body');
-    expect(portalMarkup).toContain('content');
-    expect(portalMarkup).not.toContain('yakit-spin');
-  });
-});
+    )
+    expect(portalMarkup).toContain('spin-ssr-body')
+    expect(portalMarkup).toContain('content')
+    expect(portalMarkup).not.toContain('yakit-spin')
+  })
+})

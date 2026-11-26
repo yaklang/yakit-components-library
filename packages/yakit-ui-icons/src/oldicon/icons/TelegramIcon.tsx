@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/991dbe40ead99e06373ffb5dbf986dbe15f76b0e09e0734c9785f8768a6b9add.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/991dbe40ead99e06373ffb5dbf986dbe15f76b0e09e0734c9785f8768a6b9add.svg?react'
 
-export const TelegramIcon = createIcon(OldIconAssetSvg, 'TelegramIcon');
+export const TelegramIcon = createIcon(OldIconAssetSvg, 'TelegramIcon')

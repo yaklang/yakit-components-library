@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/87eb78f7d326d947021de875067e9b6471f8fa1f0b60258e02a42ab4aae101e7.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/87eb78f7d326d947021de875067e9b6471f8fa1f0b60258e02a42ab4aae101e7.svg?react'
 
-export const IRifyQuickAccessJavaDecompilerIcon = createIcon(
-  OldIconAssetSvg,
-  'IRifyQuickAccessJavaDecompilerIcon',
-);
+export const IRifyQuickAccessJavaDecompilerIcon = createIcon(OldIconAssetSvg, 'IRifyQuickAccessJavaDecompilerIcon')

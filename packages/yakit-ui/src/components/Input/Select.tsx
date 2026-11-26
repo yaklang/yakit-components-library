@@ -1,11 +1,11 @@
-import classNames from 'classnames';
-import { forwardRef } from 'react';
+import classNames from 'classnames'
+import { forwardRef } from 'react'
 
-import chevronDown from '../SearchInput/assets/chevron-down.svg';
+import chevronDown from '../SearchInput/assets/chevron-down.svg'
 
-import type { InputSelectProps } from './type';
+import type { InputSelectProps } from './type'
 
-const prefixCls = 'yakit-input';
+const prefixCls = 'yakit-input'
 
 /**
  * A focusable compact selector for the leading or trailing segment of an Input.
@@ -25,6 +25,6 @@ export const Select = forwardRef<HTMLButtonElement, InputSelectProps>(
       <img alt="" className={`${prefixCls}-select-icon`} src={chevronDown} />
     </button>
   ),
-);
+)
 
-Select.displayName = 'Input.Select';
+Select.displayName = 'Input.Select'

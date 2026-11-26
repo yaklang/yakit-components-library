@@ -1,7 +1,7 @@
-import { Card, YakitCard } from './Card';
+import { Card, YakitCard } from './Card'
 
-export type { CardProps, CardSize, CardStyles, CardVariant, YakitCardProps } from './type';
+export type { CardProps, CardSize, CardStyles, CardVariant, YakitCardProps } from './type'
 
-export { Card, YakitCard };
+export { Card, YakitCard }
 
-export default Card;
+export default Card

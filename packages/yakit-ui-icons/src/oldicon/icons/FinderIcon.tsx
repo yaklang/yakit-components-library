@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/0a0c73d8c32a856e80db3418cb38f40d99c8dade5af7a379187ec24971b0dad5.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/0a0c73d8c32a856e80db3418cb38f40d99c8dade5af7a379187ec24971b0dad5.svg?react'
 
-export const FinderIcon = createIcon(OldIconAssetSvg, 'FinderIcon');
+export const FinderIcon = createIcon(OldIconAssetSvg, 'FinderIcon')

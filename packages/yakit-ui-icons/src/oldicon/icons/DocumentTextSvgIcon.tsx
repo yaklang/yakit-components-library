@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/219d087daf12d8a653d5c1d5e245c0f898c43d095630f146eb2d47284372a4e3.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/219d087daf12d8a653d5c1d5e245c0f898c43d095630f146eb2d47284372a4e3.svg?react'
 
-export const DocumentTextSvgIcon = createIcon(OldIconAssetSvg, 'DocumentTextSvgIcon');
+export const DocumentTextSvgIcon = createIcon(OldIconAssetSvg, 'DocumentTextSvgIcon')

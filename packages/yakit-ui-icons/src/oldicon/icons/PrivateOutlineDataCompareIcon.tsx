@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/b60ffd99f4aa983058016a0fda91bcbd0d267da2ce9359b4d231e6a585077fa2.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/b60ffd99f4aa983058016a0fda91bcbd0d267da2ce9359b4d231e6a585077fa2.svg?react'
 
-export const PrivateOutlineDataCompareIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateOutlineDataCompareIcon',
-);
+export const PrivateOutlineDataCompareIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineDataCompareIcon')

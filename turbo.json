@@ -5,10 +5,7 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [
-        "dist/**",
-        "storybook-static/**"
-      ]
+      "outputs": ["dist/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -19,6 +16,14 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "@yakit-libs/yakit-ui#build:package:prepared": {
+      "dependsOn": ["@yakit-libs/yakit-ui-icons#build"],
+      "outputs": ["dist/**"]
+    },
+    "build:static": {
+      "dependsOn": ["@yakit-libs/yakit-ui#build:package:prepared"],
+      "outputs": ["storybook-static/**"]
     }
   }
 }

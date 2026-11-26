@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/ff436f72201b223d4e20686ffcb6c653ab9debebf3422f1be146881c15cac6f3.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/ff436f72201b223d4e20686ffcb6c653ab9debebf3422f1be146881c15cac6f3.svg?react'
 
-export const WinUIOpRestoreSvgIcon = createIcon(OldIconAssetSvg, 'WinUIOpRestoreSvgIcon');
+export const WinUIOpRestoreSvgIcon = createIcon(OldIconAssetSvg, 'WinUIOpRestoreSvgIcon')

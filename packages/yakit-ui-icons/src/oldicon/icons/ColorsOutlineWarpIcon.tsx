@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/f60941191afb20bd40686b32bfb3a4d0e964424030eed3d1b42ab96274999580.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/f60941191afb20bd40686b32bfb3a4d0e964424030eed3d1b42ab96274999580.svg?react'
 
-export const ColorsOutlineWarpIcon = createIcon(OldIconAssetSvg, 'ColorsOutlineWarpIcon');
+export const ColorsOutlineWarpIcon = createIcon(OldIconAssetSvg, 'ColorsOutlineWarpIcon')

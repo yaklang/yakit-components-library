@@ -1,10 +1,10 @@
-import { forwardRef } from 'react';
-import type React from 'react';
+import { forwardRef } from 'react'
+import type React from 'react'
 
-import { Search, SearchTrigger } from '../Input/Search';
-import type { InputRef } from '../Input/type';
+import { Search, SearchTrigger } from '../Input/Search'
+import type { InputRef } from '../Input/type'
 
-import type { SearchInputProps } from './type';
+import type { SearchInputProps } from './type'
 
 /**
  * @deprecated 新代码请使用 `Input.Search`；仅图标形态请使用 `Input.SearchTrigger`。
@@ -23,7 +23,7 @@ export const SearchInput = forwardRef<InputRef | HTMLButtonElement, SearchInputP
           size={props.size}
           style={props.style}
         />
-      );
+      )
     }
 
     return (
@@ -34,8 +34,8 @@ export const SearchInput = forwardRef<InputRef | HTMLButtonElement, SearchInputP
         ref={ref as React.ForwardedRef<InputRef>}
         variant={variant}
       />
-    );
+    )
   },
-);
+)
 
-SearchInput.displayName = 'SearchInput';
+SearchInput.displayName = 'SearchInput'

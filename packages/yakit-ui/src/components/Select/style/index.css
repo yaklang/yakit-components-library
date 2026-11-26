@@ -68,9 +68,7 @@
   --ant-select-border-color: var(--Colors-Use-Warning-Border);
 }
 
-.yakit-select.yakit-select-status-warning.ant-select.ant-select-status-warning:not(
-    .ant-select-disabled
-  ):hover,
+.yakit-select.yakit-select-status-warning.ant-select.ant-select-status-warning:not(.ant-select-disabled):hover,
 .yakit-select.yakit-select-status-warning.ant-select.ant-select-status-warning.ant-select-focused:not(
     .ant-select-disabled
   ) {
@@ -187,9 +185,9 @@
   background: transparent;
 }
 
-.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined:not(:hover):not(
-    .ant-select-focused
-  ):not(.yakit-select-status-error):not(.yakit-select-status-warning) {
+.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined:not(:hover):not(.ant-select-focused):not(
+    .yakit-select-status-error
+  ):not(.yakit-select-status-warning) {
   --ant-select-border-color: var(--Colors-Use-Neutral-Border);
   border-color: transparent transparent var(--Colors-Use-Neutral-Border);
 }
@@ -201,9 +199,9 @@
   border-color: transparent transparent var(--ant-select-hover-border-color);
 }
 
-.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined.ant-select-focused:not(
-    .ant-select-disabled
-  ):not(.yakit-select-status-error):not(.yakit-select-status-warning) {
+.yakit-select.yakit-select-underlined.ant-select.ant-select-underlined.ant-select-focused:not(.ant-select-disabled):not(
+    .yakit-select-status-error
+  ):not(.yakit-select-status-warning) {
   --ant-select-border-color: var(--ant-select-active-border-color);
   border-color: transparent transparent var(--ant-select-active-border-color);
 }
@@ -275,16 +273,12 @@
 }
 
 .yakit-select-dropdown.ant-select-dropdown
-  .ant-select-item-option-selected.ant-select-item-option-active:not(
-    .ant-select-item-option-disabled
-  ) {
+  .ant-select-item-option-selected.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
   background: var(--yakit-select-option-selected-bg, var(--Colors-Use-Main-Bg));
 }
 
 .yakit-select-dropdown.yakit-select-dropdown-checkbox.ant-select-dropdown
-  .ant-select-item-option-selected.ant-select-item-option-active:not(
-    .ant-select-item-option-disabled
-  ) {
+  .ant-select-item-option-selected.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
   background: var(--yakit-select-option-selected-bg, var(--Colors-Use-Neutral-Bg-Hover));
 }
 
@@ -328,11 +322,10 @@
 }
 
 /* 勾选框本身不接收点击。悬停整行时，未选中的 Checkbox 仍走组件的悬停色。 */
-.yakit-select-dropdown .ant-select-item-option:hover:not(.ant-select-item-option-disabled)
+.yakit-select-dropdown
+  .ant-select-item-option:hover:not(.ant-select-item-option-disabled)
   .yakit-select-option-check
-  .yakit-checkbox:not(.yakit-checkbox-disabled):not(.yakit-checkbox-checked):not(
-    .yakit-checkbox-indeterminate
-  )
+  .yakit-checkbox:not(.yakit-checkbox-disabled):not(.yakit-checkbox-checked):not(.yakit-checkbox-indeterminate)
   .yakit-checkbox-inner {
   background: var(--Colors-Use-Main-Bg-Hover, #fdf0e6);
   border-color: var(--Colors-Use-Main-Hover, #f59f64);
@@ -364,8 +357,14 @@
   margin-inline-start: auto;
 }
 
-.yakit-select-dropdown .ant-select-item-option:hover:not(.ant-select-item-option-selected) .yakit-select-option-delete.yakit-btn,
-.yakit-select-dropdown .ant-select-item-option-active:not(.ant-select-item-option-selected) .yakit-select-option-delete.yakit-btn,
-.yakit-select-dropdown .ant-select-item-option:focus-within:not(.ant-select-item-option-selected) .yakit-select-option-delete.yakit-btn {
+.yakit-select-dropdown
+  .ant-select-item-option:hover:not(.ant-select-item-option-selected)
+  .yakit-select-option-delete.yakit-btn,
+.yakit-select-dropdown
+  .ant-select-item-option-active:not(.ant-select-item-option-selected)
+  .yakit-select-option-delete.yakit-btn,
+.yakit-select-dropdown
+  .ant-select-item-option:focus-within:not(.ant-select-item-option-selected)
+  .yakit-select-option-delete.yakit-btn {
   display: inline-flex;
 }

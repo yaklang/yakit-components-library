@@ -1,4 +1,4 @@
-import { Switch as InternalSwitch, YakitSwitch } from './Switch';
+import { Switch as InternalSwitch, YakitSwitch } from './Switch'
 
 export type {
   SwitchProps,
@@ -8,8 +8,8 @@ export type {
   SwitchSemanticStyles,
   SwitchSize,
   YakitSwitchProps,
-} from './type';
+} from './type'
 
-export { YakitSwitch };
+export { YakitSwitch }
 
-export default InternalSwitch;
+export default InternalSwitch

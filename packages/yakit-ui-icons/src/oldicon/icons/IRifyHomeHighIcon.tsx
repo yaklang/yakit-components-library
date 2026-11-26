@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/30240fb35ee9f76cbea0acb9528edeb5c3c3fdf4e795bd74ee6a98bb5d9eff57.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/30240fb35ee9f76cbea0acb9528edeb5c3c3fdf4e795bd74ee6a98bb5d9eff57.svg?react'
 
-export const IRifyHomeHighIcon = createIcon(OldIconAssetSvg, 'IRifyHomeHighIcon');
+export const IRifyHomeHighIcon = createIcon(OldIconAssetSvg, 'IRifyHomeHighIcon')

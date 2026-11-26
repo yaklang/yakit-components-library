@@ -1,3 +1,3 @@
-import Fragment from './fragment.svg?react';
+import Fragment from './fragment.svg?react'
 
-export default Fragment;
+export default Fragment

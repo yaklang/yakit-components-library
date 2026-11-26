@@ -1,1 +1,1 @@
-export * from '@yakit-libs/yakit-ui-icons/colorful';
+export * from '@yakit-libs/yakit-ui-icons/colorful'

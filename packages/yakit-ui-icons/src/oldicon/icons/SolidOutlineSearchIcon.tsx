@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/18296916b3af6c33f830dcbda4da04e3cf7fa3793eeaac7ad16623d4f0c4d050.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/18296916b3af6c33f830dcbda4da04e3cf7fa3793eeaac7ad16623d4f0c4d050.svg?react'
 
-export const SolidOutlineSearchIcon = createIcon(OldIconAssetSvg, 'SolidOutlineSearchIcon');
+export const SolidOutlineSearchIcon = createIcon(OldIconAssetSvg, 'SolidOutlineSearchIcon')

@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { createRef } from 'react'
 
 import {
   ConfigProvider,
@@ -9,16 +9,16 @@ import {
   type InputNumberRef,
   type SearchProps,
   type YakitConfigProviderProps,
-} from '../../src/components';
-import InputNumber, { InputNumber as NamedInputNumber } from '../../src/components/InputNumber';
-import SearchInput, { type SearchInputProps } from '../../src/components/SearchInput';
+} from '../../src/components'
+import InputNumber, { InputNumber as NamedInputNumber } from '../../src/components/InputNumber'
+import SearchInput, { type SearchInputProps } from '../../src/components/SearchInput'
 
 export const inputProps: InputProps = {
   allowClear: true,
   error: true,
   size: 'middle',
   status: 'warning',
-};
+}
 
 export const searchProps: SearchProps = {
   selector: {
@@ -26,17 +26,17 @@ export const searchProps: SearchProps = {
   },
   size: 'huge',
   variant: 'dropdown',
-};
+}
 
-export const inputRef = createRef<InputRef>();
-export const inputNumberRef = createRef<InputNumberRef>();
+export const inputRef = createRef<InputRef>()
+export const inputNumberRef = createRef<InputNumberRef>()
 
 export const inputNumberProps: InputNumberProps<string> = {
   controls: 'horizontal',
   defaultValue: '9007199254740993.01',
   size: 'huge',
   stringMode: true,
-};
+}
 
 export const configProviderProps: YakitConfigProviderProps = {
   locale: {
@@ -45,25 +45,25 @@ export const configProviderProps: YakitConfigProviderProps = {
     Search: { search: '执行搜索' },
   },
   theme: { mode: 'dark', token: { colorPrimary: '#F28C45' } },
-};
+}
 
 export const invalidConfigProviderAlgorithm: YakitConfigProviderProps = {
   theme: {
     // @ts-expect-error Ant Design theme algorithms are not part of the Yakit provider contract.
     algorithm: 'darkAlgorithm',
   },
-};
+}
 
 export const invalidConfigProviderPrefix: YakitConfigProviderProps = {
   // @ts-expect-error Yakit public class names are fixed and prefixCls is not supported.
   prefixCls: 'custom',
-};
+}
 
-export const editableSearchAliasProps: SearchInputProps = searchProps;
+export const editableSearchAliasProps: SearchInputProps = searchProps
 export const legacyIconOnlySearchProps: SearchInputProps = {
   iconPosition: 'only',
   variant: 'icon-only',
-};
+}
 
 export const compoundInputs = (
   <>
@@ -76,46 +76,46 @@ export const compoundInputs = (
     <Input.Select aria-label="协议">https://</Input.Select>
     <ConfigProvider {...configProviderProps} />
   </>
-);
+)
 
 export const standaloneNumbers = (
   <>
     <InputNumber {...inputNumberProps} ref={inputNumberRef} value="1.01" />
     <NamedInputNumber defaultValue={1} />
   </>
-);
+)
 
-export const legacySearch = <SearchInput {...searchProps} />;
+export const legacySearch = <SearchInput {...searchProps} />
 
 export const invalidInputProps: InputProps = {
   // @ts-expect-error addonBefore is not a public Yakit Input API.
   addonBefore: 'deprecated',
-};
+}
 
 // @ts-expect-error bordered is replaced by variant.
-export const invalidBorderedInput = <Input bordered />;
+export const invalidBorderedInput = <Input bordered />
 
 // @ts-expect-error Input.Number is intentionally not exposed.
-export const missingInputNumberMember = Input.Number;
+export const missingInputNumberMember = Input.Number
 
 // @ts-expect-error Input.Group is intentionally not exposed.
-export const missingInputGroupMember = Input.Group;
+export const missingInputGroupMember = Input.Group
 
 // @ts-expect-error custom string masks are not part of the owned native OTP contract.
-export const invalidOtpStringMask = <Input.OTP mask="*" />;
+export const invalidOtpStringMask = <Input.OTP mask="*" />
 
 export const invalidSearchActionArray = (
   <Input.Search
     // @ts-expect-error Search accepts one action element rather than an array of nested controls.
     enterButton={[<button key="first">First</button>]}
   />
-);
+)
 
 // @ts-expect-error addonBefore is intentionally absent from standalone Yakit InputNumber.
-export const invalidInputNumberAddonBefore = <InputNumber addonBefore="prefix" />;
+export const invalidInputNumberAddonBefore = <InputNumber addonBefore="prefix" />
 
 // @ts-expect-error addonAfter is intentionally absent from standalone Yakit InputNumber.
-export const invalidInputNumberAddonAfter = <InputNumber addonAfter="suffix" />;
+export const invalidInputNumberAddonAfter = <InputNumber addonAfter="suffix" />
 
 // @ts-expect-error bordered is replaced by variant on standalone Yakit InputNumber.
-export const invalidBorderedInputNumber = <InputNumber bordered />;
+export const invalidBorderedInputNumber = <InputNumber bordered />

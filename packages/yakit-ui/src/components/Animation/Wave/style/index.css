@@ -1,4 +1,26 @@
-.yakit-wave { overflow: visible; position: relative; }
-.yakit-wave-holder { border-radius: inherit; box-sizing: border-box; overflow: visible; pointer-events: none; position: absolute; }
-.yakit-wave-effect { border-radius: inherit; box-shadow: 0 0 0 0 var(--wave-color); height: 100%; position: absolute; transition: box-shadow 0.4s ease-out, opacity 0.4s ease-out; width: 100%; }
-@media (prefers-reduced-motion: reduce) { .yakit-wave-effect { transition: none; } }
+.yakit-wave {
+  overflow: visible;
+  position: relative;
+}
+.yakit-wave-holder {
+  border-radius: inherit;
+  box-sizing: border-box;
+  overflow: visible;
+  pointer-events: none;
+  position: absolute;
+}
+.yakit-wave-effect {
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 var(--wave-color);
+  height: 100%;
+  position: absolute;
+  transition:
+    box-shadow 0.4s ease-out,
+    opacity 0.4s ease-out;
+  width: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .yakit-wave-effect {
+    transition: none;
+  }
+}

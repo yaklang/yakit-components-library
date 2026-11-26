@@ -1,13 +1,13 @@
-import type { ReactElement } from 'react';
+import type { ReactElement } from 'react'
 
-import type { GlobalToken } from '../types/token';
+import type { GlobalToken } from '../types/token'
 
-import useYakitToken from './useYakitToken';
+import useYakitToken from './useYakitToken'
 
 interface ComponentStyleResult {
-  hashId: string;
-  token: GlobalToken;
-  wrapSSR: (node: ReactElement) => ReactElement;
+  hashId: string
+  token: GlobalToken
+  wrapSSR: (node: ReactElement) => ReactElement
 }
 
 const useComponentStyle = <T extends GlobalToken = GlobalToken>(
@@ -15,12 +15,12 @@ const useComponentStyle = <T extends GlobalToken = GlobalToken>(
   _genStyle: (prefixCls: string, token: T) => unknown,
   _extraStyle?: unknown,
 ): ComponentStyleResult => {
-  const token = useYakitToken();
+  const token = useYakitToken()
   return {
     wrapSSR: (node) => node,
     hashId: '',
     token,
-  };
-};
+  }
+}
 
-export default useComponentStyle;
+export default useComponentStyle

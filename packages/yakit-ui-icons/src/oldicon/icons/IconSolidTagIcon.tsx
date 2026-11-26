@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/bd84dfa4521ded7e37e7bd14576f4868a343804efe4d6adcda117af1d9ad2a5a.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/bd84dfa4521ded7e37e7bd14576f4868a343804efe4d6adcda117af1d9ad2a5a.svg?react'
 
-export const IconSolidTagIcon = createIcon(OldIconAssetSvg, 'IconSolidTagIcon');
+export const IconSolidTagIcon = createIcon(OldIconAssetSvg, 'IconSolidTagIcon')

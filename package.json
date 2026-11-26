@@ -16,14 +16,16 @@
     "release:preflight": "node scripts/release/check-release-state.mjs",
     "release:consumer:dry-run": "node scripts/release/tarball-consumer-dry-run.mjs",
     "release:test:independent": "node --test test/release/durable-release-state.test.mjs test/release/pack-directory-implementation.test.mjs test/release/partial-publication-recovery.test.mjs test/release/verification-manifest-implementation.test.mjs test/release/workflow-policy.test.mjs test/release/workspace-package-contract.test.mjs",
-    "release:test": "node --test test/release/*.test.mjs packages/yakit-ui/test/release/*.test.mjs",
+    "release:test": "node --test test/release/*.test.mjs packages/yakit-ui/test/release/*.test.mjs storybook/test/*.test.mjs",
     "test:auto-import": "node --test test/auto-import/*.test.mjs",
-    "release:dry-run": "pnpm run release:workspace-check && pnpm run release:test && pnpm --filter @yakit-libs/yakit-ui-icons run build && pnpm --filter @yakit-libs/yakit-ui run build:package && pnpm run test:auto-import && pnpm --filter @yakit-libs/yakit-ui run verify:package && pnpm run release:consumer:dry-run && pnpm --filter @yakit-libs/yakit-ui run pack:dry-run && pnpm --filter @yakit-libs/yakit-ui-icons pack --dry-run",
+    "release:dry-run": "pnpm run release:workspace-check && pnpm run release:test && pnpm --filter @yakit-libs/yakit-ui-icons run build && pnpm --filter @yakit-libs/yakit-ui run build:package && pnpm run test:auto-import && pnpm --filter @yakit-libs/yakit-ui run verify:package && pnpm run release:consumer:dry-run && pnpm --filter @yakit-libs/yakit-ui run pack:dry-run && pnpm --filter @yakit-libs/yakit-ui-icons pack --dry-run && pnpm --dir storybook run build:static",
     "icons:update": "node scripts/icons/update.mjs",
     "icons:import": "node packages/yakit-ui-icons/scripts/import-icon-sources.mjs",
     "icons:test": "pnpm --filter @yakit-libs/yakit-ui-icons run test:workflow && node --test test/icons/*.test.mjs",
     "icons:verify-isolation": "node scripts/icons/verify-isolation.mjs",
-    "icons:check": "node scripts/icons/check.mjs"
+    "icons:check": "node scripts/icons/check.mjs",
+    "storybook": "node storybook/dev.mjs",
+    "storybook:build": "turbo run build:static --filter=@yakit-internal/storybook"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.1",

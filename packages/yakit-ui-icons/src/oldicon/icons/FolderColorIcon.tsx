@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/fe6a226fa283ee072e83d0c986c11b40ab9de20bd0f004580fa13ab57dcd9a3e.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/fe6a226fa283ee072e83d0c986c11b40ab9de20bd0f004580fa13ab57dcd9a3e.svg?react'
 
-export const FolderColorIcon = createIcon(OldIconAssetSvg, 'FolderColorIcon');
+export const FolderColorIcon = createIcon(OldIconAssetSvg, 'FolderColorIcon')

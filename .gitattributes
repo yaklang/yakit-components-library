@@ -2,6 +2,6 @@
 packages/yakit-ui-icons/** text=auto eol=lf
 scripts/icons/*.mjs text eol=lf
 test/icons/*.mjs text eol=lf
-# These two UI files are also outputs of the root icon generator.
-packages/yakit-ui/.storybook/stories/Icon.stories.tsx text eol=lf
-packages/yakit-ui/.storybook/stories/icon-colorful.generated.ts text eol=lf
+# These two Storybook files are also outputs of the root icon generator.
+storybook/stories/icons/Icon.stories.tsx text eol=lf
+storybook/stories/icons/icon-colorful.generated.ts text eol=lf

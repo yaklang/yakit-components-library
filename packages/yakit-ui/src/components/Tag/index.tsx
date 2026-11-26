@@ -1,4 +1,4 @@
-import { CheckableTag, CheckableTagGroup, TagCopy, Tag } from './Tag';
+import { CheckableTag, CheckableTagGroup, TagCopy, Tag } from './Tag'
 import type {
   CheckableTagGroupProps,
   CheckableTagOption,
@@ -11,7 +11,7 @@ import type {
   TagShape,
   TagSize,
   TagVariant,
-} from './type';
+} from './type'
 
 export type {
   CheckableTagGroupProps,
@@ -25,7 +25,7 @@ export type {
   TagShape,
   TagSize,
   TagVariant,
-};
+}
 
-export { CheckableTag, CheckableTagGroup, TagCopy };
-export default Tag;
+export { CheckableTag, CheckableTagGroup, TagCopy }
+export default Tag

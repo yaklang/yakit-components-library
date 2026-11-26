@@ -12,7 +12,6 @@
   vertical-align: middle;
 }
 
-
 .yakit-checkbox-box {
   display: inline-flex;
   flex-shrink: 0;
@@ -81,9 +80,7 @@
   width: 75%;
 }
 
-.yakit-checkbox:hover:not(.yakit-checkbox-disabled):not(.yakit-checkbox-checked):not(
-    .yakit-checkbox-indeterminate
-  )
+.yakit-checkbox:hover:not(.yakit-checkbox-disabled):not(.yakit-checkbox-checked):not(.yakit-checkbox-indeterminate)
   .yakit-checkbox-inner {
   background: var(--Colors-Use-Main-Bg-Hover, #fdf0e6);
   border-color: var(--Colors-Use-Main-Hover, #f59f64);

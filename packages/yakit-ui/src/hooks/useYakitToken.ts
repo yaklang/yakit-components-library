@@ -1,5 +1,5 @@
-import useYakitConfig from './useYakitConfig';
+import useYakitConfig from './useYakitConfig'
 
-export const useYakitToken = () => useYakitConfig().token;
+export const useYakitToken = () => useYakitConfig().token
 
-export default useYakitToken;
+export default useYakitToken

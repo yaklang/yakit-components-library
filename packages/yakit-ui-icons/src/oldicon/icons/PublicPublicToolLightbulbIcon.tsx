@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/68efa5687c508bc8508e0492dc040586bbb30f9dfb3865e443a259652749c617.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/68efa5687c508bc8508e0492dc040586bbb30f9dfb3865e443a259652749c617.svg?react'
 
-export const PublicPublicToolLightbulbIcon = createIcon(
-  OldIconAssetSvg,
-  'PublicPublicToolLightbulbIcon',
-);
+export const PublicPublicToolLightbulbIcon = createIcon(OldIconAssetSvg, 'PublicPublicToolLightbulbIcon')

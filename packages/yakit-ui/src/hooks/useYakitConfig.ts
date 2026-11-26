@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { useContext } from 'react'
 
-import { YakitConfigContext } from '../context/YakitConfigContext';
+import { YakitConfigContext } from '../context/YakitConfigContext'
 
-export const useYakitConfig = () => useContext(YakitConfigContext);
+export const useYakitConfig = () => useContext(YakitConfigContext)
 
-export default useYakitConfig;
+export default useYakitConfig

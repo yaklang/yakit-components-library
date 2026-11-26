@@ -5,9 +5,7 @@
     {
       "exportName": "Loading",
       "file": "loading/index.tsx",
-      "typeExports": [
-        "LoadingProps"
-      ],
+      "typeExports": ["LoadingProps"],
       "source": {
         "kind": "handwritten",
         "path": "src/loading/index.tsx"

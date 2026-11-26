@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/73be829cf3f74c002c7758446ab8f893540357a586e11350c7f17bb9545dbb5a.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/73be829cf3f74c002c7758446ab8f893540357a586e11350c7f17bb9545dbb5a.svg?react'
 
-export const OutlineWebFuzzerActiveIcon = createIcon(OldIconAssetSvg, 'OutlineWebFuzzerActiveIcon');
+export const OutlineWebFuzzerActiveIcon = createIcon(OldIconAssetSvg, 'OutlineWebFuzzerActiveIcon')

@@ -1,81 +1,30 @@
 /* Dropdown — Figma List/Menu Item md-28 / lg-32；双层 token；antd 兼容前缀 */
 
 .yakit-dropdown {
-  --yakit-dropdown-bg: var(
-    --yakit-color-basic-background,
-    var(--Colors-Use-Basic-Background, #ffffff)
-  );
-  --yakit-dropdown-border: var(
-    --yakit-color-neutral-bg-hover,
-    var(--Colors-Use-Neutral-Bg-Hover, #eef0f3)
-  );
+  --yakit-dropdown-bg: var(--yakit-color-basic-background, var(--Colors-Use-Basic-Background, #ffffff));
+  --yakit-dropdown-border: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover, #eef0f3));
   --yakit-dropdown-shadow: 0 8px 16px 0 var(--Colors-Use-Basic-Shadow, rgba(23, 23, 23, 0.08));
   --yakit-dropdown-radius: 4px;
   --yakit-dropdown-item-radius: 4px;
-  --yakit-dropdown-item-color: var(
-    --yakit-color-text-title,
-    var(--Colors-Use-Neutral-Text-1-Title, #353639)
-  );
-  --yakit-dropdown-item-desc: var(
-    --yakit-color-text-help,
-    var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1)
-  );
-  --yakit-dropdown-item-hover-bg: var(
-    --yakit-color-neutral-bg-hover,
-    var(--Colors-Use-Neutral-Bg-Hover, #eef0f3)
-  );
-  --yakit-dropdown-item-selected-bg: var(
-    --yakit-color-primary,
-    var(--Colors-Use-Main-Primary, #f28c45)
-  );
+  --yakit-dropdown-item-color: var(--yakit-color-text-title, var(--Colors-Use-Neutral-Text-1-Title, #353639));
+  --yakit-dropdown-item-desc: var(--yakit-color-text-help, var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1));
+  --yakit-dropdown-item-hover-bg: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover, #eef0f3));
+  --yakit-dropdown-item-selected-bg: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
   --yakit-dropdown-item-selected-color: var(--Colors-Use-Basic-White, #ffffff);
   --yakit-dropdown-item-selected-extra: var(--Colors-Use-Basic-White, #ffffff);
-  --yakit-dropdown-item-disabled: var(
-    --yakit-color-neutral-disable,
-    var(--Colors-Use-Neutral-Disable, #c0c6d1)
-  );
+  --yakit-dropdown-item-disabled: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
   --yakit-dropdown-item-danger: var(--yakit-color-error, var(--Colors-Use-Error-Primary, #f04438));
-  --yakit-dropdown-item-danger-hover-bg: var(
-    --yakit-color-error-focus,
-    var(--Colors-Use-Error-Focus, #fde8e6)
-  );
-  --yakit-dropdown-item-success: var(
-    --yakit-color-success,
-    var(--Colors-Use-Success-Primary, #28c08e)
-  );
-  --yakit-dropdown-item-success-hover-bg: var(
-    --yakit-color-success-focus,
-    var(--Colors-Use-Success-Focus, #cff1e6)
-  );
-  --yakit-dropdown-item-info: var(
-    --yakit-color-neutral-disable,
-    var(--Colors-Use-Neutral-Disable, #c0c6d1)
-  );
-  --yakit-dropdown-item-info-hover-bg: var(
-    --yakit-color-neutral-bg-hover,
-    var(--Colors-Use-Neutral-Bg-Hover, #eef0f3)
-  );
+  --yakit-dropdown-item-danger-hover-bg: var(--yakit-color-error-focus, var(--Colors-Use-Error-Focus, #fde8e6));
+  --yakit-dropdown-item-success: var(--yakit-color-success, var(--Colors-Use-Success-Primary, #28c08e));
+  --yakit-dropdown-item-success-hover-bg: var(--yakit-color-success-focus, var(--Colors-Use-Success-Focus, #cff1e6));
+  --yakit-dropdown-item-info: var(--yakit-color-neutral-disable, var(--Colors-Use-Neutral-Disable, #c0c6d1));
+  --yakit-dropdown-item-info-hover-bg: var(--yakit-color-neutral-bg-hover, var(--Colors-Use-Neutral-Bg-Hover, #eef0f3));
   --yakit-dropdown-item-text: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
-  --yakit-dropdown-item-text-hover-bg: var(
-    --yakit-color-primary-bg,
-    var(--Colors-Use-Main-Bg, #fef5ee)
-  );
-  --yakit-dropdown-divider: var(
-    --yakit-color-neutral-border,
-    var(--Colors-Use-Neutral-Border, #e6e8ed)
-  );
-  --yakit-dropdown-group-title: var(
-    --yakit-color-text-help,
-    var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1)
-  );
-  --yakit-dropdown-extra: var(
-    --yakit-color-text-secondary,
-    var(--Colors-Use-Neutral-Text-3-Secondary, #85898e)
-  );
-  --yakit-dropdown-icon: var(
-    --yakit-color-text-secondary,
-    var(--Colors-Use-Neutral-Text-3-Secondary, #85898e)
-  );
+  --yakit-dropdown-item-text-hover-bg: var(--yakit-color-primary-bg, var(--Colors-Use-Main-Bg, #fef5ee));
+  --yakit-dropdown-divider: var(--yakit-color-neutral-border, var(--Colors-Use-Neutral-Border, #e6e8ed));
+  --yakit-dropdown-group-title: var(--yakit-color-text-help, var(--Colors-Use-Neutral-Text-4-Help-text, #9ca3b1));
+  --yakit-dropdown-extra: var(--yakit-color-text-secondary, var(--Colors-Use-Neutral-Text-3-Secondary, #85898e));
+  --yakit-dropdown-icon: var(--yakit-color-text-secondary, var(--Colors-Use-Neutral-Text-3-Secondary, #85898e));
 
   box-sizing: border-box;
   font-family: 'PingFang SC', sans-serif;
@@ -223,36 +172,27 @@
 }
 
 /* hover — grey / default */
-.yakit-dropdown-menu-item:hover:not(.yakit-dropdown-menu-item-disabled):not(
-    .yakit-dropdown-menu-item-selected
-  ),
-.ant-dropdown-menu-item:hover:not(.ant-dropdown-menu-item-disabled):not(
-    .ant-dropdown-menu-item-selected
-  ) {
+.yakit-dropdown-menu-item:hover:not(.yakit-dropdown-menu-item-disabled):not(.yakit-dropdown-menu-item-selected),
+.ant-dropdown-menu-item:hover:not(.ant-dropdown-menu-item-disabled):not(.ant-dropdown-menu-item-selected) {
   background: var(--yakit-dropdown-item-type-hover-bg, var(--yakit-dropdown-item-hover-bg));
   color: var(--yakit-dropdown-item-type-color, var(--yakit-dropdown-item-color));
 }
 
 /* primary selected — Figma 橙底白字 */
-.yakit-dropdown-menu-primary
-  .yakit-dropdown-menu-item-selected:not(.yakit-dropdown-menu-item-disabled),
-.yakit-dropdown-menu-primary
-  .ant-dropdown-menu-item-selected:not(.ant-dropdown-menu-item-disabled) {
+.yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected:not(.yakit-dropdown-menu-item-disabled),
+.yakit-dropdown-menu-primary .ant-dropdown-menu-item-selected:not(.ant-dropdown-menu-item-disabled) {
   background: var(--yakit-dropdown-item-selected-bg);
   color: var(--yakit-dropdown-item-selected-color);
 }
 
 .yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-icon,
 .yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-extra,
-.yakit-dropdown-menu-primary
-  .yakit-dropdown-menu-item-selected
-  .yakit-dropdown-menu-item-description,
+.yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-description,
 .yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected .yakit-dropdown-menu-item-arrow {
   color: var(--yakit-dropdown-item-selected-extra);
 }
 
-.yakit-dropdown-menu-primary
-  .yakit-dropdown-menu-item-selected:hover:not(.yakit-dropdown-menu-item-disabled) {
+.yakit-dropdown-menu-primary .yakit-dropdown-menu-item-selected:hover:not(.yakit-dropdown-menu-item-disabled) {
   background: var(--yakit-color-primary-hover, var(--Colors-Use-Main-Hover, #f59f64));
   color: var(--yakit-dropdown-item-selected-color);
 }
@@ -260,9 +200,7 @@
 /* 选中态保持 Figma 橙底白字（primary）；提高与 ant 双前缀并存时的命中率 */
 .yakit-dropdown
   .yakit-dropdown-menu-primary
-  .yakit-dropdown-menu-item.yakit-dropdown-menu-item-selected:not(
-    .yakit-dropdown-menu-item-disabled
-  ),
+  .yakit-dropdown-menu-item.yakit-dropdown-menu-item-selected:not(.yakit-dropdown-menu-item-disabled),
 .yakit-dropdown
   .yakit-dropdown-menu-primary
   .ant-dropdown-menu-item.ant-dropdown-menu-item-selected:not(.ant-dropdown-menu-item-disabled) {
@@ -271,8 +209,7 @@
 }
 
 /* grey selected — 主项目 grey：悬停灰底，选中弱强调 */
-.yakit-dropdown-menu-grey
-  .yakit-dropdown-menu-item-selected:not(.yakit-dropdown-menu-item-disabled) {
+.yakit-dropdown-menu-grey .yakit-dropdown-menu-item-selected:not(.yakit-dropdown-menu-item-disabled) {
   background: var(--yakit-color-primary-bg, var(--Colors-Use-Main-Bg, #fef5ee));
   color: var(--yakit-color-primary, var(--Colors-Use-Main-Primary, #f28c45));
 }

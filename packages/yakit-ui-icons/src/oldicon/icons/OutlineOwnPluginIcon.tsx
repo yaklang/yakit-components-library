@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/c3d81562e02ccf7bb88e79ca0d61e5ec18d043368711688eab316f0e5534d69e.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/c3d81562e02ccf7bb88e79ca0d61e5ec18d043368711688eab316f0e5534d69e.svg?react'
 
-export const OutlineOwnPluginIcon = createIcon(OldIconAssetSvg, 'OutlineOwnPluginIcon');
+export const OutlineOwnPluginIcon = createIcon(OldIconAssetSvg, 'OutlineOwnPluginIcon')

@@ -16,7 +16,7 @@ export type ColorfulIconCategory =
   | 'risk-level'
   | 'secondary-menu'
   | 'social-media'
-  | 'yakit-logo';
+  | 'yakit-logo'
 
 /** Whether an icon's visible artwork is fixed, partially themeable, or fully themeable. */
-export type ColorfulIconPaintMode = 'literal' | 'mixed' | 'currentColor';
+export type ColorfulIconPaintMode = 'literal' | 'mixed' | 'currentColor'

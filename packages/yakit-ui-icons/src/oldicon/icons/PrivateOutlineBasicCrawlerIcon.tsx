@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/60dc48ed2d9fac203c9d4b1e9c66be2d82535eb0cb330628c27d024900d29a54.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/60dc48ed2d9fac203c9d4b1e9c66be2d82535eb0cb330628c27d024900d29a54.svg?react'
 
-export const PrivateOutlineBasicCrawlerIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateOutlineBasicCrawlerIcon',
-);
+export const PrivateOutlineBasicCrawlerIcon = createIcon(OldIconAssetSvg, 'PrivateOutlineBasicCrawlerIcon')

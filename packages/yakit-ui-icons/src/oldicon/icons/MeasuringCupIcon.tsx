@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/c841afccde561b396861864c26ece58b3229c9c81d19751c4798324afd7e8826.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/c841afccde561b396861864c26ece58b3229c9c81d19751c4798324afd7e8826.svg?react'
 
-export const MeasuringCupIcon = createIcon(OldIconAssetSvg, 'MeasuringCupIcon');
+export const MeasuringCupIcon = createIcon(OldIconAssetSvg, 'MeasuringCupIcon')

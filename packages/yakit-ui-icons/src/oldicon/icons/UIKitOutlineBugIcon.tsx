@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/3c12db7d61d12860b939c37be199f670927276eebe15fb3cf7c79d340163e289.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/3c12db7d61d12860b939c37be199f670927276eebe15fb3cf7c79d340163e289.svg?react'
 
-export const UIKitOutlineBugIcon = createIcon(OldIconAssetSvg, 'UIKitOutlineBugIcon');
+export const UIKitOutlineBugIcon = createIcon(OldIconAssetSvg, 'UIKitOutlineBugIcon')

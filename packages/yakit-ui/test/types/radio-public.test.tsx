@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import { YakitRadioButtons } from '../../src/components';
+import { YakitRadioButtons } from '../../src/components'
 
-type ExtractorMode = 'regexp' | 'regexp-between';
+type ExtractorMode = 'regexp' | 'regexp-between'
 
 export const RadioButtonsModeTypeFixture = () => {
-  const [mode, setMode] = useState<ExtractorMode>('regexp-between');
+  const [mode, setMode] = useState<ExtractorMode>('regexp-between')
 
   return (
     <YakitRadioButtons
@@ -16,5 +16,5 @@ export const RadioButtonsModeTypeFixture = () => {
         { label: 'Regex', value: 'regexp' },
       ]}
     />
-  );
-};
+  )
+}

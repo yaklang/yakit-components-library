@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/aec7f51274f0e175d7ff5630c629c4ada6ab024671b883c79cb030a3445214f0.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/aec7f51274f0e175d7ff5630c629c4ada6ab024671b883c79cb030a3445214f0.svg?react'
 
-export const PublicReverseServerIcon = createIcon(OldIconAssetSvg, 'PublicReverseServerIcon');
+export const PublicReverseServerIcon = createIcon(OldIconAssetSvg, 'PublicReverseServerIcon')

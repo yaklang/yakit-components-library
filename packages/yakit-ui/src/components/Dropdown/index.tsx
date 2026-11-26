@@ -1,6 +1,6 @@
-import { Dropdown as InternalDropdown } from './Dropdown';
-import DropdownButton from './DropdownButton';
-import { YakitDropdownMenu } from './YakitDropdownMenu';
+import { Dropdown as InternalDropdown } from './Dropdown'
+import DropdownButton from './DropdownButton'
+import { YakitDropdownMenu } from './YakitDropdownMenu'
 
 export type {
   DropdownButtonProps,
@@ -21,18 +21,18 @@ export type {
   DropdownSemanticStyles,
   DropdownTrigger,
   YakitDropdownMenuProps,
-} from './type';
+} from './type'
 
-export { DropdownMenuPanel } from './DropdownMenu';
-export { YakitDropdownMenu };
-export { DropdownButton };
+export { DropdownMenuPanel } from './DropdownMenu'
+export { YakitDropdownMenu }
+export { DropdownButton }
 
 type CompoundedDropdown = typeof InternalDropdown & {
-  Button: typeof DropdownButton;
-};
+  Button: typeof DropdownButton
+}
 
-const Dropdown = InternalDropdown as CompoundedDropdown;
-Dropdown.Button = DropdownButton;
+const Dropdown = InternalDropdown as CompoundedDropdown
+Dropdown.Button = DropdownButton
 
-export { Dropdown };
-export default Dropdown;
+export { Dropdown }
+export default Dropdown

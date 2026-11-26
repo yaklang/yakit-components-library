@@ -1,7 +1,7 @@
-import react from '@vitejs/plugin-react';
-import { defineConfig, type Plugin } from 'vite';
+import react from '@vitejs/plugin-react'
+import { defineConfig, type Plugin } from 'vite'
 
-const iconCss = '@import "@yakit-libs/yakit-ui-icons/icon.css";\n';
+const iconCss = '@import "@yakit-libs/yakit-ui-icons/icon.css";\n'
 
 function iconBrowserFacades(): Plugin {
   const facades = {
@@ -10,25 +10,25 @@ function iconBrowserFacades(): Plugin {
     'browser/icons/outline/index.js': ['../../../icon.css', '../../../icons/outline/index.js'],
     'browser/icons/registry.js': ['../../icon.css', '../../icons/registry.js'],
     'browser/icons/solid/index.js': ['../../../icon.css', '../../../icons/solid/index.js'],
-  } as const;
+  } as const
 
   return {
     name: 'yakit-icon-browser-facades',
     generateBundle() {
-      this.emitFile({ fileName: 'icon.css', source: iconCss, type: 'asset' });
+      this.emitFile({ fileName: 'icon.css', source: iconCss, type: 'asset' })
       for (const [fileName, [_cssPath, runtimePath]] of Object.entries(facades)) {
         this.emitFile({
           fileName,
           source: `import "@yakit-libs/yakit-ui-icons/icon.css";\nexport * from ${JSON.stringify(runtimePath)};\n`,
           type: 'asset',
-        });
+        })
       }
     },
-  };
+  }
 }
 
 export default defineConfig(({ mode }) => {
-  const plugins = [react()];
+  const plugins = [react()]
 
   if (mode === 'lib') {
     return {
@@ -53,18 +53,13 @@ export default defineConfig(({ mode }) => {
         },
         rollupOptions: {
           external: (id) =>
-            [
-              '@yakit-libs/yakit-ui-icons',
-              '@yakit-libs/color',
-              'antd',
-              'classnames',
-              'react',
-              'react-dom',
-            ].some((dependency) => id === dependency || id.startsWith(`${dependency}/`)),
+            ['@yakit-libs/yakit-ui-icons', '@yakit-libs/color', 'antd', 'classnames', 'react', 'react-dom'].some(
+              (dependency) => id === dependency || id.startsWith(`${dependency}/`),
+            ),
         },
       },
       plugins: [...plugins, iconBrowserFacades()],
-    };
+    }
   }
 
   return {
@@ -73,5 +68,5 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
     },
-  };
-});
+  }
+})

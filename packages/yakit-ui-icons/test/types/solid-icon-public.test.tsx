@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType } from 'react'
 
 import {
   DownloadFigma12825Solid,
@@ -13,22 +13,22 @@ import {
   PaperAirplaneSolid,
   PillSolid,
   type IconProps,
-} from '../../src';
-import { solidIconRegistry } from '../../src/registry';
-import * as SolidIcons from '../../src/solid';
+} from '../../src'
+import { solidIconRegistry } from '../../src/registry'
+import * as SolidIcons from '../../src/solid'
 
-const publicComponents = SolidIcons satisfies Record<string, ComponentType<IconProps>>;
+const publicComponents = SolidIcons satisfies Record<string, ComponentType<IconProps>>
 // @ts-expect-error The legacy Filled suffix is intentionally not part of the public API.
-void SolidIcons.HomeFilled;
+void SolidIcons.HomeFilled
 const registry = solidIconRegistry satisfies Array<{
-  Component: ComponentType<IconProps>;
-  exportName: string;
-  family: 'solid';
-  figmaName: string | null;
-  name: string;
-  sourceNodeId: string;
-  sourceStatus: 'current' | 'supplement' | 'unnamed-in-figma' | 'legacy-non-current-figma';
-}>;
+  Component: ComponentType<IconProps>
+  exportName: string
+  family: 'solid'
+  figmaName: string | null
+  name: string
+  sourceNodeId: string
+  sourceStatus: 'current' | 'supplement' | 'unnamed-in-figma' | 'legacy-non-current-figma'
+}>
 
 const examples = (
   <>
@@ -44,8 +44,8 @@ const examples = (
     <ParkBelowSolid />
     <DownloadFigma12825Solid />
   </>
-);
+)
 
-void examples;
-void publicComponents;
-void registry;
+void examples
+void publicComponents
+void registry

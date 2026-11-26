@@ -1,5 +1,5 @@
-import { CheckOutlined, LoadingOutlined, XOutlined } from '@yakit-libs/yakit-ui-icons/outline';
-import classNames from 'classnames';
+import { CheckOutlined, LoadingOutlined, XOutlined } from '@yakit-libs/yakit-ui-icons/outline'
+import classNames from 'classnames'
 import {
   forwardRef,
   useEffect,
@@ -10,14 +10,14 @@ import {
   type CSSProperties,
   type MouseEvent,
   type ReactNode,
-} from 'react';
+} from 'react'
 
-import useYakitConfig from '../../hooks/useYakitConfig';
-import { getYakitTokenVariables } from '../../styles/tokenVariables';
-import type { YakitCSSProperties } from '../../styles/tokenVariables';
+import useYakitConfig from '../../hooks/useYakitConfig'
+import { getYakitTokenVariables } from '../../styles/tokenVariables'
+import type { YakitCSSProperties } from '../../styles/tokenVariables'
 
-import { resolveSwitchSize, supportsInnerExtra } from './sizeUtils';
-import './style/index.css';
+import { resolveSwitchSize, supportsInnerExtra } from './sizeUtils'
+import './style/index.css'
 import type {
   SemanticValue,
   SwitchProps,
@@ -25,17 +25,14 @@ import type {
   SwitchSemanticClassNames,
   SwitchSemanticInfo,
   SwitchSemanticStyles,
-} from './type';
+} from './type'
 
-const yakitPrefix = 'yakit-switch';
+const yakitPrefix = 'yakit-switch'
 /** antd 兼容前缀，供主项目 theme / 页面 :global(.ant-switch-*) 命中 */
-const antPrefix = 'ant-switch';
+const antPrefix = 'ant-switch'
 
-const resolveSemantic = <T,>(
-  value: SemanticValue<T> | undefined,
-  info: SwitchSemanticInfo,
-): T | undefined =>
-  typeof value === 'function' ? (value as (semanticInfo: SwitchSemanticInfo) => T)(info) : value;
+const resolveSemantic = <T,>(value: SemanticValue<T> | undefined, info: SwitchSemanticInfo): T | undefined =>
+  typeof value === 'function' ? (value as (semanticInfo: SwitchSemanticInfo) => T)(info) : value
 
 export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProps, ref) {
   const {
@@ -71,87 +68,76 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledby,
     'aria-describedby': ariaDescribedby,
-  } = allProps;
+  } = allProps
 
-  const config = useYakitConfig();
-  const switchToken = config.token.YakitSwitch;
-  const reactId = useId();
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const labelId = `${yakitPrefix}-label-${reactId}`;
-  const descriptionId = `${yakitPrefix}-description-${reactId}`;
+  const config = useYakitConfig()
+  const switchToken = config.token.YakitSwitch
+  const reactId = useId()
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const labelId = `${yakitPrefix}-label-${reactId}`
+  const descriptionId = `${yakitPrefix}-description-${reactId}`
 
   const resolvedSize = resolveSwitchSize(
-    sizeProp ??
-      (config.componentSize === 'large'
-        ? 'large'
-        : config.componentSize === 'small'
-          ? 'small'
-          : 'middle'),
-  );
-  const disabled = disabledProp ?? config.componentDisabled ?? false;
-  const id = idProp ?? `${yakitPrefix}-${reactId}`;
+    sizeProp ?? (config.componentSize === 'large' ? 'large' : config.componentSize === 'small' ? 'small' : 'middle'),
+  )
+  const disabled = disabledProp ?? config.componentDisabled ?? false
+  const id = idProp ?? `${yakitPrefix}-${reactId}`
 
-  const isControlled = checkedProp !== undefined;
-  const [innerChecked, setInnerChecked] = useState(defaultChecked);
-  const checked = isControlled ? Boolean(checkedProp) : innerChecked;
+  const isControlled = checkedProp !== undefined
+  const [innerChecked, setInnerChecked] = useState(defaultChecked)
+  const checked = isControlled ? Boolean(checkedProp) : innerChecked
 
-  const semanticInfo = { props: allProps as Readonly<SwitchProps> };
-  const slotClasses =
-    resolveSemantic<SwitchSemanticClassNames>(semanticClassNames, semanticInfo) ?? {};
-  const slotStyles = resolveSemantic<SwitchSemanticStyles>(semanticStyles, semanticInfo) ?? {};
+  const semanticInfo = { props: allProps as Readonly<SwitchProps> }
+  const slotClasses = resolveSemantic<SwitchSemanticClassNames>(semanticClassNames, semanticInfo) ?? {}
+  const slotStyles = resolveSemantic<SwitchSemanticStyles>(semanticStyles, semanticInfo) ?? {}
 
   useImperativeHandle(ref, () => ({
     nativeElement: buttonRef.current,
     focus: (options) => buttonRef.current?.focus(options),
     blur: () => buttonRef.current?.blur(),
-  }));
+  }))
 
   useEffect(() => {
     if (autoFocus) {
-      buttonRef.current?.focus();
+      buttonRef.current?.focus()
     }
-  }, [autoFocus]);
+  }, [autoFocus])
 
-  const labelContent = label ?? children;
-  const hasDescription = description != null && description !== false && description !== '';
-  const hasLabel = labelContent != null && labelContent !== false && labelContent !== '';
-  const isField = hasLabel || hasDescription;
+  const labelContent = label ?? children
+  const hasDescription = description != null && description !== false && description !== ''
+  const hasLabel = labelContent != null && labelContent !== false && labelContent !== ''
+  const isField = hasLabel || hasDescription
 
-  let resolvedCheckedChildren: ReactNode = checkedChildren;
-  let resolvedUnCheckedChildren: ReactNode = unCheckedChildren;
-  const canShowExtra = supportsInnerExtra(resolvedSize);
+  let resolvedCheckedChildren: ReactNode = checkedChildren
+  let resolvedUnCheckedChildren: ReactNode = unCheckedChildren
+  const canShowExtra = supportsInnerExtra(resolvedSize)
   // 对齐 antd：显式传 checkedChildren / unCheckedChildren（含 null）即视为「有显式内容」，不回退默认文案
-  const hasExplicitChildren = 'checkedChildren' in allProps || 'unCheckedChildren' in allProps;
+  const hasExplicitChildren = 'checkedChildren' in allProps || 'unCheckedChildren' in allProps
 
   if (!hasExplicitChildren && canShowExtra) {
     if (showInnerIcon) {
-      const iconSize = resolvedSize === 'large' ? 12 : 10;
-      const iconClass =
-        resolvedSize === 'large' ? `${yakitPrefix}-large-icon` : `${yakitPrefix}-middle-icon`;
-      resolvedCheckedChildren = (
-        <CheckOutlined className={iconClass} size={iconSize} color="currentColor" />
-      );
-      resolvedUnCheckedChildren = (
-        <XOutlined className={iconClass} size={iconSize} color="currentColor" />
-      );
+      const iconSize = resolvedSize === 'large' ? 12 : 10
+      const iconClass = resolvedSize === 'large' ? `${yakitPrefix}-large-icon` : `${yakitPrefix}-middle-icon`
+      resolvedCheckedChildren = <CheckOutlined className={iconClass} size={iconSize} color="currentColor" />
+      resolvedUnCheckedChildren = <XOutlined className={iconClass} size={iconSize} color="currentColor" />
     } else if (showInnerText) {
-      resolvedCheckedChildren = '开';
-      resolvedUnCheckedChildren = '关';
+      resolvedCheckedChildren = '开'
+      resolvedUnCheckedChildren = '关'
     }
   }
 
-  const hasInnerChildren = !!(resolvedCheckedChildren || resolvedUnCheckedChildren);
-  const interactiveDisabled = disabled || loading;
+  const hasInnerChildren = !!(resolvedCheckedChildren || resolvedUnCheckedChildren)
+  const interactiveDisabled = disabled || loading
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    if (interactiveDisabled) return;
-    const next = !checked;
+    if (interactiveDisabled) return
+    const next = !checked
     if (!isControlled) {
-      setInnerChecked(next);
+      setInnerChecked(next)
     }
-    onChange?.(next, event);
-    onClick?.(next, event);
-  };
+    onChange?.(next, event)
+    onClick?.(next, event)
+  }
 
   const tokenStyle = {
     ...getYakitTokenVariables(config.token),
@@ -176,12 +162,12 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
     '--yakit-switch-description-font-size': switchToken?.descriptionFontSize,
     '--yakit-switch-description-line-height': switchToken?.descriptionLineHeight,
     ...style,
-  } as YakitCSSProperties;
+  } as YakitCSSProperties
 
   const rootStyle: CSSProperties = {
     ...(isField ? undefined : tokenStyle),
     ...slotStyles.root,
-  };
+  }
 
   const switchCls = classNames(
     antPrefix,
@@ -202,18 +188,14 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
     className,
     rootClassName,
     slotClasses.root,
-  );
+  )
 
-  const contentClassName = classNames(
-    `${antPrefix}-inner-checked`,
-    `${yakitPrefix}-inner-checked`,
-    slotClasses.content,
-  );
+  const contentClassName = classNames(`${antPrefix}-inner-checked`, `${yakitPrefix}-inner-checked`, slotClasses.content)
   const uncheckedContentClassName = classNames(
     `${antPrefix}-inner-unchecked`,
     `${yakitPrefix}-inner-unchecked`,
     slotClasses.content,
-  );
+  )
 
   const switchNode = (
     <button
@@ -229,8 +211,7 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledby ?? (!ariaLabel && hasLabel ? labelId : undefined)}
       aria-describedby={
-        [ariaDescribedby, hasDescription ? descriptionId : undefined].filter(Boolean).join(' ') ||
-        undefined
+        [ariaDescribedby, hasDescription ? descriptionId : undefined].filter(Boolean).join(' ') || undefined
       }
       data-theme={config.mode}
       dir={config.direction}
@@ -244,24 +225,14 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
       onMouseLeave={isField ? undefined : onMouseLeave}
     >
       <div
-        className={classNames(
-          `${antPrefix}-handle`,
-          `${yakitPrefix}-handle`,
-          slotClasses.indicator,
-        )}
+        className={classNames(`${antPrefix}-handle`, `${yakitPrefix}-handle`, slotClasses.indicator)}
         style={slotStyles.indicator}
       >
         {loading && (
           <span className={classNames(`${antPrefix}-loading-icon`, `${yakitPrefix}-loading-icon`)}>
             <LoadingOutlined
               spin
-              size={
-                resolvedSize === 'small'
-                  ? 8
-                  : resolvedSize === 'large' || resolvedSize === 'max-large'
-                    ? 12
-                    : 10
-              }
+              size={resolvedSize === 'small' ? 8 : resolvedSize === 'large' || resolvedSize === 'max-large' ? 12 : 10}
             />
           </span>
         )}
@@ -275,12 +246,10 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
         </span>
       </span>
     </button>
-  );
+  )
 
   if (!isField) {
-    return (
-      <span className={classNames(`${yakitPrefix}-wrapper`, wrapperClassName)}>{switchNode}</span>
-    );
+    return <span className={classNames(`${yakitPrefix}-wrapper`, wrapperClassName)}>{switchNode}</span>
   }
 
   return (
@@ -308,9 +277,9 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
             id={labelId}
             className={`${yakitPrefix}-label`}
             onClick={(e) => {
-              if (interactiveDisabled) return;
-              e.preventDefault();
-              buttonRef.current?.click();
+              if (interactiveDisabled) return
+              e.preventDefault()
+              buttonRef.current?.click()
             }}
           >
             {labelContent}
@@ -323,12 +292,12 @@ export const Switch = forwardRef<SwitchRef, SwitchProps>(function Switch(allProp
         )}
       </span>
     </div>
-  );
-});
+  )
+})
 
-Switch.displayName = 'Switch';
+Switch.displayName = 'Switch'
 
 /** 主项目同名导出，便于迁移 */
-export const YakitSwitch = Switch;
+export const YakitSwitch = Switch
 
-export default Switch;
+export default Switch

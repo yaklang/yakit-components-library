@@ -1,7 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/193e74a6ef5b839e6251b24fc73818798088560b3b5faffc71635a20d721a613.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/193e74a6ef5b839e6251b24fc73818798088560b3b5faffc71635a20d721a613.svg?react'
 
-export const PrivateSolidPluginStoreIcon = createIcon(
-  OldIconAssetSvg,
-  'PrivateSolidPluginStoreIcon',
-);
+export const PrivateSolidPluginStoreIcon = createIcon(OldIconAssetSvg, 'PrivateSolidPluginStoreIcon')

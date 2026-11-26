@@ -1,4 +1,4 @@
-import { createIcon } from '../../createIcon.js';
-import OldIconAssetSvg from '../assets/3f2d8558ba4de427213d176be9b163783eee0ac2faad9959ac6acf023416b232.svg?react';
+import { createIcon } from '../../createIcon.js'
+import OldIconAssetSvg from '../assets/3f2d8558ba4de427213d176be9b163783eee0ac2faad9959ac6acf023416b232.svg?react'
 
-export const QqIcon = createIcon(OldIconAssetSvg, 'QqIcon');
+export const QqIcon = createIcon(OldIconAssetSvg, 'QqIcon')

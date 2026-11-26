@@ -6,14 +6,22 @@
 
 .yakit-tree .ant-tree-drop-indicator,
 .yakit-tree .ant-tree .ant-tree-node-content-wrapper .ant-tree-drop-indicator,
-.yakit-tree .ant-tree.ant-tree-block-node .ant-tree-list-holder-inner .ant-tree-node-content-wrapper .ant-tree-drop-indicator {
+.yakit-tree
+  .ant-tree.ant-tree-block-node
+  .ant-tree-list-holder-inner
+  .ant-tree-node-content-wrapper
+  .ant-tree-drop-indicator {
   background: var(--Colors-Use-Main-Primary);
   background-color: var(--Colors-Use-Main-Primary);
 }
 
 .yakit-tree .ant-tree-drop-indicator::after,
 .yakit-tree .ant-tree .ant-tree-node-content-wrapper .ant-tree-drop-indicator::after,
-.yakit-tree .ant-tree.ant-tree-block-node .ant-tree-list-holder-inner .ant-tree-node-content-wrapper .ant-tree-drop-indicator::after {
+.yakit-tree
+  .ant-tree.ant-tree-block-node
+  .ant-tree-list-holder-inner
+  .ant-tree-node-content-wrapper
+  .ant-tree-drop-indicator::after {
   background-color: transparent;
   border: 2px solid var(--Colors-Use-Main-Primary);
   border-color: var(--Colors-Use-Main-Primary);
@@ -29,7 +37,7 @@
   border-radius: 4px;
   background: transparent;
   background-color: transparent;
-  content: "";
+  content: '';
   pointer-events: none;
   opacity: 1;
   z-index: 3;
