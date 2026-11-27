@@ -219,14 +219,14 @@ jobs:
         run: pnpm --filter @yakit-libs/yakit-ui-icons run lint && pnpm --filter @yakit-libs/yakit-ui run lint && pnpm --filter @yakit-libs/yakit-ui run test:types
       - name: Install the pinned Playwright browser
         run: pnpm --filter @yakit-libs/yakit-ui exec playwright install --with-deps chromium
+      - name: Verify the built icon package
+        run: pnpm --filter @yakit-libs/yakit-ui-icons run verify:package
       - name: Run component and icon tests
-        run: pnpm icons:check && pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --filter @yakit-libs/yakit-ui run test:icon-integration
+        run: pnpm icons:check && pnpm --filter @yakit-libs/yakit-ui run test:ci && pnpm --dir storybook run test:icons
       - name: Build package exactly once
         run: pnpm --filter @yakit-libs/yakit-ui run build:package:prepared
       - name: Verify icon auto-import contracts
         run: pnpm run test:auto-import
-      - name: Verify lightweight and dedicated icon package contracts
-        run: pnpm --filter @yakit-libs/yakit-ui run test:icon-package-contract
       - name: Pack publishable packages
         id: pack
         uses: changesets/action/pack@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1 commit, reviewed 2026-08-21

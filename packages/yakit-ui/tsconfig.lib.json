@@ -7,6 +7,5 @@
     "noEmit": false,
     "outDir": "./dist"
   },
-  "include": ["src"],
-  "exclude": ["src/icons/oldicon"]
+  "include": ["src"]
 }

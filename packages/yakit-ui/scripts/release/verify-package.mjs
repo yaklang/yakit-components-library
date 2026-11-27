@@ -3,13 +3,14 @@ import { constants } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
+import ts from 'typescript'
+
 import {
   findRemovedUiRuntimeReferences,
   REMOVED_UI_RUNTIMES,
   scanRemovedUiRuntimesInTrees,
 } from '../../../../scripts/release/removed-ui-runtime-scan.mjs'
 import { findNodeNextIncompatibleSpecifiers } from './fix-declaration-imports.mjs'
-import { verifyIconCssGate } from '../../../yakit-ui-icons/scripts/verify-css-gate.mjs'
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const repositoryRoot = path.resolve(packageRoot, '../..')
@@ -17,13 +18,6 @@ const requiredFiles = [
   'dist/index.js',
   'dist/index.d.ts',
   'dist/index.css',
-  'dist/icon.css',
-  'dist/browser/icons/index.js',
-  'dist/browser/icons/outline/index.js',
-  'dist/browser/icons/solid/index.js',
-  'dist/browser/icons/colorful/index.js',
-  'dist/icons/colorful/index.js',
-  'dist/icons/colorful/index.d.ts',
   'README.md',
   'LICENSE',
 ]
@@ -61,17 +55,8 @@ if (manifest.bin || manifest.files.includes('storybook-static')) {
 if (manifest.exports?.['./style.css'] !== expected.css) {
   failures.push(`exports["./style.css"] must be ${expected.css}`)
 }
-if (manifest.exports?.['./icons/icon.css'] !== './dist/icon.css') {
-  failures.push('exports["./icons/icon.css"] must expose dist/icon.css')
-}
-if (JSON.stringify(manifest.sideEffects) !== JSON.stringify(['**/*.css', 'dist/browser/**/*.js'])) {
-  failures.push('sideEffects must contain only CSS and browser facade patterns')
-}
-if (
-  manifest.exports?.['./icons/colorful']?.import !== './dist/icons/colorful/index.js' ||
-  manifest.exports?.['./icons/colorful']?.types !== './dist/icons/colorful/index.d.ts'
-) {
-  failures.push('exports["./icons/colorful"] must expose JavaScript and declarations')
+if (JSON.stringify(manifest.sideEffects) !== JSON.stringify(['**/*.css'])) {
+  failures.push('sideEffects must include the UI stylesheets')
 }
 if (manifest.publishConfig?.access !== 'public') {
   failures.push('publishConfig.access must be public')
@@ -102,6 +87,27 @@ for (const includedPath of ['dist', 'README.md', 'LICENSE']) {
 }
 
 try {
+  const ui = await import(expected.name)
+  if (!ui.Button) failures.push('The UI root entry must export Button')
+} catch (error) {
+  failures.push(`Cannot import ${expected.name}: ${error.message}`)
+}
+
+const typeOptions = { module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler, skipLibCheck: true }
+const typeEntry = ts.resolveModuleName(expected.name, import.meta.filename, typeOptions, ts.sys).resolvedModule
+if (!typeEntry) {
+  failures.push('TypeScript cannot resolve the UI root entry')
+} else {
+  const program = ts.createProgram([typeEntry.resolvedFileName], typeOptions)
+  const checker = program.getTypeChecker()
+  const source = program.getSourceFile(typeEntry.resolvedFileName)
+  const symbol = source && checker.getSymbolAtLocation(source)
+  if (!symbol || !checker.getExportsOfModule(symbol).some((item) => item.name === 'ButtonProps')) {
+    failures.push('The UI root declaration must export ButtonProps')
+  }
+}
+
+try {
   const css = await readFile(path.join(packageRoot, expected.css), 'utf8')
   if (
     !css.includes('--Colors-Use-Neutral-Text-1-Title') ||
@@ -113,35 +119,6 @@ try {
 } catch {
   failures.push('dist/index.css color token contract is unreadable')
 }
-
-failures.push(
-  ...(await verifyIconCssGate({
-    entries: [
-      {
-        exportName: 'MailOutlined',
-        specifier: '@yakit-libs/yakit-ui/icons',
-        subpath: './icons',
-      },
-      {
-        exportName: 'MailOutlined',
-        specifier: '@yakit-libs/yakit-ui/icons/outline',
-        subpath: './icons/outline',
-      },
-      {
-        exportName: 'MailSolid',
-        specifier: '@yakit-libs/yakit-ui/icons/solid',
-        subpath: './icons/solid',
-      },
-      {
-        exportName: 'MitmPrimaryMenuColorful',
-        specifier: '@yakit-libs/yakit-ui/icons/colorful',
-        subpath: './icons/colorful',
-      },
-    ],
-    packageName: '@yakit-libs/yakit-ui',
-    packageRoot,
-  })),
-)
 
 try {
   const findings = await scanRemovedUiRuntimesInTrees([

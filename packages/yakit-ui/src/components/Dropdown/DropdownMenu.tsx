@@ -1,3 +1,4 @@
+import { ChevronRightOutlined } from '@yakit-libs/yakit-ui-icons/outline'
 import classNames from 'classnames'
 import {
   useEffect,
@@ -10,8 +11,6 @@ import {
   type MouseEvent,
   type ReactNode,
 } from 'react'
-
-import { ChevronRightOutlined } from '../../icons/outline'
 
 import type {
   DropdownMenuInfo,

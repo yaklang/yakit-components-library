@@ -59,12 +59,9 @@ const importScenarios = [
   { id: 'registry', subpath: 'registry', symbolName: 'iconRegistry' },
 ]
 
-function scenarioContract(scenario, installSet) {
-  const isUiOnly = installSet === 'ui-only'
-  const rootSpecifier = isUiOnly ? '@yakit-libs/yakit-ui' : '@yakit-libs/yakit-ui-icons'
-  const preferredSpecifier = scenario.subpath
-    ? `${isUiOnly ? '@yakit-libs/yakit-ui/icons' : rootSpecifier}/${scenario.subpath}`
-    : rootSpecifier
+function scenarioContract(scenario) {
+  const rootSpecifier = '@yakit-libs/yakit-ui-icons'
+  const preferredSpecifier = scenario.subpath ? rootSpecifier + '/' + scenario.subpath : rootSpecifier
   let acceptedSpecifierSet = [preferredSpecifier]
   if (scenario.subpath && scenario.subpath !== 'registry') {
     if (scenario.subpath.startsWith('oldicon')) {
@@ -74,10 +71,6 @@ function scenarioContract(scenario, installSet) {
     } else {
       acceptedSpecifierSet = [preferredSpecifier, rootSpecifier]
     }
-  }
-  if (isUiOnly && scenario.subpath === 'registry') {
-    // yakit-ui's root still re-exports the registry, so it is a valid compatibility fallback.
-    acceptedSpecifierSet.push(rootSpecifier)
   }
   return { acceptedSpecifierSet, preferredSpecifier }
 }
@@ -346,7 +339,7 @@ async function inspectAutoImport({ client, fixtureRoot, installSet, moduleResolu
       (entry) => entry.name === symbolName && typeof entry.source === 'string',
     )
     const observedCandidates = [...new Set(completionEntries.map((entry) => entry.source))].sort()
-    const { acceptedSpecifierSet, preferredSpecifier } = scenarioContract(scenario, installSet)
+    const { acceptedSpecifierSet, preferredSpecifier } = scenarioContract(scenario)
     const classification = classifyCandidates({
       acceptedSpecifierSet,
       observedCandidates,
@@ -415,13 +408,13 @@ async function inspectAutoImport({ client, fixtureRoot, installSet, moduleResolu
     }
   } catch (error) {
     return {
-      acceptedSpecifierSet: scenarioContract(scenario, installSet).acceptedSpecifierSet,
+      acceptedSpecifierSet: scenarioContract(scenario).acceptedSpecifierSet,
       error: error instanceof Error ? (error.stack ?? error.message) : String(error),
       installSet,
       moduleResolution,
       multiplicity: 0,
       observedCandidates: [],
-      preferredSpecifier: scenarioContract(scenario, installSet).preferredSpecifier,
+      preferredSpecifier: scenarioContract(scenario).preferredSpecifier,
       preferredMissing: true,
       scenario: scenario.id,
       selectedCandidate: null,
@@ -480,6 +473,14 @@ for (const installation of typescriptInstallations) {
       context.diagnostic(JSON.stringify(results, null, 2))
     }
     for (const result of results) {
+      context.assert.ok(
+        result.observedCandidates.every(
+          (value) => value === '@yakit-libs/yakit-ui-icons' || value.startsWith('@yakit-libs/yakit-ui-icons/'),
+        ),
+        JSON.stringify(result, null, 2),
+      )
+      // Editors may omit suggestions for transitive dependencies.
+      if (result.installSet === 'ui-only' && result.state === 'NO_SUGGESTION') continue
       context.assert.equal(
         result.state,
         'VALID',

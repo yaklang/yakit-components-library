@@ -46,9 +46,7 @@ applyThemeColors(theme, getColors(theme))
 
 ## 使用
 
-`@yakit-libs/yakit-ui-icons` 是 Yakit 图标的规范导入包。即使项目同时安装了
-`@yakit-libs/yakit-ui`，新增代码也应优先使用本包，而不是兼容入口
-`@yakit-libs/yakit-ui/icons*`。
+`@yakit-libs/yakit-ui-icons` 是 Yakit 图标的公开导入包。业务项目使用图标时，请将本包加为直接依赖。
 
 本包与 `@yakit-libs/yakit-ui` 独立遵循 SemVer，版本号不要求相同；任一包单独发布不会强制另一个包升版。
 
@@ -176,8 +174,7 @@ pnpm run test:auto-import
 
 #### English note
 
-Use `@yakit-libs/yakit-ui-icons` as the canonical package for new icon imports. The
-`@yakit-libs/yakit-ui/icons*` paths are compatibility-only. Both packages follow SemVer
+Use `@yakit-libs/yakit-ui-icons` for all icon imports. Both packages follow SemVer
 independently, so their versions do not need to match. Auto-import ordering is editor-controlled;
 the package exposes public module specifiers but does not install or enforce editor-private
 configuration.

@@ -68,15 +68,11 @@ test('private UI assets are checked independently and unknown assets fail', asyn
   }
 })
 
-test('UI forwards existing public icon entries and depends on the icon package', async () => {
+test('UI consumes icons internally and exposes components and styles', async () => {
   const read = async (file) => readFile(new URL(`../../${file}`, import.meta.url), 'utf8')
   const ui = JSON.parse(await read('packages/yakit-ui/package.json'))
   assert.equal(ui.dependencies['@yakit-libs/yakit-ui-icons'], 'workspace:^')
-  for (const family of ['', 'outline', 'solid', 'colorful']) {
-    const source = await read(`packages/yakit-ui/src/icons/${family ? `${family}/` : ''}index.tsx`)
-    assert.match(source, /export \* from ['"]@yakit-libs\/yakit-ui-icons/)
-    assert.doesNotMatch(source, /\.svg|createIcon/)
-  }
+  assert.deepEqual(Object.keys(ui.exports).sort(), ['.', './style.css'])
   const icons = JSON.parse(await read('packages/yakit-ui-icons/package.json'))
   assert.equal(icons.dependencies['@yakit-libs/yakit-ui'], undefined)
   assert.equal(icons.dependencies.antd, undefined)

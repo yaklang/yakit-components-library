@@ -203,9 +203,9 @@ test('CI validates both build surfaces while the publish artifact selects a non-
   for (const source of [ci, publishBuild]) {
     assert.match(source, /--filter @yakit-libs\/yakit-ui run build:package/)
     assert.match(source, /--filter @yakit-libs\/yakit-ui-icons run build/)
-    assert.match(source, /--filter @yakit-libs\/yakit-ui run test:icon-package-contract/)
+    assert.match(source, /--filter @yakit-libs\/yakit-ui-icons run verify:package/)
+    assert.match(source, /--dir storybook run test:icons/)
   }
-  assert.match(ci, /--filter @yakit-libs\/yakit-ui-icons run verify:package/)
   assert.match(publishBuild, /changesets\/action\/pack/)
   assert.match(workflow('publish.yml'), /release-matrix/)
 })

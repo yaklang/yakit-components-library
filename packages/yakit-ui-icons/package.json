@@ -97,7 +97,7 @@
     "lint": "eslint src config scripts test vite.config.ts vitest.config.ts vitest.node.config.ts",
     "lint:fix": "eslint src config scripts test vite.config.ts vitest.config.ts vitest.node.config.ts --fix",
     "build": "vite build && tsc -p tsconfig.json",
-    "verify:package": "node scripts/verify-package.mjs",
+    "verify:package": "node scripts/verify-package.mjs && vitest run --config vite.config.ts test/package/bundle.test.ts",
     "prepack": "pnpm run verify:package"
   },
   "dependencies": {

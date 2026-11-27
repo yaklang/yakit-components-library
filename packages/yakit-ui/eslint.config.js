@@ -92,7 +92,6 @@ export default [
   {
     files: [
       'config/**/*.ts',
-      'test/icons/**/*.ts',
       '.storybook/main.ts',
       'vite.config.ts',
       'vitest.config.ts',

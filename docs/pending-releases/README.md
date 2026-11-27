@@ -15,7 +15,7 @@ UI 继续构建和测试，其候选产物用于影响面检查；单独发布�
 | 文档                                            | 内容                                                        | 已登记升级级别                         |
 | ----------------------------------------------- | ----------------------------------------------------------- | -------------------------------------- |
 | [React 19 / antd 6](./react19-antd6-deps.md)    | React 兼容性、依赖及相关类型修复                            | minor                                  |
-| [独立图标包](./independent-icon-package.md)     | UI 通过公开图标包入口使用图标，保留兼容转发及开发、展示集成 | patch                                  |
+| [独立图标包](./independent-icon-package.md)     | 移除 UI 图标导出，使用方须直接从图标包导入 | minor                                  |
 | [Outline 描边规则](./uniform-icon-strokes.md)   | Outline 默认描边、其他分类原稿描边及 view-grid 图形更新     | minor                                  |
 | [描边参数支持](./adjustable-outline-strokes.md) | 可调整图标的描边参数及固定填充边界                          | patch                                  |
 | [英文名称迁移表](./english-icon-names.md)       | 公开导出改名，使用方需更新 import 和 JSX                    | 破坏性变更说明，发布前核对实际升级级别 |

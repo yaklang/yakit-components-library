@@ -1,14 +1,13 @@
 import { existsSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 
+import { colorfulIconRegistry, outlineIconRegistry, solidIconRegistry } from '@yakit-libs/yakit-ui-icons/registry'
 import { createElement, type ReactElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 
-import iconStory, * as iconStories from '../../../../storybook/stories/icons/Icon.stories'
-import { readIconInputSync } from '../../../yakit-ui-icons/scripts/icon-source-documents.mjs'
-import { colorfulIconRegistry, outlineIconRegistry, solidIconRegistry } from '../../src/icons/registry'
+import { readIconInputSync } from '../../../packages/yakit-ui-icons/scripts/icon-source-documents.mjs'
+import iconStory, * as iconStories from '../../stories/icons/Icon.stories'
 
 const colorfulManifest: {
   groups: {
@@ -24,14 +23,13 @@ const colorfulManifest: {
   }[]
 } = JSON.parse(
   readIconInputSync(
-    new URL('../../../yakit-ui-icons/config/icon-sources/colorful.json#manifest', import.meta.url),
+    new URL('../../../packages/yakit-ui-icons/config/icon-sources/colorful.json#manifest', import.meta.url),
     'utf8',
   ),
 )
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
-const storiesRoot = resolve(packageRoot, '../../storybook/stories/icons')
-const colorfulIconsRoot = resolve(packageRoot, '../yakit-ui-icons/src/colorful')
+const storiesRoot = resolve(import.meta.dirname, '../../stories/icons')
+const colorfulIconsRoot = resolve(import.meta.dirname, '../../../packages/yakit-ui-icons/src/colorful')
 const iconStorySource = readIconInputSync(resolve(storiesRoot, 'Icon.stories.tsx'), 'utf8')
 const iconStoryMarkup = renderToStaticMarkup(createElement(iconStory.component))
 const colorfulStorySpecs = colorfulManifest.groups.map(({ category, storybook, name }) => ({

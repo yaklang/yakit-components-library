@@ -2,16 +2,16 @@
 
 Yakit 业务组件库 monorepo（pnpm workspace + Turborepo），对外发布两个独立遵循 SemVer 的 npm 包：
 
-- **`@yakit-libs/yakit-ui`** — Yakit 的 React 组件库。组件与图标的离线 Storybook 随 GitHub Release 分发。`@yakit-libs/yakit-ui/icons` 等路径是组件包里的兼容入口。
+- **`@yakit-libs/yakit-ui`** — Yakit 的 React 组件库。组件与图标的离线 Storybook 随 GitHub Release 分发。
 - **`@yakit-libs/yakit-ui-icons`** — 图标的规范包，源码在 `packages/yakit-ui-icons`。适合只需要图标、不想引入组件 peer dependencies 的场景。
 
-图标源码在 `@yakit-libs/yakit-ui-icons`。`packages/yakit-ui/src/icons` 从该包再导出。两个包独立发版，版本号不要求一致。使用说明见 [packages/yakit-ui/README.md](packages/yakit-ui/README.md)。
+图标源码在 `@yakit-libs/yakit-ui-icons`。业务代码直接从图标包导入。两个包独立发版，版本号不要求一致。使用说明见 [packages/yakit-ui/README.md](packages/yakit-ui/README.md)。
 
 ## 仓库结构
 
 ```
 ├── packages/
-│   ├── yakit-ui/         # 组件库 + 图标兼容入口（发布）
+│   ├── yakit-ui/         # 组件库（发布）
 │   └── yakit-ui-icons/   # 图标源码（发布）
 ├── storybook/            # UI 和图标共用的私有文档工程
 ├── scripts/release/      # 发布流水线脚本

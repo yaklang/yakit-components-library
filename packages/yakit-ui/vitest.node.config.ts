@@ -4,6 +4,6 @@ export default defineConfig({
   plugins: [],
   test: {
     environment: 'node',
-    include: ['test/icons/**/*.test.ts', 'test/ssr/**/*.test.tsx'],
+    include: ['test/ssr/**/*.test.tsx'],
   },
 })

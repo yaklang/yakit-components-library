@@ -136,14 +136,9 @@ test('package exports the ESM library, declarations, and CSS contract', () => {
   })
   assert.equal(manifest.exports['.'].import, './dist/index.js')
   assert.equal(manifest.exports['.'].types, './dist/index.d.ts')
-  assert.deepEqual(manifest.exports['./icons/colorful'], {
-    types: './dist/icons/colorful/index.d.ts',
-    browser: './dist/browser/icons/colorful/index.js',
-    import: './dist/icons/colorful/index.js',
-  })
-  assert.equal(manifest.exports['./icons/icon.css'], './dist/icon.css')
+  assert.deepEqual(Object.keys(manifest.exports).sort(), ['.', './style.css'])
   assert.equal(manifest.exports['./style.css'], './dist/index.css')
-  assert.deepEqual(manifest.sideEffects, ['**/*.css', 'dist/browser/**/*.js'])
+  assert.deepEqual(manifest.sideEffects, ['**/*.css'])
 })
 
 test('offline Storybook is a private workspace separate from npm packages', () => {
@@ -315,13 +310,11 @@ test('each package generates SSR fixtures before its own browser tests', () => {
 test('pre-build types use source fixtures while built package contracts verify public subpaths', () => {
   const manifest = readJson(join(root, 'packages/yakit-ui/package.json'))
   const sourceTypes = readJson(join(root, 'packages/yakit-ui/test/types/tsconfig.json'))
-  const publicTypes = readJson(join(root, 'packages/yakit-ui/test/types/tsconfig.public.json'))
   const libraryTypes = readJson(join(root, 'packages/yakit-ui/tsconfig.lib.json'))
 
   assert.doesNotMatch(manifest.scripts['test:types'], /build/i)
   assert.match(manifest.scripts['build:lib:prepared'], /fix-declaration-imports\.mjs/)
   assert.equal(libraryTypes.compilerOptions.declarationMap, false)
-  assert.deepEqual(libraryTypes.exclude, ['src/icons/oldicon'])
   assert.deepEqual(sourceTypes.include, [
     '../../src/vite-env.d.ts',
     'input-public.test.tsx',
@@ -335,8 +328,6 @@ test('pre-build types use source fixtures while built package contracts verify p
   assert.ok(iconTypes.include.includes('*.test.tsx'))
   for (const file of ['colorful-icon-public', 'icon-ant-compat-public', 'icon-public', 'solid-icon-public'])
     assert.ok(existsSync(join(root, `packages/yakit-ui-icons/test/types/${file}.test.tsx`)))
-  assert.deepEqual(publicTypes.include, ['../../src/vite-env.d.ts', 'light-icon-public.test.tsx'])
-  assert.match(manifest.scripts['test:icon-package-contract'], /tsconfig\.public\.json/)
 })
 
 test('release-owned text files contain no credential-like values', () => {
