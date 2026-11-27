@@ -16,6 +16,7 @@ import {
   validatePublicationOutbox,
 } from './publication-consumer.mjs'
 import { payloadHash } from './durable-release-state.mjs'
+import { checkedFile, documentationPlan } from './storybook-release.mjs'
 import { validateVerificationManifest } from './verification-manifest.mjs'
 
 const API_VERSION = '2022-11-28'
@@ -374,6 +375,10 @@ async function validateVerificationArtifact({ artifact, directory, jsonDocuments
     if (release.evidence?.size?.filename) expectedJson.push(release.evidence.size.filename)
   exactJsonNames(jsonDocuments, expectedJson)
   exactArchiveEntries(artifact, verificationArchiveEntries(manifest))
+  if (manifest.offlineStorybook !== undefined) {
+    const { filename, sha256 } = manifest.offlineStorybook
+    await checkedFile(directory, filename, sha256)
+  }
   const tarballPaths = Object.fromEntries(
     (manifest.releases ?? []).map((release) => [
       release.name,
@@ -408,12 +413,16 @@ async function validateVerificationArtifact({ artifact, directory, jsonDocuments
 }
 
 export function verificationArchiveEntries(manifest) {
+  const documentation = manifest.offlineStorybook
+  if (documentation !== undefined && documentation?.filename !== documentationPlan(manifest).filename)
+    throw new Error('Documentation version mismatch')
   return [
     'transactional-outbox.json',
     'verification-manifest.json',
     ...(manifest.releases ?? []).map((release) => release.evidence?.size?.filename).filter(Boolean),
     ...(manifest.releases ?? []).map((release) => release.tarball?.filename ?? '<missing>'),
     ...(manifest.compatibilityBaselineSet ?? []).map((baseline) => baseline.filename ?? '<missing>'),
+    ...(documentation ? [documentation.filename] : []),
   ]
 }
 

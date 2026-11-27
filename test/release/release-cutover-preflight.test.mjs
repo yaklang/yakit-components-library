@@ -962,6 +962,24 @@ test('verification archive sets include single-package baselines and omit them f
   )
 })
 
+test('verification archive accepts only the documented ZIP for the released version pair', () => {
+  const filename = 'storybook-ui-0.2.3-icons-0.3.4.zip'
+  const manifest = {
+    releases: [{ name: ICONS, version: '0.3.4', tarball: { filename: 'icons.tgz' } }],
+    compatibilityBaselineSet: [{ package: UI, version: '0.2.3', filename: 'baseline.tgz' }],
+  }
+  const historicalEntries = verificationArchiveEntries(manifest)
+  assert.deepEqual(verificationArchiveEntries({ ...manifest, offlineStorybook: { filename } }), [
+    ...historicalEntries,
+    filename,
+  ])
+  assert.throws(
+    () =>
+      verificationArchiveEntries({ ...manifest, offlineStorybook: { filename: 'storybook-ui-0.2.3-icons-0.3.3.zip' } }),
+    /Documentation version mismatch/,
+  )
+})
+
 test('random JSON receipt and empty v3 verification manifest are inconclusive', async () => {
   await assert.rejects(
     () =>
