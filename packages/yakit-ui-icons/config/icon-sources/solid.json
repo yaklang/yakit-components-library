@@ -2215,10 +2215,27 @@
       "groupNodeId": "46824:1931",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2939.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2940"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "fill",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 20,
+        "height": 20
+      }
     },
     {
       "nodeId": "1:2941",

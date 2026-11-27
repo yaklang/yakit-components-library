@@ -763,10 +763,52 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/37690-1986.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["37690:1979", "37690:1980", "37690:1981", "37690:1982", "37690:1983", "37690:1984"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [1],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [2],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [3],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [4],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [5],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "37831:7414",
@@ -1080,10 +1122,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2225.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2226"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "1:2227",
@@ -1199,8 +1258,21 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2243.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158986:39279"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
       "nodeType": "COMPONENT",
       "nodeSize": {
@@ -1296,10 +1368,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2257.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2258"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "1:2259",
@@ -1367,8 +1456,21 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2267.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158986:39385"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
       "nodeType": "COMPONENT",
       "nodeSize": {
@@ -1419,10 +1521,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2275.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2276"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "1:2277",
@@ -1456,10 +1575,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2281.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2282"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "1:2283",
@@ -1497,10 +1633,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2287.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2288"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "30492:93384",
@@ -1563,10 +1716,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/350-20585.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["350:20912"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "287:15134",
@@ -1662,10 +1832,42 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/8990-150359.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["8989:150337", "8990:150342", "8990:150339", "8990:150341"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [1],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [2],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [3],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "37148:26363",
@@ -1831,8 +2033,21 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2291.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158986:35232"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
       "nodeType": "COMPONENT",
       "nodeSize": {
@@ -2145,10 +2360,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2331.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2332"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "1:2333",
@@ -2246,10 +2478,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/38768-9896.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["38768:9897"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "1:2345",
@@ -2921,10 +3170,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2439.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2440"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "1:2441",
@@ -2992,8 +3258,21 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/1-2449.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["1:2450"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
       "nodeType": "COMPONENT",
       "nodeSize": {
@@ -4210,10 +4489,27 @@
       "groupNodeId": "46824:1930",
       "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/44953-5888.svg",
       "colorBindings": {
-        "status": "unknown",
-        "bindings": []
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["44953:5889"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
       },
-      "nodeType": "COMPONENT"
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      }
     },
     {
       "nodeId": "44960:5345",
@@ -4918,6 +5214,403 @@
         "bindings": []
       },
       "nodeType": "COMPONENT"
+    },
+    {
+      "nodeId": "48012:208917",
+      "name": "Outline/MessageCircleText",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/48012-208917.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["48012:208916"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "48012:208942",
+      "name": "Outline/MessageCircle",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/48012-208942.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["48012:208941"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "48020:208972",
+      "name": "Outline/MessageCircleDot",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/48020-208972.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["48020:208957", "48020:208970"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              },
+              {
+                "locator": [1],
+                "attribute": "fill",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "48020:208994",
+      "name": "Outline/MessageCircleQuestion",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/48020-208994.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["48020:208993"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "48020:208997",
+      "name": "Outline/MessageCircleWarning",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/48020-208997.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["48020:208996"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "48020:209000",
+      "name": "Outline/MessageCircleX",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/48020-209000.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["48020:208999"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "158985:35216",
+      "name": "Outline/SearchCheck",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/158985-35216.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158985:35217"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "158985:35218",
+      "name": "Outline/SearchCode",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/158985-35218.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158985:35219"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "158985:35220",
+      "name": "Outline/SearchSlash",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/158985-35220.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158985:35221"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "158985:35222",
+      "name": "Outline/SearchX",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/158985-35222.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158985:35223"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "158996:1933",
+      "name": "Outline/Memory Library",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/158996-1933.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158996:1929"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "158996:1942",
+      "name": "Outline/Store",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/158996-1942.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158996:1943"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "158999:2005",
+      "name": "Outline/port",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/158999-2005.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["158999:2006"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeId": "159017:148678",
+      "name": "Outline/FileText",
+      "groupNodeId": "46824:1930",
+      "svgFile": "svg/QWct5XE0Bg0bNDQ93eYgEw/159017-148678.svg",
+      "nodeType": "COMPONENT",
+      "nodeSize": {
+        "width": 24,
+        "height": 24
+      },
+      "colorBindings": {
+        "status": "captured",
+        "bindings": [
+          {
+            "figmaVariableId": "VariableID:34701:3820",
+            "fallbackHex": "#353639",
+            "sourceNodeIds": ["159017:148677"],
+            "targets": [
+              {
+                "locator": [0],
+                "attribute": "stroke",
+                "expectedValue": "#353639"
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }

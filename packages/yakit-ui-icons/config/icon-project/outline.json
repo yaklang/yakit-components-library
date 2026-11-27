@@ -1506,6 +1506,62 @@
     "47822:21815": {
       "exportName": "MenuExpandOutlined",
       "file": "outline/47822-21815.svg"
+    },
+    "48012:208917": {
+      "exportName": "MessageCircleTextOutlined",
+      "file": "outline/48012-208917.svg"
+    },
+    "48012:208942": {
+      "exportName": "MessageCircleOutlined",
+      "file": "outline/48012-208942.svg"
+    },
+    "48020:208972": {
+      "exportName": "MessageCircleDotOutlined",
+      "file": "outline/48020-208972.svg"
+    },
+    "48020:208994": {
+      "exportName": "MessageCircleQuestionOutlined",
+      "file": "outline/48020-208994.svg"
+    },
+    "48020:208997": {
+      "exportName": "MessageCircleWarningOutlined",
+      "file": "outline/48020-208997.svg"
+    },
+    "48020:209000": {
+      "exportName": "MessageCircleXOutlined",
+      "file": "outline/48020-209000.svg"
+    },
+    "158985:35216": {
+      "exportName": "SearchCheckOutlined",
+      "file": "outline/158985-35216.svg"
+    },
+    "158985:35218": {
+      "exportName": "SearchCodeOutlined",
+      "file": "outline/158985-35218.svg"
+    },
+    "158985:35220": {
+      "exportName": "SearchSlashOutlined",
+      "file": "outline/158985-35220.svg"
+    },
+    "158985:35222": {
+      "exportName": "SearchXOutlined",
+      "file": "outline/158985-35222.svg"
+    },
+    "158996:1933": {
+      "exportName": "MemoryLibraryOutlined",
+      "file": "outline/158996-1933.svg"
+    },
+    "158996:1942": {
+      "exportName": "StoreOutlined",
+      "file": "outline/158996-1942.svg"
+    },
+    "158999:2005": {
+      "exportName": "PortOutlined",
+      "file": "outline/158999-2005.svg"
+    },
+    "159017:148678": {
+      "exportName": "FileTextOutlined",
+      "file": "outline/159017-148678.svg"
     }
   },
   "rules": {

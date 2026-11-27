@@ -4,7 +4,7 @@
 
 ## 当前发布范围
 
-发布范围以 `scripts/release/release-deferral-policy.json` 为准。当前仓库策略指定图标包 `@yakit-libs/yakit-ui-icons` 的目标版本为 `0.3.3`，UI 保持 `0.2.3`。这表示仓库中的发布意图，不表示目标版本已经发布。
+发布范围以 `scripts/release/release-deferral-policy.json` 为准。当前仓库策略指定图标包 `@yakit-libs/yakit-ui-icons` 的目标版本为 `0.3.4`，UI 保持 `0.2.3`。这表示仓库中的发布意图，不表示目标版本已经发布。
 
 `.changeset/config.json` 的 `ignore` 包含 UI，避免直接变更或依赖变更触发 UI 版本升级。本目录中的待发布 Changeset 不在 `.changeset/` 中，不参与当前版本生成。
 
