@@ -373,6 +373,20 @@ import HandDepositOutlinedSvg from './47659-1965.svg?react'
 import TimerOffOutlinedSvg from './47662-1975.svg?react'
 import MenuCollapseOutlinedSvg from './47822-21814.svg?react'
 import MenuExpandOutlinedSvg from './47822-21815.svg?react'
+import MessageCircleTextOutlinedSvg from './48012-208917.svg?react'
+import MessageCircleOutlinedSvg from './48012-208942.svg?react'
+import MessageCircleDotOutlinedSvg from './48020-208972.svg?react'
+import MessageCircleQuestionOutlinedSvg from './48020-208994.svg?react'
+import MessageCircleWarningOutlinedSvg from './48020-208997.svg?react'
+import MessageCircleXOutlinedSvg from './48020-209000.svg?react'
+import SearchCheckOutlinedSvg from './158985-35216.svg?react'
+import SearchCodeOutlinedSvg from './158985-35218.svg?react'
+import SearchSlashOutlinedSvg from './158985-35220.svg?react'
+import SearchXOutlinedSvg from './158985-35222.svg?react'
+import MemoryLibraryOutlinedSvg from './158996-1933.svg?react'
+import StoreOutlinedSvg from './158996-1942.svg?react'
+import PortOutlinedSvg from './158999-2005.svg?react'
+import FileTextOutlinedSvg from './159017-148678.svg?react'
 export const MailOutlined = createIcon(MailOutlinedSvg, 'MailOutlined')
 export const LocationMarkerOutlined = createIcon(LocationMarkerOutlinedSvg, 'LocationMarkerOutlined')
 export const ColorSwatchOutlined = createIcon(ColorSwatchOutlinedSvg, 'ColorSwatchOutlined')
@@ -754,3 +768,20 @@ export const HandDepositOutlined = createIcon(HandDepositOutlinedSvg, 'HandDepos
 export const TimerOffOutlined = createIcon(TimerOffOutlinedSvg, 'TimerOffOutlined')
 export const MenuCollapseOutlined = createIcon(MenuCollapseOutlinedSvg, 'MenuCollapseOutlined')
 export const MenuExpandOutlined = createIcon(MenuExpandOutlinedSvg, 'MenuExpandOutlined')
+export const MessageCircleTextOutlined = createIcon(MessageCircleTextOutlinedSvg, 'MessageCircleTextOutlined')
+export const MessageCircleOutlined = createIcon(MessageCircleOutlinedSvg, 'MessageCircleOutlined')
+export const MessageCircleDotOutlined = createIcon(MessageCircleDotOutlinedSvg, 'MessageCircleDotOutlined')
+export const MessageCircleQuestionOutlined = createIcon(
+  MessageCircleQuestionOutlinedSvg,
+  'MessageCircleQuestionOutlined',
+)
+export const MessageCircleWarningOutlined = createIcon(MessageCircleWarningOutlinedSvg, 'MessageCircleWarningOutlined')
+export const MessageCircleXOutlined = createIcon(MessageCircleXOutlinedSvg, 'MessageCircleXOutlined')
+export const SearchCheckOutlined = createIcon(SearchCheckOutlinedSvg, 'SearchCheckOutlined')
+export const SearchCodeOutlined = createIcon(SearchCodeOutlinedSvg, 'SearchCodeOutlined')
+export const SearchSlashOutlined = createIcon(SearchSlashOutlinedSvg, 'SearchSlashOutlined')
+export const SearchXOutlined = createIcon(SearchXOutlinedSvg, 'SearchXOutlined')
+export const MemoryLibraryOutlined = createIcon(MemoryLibraryOutlinedSvg, 'MemoryLibraryOutlined')
+export const StoreOutlined = createIcon(StoreOutlinedSvg, 'StoreOutlined')
+export const PortOutlined = createIcon(PortOutlinedSvg, 'PortOutlined')
+export const FileTextOutlined = createIcon(FileTextOutlinedSvg, 'FileTextOutlined')
