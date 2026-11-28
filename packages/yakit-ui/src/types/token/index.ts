@@ -68,6 +68,13 @@ export interface YakitLocale {
     /** 收起按钮文案 */
     collapse?: string
   }
+  Modal?: {
+    ok?: string
+    cancel?: string
+    close?: string
+    help?: string
+    ariaLabel?: string
+  }
 }
 
 export type YakitComponentSize = 'small' | 'medium' | 'large' | 'huge'

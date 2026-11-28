@@ -11,6 +11,7 @@
     "spin-public.test.tsx",
     "radio-public.test.tsx",
     "copy-text-public.test.tsx",
-    "collapse-text-public.test.tsx"
+    "collapse-text-public.test.tsx",
+    "modal-public.test.tsx"
   ]
 }

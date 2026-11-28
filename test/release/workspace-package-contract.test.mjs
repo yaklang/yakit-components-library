@@ -330,6 +330,7 @@ test('pre-build types use source fixtures while built package contracts verify p
     'radio-public.test.tsx',
     'copy-text-public.test.tsx',
     'collapse-text-public.test.tsx',
+    'modal-public.test.tsx',
   ])
   const iconTypes = readJson(join(root, 'packages/yakit-ui-icons/test/types/tsconfig.json'))
   assert.ok(iconTypes.include.includes('*.test.tsx'))

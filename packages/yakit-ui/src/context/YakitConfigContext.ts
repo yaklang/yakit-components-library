@@ -41,6 +41,13 @@ export const defaultYakitLocale: YakitLocale = {
     expand: '展开',
     collapse: '收起',
   },
+  Modal: {
+    ok: '确定',
+    cancel: '取消',
+    close: '关闭',
+    help: '帮助',
+    ariaLabel: '对话框',
+  },
 }
 
 export const defaultYakitConfig: YakitConfigContextValue = {
@@ -69,4 +76,5 @@ export const mergeYakitLocale = (parent: YakitLocale, locale?: YakitLocale): Yak
   Checkbox: mergeDefined(parent.Checkbox ?? {}, locale?.Checkbox),
   Select: mergeDefined(parent.Select ?? {}, locale?.Select),
   CollapseText: mergeDefined(parent.CollapseText ?? {}, locale?.CollapseText),
+  Modal: mergeDefined(parent.Modal ?? {}, locale?.Modal),
 })

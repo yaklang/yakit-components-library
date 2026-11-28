@@ -1,0 +1,200 @@
+.modal-demo-page {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 24px;
+}
+
+.modal-demo-heading {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  font-family: 'PingFang SC', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  margin: 0;
+}
+
+.modal-demo-grid {
+  align-items: start;
+  box-sizing: border-box;
+  display: grid;
+  gap: 40px 24px;
+  grid-template-columns: repeat(2, minmax(0, 560px));
+  max-width: 100%;
+  width: 100%;
+}
+
+.modal-demo-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.modal-demo-grid .yakit-modal {
+  max-width: 100%;
+}
+
+@media (max-width: 980px) {
+  .modal-demo-grid {
+    grid-template-columns: minmax(0, 560px);
+  }
+}
+
+.modal-demo-label {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  font-family: 'PingFang SC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.modal-demo-placeholder {
+  align-items: center;
+  background: var(--Colors-Use-Main-Bg);
+  border: 1px dashed var(--Colors-Use-Main-Border);
+  border-radius: 2px;
+  box-sizing: border-box;
+  color: var(--Colors-Use-Main-Primary);
+  display: flex;
+  font-size: 12px;
+  height: 160px;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  width: 100%;
+}
+
+.modal-demo-switch,
+.modal-demo-check {
+  align-items: center;
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  display: inline-flex;
+  font-family: 'PingFang SC', sans-serif;
+  gap: 8px;
+}
+
+.modal-demo-switch button {
+  align-items: center;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  padding: 2px;
+}
+
+.modal-demo-switch button span {
+  background: var(--Colors-Use-Basic-Background);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px var(--Colors-Use-Basic-Shadow);
+  display: block;
+}
+
+.modal-demo-check input {
+  appearance: none;
+  background: var(--Colors-Use-Basic-Background);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 72% 72%;
+  border: 1px solid var(--Colors-Use-Neutral-Disable);
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  flex: none;
+  margin: 0;
+}
+
+.modal-demo-check input:checked {
+  background-color: var(--Colors-Use-Main-Primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.2L6.4 11.1L12.5 4.9' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  border-color: var(--Colors-Use-Main-Primary);
+}
+
+.modal-demo-link {
+  color: var(--Colors-Use-Main-Primary);
+}
+
+.modal-demo-note {
+  background: var(--Colors-Use-Basic-Background);
+  border: 1px solid var(--Colors-Use-Neutral-Border);
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  gap: 8px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  padding: 12px;
+  text-align: justify;
+}
+
+.modal-demo-command {
+  align-items: center;
+  align-self: flex-start;
+  background: var(--Colors-Use-Main-Bg-Hover);
+  border: 1px solid var(--Colors-Use-Main-Border);
+  border-radius: 4px;
+  color: var(--Colors-Use-Main-Primary);
+  display: inline-flex;
+  font-size: 12px;
+  gap: 4px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  padding: 2px 8px;
+}
+
+.modal-demo-command button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  padding: 0;
+}
+
+.modal-demo-progress {
+  background: var(--Colors-Use-Neutral-Border);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.modal-demo-progress span {
+  background: var(--Colors-Use-Main-Primary);
+  display: block;
+  height: 100%;
+}
+
+.modal-demo-percent {
+  color: var(--Colors-Use-Neutral-Text-1-Title);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+}
+
+.modal-demo-meta {
+  align-items: center;
+  color: var(--Colors-Use-Neutral-Text-4-Help-text);
+  display: flex;
+  font-size: 12px;
+  gap: 8px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+}
+
+.modal-demo-meta i {
+  background: var(--Colors-Use-Neutral-Border);
+  display: block;
+  height: 12px;
+  width: 1px;
+}
+
+.modal-demo-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
